@@ -20,6 +20,8 @@
     <RootNamespace>ServidorArgentum</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
@@ -31,6 +33,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>full</DebugType>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
@@ -42,6 +45,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>none</DebugType>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic.Compatibility">
@@ -352,6 +356,7 @@
       <DependentUpon>frmUserList.vb</DependentUpon>
     </EmbeddedResource>
     <Content Include="SERVER.ico" />
+    <None Include="app.config" />
     <None Include="_UpgradeReport.htm">
       <SubType>Preview</SubType>
     </None>
