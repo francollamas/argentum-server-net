@@ -1,0 +1,369 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <ProductVersion>8.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A4A2524F-B086-463F-85F7-DAB3E5797EDD}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyName>ServidorArgentum</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>ServidorArgentum.General</StartupObject>
+    <AssemblyMajorVersion>0</AssemblyMajorVersion>
+    <AssemblyMinorVersion>13</AssemblyMinorVersion>
+    <AssemblyRevisionNumber>0</AssemblyRevisionNumber>
+    <GenerateRevisionNumber>False</GenerateRevisionNumber>
+    <AssemblyCompanyName>M</AssemblyCompanyName>
+    <StartWithIE>False</StartWithIE>
+    <ApplicationIcon>SERVER.ico</ApplicationIcon>
+    <RootNamespace>ServidorArgentum</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>ServidorArgentum.xml</DocumentationFile>
+    <DebugSymbols>True</DebugSymbols>
+    <DefineDebug>True</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>UsarQueSocket = 1 : ConUpTime = 1 : Win32=True</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>ServidorArgentum.xml</DocumentationFile>
+    <DebugSymbols>False</DebugSymbols>
+    <DefineDebug>False</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>UsarQueSocket = 1 : ConUpTime = 1 : Win32=True</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility">
+      <Name>Microsoft.VisualBasic.Compatibility</Name>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic.PowerPacks">
+      <Name>Microsoft.VisualBasic.PowerPacks</Name>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.XML">
+      <Name>System.XML</Name>
+    </Reference>
+    <COMReference Include="AxComctlLib">
+      <Guid>{6B7E6392-850A-101B-AFC0-4210102A8DA7}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <WrapperTool>aximp</WrapperTool>
+    </COMReference>
+    <COMReference Include="ComctlLib">
+      <Guid>{6B7E6392-850A-101B-AFC0-4210102A8DA7}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acciones.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Admin.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AI_NPC.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.vb" />
+    <Compile Include="cColaArray.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cGarbage.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Characters.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsAntiMassClon.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsByteQueue.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsClan.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsdicc.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsEstadisticasIPC.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsIniReader.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsMapSoundManager.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsParty.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Comercio.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConsultasPopulares.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cSolicitud.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Declares.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileIO.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="frmAdmin.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmAdmin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdmin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCargando.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmCargando.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCargando.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConID.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmConID.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmConID.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDebugNpc.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmDebugNpc.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDebugNpc.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInterv.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>FrmInterv.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmInterv.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmServidor.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmServidor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmServidor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmStat.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>FrmStat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmStat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTrafic.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmTrafic.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTrafic.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUserList.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmUserList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmUserList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameLogic.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="General.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="History.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InvUsuario.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Matematicas.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mdlCOmercioConUsuario.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mdParty.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModAreas.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modBanco.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCentinela.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModCola.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModFacciones.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modForum.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modGuilds.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modHechizos.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modHexaStrings.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modInvisibles.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modNuevoTimer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modSendData.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Modulo_InventANDobj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MODULO_NPCs.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Modulo_SysTray.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Modulo_UsUaRiOs.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PathFinding.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="praetorians.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Protocol.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queue.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SecurityIp.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SistemaCombate.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statistics.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TCP.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Trabajo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wskapiAO.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wsksock.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="frmAdmin.resX">
+      <DependentUpon>frmAdmin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCargando.resX">
+      <DependentUpon>frmCargando.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmConID.resX">
+      <DependentUpon>frmConID.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDebugNpc.resX">
+      <DependentUpon>frmDebugNpc.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInterv.resX">
+      <DependentUpon>FrmInterv.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resX">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmServidor.resX">
+      <DependentUpon>frmServidor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmStat.resX">
+      <DependentUpon>FrmStat.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTrafic.resX">
+      <DependentUpon>frmTrafic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUserList.resX">
+      <DependentUpon>frmUserList.vb</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="SERVER.ico" />
+    <None Include="_UpgradeReport.htm">
+      <SubType>Preview</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="My Project\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
