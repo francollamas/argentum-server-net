@@ -46,6 +46,7 @@ Private EntrysCounter   As Long
 Private MaxValue        As Long
 Private Multiplicado    As Long 'Cuantas veces multiplike el EntrysCounter para que me entren?
 Private Const IntervaloEntreConexiones As Long = 1000
+Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByRef destination As Any, ByRef source As Any, ByVal length As Long)
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 'Declaraciones para maximas conexiones por usuario

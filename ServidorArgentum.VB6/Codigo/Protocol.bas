@@ -12670,7 +12670,7 @@ Public Sub HandleShowServerForm(ByVal UserIndex As Integer)
         If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero Or PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
         
         Call LogGM(.name, .name & " ha solicitado mostrar el formulario del servidor.")
-        Call frmMain.mnuMostrar_Click
+        Call frmMain.Show
     End With
 End Sub
 

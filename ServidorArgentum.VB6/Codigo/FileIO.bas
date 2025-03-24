@@ -244,9 +244,7 @@ On Error GoTo Errhandler
     
     ReDim Hechizos(1 To NumeroHechizos) As tHechizo
     
-    frmCargando.cargar.min = 0
-    frmCargando.cargar.max = NumeroHechizos
-    frmCargando.cargar.Value = 0
+    frmCargando.porcentaje.Caption = "0 %"
     
     'Llena la lista
     For Hechizo = 1 To NumeroHechizos
@@ -335,7 +333,7 @@ On Error GoTo Errhandler
             .StaRequerido = val(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido"))
             
             .Target = val(Leer.GetValue("Hechizo" & Hechizo, "Target"))
-            frmCargando.cargar.Value = frmCargando.cargar.Value + 1
+            frmCargando.porcentaje.Caption = Hechizo / NumeroHechizos * 100 & " %"
             
             .NeedStaff = val(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
             .StaffAffected = CBool(val(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
@@ -713,9 +711,7 @@ On Error GoTo Errhandler
     'obtiene el numero de obj
     NumObjDatas = val(Leer.GetValue("INIT", "NumObjs"))
     
-    frmCargando.cargar.min = 0
-    frmCargando.cargar.max = NumObjDatas
-    frmCargando.cargar.Value = 0
+    frmCargando.porcentaje.Caption = "0 %"
     
     
     ReDim Preserve ObjData(1 To NumObjDatas) As ObjData
@@ -918,7 +914,7 @@ On Error GoTo Errhandler
             
             .Upgrade = val(Leer.GetValue("OBJ" & Object, "Upgrade"))
             
-            frmCargando.cargar.Value = frmCargando.cargar.Value + 1
+            frmCargando.porcentaje.Caption = Object / NumObjDatas * 100 & " %"
         End With
     Next Object
     
@@ -1247,9 +1243,7 @@ Sub CargarBackUp()
         NumMaps = val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas
         
-        frmCargando.cargar.min = 0
-        frmCargando.cargar.max = NumMaps
-        frmCargando.cargar.Value = 0
+        frmCargando.porcentaje.Caption = "0 %"
         
         MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
         
@@ -1270,7 +1264,7 @@ Sub CargarBackUp()
             
             Call CargarMapa(Map, tFileName)
             
-            frmCargando.cargar.Value = frmCargando.cargar.Value + 1
+            frmCargando.porcentaje.Caption = Map / NumMaps * 100 & " %"
             DoEvents
         Next Map
     
@@ -1301,9 +1295,7 @@ Sub LoadMapData()
         NumMaps = val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas
         
-        frmCargando.cargar.min = 0
-        frmCargando.cargar.max = NumMaps
-        frmCargando.cargar.Value = 0
+        frmCargando.porcentaje.Caption = "0 %"
         
         MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
         
@@ -1316,7 +1308,7 @@ Sub LoadMapData()
             tFileName = App.Path & MapPath & "Mapa" & Map
             Call CargarMapa(Map, tFileName)
             
-            frmCargando.cargar.Value = frmCargando.cargar.Value + 1
+            frmCargando.porcentaje.Caption = Map / NumMaps * 100 & " %"
             DoEvents
         Next Map
     

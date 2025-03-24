@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmCargando 
    BackColor       =   &H00C0C0C0&
    BorderStyle     =   0  'None
@@ -17,18 +16,6 @@ Begin VB.Form frmCargando
    ScaleWidth      =   430
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin ComctlLib.ProgressBar cargar 
-      Height          =   255
-      Left            =   120
-      TabIndex        =   3
-      Top             =   2760
-      Width           =   3855
-      _ExtentX        =   6800
-      _ExtentY        =   450
-      _Version        =   327682
-      Appearance      =   1
-      Min             =   1e-4
-   End
    Begin VB.PictureBox Picture1 
       BorderStyle     =   0  'None
       Height          =   2775
@@ -51,6 +38,28 @@ Begin VB.Form frmCargando
          Top             =   2040
          Width           =   2445
       End
+   End
+   Begin VB.Label porcentaje 
+      Appearance      =   0  'Flat
+      AutoSize        =   -1  'True
+      BackColor       =   &H80000005&
+      BackStyle       =   0  'Transparent
+      Caption         =   "0 %"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   240
+      Left            =   360
+      TabIndex        =   3
+      Top             =   2760
+      Width           =   735
    End
    Begin VB.Label Label1 
       Alignment       =   1  'Right Justify
@@ -113,4 +122,8 @@ Option Explicit
 Private Sub Form_Load()
 'Label1(1).Caption = Label1(1).Caption & " V." & App.Major & "." & App.Minor & "." & App.Revision
 Picture1.Picture = LoadPicture(App.Path & "\logo.jpg")
+End Sub
+
+Private Sub Label2_Click()
+
 End Sub

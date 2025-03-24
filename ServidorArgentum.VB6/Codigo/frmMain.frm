@@ -7,7 +7,6 @@ Begin VB.Form frmMain
    ClientLeft      =   1950
    ClientTop       =   1815
    ClientWidth     =   5190
-   ControlBox      =   0   'False
    FillColor       =   &H00C0C0C0&
    BeginProperty Font 
       Name            =   "Arial"
@@ -21,13 +20,11 @@ Begin VB.Form frmMain
    ForeColor       =   &H80000004&
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
-   MaxButton       =   0   'False
-   MinButton       =   0   'False
    PaletteMode     =   1  'UseZOrder
    ScaleHeight     =   4845
    ScaleWidth      =   5190
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   WindowState     =   1  'Minimized
    Begin VB.TextBox txtChat 
       Height          =   2775
       Left            =   120
@@ -226,21 +223,8 @@ Begin VB.Form frmMain
       Begin VB.Menu mnuServidor 
          Caption         =   "Configuracion"
       End
-      Begin VB.Menu mnuSystray 
-         Caption         =   "Systray Servidor"
-      End
       Begin VB.Menu mnuCerrar 
          Caption         =   "Cerrar Servidor"
-      End
-   End
-   Begin VB.Menu mnuPopUp 
-      Caption         =   "PopUpMenu"
-      Visible         =   0   'False
-      Begin VB.Menu mnuMostrar 
-         Caption         =   "&Mostrar"
-      End
-      Begin VB.Menu mnuSalir 
-         Caption         =   "&Salir"
       End
    End
 End
@@ -300,23 +284,6 @@ Const NIF_TIP = 4
 Const WM_MOUSEMOVE = &H200
 Const WM_LBUTTONDBLCLK = &H203
 Const WM_RBUTTONUP = &H205
-
-Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As Long, lpdwProcessId As Long) As Long
-Private Declare Function Shell_NotifyIconA Lib "SHELL32" (ByVal dwMessage As Long, lpData As NOTIFYICONDATA) As Integer
-
-Private Function setNOTIFYICONDATA(hWnd As Long, ID As Long, flags As Long, CallbackMessage As Long, Icon As Long, Tip As String) As NOTIFYICONDATA
-    Dim nidTemp As NOTIFYICONDATA
-
-    nidTemp.cbSize = Len(nidTemp)
-    nidTemp.hWnd = hWnd
-    nidTemp.uID = ID
-    nidTemp.uFlags = flags
-    nidTemp.uCallbackMessage = CallbackMessage
-    nidTemp.hIcon = Icon
-    nidTemp.szTip = Tip & Chr$(0)
-
-    setNOTIFYICONDATA = nidTemp
-End Function
 
 Sub CheckIdleUser()
     Dim iUserIndex As Long
@@ -450,16 +417,6 @@ Call SendData(SendTarget.ToAll, 0, PrepareMessageShowMessageBox(BroadMsg.Text))
 txtChat.Text = txtChat.Text & vbNewLine & "Servidor> " & BroadMsg.Text
 End Sub
 
-Public Sub InitMain(ByVal f As Byte)
-
-If f = 1 Then
-    Call mnuSystray_Click
-Else
-    frmMain.Show
-End If
-
-End Sub
-
 Private Sub Command2_Click()
 Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & BroadMsg.Text, FontTypeNames.FONTTYPE_SERVER))
 ''''''''''''''''SOLO PARA EL TESTEO'''''''
@@ -467,48 +424,11 @@ Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & Broad
 txtChat.Text = txtChat.Text & vbNewLine & "Servidor> " & BroadMsg.Text
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-On Error Resume Next
-   
-   If Not Visible Then
-        Select Case X \ Screen.TwipsPerPixelX
-                
-            Case WM_LBUTTONDBLCLK
-                WindowState = vbNormal
-                Visible = True
-                Dim hProcess As Long
-                GetWindowThreadProcessId hWnd, hProcess
-                AppActivate hProcess
-            Case WM_RBUTTONUP
-                hHook = SetWindowsHookEx(WH_CALLWNDPROC, AddressOf AppHook, App.hInstance, App.ThreadID)
-                PopupMenu mnuPopUp
-                If hHook Then UnhookWindowsHookEx hHook: hHook = 0
-        End Select
-   End If
-   
-End Sub
-
-Private Sub QuitarIconoSystray()
-On Error Resume Next
-
-'Borramos el icono del systray
-Dim i As Integer
-Dim nid As NOTIFYICONDATA
-
-nid = setNOTIFYICONDATA(frmMain.hWnd, vbNull, NIF_MESSAGE Or NIF_ICON Or NIF_TIP, vbNull, frmMain.Icon, "")
-
-i = Shell_NotifyIconA(NIM_DELETE, nid)
-    
-
-End Sub
-
 Private Sub Form_Unload(Cancel As Integer)
 On Error Resume Next
 
 'Save stats!!!
 Call Statistics.DumpStatistics
-
-Call QuitarIconoSystray
 
 #If UsarQueSocket = 1 Then
 Call LimpiaWsApi
@@ -717,12 +637,6 @@ Private Sub mnusalir_Click()
     Call mnuCerrar_Click
 End Sub
 
-Public Sub mnuMostrar_Click()
-On Error Resume Next
-    WindowState = vbNormal
-    Form_MouseMove 0, 0, 7725, 0
-End Sub
-
 Private Sub KillLog_Timer()
 On Error Resume Next
 If FileExist(App.Path & "\logs\connect.log", vbNormal) Then Kill App.Path & "\logs\connect.log"
@@ -738,21 +652,6 @@ End Sub
 
 Private Sub mnuServidor_Click()
 frmServidor.Visible = True
-End Sub
-
-Private Sub mnuSystray_Click()
-
-Dim i As Integer
-Dim S As String
-Dim nid As NOTIFYICONDATA
-
-S = "ARGENTUM-ONLINE"
-nid = setNOTIFYICONDATA(frmMain.hWnd, vbNull, NIF_MESSAGE Or NIF_ICON Or NIF_TIP, WM_MOUSEMOVE, frmMain.Icon, S)
-i = Shell_NotifyIconA(NIM_ADD, nid)
-    
-If WindowState <> vbMinimized Then WindowState = vbMinimized
-Visible = False
-
 End Sub
 
 Private Sub npcataca_Timer()

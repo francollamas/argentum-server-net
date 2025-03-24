@@ -499,12 +499,7 @@ On Error Resume Next
     Print #N, Date & " " & time & " server iniciado " & App.Major & "."; App.Minor & "." & App.Revision
     Close #N
     
-    'Ocultar
-    If HideMe = 1 Then
-        Call frmMain.InitMain(1)
-    Else
-        Call frmMain.InitMain(0)
-    End If
+    frmMain.Show
     
     tInicioServer = GetTickCount() And &H7FFFFFFF
     Call InicializaEstadisticas
@@ -1050,14 +1045,7 @@ On Error Resume Next
     Print #N, Date & " " & time & " servidor reiniciado."
     Close #N
     
-    'Ocultar
-    
-    If HideMe = 1 Then
-        Call frmMain.InitMain(1)
-    Else
-        Call frmMain.InitMain(0)
-    End If
-
+    frmMain.Show
   
 End Sub
 

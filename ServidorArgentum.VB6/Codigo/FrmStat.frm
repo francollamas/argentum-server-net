@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form FrmStat 
    BackColor       =   &H00C0C0C0&
    BorderStyle     =   3  'Fixed Dialog
@@ -17,16 +16,25 @@ Begin VB.Form FrmStat
    ScaleWidth      =   375
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
-   Begin ComctlLib.ProgressBar ProgressBar1 
-      Height          =   255
-      Left            =   240
+   Begin VB.Label Porcentaje 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "0 %"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   195
+      Left            =   2760
       TabIndex        =   1
-      Top             =   600
-      Width           =   5175
-      _ExtentX        =   9128
-      _ExtentY        =   450
-      _Version        =   327682
-      Appearance      =   1
+      Top             =   720
+      Width           =   315
    End
    Begin VB.Label Titu 
       AutoSize        =   -1  'True
@@ -83,3 +91,8 @@ Attribute VB_Exposed = False
 'Pablo Ignacio Márquez
 
 Option Explicit
+
+Private Sub Label1_Click()
+
+End Sub
+

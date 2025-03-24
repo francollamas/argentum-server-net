@@ -12,23 +12,6 @@ Begin VB.Form frmServidor
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   323
    StartUpPosition =   3  'Windows Default
-   Begin VB.CommandButton Command26 
-      Caption         =   "Reset Listen"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   1920
-      TabIndex        =   26
-      Top             =   6180
-      Width           =   1455
-   End
    Begin VB.PictureBox picFuera 
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
@@ -38,18 +21,9 @@ Begin VB.Form frmServidor
       ScaleHeight     =   288
       ScaleMode       =   3  'Pixel
       ScaleWidth      =   304
-      TabIndex        =   6
+      TabIndex        =   7
       Top             =   120
       Width           =   4590
-      Begin VB.VScrollBar VS1 
-         Height          =   4335
-         LargeChange     =   50
-         Left            =   4320
-         SmallChange     =   17
-         TabIndex        =   24
-         Top             =   0
-         Width           =   255
-      End
       Begin VB.PictureBox picCont 
          BackColor       =   &H00C0C0C0&
          BorderStyle     =   0  'None
@@ -58,113 +32,11 @@ Begin VB.Form frmServidor
          ScaleHeight     =   321
          ScaleMode       =   3  'Pixel
          ScaleWidth      =   289
-         TabIndex        =   7
+         TabIndex        =   9
          Top             =   0
          Width           =   4334
-         Begin VB.CommandButton Command27 
-            Caption         =   "Debug UserList"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   27
-            Top             =   4440
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command22 
-            Caption         =   "Administración"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   8
-            Top             =   4200
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command21 
-            Caption         =   "Pausar el servidor"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   9
-            Top             =   3960
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command17 
-            Caption         =   "Actualizar npcs.dat"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   10
-            Top             =   3720
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command25 
-            Caption         =   "Reload MD5s"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   25
-            Top             =   3480
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command16 
-            Caption         =   "Reload Server.ini"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   11
-            Top             =   3240
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command28 
-            Caption         =   "Reload Balance.dat"
+         Begin VB.CommandButton Command1 
+            Caption         =   "Actualizar objetos.dat"
             BeginProperty Font 
                Name            =   "Tahoma"
                Size            =   8.25
@@ -177,11 +49,11 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   28
-            Top             =   3000
+            Top             =   120
             Width           =   4095
          End
-         Begin VB.CommandButton Command14 
-            Caption         =   "Update MOTD"
+         Begin VB.CommandButton Command6 
+            Caption         =   "ReSpawn Guardias en posiciones originales"
             BeginProperty Font 
                Name            =   "Tahoma"
                Size            =   8.25
@@ -193,144 +65,8 @@ Begin VB.Form frmServidor
             EndProperty
             Height          =   255
             Left            =   120
-            TabIndex        =   12
-            Top             =   2760
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command19 
-            Caption         =   "Unban All IPs (PELIGRO!)"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   13
-            Top             =   2520
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command15 
-            Caption         =   "Unban All (PELIGRO!)"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   14
-            Top             =   2280
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command12 
-            Caption         =   "Debug Npcs"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   15
-            Top             =   2040
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command11 
-            Caption         =   "Stats de los slots"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   16
-            Top             =   1800
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command10 
-            Caption         =   "Trafico"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   17
-            Top             =   1560
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command9 
-            Caption         =   "Reload Lista Nombres Prohibidos"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   18
-            Top             =   1320
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command8 
-            Caption         =   "Actualizar hechizos"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   19
-            Top             =   1080
-            Width           =   4095
-         End
-         Begin VB.CommandButton Command7 
-            Caption         =   "Configurar intervalos"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   120
-            TabIndex        =   20
-            Top             =   840
+            TabIndex        =   27
+            Top             =   360
             Width           =   4095
          End
          Begin VB.CommandButton Command3 
@@ -347,12 +83,12 @@ Begin VB.Form frmServidor
             EndProperty
             Height          =   255
             Left            =   120
-            TabIndex        =   21
+            TabIndex        =   26
             Top             =   600
             Width           =   4095
          End
-         Begin VB.CommandButton Command6 
-            Caption         =   "ReSpawn Guardias en posiciones originales"
+         Begin VB.CommandButton Command7 
+            Caption         =   "Configurar intervalos"
             BeginProperty Font 
                Name            =   "Tahoma"
                Size            =   8.25
@@ -364,12 +100,29 @@ Begin VB.Form frmServidor
             EndProperty
             Height          =   255
             Left            =   120
-            TabIndex        =   22
-            Top             =   360
+            TabIndex        =   25
+            Top             =   840
             Width           =   4095
          End
-         Begin VB.CommandButton Command1 
-            Caption         =   "Actualizar objetos.dat"
+         Begin VB.CommandButton Command8 
+            Caption         =   "Actualizar hechizos"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   24
+            Top             =   1080
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command9 
+            Caption         =   "Reload Lista Nombres Prohibidos"
             BeginProperty Font 
                Name            =   "Tahoma"
                Size            =   8.25
@@ -382,10 +135,257 @@ Begin VB.Form frmServidor
             Height          =   255
             Left            =   120
             TabIndex        =   23
-            Top             =   120
+            Top             =   1320
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command10 
+            Caption         =   "Trafico"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   22
+            Top             =   1560
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command11 
+            Caption         =   "Stats de los slots"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   21
+            Top             =   1800
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command12 
+            Caption         =   "Debug Npcs"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   20
+            Top             =   2040
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command15 
+            Caption         =   "Unban All (PELIGRO!)"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   19
+            Top             =   2280
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command19 
+            Caption         =   "Unban All IPs (PELIGRO!)"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   18
+            Top             =   2520
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command14 
+            Caption         =   "Update MOTD"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   17
+            Top             =   2760
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command28 
+            Caption         =   "Reload Balance.dat"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   16
+            Top             =   3000
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command16 
+            Caption         =   "Reload Server.ini"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   15
+            Top             =   3240
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command25 
+            Caption         =   "Reload MD5s"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   14
+            Top             =   3480
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command17 
+            Caption         =   "Actualizar npcs.dat"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   13
+            Top             =   3720
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command21 
+            Caption         =   "Pausar el servidor"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   12
+            Top             =   3960
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command22 
+            Caption         =   "Administración"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   11
+            Top             =   4200
+            Width           =   4095
+         End
+         Begin VB.CommandButton Command27 
+            Caption         =   "Debug UserList"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   10
+            Top             =   4440
             Width           =   4095
          End
       End
+      Begin VB.VScrollBar VS1 
+         Height          =   4335
+         LargeChange     =   50
+         Left            =   4320
+         SmallChange     =   17
+         TabIndex        =   8
+         Top             =   0
+         Width           =   255
+      End
+   End
+   Begin VB.CommandButton Command26 
+      Caption         =   "Reset Listen"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   1920
+      TabIndex        =   6
+      Top             =   6180
+      Width           =   1455
    End
    Begin VB.CommandButton Command23 
       Caption         =   "Boton Magico para apagar server"
@@ -480,12 +480,6 @@ Begin VB.Form frmServidor
       TabIndex        =   4
       Top             =   6180
       Width           =   1575
-   End
-   Begin VB.Shape Shape2 
-      Height          =   1335
-      Left            =   120
-      Top             =   4560
-      Width           =   4335
    End
 End
 Attribute VB_Name = "frmServidor"
@@ -829,14 +823,14 @@ If picCont.Height > picFuera.ScaleHeight Then
 Else
     VS1.max = 0
 End If
-picCont.Top = -VS1.value
+picCont.Top = -VS1.Value
 
 End Sub
 
 Private Sub VS1_Change()
-picCont.Top = -VS1.value
+picCont.Top = -VS1.Value
 End Sub
 
 Private Sub VS1_Scroll()
-picCont.Top = -VS1.value
+picCont.Top = -VS1.Value
 End Sub

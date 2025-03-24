@@ -157,9 +157,7 @@ On Error Resume Next
         If MapInfo(j).BackUp = 1 Then k = k + 1
     Next j
     
-    FrmStat.ProgressBar1.min = 0
-    FrmStat.ProgressBar1.max = k
-    FrmStat.ProgressBar1.Value = 0
+    FrmStat.porcentaje.Caption = "0 %"
     
     For loopX = 1 To NumMaps
         'DoEvents
@@ -167,7 +165,7 @@ On Error Resume Next
         If MapInfo(loopX).BackUp = 1 Then
         
                 Call GrabarMapa(loopX, App.Path & "\WorldBackUp\Mapa" & loopX)
-                FrmStat.ProgressBar1.Value = FrmStat.ProgressBar1.Value + 1
+                FrmStat.porcentaje.Caption = loopX / NumMaps * 100 & " %"
         End If
     
     Next loopX
