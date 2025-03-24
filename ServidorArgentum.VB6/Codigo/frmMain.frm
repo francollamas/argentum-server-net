@@ -628,7 +628,7 @@ hayerror:
 End Sub
 
 Private Sub mnuCerrar_Click()
-    Unload Me
+    Call salir
 End Sub
 
 Private Function salir() As Boolean
