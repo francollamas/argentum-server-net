@@ -782,7 +782,7 @@ On Error Resume Next
     
     ElseIf Err.Number <> 0 And Not Err.Number = UserList(UserIndex).incomingData.NotEnoughDataErrCode Then
         'An error ocurred, log it and kick player.
-        Call LogError("Error: " & Err.Number & " [" & Err.description & "] " & " Source: " & Err.source & _
+        Call LogError("Error: " & Err.Number & " [" & Err.description & "] " & " Source: " & Err.Source & _
                         vbTab & " HelpFile: " & Err.HelpFile & vbTab & " HelpContext: " & Err.HelpContext & _
                         vbTab & " LastDllError: " & Err.LastDllError & vbTab & _
                         " - UserIndex: " & UserIndex & " - producido al manejar el paquete: " & CStr(packetID))
@@ -12670,6 +12670,7 @@ Public Sub HandleShowServerForm(ByVal UserIndex As Integer)
         If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero Or PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
         
         Call LogGM(.name, .name & " ha solicitado mostrar el formulario del servidor.")
+        frmMain.WindowState = vbNormal ' TODO FIX: no funciona como se espera, de todas formas no es algo funcional
         Call frmMain.Show
     End With
 End Sub

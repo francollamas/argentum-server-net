@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmMain 
    BackColor       =   &H00C0C0C0&
-   BorderStyle     =   3  'Fixed Dialog
+   BorderStyle     =   1  'Fixed Single
    Caption         =   "Argentum Online"
    ClientHeight    =   4845
    ClientLeft      =   1950
@@ -20,10 +20,10 @@ Begin VB.Form frmMain
    ForeColor       =   &H80000004&
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
    PaletteMode     =   1  'UseZOrder
    ScaleHeight     =   4845
    ScaleWidth      =   5190
-   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.TextBox txtChat 
       Height          =   2775
@@ -424,6 +424,12 @@ Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & Broad
 txtChat.Text = txtChat.Text & vbNewLine & "Servidor> " & BroadMsg.Text
 End Sub
 
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+If Not salir Then
+    Cancel = True
+End If
+End Sub
+
 Private Sub Form_Unload(Cancel As Integer)
 On Error Resume Next
 
@@ -622,19 +628,24 @@ hayerror:
 End Sub
 
 Private Sub mnuCerrar_Click()
+    Call salir
+End Sub
 
-
+Private Function salir() As Boolean
 If MsgBox("¡¡Atencion!! Si cierra el servidor puede provocar la perdida de datos. ¿Desea hacerlo de todas maneras?", vbYesNo) = vbYes Then
     Dim f
     For Each f In Forms
         Unload f
     Next
+    salir = True
+    Exit Function
 End If
 
-End Sub
+salir = False
+End Function
 
 Private Sub mnusalir_Click()
-    Call mnuCerrar_Click
+    Call salir
 End Sub
 
 Private Sub KillLog_Timer()
