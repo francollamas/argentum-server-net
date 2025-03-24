@@ -645,7 +645,7 @@ salir = False
 End Function
 
 Private Sub mnusalir_Click()
-    Call salir
+    Unload Me
 End Sub
 
 Private Sub KillLog_Timer()
