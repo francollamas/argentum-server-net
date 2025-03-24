@@ -244,7 +244,7 @@ On Error GoTo Errhandler
     
     ReDim Hechizos(1 To NumeroHechizos) As tHechizo
     
-    frmCargando.porcentaje.Caption = "0 %"
+    frmCargando.Porcentaje.Caption = "0 %"
     
     'Llena la lista
     For Hechizo = 1 To NumeroHechizos
@@ -333,7 +333,7 @@ On Error GoTo Errhandler
             .StaRequerido = val(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido"))
             
             .Target = val(Leer.GetValue("Hechizo" & Hechizo, "Target"))
-            frmCargando.porcentaje.Caption = Hechizo / NumeroHechizos * 100 & " %"
+            frmCargando.Porcentaje.Caption = Hechizo / NumeroHechizos * 100 & " %"
             
             .NeedStaff = val(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
             .StaffAffected = CBool(val(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
@@ -711,7 +711,7 @@ On Error GoTo Errhandler
     'obtiene el numero de obj
     NumObjDatas = val(Leer.GetValue("INIT", "NumObjs"))
     
-    frmCargando.porcentaje.Caption = "0 %"
+    frmCargando.Porcentaje.Caption = "0 %"
     
     
     ReDim Preserve ObjData(1 To NumObjDatas) As ObjData
@@ -914,7 +914,7 @@ On Error GoTo Errhandler
             
             .Upgrade = val(Leer.GetValue("OBJ" & Object, "Upgrade"))
             
-            frmCargando.porcentaje.Caption = Object / NumObjDatas * 100 & " %"
+            frmCargando.Porcentaje.Caption = Object / NumObjDatas * 100 & " %"
         End With
     Next Object
     
@@ -1203,25 +1203,75 @@ Sub LoadUserInit(ByVal UserIndex As Integer, ByRef UserFile As clsIniReader)
 End Sub
 
 Function GetVar(ByVal file As String, ByVal Main As String, ByVal Var As String, Optional EmptySpaces As Long = 1024) As String
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'
-'***************************************************
+' TODO MIGRATED | FIX PERFORMANCE: al no usar la API, la lectura se hace mucho mas lenta. Buscar alguna alternativa
+    Dim iFile As Integer
+    Dim line As String
+    Dim sectionFound As Boolean
+    Dim value As String
+    Dim maxLength As Long
 
-    Dim sSpaces As String ' This will hold the input that the program will retrieve
-    Dim szReturn As String ' This will be the defaul value if the string is not found
-      
-    szReturn = vbNullString
-      
-    sSpaces = Space$(EmptySpaces) ' This tells the computer how long the longest string can be
-      
-      
-    GetPrivateProfileString Main, Var, szReturn, sSpaces, EmptySpaces, file
-      
-    GetVar = RTrim$(sSpaces)
-    GetVar = Left$(GetVar, Len(GetVar) - 1)
-  
+    ' Inicializamos la variable value con un valor vacío
+    value = ""
+
+    ' Establecemos el máximo de caracteres permitidos (simulando EmptySpaces)
+    maxLength = EmptySpaces
+
+    ' Abrimos el archivo de configuración para lectura
+    iFile = FreeFile
+    On Error GoTo ErrorHandler
+    Open file For Input As iFile
+    
+    ' Bandera que indica si hemos encontrado la sección
+    sectionFound = False
+
+    ' Leemos línea por línea el archivo
+    Do Until EOF(iFile)
+        Line Input #iFile, line
+        line = Trim$(line) ' Limpiar espacios alrededor de la línea
+
+        ' Si encontramos una línea que es una sección
+        If Left$(line, 1) = "[" Then
+            ' Verificamos si esta es la sección que buscamos
+            If mid$(line, 2, Len(line) - 2) = Main Then
+                sectionFound = True
+            Else
+                sectionFound = False
+            End If
+        End If
+        
+        ' Si estamos en la sección correcta, buscamos la clave
+        If sectionFound And InStr(line, "=") > 0 Then
+            ' Separar la clave y el valor
+            Dim key As String
+            Dim keyValue As String
+            key = Trim$(Left$(line, InStr(line, "=") - 1))
+            keyValue = Trim$(mid$(line, InStr(line, "=") + 1))
+            
+            ' Si la clave coincide con la que buscamos, tomamos su valor
+            If key = Var Then
+                value = keyValue
+                Exit Do
+            End If
+        End If
+    Loop
+
+    ' Cerramos el archivo
+    Close iFile
+
+    ' Si no encontramos el valor, devolvemos una cadena vacía o el valor por defecto
+    If Len(value) = 0 Then
+        value = String$(maxLength, " ") ' Rellenamos con espacios si no se encuentra
+    End If
+    
+    ' Retornar el valor encontrado
+    GetVar = RTrim$(value)
+
+    Exit Function
+
+ErrorHandler:
+    ' Si ocurre un error, cerramos el archivo y devolvemos cadena vacía
+    If iFile > 0 Then Close iFile
+    GetVar = ""
 End Function
 
 Sub CargarBackUp()
@@ -1243,7 +1293,7 @@ Sub CargarBackUp()
         NumMaps = val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas
         
-        frmCargando.porcentaje.Caption = "0 %"
+        frmCargando.Porcentaje.Caption = "0 %"
         
         MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
         
@@ -1264,7 +1314,7 @@ Sub CargarBackUp()
             
             Call CargarMapa(Map, tFileName)
             
-            frmCargando.porcentaje.Caption = Map / NumMaps * 100 & " %"
+            frmCargando.Porcentaje.Caption = Map / NumMaps * 100 & " %"
             DoEvents
         Next Map
     
@@ -1272,7 +1322,7 @@ Sub CargarBackUp()
 
 man:
     MsgBox ("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
-    Call LogError(Date & " " & Err.description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.source)
+    Call LogError(Date & " " & Err.description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
  
 End Sub
 
@@ -1295,7 +1345,7 @@ Sub LoadMapData()
         NumMaps = val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas
         
-        frmCargando.porcentaje.Caption = "0 %"
+        frmCargando.Porcentaje.Caption = "0 %"
         
         MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
         
@@ -1308,7 +1358,7 @@ Sub LoadMapData()
             tFileName = App.Path & MapPath & "Mapa" & Map
             Call CargarMapa(Map, tFileName)
             
-            frmCargando.porcentaje.Caption = Map / NumMaps * 100 & " %"
+            frmCargando.Porcentaje.Caption = Map / NumMaps * 100 & " %"
             DoEvents
         Next Map
     
@@ -1316,7 +1366,7 @@ Sub LoadMapData()
 
 man:
     MsgBox ("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
-    Call LogError(Date & " " & Err.description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.source)
+    Call LogError(Date & " " & Err.description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
 
 End Sub
 
@@ -1663,15 +1713,77 @@ Sub LoadSini()
 
 End Sub
 
-Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'Escribe VAR en un archivo
-'***************************************************
-
-writeprivateprofilestring Main, Var, Value, file
+Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal value As String)
+' TODO MIGRATION | PERFORMANCE FIX: esto es lento, buscar otra alternativa
+    '***************************************************
+    'Author: Unknown
+    'Last Modification: -
+    'Escribe VAR en un archivo INI de manera manual sin usar WritePrivateProfileString
+    '***************************************************
     
+    Dim f As Integer
+    Dim line As String
+    Dim sectionFound As Boolean
+    Dim keyFound As Boolean
+
+    ' Abrir el archivo para lectura/escritura
+    f = FreeFile
+    On Error Resume Next
+    Open file For Input As #f
+    On Error GoTo 0
+
+    If Err.Number <> 0 Then
+        ' Si el archivo no existe, lo creamos
+        f = FreeFile
+        Open file For Output As #f
+        Close #f
+        f = FreeFile
+        Open file For Append As #f
+    End If
+    
+    ' Leer el archivo línea por línea
+    sectionFound = False
+    keyFound = False
+    Dim tempFile As String
+    Dim tempLine As String
+    Dim section As String
+    section = "[" & Main & "]"
+    
+    Do While Not EOF(f)
+        Line Input #f, tempLine
+        tempFile = tempFile & tempLine & vbCrLf
+        
+        ' Verificar si encontramos la sección
+        If Trim(tempLine) = section Then
+            sectionFound = True
+        End If
+
+        ' Si ya encontramos la sección, buscar la clave
+        If sectionFound Then
+            If InStr(1, tempLine, Var & "=") > 0 Then
+                keyFound = True
+                ' Reemplazar la línea con el nuevo valor
+                tempFile = Replace(tempFile, Var & "=", Var & "=" & value)
+                Exit Do
+            End If
+        End If
+    Loop
+    
+    ' Si no encontramos la clave, agregarla
+    If Not keyFound Then
+        If Not sectionFound Then
+            tempFile = tempFile & "[" & Main & "]" & vbCrLf
+        End If
+        tempFile = tempFile & Var & "=" & value & vbCrLf
+    End If
+    
+    ' Reabrir el archivo para sobrescribirlo con el nuevo contenido
+    Close #f
+    f = FreeFile
+    Open file For Output As #f
+    Print #f, tempFile
+    Close #f
+
 End Sub
 
 Sub SaveUser(ByVal UserIndex As Integer, ByVal UserFile As String)
