@@ -244,7 +244,7 @@ On Error GoTo Errhandler
     
     ReDim Hechizos(1 To NumeroHechizos) As tHechizo
     
-    frmCargando.porcentaje.Caption = "0 %"
+    frmCargando.Porcentaje.Caption = "0 %"
     
     'Llena la lista
     For Hechizo = 1 To NumeroHechizos
@@ -333,7 +333,7 @@ On Error GoTo Errhandler
             .StaRequerido = val(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido"))
             
             .Target = val(Leer.GetValue("Hechizo" & Hechizo, "Target"))
-            frmCargando.porcentaje.Caption = Hechizo / NumeroHechizos * 100 & " %"
+            frmCargando.Porcentaje.Caption = Hechizo / NumeroHechizos * 100 & " %"
             
             .NeedStaff = val(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
             .StaffAffected = CBool(val(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
@@ -711,7 +711,7 @@ On Error GoTo Errhandler
     'obtiene el numero de obj
     NumObjDatas = val(Leer.GetValue("INIT", "NumObjs"))
     
-    frmCargando.porcentaje.Caption = "0 %"
+    frmCargando.Porcentaje.Caption = "0 %"
     
     
     ReDim Preserve ObjData(1 To NumObjDatas) As ObjData
@@ -914,7 +914,7 @@ On Error GoTo Errhandler
             
             .Upgrade = val(Leer.GetValue("OBJ" & Object, "Upgrade"))
             
-            frmCargando.porcentaje.Caption = Object / NumObjDatas * 100 & " %"
+            frmCargando.Porcentaje.Caption = Object / NumObjDatas * 100 & " %"
         End With
     Next Object
     
@@ -1203,25 +1203,61 @@ Sub LoadUserInit(ByVal UserIndex As Integer, ByRef UserFile As clsIniReader)
 End Sub
 
 Function GetVar(ByVal file As String, ByVal Main As String, ByVal Var As String, Optional EmptySpaces As Long = 1024) As String
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'
-'***************************************************
+' TODO MIGRATED | FIX PERFORMANCE: al no usar la API, la lectura se hace mucho mas lenta. Buscar alguna alternativa
+    Dim iFile As Integer
+    Dim line As String
+    Dim sectionFound As Boolean
+    Dim Value As String
+    Dim maxLength As Long
 
-    Dim sSpaces As String ' This will hold the input that the program will retrieve
-    Dim szReturn As String ' This will be the defaul value if the string is not found
-      
-    szReturn = vbNullString
-      
-    sSpaces = Space$(EmptySpaces) ' This tells the computer how long the longest string can be
-      
-      
-    GetPrivateProfileString Main, Var, szReturn, sSpaces, EmptySpaces, file
-      
-    GetVar = RTrim$(sSpaces)
-    GetVar = Left$(GetVar, Len(GetVar) - 1)
-  
+    Value = ""
+
+    maxLength = EmptySpaces
+
+    iFile = FreeFile
+    On Error GoTo ErrorHandler
+    Open file For Input As iFile
+    
+    sectionFound = False
+
+    Do Until EOF(iFile)
+        Line Input #iFile, line
+        line = Trim$(line)
+
+        If Left$(line, 1) = "[" Then
+            If mid$(line, 2, Len(line) - 2) = Main Then
+                sectionFound = True
+            Else
+                sectionFound = False
+            End If
+        End If
+        
+        If sectionFound And InStr(line, "=") > 0 Then
+            Dim key As String
+            Dim keyValue As String
+            key = Trim$(Left$(line, InStr(line, "=") - 1))
+            keyValue = Trim$(mid$(line, InStr(line, "=") + 1))
+            
+            If key = Var Then
+                Value = keyValue
+                Exit Do
+            End If
+        End If
+    Loop
+
+    Close iFile
+
+    If Len(Value) = 0 Then
+        Value = String$(maxLength, " ")
+    End If
+    
+    GetVar = RTrim$(Value)
+
+    Exit Function
+
+ErrorHandler:
+    If iFile > 0 Then Close iFile
+    GetVar = ""
 End Function
 
 Sub CargarBackUp()
@@ -1243,7 +1279,7 @@ Sub CargarBackUp()
         NumMaps = val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas
         
-        frmCargando.porcentaje.Caption = "0 %"
+        frmCargando.Porcentaje.Caption = "0 %"
         
         MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
         
@@ -1264,7 +1300,7 @@ Sub CargarBackUp()
             
             Call CargarMapa(Map, tFileName)
             
-            frmCargando.porcentaje.Caption = Map / NumMaps * 100 & " %"
+            frmCargando.Porcentaje.Caption = Map / NumMaps * 100 & " %"
             DoEvents
         Next Map
     
@@ -1295,7 +1331,7 @@ Sub LoadMapData()
         NumMaps = val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas
         
-        frmCargando.porcentaje.Caption = "0 %"
+        frmCargando.Porcentaje.Caption = "0 %"
         
         MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
         
@@ -1308,7 +1344,7 @@ Sub LoadMapData()
             tFileName = App.Path & MapPath & "Mapa" & Map
             Call CargarMapa(Map, tFileName)
             
-            frmCargando.porcentaje.Caption = Map / NumMaps * 100 & " %"
+            frmCargando.Porcentaje.Caption = Map / NumMaps * 100 & " %"
             DoEvents
         Next Map
     
@@ -1663,15 +1699,172 @@ Sub LoadSini()
 
 End Sub
 
-Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'Escribe VAR en un archivo
-'***************************************************
+' -----------------------------------------------------------------------------
+' WriteVar: Escribe o modifica la propiedad (Var=Value) de una sección (Main)
+' en un archivo .ini sin usar la API del sistema y evitando secciones duplicadas
+' y líneas en blanco. Asegura además que se puedan guardar valores vacíos.
+' -----------------------------------------------------------------------------
+Public Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
+    Dim sectionNames As New Collection           ' Para guardar el orden de aparición de secciones
+    Dim sectionData As New Collection            ' Cada elemento será un Scripting.Dictionary con las claves de la sección
+    Dim currentSection As String
+    Dim dictKeys As Object                       ' As Scripting.Dictionary (lo declaramos como Object para compatibilidad en VB6 clásico)
+    Dim i As Long
+    Dim line As String
+    Dim fNum As Integer
+    Dim fileContent As String
+    Dim rawLines() As String
 
-writeprivateprofilestring Main, Var, Value, file
-    
+    ' --- Leer archivo si existe ---
+    If dir(file) <> "" Then
+        fNum = FreeFile
+        Open file For Binary As #fNum
+            If LOF(fNum) > 0 Then
+                fileContent = Space$(LOF(fNum))
+                Get #fNum, , fileContent
+            End If
+        Close #fNum
+    Else
+        fileContent = "" ' Archivo no existe, se creará
+    End If
+
+    ' --- Separar en líneas ---
+    If Len(fileContent) > 0 Then
+        rawLines = Split(fileContent, vbCrLf)
+    Else
+        ReDim rawLines(0)
+        rawLines(0) = ""
+    End If
+
+    ' --- Inicializar sección actual como vacío ---
+    currentSection = ""
+
+    ' -----------------------------------------------------------------------------
+    ' 1) Parsear todo el archivo en memoria: secciones y claves
+    '    - Al encontrar una nueva sección, si ya existe en 'sectionNames', seguimos usando la misma
+    '      para no duplicarla, de lo contrario se crea.
+    '    - Al encontrar "Clave=Valor", se guarda/actualiza en el diccionario de la sección actual.
+    '    - Se ignoran líneas vacías.
+    ' -----------------------------------------------------------------------------
+    For i = LBound(rawLines) To UBound(rawLines)
+        line = Trim$(rawLines(i))
+        If line <> "" Then
+            If Left$(line, 1) = "[" And Right$(line, 1) = "]" Then
+                ' Sección
+                currentSection = mid$(line, 2, Len(line) - 2)
+                Dim sectionExists As Boolean
+                sectionExists = False
+
+                ' Verificar si la sección ya existe
+                Dim sIdx As Long
+                For sIdx = 1 To sectionNames.Count
+                    If StrComp(sectionNames(sIdx), currentSection, vbTextCompare) = 0 Then
+                        sectionExists = True
+                        Exit For
+                    End If
+                Next sIdx
+
+                If Not sectionExists Then
+                    ' Crear la sección y su diccionario
+                    sectionNames.Add currentSection ' se guarda en el orden en que aparece
+                    Set dictKeys = CreateObject("Scripting.Dictionary")
+                    dictKeys.CompareMode = vbTextCompare
+                    sectionData.Add dictKeys, currentSection
+                End If
+
+            ElseIf currentSection <> "" Then
+                ' Estamos dentro de una sección, parsear "clave=valor"
+                Dim posEqual As Long
+                posEqual = InStr(line, "=")
+                If posEqual > 0 Then
+                    Dim keyName As String
+                    Dim keyValue As String
+                    keyName = Trim$(Left$(line, posEqual - 1))
+                    keyValue = mid$(line, posEqual + 1)
+
+                    ' Recuperar diccionario de la sección actual (la primera coincidencia)
+                    Set dictKeys = sectionData.Item(currentSection)
+                    dictKeys(keyName) = keyValue
+                    sectionData.Remove currentSection
+                    sectionData.Add dictKeys, currentSection
+                End If
+            End If
+        End If
+    Next i
+
+    ' -----------------------------------------------------------------------------
+    ' 2) Agregar/actualizar la clave solicitada en la sección "Main"
+    '    - Si la sección no existe, se crea.
+    '    - Se actualiza (o se crea) la Key=Value especificada.
+    ' -----------------------------------------------------------------------------
+    Dim mainExists As Boolean
+    mainExists = False
+
+    For i = 1 To sectionNames.Count
+        If StrComp(sectionNames(i), Main, vbTextCompare) = 0 Then
+            mainExists = True
+            Exit For
+        End If
+    Next i
+
+    If Not mainExists Then
+        ' Crear la sección
+        sectionNames.Add Main
+        Set dictKeys = CreateObject("Scripting.Dictionary")
+        dictKeys.CompareMode = vbTextCompare
+        sectionData.Add dictKeys, Main
+    End If
+
+    ' Actualizar o crear la clave Var=Value dentro de la sección Main
+    Set dictKeys = sectionData.Item(Main)
+    dictKeys(Var) = Value
+    sectionData.Remove Main
+    sectionData.Add dictKeys, Main
+
+    ' -----------------------------------------------------------------------------
+    ' 3) Reconstruir el archivo .ini: no debe haber secciones duplicadas, sin líneas en blanco
+    ' -----------------------------------------------------------------------------
+    Dim outputLines() As String
+    Dim outIndex As Long
+    outIndex = -1
+
+    For i = 1 To sectionNames.Count
+        Dim secName As String
+        secName = sectionNames(i)
+        ' Escribir la sección
+        outIndex = outIndex + 1
+        If outIndex = 0 Then
+            ReDim outputLines(0)
+        Else
+            ReDim Preserve outputLines(0 To outIndex)
+        End If
+        outputLines(outIndex) = "[" & secName & "]"
+
+        ' Volcar las claves
+        Set dictKeys = sectionData(secName)
+        Dim key As Variant
+        For Each key In dictKeys.Keys
+            outIndex = outIndex + 1
+            ReDim Preserve outputLines(0 To outIndex)
+            outputLines(outIndex) = key & "=" & dictKeys(key)
+        Next key
+    Next i
+
+    ' Si todo se borró o no hubo nada, creamos una sección y la clave
+    If outIndex < 0 Then
+        ReDim outputLines(0 To 1)
+        outputLines(0) = "[" & Main & "]"
+        outputLines(1) = Var & "=" & Value
+    End If
+
+    ' -----------------------------------------------------------------------------
+    ' 4) Escribir el archivo resultante
+    ' -----------------------------------------------------------------------------
+    fileContent = Join(outputLines, vbCrLf)
+    fNum = FreeFile
+    Open file For Output As #fNum
+        Print #fNum, fileContent
+    Close #fNum
 End Sub
 
 Sub SaveUser(ByVal UserIndex As Integer, ByVal UserFile As String)
@@ -1821,7 +2014,7 @@ With UserList(UserIndex)
     End If
     
     
-    
+    Debug.Print .Pos.Map & "-" & .Pos.X & "-" & .Pos.Y
     Call WriteVar(UserFile, "INIT", "Position", .Pos.Map & "-" & .Pos.X & "-" & .Pos.Y)
     
     
