@@ -1202,62 +1202,44 @@ Sub LoadUserInit(ByVal UserIndex As Integer, ByRef UserFile As clsIniReader)
 
 End Sub
 
-Function GetVar(ByVal file As String, ByVal Main As String, ByVal Var As String, Optional EmptySpaces As Long = 1024) As String
-' TODO MIGRATED | FIX PERFORMANCE: al no usar la API, la lectura se hace mucho mas lenta. Buscar alguna alternativa
-    Dim iFile As Integer
-    Dim line As String
-    Dim sectionFound As Boolean
-    Dim Value As String
-    Dim maxLength As Long
-
-    Value = ""
-
-    maxLength = EmptySpaces
-
-    iFile = FreeFile
-    On Error GoTo ErrorHandler
-    Open file For Input As iFile
+' TODO MIGRA: funciona pero es lento e ineficiente
+Public Function GetVar(ByVal filePath As String, ByVal sectionName As String, ByVal keyName As String, Optional EmptySpaces As Long = 1024) As String
+    Dim fileNumber As Integer
+    Dim currentLine As String
+    Dim currentSection As String
+    Dim equalPos As Long
     
-    sectionFound = False
-
-    Do Until EOF(iFile)
-        Line Input #iFile, line
-        line = Trim$(line)
-
-        If Left$(line, 1) = "[" Then
-            If mid$(line, 2, Len(line) - 2) = Main Then
-                sectionFound = True
-            Else
-                sectionFound = False
-            End If
-        End If
+    GetVar = "" ' Default return if not found
+    
+    On Error GoTo CleanExit ' Basic error handling
+    
+    fileNumber = FreeFile
+    Open filePath For Input As #fileNumber
+    
+    currentSection = ""
+    While Not EOF(fileNumber)
+        Line Input #fileNumber, currentLine
+        currentLine = Trim$(currentLine)
         
-        If sectionFound And InStr(line, "=") > 0 Then
-            Dim key As String
-            Dim keyValue As String
-            key = Trim$(Left$(line, InStr(line, "=") - 1))
-            keyValue = Trim$(mid$(line, InStr(line, "=") + 1))
-            
-            If key = Var Then
-                Value = keyValue
-                Exit Do
+        ' Check if it's a section line, e.g. [SECTION]
+        If Left$(currentLine, 1) = "[" And Right$(currentLine, 1) = "]" Then
+            currentSection = mid$(currentLine, 2, Len(currentLine) - 2)
+        ElseIf StrComp(currentSection, sectionName, vbTextCompare) = 0 Then
+            ' We are in the correct section, check if line contains the key
+            equalPos = InStr(1, currentLine, "=", vbTextCompare)
+            If equalPos > 1 Then
+                ' Extract the key (left side of '=') and compare
+                If StrComp(Trim$(Left$(currentLine, equalPos - 1)), keyName, vbTextCompare) = 0 Then
+                    ' Return the value (right side of '='), trimmed, ignoring any trailing line breaks
+                    GetVar = Trim$(mid$(currentLine, equalPos + 1))
+                    GoTo CleanExit
+                End If
             End If
         End If
-    Loop
-
-    Close iFile
-
-    If Len(Value) = 0 Then
-        Value = String$(maxLength, " ")
-    End If
+    Wend
     
-    GetVar = RTrim$(Value)
-
-    Exit Function
-
-ErrorHandler:
-    If iFile > 0 Then Close iFile
-    GetVar = ""
+CleanExit:
+    Close #fileNumber
 End Function
 
 Sub CargarBackUp()
@@ -1699,11 +1681,7 @@ Sub LoadSini()
 
 End Sub
 
-' -----------------------------------------------------------------------------
-' WriteVar: Escribe o modifica la propiedad (Var=Value) de una sección (Main)
-' en un archivo .ini sin usar la API del sistema y evitando secciones duplicadas
-' y líneas en blanco. Asegura además que se puedan guardar valores vacíos.
-' -----------------------------------------------------------------------------
+' TODO MIGRA: funciona pero es lento e ineficiente
 Public Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
     Dim sectionNames As New Collection           ' Para guardar el orden de aparición de secciones
     Dim sectionData As New Collection            ' Cada elemento será un Scripting.Dictionary con las claves de la sección
@@ -2013,8 +1991,6 @@ With UserList(UserIndex)
         Call WriteVar(UserFile, "INIT", "LastIP1", .ip & " - " & Date & ":" & time)
     End If
     
-    
-    Debug.Print .Pos.Map & "-" & .Pos.X & "-" & .Pos.Y
     Call WriteVar(UserFile, "INIT", "Position", .Pos.Map & "-" & .Pos.X & "-" & .Pos.Y)
     
     
