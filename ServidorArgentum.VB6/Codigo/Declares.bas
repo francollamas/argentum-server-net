@@ -1567,8 +1567,6 @@ Public Ayuda As New cCola
 Public ConsultaPopular As New ConsultasPopulares
 Public SonidosMapas As New SoundMapInfo
 
-Public Declare Sub ZeroMemory Lib "kernel32.dll" Alias "RtlZeroMemory" (ByRef destination As Any, ByVal length As Long)
-
 Public Enum e_ObjetosCriticos
     Manzana = 1
     Manzana2 = 2

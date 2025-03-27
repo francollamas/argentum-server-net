@@ -1,4 +1,6 @@
 Attribute VB_Name = "SecurityIp"
+' TODO MIGRA: se modifico para NO usar CopyMemory. Quizas tenga algun problema de performance. Revisar!
+
 'Argentum Online 0.12.2
 'Copyright (C) 2002 Márquez Pablo Ignacio
 '

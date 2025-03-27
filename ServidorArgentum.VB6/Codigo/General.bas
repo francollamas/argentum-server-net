@@ -1662,6 +1662,7 @@ Public Sub FreeCharIndexes()
 'Releases all char indexes
 '***************************************************
     ' Free all char indexes (set them all to 0)
+    ' TODO MIGRA: antes se usaba ZeroMemory. Quizas como esta ahora no sea del todo performante, pero no estoy seguro
     Dim i As Integer
     For i = 1 To MAXCHARS
         CharList(i) = 0
