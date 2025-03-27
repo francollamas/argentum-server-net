@@ -46,7 +46,6 @@ Private EntrysCounter   As Long
 Private MaxValue        As Long
 Private Multiplicado    As Long 'Cuantas veces multiplike el EntrysCounter para que me entren?
 Private Const IntervaloEntreConexiones As Long = 1000
-Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByRef destination As Any, ByRef source As Any, ByVal length As Long)
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 'Declaraciones para maximas conexiones por usuario
@@ -135,8 +134,10 @@ Private Sub AddNewIpIntervalo(ByVal ip As Long, ByVal index As Long)
 '*************************************************  *************
 'Author: Lucio N. Tourrilhes (DuNga)
 'Last Modify Date: Unknow
-'
+'Modified to avoid using CopyMemory
 '*************************************************  *************
+    Dim i As Long
+    
     '2) Pruebo si hay espacio, sino agrando la lista
     If MaxValue + 1 > EntrysCounter Then
         EntrysCounter = EntrysCounter \ Multiplicado
@@ -146,8 +147,15 @@ Private Sub AddNewIpIntervalo(ByVal ip As Long, ByVal index As Long)
         ReDim Preserve IpTables(EntrysCounter * 2) As Long
     End If
     
-    '4) Corro todo el array para arriba
-    Call CopyMemory(IpTables(index + 2), IpTables(index), (MaxValue - index \ 2) * 8)   '*4 (peso del long) * 2(cantidad de elementos por c/u)
+    '4) Corro todo el array para arriba usando bucle en lugar de CopyMemory
+    For i = (MaxValue * 2) + 1 To index + 1 Step -1
+        IpTables(i + 1) = IpTables(i)
+    Next i
+    
+    For i = (MaxValue * 2) To index Step -1
+        IpTables(i + 1) = IpTables(i)
+    Next i
+    
     IpTables(index) = ip
     
     '3) Subo el indicador de el maximo valor almacenado y listo :)
@@ -191,49 +199,45 @@ Dim IpTableIndex As Long
 End Function
 
 Private Sub AddNewIpLimiteConexiones(ByVal ip As Long, ByVal index As Long)
-'*************************************************  *************
-'Author: (EL OSO)
-'Last Modify Date: Unknow
-'
-'*************************************************  *************
-    'Debug.Print "agrega conexion a " & ip
-    'Debug.Print "(Declaraciones.MaxUsers - index) = " & (Declaraciones.MaxUsers - Index)
-    '4) Corro todo el array para arriba
-    'Call CopyMemory(MaxConTables(Index + 2), MaxConTables(Index), (MaxConTablesEntry - Index \ 2) * 8)    '*4 (peso del long) * 2(cantidad de elementos por c/u)
-    'MaxConTables(Index) = ip
-
-    '3) Subo el indicador de el maximo valor almacenado y listo :)
-    'MaxConTablesEntry = MaxConTablesEntry + 1
-
-
 '*************************************************    *************
 'Author: (EL OSO)
 'Last Modify Date: 16/2/2006
 'Modified by Juan Martín Sotuyo Dodero (Maraxus)
+'Modified to avoid using CopyMemory
 '*************************************************    *************
     Debug.Print "agrega conexion a " & ip
     Debug.Print "(Declaraciones.MaxUsers - index) = " & (Declaraciones.MaxUsers - index)
     Debug.Print "Agrega conexion a nueva IP " & ip
-    '4) Corro todo el array para arriba
-    Dim temp() As Long
-    ReDim temp((MaxConTablesEntry - index \ 2) * 2) As Long  'VB no deja inicializar con rangos variables...
-    Call CopyMemory(temp(0), MaxConTables(index), (MaxConTablesEntry - index \ 2) * 8)    '*4 (peso del long) * 2(cantidad de elementos por c/u)
-    Call CopyMemory(MaxConTables(index + 2), temp(0), (MaxConTablesEntry - index \ 2) * 8)    '*4 (peso del long) * 2(cantidad de elementos por c/u)
+    
+    Dim i As Long
+    Dim elementCount As Long
+    
+    elementCount = MaxConTablesEntry - index \ 2
+    
+    ' Desplazar todos los elementos para hacer espacio para la nueva entrada
+    For i = MaxConTablesEntry * 2 - 1 To index + 1 Step -1
+        MaxConTables(i + 1) = MaxConTables(i)
+    Next i
+    
+    For i = MaxConTablesEntry * 2 - 2 To index Step -1
+        MaxConTables(i + 1) = MaxConTables(i)
+    Next i
+    
     MaxConTables(index) = ip
 
     '3) Subo el indicador de el maximo valor almacenado y listo :)
     MaxConTablesEntry = MaxConTablesEntry + 1
-
 End Sub
 
 Public Sub IpRestarConexion(ByVal ip As Long)
 '***************************************************
 'Author: Unknown
 'Last Modification: -
-'
+'Modified to avoid using CopyMemory
 '***************************************************
 
 Dim key As Long
+Dim i As Long
     Debug.Print "resta conexion a " & ip
     
     key = FindTableIp(ip, IP_LIMITECONEXIONES)
@@ -244,8 +248,11 @@ Dim key As Long
         End If
         Call LogIP("restamos conexion a " & ip & " key=" & key & ". Conexiones: " & MaxConTables(key + 1))
         If MaxConTables(key + 1) <= 0 Then
-            'la limpiamos
-            Call CopyMemory(MaxConTables(key), MaxConTables(key + 2), (MaxConTablesEntry - (key \ 2) + 1) * 8)
+            'la limpiamos - desplazar todos los elementos a la izquierda
+            For i = key To (MaxConTablesEntry * 2) - 3 Step 2
+                MaxConTables(i) = MaxConTables(i + 2)
+                MaxConTables(i + 1) = MaxConTables(i + 3)
+            Next i
             MaxConTablesEntry = MaxConTablesEntry - 1
         End If
     Else 'Key <= 0
