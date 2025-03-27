@@ -1544,8 +1544,8 @@ On Error GoTo Errhandler
         If UserList(i).flags.UserLogged Then
             'Cerrar usuario
             If UserList(i).Counters.Saliendo Then
-                UserList(i).Counters.Salir = UserList(i).Counters.Salir - 1
-                If UserList(i).Counters.Salir <= 0 Then
+                UserList(i).Counters.salir = UserList(i).Counters.salir - 1
+                If UserList(i).Counters.salir <= 0 Then
                     Call WriteConsoleMsg(i, "Gracias por jugar Argentum Online", FontTypeNames.FONTTYPE_INFO)
                     Call WriteDisconnect(i)
                     Call FlushBuffer(i)
@@ -1662,5 +1662,8 @@ Public Sub FreeCharIndexes()
 'Releases all char indexes
 '***************************************************
     ' Free all char indexes (set them all to 0)
-    Call ZeroMemory(CharList(1), MAXCHARS * Len(CharList(1)))
+    Dim i As Integer
+    For i = 1 To MAXCHARS
+        CharList(i) = 0
+    Next i
 End Sub

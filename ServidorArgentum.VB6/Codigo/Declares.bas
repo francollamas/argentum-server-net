@@ -1434,7 +1434,7 @@ Type MapInfo
     NumUsers As Integer
     Music As String
     name As String
-    StartPos As WorldPos
+    startPos As WorldPos
     MapVersion As Integer
     Pk As Boolean
     MagiaSinEfecto As Byte
@@ -1567,7 +1567,6 @@ Public Ayuda As New cCola
 Public ConsultaPopular As New ConsultasPopulares
 Public SonidosMapas As New SoundMapInfo
 
-Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public Declare Sub ZeroMemory Lib "kernel32.dll" Alias "RtlZeroMemory" (ByRef destination As Any, ByVal length As Long)
 
 Public Enum e_ObjetosCriticos
