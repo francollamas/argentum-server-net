@@ -18,6 +18,17 @@ Private Const NOT_ENOUGH_DATA As Long = vbObjectError + 9
 Private Const NOT_ENOUGH_SPACE As Long = vbObjectError + 10
 Private Const DATA_BUFFER As Long = 10240
 
+Private Type ByteConverter
+    ByteArr(3) As Byte
+    LongValue As Long
+    SingleValue As Single
+End Type
+
+Private Type DoubleConverter
+    ByteArr(7) As Byte
+    DoubleValue As Double
+End Type
+
 Dim data() As Byte
 Dim queueCapacity As Long
 Dim queueLength As Long
@@ -31,24 +42,6 @@ Private Sub Class_Terminate()
     Erase data
 End Sub
 
-Public Sub CopyBuffer(ByRef source As clsByteQueue)
-    If source.length = 0 Then
-        Call RemoveData(length)
-        Exit Sub
-    End If
-    
-    queueCapacity = source.Capacity
-    ReDim data(queueCapacity - 1) As Byte
-    
-    Dim buf() As Byte
-    ReDim buf(source.length - 1) As Byte
-    
-    Call source.PeekBlock(buf, source.length)
-    
-    queueLength = 0
-    Call WriteBlock(buf, source.length)
-End Sub
-
 Private Function min(ByVal val1 As Long, ByVal val2 As Long) As Long
     If val1 < val2 Then
         min = val1
@@ -57,43 +50,119 @@ Private Function min(ByVal val1 As Long, ByVal val2 As Long) As Long
     End If
 End Function
 
+Private Sub ByteArrayToType(ByRef destVariable As Variant, ByRef sourceArray() As Byte, ByVal startPos As Long, ByVal length As Long)
+    Dim i As Long
+    Dim tempArray() As Byte
+    Dim tempBC As ByteConverter
+    Dim tempDC As DoubleConverter
+    
+    ReDim tempArray(length - 1) As Byte
+    
+    For i = 0 To length - 1
+        tempArray(i) = sourceArray(startPos + i)
+    Next i
+    
+    Select Case length
+        Case 1: destVariable = tempArray(0)
+        Case 2: destVariable = CInt(tempArray(0)) + CInt(tempArray(1)) * 256
+        Case 4:
+            If VarType(destVariable) = vbSingle Then
+                For i = 0 To 3
+                    tempBC.ByteArr(i) = tempArray(i)
+                Next i
+                destVariable = tempBC.SingleValue
+            Else
+                destVariable = CLng(tempArray(0)) + CLng(tempArray(1)) * 256& + CLng(tempArray(2)) * 65536 + CLng(tempArray(3)) * 16777216
+            End If
+        Case 8:
+            For i = 0 To 7
+                tempDC.ByteArr(i) = tempArray(i)
+            Next i
+            destVariable = tempDC.DoubleValue
+    End Select
+End Sub
+
+Private Sub TypeToByteArray(ByRef destArray() As Byte, ByVal startPos As Long, ByVal sourceVariable As Variant)
+    Dim i As Long
+    Dim valueType As VbVarType
+    Dim tempBC As ByteConverter
+    Dim tempDC As DoubleConverter
+    
+    valueType = VarType(sourceVariable)
+    
+    Select Case valueType
+        Case vbByte:
+            destArray(startPos) = CByte(sourceVariable)
+        Case vbInteger:
+            Dim tempInt As Integer
+            tempInt = CInt(sourceVariable)
+            destArray(startPos) = CByte(tempInt And &HFF&)
+            destArray(startPos + 1) = CByte((CLng(tempInt) And &HFF00&) \ 256&)
+        Case vbLong:
+            Dim tempLong As Long
+            tempLong = CLng(sourceVariable)
+            destArray(startPos) = CByte(tempLong And &HFF&)
+            destArray(startPos + 1) = CByte((tempLong And &HFF00&) \ 256&)
+            destArray(startPos + 2) = CByte((tempLong And &HFF0000) \ 65536)
+            destArray(startPos + 3) = CByte((tempLong And &HFF000000) \ 16777216)
+        Case vbSingle:
+            tempBC.SingleValue = CSng(sourceVariable)
+            For i = 0 To 3
+                destArray(startPos + i) = tempBC.ByteArr(i)
+            Next i
+        Case vbDouble:
+            tempDC.DoubleValue = CDbl(sourceVariable)
+            For i = 0 To 7
+                destArray(startPos + i) = tempDC.ByteArr(i)
+            Next i
+    End Select
+End Sub
+
+Private Sub CopyArrayData(ByRef destArray() As Byte, ByVal destStart As Long, ByRef sourceArray() As Byte, ByVal sourceStart As Long, ByVal length As Long)
+    Dim i As Long
+    
+    For i = 0 To length - 1
+        destArray(destStart + i) = sourceArray(sourceStart + i)
+    Next i
+End Sub
+
 Private Function WriteData(ByRef buf() As Byte, ByVal dataLength As Long) As Long
     If queueCapacity - queueLength - dataLength < 0 Then
         Call Err.Raise(NOT_ENOUGH_SPACE)
         Exit Function
     End If
     
-    Dim i As Long
-    For i = 0 To dataLength - 1
-        data(queueLength + i) = buf(i)
-    Next i
+    Call CopyArrayData(data, queueLength, buf, 0, dataLength)
     
     queueLength = queueLength + dataLength
     WriteData = dataLength
 End Function
 
-Private Function ReadData(ByRef buf() As Byte, ByVal dataLength As Long, Optional ByVal startPos As Long = 0) As Long
+Private Function ReadData(ByRef buf() As Byte, ByVal dataLength As Long) As Long
+    If dataLength > queueLength Then
+        Call Err.Raise(NOT_ENOUGH_DATA)
+        Exit Function
+    End If
+    
+    Call CopyArrayData(buf, 0, data, 0, dataLength)
+    ReadData = dataLength
+End Function
+
+Private Function ReadDataWithOffset(ByRef buf() As Byte, ByVal dataLength As Long, ByVal startPos As Long) As Long
     If dataLength > queueLength - startPos Then
         Call Err.Raise(NOT_ENOUGH_DATA)
         Exit Function
     End If
     
-    Dim i As Long
-    For i = 0 To dataLength - 1
-        buf(i) = data(i + startPos)
-    Next i
-    
-    ReadData = dataLength
+    Call CopyArrayData(buf, 0, data, startPos, dataLength)
+    ReadDataWithOffset = dataLength
 End Function
 
 Private Function RemoveData(ByVal dataLength As Long) As Long
     RemoveData = min(dataLength, queueLength)
     
     If RemoveData <> queueCapacity Then
-        Dim i As Long
-        For i = 0 To queueLength - RemoveData - 1
-            data(i) = data(i + RemoveData)
-        Next i
+        Call CopyArrayData(data, 0, data, RemoveData, queueLength - RemoveData)
     End If
     
     queueLength = queueLength - RemoveData
@@ -101,34 +170,32 @@ End Function
 
 Public Function WriteByte(ByVal value As Byte) As Long
     Dim buf(0) As Byte
+    
     buf(0) = value
+    
     WriteByte = WriteData(buf, 1)
 End Function
 
 Public Function WriteInteger(ByVal value As Integer) As Long
     Dim buf(1) As Byte
-    buf(0) = value And &HFF
-    buf(1) = (value \ &H100) And &HFF
+    
+    Call TypeToByteArray(buf, 0, value)
+    
     WriteInteger = WriteData(buf, 2)
 End Function
 
 Public Function WriteLong(ByVal value As Long) As Long
     Dim buf(3) As Byte
-    buf(0) = value And &HFF
-    buf(1) = (value \ &H100) And &HFF
-    buf(2) = (value \ &H10000) And &HFF
-    buf(3) = (value \ &H1000000) And &HFF
+    
+    Call TypeToByteArray(buf, 0, value)
+    
     WriteLong = WriteData(buf, 4)
 End Function
 
 Public Function WriteSingle(ByVal value As Single) As Long
     Dim buf(3) As Byte
-    Dim tempVar As Long
-    tempVar = CLng(value * 10000)
-    buf(0) = tempVar And &HFF
-    buf(1) = (tempVar \ &H100) And &HFF
-    buf(2) = (tempVar \ &H10000) And &HFF
-    buf(3) = (tempVar \ &H1000000) And &HFF
+    
+    Call TypeToByteArray(buf, 0, value)
     
     WriteSingle = WriteData(buf, 4)
 End Function
@@ -136,39 +203,25 @@ End Function
 Public Function WriteDouble(ByVal value As Double) As Long
     Dim buf(7) As Byte
     
-    Dim tempVarHigh As Long
-    Dim tempVarLow As Long
-    
-    Dim tempVal As Double
-    tempVal = value * 10000#
-    
-    tempVarLow = tempVal And &HFFFFFFFF
-    tempVarHigh = (tempVal - tempVarLow) / 4294967296#
-    
-    buf(0) = tempVarLow And &HFF
-    buf(1) = (tempVarLow \ &H100) And &HFF
-    buf(2) = (tempVarLow \ &H10000) And &HFF
-    buf(3) = (tempVarLow \ &H1000000) And &HFF
-    
-    buf(4) = tempVarHigh And &HFF
-    buf(5) = (tempVarHigh \ &H100) And &HFF
-    buf(6) = (tempVarHigh \ &H10000) And &HFF
-    buf(7) = (tempVarHigh \ &H1000000) And &HFF
+    Call TypeToByteArray(buf, 0, value)
     
     WriteDouble = WriteData(buf, 8)
 End Function
 
 Public Function WriteBoolean(ByVal value As Boolean) As Long
     Dim buf(0) As Byte
+    
     If value Then buf(0) = 1
+    
     WriteBoolean = WriteData(buf, 1)
 End Function
 
 Public Function WriteASCIIStringFixed(ByVal value As String) As Long
     Dim buf() As Byte
+    Dim i As Long, j As Long
+    
     ReDim buf(Len(value) - 1) As Byte
     
-    Dim i As Long
     For i = 1 To Len(value)
         buf(i - 1) = Asc(mid$(value, i, 1))
     Next i
@@ -178,12 +231,17 @@ End Function
 
 Public Function WriteUnicodeStringFixed(ByVal value As String) As Long
     Dim buf() As Byte
+    Dim i As Long, j As Long
+    Dim tempStr As String
+    
     ReDim buf(LenB(value) - 1) As Byte
     
-    Dim i As Long
-    For i = 1 To LenB(value) / 2
-        buf((i - 1) * 2) = Asc(mid$(value, i, 1)) And &HFF
-        buf((i - 1) * 2 + 1) = (Asc(mid$(value, i, 1)) \ &H100) And &HFF
+    j = 0
+    For i = 1 To Len(value)
+        tempStr = mid$(value, i, 1)
+        buf(j) = Asc(tempStr) And &HFF&
+        buf(j + 1) = (Asc(tempStr) And &HFF00&) \ 256&
+        j = j + 2
     Next i
     
     WriteUnicodeStringFixed = WriteData(buf, LenB(value))
@@ -191,89 +249,106 @@ End Function
 
 Public Function WriteASCIIString(ByVal value As String) As Long
     Dim buf() As Byte
-    ReDim buf(Len(value) + 1) As Byte
-    
-    buf(0) = Len(value) And &HFF
-    buf(1) = (Len(value) \ &H100) And &HFF
-    
     Dim i As Long
-    For i = 1 To Len(value)
-        buf(i + 1) = Asc(mid$(value, i, 1))
-    Next i
+    Dim length As Integer
     
-    WriteASCIIString = WriteData(buf, Len(value) + 2)
+    length = Len(value)
+    ReDim buf(length + 1) As Byte
+    
+    Call TypeToByteArray(buf, 0, length)
+    
+    If length > 0 Then
+        For i = 1 To length
+            buf(i + 1) = Asc(mid$(value, i, 1))
+        Next i
+    End If
+    
+    WriteASCIIString = WriteData(buf, length + 2)
 End Function
 
 Public Function WriteUnicodeString(ByVal value As String) As Long
     Dim buf() As Byte
-    ReDim buf(LenB(value) + 1) As Byte
+    Dim i As Long, j As Long
+    Dim tempStr As String
+    Dim length As Integer
     
-    buf(0) = Len(value) And &HFF
-    buf(1) = (Len(value) \ &H100) And &HFF
+    length = Len(value)
+    ReDim buf(length * 2 + 1) As Byte
     
-    Dim i As Long
-    For i = 1 To Len(value)
-        buf((i - 1) * 2 + 2) = Asc(mid$(value, i, 1)) And &HFF
-        buf((i - 1) * 2 + 3) = (Asc(mid$(value, i, 1)) \ &H100) And &HFF
-    Next i
+    Call TypeToByteArray(buf, 0, length)
     
-    WriteUnicodeString = WriteData(buf, LenB(value) + 2)
+    If length > 0 Then
+        j = 2
+        For i = 1 To length
+            tempStr = mid$(value, i, 1)
+            buf(j) = Asc(tempStr) And &HFF&
+            buf(j + 1) = (Asc(tempStr) And &HFF00&) \ 256&
+            j = j + 2
+        Next i
+    End If
+    
+    WriteUnicodeString = WriteData(buf, length * 2 + 2)
 End Function
 
 Public Function WriteBlock(ByRef value() As Byte, Optional ByVal length As Long = -1) As Long
     If length > UBound(value()) + 1 Or length < 0 Then length = UBound(value()) + 1
+    
     WriteBlock = WriteData(value, length)
 End Function
 
 Public Function ReadByte() As Byte
     Dim buf(0) As Byte
-    Call ReadData(buf, 1)
-    Call RemoveData(1)
+    
+    Call RemoveData(ReadData(buf, 1))
+    
     ReadByte = buf(0)
 End Function
 
 Public Function ReadInteger() As Integer
     Dim buf(1) As Byte
-    Call ReadData(buf, 2)
-    Call RemoveData(2)
-    ReadInteger = CLng(buf(0)) + CLng(buf(1)) * 256
+    Dim result As Integer
+    
+    Call RemoveData(ReadData(buf, 2))
+    
+    Call ByteArrayToType(result, buf, 0, 2)
+    ReadInteger = result
 End Function
 
 Public Function ReadLong() As Long
     Dim buf(3) As Byte
-    Call ReadData(buf, 4)
-    Call RemoveData(4)
-    ReadLong = CLng(buf(0)) + CLng(buf(1)) * 256 + CLng(buf(2)) * 65536 + CLng(buf(3)) * 16777216
+    Dim result As Long
+    
+    Call RemoveData(ReadData(buf, 4))
+    
+    Call ByteArrayToType(result, buf, 0, 4)
+    ReadLong = result
 End Function
 
 Public Function ReadSingle() As Single
     Dim buf(3) As Byte
-    Call ReadData(buf, 4)
-    Call RemoveData(4)
+    Dim result As Single
     
-    Dim tempVal As Long
-    tempVal = CLng(buf(0)) + CLng(buf(1)) * 256 + CLng(buf(2)) * 65536 + CLng(buf(3)) * 16777216
-    ReadSingle = tempVal / 10000
+    Call RemoveData(ReadData(buf, 4))
+    
+    Call ByteArrayToType(result, buf, 0, 4)
+    ReadSingle = result
 End Function
 
 Public Function ReadDouble() As Double
     Dim buf(7) As Byte
-    Call ReadData(buf, 8)
-    Call RemoveData(8)
+    Dim result As Double
     
-    Dim tempVarLow As Long
-    Dim tempVarHigh As Long
+    Call RemoveData(ReadData(buf, 8))
     
-    tempVarLow = CLng(buf(0)) + CLng(buf(1)) * 256 + CLng(buf(2)) * 65536 + CLng(buf(3)) * 16777216
-    tempVarHigh = CLng(buf(4)) + CLng(buf(5)) * 256 + CLng(buf(6)) * 65536 + CLng(buf(7)) * 16777216
-    
-    ReadDouble = (CDbl(tempVarHigh) * 4294967296# + tempVarLow) / 10000#
+    Call ByteArrayToType(result, buf, 0, 8)
+    ReadDouble = result
 End Function
 
 Public Function ReadBoolean() As Boolean
     Dim buf(0) As Byte
-    Call ReadData(buf, 1)
-    Call RemoveData(1)
+    
+    Call RemoveData(ReadData(buf, 1))
+    
     If buf(0) = 1 Then ReadBoolean = True
 End Function
 
@@ -282,15 +357,14 @@ Public Function ReadASCIIStringFixed(ByVal length As Long) As String
     
     If queueLength >= length Then
         Dim buf() As Byte
+        Dim i As Long
+        Dim result As String
+        
         ReDim buf(length - 1) As Byte
         
-        Call ReadData(buf, length)
-        Call RemoveData(length)
+        Call RemoveData(ReadData(buf, length))
         
-        Dim result As String
         result = ""
-        
-        Dim i As Long
         For i = 0 To length - 1
             result = result & Chr$(buf(i))
         Next i
@@ -306,17 +380,16 @@ Public Function ReadUnicodeStringFixed(ByVal length As Long) As String
     
     If queueLength >= length * 2 Then
         Dim buf() As Byte
+        Dim i As Long
+        Dim result As String
+        
         ReDim buf(length * 2 - 1) As Byte
         
-        Call ReadData(buf, length * 2)
-        Call RemoveData(length * 2)
+        Call RemoveData(ReadData(buf, length * 2))
         
-        Dim result As String
         result = ""
-        
-        Dim i As Long
         For i = 0 To length - 1
-            result = result & Chr$(buf(i * 2) + buf(i * 2 + 1) * 256)
+            result = result & Chr$(CLng(buf(i * 2)) + CLng(buf(i * 2 + 1)) * 256&)
         Next i
         
         ReadUnicodeStringFixed = result
@@ -331,22 +404,21 @@ Public Function ReadASCIIString() As String
     
     If queueLength > 1 Then
         Call ReadData(buf, 2)
-        length = buf(0) + buf(1) * 256
+        Call ByteArrayToType(length, buf, 0, 2)
         
         If queueLength >= length + 2 Then
             Call RemoveData(2)
             
             If length > 0 Then
                 Dim buf2() As Byte
+                Dim i As Long
+                Dim result As String
+                
                 ReDim buf2(length - 1) As Byte
                 
-                Call ReadData(buf2, length)
-                Call RemoveData(length)
+                Call RemoveData(ReadData(buf2, length))
                 
-                Dim result As String
                 result = ""
-                
-                Dim i As Long
                 For i = 0 To length - 1
                     result = result & Chr$(buf2(i))
                 Next i
@@ -367,23 +439,22 @@ Public Function ReadUnicodeString() As String
     
     If queueLength > 1 Then
         Call ReadData(buf, 2)
-        length = buf(0) + buf(1) * 256
+        Call ByteArrayToType(length, buf, 0, 2)
         
         If queueLength >= length * 2 + 2 Then
             Call RemoveData(2)
             
             Dim buf2() As Byte
+            Dim i As Long
+            Dim result As String
+            
             ReDim buf2(length * 2 - 1) As Byte
             
-            Call ReadData(buf2, length * 2)
-            Call RemoveData(length * 2)
+            Call RemoveData(ReadData(buf2, length * 2))
             
-            Dim result As String
             result = ""
-            
-            Dim i As Long
             For i = 0 To length - 1
-                result = result & Chr$(buf2(i * 2) + buf2(i * 2 + 1) * 256)
+                result = result & Chr$(CLng(buf2(i * 2)) + CLng(buf2(i * 2 + 1)) * 256&)
             Next i
             
             ReadUnicodeString = result
@@ -396,55 +467,63 @@ Public Function ReadUnicodeString() As String
 End Function
 
 Public Function ReadBlock(ByRef block() As Byte, ByVal dataLength As Long) As Long
-    If dataLength > 0 Then
-        ReadBlock = ReadData(block(), dataLength)
-        Call RemoveData(dataLength)
-    End If
+    If dataLength > 0 Then _
+        ReadBlock = RemoveData(ReadData(block(), dataLength))
 End Function
 
 Public Function PeekByte() As Byte
     Dim buf(0) As Byte
+    
     Call ReadData(buf, 1)
+    
     PeekByte = buf(0)
 End Function
 
 Public Function PeekInteger() As Integer
     Dim buf(1) As Byte
+    Dim result As Integer
+    
     Call ReadData(buf, 2)
-    PeekInteger = CLng(buf(0)) + CLng(buf(1)) * 256
+    
+    Call ByteArrayToType(result, buf, 0, 2)
+    PeekInteger = result
 End Function
 
 Public Function PeekLong() As Long
     Dim buf(3) As Byte
+    Dim result As Long
+    
     Call ReadData(buf, 4)
-    PeekLong = CLng(buf(0)) + CLng(buf(1)) * 256 + CLng(buf(2)) * 65536 + CLng(buf(3)) * 16777216
+    
+    Call ByteArrayToType(result, buf, 0, 4)
+    PeekLong = result
 End Function
 
 Public Function PeekSingle() As Single
     Dim buf(3) As Byte
+    Dim result As Single
+    
     Call ReadData(buf, 4)
     
-    Dim tempVal As Long
-    tempVal = CLng(buf(0)) + CLng(buf(1)) * 256 + CLng(buf(2)) * 65536 + CLng(buf(3)) * 16777216
-    PeekSingle = tempVal / 10000
+    Call ByteArrayToType(result, buf, 0, 4)
+    PeekSingle = result
 End Function
 
 Public Function PeekDouble() As Double
     Dim buf(7) As Byte
+    Dim result As Double
+    
     Call ReadData(buf, 8)
     
-    Dim tempVarLow As Long
-    Dim tempVarHigh As Long
-    
-    tempVarLow = CLng(buf(0)) + CLng(buf(1)) * 256 + CLng(buf(2)) * 65536 + CLng(buf(3)) * 16777216
-    tempVarHigh = CLng(buf(4)) + CLng(buf(5)) * 256 + CLng(buf(6)) * 65536 + CLng(buf(7)) * 16777216
-    
-    PeekDouble = (CDbl(tempVarHigh) * 4294967296# + tempVarLow) / 10000#
+    Call ByteArrayToType(result, buf, 0, 8)
+    PeekDouble = result
 End Function
 
 Public Function PeekBoolean() As Boolean
     Dim buf(0) As Byte
+    
     Call ReadData(buf, 1)
+    
     If buf(0) = 1 Then PeekBoolean = True
 End Function
 
@@ -453,14 +532,14 @@ Public Function PeekASCIIStringFixed(ByVal length As Long) As String
     
     If queueLength >= length Then
         Dim buf() As Byte
+        Dim i As Long
+        Dim result As String
+        
         ReDim buf(length - 1) As Byte
         
         Call ReadData(buf, length)
         
-        Dim result As String
         result = ""
-        
-        Dim i As Long
         For i = 0 To length - 1
             result = result & Chr$(buf(i))
         Next i
@@ -476,16 +555,16 @@ Public Function PeekUnicodeStringFixed(ByVal length As Long) As String
     
     If queueLength >= length * 2 Then
         Dim buf() As Byte
+        Dim i As Long
+        Dim result As String
+        
         ReDim buf(length * 2 - 1) As Byte
         
         Call ReadData(buf, length * 2)
         
-        Dim result As String
         result = ""
-        
-        Dim i As Long
         For i = 0 To length - 1
-            result = result & Chr$(buf(i * 2) + buf(i * 2 + 1) * 256)
+            result = result & Chr$(CLng(buf(i * 2)) + CLng(buf(i * 2 + 1)) * 256&)
         Next i
         
         PeekUnicodeStringFixed = result
@@ -500,18 +579,18 @@ Public Function PeekASCIIString() As String
     
     If queueLength > 1 Then
         Call ReadData(buf, 2)
-        length = buf(0) + buf(1) * 256
+        Call ByteArrayToType(length, buf, 0, 2)
         
         If queueLength >= length + 2 Then
             Dim buf2() As Byte
+            Dim i As Long
+            Dim result As String
+            
             ReDim buf2(length - 1) As Byte
             
-            Call ReadData(buf2, length, 2)
+            Call ReadDataWithOffset(buf2, length, 2)
             
-            Dim result As String
             result = ""
-            
-            Dim i As Long
             For i = 0 To length - 1
                 result = result & Chr$(buf2(i))
             Next i
@@ -531,20 +610,20 @@ Public Function PeekUnicodeString() As String
     
     If queueLength > 1 Then
         Call ReadData(buf, 2)
-        length = buf(0) + buf(1) * 256
+        Call ByteArrayToType(length, buf, 0, 2)
         
         If queueLength >= length * 2 + 2 Then
             Dim buf2() As Byte
+            Dim i As Long
+            Dim result As String
+            
             ReDim buf2(length * 2 - 1) As Byte
             
-            Call ReadData(buf2, length * 2, 2)
+            Call ReadDataWithOffset(buf2, length * 2, 2)
             
-            Dim result As String
             result = ""
-            
-            Dim i As Long
             For i = 0 To length - 1
-                result = result & Chr$(buf2(i * 2) + buf2(i * 2 + 1) * 256)
+                result = result & Chr$(CLng(buf2(i * 2)) + CLng(buf2(i * 2 + 1)) * 256&)
             Next i
             
             PeekUnicodeString = result
@@ -557,9 +636,30 @@ Public Function PeekUnicodeString() As String
 End Function
 
 Public Function PeekBlock(ByRef block() As Byte, ByVal dataLength As Long) As Long
-    If dataLength > 0 Then _
+    If dataLength > 0 Then
         PeekBlock = ReadData(block(), dataLength)
+    End If
 End Function
+
+Public Sub CopyBuffer(ByRef source As clsByteQueue)
+    If source.length = 0 Then
+        Call RemoveData(length)
+        Exit Sub
+    End If
+    
+    queueCapacity = source.Capacity
+    
+    ReDim data(queueCapacity - 1) As Byte
+    
+    Dim buf() As Byte
+    ReDim buf(source.length - 1) As Byte
+    
+    Call source.PeekBlock(buf, source.length)
+    
+    queueLength = 0
+    
+    Call WriteBlock(buf, source.length)
+End Sub
 
 Public Property Get length() As Long
     length = queueLength
