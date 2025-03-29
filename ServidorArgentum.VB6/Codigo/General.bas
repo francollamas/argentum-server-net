@@ -458,7 +458,8 @@ On Error Resume Next
     
 #If UsarQueSocket = 1 Then
     
-    Call IniciaWsApi
+    Call IniciaWsApi(frmMain.hWnd)
+    SockListen = ListenForConnect(Puerto, hWndMsg, "")
     
 #ElseIf UsarQueSocket = 0 Then
     
@@ -953,6 +954,25 @@ On Error Resume Next
     
     Dim LoopC As Long
   
+#If UsarQueSocket = 0 Then
+
+    frmMain.Socket1.Cleanup
+    frmMain.Socket1.Startup
+      
+    frmMain.Socket2(0).Cleanup
+    frmMain.Socket2(0).Startup
+
+#ElseIf UsarQueSocket = 1 Then
+
+    'Cierra el socket de escucha
+    If SockListen >= 0 Then Call apiclosesocket(SockListen)
+    
+    'Inicia el socket de escucha
+    SockListen = ListenForConnect(Puerto, hWndMsg, "")
+
+#ElseIf UsarQueSocket = 2 Then
+
+#End If
 
     For LoopC = 1 To MaxUsers
         Call CloseSocket(LoopC)

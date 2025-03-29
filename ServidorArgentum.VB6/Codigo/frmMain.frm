@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Begin VB.Form frmMain 
    BackColor       =   &H00C0C0C0&
    BorderStyle     =   1  'Fixed Single
@@ -25,6 +26,14 @@ Begin VB.Form frmMain
    ScaleHeight     =   4845
    ScaleWidth      =   5190
    StartUpPosition =   2  'CenterScreen
+   Begin MSWinsockLib.Winsock Winsock1 
+      Left            =   2520
+      Top             =   0
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+      RemotePort      =   7666
+   End
    Begin VB.TextBox txtChat 
       Height          =   2775
       Left            =   120
@@ -234,7 +243,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 'Argentum Online 0.12.2
-'Copyright (C) 2002 Mï¿½rquez Pablo Ignacio
+'Copyright (C) 2002 Márquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -256,10 +265,10 @@ Attribute VB_Exposed = False
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 nï¿½mero 983 piso 7 dto A
+'Calle 3 número 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Cï¿½digo Postal 1900
-'Pablo Ignacio Mï¿½rquez
+'Código Postal 1900
+'Pablo Ignacio Márquez
 
 Option Explicit
 
@@ -356,9 +365,9 @@ Dim num As Long
 
 Minutos = Minutos + 1
 
-'ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 Call ModAreas.AreasOptimizacion
-'ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 
 'Actualizamos el centinela
 Call modCentinela.PasarMinutoCentinela
@@ -489,7 +498,7 @@ On Error GoTo hayerror
         With UserList(iUserIndex)
            'Conexion activa?
            If .ConnID <> -1 Then
-                'ï¿½User valido?
+                '¿User valido?
                 
                 If .ConnIDValida And .flags.UserLogged Then
                     
@@ -632,7 +641,7 @@ Private Sub mnuCerrar_Click()
 End Sub
 
 Private Function salir() As Boolean
-If MsgBox("ï¿½ï¿½Atencion!! Si cierra el servidor puede provocar la perdida de datos. ï¿½Desea hacerlo de todas maneras?", vbYesNo) = vbYes Then
+If MsgBox("¡¡Atencion!! Si cierra el servidor puede provocar la perdida de datos. ¿Desea hacerlo de todas maneras?", vbYesNo) = vbYes Then
     Dim f
     For Each f In Forms
         Unload f
@@ -678,7 +687,7 @@ End Sub
 
 Private Sub packetResend_Timer()
 '***************************************************
-'Autor: Juan Martï¿½n Sotuyo Dodero (Maraxus)
+'Autor: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modification: 04/01/07
 'Attempts to resend to the user all data that may be enqueued.
 '***************************************************
@@ -726,7 +735,7 @@ If Not haciendoBK And Not EnPausa Then
         With Npclist(NpcIndex)
             If .flags.NPCActive Then 'Nos aseguramos que sea INTELIGENTE!
             
-                ' Chequea si contiua teniendo dueï¿½o
+                ' Chequea si contiua teniendo dueño
                 If .Owner > 0 Then Call ValidarPermanenciaNpc(NpcIndex)
             
                 If .flags.Paralizado = 1 Then
@@ -843,7 +852,7 @@ On Error GoTo Errhandler
             If .flags.UserLogged Then
                 If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = eTrigger.ANTIPIQUETE Then
                     .Counters.PiqueteC = .Counters.PiqueteC + 1
-                    Call WriteConsoleMsg(i, "ï¿½ï¿½ï¿½Estï¿½s obstruyendo la vï¿½a pï¿½blica, muï¿½vete o serï¿½s encarcelado!!!", FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!", FontTypeNames.FONTTYPE_INFO)
                     
                     If .Counters.PiqueteC > 23 Then
                         .Counters.PiqueteC = 0
@@ -876,15 +885,15 @@ On Error GoTo Errhandler
                     NuevaA = False
                    ' NuevoL = False
                     If Not modGuilds.m_ValidarPermanencia(i, True, NuevaA) Then
-                        Call WriteConsoleMsg(i, "Has sido expulsado del clan. ï¿½El clan ha sumado un punto de antifacciï¿½n!", FontTypeNames.FONTTYPE_GUILD)
+                        Call WriteConsoleMsg(i, "Has sido expulsado del clan. ¡El clan ha sumado un punto de antifacción!", FontTypeNames.FONTTYPE_GUILD)
                     End If
                     If NuevaA Then
-                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("ï¿½El clan ha pasado a tener alineaciï¿½n " & GuildAlignment(GI) & "!", FontTypeNames.FONTTYPE_GUILD))
-                        Call LogClanes("ï¿½El clan cambio de alineaciï¿½n!")
+                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan ha pasado a tener alineación " & GuildAlignment(GI) & "!", FontTypeNames.FONTTYPE_GUILD))
+                        Call LogClanes("¡El clan cambio de alineación!")
                     End If
 '                    If NuevoL Then
-'                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("ï¿½El clan tiene un nuevo lï¿½der!", FontTypeNames.FONTTYPE_GUILD))
-'                        Call LogClanes("ï¿½El clan tiene nuevo lider!")
+'                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan tiene un nuevo líder!", FontTypeNames.FONTTYPE_GUILD))
+'                        Call LogClanes("¡El clan tiene nuevo lider!")
 '                    End If
                 End If
                 
@@ -994,4 +1003,8 @@ Call LogError("Error socket read: " & MiDato & " dato:" & RD & " userlogged: " &
 End Sub
 
 #End If
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''FIN  USO DEL CONTROL TCPSERV'''''''''''''''''''''''''
+'''''''''''''Compilar con UsarQueSocket = 3''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

@@ -678,6 +678,16 @@ Call MD5sCarga
 
 End Sub
 
+Private Sub Command26_Click()
+#If UsarQueSocket = 1 Then
+    'Cierra el socket de escucha
+    If SockListen >= 0 Then Call apiclosesocket(SockListen)
+    
+    'Inicia el socket de escucha
+    SockListen = ListenForConnect(Puerto, hWndMsg, "")
+#End If
+End Sub
+
 Private Sub Command27_Click()
 frmUserList.Show
 
@@ -722,6 +732,16 @@ If FileExist(App.Path & "\logs\Asesinatos.log", vbNormal) Then Kill App.Path & "
 If FileExist(App.Path & "\logs\Resurrecciones.log", vbNormal) Then Kill App.Path & "\logs\Resurrecciones.log"
 If FileExist(App.Path & "\logs\Teleports.Log", vbNormal) Then Kill App.Path & "\logs\Teleports.Log"
 
+
+#If UsarQueSocket = 1 Then
+Call apiclosesocket(SockListen)
+#ElseIf UsarQueSocket = 0 Then
+frmMain.Socket1.Cleanup
+frmMain.Socket2(0).Cleanup
+#ElseIf UsarQueSocket = 2 Then
+frmMain.Serv.Detener
+#End If
+
 Dim LoopC As Integer
 
 For LoopC = 1 To MaxUsers
@@ -738,6 +758,28 @@ Call FreeCharIndexes
 Call LoadSini
 Call CargarBackUp
 Call LoadOBJData
+
+#If UsarQueSocket = 1 Then
+SockListen = ListenForConnect(Puerto, hWndMsg, "")
+
+#ElseIf UsarQueSocket = 0 Then
+frmMain.Socket1.AddressFamily = AF_INET
+frmMain.Socket1.Protocol = IPPROTO_IP
+frmMain.Socket1.SocketType = SOCK_STREAM
+frmMain.Socket1.Binary = False
+frmMain.Socket1.Blocking = False
+frmMain.Socket1.BufferSize = 1024
+
+frmMain.Socket2(0).AddressFamily = AF_INET
+frmMain.Socket2(0).Protocol = IPPROTO_IP
+frmMain.Socket2(0).SocketType = SOCK_STREAM
+frmMain.Socket2(0).Blocking = False
+frmMain.Socket2(0).BufferSize = 2048
+
+'Escucha
+frmMain.Socket1.LocalPort = Puerto
+frmMain.Socket1.listen
+#End If
 
 If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
 

@@ -820,6 +820,79 @@ End Sub
 ' @remarks If UsarQueSocket is 3 it won`t use the clsByteQueue
 
 Public Function EnviarDatosASlot(ByVal UserIndex As Integer, ByRef Datos As String) As Long
+'***************************************************
+'Author: Unknown
+'Last Modification: 01/10/07
+'Last Modified By: Lucas Tavolaro Ortiz (Tavo)
+'Now it uses the clsByteQueue class and don`t make a FIFO Queue of String
+'***************************************************
+
+#If UsarQueSocket = 1 Then '**********************************************
+    On Error GoTo Err
+    
+    Dim Ret As Long
+    
+    Ret = WsApiEnviar(UserIndex, Datos)
+    
+    If Ret <> 0 And Ret <> WSAEWOULDBLOCK Then
+        ' Close the socket avoiding any critical error
+        Call CloseSocketSL(UserIndex)
+        Call Cerrar_Usuario(UserIndex)
+    End If
+Exit Function
+    
+Err:
+
+#ElseIf UsarQueSocket = 0 Then '**********************************************
+    
+    If frmMain.Socket2(UserIndex).Write(Datos, Len(Datos)) < 0 Then
+        If frmMain.Socket2(UserIndex).LastError = WSAEWOULDBLOCK Then
+            ' WSAEWOULDBLOCK, put the data again in the outgoingData Buffer
+            Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(Datos)
+        Else
+            'Close the socket avoiding any critical error
+            Call Cerrar_Usuario(UserIndex)
+        End If
+    End If
+#ElseIf UsarQueSocket = 2 Then '**********************************************
+
+    'Return value for this Socket:
+    '--0) OK
+    '--1) WSAEWOULDBLOCK
+    '--2) ERROR
+    
+    Dim Ret As Long
+
+    Ret = frmMain.Serv.Enviar(.ConnID, Datos, Len(Datos))
+            
+    If Ret = 1 Then
+        ' WSAEWOULDBLOCK, put the data again in the outgoingData Buffer
+        Call .outgoingData.WriteASCIIStringFixed(Datos)
+    ElseIf Ret = 2 Then
+        'Close socket avoiding any critical error
+        Call CloseSocketSL(UserIndex)
+        Call Cerrar_Usuario(UserIndex)
+    End If
+    
+
+#ElseIf UsarQueSocket = 3 Then
+    'THIS SOCKET DOESN`T USE THE BYTE QUEUE CLASS
+    Dim rv As Long
+    'al carajo, esto encola solo!!! che, me aprobará los
+    'parciales también?, este control hace todo solo!!!!
+    On Error GoTo ErrorHandler
+        
+        If UserList(UserIndex).ConnID = -1 Then
+            Call LogError("TCP::EnviardatosASlot, se intento enviar datos a un userIndex con ConnId=-1")
+            Exit Function
+        End If
+        
+        If frmMain.TCPServ.Enviar(UserList(UserIndex).ConnID, Datos, Len(Datos)) = 2 Then Call CloseSocket(UserIndex)
+
+Exit Function
+ErrorHandler:
+    Call LogError("TCP::EnviarDatosASlot. UI/ConnId/Datos: " & UserIndex & "/" & UserList(UserIndex).ConnID & "/" & Datos)
+#End If '**********************************************
 
 End Function
 Function EstaPCarea(index As Integer, Index2 As Integer) As Boolean
@@ -1394,7 +1467,7 @@ Sub ResetContadores(ByVal UserIndex As Integer)
         .Lava = 0
         .Mimetismo = 0
         .Saliendo = False
-        .salir = 0
+        .Salir = 0
         .TiempoOculto = 0
         .TimerMagiaGolpe = 0
         .TimerGolpeMagia = 0
@@ -1799,6 +1872,27 @@ Sub ReloadSokcet()
 '***************************************************
 
 On Error GoTo Errhandler
+#If UsarQueSocket = 1 Then
+
+    Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
+    
+    If NumUsers <= 0 Then
+        Call WSApiReiniciarSockets
+    Else
+'       Call apiclosesocket(SockListen)
+'       SockListen = ListenForConnect(Puerto, hWndMsg, "")
+    End If
+
+#ElseIf UsarQueSocket = 0 Then
+
+    frmMain.Socket1.Cleanup
+    Call ConfigListeningSocket(frmMain.Socket1, Puerto)
+    
+#ElseIf UsarQueSocket = 2 Then
+
+    
+
+#End If
 
 Exit Sub
 Errhandler:
