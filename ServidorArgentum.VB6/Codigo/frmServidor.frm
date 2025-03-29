@@ -664,7 +664,7 @@ Private Sub Command26_Click()
     If SockListen >= 0 Then Call apiclosesocket(SockListen)
     
     'Inicia el socket de escucha
-    SockListen = ListenForConnect(Puerto, hWndMsg, "")
+    SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
 End Sub
 
 Private Sub Command27_Click()
@@ -730,7 +730,7 @@ Call LoadSini
 Call CargarBackUp
 Call LoadOBJData
 
-SockListen = ListenForConnect(Puerto, hWndMsg, "")
+SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
 
 If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
 

@@ -580,7 +580,7 @@ Dim Ret As Long
 
 Ret = WsApiEnviar(UserIndex, Datos)
 
-If Ret <> 0 And Ret <> WSAEWOULDBLOCK Then
+If Ret <> 0 Then
     ' Close the socket avoiding any critical error
     Call CloseSocketSL(UserIndex)
     Call Cerrar_Usuario(UserIndex)
@@ -1566,7 +1566,7 @@ If NumUsers <= 0 Then
     Call WSApiReiniciarSockets
 Else
 '   Call apiclosesocket(SockListen)
-'   SockListen = ListenForConnect(Puerto, hWndMsg, "")
+'   SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
 End If
 
 Exit Sub

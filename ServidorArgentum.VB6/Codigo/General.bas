@@ -430,7 +430,7 @@ On Error Resume Next
     Call SecurityIp.InitIpTables(1000)
     
     Call IniciaWsApi(frmMain.hWnd)
-    SockListen = ListenForConnect(Puerto, hWndMsg, "")
+    SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
     
     If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
     '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
@@ -903,7 +903,7 @@ On Error Resume Next
     If SockListen >= 0 Then Call apiclosesocket(SockListen)
     
     'Inicia el socket de escucha
-    SockListen = ListenForConnect(Puerto, hWndMsg, "")
+    SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
 
     For LoopC = 1 To MaxUsers
         Call CloseSocket(LoopC)
