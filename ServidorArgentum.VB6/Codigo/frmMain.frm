@@ -27,8 +27,8 @@ Begin VB.Form frmMain
    ScaleWidth      =   5190
    StartUpPosition =   2  'CenterScreen
    Begin MSWinsockLib.Winsock Winsock1 
-      Left            =   2520
-      Top             =   0
+      Left            =   480
+      Top             =   60
       _ExtentX        =   741
       _ExtentY        =   741
       _Version        =   393216
@@ -50,12 +50,6 @@ Begin VB.Form frmMain
    End
    Begin VB.Timer packetResend 
       Interval        =   10
-      Left            =   480
-      Top             =   60
-   End
-   Begin VB.Timer securityTimer 
-      Enabled         =   0   'False
-      Interval        =   10000
       Left            =   960
       Top             =   60
    End
@@ -109,7 +103,7 @@ Begin VB.Form frmMain
       Enabled         =   0   'False
       Interval        =   60000
       Left            =   480
-      Top             =   1080
+      Top             =   1020
    End
    Begin VB.Timer npcataca 
       Enabled         =   0   'False
@@ -445,13 +439,7 @@ On Error Resume Next
 'Save stats!!!
 Call Statistics.DumpStatistics
 
-#If UsarQueSocket = 1 Then
 Call LimpiaWsApi
-#ElseIf UsarQueSocket = 0 Then
-Socket1.Cleanup
-#ElseIf UsarQueSocket = 2 Then
-Serv.Detener
-#End If
 
 Dim LoopC As Integer
 
@@ -709,14 +697,6 @@ Errhandler:
     Resume Next
 End Sub
 
-Private Sub securityTimer_Timer()
-
-#If SeguridadAlkon Then
-    Call Security.SecurityCheck
-#End If
-
-End Sub
-
 Private Sub TIMER_AI_Timer()
 
 On Error GoTo ErrorHandler
@@ -906,105 +886,3 @@ Exit Sub
 Errhandler:
     Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.description)
 End Sub
-
-
-
-
-
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-'''''''''''''''''USO DEL CONTROL TCPSERV'''''''''''''''''''''''''''
-'''''''''''''Compilar con UsarQueSocket = 3''''''''''''''''''''''''
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-
-#If UsarQueSocket = 3 Then
-
-Private Sub TCPServ_Eror(ByVal Numero As Long, ByVal Descripcion As String)
-    Call LogError("TCPSERVER SOCKET ERROR: " & Numero & "/" & Descripcion)
-End Sub
-
-Private Sub TCPServ_NuevaConn(ByVal ID As Long)
-On Error GoTo errorHandlerNC
-
-    ESCUCHADAS = ESCUCHADAS + 1
-    Escuch.Caption = ESCUCHADAS
-    
-    Dim i As Integer
-    
-    Dim NewIndex As Integer
-    NewIndex = NextOpenUser
-    
-    If NewIndex <= MaxUsers Then
-        'call logindex(NewIndex, "******> Accept. ConnId: " & ID)
-        
-        TCPServ.SetDato ID, NewIndex
-        
-        If aDos.MaxConexiones(TCPServ.GetIP(ID)) Then
-            Call aDos.RestarConexion(TCPServ.GetIP(ID))
-            Call ResetUserSlot(NewIndex)
-            Exit Sub
-        End If
-
-        If NewIndex > LastUser Then LastUser = NewIndex
-
-        UserList(NewIndex).ConnID = ID
-        UserList(NewIndex).ip = TCPServ.GetIP(ID)
-        UserList(NewIndex).ConnIDValida = True
-        Set UserList(NewIndex).CommandsBuffer = New CColaArray
-        
-        For i = 1 To BanIps.Count
-            If BanIps.Item(i) = TCPServ.GetIP(ID) Then
-                Call ResetUserSlot(NewIndex)
-                Exit Sub
-            End If
-        Next i
-
-    Else
-        Call CloseSocket(NewIndex, True)
-        LogCriticEvent ("NEWINDEX > MAXUSERS. IMPOSIBLE ALOCATEAR SOCKETS")
-    End If
-
-Exit Sub
-
-errorHandlerNC:
-Call LogError("TCPServer::NuevaConexion " & Err.description)
-End Sub
-
-Private Sub TCPServ_Close(ByVal ID As Long, ByVal MiDato As Long)
-    On Error GoTo eh
-    '' No cierro yo el socket. El on_close lo cierra por mi.
-    'call logindex(MiDato, "******> Remote Close. ConnId: " & ID & " Midato: " & MiDato)
-    Call CloseSocket(MiDato, False)
-Exit Sub
-eh:
-    Call LogError("Ocurrio un error en el evento TCPServ_Close. ID/miDato:" & ID & "/" & MiDato)
-End Sub
-
-Private Sub TCPServ_Read(ByVal ID As Long, Datos As Variant, ByVal Cantidad As Long, ByVal MiDato As Long)
-On Error GoTo errorh
-
-With UserList(MiDato)
-    Datos = StrConv(StrConv(Datos, vbUnicode), vbFromUnicode)
-    
-    Call .incomingData.WriteASCIIStringFixed(Datos)
-    
-    If .ConnID <> -1 Then
-        Call HandleIncomingData(MiDato)
-    Else
-        Exit Sub
-    End If
-End With
-
-Exit Sub
-
-errorh:
-Call LogError("Error socket read: " & MiDato & " dato:" & RD & " userlogged: " & UserList(MiDato).flags.UserLogged & " connid:" & UserList(MiDato).ConnID & " ID Parametro" & ID & " error:" & Err.description)
-
-End Sub
-
-#End If
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-''''''''''''''FIN  USO DEL CONTROL TCPSERV'''''''''''''''''''''''''
-'''''''''''''Compilar con UsarQueSocket = 3''''''''''''''''''''''''
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-

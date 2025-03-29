@@ -145,10 +145,6 @@ On Error Resume Next
     
     Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Iniciando WorldSave", FontTypeNames.FONTTYPE_SERVER))
     
-    #If SeguridadAlkon Then
-        Encriptacion.StringValidacion = Encriptacion.ArmarStringValidacion
-    #End If
-    
     Call ReSpawnOrigPosNpcs 'respawn de los guardias en las pos originales
     
     Dim j As Integer, k As Integer
@@ -157,7 +153,7 @@ On Error Resume Next
         If MapInfo(j).BackUp = 1 Then k = k + 1
     Next j
     
-    FrmStat.porcentaje.Caption = "0 %"
+    FrmStat.Porcentaje.Caption = "0 %"
     
     For loopX = 1 To NumMaps
         'DoEvents
@@ -165,7 +161,7 @@ On Error Resume Next
         If MapInfo(loopX).BackUp = 1 Then
         
                 Call GrabarMapa(loopX, App.Path & "\WorldBackUp\Mapa" & loopX)
-                FrmStat.porcentaje.Caption = loopX / NumMaps * 100 & " %"
+                FrmStat.Porcentaje.Caption = loopX / NumMaps * 100 & " %"
         End If
     
     Next loopX

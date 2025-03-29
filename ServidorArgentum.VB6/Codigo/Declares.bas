@@ -32,9 +32,6 @@ Option Explicit
 ''
 ' Modulo de declaraciones. Aca hay de todo.
 '
-#If SeguridadAlkon Then
-Public aDos As New clsAntiDoS
-#End If
 
 Public aClon As New clsAntiMassClon
 Public TrashCollector As New Collection
@@ -1228,14 +1225,8 @@ Public Type User
     
     Faccion As tFacciones
     
-#If SeguridadAlkon Then
-    Security As SecurityData
-#End If
-
-#If ConUpTime Then
     LogOnTime As Date
     UpTime As Long
-#End If
 
     ip As String
     

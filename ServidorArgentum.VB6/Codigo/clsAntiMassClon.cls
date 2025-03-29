@@ -55,13 +55,6 @@ Public Function MaxPersonajes(sIp As String) As Boolean
         End If
     Next i
 
-#If SeguridadAlkon Then
-    Dim oIp As New UserIpAdress
-    oIp.ip = sIp
-    oIp.PersonajesCreados = 1
-    m_coleccion.Add oIp
-#End If
-
     MaxPersonajes = False
     Exit Function
 End Function

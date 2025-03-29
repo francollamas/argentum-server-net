@@ -538,7 +538,7 @@ On Error Resume Next
         Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "MagiaSinefecto", .MagiaSinEfecto)
         Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "InviSinEfecto", .InviSinEfecto)
         Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "ResuSinEfecto", .ResuSinEfecto)
-        Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "StartPos", .StartPos.Map & "-" & .StartPos.X & "-" & .StartPos.Y)
+        Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "StartPos", .startPos.Map & "-" & .startPos.X & "-" & .startPos.Y)
         
     
         Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "Terreno", .Terreno)
@@ -1091,10 +1091,8 @@ Sub LoadUserInit(ByVal UserIndex As Integer, ByRef UserFile As clsIniReader)
             .heading = eHeading.SOUTH
         End With
         
-        #If ConUpTime Then
-            .UpTime = CLng(UserFile.GetValue("INIT", "UpTime"))
-        #End If
-        
+        .UpTime = CLng(UserFile.GetValue("INIT", "UpTime"))
+
         If .flags.Muerto = 0 Then
             .Char = .OrigChar
         Else
@@ -1459,9 +1457,9 @@ On Error GoTo errh
     With MapInfo(Map)
         .name = GetVar(MAPFl & ".dat", "Mapa" & Map, "Name")
         .Music = GetVar(MAPFl & ".dat", "Mapa" & Map, "MusicNum")
-        .StartPos.Map = val(ReadField(1, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
-        .StartPos.X = val(ReadField(2, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
-        .StartPos.Y = val(ReadField(3, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
+        .startPos.Map = val(ReadField(1, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
+        .startPos.X = val(ReadField(2, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
+        .startPos.Y = val(ReadField(3, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
         .MagiaSinEfecto = val(GetVar(MAPFl & ".dat", "Mapa" & Map, "MagiaSinEfecto"))
         .InviSinEfecto = val(GetVar(MAPFl & ".dat", "Mapa" & Map, "InviSinEfecto"))
         .ResuSinEfecto = val(GetVar(MAPFl & ".dat", "Mapa" & Map, "ResuSinEfecto"))
@@ -1499,14 +1497,6 @@ Sub LoadSini()
     If frmMain.Visible Then frmMain.txStatus.Caption = "Cargando info de inicio del server."
     
     BootDelBackUp = val(GetVar(IniPath & "Server.ini", "INIT", "IniciarDesdeBackUp"))
-    
-    'Misc
-    #If SeguridadAlkon Then
-    
-    Call Security.SetServerIp(GetVar(IniPath & "Server.ini", "INIT", "ServerIp"))
-    
-    #End If
-    
     
     Puerto = val(GetVar(IniPath & "Server.ini", "INIT", "StartPort"))
     HideMe = val(GetVar(IniPath & "Server.ini", "INIT", "Hide"))
@@ -1674,11 +1664,6 @@ Sub LoadSini()
     Call MD5sCarga
     
     Call ConsultaPopular.LoadData
-
-#If SeguridadAlkon Then
-    Encriptacion.StringValidacion = Encriptacion.ArmarStringValidacion
-#End If
-
 End Sub
 
 ' TODO MIGRA: funciona pero es lento e ineficiente
@@ -1967,14 +1952,12 @@ With UserList(UserIndex)
     Call WriteVar(UserFile, "INIT", "Escudo", CStr(.Char.ShieldAnim))
     Call WriteVar(UserFile, "INIT", "Casco", CStr(.Char.CascoAnim))
     
-    #If ConUpTime Then
-        Dim TempDate As Date
-        TempDate = Now - .LogOnTime
-        .LogOnTime = Now
-        .UpTime = .UpTime + (Abs(Day(TempDate) - 30) * 24 * 3600) + Hour(TempDate) * 3600 + Minute(TempDate) * 60 + Second(TempDate)
-        .UpTime = .UpTime
-        Call WriteVar(UserFile, "INIT", "UpTime", .UpTime)
-    #End If
+    Dim TempDate As Date
+    TempDate = Now - .LogOnTime
+    .LogOnTime = Now
+    .UpTime = .UpTime + (Abs(Day(TempDate) - 30) * 24 * 3600) + Hour(TempDate) * 3600 + Minute(TempDate) * 60 + Second(TempDate)
+    .UpTime = .UpTime
+    Call WriteVar(UserFile, "INIT", "UpTime", .UpTime)
     
     'First time around?
     If GetVar(UserFile, "INIT", "LastIP1") = vbNullString Then

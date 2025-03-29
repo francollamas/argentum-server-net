@@ -194,29 +194,6 @@ Sub EnviarSpawnList(ByVal UserIndex As Integer)
 
 End Sub
 
-Sub ConfigListeningSocket(ByRef Obj As Object, ByVal Port As Integer)
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'
-'***************************************************
-
-#If UsarQueSocket = 0 Then
-
-    Obj.AddressFamily = AF_INET
-    Obj.Protocol = IPPROTO_IP
-    Obj.SocketType = SOCK_STREAM
-    Obj.Binary = False
-    Obj.Blocking = False
-    Obj.BufferSize = 1024
-    Obj.LocalPort = Port
-    Obj.backlog = 5
-    Obj.listen
-
-#End If
-
-End Sub
-
 Sub Main()
 '***************************************************
 'Author: Unknown
@@ -445,10 +422,6 @@ On Error Resume Next
         .KillLog.Enabled = True
         .TIMER_AI.Enabled = True
         .npcataca.Enabled = True
-        
-#If SeguridadAlkon Then
-        .securityTimer.Enabled = True
-#End If
     End With
     
     '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
@@ -456,36 +429,8 @@ On Error Resume Next
     
     Call SecurityIp.InitIpTables(1000)
     
-#If UsarQueSocket = 1 Then
-    
     Call IniciaWsApi(frmMain.hWnd)
     SockListen = ListenForConnect(Puerto, hWndMsg, "")
-    
-#ElseIf UsarQueSocket = 0 Then
-    
-    frmCargando.Label1(2).Caption = "Configurando Sockets"
-    
-    frmMain.Socket2(0).AddressFamily = AF_INET
-    frmMain.Socket2(0).Protocol = IPPROTO_IP
-    frmMain.Socket2(0).SocketType = SOCK_STREAM
-    frmMain.Socket2(0).Binary = False
-    frmMain.Socket2(0).Blocking = False
-    frmMain.Socket2(0).BufferSize = 2048
-    
-    Call ConfigListeningSocket(frmMain.Socket1, Puerto)
-    
-#ElseIf UsarQueSocket = 2 Then
-    
-    frmMain.Serv.Iniciar Puerto
-    
-#ElseIf UsarQueSocket = 3 Then
-    
-    frmMain.TCPServ.Encolar True
-    frmMain.TCPServ.IniciarTabla 1009
-    frmMain.TCPServ.SetQueueLim 51200
-    frmMain.TCPServ.Iniciar Puerto
-    
-#End If
     
     If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
     '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
@@ -953,26 +898,12 @@ On Error Resume Next
     If frmMain.Visible Then frmMain.txStatus.Caption = "Reiniciando."
     
     Dim LoopC As Long
-  
-#If UsarQueSocket = 0 Then
-
-    frmMain.Socket1.Cleanup
-    frmMain.Socket1.Startup
-      
-    frmMain.Socket2(0).Cleanup
-    frmMain.Socket2(0).Startup
-
-#ElseIf UsarQueSocket = 1 Then
 
     'Cierra el socket de escucha
     If SockListen >= 0 Then Call apiclosesocket(SockListen)
     
     'Inicia el socket de escucha
     SockListen = ListenForConnect(Puerto, hWndMsg, "")
-
-#ElseIf UsarQueSocket = 2 Then
-
-#End If
 
     For LoopC = 1 To MaxUsers
         Call CloseSocket(LoopC)
@@ -1009,32 +940,6 @@ On Error Resume Next
     Call LoadMapData
     
     Call CargarHechizos
-
-#If UsarQueSocket = 0 Then
-
-    '*****************Setup socket
-    frmMain.Socket1.AddressFamily = AF_INET
-    frmMain.Socket1.Protocol = IPPROTO_IP
-    frmMain.Socket1.SocketType = SOCK_STREAM
-    frmMain.Socket1.Binary = False
-    frmMain.Socket1.Blocking = False
-    frmMain.Socket1.BufferSize = 1024
-    
-    frmMain.Socket2(0).AddressFamily = AF_INET
-    frmMain.Socket2(0).Protocol = IPPROTO_IP
-    frmMain.Socket2(0).SocketType = SOCK_STREAM
-    frmMain.Socket2(0).Blocking = False
-    frmMain.Socket2(0).BufferSize = 2048
-    
-    'Escucha
-    frmMain.Socket1.LocalPort = val(Puerto)
-    frmMain.Socket1.listen
-
-#ElseIf UsarQueSocket = 1 Then
-
-#ElseIf UsarQueSocket = 2 Then
-
-#End If
 
     If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
     

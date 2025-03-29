@@ -29,128 +29,6 @@ Attribute VB_Name = "TCP"
 
 Option Explicit
 
-#If UsarQueSocket = 0 Then
-' General constants used with most of the controls
-Public Const INVALID_HANDLE As Integer = -1
-Public Const CONTROL_ERRIGNORE As Integer = 0
-Public Const CONTROL_ERRDISPLAY As Integer = 1
-
-
-' SocietWrench Control Actions
-Public Const SOCKET_OPEN As Integer = 1
-Public Const SOCKET_CONNECT As Integer = 2
-Public Const SOCKET_LISTEN As Integer = 3
-Public Const SOCKET_ACCEPT As Integer = 4
-Public Const SOCKET_CANCEL As Integer = 5
-Public Const SOCKET_FLUSH As Integer = 6
-Public Const SOCKET_CLOSE As Integer = 7
-Public Const SOCKET_DISCONNECT As Integer = 7
-Public Const SOCKET_ABORT As Integer = 8
-
-' SocketWrench Control States
-Public Const SOCKET_NONE As Integer = 0
-Public Const SOCKET_IDLE As Integer = 1
-Public Const SOCKET_LISTENING As Integer = 2
-Public Const SOCKET_CONNECTING As Integer = 3
-Public Const SOCKET_ACCEPTING As Integer = 4
-Public Const SOCKET_RECEIVING As Integer = 5
-Public Const SOCKET_SENDING As Integer = 6
-Public Const SOCKET_CLOSING As Integer = 7
-
-' Societ Address Families
-Public Const AF_UNSPEC As Integer = 0
-Public Const AF_UNIX As Integer = 1
-Public Const AF_INET As Integer = 2
-
-' Societ Types
-Public Const SOCK_STREAM As Integer = 1
-Public Const SOCK_DGRAM As Integer = 2
-Public Const SOCK_RAW As Integer = 3
-Public Const SOCK_RDM As Integer = 4
-Public Const SOCK_SEQPACKET As Integer = 5
-
-' Protocol Types
-Public Const IPPROTO_IP As Integer = 0
-Public Const IPPROTO_ICMP As Integer = 1
-Public Const IPPROTO_GGP As Integer = 2
-Public Const IPPROTO_TCP As Integer = 6
-Public Const IPPROTO_PUP As Integer = 12
-Public Const IPPROTO_UDP As Integer = 17
-Public Const IPPROTO_IDP As Integer = 22
-Public Const IPPROTO_ND As Integer = 77
-Public Const IPPROTO_RAW As Integer = 255
-Public Const IPPROTO_MAX As Integer = 256
-
-
-' Network Addpesses
-Public Const INADDR_ANY As String = "0.0.0.0"
-Public Const INADDR_LOOPBACK As String = "127.0.0.1"
-Public Const INADDR_NONE As String = "255.055.255.255"
-
-' Shutdown Values
-Public Const SOCKET_READ As Integer = 0
-Public Const SOCKET_WRITE As Integer = 1
-Public Const SOCKET_READWRITE As Integer = 2
-
-' SocketWrench Error Pesponse
-Public Const SOCKET_ERRIGNORE As Integer = 0
-Public Const SOCKET_ERRDISPLAY As Integer = 1
-
-' SocketWrench Error Codes
-Public Const WSABASEERR As Integer = 24000
-Public Const WSAEINTR As Integer = 24004
-Public Const WSAEBADF As Integer = 24009
-Public Const WSAEACCES As Integer = 24013
-Public Const WSAEFAULT As Integer = 24014
-Public Const WSAEINVAL As Integer = 24022
-Public Const WSAEMFILE As Integer = 24024
-Public Const WSAEWOULDBLOCK As Integer = 24035
-Public Const WSAEINPROGRESS As Integer = 24036
-Public Const WSAEALREADY As Integer = 24037
-Public Const WSAENOTSOCK As Integer = 24038
-Public Const WSAEDESTADDRREQ As Integer = 24039
-Public Const WSAEMSGSIZE As Integer = 24040
-Public Const WSAEPROTOTYPE As Integer = 24041
-Public Const WSAENOPROTOOPT As Integer = 24042
-Public Const WSAEPROTONOSUPPORT As Integer = 24043
-Public Const WSAESOCKTNOSUPPORT As Integer = 24044
-Public Const WSAEOPNOTSUPP As Integer = 24045
-Public Const WSAEPFNOSUPPORT As Integer = 24046
-Public Const WSAEAFNOSUPPORT As Integer = 24047
-Public Const WSAEADDRINUSE As Integer = 24048
-Public Const WSAEADDRNOTAVAIL As Integer = 24049
-Public Const WSAENETDOWN As Integer = 24050
-Public Const WSAENETUNREACH As Integer = 24051
-Public Const WSAENETRESET As Integer = 24052
-Public Const WSAECONNABORTED As Integer = 24053
-Public Const WSAECONNRESET As Integer = 24054
-Public Const WSAENOBUFS As Integer = 24055
-Public Const WSAEISCONN As Integer = 24056
-Public Const WSAENOTCONN As Integer = 24057
-Public Const WSAESHUTDOWN As Integer = 24058
-Public Const WSAETOOMANYREFS As Integer = 24059
-Public Const WSAETIMEDOUT As Integer = 24060
-Public Const WSAECONNREFUSED As Integer = 24061
-Public Const WSAELOOP As Integer = 24062
-Public Const WSAENAMETOOLONG As Integer = 24063
-Public Const WSAEHOSTDOWN As Integer = 24064
-Public Const WSAEHOSTUNREACH As Integer = 24065
-Public Const WSAENOTEMPTY As Integer = 24066
-Public Const WSAEPROCLIM As Integer = 24067
-Public Const WSAEUSERS As Integer = 24068
-Public Const WSAEDQUOT As Integer = 24069
-Public Const WSAESTALE As Integer = 24070
-Public Const WSAEREMOTE As Integer = 24071
-Public Const WSASYSNOTREADY As Integer = 24091
-Public Const WSAVERNOTSUPPORTED As Integer = 24092
-Public Const WSANOTINITIALISED As Integer = 24093
-Public Const WSAHOST_NOT_FOUND As Integer = 25001
-Public Const WSATRY_AGAIN As Integer = 25002
-Public Const WSANO_RECOVERY As Integer = 25003
-Public Const WSANO_DATA As Integer = 25004
-Public Const WSANO_ADDRESS As Integer = 2500
-#End If
-
 Sub DarCuerpo(ByVal UserIndex As Integer)
 '*************************************************
 'Author: Nacho (Integer)
@@ -586,10 +464,8 @@ With UserList(UserIndex)
     ' Total Items
     .Invent.NroItems = Slot
     
-    #If ConUpTime Then
-        .LogOnTime = Now
-        .UpTime = 0
-    #End If
+    .LogOnTime = Now
+    .UpTime = 0
 
 End With
 
@@ -604,8 +480,6 @@ Call SaveUser(UserIndex, CharPath & UCase$(name) & ".chr")
 Call ConnectUser(UserIndex, name, Password)
   
 End Sub
-
-#If UsarQueSocket = 1 Or UsarQueSocket = 2 Then
 
 Sub CloseSocket(ByVal UserIndex As Integer)
 '***************************************************
@@ -671,113 +545,6 @@ Errhandler:
     Call LogError("CloseSocket - Error = " & Err.Number & " - Descripción = " & Err.description & " - UserIndex = " & UserIndex)
 End Sub
 
-#ElseIf UsarQueSocket = 0 Then
-
-Sub CloseSocket(ByVal UserIndex As Integer)
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'
-'***************************************************
-
-On Error GoTo Errhandler
-    
-    
-    
-    UserList(UserIndex).ConnID = -1
-
-    If UserIndex = LastUser And LastUser > 1 Then
-        Do Until UserList(LastUser).flags.UserLogged
-            LastUser = LastUser - 1
-            If LastUser <= 1 Then Exit Do
-        Loop
-    End If
-
-    If UserList(UserIndex).flags.UserLogged Then
-            If NumUsers <> 0 Then NumUsers = NumUsers - 1
-            Call CloseUser(UserIndex)
-    End If
-
-    frmMain.Socket2(UserIndex).Cleanup
-    Unload frmMain.Socket2(UserIndex)
-    Call ResetUserSlot(UserIndex)
-
-Exit Sub
-
-Errhandler:
-    UserList(UserIndex).ConnID = -1
-    Call ResetUserSlot(UserIndex)
-End Sub
-
-
-#ElseIf UsarQueSocket = 3 Then
-
-Sub CloseSocket(ByVal UserIndex As Integer, Optional ByVal cerrarlo As Boolean = True)
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'
-'***************************************************
-On Error GoTo Errhandler
-
-Dim NURestados As Boolean
-Dim CoNnEcTiOnId As Long
-
-
-    NURestados = False
-    CoNnEcTiOnId = UserList(UserIndex).ConnID
-    
-    'call logindex(UserIndex, "******> Sub CloseSocket. ConnId: " & CoNnEcTiOnId & " Cerrarlo: " & Cerrarlo)
-    
-    
-  
-    UserList(UserIndex).ConnID = -1 'inabilitamos operaciones en socket
-
-    If UserIndex = LastUser And LastUser > 1 Then
-        Do
-            LastUser = LastUser - 1
-            If LastUser <= 1 Then Exit Do
-        Loop While UserList(LastUser).flags.UserLogged = True
-    End If
-
-    If UserList(UserIndex).flags.UserLogged Then
-            If NumUsers <> 0 Then NumUsers = NumUsers - 1
-            NURestados = True
-            Call CloseUser(UserIndex)
-    End If
-    
-    Call ResetUserSlot(UserIndex)
-    
-    'limpiada la userlist... reseteo el socket, si me lo piden
-    'Me lo piden desde: cerrada intecional del servidor (casi todas
-    'las llamadas a CloseSocket del codigo)
-    'No me lo piden desde: disconnect remoto (el on_close del control
-    'de alejo realiza la desconexion automaticamente). Esto puede pasar
-    'por ejemplo, si el cliente cierra el AO.
-    If cerrarlo Then Call frmMain.TCPServ.CerrarSocket(CoNnEcTiOnId)
-
-Exit Sub
-
-Errhandler:
-    Call LogError("CLOSESOCKETERR: " & Err.description & " UI:" & UserIndex)
-    
-    If Not NURestados Then
-        If UserList(UserIndex).flags.UserLogged Then
-            If NumUsers > 0 Then
-                NumUsers = NumUsers - 1
-            End If
-            Call LogError("Cerre sin grabar a: " & UserList(UserIndex).name)
-        End If
-    End If
-    
-    Call LogError("El usuario no guardado tenía connid " & CoNnEcTiOnId & ". Socket no liberado.")
-    Call ResetUserSlot(UserIndex)
-
-End Sub
-
-
-#End If
-
 '[Alejo-21-5]: Cierra un socket sin limpiar el slot
 Sub CloseSocketSL(ByVal UserIndex As Integer)
 '***************************************************
@@ -786,30 +553,12 @@ Sub CloseSocketSL(ByVal UserIndex As Integer)
 '
 '***************************************************
 
-#If UsarQueSocket = 1 Then
-
 If UserList(UserIndex).ConnID <> -1 And UserList(UserIndex).ConnIDValida Then
     Call BorraSlotSock(UserList(UserIndex).ConnID)
     Call WSApiCloseSocket(UserList(UserIndex).ConnID)
     UserList(UserIndex).ConnIDValida = False
 End If
 
-#ElseIf UsarQueSocket = 0 Then
-
-If UserList(UserIndex).ConnID <> -1 And UserList(UserIndex).ConnIDValida Then
-    frmMain.Socket2(UserIndex).Cleanup
-    Unload frmMain.Socket2(UserIndex)
-    UserList(UserIndex).ConnIDValida = False
-End If
-
-#ElseIf UsarQueSocket = 2 Then
-
-If UserList(UserIndex).ConnID <> -1 And UserList(UserIndex).ConnIDValida Then
-    Call frmMain.Serv.CerrarSocket(UserList(UserIndex).ConnID)
-    UserList(UserIndex).ConnIDValida = False
-End If
-
-#End If
 End Sub
 
 ''
@@ -817,7 +566,6 @@ End Sub
 '
 ' @param userIndex The index of the User
 ' @param Datos The string that will be send
-' @remarks If UsarQueSocket is 3 it won`t use the clsByteQueue
 
 Public Function EnviarDatosASlot(ByVal UserIndex As Integer, ByRef Datos As String) As Long
 '***************************************************
@@ -826,73 +574,20 @@ Public Function EnviarDatosASlot(ByVal UserIndex As Integer, ByRef Datos As Stri
 'Last Modified By: Lucas Tavolaro Ortiz (Tavo)
 'Now it uses the clsByteQueue class and don`t make a FIFO Queue of String
 '***************************************************
+On Error GoTo Err
 
-#If UsarQueSocket = 1 Then '**********************************************
-    On Error GoTo Err
-    
-    Dim Ret As Long
-    
-    Ret = WsApiEnviar(UserIndex, Datos)
-    
-    If Ret <> 0 And Ret <> WSAEWOULDBLOCK Then
-        ' Close the socket avoiding any critical error
-        Call CloseSocketSL(UserIndex)
-        Call Cerrar_Usuario(UserIndex)
-    End If
+Dim Ret As Long
+
+Ret = WsApiEnviar(UserIndex, Datos)
+
+If Ret <> 0 And Ret <> WSAEWOULDBLOCK Then
+    ' Close the socket avoiding any critical error
+    Call CloseSocketSL(UserIndex)
+    Call Cerrar_Usuario(UserIndex)
+End If
 Exit Function
     
 Err:
-
-#ElseIf UsarQueSocket = 0 Then '**********************************************
-    
-    If frmMain.Socket2(UserIndex).Write(Datos, Len(Datos)) < 0 Then
-        If frmMain.Socket2(UserIndex).LastError = WSAEWOULDBLOCK Then
-            ' WSAEWOULDBLOCK, put the data again in the outgoingData Buffer
-            Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(Datos)
-        Else
-            'Close the socket avoiding any critical error
-            Call Cerrar_Usuario(UserIndex)
-        End If
-    End If
-#ElseIf UsarQueSocket = 2 Then '**********************************************
-
-    'Return value for this Socket:
-    '--0) OK
-    '--1) WSAEWOULDBLOCK
-    '--2) ERROR
-    
-    Dim Ret As Long
-
-    Ret = frmMain.Serv.Enviar(.ConnID, Datos, Len(Datos))
-            
-    If Ret = 1 Then
-        ' WSAEWOULDBLOCK, put the data again in the outgoingData Buffer
-        Call .outgoingData.WriteASCIIStringFixed(Datos)
-    ElseIf Ret = 2 Then
-        'Close socket avoiding any critical error
-        Call CloseSocketSL(UserIndex)
-        Call Cerrar_Usuario(UserIndex)
-    End If
-    
-
-#ElseIf UsarQueSocket = 3 Then
-    'THIS SOCKET DOESN`T USE THE BYTE QUEUE CLASS
-    Dim rv As Long
-    'al carajo, esto encola solo!!! che, me aprobará los
-    'parciales también?, este control hace todo solo!!!!
-    On Error GoTo ErrorHandler
-        
-        If UserList(UserIndex).ConnID = -1 Then
-            Call LogError("TCP::EnviardatosASlot, se intento enviar datos a un userIndex con ConnId=-1")
-            Exit Function
-        End If
-        
-        If frmMain.TCPServ.Enviar(UserList(UserIndex).ConnID, Datos, Len(Datos)) = 2 Then Call CloseSocket(UserIndex)
-
-Exit Function
-ErrorHandler:
-    Call LogError("TCP::EnviarDatosASlot. UI/ConnId/Datos: " & UserIndex & "/" & UserList(UserIndex).ConnID & "/" & Datos)
-#End If '**********************************************
 
 End Function
 Function EstaPCarea(index As Integer, Index2 As Integer) As Boolean
@@ -1257,11 +952,7 @@ With UserList(UserIndex)
         .flags.ChatColor = vbWhite
     End If
     
-    
-    ''[EL OSO]: TRAIGO ESTO ACA ARRIBA PARA DARLE EL IP!
-    #If ConUpTime Then
-        .LogOnTime = Now
-    #End If
+    .LogOnTime = Now
     
     'Crea  el personaje del usuario
     Call MakeUserChar(True, .Pos.Map, UserIndex, .Pos.Map, .Pos.X, .Pos.Y)
@@ -1377,10 +1068,6 @@ With UserList(UserIndex)
     Call Statistics.UserConnected(UserIndex)
     
     Call MostrarNumUsers
-    
-    #If SeguridadAlkon Then
-        Call Security.UserConnected(UserIndex)
-    #End If
 
     N = FreeFile
     Open App.Path & "\logs\numusers.log" For Output As N
@@ -1467,7 +1154,7 @@ Sub ResetContadores(ByVal UserIndex As Integer)
         .Lava = 0
         .Mimetismo = 0
         .Saliendo = False
-        .Salir = 0
+        .salir = 0
         .TiempoOculto = 0
         .TimerMagiaGolpe = 0
         .TimerGolpeMagia = 0
@@ -1872,27 +1559,15 @@ Sub ReloadSokcet()
 '***************************************************
 
 On Error GoTo Errhandler
-#If UsarQueSocket = 1 Then
 
-    Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
-    
-    If NumUsers <= 0 Then
-        Call WSApiReiniciarSockets
-    Else
-'       Call apiclosesocket(SockListen)
-'       SockListen = ListenForConnect(Puerto, hWndMsg, "")
-    End If
+Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
 
-#ElseIf UsarQueSocket = 0 Then
-
-    frmMain.Socket1.Cleanup
-    Call ConfigListeningSocket(frmMain.Socket1, Puerto)
-    
-#ElseIf UsarQueSocket = 2 Then
-
-    
-
-#End If
+If NumUsers <= 0 Then
+    Call WSApiReiniciarSockets
+Else
+'   Call apiclosesocket(SockListen)
+'   SockListen = ListenForConnect(Puerto, hWndMsg, "")
+End If
 
 Exit Sub
 Errhandler:
