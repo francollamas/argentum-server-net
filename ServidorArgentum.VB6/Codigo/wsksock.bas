@@ -239,6 +239,13 @@ Public SockReadBuffer$
 Public Const WSA_NoName = "Unknown"
 Public WSAStartedUp As Boolean
 
+'*******************************************************************************
+' Función: WSAGetAsyncBufLen
+' Propósito: Obtiene la longitud del búfer de datos de un mensaje asincrónico.
+' Parámetros: 
+'   lParam - Valor Long que contiene información del mensaje asincrónico.
+' Retorna: Long - Longitud del búfer de datos.
+'*******************************************************************************
 Public Function WSAGetAsyncBufLen(ByVal lParam As Long) As Long
     If (lParam And &HFFFF&) > &H7FFF Then
         WSAGetAsyncBufLen = (lParam And &HFFFF&) - &H10000
@@ -247,6 +254,13 @@ Public Function WSAGetAsyncBufLen(ByVal lParam As Long) As Long
     End If
 End Function
 
+'*******************************************************************************
+' Función: WSAGetSelectEvent
+' Propósito: Obtiene el evento asociado a un mensaje asincrónico de Winsock.
+' Parámetros: 
+'   lParam - Valor Long que contiene información del mensaje asincrónico.
+' Retorna: Integer - Código del evento.
+'*******************************************************************************
 Public Function WSAGetSelectEvent(ByVal lParam As Long) As Integer
     If (lParam And &HFFFF&) > &H7FFF Then
         WSAGetSelectEvent = (lParam And &HFFFF&) - &H10000
@@ -255,10 +269,24 @@ Public Function WSAGetSelectEvent(ByVal lParam As Long) As Integer
     End If
 End Function
 
+'*******************************************************************************
+' Función: WSAGetAsyncError
+' Propósito: Obtiene el código de error asociado a un mensaje asincrónico de Winsock.
+' Parámetros: 
+'   lParam - Valor Long que contiene información del mensaje asincrónico.
+' Retorna: Integer - Código de error.
+'*******************************************************************************
 Public Function WSAGetAsyncError(ByVal lParam As Long) As Integer
     WSAGetAsyncError = (lParam And &HFFFF0000) \ &H10000
 End Function
 
+'*******************************************************************************
+' Función: AddrToIP
+' Propósito: Convierte una dirección en formato numérico a una dirección IP en formato de texto.
+' Parámetros: 
+'   AddrOrIP - Dirección en formato numérico o nombre de host.
+' Retorna: String - Dirección IP en formato de texto.
+'*******************************************************************************
 Public Function AddrToIP(ByVal AddrOrIP$) As String
 Dim T() As String
 Dim Tmp As String
@@ -269,6 +297,17 @@ AddrToIP = T(3) & "." & T(2) & "." & T(1) & "." & T(0)
 
 End Function
 
+'*******************************************************************************
+' Función: ConnectSock
+' Propósito: Establece una conexión de socket con un host y puerto especificados.
+' Parámetros: 
+'   Host - Nombre o dirección del host.
+'   Port - Puerto al que conectarse.
+'   retIpPort - Variable para almacenar la dirección IP y puerto conectados.
+'   HWndToMsg - Handle de ventana para mensajes asincrónicos.
+'   Async - Indica si la conexión es asincrónica.
+' Retorna: Long - Descriptor del socket o INVALID_SOCKET en caso de error.
+'*******************************************************************************
 Function ConnectSock(ByVal Host$, ByVal Port&, retIpPort$, ByVal HWndToMsg&, ByVal Async%) As Long
     Dim S&, SelectOps&, dummy&
     Dim sockin As sockaddr
@@ -338,6 +377,15 @@ Function ConnectSock(ByVal Host$, ByVal Port&, retIpPort$, ByVal HWndToMsg&, ByV
     ConnectSock = S
 End Function
 
+'*******************************************************************************
+' Función: SetSockLinger
+' Propósito: Configura la opción SO_LINGER en un socket.
+' Parámetros: 
+'   SockNum - Descriptor del socket.
+'   OnOff - Activa o desactiva la opción SO_LINGER.
+'   LingerTime - Tiempo de espera para cerrar el socket.
+' Retorna: Long - SOCKET_ERROR en caso de error, 0 en caso de éxito.
+'*******************************************************************************
 Public Function SetSockLinger(ByVal SockNum&, ByVal OnOff%, ByVal LingerTime%) As Long
     Dim Linger As LingerType
     Linger.l_onoff = OnOff
@@ -351,6 +399,10 @@ Public Function SetSockLinger(ByVal SockNum&, ByVal OnOff%, ByVal LingerTime%) A
     End If
 End Function
 
+'*******************************************************************************
+' Subrutina: EndWinsock
+' Propósito: Finaliza el uso de la API de Winsock y libera recursos.
+'*******************************************************************************
 Sub EndWinsock()
     Dim Ret&
     If WSAIsBlocking() Then
@@ -360,6 +412,13 @@ Sub EndWinsock()
     WSAStartedUp = False
 End Sub
 
+'*******************************************************************************
+' Función: GetAscIP
+' Propósito: Convierte una dirección IP en formato numérico a formato de texto.
+' Parámetros: 
+'   inn - Dirección IP en formato numérico.
+' Retorna: String - Dirección IP en formato de texto.
+'*******************************************************************************
 Public Function GetAscIP(ByVal inn As Long) As String
     Dim nStr&
     Dim lpStr&
@@ -377,6 +436,13 @@ Public Function GetAscIP(ByVal inn As Long) As String
     End If
 End Function
 
+'*******************************************************************************
+' Función: GetHostByAddress
+' Propósito: Obtiene el nombre del host asociado a una dirección IP.
+' Parámetros: 
+'   addr - Dirección IP en formato numérico.
+' Retorna: String - Nombre del host o "Unknown" si no se encuentra.
+'*******************************************************************************
 Public Function GetHostByAddress(ByVal addr As Long) As String
     Dim phe&
     Dim heDestHost As HostEnt
@@ -392,6 +458,13 @@ Public Function GetHostByAddress(ByVal addr As Long) As String
     End If
 End Function
 
+'*******************************************************************************
+' Función: GetHostByNameAlias
+' Propósito: Obtiene la dirección IP asociada a un nombre de host.
+' Parámetros: 
+'   HostName - Nombre del host.
+' Retorna: Long - Dirección IP en formato numérico o INADDR_NONE en caso de error.
+'*******************************************************************************
 Public Function GetHostByNameAlias(ByVal HostName$) As Long
     Dim phe&
     Dim heDestHost As HostEnt
@@ -411,6 +484,11 @@ Public Function GetHostByNameAlias(ByVal HostName$) As Long
     GetHostByNameAlias = retIP
 End Function
 
+'*******************************************************************************
+' Función: GetLocalHostName
+' Propósito: Obtiene el nombre del host local.
+' Retorna: String - Nombre del host local.
+'*******************************************************************************
 Public Function GetLocalHostName() As String
     Dim sName$
     sName = String(256, 0)
@@ -424,6 +502,13 @@ Public Function GetLocalHostName() As String
     GetLocalHostName = sName
 End Function
 
+'*******************************************************************************
+' Función: GetPeerAddress
+' Propósito: Obtiene la dirección del par conectado a un socket.
+' Parámetros: 
+'   S - Descriptor del socket.
+' Retorna: String - Dirección del par en formato "IP:Puerto".
+'*******************************************************************************
 Public Function GetPeerAddress(ByVal S&) As String
     Dim AddrLen&
     Dim sa As sockaddr
@@ -435,6 +520,13 @@ Public Function GetPeerAddress(ByVal S&) As String
     End If
 End Function
 
+'*******************************************************************************
+' Función: GetPortFromString
+' Propósito: Convierte una cadena de texto que representa un puerto a un valor numérico.
+' Parámetros: 
+'   PortStr - Cadena que representa el puerto.
+' Retorna: Long - Número de puerto.
+'*******************************************************************************
 Public Function GetPortFromString(ByVal PortStr$) As Long
     If val(PortStr$) > 32767 Then
         GetPortFromString = CInt(val(PortStr$) - &H10000)
@@ -444,6 +536,13 @@ Public Function GetPortFromString(ByVal PortStr$) As Long
     If Err Then GetPortFromString = 0
 End Function
 
+'*******************************************************************************
+' Función: GetProtocolByName
+' Propósito: Obtiene el número de protocolo asociado a un nombre de protocolo.
+' Parámetros: 
+'   Protocol - Nombre del protocolo.
+' Retorna: Long - Número de protocolo o SOCKET_ERROR en caso de error.
+'*******************************************************************************
 Function GetProtocolByName(ByVal Protocol$) As Long
     Dim tmpShort&
     Dim ppe&
@@ -462,6 +561,14 @@ Function GetProtocolByName(ByVal Protocol$) As Long
     End If
 End Function
 
+'*******************************************************************************
+' Función: GetServiceByName
+' Propósito: Obtiene el número de puerto asociado a un nombre de servicio.
+' Parámetros: 
+'   service - Nombre del servicio.
+'   Protocol - Nombre del protocolo.
+' Retorna: Long - Número de puerto o INVALID_SOCKET en caso de error.
+'*******************************************************************************
 Function GetServiceByName(ByVal service$, ByVal Protocol$) As Long
     Dim Serv&
     Dim pse&
@@ -480,6 +587,13 @@ Function GetServiceByName(ByVal service$, ByVal Protocol$) As Long
     End If
 End Function
 
+'*******************************************************************************
+' Función: GetSockAddress
+' Propósito: Obtiene la dirección asociada a un socket.
+' Parámetros: 
+'   S - Descriptor del socket.
+' Retorna: String - Dirección en formato "IP:Puerto".
+'*******************************************************************************
 Function GetSockAddress(ByVal S&) As String
     Dim AddrLen&
     Dim Ret&
@@ -494,6 +608,13 @@ Function GetSockAddress(ByVal S&) As String
     End If
 End Function
 
+'*******************************************************************************
+' Función: GetWSAErrorString
+' Propósito: Obtiene una descripción en texto de un código de error de Winsock.
+' Parámetros: 
+'   errnum - Código de error.
+' Retorna: String - Descripción del error.
+'*******************************************************************************
 Function GetWSAErrorString(ByVal errnum&) As String
     On Error Resume Next
     Select Case errnum
@@ -552,12 +673,26 @@ Function GetWSAErrorString(ByVal errnum&) As String
     End Select
 End Function
 
+'*******************************************************************************
+' Función: IpToAddr
+' Propósito: Convierte una dirección IP en formato de texto a un nombre de host.
+' Parámetros: 
+'   AddrOrIP - Dirección IP en formato de texto.
+' Retorna: String - Nombre del host o "Unknown" si no se encuentra.
+'*******************************************************************************
 Function IpToAddr(ByVal AddrOrIP$) As String
     On Error Resume Next
     IpToAddr = GetHostByAddress(GetHostByNameAlias(AddrOrIP$))
     If Err Then IpToAddr = WSA_NoName
 End Function
 
+'*******************************************************************************
+' Función: IrcGetAscIp
+' Propósito: Convierte una dirección IP en formato numérico a formato de texto.
+' Parámetros: 
+'   IPL - Dirección IP en formato numérico.
+' Retorna: String - Dirección IP en formato de texto.
+'*******************************************************************************
 Function IrcGetAscIp(ByVal IPL$) As String
     On Error GoTo IrcGetAscIPError:
     Dim lpStr&
@@ -587,10 +722,24 @@ IrcGetAscIPError:
     Exit Function
 End Function
 
+'*******************************************************************************
+' Función: GetLongIp
+' Propósito: Convierte una dirección IP en formato de texto a formato numérico.
+' Parámetros: 
+'   IPS - Dirección IP en formato de texto.
+' Retorna: Long - Dirección IP en formato numérico.
+'*******************************************************************************
 Public Function GetLongIp(ByVal IPS As String) As Long
     GetLongIp = inet_addr(IPS)
 End Function
 
+'*******************************************************************************
+' Función: IrcGetLongIp
+' Propósito: Convierte una dirección IP en formato de texto a formato numérico.
+' Parámetros: 
+'   AscIp - Dirección IP en formato de texto.
+' Retorna: String - Dirección IP en formato numérico.
+'*******************************************************************************
 Function IrcGetLongIp(ByVal AscIp$) As String
     On Error GoTo IrcGetLongIpError:
     Dim inn&
@@ -609,6 +758,15 @@ IrcGetLongIpError:
     Exit Function
 End Function
 
+'*******************************************************************************
+' Función: ListenForConnect
+' Propósito: Configura un socket para escuchar conexiones entrantes en un puerto específico.
+' Parámetros: 
+'   Port - Puerto en el que escuchar.
+'   HWndToMsg - Handle de ventana para mensajes asincrónicos.
+'   Enlazar - Dirección IP en la que enlazar el socket.
+' Retorna: Long - Descriptor del socket o INVALID_SOCKET en caso de error.
+'*******************************************************************************
 Public Function ListenForConnect(ByVal Port&, ByVal HWndToMsg&, ByVal Enlazar As String) As Long
     Dim S&, dummy&
     Dim SelectOps&
@@ -661,6 +819,14 @@ Public Function ListenForConnect(ByVal Port&, ByVal HWndToMsg&, ByVal Enlazar As
     ListenForConnect = S
 End Function
 
+'*******************************************************************************
+' Función: kSendData
+' Propósito: Envía datos a través de un socket.
+' Parámetros: 
+'   S - Descriptor del socket.
+'   vMessage - Datos a enviar.
+' Retorna: Long - Número de bytes enviados o SOCKET_ERROR en caso de error.
+'*******************************************************************************
 Public Function kSendData(ByVal S&, vMessage As Variant) As Long
     Dim TheMsg() As Byte, sTemp$
     TheMsg = vbNullString
@@ -680,10 +846,24 @@ Public Function kSendData(ByVal S&, vMessage As Variant) As Long
     End If
 End Function
 
+'*******************************************************************************
+' Función: SockAddressToString
+' Propósito: Convierte una estructura sockaddr en una cadena con formato "IP:Puerto".
+' Parámetros: 
+'   sa - Estructura sockaddr.
+' Retorna: String - Dirección en formato "IP:Puerto".
+'*******************************************************************************
 Public Function SockAddressToString(sa As sockaddr) As String
     SockAddressToString = GetAscIP(sa.sin_addr) & ":" & ntohs(sa.sin_port)
 End Function
 
+'*******************************************************************************
+' Función: StartWinsock
+' Propósito: Inicializa la API de Winsock.
+' Parámetros: 
+'   sDescription - Variable para almacenar la descripción de Winsock.
+' Retorna: Boolean - True si se inicializó correctamente, False en caso contrario.
+'*******************************************************************************
 Public Function StartWinsock(sDescription As String) As Boolean
     Dim StartupData As WSADataType
     If Not WSAStartedUp Then
@@ -697,6 +877,14 @@ Public Function StartWinsock(sDescription As String) As Boolean
     StartWinsock = WSAStartedUp
 End Function
 
+'*******************************************************************************
+' Función: WSAMakeSelectReply
+' Propósito: Combina un evento y un error en un único valor de 32 bits.
+' Parámetros: 
+'   TheEvent - Código del evento.
+'   TheError - Código del error.
+' Retorna: Long - Valor combinado de evento y error.
+'*******************************************************************************
 Public Function WSAMakeSelectReply(TheEvent%, TheError%) As Long
     WSAMakeSelectReply = (TheError * &H10000) + (TheEvent And &HFFFF&)
 End Function
