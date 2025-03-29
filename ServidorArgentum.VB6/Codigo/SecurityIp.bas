@@ -322,16 +322,5 @@ Dim Middle As Long
 End Function
 
 Public Function DumpTables()
-'***************************************************
-'Author: Unknown
-'Last Modification: -
-'
-'***************************************************
-
-Dim i As Integer
-
-    For i = 0 To MaxConTablesEntry * 2 - 1 Step 2
-        Call LogCriticEvent(GetAscIP(MaxConTables(i)) & " > " & MaxConTables(i + 1))
-    Next i
 
 End Function
