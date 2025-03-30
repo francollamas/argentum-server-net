@@ -6734,16 +6734,16 @@ On Error GoTo Errhandler
         name = buffer.ReadASCIIString()
         
         If migr_LenB(name) <> 0 Then
-            If (InStrB(name, "\") <> 0) Then
+            If (migr_InStrB(name, "\") <> 0) Then
                 name = Replace(name, "\", "")
             End If
-            If (InStrB(name, "/") <> 0) Then
+            If (migr_InStrB(name, "/") <> 0) Then
                 name = Replace(name, "/", "")
             End If
-            If (InStrB(name, ":") <> 0) Then
+            If (migr_InStrB(name, ":") <> 0) Then
                 name = Replace(name, ":", "")
             End If
-            If (InStrB(name, "|") <> 0) Then
+            If (migr_InStrB(name, "|") <> 0) Then
                 name = Replace(name, "|", "")
             End If
             
@@ -7516,10 +7516,10 @@ On Error GoTo Errhandler
         guild = buffer.ReadASCIIString()
         
         If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
-            If (InStrB(guild, "\") <> 0) Then
+            If (migr_InStrB(guild, "\") <> 0) Then
                 guild = Replace(guild, "\", "")
             End If
-            If (InStrB(guild, "/") <> 0) Then
+            If (migr_InStrB(guild, "/") <> 0) Then
                 guild = Replace(guild, "/", "")
             End If
             
@@ -8600,10 +8600,10 @@ On Error GoTo Errhandler
                     ElseIf jailTime > 60 Then
                         Call WriteConsoleMsg(UserIndex, "No puedés encarcelar por más de 60 minutos.", FontTypeNames.FONTTYPE_INFO)
                     Else
-                        If (InStrB(UserName, "\") <> 0) Then
+                        If (migr_InStrB(UserName, "\") <> 0) Then
                             UserName = Replace(UserName, "\", "")
                         End If
-                        If (InStrB(UserName, "/") <> 0) Then
+                        If (migr_InStrB(UserName, "/") <> 0) Then
                             UserName = Replace(UserName, "/", "")
                         End If
                         
@@ -8722,10 +8722,10 @@ On Error GoTo Errhandler
                 If Not privs And PlayerType.User Then
                     Call WriteConsoleMsg(UserIndex, "No puedes advertir a administradores.", FontTypeNames.FONTTYPE_INFO)
                 Else
-                    If (InStrB(UserName, "\") <> 0) Then
+                    If (migr_InStrB(UserName, "\") <> 0) Then
                             UserName = Replace(UserName, "\", "")
                     End If
-                    If (InStrB(UserName, "/") <> 0) Then
+                    If (migr_InStrB(UserName, "/") <> 0) Then
                             UserName = Replace(UserName, "/", "")
                     End If
                     
@@ -9494,10 +9494,10 @@ On Error GoTo Errhandler
             Call LogGM(.name, "/STATS " & UserName)
             
             If tUser <= 0 Then
-                If (InStrB(UserName, "\") <> 0) Then
+                If (migr_InStrB(UserName, "\") <> 0) Then
                         UserName = Replace(UserName, "\", "")
                 End If
-                If (InStrB(UserName, "/") <> 0) Then
+                If (migr_InStrB(UserName, "/") <> 0) Then
                         UserName = Replace(UserName, "/", "")
                 End If
                 
@@ -9975,10 +9975,10 @@ On Error GoTo Errhandler
         UserName = buffer.ReadASCIIString()
         
         If (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 Then
-            If (InStrB(UserName, "\") <> 0) Then
+            If (migr_InStrB(UserName, "\") <> 0) Then
                 UserName = Replace(UserName, "\", "")
             End If
-            If (InStrB(UserName, "/") <> 0) Then
+            If (migr_InStrB(UserName, "/") <> 0) Then
                 UserName = Replace(UserName, "/", "")
             End If
             
@@ -10428,7 +10428,7 @@ On Error GoTo Errhandler
         
         GuildName = buffer.ReadASCIIString()
         
-        If (InStrB(GuildName, "+") <> 0) Then
+        If (migr_InStrB(GuildName, "+") <> 0) Then
             GuildName = Replace(GuildName, "+", " ")
         End If
         
@@ -11847,10 +11847,10 @@ On Error GoTo Errhandler
         UserName = buffer.ReadASCIIString()
         
         If (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
-            If (InStrB(UserName, "\") <> 0) Then
+            If (migr_InStrB(UserName, "\") <> 0) Then
                 UserName = Replace(UserName, "\", "")
             End If
-            If (InStrB(UserName, "/") <> 0) Then
+            If (migr_InStrB(UserName, "/") <> 0) Then
                 UserName = Replace(UserName, "/", "")
             End If
             tUser = NameIndex(UserName)
@@ -11922,10 +11922,10 @@ On Error GoTo Errhandler
         UserName = buffer.ReadASCIIString()
         
         If (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
-            If (InStrB(UserName, "\") <> 0) Then
+            If (migr_InStrB(UserName, "\") <> 0) Then
                 UserName = Replace(UserName, "\", "")
             End If
-            If (InStrB(UserName, "/") <> 0) Then
+            If (migr_InStrB(UserName, "/") <> 0) Then
                 UserName = Replace(UserName, "/", "")
             End If
             tUser = NameIndex(UserName)
@@ -12063,10 +12063,10 @@ On Error GoTo Errhandler
             If migr_LenB(UserName) = 0 Then
                 Call WriteConsoleMsg(UserIndex, "Utilice /borrarpena Nick@NumeroDePena@NuevaPena", FontTypeNames.FONTTYPE_INFO)
             Else
-                If (InStrB(UserName, "\") <> 0) Then
+                If (migr_InStrB(UserName, "\") <> 0) Then
                         UserName = Replace(UserName, "\", "")
                 End If
-                If (InStrB(UserName, "/") <> 0) Then
+                If (migr_InStrB(UserName, "/") <> 0) Then
                         UserName = Replace(UserName, "/", "")
                 End If
                 
@@ -12218,13 +12218,13 @@ On Error GoTo Errhandler
         
         If (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 Then
             'Handle special chars
-            If (InStrB(UserName, "\") <> 0) Then
+            If (migr_InStrB(UserName, "\") <> 0) Then
                 UserName = Replace(UserName, "\", "")
             End If
-            If (InStrB(UserName, "\") <> 0) Then
+            If (migr_InStrB(UserName, "\") <> 0) Then
                 UserName = Replace(UserName, "/", "")
             End If
-            If (InStrB(UserName, "+") <> 0) Then
+            If (migr_InStrB(UserName, "+") <> 0) Then
                 UserName = Replace(UserName, "+", " ")
             End If
             

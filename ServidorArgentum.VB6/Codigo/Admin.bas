@@ -498,7 +498,7 @@ Public Sub BanCharacter(ByVal bannerUserIndex As Integer, ByVal UserName As Stri
     Dim cantPenas As Byte
     Dim rank As Integer
     
-    If InStrB(UserName, "+") Then
+    If migr_InStrB(UserName, "+") Then
         UserName = Replace(UserName, "+", " ")
     End If
     

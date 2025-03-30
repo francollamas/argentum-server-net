@@ -389,7 +389,7 @@ Function NameIndex(ByVal name As String) As Integer
         Exit Function
     End If
     
-    If InStrB(name, "+") <> 0 Then
+    If migr_InStrB(name, "+") <> 0 Then
         name = UCase$(Replace(name, "+", " "))
     End If
     

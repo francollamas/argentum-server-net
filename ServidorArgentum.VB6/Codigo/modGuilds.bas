@@ -646,13 +646,13 @@ Dim f           As Byte
 
     m_EstadoPermiteEntrarChar = False
     
-    If InStrB(Personaje, "\") <> 0 Then
+    If migr_InStrB(Personaje, "\") <> 0 Then
         Personaje = Replace(Personaje, "\", vbNullString)
     End If
-    If InStrB(Personaje, "/") <> 0 Then
+    If migr_InStrB(Personaje, "/") <> 0 Then
         Personaje = Replace(Personaje, "/", vbNullString)
     End If
-    If InStrB(Personaje, ".") <> 0 Then
+    If migr_InStrB(Personaje, ".") <> 0 Then
         Personaje = Replace(Personaje, ".", vbNullString)
     End If
     
@@ -983,13 +983,13 @@ Private Function GetGuildIndexFromChar(ByRef PlayerName As String) As Integer
 'aca si que vamos a violar las capas deliveradamente ya que
 'visual basic no permite declarar metodos de clase
 Dim Temps   As String
-    If InStrB(PlayerName, "\") <> 0 Then
+    If migr_InStrB(PlayerName, "\") <> 0 Then
         PlayerName = Replace(PlayerName, "\", vbNullString)
     End If
-    If InStrB(PlayerName, "/") <> 0 Then
+    If migr_InStrB(PlayerName, "/") <> 0 Then
         PlayerName = Replace(PlayerName, "/", vbNullString)
     End If
-    If InStrB(PlayerName, ".") <> 0 Then
+    If migr_InStrB(PlayerName, ".") <> 0 Then
         PlayerName = Replace(PlayerName, ".", vbNullString)
     End If
     Temps = GetVar(CharPath & PlayerName & ".chr", "GUILD", "GUILDINDEX")
@@ -1625,13 +1625,13 @@ Public Sub a_RechazarAspiranteChar(ByRef Aspirante As String, ByVal guild As Int
 '
 '***************************************************
 
-    If InStrB(Aspirante, "\") <> 0 Then
+    If migr_InStrB(Aspirante, "\") <> 0 Then
         Aspirante = Replace(Aspirante, "\", "")
     End If
-    If InStrB(Aspirante, "/") <> 0 Then
+    If migr_InStrB(Aspirante, "/") <> 0 Then
         Aspirante = Replace(Aspirante, "/", "")
     End If
-    If InStrB(Aspirante, ".") <> 0 Then
+    If migr_InStrB(Aspirante, ".") <> 0 Then
         Aspirante = Replace(Aspirante, ".", "")
     End If
     Call guilds(guild).InformarRechazoEnChar(Aspirante, Detalles)
@@ -1644,13 +1644,13 @@ Public Function a_ObtenerRechazoDeChar(ByRef Aspirante As String) As String
 '
 '***************************************************
 
-    If InStrB(Aspirante, "\") <> 0 Then
+    If migr_InStrB(Aspirante, "\") <> 0 Then
         Aspirante = Replace(Aspirante, "\", "")
     End If
-    If InStrB(Aspirante, "/") <> 0 Then
+    If migr_InStrB(Aspirante, "/") <> 0 Then
         Aspirante = Replace(Aspirante, "/", "")
     End If
-    If InStrB(Aspirante, ".") <> 0 Then
+    If migr_InStrB(Aspirante, ".") <> 0 Then
         Aspirante = Replace(Aspirante, ".", "")
     End If
     a_ObtenerRechazoDeChar = GetVar(CharPath & Aspirante & ".chr", "GUILD", "MotivoRechazo")
@@ -1744,13 +1744,13 @@ Public Sub SendDetallesPersonaje(ByVal UserIndex As Integer, ByVal Personaje As 
         Exit Sub
     End If
     
-    If InStrB(Personaje, "\") <> 0 Then
+    If migr_InStrB(Personaje, "\") <> 0 Then
         Personaje = Replace$(Personaje, "\", vbNullString)
     End If
-    If InStrB(Personaje, "/") <> 0 Then
+    If migr_InStrB(Personaje, "/") <> 0 Then
         Personaje = Replace$(Personaje, "/", vbNullString)
     End If
-    If InStrB(Personaje, ".") <> 0 Then
+    If migr_InStrB(Personaje, ".") <> 0 Then
         Personaje = Replace$(Personaje, ".", vbNullString)
     End If
     

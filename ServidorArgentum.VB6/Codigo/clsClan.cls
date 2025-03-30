@@ -823,13 +823,13 @@ End Sub
 '
 
 Private Sub ReplaceInvalidChars(ByRef S As String)
-    If InStrB(S, Chr$(13)) <> 0 Then
+    If migr_InStrB(S, Chr$(13)) <> 0 Then
         S = Replace(S, Chr$(13), vbNullString)
     End If
-    If InStrB(S, Chr$(10)) <> 0 Then
+    If migr_InStrB(S, Chr$(10)) <> 0 Then
         S = Replace(S, Chr$(10), vbNullString)
     End If
-    If InStrB(S, "¬") <> 0 Then
+    If migr_InStrB(S, "¬") <> 0 Then
         S = Replace(S, "¬", vbNullString)   'morgo usaba esto como "separador"
     End If
 End Sub
