@@ -88,7 +88,7 @@ Public Sub LoadGuildsDB()
 
 Dim CantClanes  As String
 Dim i           As Integer
-Dim TempStr     As String
+Dim tempStr     As String
 Dim Alin        As ALINEACION_GUILD
     
     GUILDINFOFILE = App.Path & "\guilds\guildsinfo.inf"
@@ -103,9 +103,9 @@ Dim Alin        As ALINEACION_GUILD
     
     For i = 1 To CANTIDADDECLANES
         Set guilds(i) = New clsClan
-        TempStr = GetVar(GUILDINFOFILE, "GUILD" & i, "GUILDNAME")
+        tempStr = GetVar(GUILDINFOFILE, "GUILD" & i, "GUILDNAME")
         Alin = String2Alineacion(GetVar(GUILDINFOFILE, "GUILD" & i, "Alineacion"))
-        Call guilds(i).Inicializar(TempStr, i, Alin)
+        Call guilds(i).Inicializar(tempStr, i, Alin)
     Next i
     
 End Sub
@@ -392,7 +392,7 @@ Public Sub ChangeCodexAndDesc(ByRef desc As String, ByRef codex() As String, ByV
     End With
 End Sub
 
-Public Sub ActualizarNoticias(ByVal UserIndex As Integer, ByRef Datos As String)
+Public Sub ActualizarNoticias(ByVal UserIndex As Integer, ByRef datos As String)
 '***************************************************
 'Author: Unknown
 'Last Modification: 21/02/2010
@@ -408,7 +408,7 @@ Public Sub ActualizarNoticias(ByVal UserIndex As Integer, ByRef Datos As String)
         
         If Not m_EsGuildLeader(.name, GI) Then Exit Sub
         
-        Call guilds(GI).SetGuildNews(Datos)
+        Call guilds(GI).SetGuildNews(datos)
         
         Call SendData(SendTarget.ToDiosesYclan, .GuildIndex, PrepareMessageGuildChat(.name & " ha actualizado las noticias del clan!"))
     End With
@@ -969,7 +969,7 @@ proximo:
     Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Elecciones revisadas.", FontTypeNames.FONTTYPE_SERVER))
 Exit Sub
 errh:
-    Call LogError("modGuilds.v_RutinaElecciones():" & Err.description)
+    Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
     Resume proximo
 End Sub
 
@@ -1181,7 +1181,7 @@ Public Function GMEscuchaClan(ByVal UserIndex As Integer, ByVal GuildName As Str
 Dim GI As Integer
 
     'listen to no guild at all
-    If LenB(GuildName) = 0 And UserList(UserIndex).EscucheClan <> 0 Then
+    If migr_LenB(GuildName) = 0 And UserList(UserIndex).EscucheClan <> 0 Then
         'Quit listening to previous guild!!
         Call WriteConsoleMsg(UserIndex, "Dejas de escuchar a : " & guilds(UserList(UserIndex).EscucheClan).GuildName, FontTypeNames.FONTTYPE_GUILD)
         guilds(UserList(UserIndex).EscucheClan).DesconectarGM (UserIndex)
@@ -1802,11 +1802,11 @@ Public Sub SendDetallesPersonaje(ByVal UserIndex As Integer, ByVal Personaje As 
     Exit Sub
 error:
     Set UserFile = Nothing
-    If Not (FileExist(CharPath & Personaje & ".chr", vbArchive)) Then
+    If Not (FileExist(CharPath & Personaje & ".chr")) Then
         Call LogError("El usuario " & UserList(UserIndex).name & " (" & UserIndex & _
                     " ) ha pedido los detalles del personaje " & Personaje & " que no se encuentra.")
     Else
-        Call LogError("[" & Err.Number & "] " & Err.description & " En la rutina SendDetallesPersonaje, por el usuario " & _
+        Call LogError("[" & Err.Number & "] " & Err.Description & " En la rutina SendDetallesPersonaje, por el usuario " & _
                     UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo información sobre el personaje " & Personaje)
     End If
 End Sub
@@ -1853,7 +1853,7 @@ Dim NuevoGuildIndex     As Integer
 
     ViejoSolicitado = GetVar(CharPath & UserList(UserIndex).name & ".chr", "GUILD", "ASPIRANTEA")
 
-    If LenB(ViejoSolicitado) <> 0 Then
+    If migr_LenB(ViejoSolicitado) <> 0 Then
         'borramos la vieja solicitud
         ViejoGuildINdex = CInt(ViejoSolicitado)
         If ViejoGuildINdex <> 0 Then

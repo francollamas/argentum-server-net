@@ -74,7 +74,7 @@ Public Sub AddForum(ByVal sForoID As String)
     
         .ID = sForoID
         
-        If FileExist(ForumPath, vbNormal) Then
+        If FileExist(ForumPath) Then
             .CantPosts = val(GetVar(ForumPath, "INFO", "CantMSG"))
             .CantAnuncios = val(GetVar(ForumPath, "INFO", "CantAnuncios"))
             
@@ -260,7 +260,7 @@ Public Sub CleanForum(ByVal ForumIndex As Integer)
     
         ' Elimino todo
         ForumPath = App.Path & "\Foros\" & .ID & ".for"
-        If FileExist(ForumPath, vbNormal) Then
+        If FileExist(ForumPath) Then
     
             NumPost = val(GetVar(ForumPath, "INFO", "CantMSG"))
             

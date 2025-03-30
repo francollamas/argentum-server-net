@@ -140,11 +140,11 @@ On Error GoTo Error_Handler
         Call WriteVar(CharPath & name & ".chr", "PENAS", "P" & numPenas + 1, "CENTINELA : BAN POR MACRO INASISTIDO " & Date & " " & time)
         
         'Evitamos loguear el logout
-        Dim index As Integer
-        index = Centinela.RevisandoUserIndex
+        Dim Index As Integer
+        Index = Centinela.RevisandoUserIndex
         Centinela.RevisandoUserIndex = 0
         
-        Call CloseSocket(index)
+        Call CloseSocket(Index)
     End If
     
     Centinela.clave = 0
@@ -167,7 +167,7 @@ Error_Handler:
         CentinelaNPCIndex = 0
     End If
     
-    Call LogError("Error en el checkeo del centinela: " & Err.description)
+    Call LogError("Error en el checkeo del centinela: " & Err.Description)
 End Sub
 
 Public Sub CentinelaCheckClave(ByVal UserIndex As Integer, ByVal clave As Integer)
@@ -198,7 +198,7 @@ Public Sub ResetCentinelaInfo()
     Dim LoopC As Long
     
     For LoopC = 1 To LastUser
-        If (LenB(UserList(LoopC).name) <> 0 And LoopC <> Centinela.RevisandoUserIndex) Then
+        If (migr_LenB(UserList(LoopC).name) <> 0 And LoopC <> Centinela.RevisandoUserIndex) Then
             UserList(LoopC).flags.CentinelaOK = False
         End If
     Next LoopC

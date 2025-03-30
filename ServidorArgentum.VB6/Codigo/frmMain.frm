@@ -647,13 +647,13 @@ End Sub
 
 Private Sub KillLog_Timer()
 On Error Resume Next
-If FileExist(App.Path & "\logs\connect.log", vbNormal) Then Kill App.Path & "\logs\connect.log"
-If FileExist(App.Path & "\logs\haciendo.log", vbNormal) Then Kill App.Path & "\logs\haciendo.log"
-If FileExist(App.Path & "\logs\stats.log", vbNormal) Then Kill App.Path & "\logs\stats.log"
-If FileExist(App.Path & "\logs\Asesinatos.log", vbNormal) Then Kill App.Path & "\logs\Asesinatos.log"
-If FileExist(App.Path & "\logs\HackAttemps.log", vbNormal) Then Kill App.Path & "\logs\HackAttemps.log"
+If FileExist(App.Path & "\logs\connect.log") Then Kill App.Path & "\logs\connect.log"
+If FileExist(App.Path & "\logs\haciendo.log") Then Kill App.Path & "\logs\haciendo.log"
+If FileExist(App.Path & "\logs\stats.log") Then Kill App.Path & "\logs\stats.log"
+If FileExist(App.Path & "\logs\Asesinatos.log") Then Kill App.Path & "\logs\Asesinatos.log"
+If FileExist(App.Path & "\logs\HackAttemps.log") Then Kill App.Path & "\logs\HackAttemps.log"
 If Not FileExist(App.Path & "\logs\nokillwsapi.txt") Then
-    If FileExist(App.Path & "\logs\wsapi.log", vbNormal) Then Kill App.Path & "\logs\wsapi.log"
+    If FileExist(App.Path & "\logs\wsapi.log") Then Kill App.Path & "\logs\wsapi.log"
 End If
 
 End Sub

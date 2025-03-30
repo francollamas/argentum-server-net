@@ -287,7 +287,7 @@ On Error GoTo ErrorHandler
 Exit Sub
     
 ErrorHandler:
-    Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.description)
+    Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.Description)
 End Sub
 
 Public Sub RefreshCharStatus(ByVal UserIndex As Integer)
@@ -394,13 +394,13 @@ On Error GoTo Errhandler
                         UserName = UserName & " " & TAG_CONSULT_MODE
                     Else
                         If UserList(sndIndex).flags.Privilegios And (PlayerType.User Or PlayerType.Consejero Or PlayerType.RoleMaster) Then
-                            If LenB(ClanTag) <> 0 Then _
+                            If migr_LenB(ClanTag) <> 0 Then _
                                 UserName = UserName & " <" & ClanTag & ">"
                         Else
                             If (.flags.invisible Or .flags.Oculto) And (Not .flags.AdminInvisible = 1) Then
                                 UserName = UserName & " " & TAG_USER_INVISIBLE
                             Else
-                                If LenB(ClanTag) <> 0 Then _
+                                If migr_LenB(ClanTag) <> 0 Then _
                                     UserName = UserName & " <" & ClanTag & ">"
                             End If
                         End If
@@ -420,7 +420,7 @@ On Error GoTo Errhandler
 Exit Sub
 
 Errhandler:
-    LogError ("MakeUserChar: num: " & Err.Number & " desc: " & Err.description)
+    LogError ("MakeUserChar: num: " & Err.Number & " desc: " & Err.Description)
     'Resume Next
     Call CloseSocket(UserIndex)
 End Sub
@@ -700,7 +700,7 @@ On Error GoTo Errhandler
 Exit Sub
 
 Errhandler:
-    Call LogError("Error en la subrutina CheckUserLevel - Error : " & Err.Number & " - Description : " & Err.description)
+    Call LogError("Error en la subrutina CheckUserLevel - Error : " & Err.Number & " - Description : " & Err.Description)
 End Sub
 
 Public Function PuedeAtravesarAgua(ByVal UserIndex As Integer) As Boolean
@@ -1080,7 +1080,7 @@ On Error Resume Next
     
     CharFile = CharPath & charName & ".chr"
     
-    If FileExist(CharFile, vbNormal) Then
+    If FileExist(CharFile) Then
         Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Tiene " & GetVar(CharFile, "Inventory", "CantidadItems") & " objetos.", FontTypeNames.FONTTYPE_INFO)
         
@@ -1498,7 +1498,7 @@ On Error GoTo ErrorHandler
 Exit Sub
 
 ErrorHandler:
-    Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " Descripción: " & Err.description)
+    Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " Descripción: " & Err.Description)
 End Sub
 
 Sub ContarMuerte(ByVal Muerto As Integer, ByVal Atacante As Integer)
@@ -1712,19 +1712,19 @@ Private Sub WarpMascotas(ByVal UserIndex As Integer)
     Dim NroPets As Integer
     Dim InvocadosMatados As Integer
     Dim canWarp As Boolean
-    Dim index As Integer
+    Dim Index As Integer
     Dim iMinHP As Integer
     
     NroPets = UserList(UserIndex).NroMascotas
     canWarp = (MapInfo(UserList(UserIndex).Pos.Map).Pk = True)
     
     For i = 1 To MAXMASCOTAS
-        index = UserList(UserIndex).MascotasIndex(i)
+        Index = UserList(UserIndex).MascotasIndex(i)
         
-        If index > 0 Then
+        If Index > 0 Then
             ' si la mascota tiene tiempo de vida > 0 significa q fue invocada => we kill it
-            If Npclist(index).Contadores.TiempoExistencia > 0 Then
-                Call QuitarNPC(index)
+            If Npclist(Index).Contadores.TiempoExistencia > 0 Then
+                Call QuitarNPC(Index)
                 UserList(UserIndex).MascotasIndex(i) = 0
                 InvocadosMatados = InvocadosMatados + 1
                 NroPets = NroPets - 1
@@ -1737,9 +1737,9 @@ Private Sub WarpMascotas(ByVal UserIndex As Integer)
                 'PetTiempoDeVida = Npclist(index).Contadores.TiempoExistencia
                 
                 ' Guardamos el hp, para restaurarlo uando se cree el npc
-                iMinHP = Npclist(index).Stats.MinHp
+                iMinHP = Npclist(Index).Stats.MinHp
                 
-                Call QuitarNPC(index)
+                Call QuitarNPC(Index)
                 
                 ' Restauramos el valor de la variable
                 UserList(UserIndex).MascotasType(i) = petType
@@ -1755,21 +1755,21 @@ Private Sub WarpMascotas(ByVal UserIndex As Integer)
         End If
         
         If petType > 0 And canWarp Then
-            index = SpawnNpc(petType, UserList(UserIndex).Pos, False, PetRespawn)
+            Index = SpawnNpc(petType, UserList(UserIndex).Pos, False, PetRespawn)
             
             'Controlamos que se sumoneo OK - should never happen. Continue to allow removal of other pets if not alone
             ' Exception: Pets don't spawn in water if they can't swim
-            If index = 0 Then
+            If Index = 0 Then
                 Call WriteConsoleMsg(UserIndex, "Tus mascotas no pueden transitar este mapa.", FontTypeNames.FONTTYPE_INFO)
             Else
-                UserList(UserIndex).MascotasIndex(i) = index
+                UserList(UserIndex).MascotasIndex(i) = Index
 
                 ' Nos aseguramos de que conserve el hp, si estaba dañado
-                Npclist(index).Stats.MinHp = IIf(iMinHP = 0, Npclist(index).Stats.MinHp, iMinHP)
+                Npclist(Index).Stats.MinHp = IIf(iMinHP = 0, Npclist(Index).Stats.MinHp, iMinHP)
             
-                Npclist(index).MaestroUser = UserIndex
-                Npclist(index).Contadores.TiempoExistencia = PetTiempoDeVida
-                Call FollowAmo(index)
+                Npclist(Index).MaestroUser = UserIndex
+                Npclist(Index).Contadores.TiempoExistencia = PetTiempoDeVida
+                Call FollowAmo(Index)
             End If
         End If
     Next i
@@ -1936,7 +1936,7 @@ Public Sub CambiarNick(ByVal UserIndex As Integer, ByVal UserIndexDestino As Int
     If UserList(UserIndexDestino).flags.UserLogged = False Then Exit Sub
     ViejoNick = UserList(UserIndexDestino).name
     
-    If FileExist(CharPath & ViejoNick & ".chr", vbNormal) Then
+    If FileExist(CharPath & ViejoNick & ".chr") Then
         'hace un backup del char
         ViejoCharBackup = CharPath & ViejoNick & ".chr.old-"
         Name CharPath & ViejoNick & ".chr" As ViejoCharBackup
@@ -1950,7 +1950,7 @@ Sub SendUserStatsTxtOFF(ByVal sendIndex As Integer, ByVal Nombre As String)
 '
 '***************************************************
 
-    If FileExist(CharPath & Nombre & ".chr", vbArchive) = False Then
+    If FileExist(CharPath & Nombre & ".chr") = False Then
         Call WriteConsoleMsg(sendIndex, "Pj Inexistente", FontTypeNames.FONTTYPE_INFO)
     Else
         Call WriteConsoleMsg(sendIndex, "Estadísticas de: " & Nombre, FontTypeNames.FONTTYPE_INFO)
@@ -1983,7 +1983,7 @@ Sub SendUserOROTxtFromChar(ByVal sendIndex As Integer, ByVal charName As String)
 On Error Resume Next
     CharFile = CharPath & charName & ".chr"
     
-    If FileExist(CharFile, vbNormal) Then
+    If FileExist(CharFile) Then
         Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Tiene " & GetVar(CharFile, "STATS", "BANCO") & " en el banco.", FontTypeNames.FONTTYPE_INFO)
     Else

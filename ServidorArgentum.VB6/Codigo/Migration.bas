@@ -7,3 +7,10 @@ Public Function GetTickCount() As Long
     GetTickCount = CLng(Timer * 1000)
 End Function
 
+Function migr_LenB(ByVal str As String) As Long
+    If str = "" Then
+        migr_LenB = 0
+    Else
+        migr_LenB = Len(str) * 2
+    End If
+End Function

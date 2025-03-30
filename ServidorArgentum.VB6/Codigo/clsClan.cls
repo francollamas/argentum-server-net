@@ -290,7 +290,7 @@ Dim i           As Integer
 Dim EsMiembro   As Boolean
 Dim MiembroDe   As String
 
-    If LenB(dir$(CharPath & Nombre & ".chr")) <> 0 Then
+    If migr_LenB(dir$(CharPath & Nombre & ".chr")) <> 0 Then
         OldQ = CInt(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
         i = 1
         Nombre = UCase$(Nombre)
@@ -312,7 +312,7 @@ Dim MiembroDe   As String
             'lo echo a el
             MiembroDe = GetVar(CharPath & Nombre & ".chr", "GUILD", "Miembro")
             If Not InStr(1, MiembroDe, p_GuildName, vbTextCompare) > 0 Then
-                If LenB(MiembroDe) <> 0 Then
+                If migr_LenB(MiembroDe) <> 0 Then
                     MiembroDe = MiembroDe & ","
                 End If
                 MiembroDe = MiembroDe & p_GuildName
@@ -416,7 +416,7 @@ Dim i       As Integer
     Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ASPIRANTEA", "0")
     Pedidos = GetVar(CharPath & Nombre & ".chr", "GUILD", "Pedidos")
     If Not InStr(1, Pedidos, p_GuildName, vbTextCompare) > 0 Then
-        If LenB(Pedidos) <> 0 Then
+        If migr_LenB(Pedidos) <> 0 Then
             Pedidos = Pedidos & ","
         End If
         Pedidos = Pedidos & p_GuildName
@@ -523,7 +523,7 @@ Dim Temps   As String
 End Sub
 
 Public Function YaVoto(ByRef Votante) As Boolean
-    YaVoto = ((LenB(Trim$(GetVar(VOTACIONESFILE, "VOTOS", Votante)))) <> 0)
+    YaVoto = ((migr_LenB(Trim$(GetVar(VOTACIONESFILE, "VOTOS", Votante)))) <> 0)
 End Function
 
 Private Function ContarVotos(ByRef CantGanadores As Integer) As String
@@ -550,7 +550,7 @@ On Error GoTo errh
             tempV = GetVar(VOTACIONESFILE, "VOTOS", Temps)
             
             'si voto a alguien contabilizamos el voto
-            If LenB(tempV) <> 0 Then
+            If migr_LenB(tempV) <> 0 Then
                 If Not IsNull(d.At(tempV)) Then  'cuantos votos tiene?
                     Call d.AtPut(tempV, CInt(d.At(tempV)) + 1)
                 Else
@@ -567,7 +567,7 @@ On Error GoTo errh
     
 Exit Function
 errh:
-    LogError ("clsClan.Contarvotos: " & Err.description)
+    LogError ("clsClan.Contarvotos: " & Err.Description)
     If Not d Is Nothing Then Set d = Nothing
     ContarVotos = vbNullString
 End Function

@@ -68,7 +68,7 @@ Dim i As Integer
 
 AtPut = False
 
-If LenB(clave) = 0 Then Exit Function
+If migr_LenB(clave) = 0 Then Exit Function
 
 clave = UCase$(clave)
 

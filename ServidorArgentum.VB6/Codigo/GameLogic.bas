@@ -233,7 +233,7 @@ On Error GoTo Errhandler
 Exit Sub
 
 Errhandler:
-    Call LogError("Error en DotileEvents. Error: " & Err.Number & " - Desc: " & Err.description)
+    Call LogError("Error en DotileEvents. Error: " & Err.Number & " - Desc: " & Err.Description)
 End Sub
 
 Function InRangoVision(ByVal UserIndex As Integer, ByVal X As Integer, ByVal Y As Integer) As Boolean
@@ -384,7 +384,7 @@ Function NameIndex(ByVal name As String) As Integer
     Dim UserIndex As Long
     
     '¿Nombre valido?
-    If LenB(name) = 0 Then
+    If migr_LenB(name) = 0 Then
         NameIndex = 0
         Exit Function
     End If
@@ -681,7 +681,7 @@ Dim IsAdminInvisible As Boolean
     End With
 End Function
 
-Sub SendHelp(ByVal index As Integer)
+Sub SendHelp(ByVal Index As Integer)
 '***************************************************
 'Author: Unknown
 'Last Modification: -
@@ -694,7 +694,7 @@ Dim LoopC As Integer
 NumHelpLines = val(GetVar(DatPath & "Help.dat", "INIT", "NumLines"))
 
 For LoopC = 1 To NumHelpLines
-    Call WriteConsoleMsg(index, GetVar(DatPath & "Help.dat", "Help", "Line" & LoopC), FontTypeNames.FONTTYPE_INFO)
+    Call WriteConsoleMsg(Index, GetVar(DatPath & "Help.dat", "Help", "Line" & LoopC), FontTypeNames.FONTTYPE_INFO)
 Next LoopC
 
 End Sub
@@ -812,7 +812,7 @@ With UserList(UserIndex)
         If FoundChar = 1 Then '  ¿Encontro un Usuario?
            If UserList(TempCharIndex).flags.AdminInvisible = 0 Or .flags.Privilegios And PlayerType.Dios Then
                 With UserList(TempCharIndex)
-                    If LenB(.DescRM) = 0 And .showName Then 'No tiene descRM y quiere que se vea su nombre.
+                    If migr_LenB(.DescRM) = 0 And .showName Then 'No tiene descRM y quiere que se vea su nombre.
                         If EsNewbie(TempCharIndex) Then
                             Stat = " <NEWBIE>"
                         End If
@@ -873,7 +873,7 @@ With UserList(UserIndex)
                     End If
                 End With
                 
-                If LenB(Stat) > 0 Then
+                If migr_LenB(Stat) > 0 Then
                     Call WriteConsoleMsg(UserIndex, Stat, ft)
                 End If
                 
@@ -1016,7 +1016,7 @@ End With
 Exit Sub
 
 Errhandler:
-    Call LogError("Error en LookAtTile. Error " & Err.Number & " : " & Err.description)
+    Call LogError("Error en LookAtTile. Error " & Err.Number & " : " & Err.Description)
 
 End Sub
 
@@ -1090,14 +1090,14 @@ Function FindDirection(Pos As WorldPos, Target As WorldPos) As eHeading
 
 End Function
 
-Public Function ItemNoEsDeMapa(ByVal index As Integer, ByVal bIsExit As Boolean) As Boolean
+Public Function ItemNoEsDeMapa(ByVal Index As Integer, ByVal bIsExit As Boolean) As Boolean
 '***************************************************
 'Author: Unknown
 'Last Modification: -
 '
 '***************************************************
 
-    With ObjData(index)
+    With ObjData(Index)
         ItemNoEsDeMapa = .OBJType <> eOBJType.otPuertas And _
                     .OBJType <> eOBJType.otForos And _
                     .OBJType <> eOBJType.otCarteles And _
@@ -1109,14 +1109,14 @@ Public Function ItemNoEsDeMapa(ByVal index As Integer, ByVal bIsExit As Boolean)
 
 End Function
 
-Public Function MostrarCantidad(ByVal index As Integer) As Boolean
+Public Function MostrarCantidad(ByVal Index As Integer) As Boolean
 '***************************************************
 'Author: Unknown
 'Last Modification: -
 '
 '***************************************************
 
-    With ObjData(index)
+    With ObjData(Index)
         MostrarCantidad = .OBJType <> eOBJType.otPuertas And _
                     .OBJType <> eOBJType.otForos And _
                     .OBJType <> eOBJType.otCarteles And _

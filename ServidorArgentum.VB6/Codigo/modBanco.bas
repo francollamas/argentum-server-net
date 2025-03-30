@@ -331,7 +331,7 @@ Dim ObjInd As Long, ObjCant As Long
 
 CharFile = CharPath & charName & ".chr"
 
-If FileExist(CharFile, vbNormal) Then
+If FileExist(CharFile) Then
     Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
     Call WriteConsoleMsg(sendIndex, "Tiene " & GetVar(CharFile, "BancoInventory", "CantidadItems") & " objetos.", FontTypeNames.FONTTYPE_INFO)
     For j = 1 To MAX_BANCOINVENTORY_SLOTS

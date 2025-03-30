@@ -168,8 +168,8 @@ On Error Resume Next
     
     FrmStat.Visible = False
     
-    If FileExist(DatPath & "\bkNpc.dat", vbNormal) Then Kill (DatPath & "bkNpc.dat")
-    'If FileExist(DatPath & "\bkNPCs-HOSTILES.dat", vbNormal) Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
+    If FileExist(DatPath & "\bkNpc.dat") Then Kill (DatPath & "bkNpc.dat")
+    'If FileExist(DatPath & "\bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
     
     For loopX = 1 To LastNPC
         If Npclist(loopX).flags.BackUp = 1 Then
@@ -222,7 +222,7 @@ Public Sub Encarcelar(ByVal UserIndex As Integer, ByVal Minutos As Long, Optiona
     
     Call WarpUserChar(UserIndex, Prision.Map, Prision.X, Prision.Y, True)
     
-    If LenB(GmName) = 0 Then
+    If migr_LenB(GmName) = 0 Then
         Call WriteConsoleMsg(UserIndex, "Has sido encarcelado, deberás permanecer en la cárcel " & Minutos & " minutos.", FontTypeNames.FONTTYPE_INFO)
     Else
         Call WriteConsoleMsg(UserIndex, GmName & " te ha encarcelado, deberás permanecer en la cárcel " & Minutos & " minutos.", FontTypeNames.FONTTYPE_INFO)
@@ -243,7 +243,7 @@ Public Sub BorrarUsuario(ByVal UserName As String)
 '***************************************************
 
 On Error Resume Next
-    If FileExist(CharPath & UCase$(UserName) & ".chr", vbNormal) Then
+    If FileExist(CharPath & UCase$(UserName) & ".chr") Then
         Kill CharPath & UCase$(UserName) & ".chr"
     End If
 End Sub
@@ -266,7 +266,7 @@ Public Function PersonajeExiste(ByVal name As String) As Boolean
 '
 '***************************************************
 
-    PersonajeExiste = FileExist(CharPath & UCase$(name) & ".chr", vbNormal)
+    PersonajeExiste = FileExist(CharPath & UCase$(name) & ".chr")
 
 End Function
 
@@ -510,7 +510,7 @@ Public Sub BanCharacter(ByVal bannerUserIndex As Integer, ByVal UserName As Stri
         If tUser <= 0 Then
             Call WriteConsoleMsg(bannerUserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_TALK)
             
-            If FileExist(CharPath & UserName & ".chr", vbNormal) Then
+            If FileExist(CharPath & UserName & ".chr") Then
                 userPriv = UserDarPrivilegioLevel(UserName)
                 
                 If (userPriv And rank) > (.flags.Privilegios And rank) Then

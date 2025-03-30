@@ -684,7 +684,7 @@ Public Sub NpcDañoNpc(ByVal Atacante As Integer, ByVal Victima As Integer)
         If Npclist(Victima).Stats.MinHp < 1 Then
             .Movement = .flags.OldMovement
             
-            If LenB(.flags.AttackedBy) <> 0 Then
+            If migr_LenB(.flags.AttackedBy) <> 0 Then
                 .Hostile = .flags.OldHostil
             End If
             
@@ -789,7 +789,7 @@ On Error GoTo Errhandler
     Exit Function
     
 Errhandler:
-    Call LogError("Error en UsuarioAtacaNpc. Error " & Err.Number & " : " & Err.description)
+    Call LogError("Error en UsuarioAtacaNpc. Error " & Err.Number & " : " & Err.Description)
     
 End Function
 
@@ -800,7 +800,7 @@ Public Sub UsuarioAtaca(ByVal UserIndex As Integer)
 '
 '***************************************************
 
-    Dim index As Integer
+    Dim Index As Integer
     Dim AttackPos As WorldPos
     
     'Check bow's interval
@@ -836,27 +836,27 @@ Public Sub UsuarioAtaca(ByVal UserIndex As Integer)
             Exit Sub
         End If
         
-        index = MapData(AttackPos.Map, AttackPos.X, AttackPos.Y).UserIndex
+        Index = MapData(AttackPos.Map, AttackPos.X, AttackPos.Y).UserIndex
         
         'Look for user
-        If index > 0 Then
-            Call UsuarioAtacaUsuario(UserIndex, index)
+        If Index > 0 Then
+            Call UsuarioAtacaUsuario(UserIndex, Index)
             Call WriteUpdateUserStats(UserIndex)
-            Call WriteUpdateUserStats(index)
+            Call WriteUpdateUserStats(Index)
             Exit Sub
         End If
         
-        index = MapData(AttackPos.Map, AttackPos.X, AttackPos.Y).NpcIndex
+        Index = MapData(AttackPos.Map, AttackPos.X, AttackPos.Y).NpcIndex
         
         'Look for NPC
-        If index > 0 Then
-            If Npclist(index).Attackable Then
-                If Npclist(index).MaestroUser > 0 And MapInfo(Npclist(index).Pos.Map).Pk = False Then
+        If Index > 0 Then
+            If Npclist(Index).Attackable Then
+                If Npclist(Index).MaestroUser > 0 And MapInfo(Npclist(Index).Pos.Map).Pk = False Then
                     Call WriteConsoleMsg(UserIndex, "No puedes atacar mascotas en zona segura.", FontTypeNames.FONTTYPE_FIGHT)
                     Exit Sub
                 End If
                 
-                Call UsuarioAtacaNpc(UserIndex, index)
+                Call UsuarioAtacaNpc(UserIndex, Index)
             Else
                 Call WriteConsoleMsg(UserIndex, "No puedes atacar a este NPC.", FontTypeNames.FONTTYPE_FIGHT)
             End If
@@ -972,7 +972,7 @@ Errhandler:
     If AtacanteIndex > 0 Then AtacanteNick = UserList(AtacanteIndex).name
     If VictimaIndex > 0 Then VictimaNick = UserList(VictimaIndex).name
     
-    Call LogError("Error en UsuarioImpacto. Error " & Err.Number & " : " & Err.description & " AtacanteIndex: " & _
+    Call LogError("Error en UsuarioImpacto. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " & _
              AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " & VictimaNick)
 End Function
 
@@ -1035,7 +1035,7 @@ On Error GoTo Errhandler
     Exit Function
     
 Errhandler:
-    Call LogError("Error en UsuarioAtacaUsuario. Error " & Err.Number & " : " & Err.description)
+    Call LogError("Error en UsuarioAtacaUsuario. Error " & Err.Number & " : " & Err.Description)
 End Function
 
 Public Sub UserDañoUser(ByVal AtacanteIndex As Integer, ByVal VictimaIndex As Integer)
@@ -1184,7 +1184,7 @@ Errhandler:
     If AtacanteIndex > 0 Then AtacanteNick = UserList(AtacanteIndex).name
     If VictimaIndex > 0 Then VictimaNick = UserList(VictimaIndex).name
     
-    Call LogError("Error en UserDañoUser. Error " & Err.Number & " : " & Err.description & " AtacanteIndex: " & _
+    Call LogError("Error en UserDañoUser. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " & _
              AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " & VictimaNick)
 End Sub
 
@@ -1422,7 +1422,7 @@ On Error GoTo Errhandler
 Exit Function
 
 Errhandler:
-    Call LogError("Error en PuedeAtacar. Error " & Err.Number & " : " & Err.description)
+    Call LogError("Error en PuedeAtacar. Error " & Err.Number & " : " & Err.Description)
 End Function
 
 Public Function PuedeAtacarNPC(ByVal AttackerIndex As Integer, ByVal NpcIndex As Integer, _
@@ -1887,7 +1887,7 @@ On Error GoTo Errhandler
 Exit Function
 Errhandler:
     TriggerZonaPelea = TRIGGER6_AUSENTE
-    LogError ("Error en TriggerZonaPelea - " & Err.description)
+    LogError ("Error en TriggerZonaPelea - " & Err.Description)
 End Function
 
 Sub UserEnvenena(ByVal AtacanteIndex As Integer, ByVal VictimaIndex As Integer)

@@ -553,7 +553,7 @@ If sENtrada = "estoy DE acuerdo" Then
 
     Fn = App.Path & "\logs\GenteBanned.log"
     
-    If FileExist(Fn, vbNormal) Then
+    If FileExist(Fn) Then
         N = FreeFile
         Open Fn For Input Shared As #N
         Do While Not EOF(N)
@@ -701,12 +701,12 @@ If frmMain.Visible Then frmMain.txStatus.Caption = "Reiniciando."
 
 FrmStat.Show
 
-If FileExist(App.Path & "\logs\errores.log", vbNormal) Then Kill App.Path & "\logs\errores.log"
-If FileExist(App.Path & "\logs\connect.log", vbNormal) Then Kill App.Path & "\logs\Connect.log"
-If FileExist(App.Path & "\logs\HackAttemps.log", vbNormal) Then Kill App.Path & "\logs\HackAttemps.log"
-If FileExist(App.Path & "\logs\Asesinatos.log", vbNormal) Then Kill App.Path & "\logs\Asesinatos.log"
-If FileExist(App.Path & "\logs\Resurrecciones.log", vbNormal) Then Kill App.Path & "\logs\Resurrecciones.log"
-If FileExist(App.Path & "\logs\Teleports.Log", vbNormal) Then Kill App.Path & "\logs\Teleports.Log"
+If FileExist(App.Path & "\logs\errores.log") Then Kill App.Path & "\logs\errores.log"
+If FileExist(App.Path & "\logs\connect.log") Then Kill App.Path & "\logs\Connect.log"
+If FileExist(App.Path & "\logs\HackAttemps.log") Then Kill App.Path & "\logs\HackAttemps.log"
+If FileExist(App.Path & "\logs\Asesinatos.log") Then Kill App.Path & "\logs\Asesinatos.log"
+If FileExist(App.Path & "\logs\Resurrecciones.log") Then Kill App.Path & "\logs\Resurrecciones.log"
+If FileExist(App.Path & "\logs\Teleports.Log") Then Kill App.Path & "\logs\Teleports.Log"
 
 LastUser = 0
 NumUsers = 0

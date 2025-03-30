@@ -345,7 +345,7 @@ On Error GoTo Errhandler
     Exit Sub
 
 Errhandler:
-    MsgBox "Error cargando hechizos.dat " & Err.Number & ": " & Err.description
+    MsgBox "Error cargando hechizos.dat " & Err.Number & ": " & Err.Description
  
 End Sub
 
@@ -433,11 +433,11 @@ On Error Resume Next
     Dim TempInt As Integer
     Dim LoopC As Long
     
-    If FileExist(MAPFILE & ".map", vbNormal) Then
+    If FileExist(MAPFILE & ".map") Then
         Kill MAPFILE & ".map"
     End If
     
-    If FileExist(MAPFILE & ".inf", vbNormal) Then
+    If FileExist(MAPFILE & ".inf") Then
         Kill MAPFILE & ".inf"
     End If
     
@@ -892,10 +892,10 @@ On Error GoTo Errhandler
             For i = 1 To NUMCLASES
                 S = UCase$(Leer.GetValue("OBJ" & Object, "CP" & i))
                 N = 1
-                Do While LenB(S) > 0 And UCase$(ListaClases(N)) <> S
+                Do While migr_LenB(S) > 0 And UCase$(ListaClases(N)) <> S
                     N = N + 1
                 Loop
-                .ClaseProhibida(i) = IIf(LenB(S) > 0, N, 0)
+                .ClaseProhibida(i) = IIf(migr_LenB(S) > 0, N, 0)
             Next i
             
             .DefensaMagicaMax = val(Leer.GetValue("OBJ" & Object, "DefensaMagicaMax"))
@@ -928,7 +928,7 @@ On Error GoTo Errhandler
     Exit Sub
 
 Errhandler:
-    MsgBox "error cargando objetos " & Err.Number & ": " & Err.description
+    MsgBox "error cargando objetos " & Err.Number & ": " & Err.Description
 
 
 End Sub
@@ -1288,7 +1288,7 @@ Sub CargarBackUp()
 
 man:
     MsgBox ("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
-    Call LogError(Date & " " & Err.description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.source)
+    Call LogError(Date & " " & Err.Description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
  
 End Sub
 
@@ -1332,7 +1332,7 @@ Sub LoadMapData()
 
 man:
     MsgBox ("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
-    Call LogError(Date & " " & Err.description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.source)
+    Call LogError(Date & " " & Err.Description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
 
 End Sub
 
@@ -1482,7 +1482,7 @@ On Error GoTo errh
 Exit Sub
 
 errh:
-    Call LogError("Error cargando mapa: " & Map & " - Pos: " & X & "," & Y & "." & Err.description)
+    Call LogError("Error cargando mapa: " & Map & " - Pos: " & X & "," & Y & "." & Err.Description)
 End Sub
 
 Sub LoadSini()
@@ -1866,7 +1866,7 @@ With UserList(UserIndex)
         .flags.Ignorado = False
     End If
     
-    If FileExist(UserFile, vbNormal) Then
+    If FileExist(UserFile) Then
         If .flags.Muerto = 1 Then
             OldUserHead = .Char.Head
             .Char.Head = GetVar(UserFile, "INIT", "Head")

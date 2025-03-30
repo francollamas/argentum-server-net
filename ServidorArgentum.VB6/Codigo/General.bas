@@ -450,12 +450,14 @@ On Error Resume Next
 
 End Sub
 
-Function FileExist(ByVal file As String, Optional FileType As VbFileAttribute = vbNormal) As Boolean
+Function FileExist(ByVal file As String) As Boolean
 '*****************************************************************
 'Se fija si existe el archivo
 '*****************************************************************
 
-    FileExist = LenB(dir$(file, FileType)) <> 0
+    On Error Resume Next
+    FileExist = (dir$(file) <> "")
+    On Error GoTo 0
 End Function
 
 Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As Byte) As String
@@ -875,7 +877,7 @@ Function ValidInputNP(ByVal cad As String) As Boolean
     
     Arg = ReadField(i, cad, 44)
     
-    If LenB(Arg) = 0 Then Exit Function
+    If migr_LenB(Arg) = 0 Then Exit Function
     
     Next i
     

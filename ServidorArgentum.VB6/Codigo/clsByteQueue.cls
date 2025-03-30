@@ -95,10 +95,10 @@ Private Sub TypeToByteArray(ByRef destArray() As Byte, ByVal startPos As Long, B
         Case vbByte:
             destArray(startPos) = CByte(sourceVariable)
         Case vbInteger:
-            Dim tempInt As Integer
-            tempInt = CInt(sourceVariable)
-            destArray(startPos) = CByte(tempInt And &HFF&)
-            destArray(startPos + 1) = CByte((CLng(tempInt) And &HFF00&) \ 256&)
+            Dim TempInt As Integer
+            TempInt = CInt(sourceVariable)
+            destArray(startPos) = CByte(TempInt And &HFF&)
+            destArray(startPos + 1) = CByte((CLng(TempInt) And &HFF00&) \ 256&)
         Case vbLong:
             Dim tempLong As Long
             tempLong = CLng(sourceVariable)
@@ -169,111 +169,111 @@ Private Function RemoveData(ByVal dataLength As Long) As Long
     queueLength = queueLength - RemoveData
 End Function
 
-Public Function WriteByte(ByVal value As Byte) As Long
+Public Function WriteByte(ByVal Value As Byte) As Long
     Dim buf(0) As Byte
     
-    buf(0) = value
+    buf(0) = Value
     
     WriteByte = WriteData(buf, 1)
 End Function
 
-Public Function WriteInteger(ByVal value As Integer) As Long
+Public Function WriteInteger(ByVal Value As Integer) As Long
     Dim buf(1) As Byte
     
-    Call TypeToByteArray(buf, 0, value)
+    Call TypeToByteArray(buf, 0, Value)
     
     WriteInteger = WriteData(buf, 2)
 End Function
 
-Public Function WriteLong(ByVal value As Long) As Long
+Public Function WriteLong(ByVal Value As Long) As Long
     Dim buf(3) As Byte
     
-    Call TypeToByteArray(buf, 0, value)
+    Call TypeToByteArray(buf, 0, Value)
     
     WriteLong = WriteData(buf, 4)
 End Function
 
-Public Function WriteSingle(ByVal value As Single) As Long
+Public Function WriteSingle(ByVal Value As Single) As Long
     Dim buf(3) As Byte
     
-    Call TypeToByteArray(buf, 0, value)
+    Call TypeToByteArray(buf, 0, Value)
     
     WriteSingle = WriteData(buf, 4)
 End Function
 
-Public Function WriteDouble(ByVal value As Double) As Long
+Public Function WriteDouble(ByVal Value As Double) As Long
     Dim buf(7) As Byte
     
-    Call TypeToByteArray(buf, 0, value)
+    Call TypeToByteArray(buf, 0, Value)
     
     WriteDouble = WriteData(buf, 8)
 End Function
 
-Public Function WriteBoolean(ByVal value As Boolean) As Long
+Public Function WriteBoolean(ByVal Value As Boolean) As Long
     Dim buf(0) As Byte
     
-    If value Then buf(0) = 1
+    If Value Then buf(0) = 1
     
     WriteBoolean = WriteData(buf, 1)
 End Function
 
-Public Function WriteASCIIStringFixed(ByVal value As String) As Long
+Public Function WriteASCIIStringFixed(ByVal Value As String) As Long
     Dim buf() As Byte
     Dim i As Long, j As Long
     
-    ReDim buf(Len(value) - 1) As Byte
+    ReDim buf(Len(Value) - 1) As Byte
     
-    For i = 1 To Len(value)
-        buf(i - 1) = Asc(mid$(value, i, 1))
+    For i = 1 To Len(Value)
+        buf(i - 1) = Asc(mid$(Value, i, 1))
     Next i
     
-    WriteASCIIStringFixed = WriteData(buf, Len(value))
+    WriteASCIIStringFixed = WriteData(buf, Len(Value))
 End Function
 
-Public Function WriteUnicodeStringFixed(ByVal value As String) As Long
+Public Function WriteUnicodeStringFixed(ByVal Value As String) As Long
     Dim buf() As Byte
     Dim i As Long, j As Long
     Dim tempStr As String
     
-    ReDim buf(LenB(value) - 1) As Byte
+    ReDim buf(migr_LenB(Value) - 1) As Byte
     
     j = 0
-    For i = 1 To Len(value)
-        tempStr = mid$(value, i, 1)
+    For i = 1 To Len(Value)
+        tempStr = mid$(Value, i, 1)
         buf(j) = Asc(tempStr) And &HFF&
         buf(j + 1) = (Asc(tempStr) And &HFF00&) \ 256&
         j = j + 2
     Next i
     
-    WriteUnicodeStringFixed = WriteData(buf, LenB(value))
+    WriteUnicodeStringFixed = WriteData(buf, migr_LenB(Value))
 End Function
 
-Public Function WriteASCIIString(ByVal value As String) As Long
+Public Function WriteASCIIString(ByVal Value As String) As Long
     Dim buf() As Byte
     Dim i As Long
     Dim length As Integer
     
-    length = Len(value)
+    length = Len(Value)
     ReDim buf(length + 1) As Byte
     
     Call TypeToByteArray(buf, 0, length)
     
     If length > 0 Then
         For i = 1 To length
-            buf(i + 1) = Asc(mid$(value, i, 1))
+            buf(i + 1) = Asc(mid$(Value, i, 1))
         Next i
     End If
     
     WriteASCIIString = WriteData(buf, length + 2)
 End Function
 
-Public Function WriteUnicodeString(ByVal value As String) As Long
+Public Function WriteUnicodeString(ByVal Value As String) As Long
     Dim buf() As Byte
     Dim i As Long, j As Long
     Dim tempStr As String
     Dim length As Integer
     
-    length = Len(value)
+    length = Len(Value)
     ReDim buf(length * 2 + 1) As Byte
     
     Call TypeToByteArray(buf, 0, length)
@@ -281,7 +281,7 @@ Public Function WriteUnicodeString(ByVal value As String) As Long
     If length > 0 Then
         j = 2
         For i = 1 To length
-            tempStr = mid$(value, i, 1)
+            tempStr = mid$(Value, i, 1)
             buf(j) = Asc(tempStr) And &HFF&
             buf(j + 1) = (Asc(tempStr) And &HFF00&) \ 256&
             j = j + 2
@@ -291,10 +291,10 @@ Public Function WriteUnicodeString(ByVal value As String) As Long
     WriteUnicodeString = WriteData(buf, length * 2 + 2)
 End Function
 
-Public Function WriteBlock(ByRef value() As Byte, Optional ByVal length As Long = -1) As Long
-    If length > UBound(value()) + 1 Or length < 0 Then length = UBound(value()) + 1
+Public Function WriteBlock(ByRef Value() As Byte, Optional ByVal length As Long = -1) As Long
+    If length > UBound(Value()) + 1 Or length < 0 Then length = UBound(Value()) + 1
     
-    WriteBlock = WriteData(value, length)
+    WriteBlock = WriteData(Value, length)
 End Function
 
 Public Function ReadByte() As Byte
@@ -642,24 +642,24 @@ Public Function PeekBlock(ByRef block() As Byte, ByVal dataLength As Long) As Lo
     End If
 End Function
 
-Public Sub CopyBuffer(ByRef source As clsByteQueue)
-    If source.length = 0 Then
+Public Sub CopyBuffer(ByRef Source As clsByteQueue)
+    If Source.length = 0 Then
         Call RemoveData(length)
         Exit Sub
     End If
     
-    queueCapacity = source.Capacity
+    queueCapacity = Source.Capacity
     
     ReDim data(queueCapacity - 1) As Byte
     
     Dim buf() As Byte
-    ReDim buf(source.length - 1) As Byte
+    ReDim buf(Source.length - 1) As Byte
     
-    Call source.PeekBlock(buf, source.length)
+    Call Source.PeekBlock(buf, Source.length)
     
     queueLength = 0
     
-    Call WriteBlock(buf, source.length)
+    Call WriteBlock(buf, Source.length)
 End Sub
 
 Public Property Get length() As Long

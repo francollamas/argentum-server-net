@@ -230,7 +230,7 @@ Dim i As Long
 
 With UserList(UserIndex)
 
-    If Not AsciiValidos(name) Or LenB(name) = 0 Then
+    If Not AsciiValidos(name) Or migr_LenB(name) = 0 Then
         Call WriteErrorMsg(UserIndex, "Nombre inválido.")
         Exit Sub
     End If
@@ -246,7 +246,7 @@ With UserList(UserIndex)
     End If
     
     '¿Existe el personaje?
-    If FileExist(CharPath & UCase$(name) & ".chr", vbNormal) = True Then
+    If FileExist(CharPath & UCase$(name) & ".chr") = True Then
         Call WriteErrorMsg(UserIndex, "Ya existe el personaje.")
         Exit Sub
     End If
@@ -566,7 +566,7 @@ End Sub
 ' @param userIndex The index of the User
 ' @param Datos The string that will be send
 
-Public Function EnviarDatosASlot(ByVal UserIndex As Integer, ByRef Datos As String) As Long
+Public Function EnviarDatosASlot(ByVal UserIndex As Integer, ByRef datos As String) As Long
 '***************************************************
 'Author: Unknown
 'Last Modification: 01/10/07
@@ -577,7 +577,7 @@ On Error GoTo Err
 
 Dim Ret As Long
 
-Ret = WsApiEnviar(UserIndex, Datos)
+Ret = WsApiEnviar(UserIndex, datos)
 
 If Ret <> 0 Then
     ' Close the socket avoiding any critical error
@@ -713,7 +713,7 @@ With UserList(UserIndex)
     End If
     
     '¿Existe el personaje?
-    If Not FileExist(CharPath & UCase$(name) & ".chr", vbNormal) Then
+    If Not FileExist(CharPath & UCase$(name) & ".chr") Then
         Call WriteErrorMsg(UserIndex, "El personaje no existe.")
         Call FlushBuffer(UserIndex)
         Call CloseSocket(UserIndex)
@@ -1059,7 +1059,7 @@ With UserList(UserIndex)
     
     tStr = modGuilds.a_ObtenerRechazoDeChar(.name)
     
-    If LenB(tStr) <> 0 Then
+    If migr_LenB(tStr) <> 0 Then
         Call WriteShowMessageBox(UserIndex, "Tu solicitud de ingreso al clan ha sido rechazada. El clan te explica que: " & tStr)
     End If
     
