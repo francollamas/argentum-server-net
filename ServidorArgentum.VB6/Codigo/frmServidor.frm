@@ -17,9 +17,8 @@ Begin VB.Form frmServidor
       ForeColor       =   &H80000008&
       Height          =   4350
       Left            =   120
-      ScaleHeight     =   288
-      ScaleMode       =   3  'Pixel
-      ScaleWidth      =   304
+      ScaleHeight     =   4320
+      ScaleWidth      =   4560
       TabIndex        =   7
       Top             =   120
       Width           =   4590
@@ -28,9 +27,8 @@ Begin VB.Form frmServidor
          BorderStyle     =   0  'None
          Height          =   4815
          Left            =   0
-         ScaleHeight     =   321
-         ScaleMode       =   3  'Pixel
-         ScaleWidth      =   289
+         ScaleHeight     =   4815
+         ScaleWidth      =   4335
          TabIndex        =   9
          Top             =   0
          Width           =   4334
@@ -746,14 +744,6 @@ End Sub
 Private Sub Form_Load()
 Command20.Visible = True
 Command26.Visible = True
-
-VS1.min = 0
-If picCont.Height > picFuera.ScaleHeight Then
-    VS1.max = picCont.Height - picFuera.ScaleHeight
-Else
-    VS1.max = 0
-End If
-picCont.Top = -VS1.Value
 
 End Sub
 
