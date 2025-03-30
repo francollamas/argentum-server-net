@@ -97,7 +97,7 @@ Dim i As Integer
 
 clave = UCase$(clave)
 
-    At = Null
+    At = Empty  ' Using Empty instead of Null
     For i = 1 To p_cant
         If clave = p_elementos(i).clave Then
             At = p_elementos(i).def
@@ -138,7 +138,7 @@ Dim i As Integer
 
 For i = 1 To MAX_ELEM
     p_elementos(i).clave = vbNullString
-    p_elementos(i).def = Null
+    p_elementos(i).def = Empty  ' Using Empty instead of Null
 Next i
 p_cant = 0
 
