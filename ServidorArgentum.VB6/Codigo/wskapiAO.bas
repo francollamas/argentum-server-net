@@ -95,8 +95,6 @@ Public Sub Winsock_Erase()
         End If
     
     End With
-    
-    ' TODO: hacer erase en la data de los userss!!
 End Sub
 
 'Finds an available Winsock control to use for an incoming connection.
