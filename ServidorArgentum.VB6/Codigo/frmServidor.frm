@@ -8,9 +8,8 @@ Begin VB.Form frmServidor
    ClientWidth     =   4845
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
-   ScaleHeight     =   436
-   ScaleMode       =   3  'Pixel
-   ScaleWidth      =   323
+   ScaleHeight     =   6540
+   ScaleWidth      =   4845
    StartUpPosition =   3  'Windows Default
    Begin VB.PictureBox picFuera 
       Appearance      =   0  'Flat

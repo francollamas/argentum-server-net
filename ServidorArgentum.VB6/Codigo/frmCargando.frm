@@ -11,9 +11,8 @@ Begin VB.Form frmCargando
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   261.181
-   ScaleMode       =   0  'User
-   ScaleWidth      =   430
+   ScaleHeight     =   3105
+   ScaleWidth      =   6450
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.PictureBox Picture1 
@@ -122,8 +121,4 @@ Option Explicit
 Private Sub Form_Load()
 'Label1(1).Caption = Label1(1).Caption & " V." & App.Major & "." & App.Minor & "." & App.Revision
 Picture1.Picture = LoadPicture(App.Path & "\logo.jpg")
-End Sub
-
-Private Sub Label2_Click()
-
 End Sub

@@ -11,9 +11,8 @@ Begin VB.Form FrmStat
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   73
-   ScaleMode       =   3  'Pixel
-   ScaleWidth      =   375
+   ScaleHeight     =   1095
+   ScaleWidth      =   5625
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin VB.Label Porcentaje 
