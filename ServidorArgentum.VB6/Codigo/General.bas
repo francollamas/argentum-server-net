@@ -171,7 +171,7 @@ On Error GoTo Errhandler
     Exit Sub
 
 Errhandler:
-    Call LogError("Error producido en el sub LimpiarMundo: " & Err.description)
+    Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
 End Sub
 
 Sub EnviarSpawnList(ByVal UserIndex As Integer)
@@ -429,8 +429,7 @@ On Error Resume Next
     
     Call SecurityIp.InitIpTables(1000)
     
-    Call IniciaWsApi(frmMain.hWnd)
-    SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
+    Call IniciaWsApi(Puerto)
     
     If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
     '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
@@ -572,7 +571,7 @@ Errhandler:
 End Sub
 
 
-Public Sub LogIndex(ByVal index As Integer, ByVal desc As String)
+Public Sub LogIndex(ByVal Index As Integer, ByVal desc As String)
 '***************************************************
 'Author: Unknown
 'Last Modification: -
@@ -583,7 +582,7 @@ On Error GoTo Errhandler
 
     Dim nfile As Integer
     nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\" & index & ".log" For Append Shared As #nfile
+    Open App.Path & "\logs\" & Index & ".log" For Append Shared As #nfile
     Print #nfile, Date & " " & time & " " & desc
     Close #nfile
     
@@ -898,16 +897,9 @@ On Error Resume Next
     If frmMain.Visible Then frmMain.txStatus.Caption = "Reiniciando."
     
     Dim LoopC As Long
-
-    'Cierra el socket de escucha
-    If SockListen >= 0 Then Call apiclosesocket(SockListen)
     
     'Inicia el socket de escucha
-    SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
-
-    For LoopC = 1 To MaxUsers
-        Call CloseSocket(LoopC)
-    Next
+    Call IniciaWsApi(Puerto)
     
     'Initialize statistics!!
     Call Statistics.Initialize
@@ -1463,7 +1455,7 @@ On Error GoTo Errhandler
 Exit Sub
 
 Errhandler:
-    Call LogError("Error en PasarSegundo. Err: " & Err.description & " - " & Err.Number & " - UserIndex: " & i)
+    Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
     Resume Next
 End Sub
  

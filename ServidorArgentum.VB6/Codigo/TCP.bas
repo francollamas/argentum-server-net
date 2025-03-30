@@ -542,7 +542,7 @@ Errhandler:
     UserList(UserIndex).ConnIDValida = False
     Call ResetUserSlot(UserIndex)
 
-    Call LogError("CloseSocket - Error = " & Err.Number & " - Descripción = " & Err.description & " - UserIndex = " & UserIndex)
+    Call LogError("CloseSocket - Error = " & Err.Number & " - Descripción = " & Err.Description & " - UserIndex = " & UserIndex)
 End Sub
 
 '[Alejo-21-5]: Cierra un socket sin limpiar el slot
@@ -554,8 +554,7 @@ Sub CloseSocketSL(ByVal UserIndex As Integer)
 '***************************************************
 
 If UserList(UserIndex).ConnID <> -1 And UserList(UserIndex).ConnIDValida Then
-    Call BorraSlotSock(UserList(UserIndex).ConnID)
-    Call WSApiCloseSocket(UserList(UserIndex).ConnID)
+    Call Winsock_Close(UserList(UserIndex).ConnID)
     UserList(UserIndex).ConnIDValida = False
 End If
 
@@ -590,7 +589,7 @@ Exit Function
 Err:
 
 End Function
-Function EstaPCarea(index As Integer, Index2 As Integer) As Boolean
+Function EstaPCarea(Index As Integer, Index2 As Integer) As Boolean
 '***************************************************
 'Author: Unknown
 'Last Modification: -
@@ -598,10 +597,10 @@ Function EstaPCarea(index As Integer, Index2 As Integer) As Boolean
 '***************************************************
 
 Dim X As Integer, Y As Integer
-For Y = UserList(index).Pos.Y - MinYBorder + 1 To UserList(index).Pos.Y + MinYBorder - 1
-        For X = UserList(index).Pos.X - MinXBorder + 1 To UserList(index).Pos.X + MinXBorder - 1
+For Y = UserList(Index).Pos.Y - MinYBorder + 1 To UserList(Index).Pos.Y + MinYBorder - 1
+        For X = UserList(Index).Pos.X - MinXBorder + 1 To UserList(Index).Pos.X + MinXBorder - 1
 
-            If MapData(UserList(index).Pos.Map, X, Y).UserIndex = Index2 Then
+            If MapData(UserList(Index).Pos.Map, X, Y).UserIndex = Index2 Then
                 EstaPCarea = True
                 Exit Function
             End If
@@ -1547,7 +1546,7 @@ Close #N
 Exit Sub
 
 Errhandler:
-Call LogError("Error en CloseUser. Número " & Err.Number & " Descripción: " & Err.description)
+Call LogError("Error en CloseUser. Número " & Err.Number & " Descripción: " & Err.Description)
 
 End Sub
 
@@ -1564,14 +1563,11 @@ Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
 
 If NumUsers <= 0 Then
     Call WSApiReiniciarSockets
-Else
-'   Call apiclosesocket(SockListen)
-'   SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
 End If
 
 Exit Sub
 Errhandler:
-    Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.description)
+    Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.Description)
 
 End Sub
 

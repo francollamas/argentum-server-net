@@ -1204,7 +1204,7 @@ Public Type User
     Pos As WorldPos
     
     ConnIDValida As Boolean
-    ConnID As Long 'ID
+    ConnID As Integer 'ID
     
     '[KEVIN]
     BancoInvent As BancoInventario

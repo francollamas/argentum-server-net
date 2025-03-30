@@ -27,12 +27,12 @@ Begin VB.Form frmMain
    ScaleWidth      =   5190
    StartUpPosition =   2  'CenterScreen
    Begin MSWinsockLib.Winsock Winsock1 
+      Index           =   0
       Left            =   480
       Top             =   60
       _ExtentX        =   741
       _ExtentY        =   741
       _Version        =   393216
-      RemotePort      =   7666
    End
    Begin VB.TextBox txtChat 
       Height          =   2775
@@ -341,7 +341,7 @@ Exit Sub
 
 errhand:
 
-Call LogError("Error en Timer Auditoria. Err: " & Err.description & " - " & Err.Number)
+Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
 Resume Next
 
 End Sub
@@ -397,7 +397,7 @@ Close #N
 
 Exit Sub
 Errhandler:
-    Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.description)
+    Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
     Resume Next
 End Sub
 
@@ -621,7 +621,7 @@ On Error GoTo hayerror
 Exit Sub
 
 hayerror:
-    LogError ("Error en GameTimer: " & Err.description & " UserIndex = " & iUserIndex)
+    LogError ("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex)
 End Sub
 
 Private Sub mnuCerrar_Click()
@@ -693,7 +693,7 @@ On Error GoTo Errhandler:
 Exit Sub
 
 Errhandler:
-    LogError ("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.description)
+    LogError ("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description)
     Resume Next
 End Sub
 
@@ -776,7 +776,7 @@ End If
 
 Exit Sub
 Errhandler:
-Call LogError("tLluvia " & Err.Number & ": " & Err.description)
+Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
 End Sub
 
 Private Sub tLluviaEvent_Timer()
@@ -884,5 +884,19 @@ On Error GoTo Errhandler
 Exit Sub
 
 Errhandler:
-    Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.description)
+    Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
 End Sub
+
+Private Sub Winsock1_Close(Index As Integer)
+    Winsock_Close Index
+End Sub
+
+Private Sub Winsock1_ConnectionRequest(Index As Integer, ByVal requestID As Long)
+    Winsock_ConnectionRequest Index, requestID
+End Sub
+
+Private Sub Winsock1_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+    Winsock_DataArrival Index, bytesTotal
+End Sub
+
+

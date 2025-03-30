@@ -660,11 +660,8 @@ Call MD5sCarga
 End Sub
 
 Private Sub Command26_Click()
-    'Cierra el socket de escucha
-    If SockListen >= 0 Then Call apiclosesocket(SockListen)
-    
     'Inicia el socket de escucha
-    SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
+    Call IniciaWsApi(Puerto)
 End Sub
 
 Private Sub Command27_Click()
@@ -711,15 +708,6 @@ If FileExist(App.Path & "\logs\Asesinatos.log", vbNormal) Then Kill App.Path & "
 If FileExist(App.Path & "\logs\Resurrecciones.log", vbNormal) Then Kill App.Path & "\logs\Resurrecciones.log"
 If FileExist(App.Path & "\logs\Teleports.Log", vbNormal) Then Kill App.Path & "\logs\Teleports.Log"
 
-Call apiclosesocket(SockListen)
-
-Dim LoopC As Integer
-
-For LoopC = 1 To MaxUsers
-    Call CloseSocket(LoopC)
-Next
-  
-
 LastUser = 0
 NumUsers = 0
 
@@ -730,7 +718,7 @@ Call LoadSini
 Call CargarBackUp
 Call LoadOBJData
 
-SockListen = ListenForConnect(Puerto, frmMain.hWnd, "")
+Call IniciaWsApi(Puerto)
 
 If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
 
