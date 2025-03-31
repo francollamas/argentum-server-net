@@ -42,7 +42,7 @@ Public CentinelaNPCIndex As Integer                'Índice del NPC en el servido
 
 Private Const TIEMPO_INICIAL As Byte = 2 'Tiempo inicial en minutos. No reducir sin antes revisar el timer que maneja estos datos.
 
-Private Type tCentinela
+Public Type tCentinela
     RevisandoUserIndex As Integer   '¿Qué índice revisamos?
     TiempoRestante As Integer       '¿Cuántos minutos le quedan al usuario?
     clave As Integer                'Clave que debe escribir

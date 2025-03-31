@@ -325,7 +325,6 @@ On Error Resume Next
     ListaAtributos(eAtributos.Carisma) = "Carisma"
     ListaAtributos(eAtributos.Constitucion) = "Constitucion"
     
-    
     frmCargando.Show
     
     'Call PlayWaveAPI(App.Path & "\wav\harp3.wav")
@@ -471,7 +470,7 @@ Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As
     Dim i As Long
     Dim LastPos As Long
     Dim CurrentPos As Long
-    Dim delimiter As String * 1
+    Dim delimiter As String
     
     delimiter = Chr$(SepASCII)
     

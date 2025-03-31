@@ -532,6 +532,7 @@ Dim i           As Integer
 Dim Temps       As String
 Dim tempV       As String
 Dim d           As diccionario
+Dim voteCount   As Variant
 
 On Error GoTo errh
     ContarVotos = vbNullString
@@ -551,8 +552,9 @@ On Error GoTo errh
             
             'si voto a alguien contabilizamos el voto
             If migr_LenB(tempV) <> 0 Then
-                If Not IsNull(d.At(tempV)) Then  'cuantos votos tiene?
-                    Call d.AtPut(tempV, CInt(d.At(tempV)) + 1)
+                voteCount = d.At(tempV)
+                If Not voteCount Is Nothing Then  'cuantos votos tiene?
+                    Call d.AtPut(tempV, CInt(voteCount) + 1)
                 Else
                     Call d.AtPut(tempV, 1)
                 End If

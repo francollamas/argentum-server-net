@@ -453,7 +453,7 @@ On Error Resume Next
     'map Header
             
     Put FreeFileMap, , MapInfo(Map).MapVersion
-    Put FreeFileMap, , MiCabecera
+    Seek #FreeFileMap, Seek(FreeFileMap) + 263
     Put FreeFileMap, , TempInt
     Put FreeFileMap, , TempInt
     Put FreeFileMap, , TempInt
@@ -889,6 +889,7 @@ On Error GoTo Errhandler
             Dim i As Integer
             Dim N As Integer
             Dim S As String
+            ReDim .ClaseProhibida(1 To NUMCLASES)
             For i = 1 To NUMCLASES
                 S = UCase$(Leer.GetValue("OBJ" & Object, "CP" & i))
                 N = 1
@@ -1365,7 +1366,7 @@ On Error GoTo errh
 
     'map Header
     Get #FreeFileMap, , MapInfo(Map).MapVersion
-    Get #FreeFileMap, , MiCabecera
+    Seek #FreeFileMap, Seek(FreeFileMap) + 263
     Get #FreeFileMap, , TempInt
     Get #FreeFileMap, , TempInt
     Get #FreeFileMap, , TempInt

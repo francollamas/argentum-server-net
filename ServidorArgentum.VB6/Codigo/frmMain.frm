@@ -267,16 +267,6 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Public ESCUCHADAS As Long
-
-Private Type NOTIFYICONDATA
-    cbSize As Long
-    hWnd As Long
-    uID As Long
-    uFlags As Long
-    uCallbackMessage As Long
-    hIcon As Long
-    szTip As String * 64
-End Type
    
 Const NIM_ADD = 0
 Const NIM_DELETE = 2
