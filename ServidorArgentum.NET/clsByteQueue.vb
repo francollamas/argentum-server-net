@@ -64,9 +64,11 @@ Friend Class clsByteQueue
 		Dim tempArray() As Byte
 		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempBC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempBC As ByteConverter
+		tempBC.Initialize()
 		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempDC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempDC As DoubleConverter
-		
+		tempDC.Initialize()
+
 		ReDim tempArray(length - 1)
 		
 		For i = 0 To length - 1
@@ -106,9 +108,11 @@ Friend Class clsByteQueue
 		Dim valueType As VariantType
 		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempBC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempBC As ByteConverter
+		tempBC.Initialize()
 		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempDC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempDC As DoubleConverter
-		
+		tempDC.Initialize()
+
 		'UPGRADE_WARNING: VarType tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		valueType = VarType(sourceVariable)
 		
