@@ -967,7 +967,7 @@ proximo:
 		Exit Sub
 errh: 
 		Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
-		Resume proximo
+		Resume Next
 	End Sub
 	
 	Private Function GetGuildIndexFromChar(ByRef PlayerName As String) As Short

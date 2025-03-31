@@ -390,9 +390,9 @@ hayerror:
 	Private Function salir() As Boolean
 		Dim f As Object
 		If MsgBox("¡¡Atencion!! Si cierra el servidor puede provocar la perdida de datos. ¿Desea hacerlo de todas maneras?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-			For	Each f In My.Application.OpenForms
+			For Each f In Application.OpenForms
 				'UPGRADE_ISSUE: f de descarga no se actualizó. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="875EBAD7-D704-4539-9969-BC7DBDAA62A2"'
-				Unload(f)
+				f.Close()
 			Next f
 			salir = True
 			Exit Function

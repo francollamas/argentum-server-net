@@ -120,14 +120,14 @@ Module PathFinding
 		End If
 		
 	End Function
-	
-	Private Sub ProcessAdjacents(ByVal MapIndex As Short, ByRef T() As tIntermidiateWork, ByRef vfila As Short, ByRef vcolu As Short, ByVal NpcIndex As Short)
+
+	Private Sub ProcessAdjacents(ByVal MapIndex As Short, ByRef T(,) As tIntermidiateWork, ByRef vfila As Short, ByRef vcolu As Short, ByVal NpcIndex As Short)
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		Dim V As tVertice
 		Dim j As Short
 		'Look to North
@@ -200,11 +200,11 @@ Module PathFinding
 				End If
 			End If
 		End If
-		
-		
+
+
 	End Sub
-	
-	
+
+
 	Public Sub SeekPath(ByVal NpcIndex As Short, Optional ByVal MaxSteps As Short = 30)
 		'***************************************************
 		'Author: Unknown
@@ -287,15 +287,15 @@ Module PathFinding
 		Npclist(NpcIndex).PFINFO.NoPath = False
 		
 	End Sub
-	
-	Private Sub InitializeTable(ByRef T() As tIntermidiateWork, ByRef S As tVertice, Optional ByVal MaxSteps As Short = 30)
+
+	Private Sub InitializeTable(ByRef T(,) As tIntermidiateWork, ByRef S As tVertice, Optional ByVal MaxSteps As Short = 30)
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: -
 		'Initialize the array where we calculate the path
 		'***************************************************
-		
-		
+
+
 		Dim j, k As Short
 		Const anymap As Short = 1
 		For j = S.Y - MaxSteps To S.Y + MaxSteps
@@ -306,11 +306,11 @@ Module PathFinding
 					T(j, k).PrevV.X = 0
 					T(j, k).PrevV.Y = 0
 				End If
-			Next 
-		Next 
-		
+			Next
+		Next
+
 		T(S.Y, S.X).Known = False
 		T(S.Y, S.X).DistV = 0
-		
+
 	End Sub
 End Module

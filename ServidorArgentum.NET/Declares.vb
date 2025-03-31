@@ -1439,7 +1439,7 @@ Module Declaraciones
 	'UPGRADE_WARNING: El límite inferior de la matriz Npclist ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	'UPGRADE_WARNING: Es posible que la matriz Npclist necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 	Public Npclist(MAXNPCS) As npc 'NPCS
-	Public MapData() As MapBlock
+	Public MapData(,,) As MapBlock
 	'UPGRADE_NOTE: MapInfo se actualizó a MapInfo_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public MapInfo_Renamed() As MapInfo
 	Public Hechizos() As tHechizo

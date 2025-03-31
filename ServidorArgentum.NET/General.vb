@@ -442,12 +442,16 @@ Errhandler:
 		FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(N, Today & " " & TimeOfDay & " server iniciado " & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision)
 		FileClose(N)
-		
-		frmMain.Show()
-		
+
 		tInicioServer = GetTickCount() And &H7FFFFFFF
 		Call InicializaEstadisticas()
-		
+
+		Application.EnableVisualStyles()
+		Application.SetCompatibleTextRenderingDefault(False)
+
+		Dim mainForm As New frmMain()
+		Application.Run(mainForm) ' Mantiene la aplicación viva hasta que se cierre frmMain
+
 	End Sub
 	
 	Function FileExist(ByVal file As String) As Boolean
