@@ -660,6 +660,10 @@ Module Declaraciones
 		Dim MochilaEqpObjIndex As Short
 		Dim MochilaEqpSlot As Byte
 		Dim NroItems As Short
+
+		Public Sub Initialize()
+			ReDim Object_Renamed(MAX_INVENTORY_SLOTS)
+		End Sub
 	End Structure
 	
 	Public Structure tPartyData
@@ -830,6 +834,10 @@ Module Declaraciones
 		'UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		<VBFixedArray(MAX_BANCOINVENTORY_SLOTS)> Dim Object_Renamed() As UserOBJ
 		Dim NroItems As Short
+
+		Public Sub Initialize()
+			ReDim Object_Renamed(MAX_BANCOINVENTORY_SLOTS)
+		End Sub
 	End Structure
 	'[/KEVIN]
 	
@@ -1173,6 +1181,8 @@ Module Declaraciones
 			ReDim MascotasType(MAXMASCOTAS)
 			Stats.Initialize()
 			ComUsu.Initialize()
+			Invent.Initialize()
+			BancoInvent.Initialize()
 		End Sub
 	End Structure
 	
@@ -1313,6 +1323,7 @@ Module Declaraciones
 		Public Sub Initialize()
 			'UPGRADE_WARNING: El límite inferior de la matriz Drop ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim Drop(MAX_NPC_DROPS)
+			Invent.Initialize()
 		End Sub
 	End Structure
 	

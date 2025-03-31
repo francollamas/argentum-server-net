@@ -101,6 +101,7 @@
     <Compile Include="AI_NPC.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ArrayInitializers.vb" />
     <Compile Include="AssemblyInfo.vb" />
     <Compile Include="AxWinsockArray.vb">
       <SubType>Component</SubType>

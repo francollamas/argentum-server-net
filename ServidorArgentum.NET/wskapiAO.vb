@@ -267,9 +267,10 @@ ErrorHandler:
 			'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			UserList(i).outgoingData = Nothing
 		Next i
-		
+
 		'UPGRADE_WARNING: El límite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim UserList(MaxUsers)
+		ArrayInitializers.InitializeStruct(UserList)
 		For i = 1 To MaxUsers
 			UserList(i).ConnID = -1
 			UserList(i).ConnIDValida = False

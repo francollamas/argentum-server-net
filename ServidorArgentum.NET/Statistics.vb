@@ -27,35 +27,35 @@ Module Statistics
 		Dim startTick As Integer
 		Dim trainningTime As Integer
 	End Structure
-	
-	Private Structure fragLvlRace
-		<VBFixedArray(50, 5)> Dim matrix(, ) As Integer
-		
+
+	Public Structure fragLvlRace
+		<VBFixedArray(50, 5)> Dim matrix(,) As Integer
+
 		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
 			'UPGRADE_WARNING: El límite inferior de la matriz matrix ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim matrix(50, 5)
 		End Sub
 	End Structure
-	
-	Private Structure fragLvlLvl
-		<VBFixedArray(50, 50)> Dim matrix(, ) As Integer
-		
+
+	Public Structure fragLvlLvl
+		<VBFixedArray(50, 50)> Dim matrix(,) As Integer
+
 		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
 			'UPGRADE_WARNING: El límite inferior de la matriz matrix ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim matrix(50, 50)
 		End Sub
 	End Structure
-	
+
 	Private trainningInfo() As trainningData
-	
+
 	'UPGRADE_WARNING: El límite inferior de la matriz fragLvlRaceData ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	'UPGRADE_WARNING: Es posible que la matriz fragLvlRaceData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-	Private fragLvlRaceData(7) As fragLvlRace
+	Public fragLvlRaceData(7) As fragLvlRace
 	'UPGRADE_WARNING: El límite inferior de la matriz fragLvlLvlData ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	'UPGRADE_WARNING: Es posible que la matriz fragLvlLvlData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-	Private fragLvlLvlData(7) As fragLvlLvl
+	Public fragLvlLvlData(7) As fragLvlLvl
 	'UPGRADE_WARNING: El límite inferior de la matriz fragAlignmentLvlData ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Private fragAlignmentLvlData(50, 4) As Integer
 	
