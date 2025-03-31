@@ -821,7 +821,7 @@ Public Type ObjData
     texto As String
     
     'Clases que no tienen permitido usar este obj
-    ClaseProhibida() As eClass
+    ClaseProhibida(1 To NUMCLASES) As eClass
     
     Snd1 As Integer
     Snd2 As Integer

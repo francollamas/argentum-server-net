@@ -889,7 +889,6 @@ On Error GoTo Errhandler
             Dim i As Integer
             Dim N As Integer
             Dim S As String
-            ReDim .ClaseProhibida(1 To NUMCLASES)
             For i = 1 To NUMCLASES
                 S = UCase$(Leer.GetValue("OBJ" & Object, "CP" & i))
                 N = 1
