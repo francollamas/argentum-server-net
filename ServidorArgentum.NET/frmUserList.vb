@@ -50,7 +50,7 @@ Friend Class frmUserList
 		
 	End Sub
 	
-	'UPGRADE_WARNING: El evento List1.SelectedIndexChanged se puede desencadenar cuando se inicializa el formulario. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
+	'UPGRADE_WARNING: El evento List1.SelectedIndexChanged se puede desencadenar cuando se inicializa el formulario. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
 	Private Sub List1_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles List1.SelectedIndexChanged
 		Dim UserIndex As Short
 		If List1.SelectedIndex <> -1 Then

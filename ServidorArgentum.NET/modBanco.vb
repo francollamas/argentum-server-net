@@ -44,7 +44,7 @@ Errhandler:
 		
 	End Sub
 	
-	'UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Object se actualizÃ³ a Object_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Sub SendBanObj(ByRef UserIndex As Short, ByRef Slot As Byte, ByRef Object_Renamed As UserOBJ)
 		'***************************************************
 		'Author: Unknown
@@ -52,7 +52,7 @@ Errhandler:
 		'
 		'***************************************************
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		UserList(UserIndex).BancoInvent.Object_Renamed(Slot) = Object_Renamed
 		
 		Call WriteChangeBankSlot(UserIndex, Slot)
@@ -140,7 +140,7 @@ Errhandler:
 			obji = .BancoInvent.Object_Renamed(ObjIndex).ObjIndex
 			
 			
-			'¿Ya tiene un objeto de este tipo?
+			'Â¿Ya tiene un objeto de este tipo?
 			Slot = 1
 			Do Until .Invent.Object_Renamed(Slot).ObjIndex = obji And .Invent.Object_Renamed(Slot).Amount + Cantidad <= MAX_INVENTORY_OBJS
 				
@@ -157,7 +157,7 @@ Errhandler:
 					Slot = Slot + 1
 					
 					If Slot > .CurrentInventorySlots Then
-						Call WriteConsoleMsg(UserIndex, "No podés tener mas objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No podÃ©s tener mas objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 				Loop 
@@ -174,7 +174,7 @@ Errhandler:
 				
 				Call QuitarBancoInvItem(UserIndex, CByte(ObjIndex), Cantidad)
 			Else
-				Call WriteConsoleMsg(UserIndex, "No podés tener mas objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No podÃ©s tener mas objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
 		
@@ -256,7 +256,7 @@ Errhandler:
 		With UserList(UserIndex)
 			obji = .Invent.Object_Renamed(ObjIndex).ObjIndex
 			
-			'¿Ya tiene un objeto de este tipo?
+			'Â¿Ya tiene un objeto de este tipo?
 			Slot = 1
 			Do Until .BancoInvent.Object_Renamed(Slot).ObjIndex = obji And .BancoInvent.Object_Renamed(Slot).Amount + Cantidad <= MAX_INVENTORY_OBJS
 				Slot = Slot + 1

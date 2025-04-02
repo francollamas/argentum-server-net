@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module Matematicas
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module Matematicas
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Public Function Porcentaje(ByVal Total As Integer, ByVal Porc As Integer) As Integer
@@ -66,7 +66,7 @@ Module Matematicas
 	
 	Public Function RandomNumber(ByVal LowerBound As Integer, ByVal UpperBound As Integer) As Integer
 		'**************************************************************
-		'Author: Juan Martín Sotuyo Dodero
+		'Author: Juan MartÃ­n Sotuyo Dodero
 		'Last Modify Date: 3/06/2006
 		'Generates a random number in the range given - recoded to use longs and work properly with ranges
 		'**************************************************************

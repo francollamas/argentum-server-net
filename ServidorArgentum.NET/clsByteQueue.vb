@@ -12,7 +12,7 @@ Friend Class clsByteQueue
 		Dim LongValue As Integer
 		Dim SingleValue As Single
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
 			ReDim ByteArr(3)
 		End Sub
@@ -22,7 +22,7 @@ Friend Class clsByteQueue
 		<VBFixedArray(7)> Dim ByteArr() As Byte
 		Dim DoubleValue As Double
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
 			ReDim ByteArr(7)
 		End Sub
@@ -32,7 +32,7 @@ Friend Class clsByteQueue
 	Dim queueCapacity As Integer
 	Dim queueLength As Integer
 	
-	'UPGRADE_NOTE: Class_Initialize se actualizÛ a Class_Initialize_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualiz√≥ a Class_Initialize_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
 		ReDim data(DATA_BUFFER - 1)
 		queueCapacity = DATA_BUFFER
@@ -42,7 +42,7 @@ Friend Class clsByteQueue
 		Class_Initialize_Renamed()
 	End Sub
 	
-	'UPGRADE_NOTE: Class_Terminate se actualizÛ a Class_Terminate_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Terminate se actualiz√≥ a Class_Terminate_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Terminate_Renamed()
 		Erase data
 	End Sub
@@ -62,10 +62,10 @@ Friend Class clsByteQueue
 	Private Sub ByteArrayToType(ByRef destVariable As Object, ByRef sourceArray() As Byte, ByVal startPos As Integer, ByVal length As Integer)
 		Dim i As Integer
 		Dim tempArray() As Byte
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempBC, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempBC, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempBC As ByteConverter
 		tempBC.Initialize()
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempDC, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempDC, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempDC As DoubleConverter
 		tempDC.Initialize()
 
@@ -77,28 +77,28 @@ Friend Class clsByteQueue
 		
 		Select Case length
 			Case 1
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				destVariable = tempArray(0)
 			Case 2
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				destVariable = CShort(tempArray(0)) + CShort(tempArray(1)) * 256
 			Case 4
-				'UPGRADE_WARNING: VarType tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+				'UPGRADE_WARNING: VarType tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 				If VarType(destVariable) = VariantType.Single Then
 					For i = 0 To 3
 						tempBC.ByteArr(i) = tempArray(i)
 					Next i
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					destVariable = tempBC.SingleValue
 				Else
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					destVariable = CInt(tempArray(0)) + CInt(tempArray(1)) * 256 + CInt(tempArray(2)) * 65536 + CInt(tempArray(3)) * 16777216
 				End If
 			Case 8
 				For i = 0 To 7
 					tempDC.ByteArr(i) = tempArray(i)
 				Next i
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto destVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				destVariable = tempDC.DoubleValue
 		End Select
 	End Sub
@@ -106,42 +106,42 @@ Friend Class clsByteQueue
 	Private Sub TypeToByteArray(ByRef destArray() As Byte, ByVal startPos As Integer, ByVal sourceVariable As Object)
 		Dim i As Integer
 		Dim valueType As VariantType
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempBC, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempBC, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempBC As ByteConverter
 		tempBC.Initialize()
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempDC, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura tempDC, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim tempDC As DoubleConverter
 		tempDC.Initialize()
 
-		'UPGRADE_WARNING: VarType tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: VarType tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		valueType = VarType(sourceVariable)
 		
 		Dim TempInt As Short
 		Dim tempLong As Integer
 		Select Case valueType
 			Case VariantType.Byte
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				destArray(startPos) = CByte(sourceVariable)
 			Case VariantType.Short
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				TempInt = CShort(sourceVariable)
 				destArray(startPos) = CByte(TempInt And &HFF)
 				destArray(startPos + 1) = CByte((CInt(TempInt) And &HFF00) \ 256)
 			Case VariantType.Integer
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				tempLong = CInt(sourceVariable)
 				destArray(startPos) = CByte(tempLong And &HFF)
 				destArray(startPos + 1) = CByte((tempLong And &HFF00) \ 256)
 				destArray(startPos + 2) = CByte((tempLong And &HFF0000) \ 65536)
 				destArray(startPos + 3) = CByte((tempLong And &HFF000000) \ 16777216)
 			Case VariantType.Single
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				tempBC.SingleValue = CSng(sourceVariable)
 				For i = 0 To 3
 					destArray(startPos + i) = tempBC.ByteArr(i)
 				Next i
 			Case VariantType.Double
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sourceVariable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				tempDC.DoubleValue = CDbl(sourceVariable)
 				For i = 0 To 7
 					destArray(startPos + i) = tempDC.ByteArr(i)

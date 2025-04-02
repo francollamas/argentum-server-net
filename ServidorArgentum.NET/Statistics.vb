@@ -4,7 +4,7 @@ Module Statistics
 	'**************************************************************
 	' modStatistics.bas - Takes statistics on the game for later study.
 	'
-	' Implemented by Juan MartÌn Sotuyo Dodero (Maraxus)
+	' Implemented by Juan Mart√≠n Sotuyo Dodero (Maraxus)
 	' (juansotuyo@gmail.com)
 	'**************************************************************
 	
@@ -31,9 +31,9 @@ Module Statistics
 	Public Structure fragLvlRace
 		<VBFixedArray(50, 5)> Dim matrix(,) As Integer
 
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz matrix ha cambiado de 1,1 a 0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz matrix ha cambiado de 1,1 a 0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim matrix(50, 5)
 		End Sub
 	End Structure
@@ -41,29 +41,29 @@ Module Statistics
 	Public Structure fragLvlLvl
 		<VBFixedArray(50, 50)> Dim matrix(,) As Integer
 
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz matrix ha cambiado de 1,1 a 0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz matrix ha cambiado de 1,1 a 0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim matrix(50, 50)
 		End Sub
 	End Structure
 
 	Private trainningInfo() As trainningData
 
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz fragLvlRaceData ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_WARNING: Es posible que la matriz fragLvlRaceData necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz fragLvlRaceData ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: Es posible que la matriz fragLvlRaceData necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 	Public fragLvlRaceData(7) As fragLvlRace
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz fragLvlLvlData ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_WARNING: Es posible que la matriz fragLvlLvlData necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz fragLvlLvlData ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: Es posible que la matriz fragLvlLvlData necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 	Public fragLvlLvlData(7) As fragLvlLvl
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz fragAlignmentLvlData ha cambiado de 1,1 a 0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz fragAlignmentLvlData ha cambiado de 1,1 a 0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Private fragAlignmentLvlData(50, 4) As Integer
 	
 	'Currency just in case.... chats are way TOO often...
 	Private keyOcurrencies(255) As Decimal
 	
 	Public Sub Initialize()
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz trainningInfo ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz trainningInfo ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim trainningInfo(MaxUsers)
 	End Sub
 	
@@ -112,7 +112,7 @@ Module Statistics
 			'Log the data
 			FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\statistics.log", OpenMode.Append, , OpenShare.Shared)
 			
-			PrintLine(handle, UCase(UserList(UserIndex).name) & " completÛ el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainningTime + CShort(CShort(GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos.")
+			PrintLine(handle, UCase(UserList(UserIndex).name) & " complet√≥ el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainningTime + CShort(CShort(GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos.")
 			
 			FileClose(handle)
 			

@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module Acciones
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module Acciones
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	
 	''
@@ -52,12 +52,12 @@ Module Acciones
 		Dim tempIndex As Short
 		
 		On Error Resume Next
-		'øRango VisiÛn? (ToxicWaste)
+		'¬øRango Visi√≥n? (ToxicWaste)
 		If (System.Math.Abs(UserList(UserIndex).Pos.Y - Y) > RANGO_VISION_Y) Or (System.Math.Abs(UserList(UserIndex).Pos.X - X) > RANGO_VISION_X) Then
 			Exit Sub
 		End If
 		
-		'øPosicion valida?
+		'¬øPosicion valida?
 		If InMapBounds(Map, X, Y) Then
 			With UserList(UserIndex)
 				If MapData(Map, X, Y).NpcIndex > 0 Then 'Acciones NPCs
@@ -67,9 +67,9 @@ Module Acciones
 					.flags.TargetNPC = tempIndex
 					
 					If Npclist(tempIndex).Comercia = 1 Then
-						'øEsta el user muerto? Si es asi no puede comerciar
+						'¬øEsta el user muerto? Si es asi no puede comerciar
 						If .flags.Muerto = 1 Then
-							Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
@@ -79,7 +79,7 @@ Module Acciones
 						End If
 						
 						If Distancia(Npclist(tempIndex).Pos, .Pos) > 3 Then
-							Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos del vendedor.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos del vendedor.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
@@ -87,9 +87,9 @@ Module Acciones
 						Call IniciarComercioNPC(UserIndex)
 						
 					ElseIf Npclist(tempIndex).NPCtype = Declaraciones.eNPCType.Banquero Then 
-						'øEsta el user muerto? Si es asi no puede comerciar
+						'¬øEsta el user muerto? Si es asi no puede comerciar
 						If .flags.Muerto = 1 Then
-							Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
@@ -99,7 +99,7 @@ Module Acciones
 						End If
 						
 						If Distancia(Npclist(tempIndex).Pos, .Pos) > 3 Then
-							Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos del vendedor.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos del vendedor.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
@@ -108,7 +108,7 @@ Module Acciones
 						
 					ElseIf Npclist(tempIndex).NPCtype = Declaraciones.eNPCType.Revividor Or Npclist(tempIndex).NPCtype = Declaraciones.eNPCType.ResucitadorNewbie Then 
 						If Distancia(.Pos, Npclist(tempIndex).Pos) > 10 Then
-							Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que est·s demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que est√°s demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
@@ -124,7 +124,7 @@ Module Acciones
 						End If
 					End If
 					
-					'øEs un obj?
+					'¬øEs un obj?
 				ElseIf MapData(Map, X, Y).ObjInfo.ObjIndex > 0 Then 
 					tempIndex = MapData(Map, X, Y).ObjInfo.ObjIndex
 					
@@ -137,7 +137,7 @@ Module Acciones
 							Call AccionParaCartel(Map, X, Y, UserIndex)
 						Case Declaraciones.eOBJType.otForos 'Foro
 							Call AccionParaForo(Map, X, Y, UserIndex)
-						Case Declaraciones.eOBJType.otLeÒa 'LeÒa
+						Case Declaraciones.eOBJType.otLe√±a 'Le√±a
 							If tempIndex = FOGATA_APAG And .flags.Muerto = 0 Then
 								Call AccionParaRamita(Map, X, Y, UserIndex)
 							End If
@@ -254,10 +254,10 @@ Module Acciones
 				
 				UserList(UserIndex).flags.TargetObj = MapData(Map, X, Y).ObjInfo.ObjIndex
 			Else
-				Call WriteConsoleMsg(UserIndex, "La puerta est· cerrada con llave.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "La puerta est√° cerrada con llave.", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 		Else
-			Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 		End If
 		
 	End Sub
@@ -292,7 +292,7 @@ Module Acciones
 		
 		Dim Suerte As Byte
 		Dim exito As Byte
-		'UPGRADE_NOTE: Obj se actualizÛ a Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Obj se actualiz√≥ a Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As Obj
 		
 		Dim Pos As WorldPos
@@ -303,7 +303,7 @@ Module Acciones
 		Dim Fogatita As New cGarbage
 		With UserList(UserIndex)
 			If Distancia(Pos, .Pos) > 2 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			

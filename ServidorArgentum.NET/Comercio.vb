@@ -56,7 +56,7 @@ Module modSistemaComercio
 				Exit Sub
 			ElseIf Cantidad > MAX_INVENTORY_OBJS Then 
 				Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(UserList(UserIndex).name & " ha sido baneado por el sistema anti-cheats.", Protocol.FontTypeNames.FONTTYPE_FIGHT))
-				Call Ban(UserList(UserIndex).name, "Sistema Anti Cheats", "Intentar hackear el sistema de comercio. Quiso comprar demasiados Ìtems:" & Cantidad)
+				Call Ban(UserList(UserIndex).name, "Sistema Anti Cheats", "Intentar hackear el sistema de comercio. Quiso comprar demasiados √≠tems:" & Cantidad)
 				UserList(UserIndex).flags.Ban = 1
 				Call WriteErrorMsg(UserIndex, "Has sido baneado por el Sistema AntiCheat.")
 				Call FlushBuffer(UserIndex)
@@ -96,18 +96,18 @@ Module modSistemaComercio
 			'Bien, ahora logueo de ser necesario. Pablo (ToxicWaste) 07/09/07
 			'Es un Objeto que tenemos que loguear?
 			If ObjData_Renamed(Objeto.ObjIndex).Log = 1 Then
-				Call LogDesarrollo(UserList(UserIndex).name & " comprÛ del NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
+				Call LogDesarrollo(UserList(UserIndex).name & " compr√≥ del NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
 			ElseIf Objeto.Amount = 1000 Then  'Es mucha cantidad?
 				'Si no es de los prohibidos de loguear, lo logueamos.
 				If ObjData_Renamed(Objeto.ObjIndex).NoLog <> 1 Then
-					Call LogDesarrollo(UserList(UserIndex).name & " comprÛ del NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
+					Call LogDesarrollo(UserList(UserIndex).name & " compr√≥ del NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
 				End If
 			End If
 			
 			'Agregado para que no se vuelvan a vender las llaves si se recargan los .dat.
 			If ObjData_Renamed(Objeto.ObjIndex).OBJType = Declaraciones.eOBJType.otLlaves Then
 				Call WriteVar(DatPath & "NPCs.dat", "NPC" & Npclist(NpcIndex).Numero, "obj" & Slot, Objeto.ObjIndex & "-0")
-				Call logVentaCasa(UserList(UserIndex).name & " comprÛ " & ObjData_Renamed(Objeto.ObjIndex).name)
+				Call logVentaCasa(UserList(UserIndex).name & " compr√≥ " & ObjData_Renamed(Objeto.ObjIndex).name)
 			End If
 			
 		ElseIf Modo = eModoComercio.Venta Then 
@@ -126,14 +126,14 @@ Module modSistemaComercio
 				Exit Sub
 			ElseIf ObjData_Renamed(Objeto.ObjIndex).Real = 1 Then 
 				If Npclist(NpcIndex).name <> "SR" Then
-					Call WriteConsoleMsg(UserIndex, "Las armaduras del ejÈrcito real sÛlo pueden ser vendidas a los sastres reales.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Las armaduras del ej√©rcito real s√≥lo pueden ser vendidas a los sastres reales.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
 					Call WriteTradeOK(UserIndex)
 					Exit Sub
 				End If
 			ElseIf ObjData_Renamed(Objeto.ObjIndex).Caos = 1 Then 
 				If Npclist(NpcIndex).name <> "SC" Then
-					Call WriteConsoleMsg(UserIndex, "Las armaduras de la legiÛn oscura sÛlo pueden ser vendidas a los sastres del demonio.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Las armaduras de la legi√≥n oscura s√≥lo pueden ser vendidas a los sastres del demonio.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
 					Call WriteTradeOK(UserIndex)
 					Exit Sub
@@ -144,7 +144,7 @@ Module modSistemaComercio
 				Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
 				Exit Sub
 			ElseIf UserList(UserIndex).flags.Privilegios And Declaraciones.PlayerType.Consejero Then 
-				Call WriteConsoleMsg(UserIndex, "No puedes vender Ìtems.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+				Call WriteConsoleMsg(UserIndex, "No puedes vender √≠tems.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 				Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
 				Call WriteTradeOK(UserIndex)
 				Exit Sub
@@ -172,11 +172,11 @@ Module modSistemaComercio
 			'Bien, ahora logueo de ser necesario. Pablo (ToxicWaste) 07/09/07
 			'Es un Objeto que tenemos que loguear?
 			If ObjData_Renamed(Objeto.ObjIndex).Log = 1 Then
-				Call LogDesarrollo(UserList(UserIndex).name & " vendiÛ al NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
+				Call LogDesarrollo(UserList(UserIndex).name & " vendi√≥ al NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
 			ElseIf Objeto.Amount = 1000 Then  'Es mucha cantidad?
 				'Si no es de los prohibidos de loguear, lo logueamos.
 				If ObjData_Renamed(Objeto.ObjIndex).NoLog <> 1 Then
-					Call LogDesarrollo(UserList(UserIndex).name & " vendiÛ al NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
+					Call LogDesarrollo(UserList(UserIndex).name & " vendi√≥ al NPC " & Objeto.Amount & " " & ObjData_Renamed(Objeto.ObjIndex).name)
 				End If
 			End If
 			
@@ -248,10 +248,10 @@ Module modSistemaComercio
 		'*************************************************
 		'Author: Nacho (Integer)
 		'Last Modified: 06/14/08
-		'Last Modified By: Nicol·s Ezequiel Bouhid (NicoNZ)
+		'Last Modified By: Nicol√°s Ezequiel Bouhid (NicoNZ)
 		'*************************************************
 		Dim Slot As Byte
-		'UPGRADE_NOTE: val se actualizÛ a val_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: val se actualiz√≥ a val_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim val_Renamed As Single
 		
 		Dim thisObj As Obj
@@ -274,11 +274,11 @@ Module modSistemaComercio
 	''
 	' Devuelve el valor de venta del objeto
 	'
-	' @param ObjIndex  El n˙mero de objeto al cual le calculamos el precio de venta
+	' @param ObjIndex  El n√∫mero de objeto al cual le calculamos el precio de venta
 	
 	Public Function SalePrice(ByVal ObjIndex As Short) As Single
 		'*************************************************
-		'Author: Nicol·s (NicoNZ)
+		'Author: Nicol√°s (NicoNZ)
 		'
 		'*************************************************
 		If ObjIndex < 1 Or ObjIndex > UBound(ObjData_Renamed) Then Exit Function

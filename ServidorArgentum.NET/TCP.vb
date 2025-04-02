@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module TCP
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module TCP
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Sub DarCuerpo(ByVal UserIndex As Short)
@@ -207,14 +207,14 @@ Module TCP
 		'Author: Unknown
 		'Last modified: 3/12/2009
 		'Conecta un nuevo Usuario
-		'23/01/2007 Pablo (ToxicWaste) - Agregué ResetFaccion al crear usuario
-		'24/01/2007 Pablo (ToxicWaste) - Agregué el nuevo mana inicial de los magos.
+		'23/01/2007 Pablo (ToxicWaste) - AgreguÃ© ResetFaccion al crear usuario
+		'24/01/2007 Pablo (ToxicWaste) - AgreguÃ© el nuevo mana inicial de los magos.
 		'12/02/2007 Pablo (ToxicWaste) - Puse + 1 de const al Elfo normal.
 		'20/04/2007 Pablo (ToxicWaste) - Puse -1 de fuerza al Elfo.
 		'09/01/2008 Pablo (ToxicWaste) - Ahora los modificadores de Raza se controlan desde Balance.dat
-		'11/19/2009: Pato - Modifico la maná inicial del bandido.
+		'11/19/2009: Pato - Modifico la manÃ¡ inicial del bandido.
 		'11/19/2009: Pato - Asigno los valores iniciales de ExpSkills y EluSkills.
-		'03/12/2009: Budi - Optimización del código.
+		'03/12/2009: Budi - OptimizaciÃ³n del cÃ³digo.
 		'*************************************************
 		Dim i As Integer
 		
@@ -224,7 +224,7 @@ Module TCP
 		With UserList(UserIndex)
 			
 			If Not AsciiValidos(name) Or migr_LenB(name) = 0 Then
-				Call WriteErrorMsg(UserIndex, "Nombre inválido.")
+				Call WriteErrorMsg(UserIndex, "Nombre invÃ¡lido.")
 				Exit Sub
 			End If
 			
@@ -238,13 +238,13 @@ Module TCP
 				Exit Sub
 			End If
 			
-			'¿Existe el personaje?
+			'Â¿Existe el personaje?
 			If FileExist(CharPath & UCase(name) & ".chr") = True Then
 				Call WriteErrorMsg(UserIndex, "Ya existe el personaje.")
 				Exit Sub
 			End If
 			
-			'Tiró los dados antes de llegar acá??
+			'TirÃ³ los dados antes de llegar acÃ¡??
 			If .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = 0 Then
 				Call WriteErrorMsg(UserIndex, "Debe tirar los dados antes de poder crear un personaje.")
 				Exit Sub
@@ -253,7 +253,7 @@ Module TCP
 			If Not ValidarCabeza(UserRaza, UserSexo, Head) Then
 				Call LogCheating("El usuario " & name & " ha seleccionado la cabeza " & Head & " desde la IP " & .ip)
 				
-				Call WriteErrorMsg(UserIndex, "Cabeza inválida, elija una cabeza seleccionable.")
+				Call WriteErrorMsg(UserIndex, "Cabeza invÃ¡lida, elija una cabeza seleccionable.")
 				Exit Sub
 			End If
 			
@@ -297,7 +297,7 @@ Module TCP
 			Call DarCuerpo(UserIndex)
 			.Char_Renamed.Head = Head
 			
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().OrigChar. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().OrigChar. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			.OrigChar = .Char_Renamed
 			
 			MiInt = RandomNumber(1, .Stats.UserAtributos(Declaraciones.eAtributos.Constitucion) \ 3)
@@ -350,7 +350,7 @@ Module TCP
 			.Stats.ELU = 300
 			.Stats.ELV = 1
 			
-			'???????????????? INVENTARIO ¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿
+			'???????????????? INVENTARIO Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿Â¿
 			
 			IsPaladin = UserClase = Declaraciones.eClass.Paladin
 			
@@ -491,8 +491,8 @@ Module TCP
 			Call CloseSocketSL(UserIndex)
 		End If
 		
-		'Es el mismo user al que está revisando el centinela??
-		'IMPORTANTE!!! hacerlo antes de resetear así todavía sabemos el nombre del user
+		'Es el mismo user al que estÃ¡ revisando el centinela??
+		'IMPORTANTE!!! hacerlo antes de resetear asÃ­ todavÃ­a sabemos el nombre del user
 		' y lo podemos loguear
 		If Centinela.RevisandoUserIndex = UserIndex Then Call modCentinela.CentinelaUserLogout()
 		
@@ -529,7 +529,7 @@ Errhandler:
 		UserList(UserIndex).ConnIDValida = False
 		Call ResetUserSlot(UserIndex)
 		
-		Call LogError("CloseSocket - Error = " & Err.Number & " - Descripción = " & Err.Description & " - UserIndex = " & UserIndex)
+		Call LogError("CloseSocket - Error = " & Err.Number & " - DescripciÃ³n = " & Err.Description & " - UserIndex = " & UserIndex)
 	End Sub
 	
 	'[Alejo-21-5]: Cierra un socket sin limpiar el slot
@@ -656,7 +656,7 @@ Err_Renamed:
 		'12/06/2009: ZaMa - Agrego chequeo de nivel al loguear
 		'14/09/2009: ZaMa - Ahora el usuario esta protegido del ataque de npcs al loguear
 		'11/27/2009: Budi - Se envian los InvStats del personaje y su Fuerza y Agilidad
-		'03/12/2009: Budi - Optimización del código
+		'03/12/2009: Budi - OptimizaciÃ³n del cÃ³digo
 		'***************************************************
 		Dim N As Short
 		Dim tStr As String
@@ -667,7 +667,7 @@ Err_Renamed:
 		Dim tX As Integer
 		Dim tY As Integer
 		Dim i As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Barco, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Barco, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Barco As ObjData
 		With UserList(UserIndex)
 			
@@ -689,23 +689,23 @@ Err_Renamed:
 			
 			'Controlamos no pasar el maximo de usuarios
 			If NumUsers >= MaxUsers Then
-				Call WriteErrorMsg(UserIndex, "El servidor ha alcanzado el máximo de usuarios soportado, por favor vuelva a intertarlo más tarde.")
+				Call WriteErrorMsg(UserIndex, "El servidor ha alcanzado el mÃ¡ximo de usuarios soportado, por favor vuelva a intertarlo mÃ¡s tarde.")
 				Call FlushBuffer(UserIndex)
 				Call CloseSocket(UserIndex)
 				Exit Sub
 			End If
 			
-			'¿Este IP ya esta conectado?
+			'Â¿Este IP ya esta conectado?
 			If AllowMultiLogins = 0 Then
 				If CheckForSameIP(UserIndex, .ip) = True Then
-					Call WriteErrorMsg(UserIndex, "No es posible usar más de un personaje al mismo tiempo.")
+					Call WriteErrorMsg(UserIndex, "No es posible usar mÃ¡s de un personaje al mismo tiempo.")
 					Call FlushBuffer(UserIndex)
 					Call CloseSocket(UserIndex)
 					Exit Sub
 				End If
 			End If
 			
-			'¿Existe el personaje?
+			'Â¿Existe el personaje?
 			If Not FileExist(CharPath & UCase(name) & ".chr") Then
 				Call WriteErrorMsg(UserIndex, "El personaje no existe.")
 				Call FlushBuffer(UserIndex)
@@ -713,7 +713,7 @@ Err_Renamed:
 				Exit Sub
 			End If
 			
-			'¿Es el passwd valido?
+			'Â¿Es el passwd valido?
 			If UCase(Password) <> UCase(GetVar(CharPath & UCase(name) & ".chr", "INIT", "Password")) Then
 				Call WriteErrorMsg(UserIndex, "Password incorrecto.")
 				Call FlushBuffer(UserIndex)
@@ -721,12 +721,12 @@ Err_Renamed:
 				Exit Sub
 			End If
 			
-			'¿Ya esta conectado el personaje?
+			'Â¿Ya esta conectado el personaje?
 			If CheckForSameName(name) Then
 				If UserList(NameIndex(name)).Counters.Saliendo Then
-					Call WriteErrorMsg(UserIndex, "El usuario está saliendo.")
+					Call WriteErrorMsg(UserIndex, "El usuario estÃ¡ saliendo.")
 				Else
-					Call WriteErrorMsg(UserIndex, "Perdón, un usuario con el mismo nombre se ha logueado.")
+					Call WriteErrorMsg(UserIndex, "PerdÃ³n, un usuario con el mismo nombre se ha logueado.")
 				End If
 				Call FlushBuffer(UserIndex)
 				Call CloseSocket(UserIndex)
@@ -785,7 +785,7 @@ Err_Renamed:
 			
 			Call LoadUserReputacion(UserIndex, Leer)
 			
-			'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			Leer = Nothing
 			
 			If .Invent.EscudoEqpSlot = 0 Then .Char_Renamed.ShieldAnim = NingunEscudo
@@ -822,28 +822,28 @@ Err_Renamed:
 			If .Pos.Map = 0 Then
 				Select Case .Hogar
 					Case Declaraciones.eCiudad.cNix
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						.Pos = Nix
 					Case Declaraciones.eCiudad.cUllathorpe
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						.Pos = Ullathorpe
 					Case Declaraciones.eCiudad.cBanderbill
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						.Pos = Banderbill
 					Case Declaraciones.eCiudad.cLindos
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						.Pos = Lindos
 					Case Declaraciones.eCiudad.cArghal
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						.Pos = Arghal
 					Case Else
 						.Hogar = Declaraciones.eCiudad.cUllathorpe
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						.Pos = Ullathorpe
 				End Select
 			Else
 				If Not MapaValido(.Pos.Map) Then
-					Call WriteErrorMsg(UserIndex, "El PJ se encuenta en un mapa inválido.")
+					Call WriteErrorMsg(UserIndex, "El PJ se encuenta en un mapa invÃ¡lido.")
 					Call FlushBuffer(UserIndex)
 					Call CloseSocket(UserIndex)
 					Exit Sub
@@ -851,7 +851,7 @@ Err_Renamed:
 			End If
 			
 			'Tratamos de evitar en lo posible el "Telefrag". Solo 1 intento de loguear en pos adjacentes.
-			'Codigo por Pablo (ToxicWaste) y revisado por Nacho (Integer), corregido para que realmetne ande y no tire el server por Juan Martín Sotuyo Dodero (Maraxus)
+			'Codigo por Pablo (ToxicWaste) y revisado por Nacho (Integer), corregido para que realmetne ande y no tire el server por Juan MartÃ­n Sotuyo Dodero (Maraxus)
 			If MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex <> 0 Or MapData(.Pos.Map, .Pos.X, .Pos.Y).NpcIndex <> 0 Then
 				
 				FoundPlace = False
@@ -894,7 +894,7 @@ Err_Renamed:
 							'Lo sacamos.
 							If UserList(MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex).flags.UserLogged Then
 								Call FinComerciarUsu(MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex)
-								Call WriteErrorMsg(MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex, "Alguien se ha conectado donde te encontrabas, por favor reconéctate...")
+								Call WriteErrorMsg(MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex, "Alguien se ha conectado donde te encontrabas, por favor reconÃ©ctate...")
 								Call FlushBuffer(MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex)
 							End If
 						End If
@@ -911,7 +911,7 @@ Err_Renamed:
 			
 			'If in the water, and has a boat, equip it!
 			If .Invent.BarcoObjIndex > 0 And (HayAgua(.Pos.Map, .Pos.X, .Pos.Y) Or BodyIsBoat(.Char_Renamed.body)) Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Barco. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Barco. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Barco = ObjData_Renamed(.Invent.BarcoObjIndex)
 				.Char_Renamed.Head = 0
 				If .flags.Muerto = 0 Then
@@ -962,12 +962,12 @@ Err_Renamed:
 			
 			If haciendoBK Then
 				Call WritePauseToggle(UserIndex)
-				Call WriteConsoleMsg(UserIndex, "Servidor> Por favor espera algunos segundos, el WorldSave está ejecutándose.", Protocol.FontTypeNames.FONTTYPE_SERVER)
+				Call WriteConsoleMsg(UserIndex, "Servidor> Por favor espera algunos segundos, el WorldSave estÃ¡ ejecutÃ¡ndose.", Protocol.FontTypeNames.FONTTYPE_SERVER)
 			End If
 			
 			If EnPausa Then
 				Call WritePauseToggle(UserIndex)
-				Call WriteConsoleMsg(UserIndex, "Servidor> Lo sentimos mucho pero el servidor se encuentra actualmente detenido. Intenta ingresar más tarde.", Protocol.FontTypeNames.FONTTYPE_SERVER)
+				Call WriteConsoleMsg(UserIndex, "Servidor> Lo sentimos mucho pero el servidor se encuentra actualmente detenido. Intenta ingresar mÃ¡s tarde.", Protocol.FontTypeNames.FONTTYPE_SERVER)
 			End If
 			
 			If EnTesting And .Stats.ELV >= 18 Then
@@ -1102,7 +1102,7 @@ Err_Renamed:
 			.CiudadanosMatados = 0
 			.CriminalesMatados = 0
 			.FuerzasCaos = 0
-			.FechaIngreso = "No ingresó a ninguna Facción"
+			.FechaIngreso = "No ingresÃ³ a ninguna FacciÃ³n"
 			.RecibioArmaduraCaos = 0
 			.RecibioArmaduraReal = 0
 			.RecibioExpInicialCaos = 0
@@ -1272,7 +1272,7 @@ Err_Renamed:
 		'Last modified: 06/28/2008
 		'Resetea todos los valores generales y las stats
 		'03/15/2006 Maraxus - Uso de With para mayor performance y claridad.
-		'03/29/2006 Maraxus - Reseteo el CentinelaOK también.
+		'03/29/2006 Maraxus - Reseteo el CentinelaOK tambiÃ©n.
 		'06/28/2008 NicoNZ - Agrego el flag Inmovilizado
 		'*************************************************
 		With UserList(UserIndex).flags
@@ -1537,7 +1537,7 @@ Err_Renamed:
 		Exit Sub
 		
 Errhandler: 
-		Call LogError("Error en CloseUser. Número " & Err.Number & " Descripción: " & Err.Description)
+		Call LogError("Error en CloseUser. NÃºmero " & Err.Number & " DescripciÃ³n: " & Err.Description)
 		
 	End Sub
 	

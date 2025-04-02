@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module InvUsuario
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module InvUsuario
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Public Function TieneObjetosRobables(ByVal UserIndex As Short) As Boolean
@@ -38,7 +38,7 @@ Module InvUsuario
 		'***************************************************
 		
 		'17/09/02
-		'Agregue que la función se asegure que el objeto no es un barco
+		'Agregue que la funciÃ³n se asegure que el objeto no es un barco
 		
 		On Error Resume Next
 		
@@ -110,23 +110,23 @@ manejador:
 				End If
 			Next j
 			
-			'[Barrin 17-12-03] Si el usuario dejó de ser Newbie, y estaba en el Newbie Dungeon
+			'[Barrin 17-12-03] Si el usuario dejÃ³ de ser Newbie, y estaba en el Newbie Dungeon
 			'es transportado a su hogar de origen ;)
 			If UCase(MapInfo_Renamed(.Pos.Map).Restringir) = "NEWBIE" Then
 				
 				
 				Select Case .Hogar
 					Case Declaraciones.eCiudad.cLindos 'Vamos a tener que ir por todo el desierto... uff!
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						DeDonde = Lindos
 					Case Declaraciones.eCiudad.cUllathorpe
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						DeDonde = Ullathorpe
 					Case Declaraciones.eCiudad.cBanderbill
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						DeDonde = Banderbill
 					Case Else
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto DeDonde. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						DeDonde = Nix
 				End Select
 				
@@ -202,7 +202,7 @@ manejador:
 		Dim Cercanos As String
 		Dim TeniaOro As Integer
 		Dim AuxPos As WorldPos
-		'UPGRADE_NOTE: Extra se actualizó a Extra_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Extra se actualizÃ³ a Extra_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Extra_Renamed As Integer
 		With UserList(UserIndex)
 			'SI EL Pjta TIENE ORO LO TIRAMOS
@@ -242,16 +242,16 @@ manejador:
 					
 					MiObj.ObjIndex = iORO
 					
-					If EsGM(UserIndex) Then Call LogGM(.name, "Tiró cantidad:" & MiObj.Amount & " Objeto:" & ObjData_Renamed(MiObj.ObjIndex).name)
+					If EsGM(UserIndex) Then Call LogGM(.name, "TirÃ³ cantidad:" & MiObj.Amount & " Objeto:" & ObjData_Renamed(MiObj.ObjIndex).name)
 					
 					If .clase = Declaraciones.eClass.Pirat And .Invent.BarcoObjIndex = 476 Then
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AuxPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AuxPos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						AuxPos = TirarItemAlPiso(.Pos, MiObj, False)
 						If AuxPos.X <> 0 And AuxPos.Y <> 0 Then
 							.Stats.GLD = .Stats.GLD - MiObj.Amount
 						End If
 					Else
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AuxPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AuxPos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						AuxPos = TirarItemAlPiso(.Pos, MiObj, True)
 						If AuxPos.X <> 0 And AuxPos.Y <> 0 Then
 							.Stats.GLD = .Stats.GLD - MiObj.Amount
@@ -298,7 +298,7 @@ Errhandler:
 			
 			'Quita un objeto
 			.Amount = .Amount - Cantidad
-			'¿Quedan mas?
+			'Â¿Quedan mas?
 			If .Amount <= 0 Then
 				UserList(UserIndex).Invent.NroItems = UserList(UserIndex).Invent.NroItems - 1
 				.ObjIndex = 0
@@ -364,7 +364,7 @@ Errhandler:
 		'
 		'***************************************************
 		
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As Obj
 		
 		With UserList(UserIndex)
@@ -391,19 +391,19 @@ Errhandler:
 					Call UpdateUserInv(False, UserIndex, Slot)
 					
 					If ObjData_Renamed(Obj_Renamed.ObjIndex).OBJType = Declaraciones.eOBJType.otBarcos Then
-						Call WriteConsoleMsg(UserIndex, "¡¡ATENCIÓN!! ¡ACABAS DE TIRAR TU BARCA!", Protocol.FontTypeNames.FONTTYPE_TALK)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡ATENCIÃ“N!! Â¡ACABAS DE TIRAR TU BARCA!", Protocol.FontTypeNames.FONTTYPE_TALK)
 					End If
 					
-					If Not .flags.Privilegios And Declaraciones.PlayerType.User Then Call LogGM(.name, "Tiró cantidad:" & num & " Objeto:" & ObjData_Renamed(Obj_Renamed.ObjIndex).name)
+					If Not .flags.Privilegios And Declaraciones.PlayerType.User Then Call LogGM(.name, "TirÃ³ cantidad:" & num & " Objeto:" & ObjData_Renamed(Obj_Renamed.ObjIndex).name)
 					
 					'Log de Objetos que se tiran al piso. Pablo (ToxicWaste) 07/09/07
 					'Es un Objeto que tenemos que loguear?
 					If ObjData_Renamed(Obj_Renamed.ObjIndex).Log = 1 Then
-						Call LogDesarrollo(.name & " tiró al piso " & Obj_Renamed.Amount & " " & ObjData_Renamed(Obj_Renamed.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
-					ElseIf Obj_Renamed.Amount > 5000 Then  'Es mucha cantidad? > Subí a 5000 el minimo porque si no se llenaba el log de cosas al pedo. (NicoNZ)
+						Call LogDesarrollo(.name & " tirÃ³ al piso " & Obj_Renamed.Amount & " " & ObjData_Renamed(Obj_Renamed.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
+					ElseIf Obj_Renamed.Amount > 5000 Then  'Es mucha cantidad? > SubÃ­ a 5000 el minimo porque si no se llenaba el log de cosas al pedo. (NicoNZ)
 						'Si no es de los prohibidos de loguear, lo logueamos.
 						If ObjData_Renamed(Obj_Renamed.ObjIndex).NoLog <> 1 Then
-							Call LogDesarrollo(.name & " tiró al piso " & Obj_Renamed.Amount & " " & ObjData_Renamed(Obj_Renamed.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
+							Call LogDesarrollo(.name & " tirÃ³ al piso " & Obj_Renamed.Amount & " " & ObjData_Renamed(Obj_Renamed.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
 						End If
 					End If
 				Else
@@ -447,7 +447,7 @@ Errhandler:
 				If .ObjInfo.ObjIndex = Obj.ObjIndex Then
 					.ObjInfo.Amount = .ObjInfo.Amount + Obj.Amount
 				Else
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MapData().ObjInfo. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MapData().ObjInfo. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					.ObjInfo = Obj
 					
 					Call modSendData.SendToAreaByPos(Map, X, Y, PrepareMessageObjectCreate(ObjData_Renamed(Obj.ObjIndex).GrhIndex, X, Y))
@@ -471,7 +471,7 @@ Errhandler:
 		Dim Slot As Byte
 		
 		With UserList(UserIndex)
-			'¿el user ya tiene un objeto del mismo tipo?
+			'Â¿el user ya tiene un objeto del mismo tipo?
 			Slot = 1
 			Do Until .Invent.Object_Renamed(Slot).ObjIndex = MiObj.ObjIndex And .Invent.Object_Renamed(Slot).Amount + MiObj.Amount <= MAX_INVENTORY_OBJS
 				Slot = Slot + 1
@@ -486,7 +486,7 @@ Errhandler:
 				Do Until .Invent.Object_Renamed(Slot).ObjIndex = 0
 					Slot = Slot + 1
 					If Slot > .CurrentInventorySlots Then
-						Call WriteConsoleMsg(UserIndex, "No puedes cargar más objetos.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(UserIndex, "No puedes cargar mÃ¡s objetos.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 						MeterItemEnInventario = False
 						Exit Function
 					End If
@@ -528,8 +528,8 @@ Errhandler:
 		'18/12/2009: ZaMa - Oro directo a la billetera.
 		'***************************************************
 		
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim MiObj As Obj
 		Dim ObjPos As String
@@ -538,15 +538,15 @@ Errhandler:
 		Dim Y As Short
 		Dim Slot As Byte
 		With UserList(UserIndex)
-			'¿Hay algun obj?
+			'Â¿Hay algun obj?
 			If MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex > 0 Then
-				'¿Esta permitido agarrar este obj?
+				'Â¿Esta permitido agarrar este obj?
 				If ObjData_Renamed(MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex).Agarrable <> 1 Then
 					
 					X = .Pos.X
 					Y = .Pos.Y
 					
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					Obj_Renamed = ObjData_Renamed(MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex)
 					MiObj.Amount = MapData(.Pos.Map, X, Y).ObjInfo.Amount
 					MiObj.ObjIndex = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
@@ -569,19 +569,19 @@ Errhandler:
 							'Es un Objeto que tenemos que loguear?
 							If ObjData_Renamed(MiObj.ObjIndex).Log = 1 Then
 								ObjPos = " Mapa: " & .Pos.Map & " X: " & .Pos.X & " Y: " & .Pos.Y
-								Call LogDesarrollo(.name & " juntó del piso " & MiObj.Amount & " " & ObjData_Renamed(MiObj.ObjIndex).name & ObjPos)
+								Call LogDesarrollo(.name & " juntÃ³ del piso " & MiObj.Amount & " " & ObjData_Renamed(MiObj.ObjIndex).name & ObjPos)
 							ElseIf MiObj.Amount > MAX_INVENTORY_OBJS - 1000 Then  'Es mucha cantidad?
 								'Si no es de los prohibidos de loguear, lo logueamos.
 								If ObjData_Renamed(MiObj.ObjIndex).NoLog <> 1 Then
 									ObjPos = " Mapa: " & .Pos.Map & " X: " & .Pos.X & " Y: " & .Pos.Y
-									Call LogDesarrollo(.name & " juntó del piso " & MiObj.Amount & " " & ObjData_Renamed(MiObj.ObjIndex).name & ObjPos)
+									Call LogDesarrollo(.name & " juntÃ³ del piso " & MiObj.Amount & " " & ObjData_Renamed(MiObj.ObjIndex).name & ObjPos)
 								End If
 							End If
 						End If
 					End If
 				End If
 			Else
-				Call WriteConsoleMsg(UserIndex, "No hay nada aquí.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No hay nada aquÃ­.", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
 		
@@ -597,8 +597,8 @@ Errhandler:
 		On Error GoTo Errhandler
 		
 		'Desequipa el item slot del inventario
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		
 		With UserList(UserIndex)
@@ -609,7 +609,7 @@ Errhandler:
 					Exit Sub
 				End If
 				
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(.Object_Renamed(Slot).ObjIndex)
 			End With
 			
@@ -721,7 +721,7 @@ Errhandler:
 			SexoPuedeUsarItem = True
 		End If
 		
-		If Not SexoPuedeUsarItem Then sMotivo = "Tu género no puede usar este objeto."
+		If Not SexoPuedeUsarItem Then sMotivo = "Tu gÃ©nero no puede usar este objeto."
 		
 		Exit Function
 Errhandler: 
@@ -752,7 +752,7 @@ Errhandler:
 			FaccionPuedeUsarItem = True
 		End If
 		
-		If Not FaccionPuedeUsarItem Then sMotivo = "Tu alineación no puede usar este objeto."
+		If Not FaccionPuedeUsarItem Then sMotivo = "Tu alineaciÃ³n no puede usar este objeto."
 		
 	End Function
 	
@@ -767,19 +767,19 @@ Errhandler:
 		On Error GoTo Errhandler
 		
 		'Equipa un item del inventario
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim ObjIndex As Short
 		Dim sMotivo As String
 		
 		With UserList(UserIndex)
 			ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Obj_Renamed = ObjData_Renamed(ObjIndex)
 			
 			If Obj_Renamed.Newbie = 1 And Not EsNewbie(UserIndex) Then
-				Call WriteConsoleMsg(UserIndex, "Sólo los newbies pueden usar este objeto.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "SÃ³lo los newbies pueden usar este objeto.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -980,7 +980,7 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otMochilas
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estas muerto!! Solo podes usar items cuando estas vivo. ", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡Estas muerto!! Solo podes usar items cuando estas vivo. ", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					If .Invent.Object_Renamed(Slot).Equipped Then
@@ -1044,8 +1044,8 @@ Errhandler:
 		'Author: Unknown
 		'Last modified: 10/12/2009
 		'Handels the usage of items from inventory box.
-		'24/01/2007 Pablo (ToxicWaste) - Agrego el Cuerno de la Armada y la Legión.
-		'24/01/2007 Pablo (ToxicWaste) - Utilización nueva de Barco en lvl 20 por clase Pirata y Pescador.
+		'24/01/2007 Pablo (ToxicWaste) - Agrego el Cuerno de la Armada y la LegiÃ³n.
+		'24/01/2007 Pablo (ToxicWaste) - UtilizaciÃ³n nueva de Barco en lvl 20 por clase Pirata y Pescador.
 		'01/08/2009: ZaMa - Now it's not sent any sound made by an invisible admin, except to its own client
 		'17/11/2009: ZaMa - Ahora se envia una orientacion de la posicion hacia donde esta el que uso el cuerno.
 		'27/11/2009: Budi - Se envia indivualmente cuando se modifica a la Agilidad o la Fuerza del personaje.
@@ -1053,11 +1053,11 @@ Errhandler:
 		'10/12/2009: ZaMa - Arreglos y validaciones en todos las herramientas de trabajo.
 		'*************************************************
 		
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim ObjIndex As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura TargObj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura TargObj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim TargObj As ObjData
 		Dim MiObj As Obj
 		
@@ -1065,11 +1065,11 @@ Errhandler:
 			
 			If .Invent.Object_Renamed(Slot).Amount = 0 Then Exit Sub
 			
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Obj_Renamed = ObjData_Renamed(.Invent.Object_Renamed(Slot).ObjIndex)
 			
 			If Obj_Renamed.Newbie = 1 And Not EsNewbie(UserIndex) Then
-				Call WriteConsoleMsg(UserIndex, "Sólo los newbies pueden usar estos objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "SÃ³lo los newbies pueden usar estos objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -1093,7 +1093,7 @@ Errhandler:
 			Select Case Obj_Renamed.OBJType
 				Case Declaraciones.eOBJType.otUseOnce
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
@@ -1117,7 +1117,7 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otGuita
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
@@ -1131,25 +1131,25 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otWeapon
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
 					If Not .Stats.MinSta > 0 Then
-						Call WriteConsoleMsg(UserIndex, "Estás muy cansad" & IIf(.Genero = Declaraciones.eGenero.Hombre, "o", "a") & ".", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "EstÃ¡s muy cansad" & IIf(.Genero = Declaraciones.eGenero.Hombre, "o", "a") & ".", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
 					If ObjData_Renamed(ObjIndex).proyectil = 1 Then
 						If .Invent.Object_Renamed(Slot).Equipped = 0 Then
-							Call WriteConsoleMsg(UserIndex, "Antes de usar la herramienta deberías equipartela.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Antes de usar la herramienta deberÃ­as equipartela.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.WorkRequestTarget, Declaraciones.eSkill.Proyectiles) 'Call WriteWorkRequestTarget(UserIndex, Proyectiles)
-					ElseIf .flags.TargetObj = Leña Then 
+					ElseIf .flags.TargetObj = LeÃ±a Then 
 						If .Invent.Object_Renamed(Slot).ObjIndex = DAGA Then
 							If .Invent.Object_Renamed(Slot).Equipped = 0 Then
-								Call WriteConsoleMsg(UserIndex, "Antes de usar la herramienta deberías equipartela.", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "Antes de usar la herramienta deberÃ­as equipartela.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
 							
@@ -1158,15 +1158,15 @@ Errhandler:
 					Else
 						
 						Select Case ObjIndex
-							Case CAÑA_PESCA, RED_PESCA
-								If .Invent.WeaponEqpObjIndex = CAÑA_PESCA Or .Invent.WeaponEqpObjIndex = RED_PESCA Then
+							Case CAÃ‘A_PESCA, RED_PESCA
+								If .Invent.WeaponEqpObjIndex = CAÃ‘A_PESCA Or .Invent.WeaponEqpObjIndex = RED_PESCA Then
 									Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.WorkRequestTarget, Declaraciones.eSkill.Pesca) 'Call WriteWorkRequestTarget(UserIndex, eSkill.Pesca)
 								Else
 									Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								End If
 								
-							Case HACHA_LEÑADOR, HACHA_LEÑA_ELFICA
-								If .Invent.WeaponEqpObjIndex = HACHA_LEÑADOR Or .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then
+							Case HACHA_LEÃ‘ADOR, HACHA_LEÃ‘A_ELFICA
+								If .Invent.WeaponEqpObjIndex = HACHA_LEÃ‘ADOR Or .Invent.WeaponEqpObjIndex = HACHA_LEÃ‘A_ELFICA Then
 									Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.WorkRequestTarget, Declaraciones.eSkill.Talar)
 								Else
 									Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -1204,12 +1204,12 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otPociones
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo. ", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo. ", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
 					If Not IntervaloPermiteGolpeUsar(UserIndex, False) Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Debes esperar unos momentos para tomar otra poción!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡Debes esperar unos momentos para tomar otra pociÃ³n!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
@@ -1315,7 +1315,7 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otBebidas
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					.Stats.MinAGU = .Stats.MinAGU + Obj_Renamed.MinSed
@@ -1337,18 +1337,18 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otLlaves
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
 					If .flags.TargetObj = 0 Then Exit Sub
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto TargObj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto TargObj. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					TargObj = ObjData_Renamed(.flags.TargetObj)
-					'¿El objeto clickeado es una puerta?
+					'Â¿El objeto clickeado es una puerta?
 					If TargObj.OBJType = Declaraciones.eOBJType.otPuertas Then
-						'¿Esta cerrada?
+						'Â¿Esta cerrada?
 						If TargObj.Cerrada = 1 Then
-							'¿Cerrada con llave?
+							'Â¿Cerrada con llave?
 							If TargObj.Llave > 0 Then
 								If TargObj.clave = Obj_Renamed.clave Then
 									
@@ -1372,18 +1372,18 @@ Errhandler:
 								End If
 							End If
 						Else
-							Call WriteConsoleMsg(UserIndex, "No está cerrada.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "No estÃ¡ cerrada.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 					End If
 					
 				Case Declaraciones.eOBJType.otBotellaVacia
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					If Not HayAgua(.Pos.Map, .flags.TargetX, .flags.TargetY) Then
-						Call WriteConsoleMsg(UserIndex, "No hay agua allí.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No hay agua allÃ­.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					MiObj.Amount = 1
@@ -1397,7 +1397,7 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otBotellaLlena
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					.Stats.MinAGU = .Stats.MinAGU + Obj_Renamed.MinSed
@@ -1415,7 +1415,7 @@ Errhandler:
 					
 				Case Declaraciones.eOBJType.otPergaminos
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
@@ -1424,28 +1424,28 @@ Errhandler:
 							Call AgregarHechizo(UserIndex, Slot)
 							Call UpdateUserInv(False, UserIndex, Slot)
 						Else
-							Call WriteConsoleMsg(UserIndex, "Estás demasiado hambriento y sediento.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "EstÃ¡s demasiado hambriento y sediento.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
 						Call WriteConsoleMsg(UserIndex, "No tienes conocimientos de las Artes Arcanas.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					End If
 				Case Declaraciones.eOBJType.otMinerales
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.WorkRequestTarget, FundirMetal) 'Call WriteWorkRequestTarget(UserIndex, FundirMetal)
 					
 				Case Declaraciones.eOBJType.otInstrumentos
 					If .flags.Muerto = 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes usar ítems cuando estás vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muerto!! SÃ³lo puedes usar Ã­tems cuando estÃ¡s vivo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
-					If Obj_Renamed.Real Then '¿Es el Cuerno Real?
+					If Obj_Renamed.Real Then 'Â¿Es el Cuerno Real?
 						If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
 							If MapInfo_Renamed(.Pos.Map).Pk = False Then
-								Call WriteConsoleMsg(UserIndex, "No hay peligro aquí. Es zona segura.", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "No hay peligro aquÃ­. Es zona segura.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
 							
@@ -1459,13 +1459,13 @@ Errhandler:
 							
 							Exit Sub
 						Else
-							Call WriteConsoleMsg(UserIndex, "Sólo miembros del ejército real pueden usar este cuerno.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "SÃ³lo miembros del ejÃ©rcito real pueden usar este cuerno.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
-					ElseIf Obj_Renamed.Caos Then  '¿Es el Cuerno Legión?
+					ElseIf Obj_Renamed.Caos Then  'Â¿Es el Cuerno LegiÃ³n?
 						If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
 							If MapInfo_Renamed(.Pos.Map).Pk = False Then
-								Call WriteConsoleMsg(UserIndex, "No hay peligro aquí. Es zona segura.", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "No hay peligro aquÃ­. Es zona segura.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
 							
@@ -1479,7 +1479,7 @@ Errhandler:
 							
 							Exit Sub
 						Else
-							Call WriteConsoleMsg(UserIndex, "Sólo miembros de la legión oscura pueden usar este cuerno.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "SÃ³lo miembros de la legiÃ³n oscura pueden usar este cuerno.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 					End If
@@ -1508,7 +1508,7 @@ Errhandler:
 					If ((LegalPos(.Pos.Map, .Pos.X - 1, .Pos.Y, True, False) Or LegalPos(.Pos.Map, .Pos.X, .Pos.Y - 1, True, False) Or LegalPos(.Pos.Map, .Pos.X + 1, .Pos.Y, True, False) Or LegalPos(.Pos.Map, .Pos.X, .Pos.Y + 1, True, False)) And .flags.Navegando = 0) Or .flags.Navegando = 1 Then
 						Call DoNavega(UserIndex, Obj_Renamed, Slot)
 					Else
-						Call WriteConsoleMsg(UserIndex, "¡Debes aproximarte al agua para usar el barco!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Debes aproximarte al agua para usar el barco!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 			End Select
@@ -1612,7 +1612,7 @@ Errhandler:
 						If .clase = Declaraciones.eClass.Pirat Then
 							' Si tiene galeon equipado
 							If .Invent.BarcoObjIndex = 476 Then
-								' Limitación por nivel, después dropea normalmente
+								' LimitaciÃ³n por nivel, despuÃ©s dropea normalmente
 								If .Stats.ELV >= 20 And .Stats.ELV <= 25 Then
 									' No dropea en agua
 									DropAgua = False

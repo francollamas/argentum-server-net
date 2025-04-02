@@ -3,7 +3,7 @@ Option Explicit On
 Friend Class frmCargando
 	Inherits System.Windows.Forms.Form
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -25,16 +25,16 @@ Friend Class frmCargando
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Private Sub frmCargando_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
 		'Label1(1).Caption = Label1(1).Caption & " V." & App.Major & "." & App.Minor & "." & App.Revision
 		Picture1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-		'UPGRADE_WARNING: Picture tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Picture tiene un nuevo comportamiento. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		Picture1.BackgroundImage = System.Drawing.Image.FromFile(My.Application.Info.DirectoryPath & "\logo.jpg")
 	End Sub
 End Class

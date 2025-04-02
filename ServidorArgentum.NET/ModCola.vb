@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Friend Class cCola
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Friend Class cCola
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	'                    Metodos publicos
 	'
@@ -50,7 +50,7 @@ Friend Class cCola
 	
 	Private Cola As Collection
 	
-	'UPGRADE_NOTE: Reset se actualizÛ a Reset_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Reset se actualiz√≥ a Reset_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub Reset_Renamed()
 		On Error Resume Next
 		
@@ -71,7 +71,7 @@ Friend Class cCola
 		IndexValido = i >= 1 And i <= Me.Longitud
 	End Function
 	
-	'UPGRADE_NOTE: Class_Initialize se actualizÛ a Class_Initialize_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualiz√≥ a Class_Initialize_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
 		Cola = New Collection
 	End Sub
@@ -84,7 +84,7 @@ Friend Class cCola
 		On Error Resume Next
 		If IndexValido(index) Then
 			'Pablo
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			VerElemento = UCase(Cola.Item(index))
 			'/Pablo
 			'VerElemento = Cola(Index)
@@ -110,7 +110,7 @@ Friend Class cCola
 		On Error Resume Next
 		'Quita elemento de la cola
 		If Cola.Count() > 0 Then
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Pop = Cola.Item(FRENTE)
 			Call Cola.Remove(FRENTE)
 		Else
@@ -124,7 +124,7 @@ Friend Class cCola
 		
 		'Quita elemento de la cola
 		If Cola.Count() > 0 Then
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			PopByVal = Cola.Item(1)
 		Else
 			PopByVal = CStr(0)
@@ -181,10 +181,10 @@ Friend Class cCola
 	End Sub
 	
 	
-	'UPGRADE_NOTE: Class_Terminate se actualizÛ a Class_Terminate_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Terminate se actualiz√≥ a Class_Terminate_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Terminate_Renamed()
 		'Destruimos el objeto Cola
-		'UPGRADE_NOTE: El objeto Cola no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto Cola no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		Cola = Nothing
 	End Sub
 	Protected Overrides Sub Finalize()

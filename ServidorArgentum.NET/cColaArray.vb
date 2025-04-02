@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Friend Class CColaArray
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Friend Class CColaArray
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	Private m_maxelem As Integer
 	
@@ -86,14 +86,14 @@ Friend Class CColaArray
 		
 	End Function
 	
-	'UPGRADE_NOTE: Class_Initialize se actualizÛ a Class_Initialize_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualiz√≥ a Class_Initialize_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
 		m_lastelem = 0
 		m_firstelem = 0
 		m_size = 0
 		m_maxelem = 300
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz m_array ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz m_array ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim m_array(m_maxelem)
 	End Sub
 	Public Sub New()
@@ -108,7 +108,7 @@ Friend Class CColaArray
 		End Get
 		Set(ByVal Value As Integer)
 			m_maxelem = Value
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz m_array ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz m_array ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim Preserve m_array(m_maxelem)
 			
 		End Set

@@ -6,7 +6,7 @@ Friend Class clsIniReader
 	' Use it instead of GetVar when reading several values form the same file at once, otherwise it's not usefull.
 	' Based in the idea of AlejoLP and his clsLeerInis.
 	'
-	' Designed and implemented by Juan MartÌn Sotuyo Dodero (Maraxus)
+	' Designed and implemented by Juan Mart√≠n Sotuyo Dodero (Maraxus)
 	' (juansotuyo@gmail.com)
 	'**************************************************************
 	
@@ -30,14 +30,14 @@ Friend Class clsIniReader
 	'It's particularly usefull when you can keep a whole file in memory such as NPCs.dat'
 	' Based in the idea of AlejoLP and his clsLeerInis.
 	'
-	' @author Juan MartÌn Sotuyo Dodero (Maraxus) juansotuyo@gmail.com
+	' @author Juan Mart√≠n Sotuyo Dodero (Maraxus) juansotuyo@gmail.com
 	' @version 1.1.0
 	' @date 20060501
 	
-	'01/05/2006 - Juan MartÌn Sotuyo Dodero (Maraxus) - (juansotuyo@gmail.com)
+	'01/05/2006 - Juan Mart√≠n Sotuyo Dodero (Maraxus) - (juansotuyo@gmail.com)
 	'   - First Release
 	'
-	'01/04/2008 - Juan MartÌn Sotuyo Dodero (Maraxus) - (juansotuyo@gmail.com)
+	'01/04/2008 - Juan Mart√≠n Sotuyo Dodero (Maraxus) - (juansotuyo@gmail.com)
 	'   - Add: KeyExists method allows to check for valid section keys.
 	
 	
@@ -82,10 +82,10 @@ Friend Class clsIniReader
 	''
 	'Default constructor. Does nothing.
 	
-	'UPGRADE_NOTE: Class_Initialize se actualizÛ a Class_Initialize_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualiz√≥ a Class_Initialize_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'
 		'**************************************************************
@@ -99,10 +99,10 @@ Friend Class clsIniReader
 	'Destroy every array and deallocates al memory.
 	'
 	
-	'UPGRADE_NOTE: Class_Terminate se actualizÛ a Class_Terminate_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Terminate se actualiz√≥ a Class_Terminate_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Terminate_Renamed()
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'
 		'**************************************************************
@@ -132,7 +132,7 @@ Friend Class clsIniReader
 	
 	Public Sub Initialize(ByVal file As String)
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 27/07/2006
 		'Opens the requested file and loads it's data into memory
 		'**************************************************************
@@ -210,7 +210,7 @@ Friend Class clsIniReader
 	
 	Private Sub SortChildNodes(ByRef Node As MainNode, ByVal First As Short, ByVal Last As Short)
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'Sorts the list of values in a given MainNode using quicksort,
 		'this allows the use of Binary Search for faster searches
@@ -234,11 +234,11 @@ Friend Class clsIniReader
 					max = max - 1
 				Loop 
 				If min <= max Then
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					temp = .values(min)
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Node.values(min). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Node.values(min). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					.values(min) = .values(max)
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Node.values(max). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Node.values(max). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					.values(max) = temp
 					min = min + 1
 					max = max - 1
@@ -258,7 +258,7 @@ Friend Class clsIniReader
 	
 	Private Sub SortMainNodes(ByVal First As Short, ByVal Last As Short)
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'Sorts the MainNodes list using quicksort,
 		'this allows the use of Binary Search for faster searches
@@ -266,7 +266,7 @@ Friend Class clsIniReader
 		Dim min As Short 'First item in the list
 		Dim max As Short 'Last item in the list
 		Dim comp As String 'Item used to compare
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura temp, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura temp, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim temp As MainNode
 		
 		min = First
@@ -282,11 +282,11 @@ Friend Class clsIniReader
 				max = max - 1
 			Loop 
 			If min <= max Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				temp = fileData(min)
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto fileData(min). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto fileData(min). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				fileData(min) = fileData(max)
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto fileData(max). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto fileData(max). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				fileData(max) = temp
 				min = min + 1
 				max = max - 1
@@ -306,7 +306,7 @@ Friend Class clsIniReader
 	
 	Public Function GetValue(ByVal Main As String, ByVal Key As String) As String
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'Returns a value if the key and main node exist, or a nullstring otherwise
 		'**************************************************************
@@ -362,14 +362,14 @@ Friend Class clsIniReader
 	
 	Private Function FindKey(ByRef Node As MainNode, ByVal Key As String) As Integer
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'Returns the index of the value which key matches the requested one,
 		'or the negation of the position were it should be if not found
 		'**************************************************************
 		Dim min As Integer
 		Dim max As Integer
-		'UPGRADE_NOTE: mid se actualizÛ a mid_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: mid se actualiz√≥ a mid_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim mid_Renamed As Integer
 		
 		min = 0
@@ -402,14 +402,14 @@ Friend Class clsIniReader
 	
 	Private Function FindMain(ByVal name As String) As Integer
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 5/01/2006
 		'Returns the index of the MainNode which name matches the requested one,
 		'or the negation of the position were it should be if not found
 		'**************************************************************
 		Dim min As Integer
 		Dim max As Integer
-		'UPGRADE_NOTE: mid se actualizÛ a mid_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: mid se actualiz√≥ a mid_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim mid_Renamed As Integer
 		
 		min = 0
@@ -442,7 +442,7 @@ Friend Class clsIniReader
 	
 	Public Function KeyExists(ByVal name As String) As Boolean
 		'**************************************************************
-		'Author: Juan MartÌn Sotuyo Dodero
+		'Author: Juan Mart√≠n Sotuyo Dodero
 		'Last Modify Date: 04/01/2008
 		'Returns true of the key exists, false otherwise.
 		'**************************************************************

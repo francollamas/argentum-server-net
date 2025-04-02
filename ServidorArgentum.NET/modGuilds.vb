@@ -25,7 +25,7 @@ Module modGuilds
 	
 	'guilds nueva version. Hecho por el oso, eliminando los problemas
 	'de sincronizacion con los datos en el HD... entre varios otros
-	'º¬
+	'ÂºÂ¬
 	
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -41,7 +41,7 @@ Module modGuilds
 	Public CANTIDADDECLANES As Short
 	'cantidad actual de clanes en el servidor
 	
-	'UPGRADE_WARNING: El límite inferior de la matriz guilds ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El lÃ­mite inferior de la matriz guilds ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Private guilds(MAX_GUILDS) As clsClan
 	'array global de guilds, se indexa por userlist().guildindex
 	
@@ -130,7 +130,7 @@ Module modGuilds
 			m_ConectarMiembroAClan = True
 		Else
 			m_ConectarMiembroAClan = m_ValidarPermanencia(UserIndex, True, NuevaA)
-			If NuevaA Then News = News & "El clan tiene nueva alineación."
+			If NuevaA Then News = News & "El clan tiene nueva alineaciÃ³n."
 			'If NuevoL Or NuevaA Then Call guilds(GuildIndex).SetGuildNews(News)
 		End If
 		
@@ -157,7 +157,7 @@ Module modGuilds
 			
 			' Es el lider, bajamos 1 rango de alineacion
 			If GuildLeader(GuildIndex) = UserList(UserIndex).name Then
-				Call LogClanes(UserList(UserIndex).name & ", líder de " & guilds(GuildIndex).GuildName & " hizo bajar la alienación de su clan.")
+				Call LogClanes(UserList(UserIndex).name & ", lÃ­der de " & guilds(GuildIndex).GuildName & " hizo bajar la alienaciÃ³n de su clan.")
 				
 				CambioAlineacion = True
 				
@@ -173,11 +173,11 @@ Module modGuilds
 				
 				CambioAlineacion = guilds(GuildIndex).PuntosAntifaccion = MAXANTIFACCION
 				
-				Call LogClanes(UserList(UserIndex).name & " de " & guilds(GuildIndex).GuildName & IIf(CambioAlineacion, " SI ", " NO ") & "provoca cambio de alineación. MAXANT:" & CambioAlineacion)
+				Call LogClanes(UserList(UserIndex).name & " de " & guilds(GuildIndex).GuildName & IIf(CambioAlineacion, " SI ", " NO ") & "provoca cambio de alineaciÃ³n. MAXANT:" & CambioAlineacion)
 				
 				Call m_EcharMiembroDeClan(-1, UserList(UserIndex).name)
 				
-				' Llegamos a la maxima cantidad de antifacciones permitidas, bajamos un grado de alineación
+				' Llegamos a la maxima cantidad de antifacciones permitidas, bajamos un grado de alineaciÃ³n
 				If CambioAlineacion Then
 					Call UpdateGuildMembers(GuildIndex)
 				End If
@@ -199,7 +199,7 @@ Module modGuilds
 		Dim UserIndex As Short
 		Dim Reenlistadas As Short
 		
-		' Si devuelve true, cambio a neutro y echamos a todos los que estén de mas, sino no echamos a nadie
+		' Si devuelve true, cambio a neutro y echamos a todos los que estÃ©n de mas, sino no echamos a nadie
 		If guilds(GuildIndex).CambiarAlineacion(BajarGrado(GuildIndex)) Then 'ALINEACION_NEUTRO)
 			
 			'uso GetMemberList y no los iteradores pq voy a rajar gente y puedo alterar
@@ -245,7 +245,7 @@ Module modGuilds
 				End If
 			Next MemberIndex
 		Else
-			' Resetea los puntos de antifacción
+			' Resetea los puntos de antifacciÃ³n
 			guilds(GuildIndex).PuntosAntifaccion = 0
 		End If
 	End Sub
@@ -431,7 +431,7 @@ Module modGuilds
 		End If
 		
 		If GuildName = vbNullString Or Not GuildNameValido(GuildName) Then
-			refError = "Nombre de clan inválido."
+			refError = "Nombre de clan invÃ¡lido."
 			Exit Function
 		End If
 		
@@ -461,7 +461,7 @@ Module modGuilds
 					Call .SetCodex(i, codex(i - 1))
 				Next i
 				Call .SetDesc(desc)
-				Call .SetGuildNews("Clan creado con alineación: " & Alineacion2String(Alineacion))
+				Call .SetGuildNews("Clan creado con alineaciÃ³n: " & Alineacion2String(Alineacion))
 				Call .SetLeader(UserList(FundadorIndex).name)
 				Call .SetURL(URL)
 				
@@ -477,7 +477,7 @@ Module modGuilds
 				Call guilds(i).ProcesarFundacionDeOtroClan()
 			Next i
 		Else
-			refError = "No hay más slots para fundar clanes. Consulte a un administrador."
+			refError = "No hay mÃ¡s slots para fundar clanes. Consulte a un administrador."
 			Exit Function
 		End If
 		
@@ -535,10 +535,10 @@ Module modGuilds
 			Call WriteGuildNews(UserIndex, .GetGuildNews, enemies, allies)
 			
 			If .EleccionesAbiertas Then
-				Call WriteConsoleMsg(UserIndex, "Hoy es la votación para elegir un nuevo líder para el clan.", Protocol.FontTypeNames.FONTTYPE_GUILD)
-				Call WriteConsoleMsg(UserIndex, "La elección durará 24 horas, se puede votar a cualquier miembro del clan.", Protocol.FontTypeNames.FONTTYPE_GUILD)
+				Call WriteConsoleMsg(UserIndex, "Hoy es la votaciÃ³n para elegir un nuevo lÃ­der para el clan.", Protocol.FontTypeNames.FONTTYPE_GUILD)
+				Call WriteConsoleMsg(UserIndex, "La elecciÃ³n durarÃ¡ 24 horas, se puede votar a cualquier miembro del clan.", Protocol.FontTypeNames.FONTTYPE_GUILD)
 				Call WriteConsoleMsg(UserIndex, "Para votar escribe /VOTO NICKNAME.", Protocol.FontTypeNames.FONTTYPE_GUILD)
-				Call WriteConsoleMsg(UserIndex, "Sólo se computará un voto por miembro. Tu voto no puede ser cambiado.", Protocol.FontTypeNames.FONTTYPE_GUILD)
+				Call WriteConsoleMsg(UserIndex, "SÃ³lo se computarÃ¡ un voto por miembro. Tu voto no puede ser cambiado.", Protocol.FontTypeNames.FONTTYPE_GUILD)
 			End If
 		End With
 		
@@ -598,7 +598,7 @@ Module modGuilds
 		Select Case Alineacion
 			Case ALINEACION_GUILD.ALINEACION_ARMADA
 				If UserList(UserIndex).Faccion.ArmadaReal <> 1 Then
-					refError = "Para fundar un clan real debes ser miembro del ejército real."
+					refError = "Para fundar un clan real debes ser miembro del ejÃ©rcito real."
 					Exit Function
 				End If
 			Case ALINEACION_GUILD.ALINEACION_CIUDA
@@ -613,17 +613,17 @@ Module modGuilds
 				End If
 			Case ALINEACION_GUILD.ALINEACION_LEGION
 				If UserList(UserIndex).Faccion.FuerzasCaos <> 1 Then
-					refError = "Para fundar un clan del mal debes pertenecer a la legión oscura."
+					refError = "Para fundar un clan del mal debes pertenecer a la legiÃ³n oscura."
 					Exit Function
 				End If
 			Case ALINEACION_GUILD.ALINEACION_MASTER
 				If UserList(UserIndex).flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
-					refError = "Para fundar un clan sin alineación debes ser un dios."
+					refError = "Para fundar un clan sin alineaciÃ³n debes ser un dios."
 					Exit Function
 				End If
 			Case ALINEACION_GUILD.ALINEACION_NEUTRO
 				If UserList(UserIndex).Faccion.ArmadaReal <> 0 Or UserList(UserIndex).Faccion.FuerzasCaos <> 0 Then
-					refError = "Para fundar un clan neutro no debes pertenecer a ninguna facción."
+					refError = "Para fundar un clan neutro no debes pertenecer a ninguna facciÃ³n."
 					Exit Function
 				End If
 		End Select
@@ -877,17 +877,17 @@ Module modGuilds
 		GuildIndex = UserList(UserIndex).GuildIndex
 		
 		If GuildIndex = 0 Or GuildIndex > CANTIDADDECLANES Then
-			refError = "Tú no perteneces a ningún clan."
+			refError = "TÃº no perteneces a ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GuildIndex) Then
-			refError = "No eres el líder de tu clan"
+			refError = "No eres el lÃ­der de tu clan"
 			Exit Function
 		End If
 		
 		If guilds(GuildIndex).EleccionesAbiertas Then
-			refError = "Las elecciones ya están abiertas."
+			refError = "Las elecciones ya estÃ¡n abiertas."
 			Exit Function
 		End If
 		
@@ -911,7 +911,7 @@ Module modGuilds
 		GuildIndex = UserList(UserIndex).GuildIndex
 		
 		If GuildIndex = 0 Or GuildIndex > CANTIDADDECLANES Then
-			refError = "Tú no perteneces a ningún clan."
+			refError = "TÃº no perteneces a ningÃºn clan."
 			Exit Function
 		End If
 		
@@ -958,7 +958,7 @@ Module modGuilds
 		For i = 1 To CANTIDADDECLANES
 			If Not guilds(i) Is Nothing Then
 				If guilds(i).RevisarElecciones Then
-					Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & guilds(i).GetLeader & " es el nuevo líder de " & guilds(i).GuildName & ".", Protocol.FontTypeNames.FONTTYPE_SERVER))
+					Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & guilds(i).GetLeader & " es el nuevo lÃ­der de " & guilds(i).GuildName & ".", Protocol.FontTypeNames.FONTTYPE_SERVER))
 				End If
 			End If
 proximo: 
@@ -1089,7 +1089,7 @@ errh:
 		'***************************************************
 		'Autor: Mariano Barrou (El Oso)
 		'Last Modification: 12/10/06
-		'Las Modified By: Juan Martín Sotuyo Dodero (Maraxus)
+		'Las Modified By: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'***************************************************
 		Dim GI As Short
 		Dim guildList() As String
@@ -1232,23 +1232,23 @@ errh:
 		r_DeclararGuerra = 0
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
 		If Trim(GuildGuerra) = vbNullString Then
-			refError = "No has seleccionado ningún clan."
+			refError = "No has seleccionado ningÃºn clan."
 			Exit Function
 		End If
 		
 		GIG = GuildIndex(GuildGuerra)
 		If guilds(GI).GetRelacion(GIG) = RELACIONES_GUILD.GUERRA Then
-			refError = "Tu clan ya está en guerra con " & GuildGuerra & "."
+			refError = "Tu clan ya estÃ¡ en guerra con " & GuildGuerra & "."
 			Exit Function
 		End If
 		
@@ -1286,17 +1286,17 @@ errh:
 		
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
 		If Trim(GuildPaz) = vbNullString Then
-			refError = "No has seleccionado ningún clan."
+			refError = "No has seleccionado ningÃºn clan."
 			Exit Function
 		End If
 		
@@ -1309,7 +1309,7 @@ errh:
 		End If
 		
 		If guilds(GI).GetRelacion(GIG) <> RELACIONES_GUILD.GUERRA Then
-			refError = "No estás en guerra con ese clan."
+			refError = "No estÃ¡s en guerra con ese clan."
 			Exit Function
 		End If
 		
@@ -1341,17 +1341,17 @@ errh:
 		GI = UserList(UserIndex).GuildIndex
 		
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
 		If Trim(GuildPro) = vbNullString Then
-			refError = "No has seleccionado ningún clan."
+			refError = "No has seleccionado ningÃºn clan."
 			Exit Function
 		End If
 		
@@ -1391,17 +1391,17 @@ errh:
 		GI = UserList(UserIndex).GuildIndex
 		
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
 		If Trim(GuildPro) = vbNullString Then
-			refError = "No has seleccionado ningún clan."
+			refError = "No has seleccionado ningÃºn clan."
 			Exit Function
 		End If
 		
@@ -1439,17 +1439,17 @@ errh:
 		r_AceptarPropuestaDeAlianza = 0
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
 		If Trim(GuildAllie) = vbNullString Then
-			refError = "No has seleccionado ningún clan."
+			refError = "No has seleccionado ningÃºn clan."
 			Exit Function
 		End If
 		
@@ -1462,7 +1462,7 @@ errh:
 		End If
 		
 		If guilds(GI).GetRelacion(GIG) <> RELACIONES_GUILD.PAZ Then
-			refError = "No estás en paz con el clan, solo puedes aceptar propuesas de alianzas con alguien que estes en paz."
+			refError = "No estÃ¡s en paz con el clan, solo puedes aceptar propuesas de alianzas con alguien que estes en paz."
 			Exit Function
 		End If
 		
@@ -1495,7 +1495,7 @@ errh:
 		
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
@@ -1517,14 +1517,14 @@ errh:
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
 		'de acuerdo al tipo procedemos validando las transiciones
 		If Tipo = RELACIONES_GUILD.PAZ Then
 			If guilds(GI).GetRelacion(OtroClanGI) <> RELACIONES_GUILD.GUERRA Then
-				refError = "No estás en guerra con " & OtroClan
+				refError = "No estÃ¡s en guerra con " & OtroClan
 				Exit Function
 			End If
 		ElseIf Tipo = RELACIONES_GUILD.GUERRA Then 
@@ -1556,12 +1556,12 @@ errh:
 		
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No eres miembro de ningún clan."
+			refError = "No eres miembro de ningÃºn clan."
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan."
+			refError = "No eres el lÃ­der de tu clan."
 			Exit Function
 		End If
 		
@@ -1663,7 +1663,7 @@ errh:
 		a_RechazarAspirante = False
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No perteneces a ningún clan"
+			refError = "No perteneces a ningÃºn clan"
 			Exit Function
 		End If
 		
@@ -1728,12 +1728,12 @@ errh:
 		Personaje = UCase(Personaje)
 		
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			Call Protocol.WriteConsoleMsg(UserIndex, "No perteneces a ningún clan.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call Protocol.WriteConsoleMsg(UserIndex, "No perteneces a ningÃºn clan.", Protocol.FontTypeNames.FONTTYPE_INFO)
 			Exit Sub
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			Call Protocol.WriteConsoleMsg(UserIndex, "No eres el líder de tu clan.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call Protocol.WriteConsoleMsg(UserIndex, "No eres el lÃ­der de tu clan.", Protocol.FontTypeNames.FONTTYPE_INFO)
 			Exit Sub
 		End If
 		
@@ -1786,17 +1786,17 @@ errh:
 			Call Protocol.WriteCharacterInfo(UserIndex, Personaje, CShort(.GetValue("INIT", "Raza")), CShort(.GetValue("INIT", "Clase")), CShort(.GetValue("INIT", "Genero")), CByte(.GetValue("STATS", "ELV")), CInt(.GetValue("STATS", "GLD")), CInt(.GetValue("STATS", "Banco")), CInt(.GetValue("REP", "Promedio")), .GetValue("GUILD", "Pedidos"), GuildName, Miembro, CBool(.GetValue("FACCIONES", "EjercitoReal")), CBool(.GetValue("FACCIONES", "EjercitoCaos")), CInt(.GetValue("FACCIONES", "CiudMatados")), CInt(.GetValue("FACCIONES", "CrimMatados")))
 		End With
 		
-		'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		UserFile = Nothing
 		
 		Exit Sub
 error_Renamed: 
-		'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		UserFile = Nothing
 		If Not (FileExist(CharPath & Personaje & ".chr")) Then
 			Call LogError("El usuario " & UserList(UserIndex).name & " (" & UserIndex & " ) ha pedido los detalles del personaje " & Personaje & " que no se encuentra.")
 		Else
-			Call LogError("[" & Err.Number & "] " & Err.Description & " En la rutina SendDetallesPersonaje, por el usuario " & UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo información sobre el personaje " & Personaje)
+			Call LogError("[" & Err.Number & "] " & Err.Description & " En la rutina SendDetallesPersonaje, por el usuario " & UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo informaciÃ³n sobre el personaje " & Personaje)
 		End If
 	End Sub
 	
@@ -1831,12 +1831,12 @@ error_Renamed:
 		End If
 		
 		If Not m_EstadoPermiteEntrar(UserIndex, NuevoGuildIndex) Then
-			refError = "Tú no puedes entrar a un clan de alineación " & Alineacion2String(guilds(NuevoGuildIndex).Alineacion)
+			refError = "TÃº no puedes entrar a un clan de alineaciÃ³n " & Alineacion2String(guilds(NuevoGuildIndex).Alineacion)
 			Exit Function
 		End If
 		
 		If guilds(NuevoGuildIndex).CantidadAspirantes >= MAXASPIRANTES Then
-			refError = "El clan tiene demasiados aspirantes. Contáctate con un miembro para que procese las solicitudes."
+			refError = "El clan tiene demasiados aspirantes. ContÃ¡ctate con un miembro para que procese las solicitudes."
 			Exit Function
 		End If
 		
@@ -1877,12 +1877,12 @@ error_Renamed:
 		
 		GI = UserList(UserIndex).GuildIndex
 		If GI <= 0 Or GI > CANTIDADDECLANES Then
-			refError = "No perteneces a ningún clan"
+			refError = "No perteneces a ningÃºn clan"
 			Exit Function
 		End If
 		
 		If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-			refError = "No eres el líder de tu clan"
+			refError = "No eres el lÃ­der de tu clan"
 			Exit Function
 		End If
 		
@@ -1897,7 +1897,7 @@ error_Renamed:
 		If AspiranteUI > 0 Then
 			'pj Online
 			If Not m_EstadoPermiteEntrar(AspiranteUI, GI) Then
-				refError = Aspirante & " no puede entrar a un clan de alineación " & Alineacion2String(guilds(GI).Alineacion)
+				refError = Aspirante & " no puede entrar a un clan de alineaciÃ³n " & Alineacion2String(guilds(GI).Alineacion)
 				Call guilds(GI).RetirarAspirante(Aspirante, NroAspirante)
 				Exit Function
 			ElseIf Not UserList(AspiranteUI).GuildIndex = 0 Then 
@@ -1907,7 +1907,7 @@ error_Renamed:
 			End If
 		Else
 			If Not m_EstadoPermiteEntrarChar(Aspirante, GI) Then
-				refError = Aspirante & " no puede entrar a un clan de alineación " & Alineacion2String(guilds(GI).Alineacion)
+				refError = Aspirante & " no puede entrar a un clan de alineaciÃ³n " & Alineacion2String(guilds(GI).Alineacion)
 				Call guilds(GI).RetirarAspirante(Aspirante, NroAspirante)
 				Exit Function
 			ElseIf GetGuildIndexFromChar(Aspirante) Then 

@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module modHechizos
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module modHechizos
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	
 	Public Const HELEMENTAL_FUEGO As Short = 26
@@ -47,43 +47,43 @@ Module modHechizos
 		If MapInfo_Renamed(UserList(UserIndex).Pos.Map).MagiaSinEfecto > 0 Then Exit Sub
 		
 		Npclist(NpcIndex).CanAttack = 0
-		Dim daÒo As Short
+		Dim da√±o As Short
 		
 		With UserList(UserIndex)
 			If Hechizos(Spell).SubeHP = 1 Then
 				
-				daÒo = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+				da√±o = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(Hechizos(Spell).WAV, .Pos.X, .Pos.Y))
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char_Renamed.CharIndex, Hechizos(Spell).FXgrh, Hechizos(Spell).loops))
 				
-				.Stats.MinHp = .Stats.MinHp + daÒo
+				.Stats.MinHp = .Stats.MinHp + da√±o
 				If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
 				
-				Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Call WriteUpdateUserStats(UserIndex)
 				
 			ElseIf Hechizos(Spell).SubeHP = 2 Then 
 				
 				If .flags.Privilegios And Declaraciones.PlayerType.User Then
 					
-					daÒo = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+					da√±o = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
 					
 					If .Invent.CascoEqpObjIndex > 0 Then
-						daÒo = daÒo - RandomNumber(ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMax)
+						da√±o = da√±o - RandomNumber(ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMax)
 					End If
 					
 					If .Invent.AnilloEqpObjIndex > 0 Then
-						daÒo = daÒo - RandomNumber(ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMax)
+						da√±o = da√±o - RandomNumber(ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMax)
 					End If
 					
-					If daÒo < 0 Then daÒo = 0
+					If da√±o < 0 Then da√±o = 0
 					
 					Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(Hechizos(Spell).WAV, .Pos.X, .Pos.Y))
 					Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char_Renamed.CharIndex, Hechizos(Spell).FXgrh, Hechizos(Spell).loops))
 					
-					.Stats.MinHp = .Stats.MinHp - daÒo
+					.Stats.MinHp = .Stats.MinHp - da√±o
 					
-					Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 					Call WriteUpdateUserStats(UserIndex)
 					
 					'Muere
@@ -161,15 +161,15 @@ Module modHechizos
 		If Npclist(NpcIndex).CanAttack = 0 Then Exit Sub
 		Npclist(NpcIndex).CanAttack = 0
 		
-		Dim daÒo As Short
+		Dim da√±o As Short
 		
 		If Hechizos(Spell).SubeHP = 2 Then
 			
-			daÒo = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+			da√±o = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
 			Call SendData(modSendData.SendTarget.ToNPCArea, TargetNPC, PrepareMessagePlayWave(Hechizos(Spell).WAV, Npclist(TargetNPC).Pos.X, Npclist(TargetNPC).Pos.Y))
 			Call SendData(modSendData.SendTarget.ToNPCArea, TargetNPC, PrepareMessageCreateFX(Npclist(TargetNPC).Char_Renamed.CharIndex, Hechizos(Spell).FXgrh, Hechizos(Spell).loops))
 			
-			Npclist(TargetNPC).Stats.MinHp = Npclist(TargetNPC).Stats.MinHp - daÒo
+			Npclist(TargetNPC).Stats.MinHp = Npclist(TargetNPC).Stats.MinHp - da√±o
 			
 			'Muere
 			If Npclist(TargetNPC).Stats.MinHp < 1 Then
@@ -227,7 +227,7 @@ Errhandler:
 				Next j
 				
 				If .Stats.UserHechizos(j) <> 0 Then
-					Call WriteConsoleMsg(UserIndex, "No tienes espacio para m·s hechizos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No tienes espacio para m√°s hechizos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Else
 					.Stats.UserHechizos(j) = hIndex
 					Call UpdateUserHechizos(False, UserIndex, CByte(j))
@@ -279,7 +279,7 @@ Errhandler:
 		'Author: Unknown
 		'Last Modification: 12/01/2010
 		'Last Modification By: ZaMa
-		'06/11/09 - Corregida la bonificaciÛn de man· del mimetismo en el druida con flauta m·gica equipada.
+		'06/11/09 - Corregida la bonificaci√≥n de man√° del mimetismo en el druida con flauta m√°gica equipada.
 		'19/11/2009: ZaMa - Validacion de mana para el Invocar Mascotas
 		'12/01/2010: ZaMa - Validacion de mana para hechizos lanzados por druida.
 		'***************************************************
@@ -295,11 +295,11 @@ Errhandler:
 				If .clase = Declaraciones.eClass.Mage Then
 					If .Invent.WeaponEqpObjIndex > 0 Then
 						If ObjData_Renamed(.Invent.WeaponEqpObjIndex).StaffPower < Hechizos(HechizoIndex).NeedStaff Then
-							Call WriteConsoleMsg(UserIndex, "No posees un b·culo lo suficientemente poderoso para poder lanzar el conjuro.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "No posees un b√°culo lo suficientemente poderoso para poder lanzar el conjuro.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							Exit Function
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "No puedes lanzar este conjuro sin la ayuda de un b·culo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes lanzar este conjuro sin la ayuda de un b√°culo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					End If
 				End If
@@ -312,9 +312,9 @@ Errhandler:
 			
 			If .Stats.MinSta < Hechizos(HechizoIndex).StaRequerido Then
 				If .Genero = Declaraciones.eGenero.Hombre Then
-					Call WriteConsoleMsg(UserIndex, "Est·s muy cansado para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Est√°s muy cansado para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Est·s muy cansada para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Est√°s muy cansada para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				Exit Function
 			End If
@@ -339,7 +339,7 @@ Errhandler:
 				' Necesita tener la barra de mana completa para invocar una mascota
 				If Hechizos(HechizoIndex).Warp = 1 Then
 					If .Stats.MinMAN <> .Stats.MaxMAN Then
-						Call WriteConsoleMsg(UserIndex, "Debes poseer toda tu man· para poder lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Debes poseer toda tu man√° para poder lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 						' Si no tiene mascotas, no tiene sentido que lo use
 					ElseIf .NroMascotas = 0 Then 
@@ -350,7 +350,7 @@ Errhandler:
 			End If
 			
 			If .Stats.MinMAN < Hechizos(HechizoIndex).ManaRequerido * DruidManaBonus Then
-				Call WriteConsoleMsg(UserIndex, "No tienes suficiente man·.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No tienes suficiente man√°.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Exit Function
 			End If
 			
@@ -404,13 +404,13 @@ Errhandler:
 	' Le da propiedades al nuevo npc
 	'
 	' @param UserIndex  Indice del usuario que invoca.
-	' @param b  Indica si se termino la operaciÛn.
+	' @param b  Indica si se termino la operaci√≥n.
 	
 	Sub HechizoInvocacion(ByVal UserIndex As Short, ByRef HechizoCasteado As Boolean)
 		'***************************************************
 		'Author: Uknown
 		'Last modification: 18/11/2009
-		'Sale del sub si no hay una posiciÛn valida.
+		'Sale del sub si no hay una posici√≥n valida.
 		'18/11/2009: Optimizacion de codigo.
 		'***************************************************
 		
@@ -512,7 +512,7 @@ error_Renamed:
 				
 				ManaRequerida = Hechizos(SpellIndex).ManaRequerido
 				
-				If Hechizos(SpellIndex).Warp = 1 Then ' InvocÛ una mascota
+				If Hechizos(SpellIndex).Warp = 1 Then ' Invoc√≥ una mascota
 					' Consume toda la mana
 					ManaRequerida = .Stats.MinMAN
 				Else
@@ -629,9 +629,9 @@ error_Renamed:
 				
 				ManaRequerida = Hechizos(HechizoIndex).ManaRequerido
 				
-				' BonificaciÛn para druidas.
+				' Bonificaci√≥n para druidas.
 				If .clase = Declaraciones.eClass.Druid Then
-					' Se mostrÛ como usuario, puede ser atacado por npcs
+					' Se mostr√≥ como usuario, puede ser atacado por npcs
 					.flags.Ignorado = False
 					
 					' Solo con flauta equipada
@@ -639,7 +639,7 @@ error_Renamed:
 						If Hechizos(HechizoIndex).Mimetiza = 1 Then
 							' 50% menos de mana para mimetismo
 							ManaRequerida = ManaRequerida * 0.5
-							' Ser· ignorado hasta que pierda el efecto del mimetismo o ataque un npc
+							' Ser√° ignorado hasta que pierda el efecto del mimetismo o ataque un npc
 							.flags.Ignorado = True
 						Else
 							' 10% menos de mana para hechizos
@@ -678,7 +678,7 @@ error_Renamed:
 		With UserList(UserIndex)
 			
 			If .flags.EnConsulta Then
-				Call WriteConsoleMsg(UserIndex, "No puedes lanzar hechizos si est·s en consulta.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No puedes lanzar hechizos si est√°s en consulta.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -689,10 +689,10 @@ error_Renamed:
 							If System.Math.Abs(UserList(.flags.TargetUser).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 								Call HandleHechizoUsuario(UserIndex, SpellIndex)
 							Else
-								Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+								Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 							End If
 						Else
-							Call WriteConsoleMsg(UserIndex, "Este hechizo act˙a sÛlo sobre usuarios.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Este hechizo act√∫a s√≥lo sobre usuarios.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						End If
 						
 					Case Declaraciones.TargetType.uNPC
@@ -700,10 +700,10 @@ error_Renamed:
 							If System.Math.Abs(Npclist(.flags.TargetNPC).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 								Call HandleHechizoNPC(UserIndex, SpellIndex)
 							Else
-								Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+								Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 							End If
 						Else
-							Call WriteConsoleMsg(UserIndex, "Este hechizo sÛlo afecta a los npcs.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Este hechizo s√≥lo afecta a los npcs.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						End If
 						
 					Case Declaraciones.TargetType.uUsuariosYnpc
@@ -711,16 +711,16 @@ error_Renamed:
 							If System.Math.Abs(UserList(.flags.TargetUser).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 								Call HandleHechizoUsuario(UserIndex, SpellIndex)
 							Else
-								Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+								Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 							End If
 						ElseIf .flags.TargetNPC > 0 Then 
 							If System.Math.Abs(Npclist(.flags.TargetNPC).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 								Call HandleHechizoNPC(UserIndex, SpellIndex)
 							Else
-								Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+								Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 							End If
 						Else
-							Call WriteConsoleMsg(UserIndex, "Target inv·lido.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Target inv√°lido.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						End If
 						
 					Case Declaraciones.TargetType.uTerreno
@@ -751,8 +751,8 @@ Errhandler:
 		'26/01/2007 Pablo (ToxicWaste) - Cambios que permiten mejor manejo de ataques en los rings.
 		'26/01/2007 Pablo (ToxicWaste) - Revivir no permitido en Mapas con ResuSinEfecto
 		'02/01/2008 Marcos (ByVal) - Curar Veneno no permitido en usuarios muertos.
-		'06/28/2008 NicoNZ - AgreguÈ que se le de valor al flag Inmovilizado.
-		'17/11/2008: NicoNZ - Agregado para quitar la penalizaciÛn de vida en el ring y cambio de ecuacion.
+		'06/28/2008 NicoNZ - Agregu√© que se le de valor al flag Inmovilizado.
+		'17/11/2008: NicoNZ - Agregado para quitar la penalizaci√≥n de vida en el ring y cambio de ecuacion.
 		'13/02/2009: ZaMa - Arreglada ecuacion para quitar vida tras resucitar en rings.
 		'23/11/2009: ZaMa - Optimizacion de codigo.
 		'28/04/2010: ZaMa - Agrego Restricciones para ciudas respecto al estado atacable.
@@ -770,18 +770,18 @@ Errhandler:
 			' <-------- Agrega Invisibilidad ---------->
 			If Hechizos(HechizoIndex).Invisibilidad = 1 Then
 				If UserList(TargetIndex).flags.Muerto = 1 Then
-					Call WriteConsoleMsg(UserIndex, "°El usuario est· muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°El usuario est√° muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					HechizoCasteado = False
 					Exit Sub
 				End If
 				
 				If UserList(TargetIndex).Counters.Saliendo Then
 					If UserIndex <> TargetIndex Then
-						Call WriteConsoleMsg(UserIndex, "°El hechizo no tiene efecto!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°El hechizo no tiene efecto!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						HechizoCasteado = False
 						Exit Sub
 					Else
-						Call WriteConsoleMsg(UserIndex, "°No puedes hacerte invisible mientras te encuentras saliendo!", Protocol.FontTypeNames.FONTTYPE_WARNING)
+						Call WriteConsoleMsg(UserIndex, "¬°No puedes hacerte invisible mientras te encuentras saliendo!", Protocol.FontTypeNames.FONTTYPE_WARNING)
 						HechizoCasteado = False
 						Exit Sub
 					End If
@@ -789,7 +789,7 @@ Errhandler:
 				
 				'No usar invi mapas InviSinEfecto
 				If MapInfo_Renamed(UserList(TargetIndex).Pos.Map).InviSinEfecto > 0 Then
-					Call WriteConsoleMsg(UserIndex, "°La invisibilidad no funciona aquÌ!", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°La invisibilidad no funciona aqu√≠!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					HechizoCasteado = False
 					Exit Sub
 				End If
@@ -884,7 +884,7 @@ Errhandler:
 				
 				'Verificamos que el usuario no este muerto
 				If UserList(TargetIndex).flags.Muerto = 1 Then
-					Call WriteConsoleMsg(UserIndex, "°El usuario est· muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°El usuario est√° muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					HechizoCasteado = False
 					Exit Sub
 				End If
@@ -953,7 +953,7 @@ Errhandler:
 					HechizoCasteado = True
 					If UserList(TargetIndex).Invent.AnilloEqpObjIndex = SUPERANILLO Then
 						Call WriteConsoleMsg(TargetIndex, " Tu anillo rechaza los efectos del hechizo.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-						Call WriteConsoleMsg(UserIndex, " °El hechizo no tiene efecto!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(UserIndex, " ¬°El hechizo no tiene efecto!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 						Call FlushBuffer(TargetIndex)
 						Exit Sub
 					End If
@@ -1013,21 +1013,21 @@ Errhandler:
 					
 					'Seguro de resurreccion (solo afecta a los hechizos, no al sacerdote ni al comando de GM)
 					If UserList(TargetIndex).flags.SeguroResu Then
-						Call WriteConsoleMsg(UserIndex, "°El espÌritu no tiene intenciones de regresar al mundo de los vivos!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°El esp√≠ritu no tiene intenciones de regresar al mundo de los vivos!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						HechizoCasteado = False
 						Exit Sub
 					End If
 					
 					'No usar resu en mapas con ResuSinEfecto
 					If MapInfo_Renamed(UserList(TargetIndex).Pos.Map).ResuSinEfecto > 0 Then
-						Call WriteConsoleMsg(UserIndex, "°Revivir no est· permitido aquÌ! Retirate de la Zona si deseas utilizar el Hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Revivir no est√° permitido aqu√≠! Retirate de la Zona si deseas utilizar el Hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						HechizoCasteado = False
 						Exit Sub
 					End If
 					
-					'No podemos resucitar si nuestra barra de energÌa no est· llena. (GD: 29/04/07)
+					'No podemos resucitar si nuestra barra de energ√≠a no est√° llena. (GD: 29/04/07)
 					If .Stats.MaxSta <> .Stats.MinSta Then
-						Call WriteConsoleMsg(UserIndex, "No puedes resucitar si no tienes tu barra de energÌa llena.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes resucitar si no tienes tu barra de energ√≠a llena.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						HechizoCasteado = False
 						Exit Sub
 					End If
@@ -1038,20 +1038,20 @@ Errhandler:
 					If .clase = Declaraciones.eClass.Mage Then
 						If .Invent.WeaponEqpObjIndex > 0 Then
 							If ObjData_Renamed(.Invent.WeaponEqpObjIndex).StaffPower < Hechizos(HechizoIndex).NeedStaff Then
-								Call WriteConsoleMsg(UserIndex, "Necesitas un b·culo mejor para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "Necesitas un b√°culo mejor para lanzar este hechizo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								HechizoCasteado = False
 								Exit Sub
 							End If
 						End If
 					ElseIf .clase = Declaraciones.eClass.Bard Then 
 						If .Invent.AnilloEqpObjIndex <> LAUDELFICO And .Invent.AnilloEqpObjIndex <> LAUDMAGICO Then
-							Call WriteConsoleMsg(UserIndex, "Necesitas un instrumento m·gico para devolver la vida.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Necesitas un instrumento m√°gico para devolver la vida.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							HechizoCasteado = False
 							Exit Sub
 						End If
 					ElseIf .clase = Declaraciones.eClass.Druid Then 
 						If .Invent.AnilloEqpObjIndex <> FLAUTAELFICA And .Invent.AnilloEqpObjIndex <> FLAUTAMAGICA Then
-							Call WriteConsoleMsg(UserIndex, "Necesitas un instrumento m·gico para devolver la vida.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Necesitas un instrumento m√°gico para devolver la vida.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							HechizoCasteado = False
 							Exit Sub
 						End If
@@ -1067,7 +1067,7 @@ Errhandler:
 						If TargetIndex <> UserIndex Then
 							.Reputacion.NobleRep = .Reputacion.NobleRep + 500
 							If .Reputacion.NobleRep > MAXREP Then .Reputacion.NobleRep = MAXREP
-							Call WriteConsoleMsg(UserIndex, "°Los Dioses te sonrÌen, has ganado 500 puntos de nobleza!", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "¬°Los Dioses te sonr√≠en, has ganado 500 puntos de nobleza!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						End If
 					End If
 					
@@ -1087,7 +1087,7 @@ Errhandler:
 						.Stats.MinSta = 0
 					End With
 					
-					'Agregado para quitar la penalizaciÛn de vida en el ring y cambio de ecuacion. (NicoNZ)
+					'Agregado para quitar la penalizaci√≥n de vida en el ring y cambio de ecuacion. (NicoNZ)
 					If (TriggerZonaPelea(UserIndex, TargetIndex) <> Declaraciones.eTrigger6.TRIGGER6_PERMITE) Then
 						'Solo saco vida si es User. no quiero que exploten GMs por ahi.
 						If .flags.Privilegios And Declaraciones.PlayerType.User Then
@@ -1254,12 +1254,12 @@ Errhandler:
 								HechizoCasteado = True
 								Exit Sub
 							Else
-								Call WriteConsoleMsg(UserIndex, "SÛlo puedes remover la par·lisis de los Guardias si perteneces a su facciÛn.", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "S√≥lo puedes remover la par√°lisis de los Guardias si perteneces a su facci√≥n.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								HechizoCasteado = False
 								Exit Sub
 							End If
 							
-							Call WriteConsoleMsg(UserIndex, "Solo puedes remover la par·lisis de los NPCs que te consideren su amo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Solo puedes remover la par√°lisis de los NPCs que te consideren su amo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 							HechizoCasteado = False
 							Exit Sub
 						Else
@@ -1271,7 +1271,7 @@ Errhandler:
 									HechizoCasteado = True
 									Exit Sub
 								Else
-									Call WriteConsoleMsg(UserIndex, "Solo puedes remover la par·lisis de los Guardias si perteneces a su facciÛn.", Protocol.FontTypeNames.FONTTYPE_INFO)
+									Call WriteConsoleMsg(UserIndex, "Solo puedes remover la par√°lisis de los Guardias si perteneces a su facci√≥n.", Protocol.FontTypeNames.FONTTYPE_INFO)
 									HechizoCasteado = False
 									Exit Sub
 								End If
@@ -1279,7 +1279,7 @@ Errhandler:
 						End If
 					End If
 				Else
-					Call WriteConsoleMsg(UserIndex, "Este NPC no est· paralizado", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Este NPC no est√° paralizado", Protocol.FontTypeNames.FONTTYPE_INFO)
 					HechizoCasteado = False
 					Exit Sub
 				End If
@@ -1334,7 +1334,7 @@ Errhandler:
 					Call ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading, .Char_Renamed.WeaponAnim, .Char_Renamed.ShieldAnim, .Char_Renamed.CascoAnim)
 					
 				Else
-					Call WriteConsoleMsg(UserIndex, "SÛlo los druidas pueden mimetizarse con criaturas.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "S√≥lo los druidas pueden mimetizarse con criaturas.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 				
@@ -1353,18 +1353,18 @@ Errhandler:
 		'14/08/2007 Pablo (ToxicWaste) - Orden general.
 		'***************************************************
 		
-		Dim daÒo As Integer
+		Dim da√±o As Integer
 		
 		With Npclist(NpcIndex)
 			'Salud
 			If Hechizos(SpellIndex).SubeHP = 1 Then
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
-				daÒo = daÒo + Porcentaje(daÒo, 3 * UserList(UserIndex).Stats.ELV)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
+				da√±o = da√±o + Porcentaje(da√±o, 3 * UserList(UserIndex).Stats.ELV)
 				
 				Call InfoHechizo(UserIndex)
-				.Stats.MinHp = .Stats.MinHp + daÒo
+				.Stats.MinHp = .Stats.MinHp + da√±o
 				If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
-				Call WriteConsoleMsg(UserIndex, "Has curado " & daÒo & " puntos de vida a la criatura.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Has curado " & da√±o & " puntos de vida a la criatura.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				HechizoCasteado = True
 				
 			ElseIf Hechizos(SpellIndex).SubeHP = 2 Then 
@@ -1373,22 +1373,22 @@ Errhandler:
 					Exit Sub
 				End If
 				Call NPCAtacado(NpcIndex, UserIndex)
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
-				daÒo = daÒo + Porcentaje(daÒo, 3 * UserList(UserIndex).Stats.ELV)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
+				da√±o = da√±o + Porcentaje(da√±o, 3 * UserList(UserIndex).Stats.ELV)
 				
 				If Hechizos(SpellIndex).StaffAffected Then
 					If UserList(UserIndex).clase = Declaraciones.eClass.Mage Then
 						If UserList(UserIndex).Invent.WeaponEqpObjIndex > 0 Then
-							daÒo = (daÒo * (ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).StaffDamageBonus + 70)) / 100
-							'Aumenta daÒo segun el staff-
-							'DaÒo = (DaÒo* (70 + BonifB·culo)) / 100
+							da√±o = (da√±o * (ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).StaffDamageBonus + 70)) / 100
+							'Aumenta da√±o segun el staff-
+							'Da√±o = (Da√±o* (70 + BonifB√°culo)) / 100
 						Else
-							daÒo = daÒo * 0.7 'Baja daÒo a 70% del original
+							da√±o = da√±o * 0.7 'Baja da√±o a 70% del original
 						End If
 					End If
 				End If
 				If UserList(UserIndex).Invent.AnilloEqpObjIndex = LAUDELFICO Or UserList(UserIndex).Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
-					daÒo = daÒo * 1.04 'laud magico de los bardos
+					da√±o = da√±o * 1.04 'laud magico de los bardos
 				End If
 				
 				Call InfoHechizo(UserIndex)
@@ -1399,12 +1399,12 @@ Errhandler:
 				End If
 				
 				'Quizas tenga defenza magica el NPC. Pablo (ToxicWaste)
-				daÒo = daÒo - .Stats.defM
-				If daÒo < 0 Then daÒo = 0
+				da√±o = da√±o - .Stats.defM
+				If da√±o < 0 Then da√±o = 0
 				
-				.Stats.MinHp = .Stats.MinHp - daÒo
-				Call WriteConsoleMsg(UserIndex, "°Le has quitado " & daÒo & " puntos de vida a la criatura!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-				Call CalcularDarExp(UserIndex, NpcIndex, daÒo)
+				.Stats.MinHp = .Stats.MinHp - da√±o
+				Call WriteConsoleMsg(UserIndex, "¬°Le has quitado " & da√±o & " puntos de vida a la criatura!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call CalcularDarExp(UserIndex, NpcIndex, da√±o)
 				
 				If .Stats.MinHp < 1 Then
 					.Stats.MinHp = 0
@@ -1474,7 +1474,7 @@ Errhandler:
 		'***************************************************
 		
 		Dim SpellIndex As Short
-		Dim daÒo As Integer
+		Dim da√±o As Integer
 		Dim TargetIndex As Short
 		
 		SpellIndex = UserList(UserIndex).flags.Hechizo
@@ -1491,16 +1491,16 @@ Errhandler:
 				
 				Call InfoHechizo(UserIndex)
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinHam, Hechizos(SpellIndex).MaxHam)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinHam, Hechizos(SpellIndex).MaxHam)
 				
-				.Stats.MinHam = .Stats.MinHam + daÒo
+				.Stats.MinHam = .Stats.MinHam + da√±o
 				If .Stats.MinHam > .Stats.MaxHam Then .Stats.MinHam = .Stats.MaxHam
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & daÒo & " puntos de hambre a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & daÒo & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & da√±o & " puntos de hambre a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & da√±o & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & daÒo & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & da√±o & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 				Call WriteUpdateHungerAndThirst(TargetIndex)
@@ -1517,15 +1517,15 @@ Errhandler:
 				
 				Call InfoHechizo(UserIndex)
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinHam, Hechizos(SpellIndex).MaxHam)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinHam, Hechizos(SpellIndex).MaxHam)
 				
-				.Stats.MinHam = .Stats.MinHam - daÒo
+				.Stats.MinHam = .Stats.MinHam - da√±o
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has quitado " & daÒo & " puntos de hambre a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & daÒo & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has quitado " & da√±o & " puntos de hambre a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & da√±o & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has quitado " & daÒo & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has quitado " & da√±o & " puntos de hambre.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 				If .Stats.MinHam < 1 Then
@@ -1541,18 +1541,18 @@ Errhandler:
 				
 				Call InfoHechizo(UserIndex)
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinSed, Hechizos(SpellIndex).MaxSed)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinSed, Hechizos(SpellIndex).MaxSed)
 				
-				.Stats.MinAGU = .Stats.MinAGU + daÒo
+				.Stats.MinAGU = .Stats.MinAGU + da√±o
 				If .Stats.MinAGU > .Stats.MaxAGU Then .Stats.MinAGU = .Stats.MaxAGU
 				
 				Call WriteUpdateHungerAndThirst(TargetIndex)
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & daÒo & " puntos de sed a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & daÒo & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & da√±o & " puntos de sed a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & da√±o & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & daÒo & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & da√±o & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 				
@@ -1567,15 +1567,15 @@ Errhandler:
 				
 				Call InfoHechizo(UserIndex)
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinSed, Hechizos(SpellIndex).MaxSed)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinSed, Hechizos(SpellIndex).MaxSed)
 				
-				.Stats.MinAGU = .Stats.MinAGU - daÒo
+				.Stats.MinAGU = .Stats.MinAGU - da√±o
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has quitado " & daÒo & " puntos de sed a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & daÒo & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has quitado " & da√±o & " puntos de sed a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & da√±o & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has quitado " & daÒo & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has quitado " & da√±o & " puntos de sed.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 				If .Stats.MinAGU < 1 Then
@@ -1594,10 +1594,10 @@ Errhandler:
 				If Not CanSupportUser(UserIndex, TargetIndex) Then Exit Function
 				
 				Call InfoHechizo(UserIndex)
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinAgilidad, Hechizos(SpellIndex).MaxAgilidad)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinAgilidad, Hechizos(SpellIndex).MaxAgilidad)
 				
 				.flags.DuracionEfecto = 1200
-				.Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) = .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) + daÒo
+				.Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) = .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) + da√±o
 				If .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) > MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Declaraciones.eAtributos.Agilidad) * 2) Then .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) = MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Declaraciones.eAtributos.Agilidad) * 2)
 				
 				.flags.TomoPocion = True
@@ -1615,9 +1615,9 @@ Errhandler:
 				Call InfoHechizo(UserIndex)
 				
 				.flags.TomoPocion = True
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinAgilidad, Hechizos(SpellIndex).MaxAgilidad)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinAgilidad, Hechizos(SpellIndex).MaxAgilidad)
 				.flags.DuracionEfecto = 700
-				.Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) = .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) - daÒo
+				.Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) = .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) - da√±o
 				If .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) < MINATRIBUTOS Then .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) = MINATRIBUTOS
 				
 				Call WriteUpdateDexterity(TargetIndex)
@@ -1630,11 +1630,11 @@ Errhandler:
 				If Not CanSupportUser(UserIndex, TargetIndex) Then Exit Function
 				
 				Call InfoHechizo(UserIndex)
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinFuerza, Hechizos(SpellIndex).MaxFuerza)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinFuerza, Hechizos(SpellIndex).MaxFuerza)
 				
 				.flags.DuracionEfecto = 1200
 				
-				.Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) + daÒo
+				.Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) + da√±o
 				If .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) > MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Declaraciones.eAtributos.Fuerza) * 2) Then .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Declaraciones.eAtributos.Fuerza) * 2)
 				
 				.flags.TomoPocion = True
@@ -1653,9 +1653,9 @@ Errhandler:
 				
 				.flags.TomoPocion = True
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinFuerza, Hechizos(SpellIndex).MaxFuerza)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinFuerza, Hechizos(SpellIndex).MaxFuerza)
 				.flags.DuracionEfecto = 700
-				.Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) - daÒo
+				.Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) - da√±o
 				If .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) < MINATRIBUTOS Then .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) = MINATRIBUTOS
 				
 				Call WriteUpdateStrenght(TargetIndex)
@@ -1666,31 +1666,31 @@ Errhandler:
 				
 				'Verifica que el usuario no este muerto
 				If .flags.Muerto = 1 Then
-					Call WriteConsoleMsg(UserIndex, "°El usuario est· muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°El usuario est√° muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Function
 				End If
 				
 				' Chequea si el status permite ayudar al otro usuario
 				If Not CanSupportUser(UserIndex, TargetIndex) Then Exit Function
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
-				daÒo = daÒo + Porcentaje(daÒo, 3 * UserList(UserIndex).Stats.ELV)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
+				da√±o = da√±o + Porcentaje(da√±o, 3 * UserList(UserIndex).Stats.ELV)
 				
 				Call InfoHechizo(UserIndex)
 				
-				.Stats.MinHp = .Stats.MinHp + daÒo
+				.Stats.MinHp = .Stats.MinHp + da√±o
 				If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
 				
 				Call WriteUpdateHP(TargetIndex)
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & daÒo & " puntos de vida a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & da√±o & " puntos de vida a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
-				' <-------- Quita salud (DaÒa) ---------->
+				' <-------- Quita salud (Da√±a) ---------->
 			ElseIf Hechizos(SpellIndex).SubeHP = 2 Then 
 				
 				If UserIndex = TargetIndex Then
@@ -1698,35 +1698,35 @@ Errhandler:
 					Exit Function
 				End If
 				
-				daÒo = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
+				da√±o = RandomNumber(Hechizos(SpellIndex).MinHp, Hechizos(SpellIndex).MaxHp)
 				
-				daÒo = daÒo + Porcentaje(daÒo, 3 * UserList(UserIndex).Stats.ELV)
+				da√±o = da√±o + Porcentaje(da√±o, 3 * UserList(UserIndex).Stats.ELV)
 				
 				If Hechizos(SpellIndex).StaffAffected Then
 					If UserList(UserIndex).clase = Declaraciones.eClass.Mage Then
 						If UserList(UserIndex).Invent.WeaponEqpObjIndex > 0 Then
-							daÒo = (daÒo * (ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).StaffDamageBonus + 70)) / 100
+							da√±o = (da√±o * (ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).StaffDamageBonus + 70)) / 100
 						Else
-							daÒo = daÒo * 0.7 'Baja daÒo a 70% del original
+							da√±o = da√±o * 0.7 'Baja da√±o a 70% del original
 						End If
 					End If
 				End If
 				
 				If UserList(UserIndex).Invent.AnilloEqpObjIndex = LAUDELFICO Or UserList(UserIndex).Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
-					daÒo = daÒo * 1.04 'laud magico de los bardos
+					da√±o = da√±o * 1.04 'laud magico de los bardos
 				End If
 				
 				'cascos antimagia
 				If (.Invent.CascoEqpObjIndex > 0) Then
-					daÒo = daÒo - RandomNumber(ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMax)
+					da√±o = da√±o - RandomNumber(ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMax)
 				End If
 				
 				'anillos
 				If (.Invent.AnilloEqpObjIndex > 0) Then
-					daÒo = daÒo - RandomNumber(ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMax)
+					da√±o = da√±o - RandomNumber(ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMin, ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMax)
 				End If
 				
-				If daÒo < 0 Then daÒo = 0
+				If da√±o < 0 Then da√±o = 0
 				
 				If Not PuedeAtacar(UserIndex, TargetIndex) Then Exit Function
 				
@@ -1736,12 +1736,12 @@ Errhandler:
 				
 				Call InfoHechizo(UserIndex)
 				
-				.Stats.MinHp = .Stats.MinHp - daÒo
+				.Stats.MinHp = .Stats.MinHp - da√±o
 				
 				Call WriteUpdateHP(TargetIndex)
 				
-				Call WriteConsoleMsg(UserIndex, "Le has quitado " & daÒo & " puntos de vida a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-				Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Le has quitado " & da√±o & " puntos de vida a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				
 				'Muere
 				If .Stats.MinHp < 1 Then
@@ -1763,16 +1763,16 @@ Errhandler:
 			If Hechizos(SpellIndex).SubeMana = 1 Then
 				
 				Call InfoHechizo(UserIndex)
-				.Stats.MinMAN = .Stats.MinMAN + daÒo
+				.Stats.MinMAN = .Stats.MinMAN + da√±o
 				If .Stats.MinMAN > .Stats.MaxMAN Then .Stats.MinMAN = .Stats.MaxMAN
 				
 				Call WriteUpdateMana(TargetIndex)
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & daÒo & " puntos de man· a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & daÒo & " puntos de man·.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & da√±o & " puntos de man√° a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & da√±o & " puntos de man√°.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & daÒo & " puntos de man·.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & da√±o & " puntos de man√°.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 				
@@ -1787,13 +1787,13 @@ Errhandler:
 				Call InfoHechizo(UserIndex)
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has quitado " & daÒo & " puntos de man· a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & daÒo & " puntos de man·.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has quitado " & da√±o & " puntos de man√° a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & da√±o & " puntos de man√°.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has quitado " & daÒo & " puntos de man·.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has quitado " & da√±o & " puntos de man√°.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
-				.Stats.MinMAN = .Stats.MinMAN - daÒo
+				.Stats.MinMAN = .Stats.MinMAN - da√±o
 				If .Stats.MinMAN < 1 Then .Stats.MinMAN = 0
 				
 				Call WriteUpdateMana(TargetIndex)
@@ -1803,16 +1803,16 @@ Errhandler:
 			' <-------- Aumenta Stamina ---------->
 			If Hechizos(SpellIndex).SubeSta = 1 Then
 				Call InfoHechizo(UserIndex)
-				.Stats.MinSta = .Stats.MinSta + daÒo
+				.Stats.MinSta = .Stats.MinSta + da√±o
 				If .Stats.MinSta > .Stats.MaxSta Then .Stats.MinSta = .Stats.MaxSta
 				
 				Call WriteUpdateSta(TargetIndex)
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & daÒo & " puntos de energÌa a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & daÒo & " puntos de energÌa.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has restaurado " & da√±o & " puntos de energ√≠a a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha restaurado " & da√±o & " puntos de energ√≠a.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & daÒo & " puntos de energÌa.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has restaurado " & da√±o & " puntos de energ√≠a.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 				' <-------- Quita Stamina ---------->
@@ -1826,13 +1826,13 @@ Errhandler:
 				Call InfoHechizo(UserIndex)
 				
 				If UserIndex <> TargetIndex Then
-					Call WriteConsoleMsg(UserIndex, "Le has quitado " & daÒo & " puntos de energÌa a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & daÒo & " puntos de energÌa.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Le has quitado " & da√±o & " puntos de energ√≠a a " & .name & ".", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(TargetIndex, UserList(UserIndex).name & " te ha quitado " & da√±o & " puntos de energ√≠a.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Te has quitado " & daÒo & " puntos de energÌa.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "Te has quitado " & da√±o & " puntos de energ√≠a.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
-				.Stats.MinSta = .Stats.MinSta - daÒo
+				.Stats.MinSta = .Stats.MinSta - da√±o
 				
 				If .Stats.MinSta < 1 Then .Stats.MinSta = 0
 				
@@ -1884,13 +1884,13 @@ Errhandler:
 					
 					' Armadas no pueden ayudar
 					If esArmada(CasterIndex) Then
-						Call WriteConsoleMsg(CasterIndex, "Los miembros del ejÈrcito real no pueden ayudar a los criminales.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(CasterIndex, "Los miembros del ej√©rcito real no pueden ayudar a los criminales.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					End If
 					
 					' Si el ciuda tiene el seguro puesto no puede ayudar
 					If .flags.Seguro Then
-						Call WriteConsoleMsg(CasterIndex, "Para ayudar criminales debes sacarte el seguro ya que te volver·s criminal como ellos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(CasterIndex, "Para ayudar criminales debes sacarte el seguro ya que te volver√°s criminal como ellos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					Else
 						' Penalizacion
@@ -1906,7 +1906,7 @@ Errhandler:
 			Else
 				' Casteador es caos? => No Pueden ayudar ciudas
 				If esCaos(CasterIndex) Then
-					Call WriteConsoleMsg(CasterIndex, "Los miembros de la legiÛn oscura no pueden ayudar a los ciudadanos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(CasterIndex, "Los miembros de la legi√≥n oscura no pueden ayudar a los ciudadanos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Function
 					
 					' Casteador ciuda/army?
@@ -1920,7 +1920,7 @@ Errhandler:
 							
 							' Si es armada no puede ayudar
 							If esArmada(CasterIndex) Then
-								Call WriteConsoleMsg(CasterIndex, "Los miembros del ejÈrcito real no pueden ayudar a ciudadanos en estado atacable.", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(CasterIndex, "Los miembros del ej√©rcito real no pueden ayudar a ciudadanos en estado atacable.", Protocol.FontTypeNames.FONTTYPE_INFO)
 								Exit Function
 							End If
 							
@@ -2013,7 +2013,7 @@ Errhandler:
 		With UserList(UserIndex)
 			If Dire = 1 Then 'Mover arriba
 				If HechizoDesplazado = 1 Then
-					Call WriteConsoleMsg(UserIndex, "No puedes mover el hechizo en esa direcciÛn.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No puedes mover el hechizo en esa direcci√≥n.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				Else
 					TempHechizo = .Stats.UserHechizos(HechizoDesplazado)
@@ -2022,7 +2022,7 @@ Errhandler:
 				End If
 			Else 'mover abajo
 				If HechizoDesplazado = MAXUSERHECHIZOS Then
-					Call WriteConsoleMsg(UserIndex, "No puedes mover el hechizo en esa direcciÛn.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No puedes mover el hechizo en esa direcci√≥n.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				Else
 					TempHechizo = .Stats.UserHechizos(HechizoDesplazado)

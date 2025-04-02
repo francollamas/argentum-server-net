@@ -2,8 +2,8 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 
-' La informaci髇 general de un ensamblado se controla mediante el siguiente
-' conjunto de atributos. Cambie estos atributos para modificar la informaci髇
+' La informaci贸n general de un ensamblado se controla mediante el siguiente
+' conjunto de atributos. Cambie estos atributos para modificar la informaci贸n
 ' asociada con un ensamblado.
 
 
@@ -18,15 +18,15 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 
-' La informaci髇 de versi髇 de un ensamblado consta de los cuatro valores siguientes:
+' La informaci贸n de versi贸n de un ensamblado consta de los cuatro valores siguientes:
 
-'	Versi髇 principal
-'	Versi髇 secundaria
-'	N鷐ero de versi髇 de compilaci髇
-'	Revisi髇
+'	Versi贸n principal
+'	Versi贸n secundaria
+'	N煤mero de versi贸n de compilaci贸n
+'	Revisi贸n
 
-' Puede especificar todos los valores o establecer como predeterminados los n鷐eros de versi髇 de compilaci髇 y de revisi髇
-' mediante el asterisco ('*'), tal y como se muestra a continuaci髇:
+' Puede especificar todos los valores o establecer como predeterminados los n煤meros de versi贸n de compilaci贸n y de revisi贸n
+' mediante el asterisco ('*'), tal y como se muestra a continuaci贸n:
 
 <Assembly:  AssemblyVersion("0.13.*")>
 

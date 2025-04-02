@@ -4,7 +4,7 @@ Module SecurityIp
 	' TODO MIGRA: se modifico para NO usar CopyMemory. Quizas tenga algun problema de performance. Revisar!
 	
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -26,22 +26,22 @@ Module SecurityIp
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	'**************************************************************
 	' General_IpSecurity.Bas - Maneja la seguridad de las IPs
 	'
-	' Escrito y diseñado por DuNga (ltourrilhes@gmail.com)
+	' Escrito y diseÃ±ado por DuNga (ltourrilhes@gmail.com)
 	'**************************************************************
 	
 	'*************************************************  *************
 	' General_IpSecurity.Bas - Maneja la seguridad de las IPs
 	'
-	' Escrito y diseñado por DuNga (ltourrilhes@gmail.com)
+	' Escrito y diseÃ±ado por DuNga (ltourrilhes@gmail.com)
 	'*************************************************  *************
 	
 	Private IpTables() As Integer 'USAMOS 2 LONGS: UNO DE LA IP, SEGUIDO DE UNO DE LA INFO
@@ -111,7 +111,7 @@ Module SecurityIp
 		IpTableIndex = FindTableIp(ip, e_SecurityIpTabla.IP_INTERVALOS)
 		
 		If IpTableIndex >= 0 Then
-			If IpTables(IpTableIndex + 1) + IntervaloEntreConexiones <= GetTickCount Then 'No está saturando de connects?
+			If IpTables(IpTableIndex + 1) + IntervaloEntreConexiones <= GetTickCount Then 'No estÃ¡ saturando de connects?
 				IpTables(IpTableIndex + 1) = GetTickCount
 				IpSecurityAceptarNuevaConexion = True
 				Debug.Print("CONEXION ACEPTADA")
@@ -205,7 +205,7 @@ Module SecurityIp
 		'*************************************************    *************
 		'Author: (EL OSO)
 		'Last Modify Date: 16/2/2006
-		'Modified by Juan Martín Sotuyo Dodero (Maraxus)
+		'Modified by Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Modified to avoid using CopyMemory
 		'*************************************************    *************
 		Debug.Print("agrega conexion a " & ip)
@@ -277,7 +277,7 @@ Module SecurityIp
 		'*************************************************  *************
 		'Author: Lucio N. Tourrilhes (DuNga)
 		'Last Modify Date: Unknow
-		'Modified by Juan Martín Sotuyo Dodero (Maraxus) to use Binary Insertion
+		'Modified by Juan MartÃ­n Sotuyo Dodero (Maraxus) to use Binary Insertion
 		'*************************************************  *************
 		Dim First As Integer
 		Dim Last As Integer

@@ -3,7 +3,7 @@ Option Explicit On
 Module modHexaStrings
 	'Argentum Online 0.12.2
 	'
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'Copyright (C) 2002 Otto Perez
 	'Copyright (C) 2002 Aaron Perkins
 	'
@@ -27,14 +27,14 @@ Module modHexaStrings
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	'Modulo realizado por Gonzalo Larralde(CDT) <gonzalolarralde@yahoo.com.ar>
 	'Para la conversion a caracteres de cadenas MD5 y de
-	'semi encriptación de cadenas por ascii table offset
+	'semi encriptaciÃ³n de cadenas por ascii table offset
 	
 	
 	Public Function hexMd52Asc(ByVal MD5 As String) As String
@@ -55,7 +55,7 @@ Module modHexaStrings
 		Next i
 	End Function
 	
-	'UPGRADE_NOTE: hex se actualizó a hex_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: hex se actualizÃ³ a hex_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Function hexHex2Dec(ByVal hex_Renamed As String) As Integer
 		'***************************************************
 		'Author: Unknown

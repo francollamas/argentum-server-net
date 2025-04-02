@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module AI
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M�rquez Pablo Ignacio
+	'Copyright (C) 2002 Mï¿½rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module AI
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n�mero 983 piso 7 dto A
+	'Calle 3 nï¿½mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'C�digo Postal 1900
-	'Pablo Ignacio M�rquez
+	'Cï¿½digo Postal 1900
+	'Pablo Ignacio Mï¿½rquez
 	
 	
 	Public Enum TipoAI
@@ -52,21 +52,21 @@ Module AI
 	Public Const ELEMENTALTIERRA As Short = 94
 	Public Const ELEMENTALAGUA As Short = 92
 	
-	'Damos a los NPCs el mismo rango de visi�n que un PJ
+	'Damos a los NPCs el mismo rango de visiï¿½n que un PJ
 	Public Const RANGO_VISION_X As Byte = 8
 	Public Const RANGO_VISION_Y As Byte = 6
 	
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
 	'                        Modulo AI_NPC
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
 	'AI de los NPC
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-	'?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
+	'?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
 	
 	Private Sub GuardiasAI(ByVal NpcIndex As Short, ByVal DelCaos As Boolean)
 		'***************************************************
@@ -82,7 +82,7 @@ Module AI
 		
 		With Npclist(NpcIndex)
 			For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aqu� para obtener m�s informaci�n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				nPos = .Pos
 				If .flags.Inmovilizado = 0 Or headingloop = .Char_Renamed.heading Then
 					Call HeadtoPos(headingloop, nPos)
@@ -93,7 +93,7 @@ Module AI
 							UserProtected = UserProtected Or UserList(UI).flags.Ignorado Or UserList(UI).flags.EnConsulta
 							
 							If UserList(UI).flags.Muerto = 0 And UserList(UI).flags.AdminPerseguible And Not UserProtected Then
-								'�ES CRIMINAL?
+								'ï¿½ES CRIMINAL?
 								If Not DelCaos Then
 									If criminal(UI) Then
 										If NpcAtacaUser(NpcIndex, UI) Then
@@ -154,7 +154,7 @@ Module AI
 		
 		With Npclist(NpcIndex)
 			For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aqu� para obtener m�s informaci�n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				nPos = .Pos
 				If .flags.Inmovilizado = 0 Or .Char_Renamed.heading = headingloop Then
 					Call HeadtoPos(headingloop, nPos)
@@ -223,7 +223,7 @@ Module AI
 		
 		With Npclist(NpcIndex)
 			For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aqu� para obtener m�s informaci�n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				nPos = .Pos
 				If .flags.Inmovilizado = 0 Or .Char_Renamed.heading = headingloop Then
 					Call HeadtoPos(headingloop, nPos)
@@ -336,7 +336,7 @@ Module AI
 					
 				End If
 				
-				' No le pertenece a nadie o el due�o no esta en el rango de vision, sigue a cualquiera
+				' No le pertenece a nadie o el dueño no esta en el rango de vision, sigue a cualquiera
 				For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
 					UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
 					
@@ -364,7 +364,7 @@ Module AI
 					End If
 				Next i
 				
-				'Si llega aca es que no hab�a ning�n usuario cercano vivo.
+				'Si llega aca es que no habï¿½a ningï¿½n usuario cercano vivo.
 				'A bailar. Pablo (ToxicWaste)
 				If RandomNumber(0, 10) = 0 Then
 					Call MoveNPCChar(NpcIndex, CByte(RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST)))
@@ -385,7 +385,7 @@ Module AI
 		'Author: Unknown
 		'Last Modify by: Marco Vanotti (MarKoxX)
 		'Last Modify Date: 08/16/2008
-		'08/16/2008: MarKoxX - Now pets that do mel� attacks have to be near the enemy to attack.
+		'08/16/2008: MarKoxX - Now pets that do melï¿½ attacks have to be near the enemy to attack.
 		'**************************************************************
 		Dim tHeading As Byte
 		Dim UI As Short
@@ -425,7 +425,7 @@ Module AI
 							If UserList(UI).name = .flags.AttackedBy Then
 								If .MaestroUser > 0 Then
 									If Not criminal(.MaestroUser) And Not criminal(UI) And (UserList(.MaestroUser).flags.Seguro Or UserList(.MaestroUser).Faccion.ArmadaReal = 1) Then
-										Call WriteConsoleMsg(.MaestroUser, "La mascota no atacar� a ciudadanos si eres miembro del ej�rcito real o tienes el seguro activado.", Protocol.FontTypeNames.FONTTYPE_INFO)
+										Call WriteConsoleMsg(.MaestroUser, "La mascota no atacará a ciudadanos si eres miembro del ejército real o tienes el seguro activado.", Protocol.FontTypeNames.FONTTYPE_INFO)
 										Call FlushBuffer(.MaestroUser)
 										.flags.AttackedBy = vbNullString
 										Exit Sub
@@ -462,7 +462,7 @@ Module AI
 							If UserList(UI).name = .flags.AttackedBy Then
 								If .MaestroUser > 0 Then
 									If Not criminal(.MaestroUser) And Not criminal(UI) And (UserList(.MaestroUser).flags.Seguro Or UserList(.MaestroUser).Faccion.ArmadaReal = 1) Then
-										Call WriteConsoleMsg(.MaestroUser, "La mascota no atacar� a ciudadanos si eres miembro del ej�rcito real o tienes el seguro activado.", Protocol.FontTypeNames.FONTTYPE_INFO)
+										Call WriteConsoleMsg(.MaestroUser, "La mascota no atacará a ciudadanos si eres miembro del ejército real o tienes el seguro activado.", Protocol.FontTypeNames.FONTTYPE_INFO)
 										Call FlushBuffer(.MaestroUser)
 										.flags.AttackedBy = vbNullString
 										Call FollowAmo(NpcIndex)
@@ -833,7 +833,7 @@ Module AI
 		'Author: Unknown
 		'Last Modify by: ZaMa
 		'Last Modify Date: 15/11/2009
-		'08/16/2008: MarKoxX - Now pets that do mel� attacks have to be near the enemy to attack.
+		'08/16/2008: MarKoxX - Now pets that do melï¿½ attacks have to be near the enemy to attack.
 		'15/11/2009: ZaMa - Implementacion de npc objetos ai.
 		'**************************************************************
 		On Error GoTo ErrorHandler
@@ -841,7 +841,7 @@ Module AI
 			'<<<<<<<<<<< Ataques >>>>>>>>>>>>>>>>
 			If .MaestroUser = 0 Then
 				'Busca a alguien para atacar
-				'�Es un guardia?
+				'ï¿½Es un guardia?
 				If .NPCtype = Declaraciones.eNPCType.GuardiaReal Then
 					Call GuardiasAI(NpcIndex, False)
 				ElseIf .NPCtype = Declaraciones.eNPCType.Guardiascaos Then 
@@ -929,9 +929,9 @@ Module AI
 		
 ErrorHandler: 
 		Call LogError("NPCAI " & Npclist(NpcIndex).name & " " & Npclist(NpcIndex).MaestroUser & " " & Npclist(NpcIndex).MaestroNpc & " mapa:" & Npclist(NpcIndex).Pos.Map & " x:" & Npclist(NpcIndex).Pos.X & " y:" & Npclist(NpcIndex).Pos.Y & " Mov:" & Npclist(NpcIndex).Movement & " TargU:" & Npclist(NpcIndex).Target & " TargN:" & Npclist(NpcIndex).TargetNPC)
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aqu� para obtener m�s informaci�n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim MiNPC As npc
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aqu� para obtener m�s informaci�n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		MiNPC = Npclist(NpcIndex)
 		Call QuitarNPC(NpcIndex)
 		Call ReSpawnNpc(MiNPC)
@@ -983,7 +983,7 @@ ErrorHandler:
 		
 		With Npclist(NpcIndex)
 			tmpPos.Map = .Pos.Map
-			tmpPos.X = .PFINFO.Path(.PFINFO.CurPos).Y ' invert� las coordenadas
+			tmpPos.X = .PFINFO.Path(.PFINFO.CurPos).Y ' invertï¿½ las coordenadas
 			tmpPos.Y = .PFINFO.Path(.PFINFO.CurPos).X
 			
 			'Debug.Print "(" & tmpPos.X & "," & tmpPos.Y & ")"

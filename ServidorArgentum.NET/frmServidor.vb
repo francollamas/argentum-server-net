@@ -3,7 +3,7 @@ Option Explicit On
 Friend Class frmServidor
 	Inherits System.Windows.Forms.Form
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -25,10 +25,10 @@ Friend Class frmServidor
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Private Sub Command1_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Command1.Click
@@ -62,7 +62,7 @@ Friend Class frmServidor
 		
 		Dim sENtrada As String
 		
-		sENtrada = InputBox("Escribe ""estoy DE acuerdo"" entre comillas y con distinción de mayúsculas minúsculas para desbanear a todos los personajes.", "UnBan", "hola")
+		sENtrada = InputBox("Escribe ""estoy DE acuerdo"" entre comillas y con distinciÃ³n de mayÃºsculas minÃºsculas para desbanear a todos los personajes.", "UnBan", "hola")
 		If sENtrada = "estoy DE acuerdo" Then
 			
 			Fn = My.Application.Info.DirectoryPath & "\logs\GenteBanned.log"
@@ -105,7 +105,7 @@ Friend Class frmServidor
 		
 		Dim sENtrada As String
 		
-		sENtrada = InputBox("Escribe ""estoy DE acuerdo"" sin comillas y con distinción de mayúsculas minúsculas para desbanear a todos los personajes", "UnBan", "hola")
+		sENtrada = InputBox("Escribe ""estoy DE acuerdo"" sin comillas y con distinciÃ³n de mayÃºsculas minÃºsculas para desbanear a todos los personajes", "UnBan", "hola")
 		If sENtrada = "estoy DE acuerdo" Then
 			
 			N = BanIps.Count()
@@ -123,7 +123,7 @@ Friend Class frmServidor
 	End Sub
 	
 	Private Sub Command20_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Command20.Click
-		If MsgBox("¿Está seguro que desea reiniciar los sockets? Se cerrarán todas las conexiones activas.", MsgBoxStyle.YesNo, "Reiniciar Sockets") = MsgBoxResult.Yes Then
+		If MsgBox("Â¿EstÃ¡ seguro que desea reiniciar los sockets? Se cerrarÃ¡n todas las conexiones activas.", MsgBoxStyle.YesNo, "Reiniciar Sockets") = MsgBoxResult.Yes Then
 			Call WSApiReiniciarSockets()
 		End If
 	End Sub
@@ -149,7 +149,7 @@ Friend Class frmServidor
 	End Sub
 	
 	Private Sub Command23_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Command23.Click
-		If MsgBox("¿Está seguro que desea hacer WorldSave, guardar pjs y cerrar?", MsgBoxStyle.YesNo, "Apagar Magicamente") = MsgBoxResult.Yes Then
+		If MsgBox("Â¿EstÃ¡ seguro que desea hacer WorldSave, guardar pjs y cerrar?", MsgBoxStyle.YesNo, "Apagar Magicamente") = MsgBoxResult.Yes Then
 			Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
 			
 			FrmStat.Show()
@@ -188,7 +188,7 @@ Friend Class frmServidor
 	End Sub
 	
 	Private Sub Command3_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Command3.Click
-		If MsgBox("¡¡Atencion!! Si reinicia el servidor puede provocar la pérdida de datos de los usarios. ¿Desea reiniciar el servidor de todas maneras?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+		If MsgBox("Â¡Â¡Atencion!! Si reinicia el servidor puede provocar la pÃ©rdida de datos de los usarios. Â¿Desea reiniciar el servidor de todas maneras?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
 			Me.Visible = False
 			Call General.Restart()
 		End If
@@ -254,7 +254,7 @@ eh:
 		Call CargarForbidenWords()
 	End Sub
 	
-	'UPGRADE_WARNING: Form evento frmServidor.Deactivate tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
+	'UPGRADE_WARNING: Form evento frmServidor.Deactivate tiene un nuevo comportamiento. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
 	Private Sub frmServidor_Deactivate(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Deactivate
 		Me.Visible = False
 	End Sub
@@ -265,13 +265,13 @@ eh:
 		
 	End Sub
 	
-	'UPGRADE_NOTE: VS1.Change pasó de ser un evento a un procedimiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="4E2DC008-5EDA-4547-8317-C9316952674F"'
-	'UPGRADE_WARNING: VScrollBar evento VS1.Change tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
+	'UPGRADE_NOTE: VS1.Change pasÃ³ de ser un evento a un procedimiento. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="4E2DC008-5EDA-4547-8317-C9316952674F"'
+	'UPGRADE_WARNING: VScrollBar evento VS1.Change tiene un nuevo comportamiento. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
 	Private Sub VS1_Change(ByVal newScrollValue As Integer)
 		picCont.Top = VB6.TwipsToPixelsY(-newScrollValue)
 	End Sub
 	
-	'UPGRADE_NOTE: VS1.Scroll pasó de ser un evento a un procedimiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="4E2DC008-5EDA-4547-8317-C9316952674F"'
+	'UPGRADE_NOTE: VS1.Scroll pasÃ³ de ser un evento a un procedimiento. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="4E2DC008-5EDA-4547-8317-C9316952674F"'
 	Private Sub VS1_Scroll_Renamed(ByVal newScrollValue As Integer)
 		picCont.Top = VB6.TwipsToPixelsY(-newScrollValue)
 	End Sub

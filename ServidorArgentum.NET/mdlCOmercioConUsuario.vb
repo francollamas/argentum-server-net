@@ -38,11 +38,11 @@ Module mdlCOmercioConUsuario
 		Dim Acepto As Boolean
 		Dim Confirmo As Boolean
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El límite inferior de la matriz Objeto ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El lÃ­mite inferior de la matriz Objeto ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim Objeto(MAX_OFFER_SLOTS)
-			'UPGRADE_WARNING: El límite inferior de la matriz cant ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El lÃ­mite inferior de la matriz cant ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim cant(MAX_OFFER_SLOTS)
 		End Sub
 	End Structure
@@ -168,7 +168,7 @@ Errhandler:
 					' Quito la cantidad de oro ofrecida
 					.Stats.GLD = .Stats.GLD - .ComUsu.GoldAmount
 					' Log
-					If .ComUsu.GoldAmount > MAX_ORO_LOGUEABLE Then Call LogDesarrollo(.name & " soltó oro en comercio seguro con " & UserList(OtroUserIndex).name & ". Cantidad: " & .ComUsu.GoldAmount)
+					If .ComUsu.GoldAmount > MAX_ORO_LOGUEABLE Then Call LogDesarrollo(.name & " soltÃ³ oro en comercio seguro con " & UserList(OtroUserIndex).name & ". Cantidad: " & .ComUsu.GoldAmount)
 					' Update Usuario
 					Call WriteUpdateUserStats(UserIndex)
 					' Se la doy al otro
@@ -190,14 +190,14 @@ Errhandler:
 					
 					'Es un Objeto que tenemos que loguear? Pablo (ToxicWaste) 07/09/07
 					If ObjData_Renamed(TradingObj.ObjIndex).Log = 1 Then
-						Call LogDesarrollo(.name & " le pasó en comercio seguro a " & UserList(OtroUserIndex).name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
+						Call LogDesarrollo(.name & " le pasÃ³ en comercio seguro a " & UserList(OtroUserIndex).name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
 					End If
 					
 					'Es mucha cantidad?
 					If TradingObj.Amount > MAX_OBJ_LOGUEABLE Then
 						'Si no es de los prohibidos de loguear, lo logueamos.
 						If ObjData_Renamed(TradingObj.ObjIndex).NoLog <> 1 Then
-							Call LogDesarrollo(UserList(OtroUserIndex).name & " le pasó en comercio seguro a " & .name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
+							Call LogDesarrollo(UserList(OtroUserIndex).name & " le pasÃ³ en comercio seguro a " & .name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
 						End If
 					End If
 				End If
@@ -210,12 +210,12 @@ Errhandler:
 					' Quito la cantidad de oro ofrecida
 					.Stats.GLD = .Stats.GLD - .ComUsu.GoldAmount
 					' Log
-					If .ComUsu.GoldAmount > MAX_ORO_LOGUEABLE Then Call LogDesarrollo(.name & " soltó oro en comercio seguro con " & UserList(UserIndex).name & ". Cantidad: " & .ComUsu.GoldAmount)
+					If .ComUsu.GoldAmount > MAX_ORO_LOGUEABLE Then Call LogDesarrollo(.name & " soltÃ³ oro en comercio seguro con " & UserList(UserIndex).name & ". Cantidad: " & .ComUsu.GoldAmount)
 					' Update Usuario
 					Call WriteUpdateUserStats(OtroUserIndex)
 					'y se la doy al otro
 					UserList(UserIndex).Stats.GLD = UserList(UserIndex).Stats.GLD + .ComUsu.GoldAmount
-					If .ComUsu.GoldAmount > MAX_ORO_LOGUEABLE Then Call LogDesarrollo(UserList(UserIndex).name & " recibió oro en comercio seguro con " & .name & ". Cantidad: " & .ComUsu.GoldAmount)
+					If .ComUsu.GoldAmount > MAX_ORO_LOGUEABLE Then Call LogDesarrollo(UserList(UserIndex).name & " recibiÃ³ oro en comercio seguro con " & .name & ". Cantidad: " & .ComUsu.GoldAmount)
 					' Update Otro Usuario
 					Call WriteUpdateUserStats(UserIndex)
 					
@@ -233,14 +233,14 @@ Errhandler:
 					
 					'Es un Objeto que tenemos que loguear? Pablo (ToxicWaste) 07/09/07
 					If ObjData_Renamed(TradingObj.ObjIndex).Log = 1 Then
-						Call LogDesarrollo(.name & " le pasó en comercio seguro a " & UserList(UserIndex).name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
+						Call LogDesarrollo(.name & " le pasÃ³ en comercio seguro a " & UserList(UserIndex).name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
 					End If
 					
 					'Es mucha cantidad?
 					If TradingObj.Amount > MAX_OBJ_LOGUEABLE Then
 						'Si no es de los prohibidos de loguear, lo logueamos.
 						If ObjData_Renamed(TradingObj.ObjIndex).NoLog <> 1 Then
-							Call LogDesarrollo(.name & " le pasó en comercio seguro a " & UserList(UserIndex).name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
+							Call LogDesarrollo(.name & " le pasÃ³ en comercio seguro a " & UserList(UserIndex).name & " " & TradingObj.Amount & " " & ObjData_Renamed(TradingObj.ObjIndex).name)
 						End If
 					End If
 				End If
@@ -277,7 +277,7 @@ Errhandler:
 						If ObjIndex > 0 Then .Objeto(OfferSlot) = ObjIndex
 						.cant(OfferSlot) = .cant(OfferSlot) + Amount
 						
-						'Quitó todos los items de ese tipo
+						'QuitÃ³ todos los items de ese tipo
 						If .cant(OfferSlot) <= 0 Then
 							' Removemos el objeto para evitar conflictos
 							.Objeto(OfferSlot) = 0

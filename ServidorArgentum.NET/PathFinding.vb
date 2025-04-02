@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module PathFinding
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module PathFinding
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	'#######################################################
 	'PathFinding Module
@@ -90,7 +90,7 @@ Module PathFinding
 		Dim PrevV As tVertice
 	End Structure
 	
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz TmpArray ha cambiado de 1,1 a 0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz TmpArray ha cambiado de 1,1 a 0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Dim TmpArray(ROWS, COLUMS) As tIntermidiateWork
 	
 	Dim TilePosY As Short
@@ -102,7 +102,7 @@ Module PathFinding
 		'
 		'***************************************************
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Limites = vcolu >= 1 And vcolu <= COLUMS And vfila >= 1 And vfila <= ROWS
 	End Function
 	
@@ -132,10 +132,10 @@ Module PathFinding
 		Dim j As Short
 		'Look to North
 		j = vfila - 1
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(j, vcolu). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(j, vcolu). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Limites(j, vcolu) Then
 			If IsWalkable(MapIndex, j, vcolu, NpcIndex) Then
-				'Nos aseguramos que no hay un camino m·s corto
+				'Nos aseguramos que no hay un camino m√°s corto
 				If T(j, vcolu).DistV = MAXINT Then
 					'Actualizamos la tabla de calculos intermedios
 					T(j, vcolu).DistV = T(vfila, vcolu).DistV + 1
@@ -150,10 +150,10 @@ Module PathFinding
 		End If
 		j = vfila + 1
 		'look to south
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(j, vcolu). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(j, vcolu). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Limites(j, vcolu) Then
 			If IsWalkable(MapIndex, j, vcolu, NpcIndex) Then
-				'Nos aseguramos que no hay un camino m·s corto
+				'Nos aseguramos que no hay un camino m√°s corto
 				If T(j, vcolu).DistV = MAXINT Then
 					'Actualizamos la tabla de calculos intermedios
 					T(j, vcolu).DistV = T(vfila, vcolu).DistV + 1
@@ -167,10 +167,10 @@ Module PathFinding
 			End If
 		End If
 		'look to west
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(vfila, vcolu - 1). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(vfila, vcolu - 1). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Limites(vfila, vcolu - 1) Then
 			If IsWalkable(MapIndex, vfila, vcolu - 1, NpcIndex) Then
-				'Nos aseguramos que no hay un camino m·s corto
+				'Nos aseguramos que no hay un camino m√°s corto
 				If T(vfila, vcolu - 1).DistV = MAXINT Then
 					'Actualizamos la tabla de calculos intermedios
 					T(vfila, vcolu - 1).DistV = T(vfila, vcolu).DistV + 1
@@ -184,10 +184,10 @@ Module PathFinding
 			End If
 		End If
 		'look to east
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(vfila, vcolu + 1). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(vfila, vcolu + 1). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Limites(vfila, vcolu + 1) Then
 			If IsWalkable(MapIndex, vfila, vcolu + 1, NpcIndex) Then
-				'Nos aseguramos que no hay un camino m·s corto
+				'Nos aseguramos que no hay un camino m√°s corto
 				If T(vfila, vcolu + 1).DistV = MAXINT Then
 					'Actualizamos la tabla de calculos intermedios
 					T(vfila, vcolu + 1).DistV = T(vfila, vcolu).DistV + 1
@@ -239,7 +239,7 @@ Module PathFinding
 		
 		Do While (Not IsEmpty)
 			If steps > MaxSteps Then Exit Do
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto V. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto V. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			V = Pop
 			If V.X = tar_npc_pos.X And V.Y = tar_npc_pos.Y Then Exit Do
 			Call ProcessAdjacents(NpcMap, TmpArray, V.Y, V.X, NpcIndex)
@@ -277,9 +277,9 @@ Module PathFinding
 		miV.Y = Npclist(NpcIndex).PFINFO.Target.Y
 		
 		For i = Pasos To 1 Step -1
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().PFINFO.Path(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().PFINFO.Path(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Npclist(NpcIndex).PFINFO.Path(i) = miV
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto miV. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto miV. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			miV = TmpArray(miV.Y, miV.X).PrevV
 		Next i
 		

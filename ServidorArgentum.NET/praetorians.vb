@@ -45,7 +45,7 @@ Module PraetoriansCoopNPC
 	Private Const SONIDO_Dragon_VIVO As Short = 30
 	''ALCOBAS REALES
 	''OJO LOS BICHOS TAN HARDCODEADOS, NO CAMBIAR EL MAPA DONDE
-	''EST¡N UBICADOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	''EST√ÅN UBICADOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	''MUCHO MENOS LA COORDENADA Y DE LAS ALCOBAS YA QUE DEBE SER LA MISMA!!!
 	''(HAY FUNCIONES Q CUENTAN CON QUE ES LA MISMA!)
 	Public Const ALCOBA1_X As Short = 35
@@ -71,7 +71,7 @@ Module PraetoriansCoopNPC
 		Dim i As Short
 		N = Npclist(NpcIndex).Numero
 		i = Npclist(NpcIndex).Char_Renamed.CharIndex
-		'    Call SendData(SendTarget.ToNPCArea, NpcIndex, Npclist(NpcIndex).Pos.Map, "||" & vbGreen & "∞ Soy Pretoriano ∞" & Str(ind))
+		'    Call SendData(SendTarget.ToNPCArea, NpcIndex, Npclist(NpcIndex).Pos.Map, "||" & vbGreen & "¬∞ Soy Pretoriano ¬∞" & Str(ind))
 		Select Case Npclist(NpcIndex).Numero
 			Case PRCLER_NPC
 				esPretoriano = 1
@@ -138,7 +138,7 @@ errorh:
 				Call SendData(modSendData.SendTarget.ToNPCArea, TeleFrag, PrepareMessageCharacterMove(Npclist(TeleFrag).Char_Renamed.CharIndex, wp2.X, wp2.Y))
 				'Update map and user pos
 				MapData(wp.Map, wp.X, wp.Y).NpcIndex = 0
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Npclist(TeleFrag).Pos = wp2
 				MapData(wp2.Map, wp2.X, wp2.Y).NpcIndex = TeleFrag
 			Else
@@ -146,10 +146,10 @@ errorh:
 				Call QuitarNPC(TeleFrag)
 			End If
 		End If
-		''ya limpiÈ el lugar para el rey (wp)
+		''ya limpi√© el lugar para el rey (wp)
 		''Los otros no necesitan este caso ya que respawnan lejos
 		Dim nPos As WorldPos
-		'Busco la posicion legal mas cercana aca, aun que creo que tendrÌa que ir en el crearnpc. (NicoNZ)
+		'Busco la posicion legal mas cercana aca, aun que creo que tendr√≠a que ir en el crearnpc. (NicoNZ)
 		Call ClosestLegalPos(wp, nPos, False, True)
 		Call CrearNPC(PRKING_NPC, MAPA_PRETORIANO, nPos)
 		
@@ -284,7 +284,7 @@ errorh:
 		End Select
 		
 		''  Vamos a setear el hold on del cazador en el medio entre el rey
-		''  y el atacante. De esta manera se lo podra atacar aun asi est· lejos
+		''  y el atacante. De esta manera se lo podra atacar aun asi est√° lejos
 		''  pero sin alejarse del rango de los an hoax vorps de los
 		''  clerigos o rey. A menos q este paralizado, claro
 		
@@ -476,7 +476,7 @@ errorh:
 		Select Case quehacer
 			''case 1 esta "harcodeado" en el doble for
 			''es remover invisibilidades
-			Case 2 ''apocalipsis Rahma NaÒarak O'al
+			Case 2 ''apocalipsis Rahma Na√±arak O'al
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead(Hechizos(Npclist(npcind).Spells(DAT_APOCALIPSIS)).PalabrasMagicas, Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Cyan)))
 				Call NpcLanzaSpellSobreUser2(npcind, BestTarget, Npclist(npcind).Spells(DAT_APOCALIPSIS)) ''SPELL 1 de Mago: Apocalipsis
 			Case 3
@@ -622,7 +622,7 @@ errorh:
 						If e_p > 0 And e_p < 6 And (Not (NPCAlInd = npcind)) Then
 							hayPretorianos = True
 							
-							'Me curo mientras haya pretorianos (no es lo ideal, deberÌa no dar experiencia tampoco, pero por ahora es lo que hay)
+							'Me curo mientras haya pretorianos (no es lo ideal, deber√≠a no dar experiencia tampoco, pero por ahora es lo que hay)
 							Npclist(npcind).Stats.MinHp = Npclist(npcind).Stats.MaxHp
 						End If
 						
@@ -682,7 +682,7 @@ errorh:
 				''heading loop de ataque
 				''teclavolaespada
 				For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					nPos = Npclist(npcind).Pos
 					Call HeadtoPos(headingloop, nPos)
 					If InMapBounds(nPos.Map, nPos.X, nPos.Y) Then
@@ -781,7 +781,7 @@ errorh:
 		
 		''teclavolaespada
 		For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			nPos = Npclist(npcind).Pos
 			Call HeadtoPos(headingloop, nPos)
 			If InMapBounds(nPos.Map, nPos.X, nPos.Y) Then
@@ -852,9 +852,9 @@ errorh:
 		PJBestTarget = False
 		BestTarget = 0
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		azar = System.Math.Sign(RandomNumber(-1, 1))
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If azar = 0 Then azar = 1
 		azar2 = System.Math.Sign(RandomNumber(-1, 1))
 		If azar2 = 0 Then azar2 = 1
@@ -863,7 +863,7 @@ errorh:
 		'1) "hoaxed" friends MUST be released
 		'2) enemy shall be annihilated no matter what
 		'3) party healing if no threats
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		For X = NPCPosX + (azar * 8) To NPCPosX + (azar * -8) Step -azar
 			For Y = NPCPosY + (azar2 * 7) To NPCPosY + (azar2 * -7) Step -azar2
 				'scan combat field
@@ -909,14 +909,14 @@ errorh:
 							End If ''endif paralizado
 						End If ''end if not muerto
 					End If ''listo el analisis del tile
-				End If ''saltea el analisis si no puede atacar, en realidad no es lo "mejor" pero evita cuentas in˙tiles
+				End If ''saltea el analisis si no puede atacar, en realidad no es lo "mejor" pero evita cuentas in√∫tiles
 			Next Y
 		Next X
 		
 		''aqui (si llego) tiene el mejor target
 		Select Case quehacer
 			Case 0
-				''nada que hacer. Buscar mas alla del campo de visiÛn algun aliado, a menos
+				''nada que hacer. Buscar mas alla del campo de visi√≥n algun aliado, a menos
 				''que este paralizado pq no puedo ir
 				If Npclist(npcind).flags.Paralizado = 1 Then Exit Sub
 				
@@ -924,7 +924,7 @@ errorh:
 				
 				If NPCPosX < 50 Then centroX = ALCOBA1_X Else centroX = ALCOBA2_X
 				centroY = ALCOBA1_Y
-				''aca establecÌ el lugar de las alcobas
+				''aca establec√≠ el lugar de las alcobas
 				
 				''Este doble for busca amigos paralizados lejos para ir a rescatarlos
 				''Entra aca solo si en el area cercana al rey no hay algo mejor que
@@ -1107,7 +1107,7 @@ errorh:
 		On Error GoTo errorh
 		Dim indireccion As Short
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto indice. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto indice. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		indireccion = Npclist(paralizador).Spells(indice)
 		'' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
 		Call SendData(modSendData.SendTarget.ToNPCArea, paralizador, PrepareMessageChatOverHead(Hechizos(indireccion).PalabrasMagicas, Npclist(paralizador).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Cyan)))
@@ -1163,7 +1163,7 @@ errorh:
 		''bardea si es el rey
 		If Npclist(npcind).name = "Rey Pretoriano" Then
 			Call WriteConsoleMsg(PJEnInd, "El rey pretoriano te ha vuelto ciego ", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-			Call WriteConsoleMsg(PJEnInd, "A la distancia escuchas las siguientes palabras: °Cobarde, no eres digno de luchar conmigo si escapas! ", Protocol.FontTypeNames.FONTTYPE_VENENO)
+			Call WriteConsoleMsg(PJEnInd, "A la distancia escuchas las siguientes palabras: ¬°Cobarde, no eres digno de luchar conmigo si escapas! ", Protocol.FontTypeNames.FONTTYPE_VENENO)
 		End If
 		
 		Exit Sub
@@ -1189,7 +1189,7 @@ errorh:
 		
 		'bardea si es el rey
 		If Npclist(npcind).name = "Rey Pretoriano" Then
-			Call WriteConsoleMsg(PJEnInd, "El rey pretoriano te ha vuelto est˙pido.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+			Call WriteConsoleMsg(PJEnInd, "El rey pretoriano te ha vuelto est√∫pido.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 		End If
 		Exit Sub
 		
@@ -1213,7 +1213,7 @@ errorh:
 			UserList(PJEnInd).flags.Oculto = 0
 			Call SetInvisible(PJEnInd, UserList(PJEnInd).Char_Renamed.CharIndex, False)
 			'Call SendData(SendTarget.ToPCArea, PJEnInd, PrepareMessageSetInvisible(UserList(PJEnInd).Char.CharIndex, False))
-			Call WriteConsoleMsg(PJEnInd, "°Has sido detectado!", Protocol.FontTypeNames.FONTTYPE_VENENO)
+			Call WriteConsoleMsg(PJEnInd, "¬°Has sido detectado!", Protocol.FontTypeNames.FONTTYPE_VENENO)
 		Else
 			'sino, solo lo "iniciamos" en la sacada de invisibilidad.
 			Call WriteConsoleMsg(PJEnInd, "Comienzas a hacerte visible.", Protocol.FontTypeNames.FONTTYPE_VENENO)
@@ -1242,29 +1242,29 @@ errorh:
 		'If UserList(UserIndex).Flags.Invisible = 1 Then Exit Sub
 		
 		Npclist(NpcIndex).CanAttack = 0
-		Dim daÒo As Short
+		Dim da√±o As Short
 		
 		If Hechizos(Spell).SubeHP = 1 Then
 			
-			daÒo = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+			da√±o = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
 			Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(Hechizos(Spell).WAV, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y))
 			Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(UserList(UserIndex).Char_Renamed.CharIndex, Hechizos(Spell).FXgrh, Hechizos(Spell).loops))
 			
-			UserList(UserIndex).Stats.MinHp = UserList(UserIndex).Stats.MinHp + daÒo
+			UserList(UserIndex).Stats.MinHp = UserList(UserIndex).Stats.MinHp + da√±o
 			If UserList(UserIndex).Stats.MinHp > UserList(UserIndex).Stats.MaxHp Then UserList(UserIndex).Stats.MinHp = UserList(UserIndex).Stats.MaxHp
 			
-			Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+			Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			
 			Call WriteUpdateHP(UserIndex)
 		ElseIf Hechizos(Spell).SubeHP = 2 Then 
 			
-			daÒo = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+			da√±o = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
 			Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(Hechizos(Spell).WAV, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y))
 			Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(UserList(UserIndex).Char_Renamed.CharIndex, Hechizos(Spell).FXgrh, Hechizos(Spell).loops))
 			
-			If UserList(UserIndex).flags.Privilegios And Declaraciones.PlayerType.User Then UserList(UserIndex).Stats.MinHp = UserList(UserIndex).Stats.MinHp - daÒo
+			If UserList(UserIndex).flags.Privilegios And Declaraciones.PlayerType.User Then UserList(UserIndex).Stats.MinHp = UserList(UserIndex).Stats.MinHp - da√±o
 			
-			Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & daÒo & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+			Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & da√±o & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			
 			'Muere
 			If UserList(UserIndex).Stats.MinHp < 1 Then
@@ -1318,16 +1318,16 @@ errorh:
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("Rahma", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
 			Case 4
-				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("vÙrtax", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
+				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("v√¥rtax", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
 			Case 3
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("Zill", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
 			Case 2
-				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("y‰k‡ E'nta", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
+				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("y√§k√† E'nta", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
 			Case 1
-				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("°°Kor‡t·!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
+				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("¬°¬°Kor√†t√°!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
 			Case 0
 				Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead(vbNullString, Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime)))
@@ -1337,7 +1337,7 @@ errorh:
 				NPCPosM = Npclist(npcind).Pos.Map
 				PJInd = 0
 				indireccion = Npclist(npcind).Spells(indice)
-				''DaÒo masivo por destruccion de wand
+				''Da√±o masivo por destruccion de wand
 				For X = 8 To 95
 					For Y = 8 To 95
 						PJInd = MapData(NPCPosM, X, Y).UserIndex
@@ -1392,12 +1392,12 @@ errorh:
 	Sub GreedyWalkTo(ByVal npcorig As Short, ByVal Map As Short, ByVal X As Short, ByVal Y As Short)
 		On Error GoTo errorh
 		''  Este procedimiento es llamado cada vez que un NPC deba ir
-		''  a otro lugar en el mismo mapa. Utiliza una tÈcnica
-		''  de programaciÛn greedy no determinÌstica.
+		''  a otro lugar en el mismo mapa. Utiliza una t√©cnica
+		''  de programaci√≥n greedy no determin√≠stica.
 		''  Cada paso azaroso que me acerque al destino, es un buen paso.
-		''  Si no hay mejor paso v·lido, entonces hay que volver atr·s y reintentar.
+		''  Si no hay mejor paso v√°lido, entonces hay que volver atr√°s y reintentar.
 		''  Si no puedo moverme, me considero piketeado
-		''  La funcion es larga, pero es O(1) - orden algorÌtmico temporal constante
+		''  La funcion es larga, pero es O(1) - orden algor√≠tmico temporal constante
 		
 		'Rapsodius - Changed Mod by And for speed
 		
@@ -1413,7 +1413,7 @@ errorh:
 		NPCx = Npclist(npcorig).Pos.X
 		NPCy = Npclist(npcorig).Pos.Y
 		
-		If (NPCx = X And NPCy = Y) Then Exit Sub ''ya lleguÈ!!
+		If (NPCx = X And NPCy = Y) Then Exit Sub ''ya llegu√©!!
 		
 		
 		''  Levanto las coordenadas del destino
@@ -1509,7 +1509,7 @@ errorh:
 				Else
 					''si me muevo abajo entro en loop. Aca el algoritmo falla
 					If Npclist(npcorig).CanAttack = 1 And (RandomNumber(1, 100) > 95) Then
-						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, °Ven aquÌ!", CShort(Str(Npclist(npcorig).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, ¬°Ven aqu√≠!", CShort(Str(Npclist(npcorig).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 						Npclist(npcorig).CanAttack = 0
 					End If
 				End If
@@ -1602,7 +1602,7 @@ errorh:
 				Else
 					''si me muevo loopeo. aca falla el algoritmo
 					If Npclist(npcorig).CanAttack = 1 And (RandomNumber(1, 100) > 95) Then
-						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, °Ven aquÌ!", Npclist(npcorig).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, ¬°Ven aqu√≠!", Npclist(npcorig).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 						Npclist(npcorig).CanAttack = 0
 					End If
 				End If
@@ -1623,7 +1623,7 @@ errorh:
 				Else
 					''aca tambien falla el algoritmo
 					If Npclist(npcorig).CanAttack = 1 And (RandomNumber(1, 100) > 95) Then
-						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, °Ven aquÌ!", Npclist(npcorig).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, ¬°Ven aqu√≠!", Npclist(npcorig).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 						Npclist(npcorig).CanAttack = 0
 					End If
 				End If
@@ -1640,7 +1640,7 @@ errorh:
 				Else
 					''posible loop
 					If Npclist(npcorig).CanAttack = 1 And (RandomNumber(1, 100) > 95) Then
-						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, °Ven aquÌ!", Npclist(npcorig).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+						Call SendData(modSendData.SendTarget.ToNPCArea, npcorig, PrepareMessageChatOverHead("Maldito bastardo, ¬°Ven aqu√≠!", Npclist(npcorig).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 						Npclist(npcorig).CanAttack = 0
 					End If
 				End If
@@ -1671,7 +1671,7 @@ errorh:
 		Npclist(npcorig).Char_Renamed.heading = Declaraciones.eHeading.SOUTH
 		MapData(mapa, NPCx, NPCy + 1).NpcIndex = npcorig
 		
-		'Revisamos sidebemos cambair el ·rea
+		'Revisamos sidebemos cambair el √°rea
 		Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.SOUTH)
 		Exit Sub
 		
@@ -1697,7 +1697,7 @@ errorh:
 		Npclist(npcorig).Char_Renamed.heading = Declaraciones.eHeading.NORTH
 		MapData(mapa, NPCx, NPCy - 1).NpcIndex = npcorig
 		
-		'Revisamos sidebemos cambair el ·rea
+		'Revisamos sidebemos cambair el √°rea
 		Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.NORTH)
 		Exit Sub
 		
@@ -1722,7 +1722,7 @@ errorh:
 		Npclist(npcorig).Char_Renamed.heading = Declaraciones.eHeading.WEST
 		MapData(mapa, NPCx - 1, NPCy).NpcIndex = npcorig
 		
-		'Revisamos sidebemos cambair el ·rea
+		'Revisamos sidebemos cambair el √°rea
 		Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.WEST)
 		Exit Sub
 		
@@ -1748,7 +1748,7 @@ errorh:
 		Npclist(npcorig).Char_Renamed.heading = Declaraciones.eHeading.EAST
 		MapData(mapa, NPCx + 1, NPCy).NpcIndex = npcorig
 		
-		'Revisamos sidebemos cambair el ·rea
+		'Revisamos sidebemos cambair el √°rea
 		Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.EAST)
 		Exit Sub
 		
@@ -1798,10 +1798,10 @@ errorh:
 		'    retvalue = Npclist(npcind).Pos.X < 80 And Npclist(npcind).Pos.X > 59
 		'End If
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		retvalue = Npclist(npcind).Pos.Y > 39
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Not Npclist(npcind).Pos.Map = MAPA_PRETORIANO Then
 			EstoyMuyLejos = False
 		Else
@@ -1824,19 +1824,19 @@ errorh:
 		
 		Dim retvalue As Boolean
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Npclist(npcind).Pos.X < 50 Then
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			retvalue = Npclist(npcind).Pos.X < 43 And Npclist(npcind).Pos.X > 27
 		Else
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			retvalue = Npclist(npcind).Pos.X < 75 And Npclist(npcind).Pos.X > 59
 		End If
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		retvalue = retvalue And Npclist(npcind).Pos.Y > 19 And Npclist(npcind).Pos.Y < 31
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto npcind. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Not Npclist(npcind).Pos.Map = MAPA_PRETORIANO Then
 			EstoyLejos = False
 		Else
@@ -1854,7 +1854,7 @@ errorh:
 		On Error GoTo errorh
 		
 		''esta funcion es especialmente hecha para el mapa pretoriano
-		''Est· diseÒada para que se ignore a los PJs que estan demasiado lejos
+		''Est√° dise√±ada para que se ignore a los PJs que estan demasiado lejos
 		''evitando asi que los "lockeen" en la pelea sacandolos de combate
 		''sin matarlos. La fcion es totalmente inutil si los NPCs estan en otro mapa.
 		''Chequea la posibilidad que les hagan /racc desde otro mapa para evitar
@@ -1879,7 +1879,7 @@ errorh:
 		If (Npclist(npcind).Pos.Map = MAPA_PRETORIANO) And (UserList(PJEnInd).Pos.Map = MAPA_PRETORIANO) Then
 			''los bounds del mapa pretoriano son fijos.
 			''Esta en una posicion alcanzable si esta dentro del
-			''espacio de las alcobas reales del mapa diseÒado por mi.
+			''espacio de las alcobas reales del mapa dise√±ado por mi.
 			''Y dentro de la alcoba en el rango del perimetro de defensa
 			'' 8+8+8+8 x 7+7+7+7
 			retvalue = PJPosX > 18 And PJPosX < 49 And NPCPosX <= 51 'And NPCPosX < 49
@@ -1891,7 +1891,7 @@ errorh:
 			retvalue = retvalue Or retValue2
 			'If retvalue = False Then
 			'    If Npclist(npcind).CanAttack = 1 Then
-			'        Call SendData(SendTarget.ToNPCArea, npcind, Npclist(npcind).Pos.Map, "||" & vbYellow & "∞° Cobarde !∞" & str(Npclist(npcind).Char.CharIndex))
+			'        Call SendData(SendTarget.ToNPCArea, npcind, Npclist(npcind).Pos.Map, "||" & vbYellow & "¬∞¬° Cobarde !¬∞" & str(Npclist(npcind).Char.CharIndex))
 			'        Npclist(npcind).CanAttack = 0
 			'    End If
 			'End If
@@ -1987,7 +1987,7 @@ errorh:
 			Npclist(npcind).Pos.X = NPCPosX + 1
 			Npclist(npcind).Char_Renamed.heading = Declaraciones.eHeading.SOUTH
 			MapData(NPCPosM, NPCPosX + 1, NPCPosY + 1).NpcIndex = npcind
-			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("°°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("¬°¬°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 			Exit Sub
 		End If
 		
@@ -1999,7 +1999,7 @@ errorh:
 			Npclist(npcind).Pos.X = NPCPosX - 1
 			Npclist(npcind).Char_Renamed.heading = Declaraciones.eHeading.NORTH
 			MapData(NPCPosM, NPCPosX - 1, NPCPosY - 1).NpcIndex = npcind
-			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("°°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("¬°¬°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 			Exit Sub
 		End If
 		
@@ -2011,7 +2011,7 @@ errorh:
 			Npclist(npcind).Pos.X = NPCPosX + 1
 			Npclist(npcind).Char_Renamed.heading = Declaraciones.eHeading.EAST
 			MapData(NPCPosM, NPCPosX + 1, NPCPosY - 1).NpcIndex = npcind
-			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("°°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("¬°¬°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 			Exit Sub
 		End If
 		
@@ -2023,13 +2023,13 @@ errorh:
 			Npclist(npcind).Pos.X = NPCPosX - 1
 			Npclist(npcind).Char_Renamed.heading = Declaraciones.eHeading.WEST
 			MapData(NPCPosM, NPCPosX - 1, NPCPosY + 1).NpcIndex = npcind
-			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("°°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("¬°¬°JA JA JA JA!!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 			Exit Sub
 		End If
 		
 		''si esta aca, estamos fritos!
 		If Npclist(npcind).CanAttack = 1 Then
-			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("°Por las barbas de los antiguos reyes! °Alej·os endemoniados espectros o sufrirÈis la furia de los dioses!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+			Call SendData(modSendData.SendTarget.ToNPCArea, npcind, PrepareMessageChatOverHead("¬°Por las barbas de los antiguos reyes! ¬°Alej√°os endemoniados espectros o sufrir√©is la furia de los dioses!", Npclist(npcind).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
 			Npclist(npcind).CanAttack = 0
 		End If
 		

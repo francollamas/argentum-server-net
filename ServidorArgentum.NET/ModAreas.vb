@@ -5,7 +5,7 @@ Module ModAreas
 	' ModAreas.bas - Module to allow the usage of areas instead of maps.
 	' Saves a lot of bandwidth.
 	'
-	' Original Idea by Juan MartÌn Sotuyo Dodero (Maraxus)
+	' Original Idea by Juan Mart√≠n Sotuyo Dodero (Maraxus)
 	' (juansotuyo@gmail.com)
 	' Implemented by Lucio N. Tourrilhes (DuNga)
 	'**************************************************************
@@ -24,7 +24,7 @@ Module ModAreas
 	'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 	'**************************************************************************
 	
-	' Modulo de envio por areas compatible con la versiÛn 9.10.x ... By DuNga
+	' Modulo de envio por areas compatible con la versi√≥n 9.10.x ... By DuNga
 	
 	
 	'>>>>>>AREAS>>>>>AREAS>>>>>>>>AREAS>>>>>>>AREAS>>>>>>>>>>
@@ -47,13 +47,13 @@ Module ModAreas
 	Public Const USER_NUEVO As Byte = 255
 	
 	'Cuidado:
-	' °°°LAS AREAS EST¡N HARDCODEADAS!!!
+	' ¬°¬°¬°LAS AREAS EST√ÅN HARDCODEADAS!!!
 	Private CurDay As Byte
 	Private CurHour As Byte
 	
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz AreasInfo ha cambiado de 1,1 a 0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz AreasInfo ha cambiado de 1,1 a 0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Private AreasInfo(100, 100) As Byte
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz PosToArea ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz PosToArea ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Private PosToArea(100) As Byte
 	
 	Private AreasRecive(12) As Short
@@ -80,7 +80,7 @@ Module ModAreas
 		
 		For LoopC = 1 To 100
 			For loopX = 1 To 100
-				'Usamos 121 IDs de area para saber si pasasamos de area "m·s r·pido"
+				'Usamos 121 IDs de area para saber si pasasamos de area "m√°s r√°pido"
 				AreasInfo(LoopC, loopX) = (LoopC \ 9 + 1) * (loopX \ 9 + 1)
 			Next loopX
 		Next LoopC
@@ -89,14 +89,14 @@ Module ModAreas
 		CurDay = IIf(WeekDay(Today) > 6, 1, 2) 'A ke tipo de dia pertenece?
 		CurHour = Fix(Hour(TimeOfDay) \ 3) 'A ke parte de la hora pertenece
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz ConnGroups ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz ConnGroups ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim ConnGroups(NumMaps)
 		
 		For LoopC = 1 To NumMaps
 			ConnGroups(LoopC).OptValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
 			
 			If ConnGroups(LoopC).OptValue = 0 Then ConnGroups(LoopC).OptValue = 1
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim ConnGroups(LoopC).UserEntrys(ConnGroups(LoopC).OptValue)
 		Next LoopC
 	End Sub
@@ -105,7 +105,7 @@ Module ModAreas
 		'**************************************************************
 		'Author: Lucio N. Tourrilhes (DuNga)
 		'Last Modify Date: Unknow
-		'Es la funciÛn de autooptimizacion.... la idea es no mandar redimensionando arrays grandes todo el tiempo
+		'Es la funci√≥n de autooptimizacion.... la idea es no mandar redimensionando arrays grandes todo el tiempo
 		'**************************************************************
 		Dim LoopC As Integer
 		Dim tCurDay As Byte
@@ -123,7 +123,7 @@ Module ModAreas
 				
 				ConnGroups(LoopC).OptValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, tCurDay & "-" & tCurHour))
 				If ConnGroups(LoopC).OptValue = 0 Then ConnGroups(LoopC).OptValue = 1
-				'UPGRADE_WARNING: El lÌmite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El l√≠mite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				If ConnGroups(LoopC).OptValue >= MapInfo_Renamed(LoopC).NumUsers Then ReDim Preserve ConnGroups(LoopC).UserEntrys(ConnGroups(LoopC).OptValue)
 			Next LoopC
 			
@@ -136,7 +136,7 @@ Module ModAreas
 		'**************************************************************
 		'Author: Lucio N. Tourrilhes (DuNga)
 		'Last Modify Date: 15/07/2009
-		'Es la funciÛn clave del sistema de areas... Es llamada al mover un user
+		'Es la funci√≥n clave del sistema de areas... Es llamada al mover un user
 		'15/07/2009: ZaMa - Now it doesn't send an invisible admin char info
 		'**************************************************************
 		If UserList(UserIndex).AreasInfo.AreaID = AreasInfo(UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y) Then Exit Sub
@@ -389,7 +389,7 @@ Module ModAreas
 		Next LoopC
 		
 		If TempVal > ConnGroups(Map).OptValue Then 'Nescesito Redim?
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz ConnGroups(Map).UserEntrys ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz ConnGroups(Map).UserEntrys ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim Preserve ConnGroups(Map).UserEntrys(TempVal)
 		End If
 	End Sub
@@ -398,7 +398,7 @@ Module ModAreas
 		'**************************************************************
 		'Author: Lucio N. Tourrilhes (DuNga)
 		'Last Modify Date: 04/01/2007
-		'Modified by Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Modified by Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'   - Now the method checks for repetead users instead of trusting parameters.
 		'   - If the character is new to the map, update it
 		'**************************************************************
@@ -424,7 +424,7 @@ Module ModAreas
 			TempVal = ConnGroups(Map).CountEntrys
 			
 			If TempVal > ConnGroups(Map).OptValue Then 'Nescesito Redim
-				'UPGRADE_WARNING: El lÌmite inferior de la matriz ConnGroups(Map).UserEntrys ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El l√≠mite inferior de la matriz ConnGroups(Map).UserEntrys ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim Preserve ConnGroups(Map).UserEntrys(TempVal)
 			End If
 			

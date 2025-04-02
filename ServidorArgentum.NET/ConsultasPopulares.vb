@@ -72,7 +72,7 @@ Friend Class ConsultasPopulares
 		If pEncuestaActualNum > 0 Then
 			'cargo todas las opciones
 			CantOpciones = Val(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES"))
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz pOpciones ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz pOpciones ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim pOpciones(CantOpciones)
 			For i = 1 To CantOpciones
 				pOpciones(i) = Val(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i))

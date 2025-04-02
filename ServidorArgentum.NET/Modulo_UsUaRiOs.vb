@@ -3,7 +3,7 @@ Option Explicit On
 Imports VB = Microsoft.VisualBasic
 Module UsUaRiOs
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -25,17 +25,17 @@ Module UsUaRiOs
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 	'                        Modulo Usuarios
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 	'Rutinas de los usuarios
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 	
 	Public Sub ActStats(ByVal VictimIndex As Short, ByVal AttackerIndex As Short)
 		'***************************************************
@@ -83,7 +83,7 @@ Module UsUaRiOs
 			'Lo mata
 			'Call WriteConsoleMsg(attackerIndex, "Has matado a " & UserList(VictimIndex).name & "!", FontTypeNames.FONTTYPE_FIGHT)
 			'Call WriteConsoleMsg(attackerIndex, "Has ganado " & DaExp & " puntos de experiencia.", FontTypeNames.FONTTYPE_FIGHT)
-			'Call WriteConsoleMsg(VictimIndex, "¡" & .name & " te ha matado!", FontTypeNames.FONTTYPE_FIGHT)
+			'Call WriteConsoleMsg(VictimIndex, "Â¡" & .name & " te ha matado!", FontTypeNames.FONTTYPE_FIGHT)
 			Call WriteMultiMessage(AttackerIndex, Declaraciones.eMessages.HaveKilledUser, VictimIndex, DaExp)
 			Call WriteMultiMessage(VictimIndex, Declaraciones.eMessages.UserKill, AttackerIndex)
 			
@@ -269,7 +269,7 @@ Module UsUaRiOs
 			If IsAdminInvisible Then
 				Call EnviarDatosASlot(UserIndex, PrepareMessageCharacterRemove(.Char_Renamed.CharIndex))
 			Else
-				'Le mandamos el mensaje para que borre el personaje a los clientes que estén cerca
+				'Le mandamos el mensaje para que borre el personaje a los clientes que estÃ©n cerca
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCharacterRemove(.Char_Renamed.CharIndex))
 			End If
 			
@@ -347,7 +347,7 @@ ErrorHandler:
 		'*************************************************
 		'Author: Unknown
 		'Last modified: 15/01/2010
-		'23/07/2009: Budi - Ahora se envía el nick
+		'23/07/2009: Budi - Ahora se envÃ­a el nick
 		'15/01/2010: ZaMa - Ahora se envia el color del nick.
 		'*************************************************
 		
@@ -430,11 +430,11 @@ Errhandler:
 		'01/10/2007 Tavo - Corregido el BUG de STAT_MAXELV
 		'24/01/2007 Pablo (ToxicWaste) - Agrego modificaciones en ELU al subir de nivel.
 		'24/01/2007 Pablo (ToxicWaste) - Agrego modificaciones de la subida de mana de los magos por lvl.
-		'13/03/2007 Pablo (ToxicWaste) - Agrego diferencias entre el 18 y el 19 en Constitución.
-		'09/01/2008 Pablo (ToxicWaste) - Ahora el incremento de vida por Consitución se controla desde Balance.dat
-		'12/09/2008 Marco Vanotti (Marco) - Ahora si se llega a nivel 25 y está en un clan, se lo expulsa para no sumar antifacción
+		'13/03/2007 Pablo (ToxicWaste) - Agrego diferencias entre el 18 y el 19 en ConstituciÃ³n.
+		'09/01/2008 Pablo (ToxicWaste) - Ahora el incremento de vida por ConsituciÃ³n se controla desde Balance.dat
+		'12/09/2008 Marco Vanotti (Marco) - Ahora si se llega a nivel 25 y estÃ¡ en un clan, se lo expulsa para no sumar antifacciÃ³n
 		'02/03/2009 ZaMa - Arreglada la validacion de expulsion para miembros de clanes faccionarios que llegan a 25.
-		'11/19/2009 Pato - Modifico la nueva fórmula de maná ganada para el bandido y se la limito a 499
+		'11/19/2009 Pato - Modifico la nueva fÃ³rmula de manÃ¡ ganada para el bandido y se la limito a 499
 		'02/04/2010: ZaMa - Modifico la ganancia de hit por nivel del ladron.
 		'*************************************************
 		Dim Pts As Short
@@ -445,7 +445,7 @@ Errhandler:
 		Dim WasNewbie As Boolean
 		Dim Promedio As Double
 		Dim aux As Short
-		'UPGRADE_WARNING: El límite inferior de la matriz DistVida ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El lÃ­mite inferior de la matriz DistVida ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		Dim DistVida(5) As Short
 		Dim GI As Short 'Guild Index
 		
@@ -456,7 +456,7 @@ Errhandler:
 		With UserList(UserIndex)
 			Do While .Stats.Exp >= .Stats.ELU
 				
-				'Checkea si alcanzó el máximo nivel
+				'Checkea si alcanzÃ³ el mÃ¡ximo nivel
 				If .Stats.ELV >= STAT_MAXELV Then
 					.Stats.Exp = 0
 					.Stats.ELU = 0
@@ -467,7 +467,7 @@ Errhandler:
 				Call Statistics.UserLevelUp(UserIndex)
 				
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_NIVEL, .Pos.X, .Pos.Y))
-				Call WriteConsoleMsg(UserIndex, "¡Has subido de nivel!", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Â¡Has subido de nivel!", Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 				If .Stats.ELV = 1 Then
 					Pts = 10
@@ -610,7 +610,7 @@ Errhandler:
 				.Stats.MaxMAN = .Stats.MaxMAN + AumentoMANA
 				If .Stats.MaxMAN > STAT_MAXMAN Then .Stats.MaxMAN = STAT_MAXMAN
 				
-				'Actualizamos Golpe Máximo
+				'Actualizamos Golpe MÃ¡ximo
 				.Stats.MaxHIT = .Stats.MaxHIT + AumentoHIT
 				If .Stats.ELV < 36 Then
 					If .Stats.MaxHIT > STAT_MAXHIT_UNDER36 Then .Stats.MaxHIT = STAT_MAXHIT_UNDER36
@@ -618,7 +618,7 @@ Errhandler:
 					If .Stats.MaxHIT > STAT_MAXHIT_OVER36 Then .Stats.MaxHIT = STAT_MAXHIT_OVER36
 				End If
 				
-				'Actualizamos Golpe Mínimo
+				'Actualizamos Golpe MÃ­nimo
 				.Stats.MinHIT = .Stats.MinHIT + AumentoHIT
 				If .Stats.ELV < 36 Then
 					If .Stats.MinHIT > STAT_MAXHIT_UNDER36 Then .Stats.MinHIT = STAT_MAXHIT_UNDER36
@@ -631,14 +631,14 @@ Errhandler:
 					Call WriteConsoleMsg(UserIndex, "Has ganado " & AumentoHP & " puntos de vida.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				If AumentoSTA > 0 Then
-					Call WriteConsoleMsg(UserIndex, "Has ganado " & AumentoSTA & " puntos de energía.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Has ganado " & AumentoSTA & " puntos de energÃ­a.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				If AumentoMANA > 0 Then
-					Call WriteConsoleMsg(UserIndex, "Has ganado " & AumentoMANA & " puntos de maná.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Has ganado " & AumentoMANA & " puntos de manÃ¡.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				If AumentoHIT > 0 Then
-					Call WriteConsoleMsg(UserIndex, "Tu golpe máximo aumentó en " & AumentoHIT & " puntos.", Protocol.FontTypeNames.FONTTYPE_INFO)
-					Call WriteConsoleMsg(UserIndex, "Tu golpe mínimo aumentó en " & AumentoHIT & " puntos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Tu golpe mÃ¡ximo aumentÃ³ en " & AumentoHIT & " puntos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Tu golpe mÃ­nimo aumentÃ³ en " & AumentoHIT & " puntos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				
 				Call LogDesarrollo(.name & " paso a nivel " & .Stats.ELV & " gano HP: " & AumentoHP)
@@ -656,7 +656,7 @@ Errhandler:
 							'We get here, so guild has factionary alignment, we have to expulse the user
 							Call modGuilds.m_EcharMiembroDeClan(-1, .name)
 							Call SendData(modSendData.SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg(.name & " deja el clan.", Protocol.FontTypeNames.FONTTYPE_GUILD))
-							Call WriteConsoleMsg(UserIndex, "¡Ya tienes la madurez suficiente como para decidir bajo que estandarte pelearás! Por esta razón, hasta tanto no te enlistes en la facción bajo la cual tu clan está alineado, estarás excluído del mismo.", Protocol.FontTypeNames.FONTTYPE_GUILD)
+							Call WriteConsoleMsg(UserIndex, "Â¡Ya tienes la madurez suficiente como para decidir bajo que estandarte pelearÃ¡s! Por esta razÃ³n, hasta tanto no te enlistes en la facciÃ³n bajo la cual tu clan estÃ¡ alineado, estarÃ¡s excluÃ­do del mismo.", Protocol.FontTypeNames.FONTTYPE_GUILD)
 						End If
 					End If
 				End If
@@ -717,7 +717,7 @@ Errhandler:
 		Dim CasPerPos As WorldPos
 		
 		sailing = PuedeAtravesarAgua(UserIndex)
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		nPos = UserList(UserIndex).Pos
 		Call HeadtoPos(nHeading, nPos)
 		
@@ -740,7 +740,7 @@ Errhandler:
 						End If
 						
 						CasperHeading = InvertHeading(nHeading)
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto CasPerPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto CasPerPos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						CasPerPos = UserList(CasperIndex).Pos
 						Call HeadtoPos(CasperHeading, CasPerPos)
 						
@@ -752,14 +752,14 @@ Errhandler:
 							Call WriteForceCharMove(CasperIndex, CasperHeading)
 							
 							'Update map and user pos
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							.Pos = CasPerPos
 							.Char_Renamed.heading = CasperHeading
 							MapData(.Pos.Map, CasPerPos.X, CasPerPos.Y).UserIndex = CasperIndex
 							
 						End With
 						
-						'Actualizamos las áreas de ser necesario
+						'Actualizamos las Ã¡reas de ser necesario
 						Call ModAreas.CheckUpdateNeededUser(CasperIndex, CasperHeading)
 					End If
 				End If
@@ -780,12 +780,12 @@ Errhandler:
 					MapData(UserList(UserIndex).Pos.Map, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y).UserIndex = 0
 				End If
 				
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				UserList(UserIndex).Pos = nPos
 				UserList(UserIndex).Char_Renamed.heading = nHeading
 				MapData(UserList(UserIndex).Pos.Map, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y).UserIndex = UserIndex
 				
-				'Actualizamos las áreas de ser necesario
+				'Actualizamos las Ã¡reas de ser necesario
 				Call ModAreas.CheckUpdateNeededUser(UserIndex, nHeading)
 			Else
 				Call WritePosUpdate(UserIndex)
@@ -818,7 +818,7 @@ Errhandler:
 		End Select
 	End Function
 	
-	'UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Object se actualizÃ³ a Object_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Sub ChangeUserInv(ByVal UserIndex As Short, ByVal Slot As Byte, ByRef Object_Renamed As UserOBJ)
 		'***************************************************
 		'Author: Unknown
@@ -826,7 +826,7 @@ Errhandler:
 		'
 		'***************************************************
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Invent.Object(Slot). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Invent.Object(Slot). Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		UserList(UserIndex).Invent.Object_Renamed(Slot) = Object_Renamed
 		Call WriteChangeInventorySlot(UserIndex, Slot)
 	End Sub
@@ -882,9 +882,9 @@ Errhandler:
 		Dim TempSecs As Integer
 		Dim tempStr As String
 		With UserList(UserIndex)
-			Call WriteConsoleMsg(sendIndex, "Estadísticas de: " & .name, Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(sendIndex, "EstadÃ­sticas de: " & .name, Protocol.FontTypeNames.FONTTYPE_INFO)
 			Call WriteConsoleMsg(sendIndex, "Nivel: " & .Stats.ELV & "  EXP: " & .Stats.Exp & "/" & .Stats.ELU, Protocol.FontTypeNames.FONTTYPE_INFO)
-			Call WriteConsoleMsg(sendIndex, "Salud: " & .Stats.MinHp & "/" & .Stats.MaxHp & "  Maná: " & .Stats.MinMAN & "/" & .Stats.MaxMAN & "  Energía: " & .Stats.MinSta & "/" & .Stats.MaxSta, Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(sendIndex, "Salud: " & .Stats.MinHp & "/" & .Stats.MaxHp & "  ManÃ¡: " & .Stats.MinMAN & "/" & .Stats.MaxMAN & "  EnergÃ­a: " & .Stats.MinSta & "/" & .Stats.MaxSta, Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 			If .Invent.WeaponEqpObjIndex > 0 Then
 				Call WriteConsoleMsg(sendIndex, "Menor Golpe/Mayor Golpe: " & .Stats.MinHIT & "/" & .Stats.MaxHIT & " (" & ObjData_Renamed(.Invent.WeaponEqpObjIndex).MinHIT & "/" & ObjData_Renamed(.Invent.WeaponEqpObjIndex).MaxHIT & ")", Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -894,25 +894,25 @@ Errhandler:
 			
 			If .Invent.ArmourEqpObjIndex > 0 Then
 				If .Invent.EscudoEqpObjIndex > 0 Then
-					Call WriteConsoleMsg(sendIndex, "(CUERPO) Mín Def/Máx Def: " & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MinDef + ObjData_Renamed(.Invent.EscudoEqpObjIndex).MinDef & "/" & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MaxDef + ObjData_Renamed(.Invent.EscudoEqpObjIndex).MaxDef, Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(sendIndex, "(CUERPO) MÃ­n Def/MÃ¡x Def: " & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MinDef + ObjData_Renamed(.Invent.EscudoEqpObjIndex).MinDef & "/" & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MaxDef + ObjData_Renamed(.Invent.EscudoEqpObjIndex).MaxDef, Protocol.FontTypeNames.FONTTYPE_INFO)
 				Else
-					Call WriteConsoleMsg(sendIndex, "(CUERPO) Mín Def/Máx Def: " & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MinDef & "/" & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MaxDef, Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(sendIndex, "(CUERPO) MÃ­n Def/MÃ¡x Def: " & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MinDef & "/" & ObjData_Renamed(.Invent.ArmourEqpObjIndex).MaxDef, Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 			Else
-				Call WriteConsoleMsg(sendIndex, "(CUERPO) Mín Def/Máx Def: 0", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "(CUERPO) MÃ­n Def/MÃ¡x Def: 0", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 			
 			If .Invent.CascoEqpObjIndex > 0 Then
-				Call WriteConsoleMsg(sendIndex, "(CABEZA) Mín Def/Máx Def: " & ObjData_Renamed(.Invent.CascoEqpObjIndex).MinDef & "/" & ObjData_Renamed(.Invent.CascoEqpObjIndex).MaxDef, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "(CABEZA) MÃ­n Def/MÃ¡x Def: " & ObjData_Renamed(.Invent.CascoEqpObjIndex).MinDef & "/" & ObjData_Renamed(.Invent.CascoEqpObjIndex).MaxDef, Protocol.FontTypeNames.FONTTYPE_INFO)
 			Else
-				Call WriteConsoleMsg(sendIndex, "(CABEZA) Mín Def/Máx Def: 0", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "(CABEZA) MÃ­n Def/MÃ¡x Def: 0", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 			
 			GuildI = .GuildIndex
 			If GuildI > 0 Then
 				Call WriteConsoleMsg(sendIndex, "Clan: " & modGuilds.GuildName(GuildI), Protocol.FontTypeNames.FONTTYPE_INFO)
 				If UCase(modGuilds.GuildLeader(GuildI)) = UCase(.name) Then
-					Call WriteConsoleMsg(sendIndex, "Status: Líder", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(sendIndex, "Status: LÃ­der", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				'guildpts no tienen objeto
 			End If
@@ -923,7 +923,7 @@ Errhandler:
 			Call WriteConsoleMsg(sendIndex, "Logeado hace: " & Hour(TempDate) & ":" & Minute(TempDate) & ":" & Second(TempDate), Protocol.FontTypeNames.FONTTYPE_INFO)
 			Call WriteConsoleMsg(sendIndex, "Total: " & tempStr, Protocol.FontTypeNames.FONTTYPE_INFO)
 			
-			Call WriteConsoleMsg(sendIndex, "Oro: " & .Stats.GLD & "  Posición: " & .Pos.X & "," & .Pos.Y & " en mapa " & .Pos.Map, Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(sendIndex, "Oro: " & .Stats.GLD & "  PosiciÃ³n: " & .Pos.X & "," & .Pos.Y & " en mapa " & .Pos.Map, Protocol.FontTypeNames.FONTTYPE_INFO)
 			Call WriteConsoleMsg(sendIndex, "Dados: " & .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) & ", " & .Stats.UserAtributos(Declaraciones.eAtributos.Agilidad) & ", " & .Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia) & ", " & .Stats.UserAtributos(Declaraciones.eAtributos.Carisma) & ", " & .Stats.UserAtributos(Declaraciones.eAtributos.Constitucion), Protocol.FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
@@ -933,7 +933,7 @@ Errhandler:
 		'Author: Unknown
 		'Last modified: 23/01/2007
 		'Shows the users Stats when the user is online.
-		'23/01/2007 Pablo (ToxicWaste) - Agrego de funciones y mejora de distribución de parámetros.
+		'23/01/2007 Pablo (ToxicWaste) - Agrego de funciones y mejora de distribuciÃ³n de parÃ¡metros.
 		'*************************************************
 		With UserList(UserIndex)
 			Call WriteConsoleMsg(sendIndex, "Pj: " & .name, Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -943,22 +943,22 @@ Errhandler:
 			Call WriteConsoleMsg(sendIndex, "Pena: " & .Counters.Pena, Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 			If .Faccion.ArmadaReal = 1 Then
-				Call WriteConsoleMsg(sendIndex, "Ejército real desde: " & .Faccion.FechaIngreso, Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Ingresó en nivel: " & .Faccion.NivelIngreso & " con " & .Faccion.MatadosIngreso & " ciudadanos matados.", Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "EjÃ©rcito real desde: " & .Faccion.FechaIngreso, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "IngresÃ³ en nivel: " & .Faccion.NivelIngreso & " con " & .Faccion.MatadosIngreso & " ciudadanos matados.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 			ElseIf .Faccion.FuerzasCaos = 1 Then 
-				Call WriteConsoleMsg(sendIndex, "Legión oscura desde: " & .Faccion.FechaIngreso, Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Ingresó en nivel: " & .Faccion.NivelIngreso, Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "LegiÃ³n oscura desde: " & .Faccion.FechaIngreso, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "IngresÃ³ en nivel: " & .Faccion.NivelIngreso, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 			ElseIf .Faccion.RecibioExpInicialReal = 1 Then 
-				Call WriteConsoleMsg(sendIndex, "Fue ejército real", Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Fue ejÃ©rcito real", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 			ElseIf .Faccion.RecibioExpInicialCaos = 1 Then 
-				Call WriteConsoleMsg(sendIndex, "Fue legión oscura", Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Fue legiÃ³n oscura", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & .Faccion.Reenlistadas, Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 			
 			Call WriteConsoleMsg(sendIndex, "Asesino: " & .Reputacion.AsesinoRep, Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -975,7 +975,7 @@ Errhandler:
 		'Author: Unknown
 		'Last modified: 23/01/2007
 		'Shows the users Stats when the user is offline.
-		'23/01/2007 Pablo (ToxicWaste) - Agrego de funciones y mejora de distribución de parámetros.
+		'23/01/2007 Pablo (ToxicWaste) - Agrego de funciones y mejora de distribuciÃ³n de parÃ¡metros.
 		'*************************************************
 		Dim CharFile As String
 		Dim Ban As String
@@ -992,22 +992,22 @@ Errhandler:
 			Call WriteConsoleMsg(sendIndex, "Pena: " & GetVar(CharFile, "COUNTERS", "PENA"), Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 			If CByte(GetVar(CharFile, "FACCIONES", "EjercitoReal")) = 1 Then
-				Call WriteConsoleMsg(sendIndex, "Ejército real desde: " & GetVar(CharFile, "FACCIONES", "FechaIngreso"), Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Ingresó en nivel: " & CShort(GetVar(CharFile, "FACCIONES", "NivelIngreso")) & " con " & CShort(GetVar(CharFile, "FACCIONES", "MatadosIngreso")) & " ciudadanos matados.", Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "EjÃ©rcito real desde: " & GetVar(CharFile, "FACCIONES", "FechaIngreso"), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "IngresÃ³ en nivel: " & CShort(GetVar(CharFile, "FACCIONES", "NivelIngreso")) & " con " & CShort(GetVar(CharFile, "FACCIONES", "MatadosIngreso")) & " ciudadanos matados.", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 			ElseIf CByte(GetVar(CharFile, "FACCIONES", "EjercitoCaos")) = 1 Then 
-				Call WriteConsoleMsg(sendIndex, "Legión oscura desde: " & GetVar(CharFile, "FACCIONES", "FechaIngreso"), Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Ingresó en nivel: " & CShort(GetVar(CharFile, "FACCIONES", "NivelIngreso")), Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "LegiÃ³n oscura desde: " & GetVar(CharFile, "FACCIONES", "FechaIngreso"), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "IngresÃ³ en nivel: " & CShort(GetVar(CharFile, "FACCIONES", "NivelIngreso")), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 			ElseIf CByte(GetVar(CharFile, "FACCIONES", "rExReal")) = 1 Then 
-				Call WriteConsoleMsg(sendIndex, "Fue ejército real", Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Fue ejÃ©rcito real", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
 				
 			ElseIf CByte(GetVar(CharFile, "FACCIONES", "rExCaos")) = 1 Then 
-				Call WriteConsoleMsg(sendIndex, "Fue legión oscura", Protocol.FontTypeNames.FONTTYPE_INFO)
-				Call WriteConsoleMsg(sendIndex, "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Fue legiÃ³n oscura", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(sendIndex, "Veces que ingresÃ³: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")), Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 			
 			
@@ -1113,7 +1113,7 @@ Errhandler:
 		If Npclist(NpcIndex).MaestroUser > 0 Then
 			EsMascotaCiudadano = Not criminal(Npclist(NpcIndex).MaestroUser)
 			If EsMascotaCiudadano Then
-				Call WriteConsoleMsg(Npclist(NpcIndex).MaestroUser, "¡¡" & UserList(UserIndex).name & " esta atacando tu mascota!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(Npclist(NpcIndex).MaestroUser, "Â¡Â¡" & UserList(UserIndex).name & " esta atacando tu mascota!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 		End If
 	End Function
@@ -1124,7 +1124,7 @@ Errhandler:
 		'Last Modification: 02/04/2010
 		'24/01/2007 -> Pablo (ToxicWaste): Agrego para que se actualize el tag si corresponde.
 		'24/07/2007 -> Pablo (ToxicWaste): Guardar primero que ataca NPC y el que atacas ahora.
-		'06/28/2008 -> NicoNZ: Los elementales al atacarlos por su amo no se paran más al lado de él sin hacer nada.
+		'06/28/2008 -> NicoNZ: Los elementales al atacarlos por su amo no se paran mÃ¡s al lado de Ã©l sin hacer nada.
 		'02/04/2010: ZaMa: Un ciuda no se vuelve mas criminal al atacar un npc no hostil.
 		'**********************************************
 		Dim EraCriminal As Boolean
@@ -1193,7 +1193,7 @@ Errhandler:
 			End If
 		End If
 	End Sub
-	Public Function PuedeApuñalar(ByVal UserIndex As Short) As Boolean
+	Public Function PuedeApuÃ±alar(ByVal UserIndex As Short) As Boolean
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: -
@@ -1201,8 +1201,8 @@ Errhandler:
 		'***************************************************
 		
 		If UserList(UserIndex).Invent.WeaponEqpObjIndex > 0 Then
-			If ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).Apuñala = 1 Then
-				PuedeApuñalar = UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Apuñalar) >= MIN_APUÑALAR Or UserList(UserIndex).clase = Declaraciones.eClass.Assasin
+			If ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).ApuÃ±ala = 1 Then
+				PuedeApuÃ±alar = UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.ApuÃ±alar) >= MIN_APUÃ‘ALAR Or UserList(UserIndex).clase = Declaraciones.eClass.Assasin
 			End If
 		End If
 	End Function
@@ -1259,12 +1259,12 @@ Errhandler:
 					
 					If .ExpSkills(Skill) >= .EluSkills(Skill) Then
 						.UserSkills(Skill) = .UserSkills(Skill) + 1
-						Call WriteConsoleMsg(UserIndex, "¡Has mejorado tu skill " & SkillsNames(Skill) & " en un punto! Ahora tienes " & .UserSkills(Skill) & " pts.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Has mejorado tu skill " & SkillsNames(Skill) & " en un punto! Ahora tienes " & .UserSkills(Skill) & " pts.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						
 						.Exp = .Exp + 50
 						If .Exp > MAXEXP Then .Exp = MAXEXP
 						
-						Call WriteConsoleMsg(UserIndex, "¡Has ganado 50 puntos de experiencia!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(UserIndex, "Â¡Has ganado 50 puntos de experiencia!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 						
 						Call WriteUpdateExp(UserIndex)
 						Call CheckUserLevel(UserIndex)
@@ -1483,7 +1483,7 @@ Errhandler:
 		Exit Sub
 		
 ErrorHandler: 
-		Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " Descripción: " & Err.Description)
+		Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " DescripciÃ³n: " & Err.Description)
 	End Sub
 	
 	Sub ContarMuerte(ByVal Muerto As Short, ByVal Atacante As Short)
@@ -1605,7 +1605,7 @@ ErrorHandler:
 				End If
 				
 				'Si el mapa al que entro NO ES superficial AND en el que estaba TAMPOCO ES superficial, ENTONCES
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nextMap. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nextMap. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				nextMap = IIf(distanceToCities(Map).distanceToCity(.Hogar) >= 0, True, False)
 				previousMap = IIf(distanceToCities(.Pos.Map).distanceToCity(.Hogar) >= 0, True, False)
 				
@@ -1613,7 +1613,7 @@ ErrorHandler:
 					'NO PASA NADA PORQUE NO ENTRO A UN DUNGEON.
 				ElseIf previousMap And Not nextMap Then  '139 => 140 (139 es superficial, 140 no. Por lo tanto 139 es el ultimo mapa superficial)
 					.flags.lastMap = .Pos.Map
-				ElseIf Not previousMap And nextMap Then  '140 => 139 (140 es no es superficial, 139 si. Por lo tanto, el último mapa es 0 ya que no esta en un dungeon)
+				ElseIf Not previousMap And nextMap Then  '140 => 139 (140 es no es superficial, 139 si. Por lo tanto, el Ãºltimo mapa es 0 ya que no esta en un dungeon)
 					.flags.lastMap = 0
 				ElseIf Not previousMap And Not nextMap Then  '140 => 141 (Ninguno es superficial, el ultimo mapa es el mismo de antes)
 					.flags.lastMap = .flags.lastMap
@@ -1747,7 +1747,7 @@ ErrorHandler:
 				Else
 					UserList(UserIndex).MascotasIndex(i) = Index
 					
-					' Nos aseguramos de que conserve el hp, si estaba dañado
+					' Nos aseguramos de que conserve el hp, si estaba daÃ±ado
 					Npclist(Index).Stats.MinHp = IIf(iMinHP = 0, Npclist(Index).Stats.MinHp, iMinHP)
 					
 					Npclist(Index).MaestroUser = UserIndex
@@ -1762,7 +1762,7 @@ ErrorHandler:
 		End If
 		
 		If Not canWarp Then
-			Call WriteConsoleMsg(UserIndex, "No se permiten mascotas en zona segura. Éstas te esperarán afuera.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, "No se permiten mascotas en zona segura. Ã‰stas te esperarÃ¡n afuera.", Protocol.FontTypeNames.FONTTYPE_INFO)
 		End If
 		
 		UserList(UserIndex).NroMascotas = NroPets
@@ -1808,7 +1808,7 @@ ErrorHandler:
 				.MascotasIndex(PetIndex) = NpcIndex
 				
 				With Npclist(NpcIndex)
-					' Nos aseguramos de que conserve el hp, si estaba dañado
+					' Nos aseguramos de que conserve el hp, si estaba daÃ±ado
 					.Stats.MinHp = IIf(iMinHP = 0, .Stats.MinHp, iMinHP)
 					
 					.MaestroUser = UserIndex
@@ -1851,7 +1851,7 @@ ErrorHandler:
 							If .clase = Declaraciones.eClass.Pirat Then
 								' Pierde la apariencia de fragata fantasmal
 								Call ToogleBoatBody(UserIndex)
-								Call WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!", Protocol.FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "Â¡Has recuperado tu apariencia normal!", Protocol.FontTypeNames.FONTTYPE_INFO)
 								Call ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading, NingunArma, NingunEscudo, NingunCasco)
 								HiddenPirat = True
 							End If
@@ -1871,7 +1871,7 @@ ErrorHandler:
 					Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.CancelHome)
 				End If
 				
-				Call WriteConsoleMsg(UserIndex, "Cerrando...Se cerrará el juego en " & .Counters.salir & " segundos...", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Cerrando...Se cerrarÃ¡ el juego en " & .Counters.salir & " segundos...", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
 	End Sub
@@ -1883,7 +1883,7 @@ ErrorHandler:
 	
 	Public Sub CancelExit(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan Martín Sotuyo Dodero (Maraxus)
+		'Author: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/02/08
 		'
 		'***************************************************
@@ -1902,7 +1902,7 @@ ErrorHandler:
 	
 	'CambiarNick: Cambia el Nick de un slot.
 	'
-	'UserIndex: Quien ejecutó la orden
+	'UserIndex: Quien ejecutÃ³ la orden
 	'UserIndexDestino: SLot del usuario destino, a quien cambiarle el nick
 	'NuevoNick: Nuevo nick de UserIndexDestino
 	Public Sub CambiarNick(ByVal UserIndex As Short, ByVal UserIndexDestino As Short, ByVal NuevoNick As String)
@@ -1937,17 +1937,17 @@ ErrorHandler:
 		If FileExist(CharPath & Nombre & ".chr") = False Then
 			Call WriteConsoleMsg(sendIndex, "Pj Inexistente", Protocol.FontTypeNames.FONTTYPE_INFO)
 		Else
-			Call WriteConsoleMsg(sendIndex, "Estadísticas de: " & Nombre, Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(sendIndex, "EstadÃ­sticas de: " & Nombre, Protocol.FontTypeNames.FONTTYPE_INFO)
 			Call WriteConsoleMsg(sendIndex, "Nivel: " & GetVar(CharPath & Nombre & ".chr", "stats", "elv") & "  EXP: " & GetVar(CharPath & Nombre & ".chr", "stats", "Exp") & "/" & GetVar(CharPath & Nombre & ".chr", "stats", "elu"), Protocol.FontTypeNames.FONTTYPE_INFO)
-			Call WriteConsoleMsg(sendIndex, "Energía: " & GetVar(CharPath & Nombre & ".chr", "stats", "minsta") & "/" & GetVar(CharPath & Nombre & ".chr", "stats", "maxSta"), Protocol.FontTypeNames.FONTTYPE_INFO)
-			Call WriteConsoleMsg(sendIndex, "Salud: " & GetVar(CharPath & Nombre & ".chr", "stats", "MinHP") & "/" & GetVar(CharPath & Nombre & ".chr", "Stats", "MaxHP") & "  Maná: " & GetVar(CharPath & Nombre & ".chr", "Stats", "MinMAN") & "/" & GetVar(CharPath & Nombre & ".chr", "Stats", "MaxMAN"), Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(sendIndex, "EnergÃ­a: " & GetVar(CharPath & Nombre & ".chr", "stats", "minsta") & "/" & GetVar(CharPath & Nombre & ".chr", "stats", "maxSta"), Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(sendIndex, "Salud: " & GetVar(CharPath & Nombre & ".chr", "stats", "MinHP") & "/" & GetVar(CharPath & Nombre & ".chr", "Stats", "MaxHP") & "  ManÃ¡: " & GetVar(CharPath & Nombre & ".chr", "Stats", "MinMAN") & "/" & GetVar(CharPath & Nombre & ".chr", "Stats", "MaxMAN"), Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 			Call WriteConsoleMsg(sendIndex, "Menor Golpe/Mayor Golpe: " & GetVar(CharPath & Nombre & ".chr", "stats", "MaxHIT"), Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 			Call WriteConsoleMsg(sendIndex, "Oro: " & GetVar(CharPath & Nombre & ".chr", "stats", "GLD"), Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 			TempSecs = CInt(GetVar(CharPath & Nombre & ".chr", "INIT", "UpTime"))
-			tempStr = (TempSecs \ 86400) & " Días, " & ((TempSecs Mod 86400) \ 3600) & " Horas, " & ((TempSecs Mod 86400) Mod 3600) \ 60 & " Minutos, " & (((TempSecs Mod 86400) Mod 3600) Mod 60) & " Segundos."
+			tempStr = (TempSecs \ 86400) & " DÃ­as, " & ((TempSecs Mod 86400) \ 3600) & " Horas, " & ((TempSecs Mod 86400) Mod 3600) \ 60 & " Minutos, " & (((TempSecs Mod 86400) Mod 3600) Mod 60) & " Segundos."
 			Call WriteConsoleMsg(sendIndex, "Tiempo Logeado: " & tempStr, Protocol.FontTypeNames.FONTTYPE_INFO)
 			
 		End If
@@ -2026,7 +2026,7 @@ ErrorHandler:
 	
 	Public Function BodyIsBoat(ByVal body As Short) As Boolean
 		'**************************************************************
-		'Author: Juan Martín Sotuyo Dodero (Maraxus)
+		'Author: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modify Date: 10/07/2008
 		'Checks if a given body index is a boat
 		'**************************************************************
@@ -2100,7 +2100,7 @@ ErrorHandler:
 		'Author: ZaMa
 		'Last Modify Date: 18/01/2010 (ZaMa)
 		'The user loses his owned npc
-		'18/01/2010: ZaMa - Las mascotas dejan de atacar al npc que se perdió.
+		'18/01/2010: ZaMa - Las mascotas dejan de atacar al npc que se perdiÃ³.
 		'**************************************************************
 		
 		Dim PetIndex As Integer
@@ -2142,7 +2142,7 @@ ErrorHandler:
 			' Pierde el npc anterior
 			If .flags.OwnedNpc > 0 Then Npclist(.flags.OwnedNpc).Owner = 0
 			
-			' Si tenia otro dueño, lo perdio aca
+			' Si tenia otro dueÃ±o, lo perdio aca
 			Npclist(NpcIndex).Owner = UserIndex
 			.flags.OwnedNpc = NpcIndex
 		End With
@@ -2363,7 +2363,7 @@ Errhandler:
 				If StealingNpc Then
 					' Puede atacar el mismo npc que ya estaba robando, pero no una nuevo.
 					If AtacablePor <> OwnerIndex Then
-						Call WriteConsoleMsg(UserIndex, "No puedes atacar otra criatura con dueño hasta que haya terminado tu castigo.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes atacar otra criatura con dueÃ±o hasta que haya terminado tu castigo.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					End If
 					' Esta atacando a alguien en estado atacable => Se renueva el timer de atacable
@@ -2398,6 +2398,6 @@ Errhandler:
 		If newHome < Declaraciones.eCiudad.cUllathorpe Or newHome > Declaraciones.eCiudad.cArghal Then Exit Sub
 		UserList(UserIndex).Hogar = newHome
 		
-		Call WriteChatOverHead(UserIndex, "¡¡¡Bienvenido a nuestra humilde comunidad, este es ahora tu nuevo hogar!!!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+		Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Bienvenido a nuestra humilde comunidad, este es ahora tu nuevo hogar!!!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 	End Sub
 End Module

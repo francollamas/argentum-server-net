@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module ModFacciones
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module ModFacciones
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	
@@ -74,7 +74,7 @@ Module ModFacciones
 		<VBFixedArray(NUM_DEF_FACCION_ARMOURS - 1)> Dim Armada() As Short
 		<VBFixedArray(NUM_DEF_FACCION_ARMOURS - 1)> Dim Caos() As Short
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
 			ReDim Armada(NUM_DEF_FACCION_ARMOURS - 1)
 			ReDim Caos(NUM_DEF_FACCION_ARMOURS - 1)
@@ -82,8 +82,8 @@ Module ModFacciones
 	End Structure
 	
 	' Matriz que contiene las armaduras faccionarias segun raza, clase, faccion y defensa de armadura
-	'UPGRADE_WARNING: El límite inferior de la matriz ArmadurasFaccion ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_WARNING: Es posible que la matriz ArmadurasFaccion necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+	'UPGRADE_WARNING: El lÃ­mite inferior de la matriz ArmadurasFaccion ha cambiado de 1,1 a 0,0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: Es posible que la matriz ArmadurasFaccion necesite tener elementos individuales inicializados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 	Public ArmadurasFaccion(NUMCLASES, NUMRAZAS) As tFaccionArmaduras
 	
 	' Contiene la cantidad de exp otorgada cada vez que aumenta el rango
@@ -201,55 +201,55 @@ Module ModFacciones
 		'Autor: Pablo (ToxicWaste) & Unknown (orginal version)
 		'Last Modification: 15/04/2010
 		'Handles the entrance of users to the "Armada Real"
-		'15/03/2009: ZaMa - No se puede enlistar el fundador de un clan con alineación neutral.
+		'15/03/2009: ZaMa - No se puede enlistar el fundador de un clan con alineaciÃ³n neutral.
 		'27/11/2009: ZaMa - Ahora no se puede enlistar un miembro de un clan neutro, por ende saque la antifaccion.
 		'15/04/2010: ZaMa - Cambio en recompensas iniciales.
 		'***************************************************
 		
 		With UserList(UserIndex)
 			If .Faccion.ArmadaReal = 1 Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡Ya perteneces a las tropas reales!!! Ve a combatir criminales.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Ya perteneces a las tropas reales!!! Ve a combatir criminales.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.FuerzasCaos = 1 Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡Maldito insolente!!! Vete de aquí seguidor de las sombras.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Maldito insolente!!! Vete de aquÃ­ seguidor de las sombras.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If criminal(UserIndex) Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡No se permiten criminales en el ejército real!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡No se permiten criminales en el ejÃ©rcito real!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.CriminalesMatados < 30 Then
-				Call WriteChatOverHead(UserIndex, "Para unirte a nuestras fuerzas debes matar al menos 30 criminales, sólo has matado " & .Faccion.CriminalesMatados & ".", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Para unirte a nuestras fuerzas debes matar al menos 30 criminales, sÃ³lo has matado " & .Faccion.CriminalesMatados & ".", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Stats.ELV < 25 Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡Para unirte a nuestras fuerzas debes ser al menos de nivel 25!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Para unirte a nuestras fuerzas debes ser al menos de nivel 25!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.CiudadanosMatados > 0 Then
-				Call WriteChatOverHead(UserIndex, "¡Has asesinado gente inocente, no aceptamos asesinos en las tropas reales!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Has asesinado gente inocente, no aceptamos asesinos en las tropas reales!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.Reenlistadas > 4 Then
-				Call WriteChatOverHead(UserIndex, "¡Has sido expulsado de las fuerzas reales demasiadas veces!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Has sido expulsado de las fuerzas reales demasiadas veces!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Reputacion.NobleRep < 1000000 Then
-				Call WriteChatOverHead(UserIndex, "Necesitas ser aún más noble para integrar el ejército real, sólo tienes " & .Reputacion.NobleRep & "/1.000.000 puntos de nobleza", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Necesitas ser aÃºn mÃ¡s noble para integrar el ejÃ©rcito real, sÃ³lo tienes " & .Reputacion.NobleRep & "/1.000.000 puntos de nobleza", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .GuildIndex > 0 Then
 				If modGuilds.GuildAlignment(.GuildIndex) = "Neutral" Then
-					Call WriteChatOverHead(UserIndex, "¡¡¡Perteneces a un clan neutro, sal de él si quieres unirte a nuestras fuerzas!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Perteneces a un clan neutro, sal de Ã©l si quieres unirte a nuestras fuerzas!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
 			End If
@@ -257,7 +257,7 @@ Module ModFacciones
 			.Faccion.ArmadaReal = 1
 			.Faccion.Reenlistadas = .Faccion.Reenlistadas + 1
 			
-			Call WriteChatOverHead(UserIndex, "¡¡¡Bienvenido al ejército real!!! Aquí tienes tus vestimentas. Cumple bien tu labor exterminando criminales y me encargaré de recompensarte.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+			Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Bienvenido al ejÃ©rcito real!!! AquÃ­ tienes tus vestimentas. Cumple bien tu labor exterminando criminales y me encargarÃ© de recompensarte.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			
 			' TODO: Dejo esta variable por ahora, pero con chequear las reenlistadas deberia ser suficiente :S
 			If .Faccion.RecibioArmaduraReal = 0 Then
@@ -268,7 +268,7 @@ Module ModFacciones
 				.Faccion.RecibioArmaduraReal = 1
 				.Faccion.NivelIngreso = .Stats.ELV
 				.Faccion.FechaIngreso = CStr(Today)
-				'Esto por ahora es inútil, siempre va a ser cero, pero bueno, despues va a servir.
+				'Esto por ahora es inÃºtil, siempre va a ser cero, pero bueno, despues va a servir.
 				.Faccion.MatadosIngreso = .Faccion.CiudadanosMatados
 				
 				.Faccion.RecibioExpInicialReal = 1
@@ -279,7 +279,7 @@ Module ModFacciones
 			
 			If .flags.Navegando Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
 			
-			Call LogEjercitoReal(.name & " ingresó el " & Today & " cuando era nivel " & .Stats.ELV)
+			Call LogEjercitoReal(.name & " ingresÃ³ el " & Today & " cuando era nivel " & .Stats.ELV)
 		End With
 		
 	End Sub
@@ -303,7 +303,7 @@ Module ModFacciones
 			Nobleza = .Reputacion.NobleRep
 			
 			If Crimis < NextRecom Then
-				Call WriteChatOverHead(UserIndex, "Mata " & NextRecom - Crimis & " criminales más para recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Mata " & NextRecom - Crimis & " criminales mÃ¡s para recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
@@ -330,7 +330,7 @@ Module ModFacciones
 					
 				Case 640
 					If Lvl < 27 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 27 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 27 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 6
@@ -346,7 +346,7 @@ Module ModFacciones
 					
 				Case 2000
 					If Lvl < 30 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 30 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 30 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 9
@@ -354,7 +354,7 @@ Module ModFacciones
 					
 				Case 2500
 					If Nobleza < 2000000 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 2000000 - Nobleza & " puntos de nobleza para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 2000000 - Nobleza & " puntos de nobleza para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 10
@@ -362,7 +362,7 @@ Module ModFacciones
 					
 				Case 3000
 					If Nobleza < 3000000 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 3000000 - Nobleza & " puntos de nobleza para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 3000000 - Nobleza & " puntos de nobleza para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 11
@@ -370,11 +370,11 @@ Module ModFacciones
 					
 				Case 3500
 					If Lvl < 35 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 35 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 35 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					If Nobleza < 4000000 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 4000000 - Nobleza & " puntos de nobleza para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 4000000 - Nobleza & " puntos de nobleza para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 12
@@ -382,11 +382,11 @@ Module ModFacciones
 					
 				Case 4000
 					If Lvl < 36 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 36 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 36 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					If Nobleza < 5000000 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 5000000 - Nobleza & " puntos de nobleza para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 5000000 - Nobleza & " puntos de nobleza para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 13
@@ -394,25 +394,25 @@ Module ModFacciones
 					
 				Case 5000
 					If Lvl < 37 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 37 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 37 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					If Nobleza < 6000000 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 6000000 - Nobleza & " puntos de nobleza para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes criminales, pero te faltan " & 6000000 - Nobleza & " puntos de nobleza para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasReal = 14
 					.Faccion.NextRecompensa = 10000
 					
 				Case 10000
-					Call WriteChatOverHead(UserIndex, "Eres uno de mis mejores soldados. Mataste " & Crimis & " criminales, sigue así. Ya no tengo más recompensa para darte que mi agradecimiento. ¡Felicidades!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Eres uno de mis mejores soldados. Mataste " & Crimis & " criminales, sigue asÃ­. Ya no tengo mÃ¡s recompensa para darte que mi agradecimiento. Â¡Felicidades!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 					
 				Case Else
 					Exit Sub
 			End Select
 			
-			Call WriteChatOverHead(UserIndex, "¡¡¡Aquí tienes tu recompensa " & TituloReal(UserIndex) & "!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+			Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡AquÃ­ tienes tu recompensa " & TituloReal(UserIndex) & "!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			
 			' Recompensas de armaduras y exp
 			Call GiveFactionArmours(UserIndex, False)
@@ -433,18 +433,18 @@ Module ModFacciones
 			.Faccion.ArmadaReal = 0
 			'Call PerderItemsFaccionarios(UserIndex)
 			If Expulsado Then
-				Call WriteConsoleMsg(UserIndex, "¡¡¡Has sido expulsado del ejército real!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Â¡Â¡Â¡Has sido expulsado del ejÃ©rcito real!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			Else
-				Call WriteConsoleMsg(UserIndex, "¡¡¡Te has retirado del ejército real!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Â¡Â¡Â¡Te has retirado del ejÃ©rcito real!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			End If
 			
 			If .Invent.ArmourEqpObjIndex <> 0 Then
-				'Desequipamos la armadura real si está equipada
+				'Desequipamos la armadura real si estÃ¡ equipada
 				If ObjData_Renamed(.Invent.ArmourEqpObjIndex).Real = 1 Then Call Desequipar(UserIndex, .Invent.ArmourEqpSlot)
 			End If
 			
 			If .Invent.EscudoEqpObjIndex <> 0 Then
-				'Desequipamos el escudo de caos si está equipado
+				'Desequipamos el escudo de caos si estÃ¡ equipado
 				If ObjData_Renamed(.Invent.EscudoEqpObjIndex).Real = 1 Then Call Desequipar(UserIndex, .Invent.EscudoEqpObjIndex)
 			End If
 			
@@ -464,18 +464,18 @@ Module ModFacciones
 			.Faccion.FuerzasCaos = 0
 			'Call PerderItemsFaccionarios(UserIndex)
 			If Expulsado Then
-				Call WriteConsoleMsg(UserIndex, "¡¡¡Has sido expulsado de la Legión Oscura!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Â¡Â¡Â¡Has sido expulsado de la LegiÃ³n Oscura!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			Else
-				Call WriteConsoleMsg(UserIndex, "¡¡¡Te has retirado de la Legión Oscura!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Â¡Â¡Â¡Te has retirado de la LegiÃ³n Oscura!!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			End If
 			
 			If .Invent.ArmourEqpObjIndex <> 0 Then
-				'Desequipamos la armadura de caos si está equipada
+				'Desequipamos la armadura de caos si estÃ¡ equipada
 				If ObjData_Renamed(.Invent.ArmourEqpObjIndex).Caos = 1 Then Call Desequipar(UserIndex, .Invent.ArmourEqpSlot)
 			End If
 			
 			If .Invent.EscudoEqpObjIndex <> 0 Then
-				'Desequipamos el escudo de caos si está equipado
+				'Desequipamos el escudo de caos si estÃ¡ equipado
 				If ObjData_Renamed(.Invent.EscudoEqpObjIndex).Caos = 1 Then Call Desequipar(UserIndex, .Invent.EscudoEqpObjIndex)
 			End If
 			
@@ -498,7 +498,7 @@ Module ModFacciones
 			'Rango 4: Sargento (210 Criminales)
 			'Rango 5: Caballero (320 Criminales)
 			'Rango 6: Comandante (460 Criminales)
-			'Rango 7: Capitán (640 Criminales + > lvl 27)
+			'Rango 7: CapitÃ¡n (640 Criminales + > lvl 27)
 			'Rango 8: Senescal (870 Criminales)
 			'Rango 9: Mariscal (1160 Criminales)
 			'Rango 10: Condestable (2000 Criminales + > lvl 30)
@@ -506,8 +506,8 @@ Module ModFacciones
 			'Rango 11: Ejecutor Imperial (2500 Criminales + 2.000.000 Nobleza)
 			'Rango 12: Protector del Reino (3000 Criminales + 3.000.000 Nobleza)
 			'Rango 13: Avatar de la Justicia (3500 Criminales + 4.000.000 Nobleza + > lvl 35)
-			'Rango 14: Guardián del Bien (4000 Criminales + 5.000.000 Nobleza + > lvl 36)
-			'Rango 15: Campeón de la Luz (5000 Criminales + 6.000.000 Nobleza + > lvl 37)
+			'Rango 14: GuardiÃ¡n del Bien (4000 Criminales + 5.000.000 Nobleza + > lvl 36)
+			'Rango 15: CampeÃ³n de la Luz (5000 Criminales + 6.000.000 Nobleza + > lvl 37)
 			
 			Case 0
 				TituloReal = "Aprendiz"
@@ -522,7 +522,7 @@ Module ModFacciones
 			Case 5
 				TituloReal = "Comandante"
 			Case 6
-				TituloReal = "Capitán"
+				TituloReal = "CapitÃ¡n"
 			Case 7
 				TituloReal = "Senescal"
 			Case 8
@@ -536,9 +536,9 @@ Module ModFacciones
 			Case 12
 				TituloReal = "Avatar de la Justicia"
 			Case 13
-				TituloReal = "Guardián del Bien"
+				TituloReal = "GuardiÃ¡n del Bien"
 			Case Else
-				TituloReal = "Campeón de la Luz"
+				TituloReal = "CampeÃ³n de la Luz"
 		End Select
 		
 		
@@ -548,52 +548,52 @@ Module ModFacciones
 		'***************************************************
 		'Autor: Pablo (ToxicWaste) & Unknown (orginal version)
 		'Last Modification: 27/11/2009
-		'15/03/2009: ZaMa - No se puede enlistar el fundador de un clan con alineación neutral.
+		'15/03/2009: ZaMa - No se puede enlistar el fundador de un clan con alineaciÃ³n neutral.
 		'27/11/2009: ZaMa - Ahora no se puede enlistar un miembro de un clan neutro, por ende saque la antifaccion.
-		'Handles the entrance of users to the "Legión Oscura"
+		'Handles the entrance of users to the "LegiÃ³n Oscura"
 		'***************************************************
 		
 		With UserList(UserIndex)
 			If Not criminal(UserIndex) Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡Lárgate de aquí, bufón!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡LÃ¡rgate de aquÃ­, bufÃ³n!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.FuerzasCaos = 1 Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡Ya perteneces a la legión oscura!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Ya perteneces a la legiÃ³n oscura!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.ArmadaReal = 1 Then
-				Call WriteChatOverHead(UserIndex, "Las sombras reinarán en Argentum. ¡¡¡Fuera de aquí insecto real!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Las sombras reinarÃ¡n en Argentum. Â¡Â¡Â¡Fuera de aquÃ­ insecto real!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			'[Barrin 17-12-03] Si era miembro de la Armada Real no se puede enlistar
-			If .Faccion.RecibioExpInicialReal = 1 Then 'Tomamos el valor de ahí: ¿Recibio la experiencia para entrar?
-				Call WriteChatOverHead(UserIndex, "No permitiré que ningún insecto real ingrese a mis tropas.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+			If .Faccion.RecibioExpInicialReal = 1 Then 'Tomamos el valor de ahÃ­: Â¿Recibio la experiencia para entrar?
+				Call WriteChatOverHead(UserIndex, "No permitirÃ© que ningÃºn insecto real ingrese a mis tropas.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			'[/Barrin]
 			
 			If Not criminal(UserIndex) Then
-				Call WriteChatOverHead(UserIndex, "¡¡Ja ja ja!! Tú no eres bienvenido aquí asqueroso ciudadano.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Ja ja ja!! TÃº no eres bienvenido aquÃ­ asqueroso ciudadano.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Faccion.CiudadanosMatados < 70 Then
-				Call WriteChatOverHead(UserIndex, "Para unirte a nuestras fuerzas debes matar al menos 70 ciudadanos, sólo has matado " & .Faccion.CiudadanosMatados & ".", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Para unirte a nuestras fuerzas debes matar al menos 70 ciudadanos, sÃ³lo has matado " & .Faccion.CiudadanosMatados & ".", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .Stats.ELV < 25 Then
-				Call WriteChatOverHead(UserIndex, "¡¡¡Para unirte a nuestras fuerzas debes ser al menos nivel 25!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Para unirte a nuestras fuerzas debes ser al menos nivel 25!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
 			If .GuildIndex > 0 Then
 				If modGuilds.GuildAlignment(.GuildIndex) = "Neutral" Then
-					Call WriteChatOverHead(UserIndex, "¡¡¡Perteneces a un clan neutro, sal de él si quieres unirte a nuestras fuerzas!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Perteneces a un clan neutro, sal de Ã©l si quieres unirte a nuestras fuerzas!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
 			End If
@@ -601,9 +601,9 @@ Module ModFacciones
 			
 			If .Faccion.Reenlistadas > 4 Then
 				If .Faccion.Reenlistadas = 200 Then
-					Call WriteChatOverHead(UserIndex, "Has sido expulsado de las fuerzas oscuras y durante tu rebeldía has atacado a mi ejército. ¡Vete de aquí!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Has sido expulsado de las fuerzas oscuras y durante tu rebeldÃ­a has atacado a mi ejÃ©rcito. Â¡Vete de aquÃ­!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
-					Call WriteChatOverHead(UserIndex, "¡Has sido expulsado de las fuerzas oscuras demasiadas veces!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Â¡Has sido expulsado de las fuerzas oscuras demasiadas veces!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				End If
 				Exit Sub
 			End If
@@ -611,7 +611,7 @@ Module ModFacciones
 			.Faccion.Reenlistadas = .Faccion.Reenlistadas + 1
 			.Faccion.FuerzasCaos = 1
 			
-			Call WriteChatOverHead(UserIndex, "¡¡¡Bienvenido al lado oscuro!!! Aquí tienes tus armaduras. Derrama sangre ciudadana y real, y serás recompensado, lo prometo.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+			Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Bienvenido al lado oscuro!!! AquÃ­ tienes tus armaduras. Derrama sangre ciudadana y real, y serÃ¡s recompensado, lo prometo.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			
 			If .Faccion.RecibioArmaduraCaos = 0 Then
 				
@@ -629,7 +629,7 @@ Module ModFacciones
 			
 			If .flags.Navegando Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
 			
-			Call LogEjercitoCaos(.name & " ingresó el " & Today & " cuando era nivel " & .Stats.ELV)
+			Call LogEjercitoCaos(.name & " ingresÃ³ el " & Today & " cuando era nivel " & .Stats.ELV)
 		End With
 		
 	End Sub
@@ -638,7 +638,7 @@ Module ModFacciones
 		'***************************************************
 		'Author: Pablo (ToxicWaste) & Unknown (orginal version)
 		'Last Modification: 15/04/2010
-		'Handles the way of gaining new ranks in the "Legión Oscura"
+		'Handles the way of gaining new ranks in the "LegiÃ³n Oscura"
 		'15/04/2010: ZaMa - Agrego recompensas de oro y armaduras
 		'***************************************************
 		Dim Ciudas As Integer
@@ -651,7 +651,7 @@ Module ModFacciones
 			NextRecom = .Faccion.NextRecompensa
 			
 			If Ciudas < NextRecom Then
-				Call WriteChatOverHead(UserIndex, "Mata " & NextRecom - Ciudas & " cuidadanos más para recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Mata " & NextRecom - Ciudas & " cuidadanos mÃ¡s para recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Exit Sub
 			End If
 			
@@ -678,7 +678,7 @@ Module ModFacciones
 					
 				Case 1500
 					If Lvl < 27 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 27 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 27 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 6
@@ -694,7 +694,7 @@ Module ModFacciones
 					
 				Case 4600
 					If Lvl < 30 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 30 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 30 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 9
@@ -702,7 +702,7 @@ Module ModFacciones
 					
 				Case 5800
 					If Lvl < 31 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 31 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 31 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 10
@@ -710,7 +710,7 @@ Module ModFacciones
 					
 				Case 6990
 					If Lvl < 33 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 33 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 33 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 11
@@ -718,7 +718,7 @@ Module ModFacciones
 					
 				Case 8100
 					If Lvl < 35 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 35 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 35 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 12
@@ -726,7 +726,7 @@ Module ModFacciones
 					
 				Case 9300
 					If Lvl < 36 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 36 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 36 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 13
@@ -734,14 +734,14 @@ Module ModFacciones
 					
 				Case 11500
 					If Lvl < 37 Then
-						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 37 - Lvl & " niveles para poder recibir la próxima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Mataste suficientes ciudadanos, pero te faltan " & 37 - Lvl & " niveles para poder recibir la prÃ³xima recompensa.", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 						Exit Sub
 					End If
 					.Faccion.RecompensasCaos = 14
 					.Faccion.NextRecompensa = 23000
 					
 				Case 23000
-					Call WriteChatOverHead(UserIndex, "Eres uno de mis mejores soldados. Mataste " & Ciudas & " ciudadanos . Tu única recompensa será la sangre derramada. ¡¡Continúa así!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Eres uno de mis mejores soldados. Mataste " & Ciudas & " ciudadanos . Tu Ãºnica recompensa serÃ¡ la sangre derramada. Â¡Â¡ContinÃºa asÃ­!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 					
 				Case Else
@@ -749,7 +749,7 @@ Module ModFacciones
 					
 			End Select
 			
-			Call WriteChatOverHead(UserIndex, "¡¡¡Bien hecho " & TituloCaos(UserIndex) & ", aquí tienes tu recompensa!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+			Call WriteChatOverHead(UserIndex, "Â¡Â¡Â¡Bien hecho " & TituloCaos(UserIndex) & ", aquÃ­ tienes tu recompensa!!!", CShort(Str(Npclist(.flags.TargetNPC).Char_Renamed.CharIndex)), System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			
 			' Recompensas de armaduras y exp
 			Call GiveFactionArmours(UserIndex, True)
@@ -763,9 +763,9 @@ Module ModFacciones
 		'***************************************************
 		'Autor: Unknown (orginal version)
 		'Last Modification: 23/01/2007 Pablo (ToxicWaste)
-		'Handles the titles of the members of the "Legión Oscura"
+		'Handles the titles of the members of the "LegiÃ³n Oscura"
 		'***************************************************
-		'Rango 1: Acólito (70)
+		'Rango 1: AcÃ³lito (70)
 		'Rango 2: Alma Corrupta (160)
 		'Rango 3: Paria (300)
 		'Rango 4: Condenado (490)
@@ -774,16 +774,16 @@ Module ModFacciones
 		'Rango 7: Corruptor (1500 + lvl 27)
 		'Rango 8: Heraldo Impio (2010)
 		'Rango 9: Caballero de la Oscuridad (2700)
-		'Rango 10: Señor del Miedo (4600 + lvl 30)
+		'Rango 10: SeÃ±or del Miedo (4600 + lvl 30)
 		'Rango 11: Ejecutor Infernal (5800 + lvl 31)
 		'Rango 12: Protector del Averno (6990 + lvl 33)
-		'Rango 13: Avatar de la Destrucción (8100 + lvl 35)
-		'Rango 14: Guardián del Mal (9300 + lvl 36)
-		'Rango 15: Campeón de la Oscuridad (11500 + lvl 37)
+		'Rango 13: Avatar de la DestrucciÃ³n (8100 + lvl 35)
+		'Rango 14: GuardiÃ¡n del Mal (9300 + lvl 36)
+		'Rango 15: CampeÃ³n de la Oscuridad (11500 + lvl 37)
 		
 		Select Case UserList(UserIndex).Faccion.RecompensasCaos
 			Case 0
-				TituloCaos = "Acólito"
+				TituloCaos = "AcÃ³lito"
 			Case 1
 				TituloCaos = "Alma Corrupta"
 			Case 2
@@ -797,21 +797,21 @@ Module ModFacciones
 			Case 6
 				TituloCaos = "Corruptor"
 			Case 7
-				TituloCaos = "Heraldo Impío"
+				TituloCaos = "Heraldo ImpÃ­o"
 			Case 8
 				TituloCaos = "Caballero de la Oscuridad"
 			Case 9
-				TituloCaos = "Señor del Miedo"
+				TituloCaos = "SeÃ±or del Miedo"
 			Case 10
 				TituloCaos = "Ejecutor Infernal"
 			Case 11
 				TituloCaos = "Protector del Averno"
 			Case 12
-				TituloCaos = "Avatar de la Destrucción"
+				TituloCaos = "Avatar de la DestrucciÃ³n"
 			Case 13
-				TituloCaos = "Guardián del Mal"
+				TituloCaos = "GuardiÃ¡n del Mal"
 			Case Else
-				TituloCaos = "Campeón de la Oscuridad"
+				TituloCaos = "CampeÃ³n de la Oscuridad"
 		End Select
 		
 	End Function

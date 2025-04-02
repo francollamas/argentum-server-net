@@ -3,7 +3,7 @@ Option Explicit On
 Module SistemaCombate
 	
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -25,12 +25,12 @@ Module SistemaCombate
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	'
-	'Diseño y corrección del modulo de combate por
+	'DiseÃ±o y correcciÃ³n del modulo de combate por
 	'Gerardo Saiz, gerardosaiz@yahoo.com
 	'
 	
@@ -175,7 +175,7 @@ Module SistemaCombate
 				PoderAtaque = PoderAtaqueArma(UserIndex)
 				Skill = Declaraciones.eSkill.Armas
 			End If
-		Else 'Peleando con puños
+		Else 'Peleando con puÃ±os
 			PoderAtaque = PoderAtaqueWrestling(UserIndex)
 			Skill = Declaraciones.eSkill.Wrestling
 		End If
@@ -197,7 +197,7 @@ Module SistemaCombate
 		'Author: Unknown
 		'Last modified: 03/15/2006
 		'Revisa si un NPC logra impactar a un user o no
-		'03/15/2006 Maraxus - Evité una división por cero que eliminaba NPCs
+		'03/15/2006 Maraxus - EvitÃ© una divisiÃ³n por cero que eliminaba NPCs
 		'*************************************************
 		Dim Rechazo As Boolean
 		Dim ProbRechazo As Integer
@@ -226,7 +226,7 @@ Module SistemaCombate
 		' el usuario esta usando un escudo ???
 		If UserList(UserIndex).Invent.EscudoEqpObjIndex > 0 Then
 			If Not NpcImpacto Then
-				If SkillDefensa + SkillTacticas > 0 Then 'Evitamos división por cero
+				If SkillDefensa + SkillTacticas > 0 Then 'Evitamos divisiÃ³n por cero
 					' Chances are rounded
 					ProbRechazo = MaximoInt(10, MinimoInt(90, 100 * SkillDefensa / (SkillDefensa + SkillTacticas)))
 					Rechazo = (RandomNumber(1, 100) <= ProbRechazo)
@@ -244,22 +244,22 @@ Module SistemaCombate
 		End If
 	End Function
 	
-	Public Function CalcularDaño(ByVal UserIndex As Short, Optional ByVal NpcIndex As Short = 0) As Integer
+	Public Function CalcularDaÃ±o(ByVal UserIndex As Short, Optional ByVal NpcIndex As Short = 0) As Integer
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: 01/04/2010 (ZaMa)
-		'01/04/2010: ZaMa - Modifico el daño de wrestling.
+		'01/04/2010: ZaMa - Modifico el daÃ±o de wrestling.
 		'01/04/2010: ZaMa - Agrego bonificadores de wrestling para los guantes.
 		'***************************************************
-		Dim DañoArma As Integer
-		Dim DañoUsuario As Integer
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Arma, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		Dim DaÃ±oArma As Integer
+		Dim DaÃ±oUsuario As Integer
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Arma, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Arma As ObjData
 		Dim ModifClase As Single
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura proyectil, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura proyectil, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim proyectil As ObjData
-		Dim DañoMaxArma As Integer
-		Dim DañoMinArma As Integer
+		Dim DaÃ±oMaxArma As Integer
+		Dim DaÃ±oMinArma As Integer
 		Dim ObjIndex As Short
 		
 		''sacar esto si no queremos q la matadracos mate el Dragon si o si
@@ -268,139 +268,139 @@ Module SistemaCombate
 		
 		With UserList(UserIndex)
 			If .Invent.WeaponEqpObjIndex > 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Arma. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Arma. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Arma = ObjData_Renamed(.Invent.WeaponEqpObjIndex)
 				
 				' Ataca a un npc?
 				If NpcIndex > 0 Then
 					If Arma.proyectil = 1 Then
-						ModifClase = ModClase_Renamed(.clase).DañoProyectiles
-						DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
-						DañoMaxArma = Arma.MaxHIT
+						ModifClase = ModClase_Renamed(.clase).DaÃ±oProyectiles
+						DaÃ±oArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
+						DaÃ±oMaxArma = Arma.MaxHIT
 						
 						If Arma.Municion = 1 Then
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto proyectil. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto proyectil. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							proyectil = ObjData_Renamed(.Invent.MunicionEqpObjIndex)
-							DañoArma = DañoArma + RandomNumber(proyectil.MinHIT, proyectil.MaxHIT)
+							DaÃ±oArma = DaÃ±oArma + RandomNumber(proyectil.MinHIT, proyectil.MaxHIT)
 							' For some reason this isn't done...
-							'DañoMaxArma = DañoMaxArma + proyectil.MaxHIT
+							'DaÃ±oMaxArma = DaÃ±oMaxArma + proyectil.MaxHIT
 						End If
 					Else
-						ModifClase = ModClase_Renamed(.clase).DañoArmas
+						ModifClase = ModClase_Renamed(.clase).DaÃ±oArmas
 						
 						If .Invent.WeaponEqpObjIndex = EspadaMataDragonesIndex Then ' Usa la mata Dragones?
 							If Npclist(NpcIndex).NPCtype = Declaraciones.eNPCType.DRAGON Then 'Ataca Dragon?
-								DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
-								DañoMaxArma = Arma.MaxHIT
+								DaÃ±oArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
+								DaÃ±oMaxArma = Arma.MaxHIT
 								matoDragon = True ''sacar esto si no queremos q la matadracos mate el Dragon si o si
-							Else ' Sino es Dragon daño es 1
-								DañoArma = 1
-								DañoMaxArma = 1
+							Else ' Sino es Dragon daÃ±o es 1
+								DaÃ±oArma = 1
+								DaÃ±oMaxArma = 1
 							End If
 						Else
-							DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
-							DañoMaxArma = Arma.MaxHIT
+							DaÃ±oArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
+							DaÃ±oMaxArma = Arma.MaxHIT
 						End If
 					End If
 				Else ' Ataca usuario
 					If Arma.proyectil = 1 Then
-						ModifClase = ModClase_Renamed(.clase).DañoProyectiles
-						DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
-						DañoMaxArma = Arma.MaxHIT
+						ModifClase = ModClase_Renamed(.clase).DaÃ±oProyectiles
+						DaÃ±oArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
+						DaÃ±oMaxArma = Arma.MaxHIT
 						
 						If Arma.Municion = 1 Then
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto proyectil. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto proyectil. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							proyectil = ObjData_Renamed(.Invent.MunicionEqpObjIndex)
-							DañoArma = DañoArma + RandomNumber(proyectil.MinHIT, proyectil.MaxHIT)
+							DaÃ±oArma = DaÃ±oArma + RandomNumber(proyectil.MinHIT, proyectil.MaxHIT)
 							' For some reason this isn't done...
-							'DañoMaxArma = DañoMaxArma + proyectil.MaxHIT
+							'DaÃ±oMaxArma = DaÃ±oMaxArma + proyectil.MaxHIT
 						End If
 					Else
-						ModifClase = ModClase_Renamed(.clase).DañoArmas
+						ModifClase = ModClase_Renamed(.clase).DaÃ±oArmas
 						
 						If .Invent.WeaponEqpObjIndex = EspadaMataDragonesIndex Then
-							ModifClase = ModClase_Renamed(.clase).DañoArmas
-							DañoArma = 1 ' Si usa la espada mataDragones daño es 1
-							DañoMaxArma = 1
+							ModifClase = ModClase_Renamed(.clase).DaÃ±oArmas
+							DaÃ±oArma = 1 ' Si usa la espada mataDragones daÃ±o es 1
+							DaÃ±oMaxArma = 1
 						Else
-							DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
-							DañoMaxArma = Arma.MaxHIT
+							DaÃ±oArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
+							DaÃ±oMaxArma = Arma.MaxHIT
 						End If
 					End If
 				End If
 			Else
-				ModifClase = ModClase_Renamed(.clase).DañoWrestling
+				ModifClase = ModClase_Renamed(.clase).DaÃ±oWrestling
 				
-				' Daño sin guantes
-				DañoMinArma = 4
-				DañoMaxArma = 9
+				' DaÃ±o sin guantes
+				DaÃ±oMinArma = 4
+				DaÃ±oMaxArma = 9
 				
 				' Plus de guantes (en slot de anillo)
 				ObjIndex = .Invent.AnilloEqpObjIndex
 				If ObjIndex > 0 Then
 					If ObjData_Renamed(ObjIndex).Guante = 1 Then
-						DañoMinArma = DañoMinArma + ObjData_Renamed(ObjIndex).MinHIT
-						DañoMaxArma = DañoMaxArma + ObjData_Renamed(ObjIndex).MaxHIT
+						DaÃ±oMinArma = DaÃ±oMinArma + ObjData_Renamed(ObjIndex).MinHIT
+						DaÃ±oMaxArma = DaÃ±oMaxArma + ObjData_Renamed(ObjIndex).MaxHIT
 					End If
 				End If
 				
-				DañoArma = RandomNumber(DañoMinArma, DañoMaxArma)
+				DaÃ±oArma = RandomNumber(DaÃ±oMinArma, DaÃ±oMaxArma)
 				
 			End If
 			
-			DañoUsuario = RandomNumber(.Stats.MinHIT, .Stats.MaxHIT)
+			DaÃ±oUsuario = RandomNumber(.Stats.MinHIT, .Stats.MaxHIT)
 			
 			''sacar esto si no queremos q la matadracos mate el Dragon si o si
 			If matoDragon Then
-				CalcularDaño = Npclist(NpcIndex).Stats.MinHp + Npclist(NpcIndex).Stats.def
+				CalcularDaÃ±o = Npclist(NpcIndex).Stats.MinHp + Npclist(NpcIndex).Stats.def
 			Else
-				CalcularDaño = (3 * DañoArma + ((DañoMaxArma / 5) * MaximoInt(0, .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) - 15)) + DañoUsuario) * ModifClase
+				CalcularDaÃ±o = (3 * DaÃ±oArma + ((DaÃ±oMaxArma / 5) * MaximoInt(0, .Stats.UserAtributos(Declaraciones.eAtributos.Fuerza) - 15)) + DaÃ±oUsuario) * ModifClase
 			End If
 		End With
 	End Function
 	
-	Public Sub UserDañoNpc(ByVal UserIndex As Short, ByVal NpcIndex As Short)
+	Public Sub UserDaÃ±oNpc(ByVal UserIndex As Short, ByVal NpcIndex As Short)
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: 07/04/2010 (ZaMa)
 		'25/01/2010: ZaMa - Agrego poder acuchillar npcs.
-		'07/04/2010: ZaMa - Los asesinos apuñalan acorde al daño base sin descontar la defensa del npc.
+		'07/04/2010: ZaMa - Los asesinos apuÃ±alan acorde al daÃ±o base sin descontar la defensa del npc.
 		'***************************************************
 		
-		Dim daño As Integer
-		Dim DañoBase As Integer
+		Dim daÃ±o As Integer
+		Dim DaÃ±oBase As Integer
 		
-		DañoBase = CalcularDaño(UserIndex, NpcIndex)
+		DaÃ±oBase = CalcularDaÃ±o(UserIndex, NpcIndex)
 		
-		'esta navegando? si es asi le sumamos el daño del barco
+		'esta navegando? si es asi le sumamos el daÃ±o del barco
 		If UserList(UserIndex).flags.Navegando = 1 Then
 			If UserList(UserIndex).Invent.BarcoObjIndex > 0 Then
-				DañoBase = DañoBase + RandomNumber(ObjData_Renamed(UserList(UserIndex).Invent.BarcoObjIndex).MinHIT, ObjData_Renamed(UserList(UserIndex).Invent.BarcoObjIndex).MaxHIT)
+				DaÃ±oBase = DaÃ±oBase + RandomNumber(ObjData_Renamed(UserList(UserIndex).Invent.BarcoObjIndex).MinHIT, ObjData_Renamed(UserList(UserIndex).Invent.BarcoObjIndex).MaxHIT)
 			End If
 		End If
 		
 		Dim j As Short
 		With Npclist(NpcIndex)
-			daño = DañoBase - .Stats.def
+			daÃ±o = DaÃ±oBase - .Stats.def
 			
-			If daño < 0 Then daño = 0
+			If daÃ±o < 0 Then daÃ±o = 0
 			
-			'Call WriteUserHitNPC(UserIndex, daño)
-			Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.UserHitNPC, daño)
-			Call CalcularDarExp(UserIndex, NpcIndex, daño)
-			.Stats.MinHp = .Stats.MinHp - daño
+			'Call WriteUserHitNPC(UserIndex, daÃ±o)
+			Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.UserHitNPC, daÃ±o)
+			Call CalcularDarExp(UserIndex, NpcIndex, daÃ±o)
+			.Stats.MinHp = .Stats.MinHp - daÃ±o
 			
 			If .Stats.MinHp > 0 Then
-				'Trata de apuñalar por la espalda al enemigo
-				If PuedeApuñalar(UserIndex) Then
-					Call DoApuñalar(UserIndex, NpcIndex, 0, DañoBase)
+				'Trata de apuÃ±alar por la espalda al enemigo
+				If PuedeApuÃ±alar(UserIndex) Then
+					Call DoApuÃ±alar(UserIndex, NpcIndex, 0, DaÃ±oBase)
 				End If
 				
-				'trata de dar golpe crítico
-				Call DoGolpeCritico(UserIndex, NpcIndex, 0, daño)
+				'trata de dar golpe crÃ­tico
+				Call DoGolpeCritico(UserIndex, NpcIndex, 0, daÃ±o)
 				
 				If PuedeAcuchillar(UserIndex) Then
-					Call DoAcuchillar(UserIndex, NpcIndex, 0, daño)
+					Call DoAcuchillar(UserIndex, NpcIndex, 0, daÃ±o)
 				End If
 			End If
 			
@@ -412,7 +412,7 @@ Module SistemaCombate
 					If UserList(UserIndex).Invent.WeaponEqpObjIndex = EspadaMataDragonesIndex Then
 						Call QuitarObjetos(EspadaMataDragonesIndex, 1, UserIndex)
 					End If
-					If .Stats.MaxHp > 100000 Then Call LogDesarrollo(UserList(UserIndex).name & " mató un dragón")
+					If .Stats.MaxHp > 100000 Then Call LogDesarrollo(UserList(UserIndex).name & " matÃ³ un dragÃ³n")
 				End If
 				
 				' Para que las mascotas no sigan intentando luchar y
@@ -431,28 +431,28 @@ Module SistemaCombate
 		End With
 	End Sub
 	
-	Public Sub NpcDaño(ByVal NpcIndex As Short, ByVal UserIndex As Short)
+	Public Sub NpcDaÃ±o(ByVal NpcIndex As Short, ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: -
 		'
 		'***************************************************
 		
-		Dim daño As Short
+		Dim daÃ±o As Short
 		Dim Lugar As Short
 		Dim absorbido As Short
 		Dim defbarco As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		
-		daño = RandomNumber(Npclist(NpcIndex).Stats.MinHIT, Npclist(NpcIndex).Stats.MaxHIT)
+		daÃ±o = RandomNumber(Npclist(NpcIndex).Stats.MinHIT, Npclist(NpcIndex).Stats.MaxHIT)
 		
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj2, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj2, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Obj2 As ObjData
 		With UserList(UserIndex)
 			If .flags.Navegando = 1 And .Invent.BarcoObjIndex > 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(.Invent.BarcoObjIndex)
 				defbarco = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
 			End If
@@ -463,17 +463,17 @@ Module SistemaCombate
 				Case Declaraciones.PartesCuerpo.bCabeza
 					'Si tiene casco absorbe el golpe
 					If .Invent.CascoEqpObjIndex > 0 Then
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						Obj_Renamed = ObjData_Renamed(.Invent.CascoEqpObjIndex)
 						absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
 					End If
 				Case Else
 					'Si tiene armadura absorbe el golpe
 					If .Invent.ArmourEqpObjIndex > 0 Then
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						Obj_Renamed = ObjData_Renamed(.Invent.ArmourEqpObjIndex)
 						If .Invent.EscudoEqpObjIndex Then
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							Obj2 = ObjData_Renamed(.Invent.EscudoEqpObjIndex)
 							absorbido = RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef, Obj_Renamed.MaxDef + Obj2.MaxDef)
 						Else
@@ -483,16 +483,16 @@ Module SistemaCombate
 			End Select
 			
 			absorbido = absorbido + defbarco
-			daño = daño - absorbido
-			If daño < 1 Then daño = 1
+			daÃ±o = daÃ±o - absorbido
+			If daÃ±o < 1 Then daÃ±o = 1
 			
-			Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.NPCHitUser, Lugar, daño)
-			'Call WriteNPCHitUser(UserIndex, Lugar, daño)
+			Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.NPCHitUser, Lugar, daÃ±o)
+			'Call WriteNPCHitUser(UserIndex, Lugar, daÃ±o)
 			
-			If .flags.Privilegios And Declaraciones.PlayerType.User Then .Stats.MinHp = .Stats.MinHp - daño
+			If .flags.Privilegios And Declaraciones.PlayerType.User Then .Stats.MinHp = .Stats.MinHp - daÃ±o
 			
 			If .flags.Meditando Then
-				If daño > Fix(.Stats.MinHp / 100 * .Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia) * .Stats.UserSkills(Declaraciones.eSkill.Meditar) / 100 * 12 / (RandomNumber(0, 5) + 7)) Then
+				If daÃ±o > Fix(.Stats.MinHp / 100 * .Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia) * .Stats.UserSkills(Declaraciones.eSkill.Meditar) / 100 * 12 / (RandomNumber(0, 5) + 7)) Then
 					.flags.Meditando = False
 					Call WriteMeditateToggle(UserIndex)
 					Call WriteConsoleMsg(UserIndex, "Dejas de meditar.", Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -643,10 +643,10 @@ Module SistemaCombate
 					End If
 				End If
 				
-				Call NpcDaño(NpcIndex, UserIndex)
+				Call NpcDaÃ±o(NpcIndex, UserIndex)
 				Call WriteUpdateHP(UserIndex)
 				
-				'¿Puede envenenar?
+				'Â¿Puede envenenar?
 				If Npclist(NpcIndex).Veneno = 1 Then Call NpcEnvenenarUser(UserIndex)
 			End With
 			
@@ -679,18 +679,18 @@ Module SistemaCombate
 		NpcImpactoNpc = (RandomNumber(1, 100) <= ProbExito)
 	End Function
 	
-	Public Sub NpcDañoNpc(ByVal Atacante As Short, ByVal Victima As Short)
+	Public Sub NpcDaÃ±oNpc(ByVal Atacante As Short, ByVal Victima As Short)
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: -
 		'
 		'***************************************************
 		
-		Dim daño As Short
+		Dim daÃ±o As Short
 		
 		With Npclist(Atacante)
-			daño = RandomNumber(.Stats.MinHIT, .Stats.MaxHIT)
-			Npclist(Victima).Stats.MinHp = Npclist(Victima).Stats.MinHp - daño
+			daÃ±o = RandomNumber(.Stats.MinHIT, .Stats.MaxHIT)
+			Npclist(Victima).Stats.MinHp = Npclist(Victima).Stats.MinHp - daÃ±o
 			
 			If Npclist(Victima).Stats.MinHp < 1 Then
 				.Movement = .flags.OldMovement
@@ -720,7 +720,7 @@ Module SistemaCombate
 			'Es el Rey Preatoriano?
 			If Npclist(Victima).Numero = PRKING_NPC Then
 				If pretorianosVivos > 0 Then
-					Call WriteConsoleMsg(.MaestroUser, "Debes matar al resto del ejército antes de atacar al rey!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(.MaestroUser, "Debes matar al resto del ejÃ©rcito antes de atacar al rey!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 					.TargetNPC = 0
 					Exit Sub
 				End If
@@ -754,7 +754,7 @@ Module SistemaCombate
 					Call SendData(modSendData.SendTarget.ToNPCArea, Victima, PrepareMessagePlayWave(SND_IMPACTO, Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y))
 				End If
 				
-				Call NpcDañoNpc(Atacante, Victima)
+				Call NpcDaÃ±oNpc(Atacante, Victima)
 			Else
 				If .MaestroUser > 0 Then
 					Call SendData(modSendData.SendTarget.ToNPCArea, Atacante, PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
@@ -770,7 +770,7 @@ Module SistemaCombate
 		'Author: Unknown
 		'Last Modification: 14/01/2010 (ZaMa)
 		'12/01/2010: ZaMa - Los druidas pierden la inmunidad de ser atacados por npcs cuando los atacan.
-		'14/01/2010: ZaMa - Lo transformo en función, para que no se pierdan municiones al atacar targets inválidos.
+		'14/01/2010: ZaMa - Lo transformo en funciÃ³n, para que no se pierdan municiones al atacar targets invÃ¡lidos.
 		'***************************************************
 		
 		On Error GoTo Errhandler
@@ -786,13 +786,13 @@ Module SistemaCombate
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_IMPACTO2, Npclist(NpcIndex).Pos.X, Npclist(NpcIndex).Pos.Y))
 			End If
 			
-			Call UserDañoNpc(UserIndex, NpcIndex)
+			Call UserDaÃ±oNpc(UserIndex, NpcIndex)
 		Else
 			Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_SWING, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y))
 			Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.UserSwing)
 		End If
 		
-		' Reveló su condición de usuario al atacar, los npcs lo van a atacar
+		' RevelÃ³ su condiciÃ³n de usuario al atacar, los npcs lo van a atacar
 		UserList(UserIndex).flags.Ignorado = False
 		
 		UsuarioAtacaNpc = True
@@ -831,14 +831,14 @@ Errhandler:
 				Call QuitarSta(UserIndex, RandomNumber(1, 10))
 			Else
 				If .Genero = Declaraciones.eGenero.Hombre Then
-					Call WriteConsoleMsg(UserIndex, "Estás muy cansado para luchar.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "EstÃ¡s muy cansado para luchar.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				Else
-					Call WriteConsoleMsg(UserIndex, "Estás muy cansada para luchar.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "EstÃ¡s muy cansada para luchar.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				Exit Sub
 			End If
 			
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AttackPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AttackPos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			AttackPos = .Pos
 			Call HeadtoPos(.Char_Renamed.heading, AttackPos)
 			
@@ -991,8 +991,8 @@ Errhandler:
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: 14/01/2010 (ZaMa)
-		'14/01/2010: ZaMa - Lo transformo en función, para que no se pierdan municiones al atacar targets
-		'                    inválidos, y evitar un doble chequeo innecesario
+		'14/01/2010: ZaMa - Lo transformo en funciÃ³n, para que no se pierdan municiones al atacar targets
+		'                    invÃ¡lidos, y evitar un doble chequeo innecesario
 		'***************************************************
 		
 		On Error GoTo Errhandler
@@ -1001,7 +1001,7 @@ Errhandler:
 		
 		With UserList(AtacanteIndex)
 			If Distancia(.Pos, UserList(VictimaIndex).Pos) > MAXDISTANCIAARCO Then
-				Call WriteConsoleMsg(AtacanteIndex, "Estás muy lejos para disparar.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(AtacanteIndex, "EstÃ¡s muy lejos para disparar.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Exit Function
 			End If
 			
@@ -1014,17 +1014,17 @@ Errhandler:
 					Call SendData(modSendData.SendTarget.ToPCArea, VictimaIndex, PrepareMessageCreateFX(UserList(VictimaIndex).Char_Renamed.CharIndex, FXSANGRE, 0))
 				End If
 				
-				'Pablo (ToxicWaste): Guantes de Hurto del Bandido en acción
+				'Pablo (ToxicWaste): Guantes de Hurto del Bandido en acciÃ³n
 				If .clase = Declaraciones.eClass.Bandit Then
 					Call DoDesequipar(AtacanteIndex, VictimaIndex)
 					
-					'y ahora, el ladrón puede llegar a paralizar con el golpe.
+					'y ahora, el ladrÃ³n puede llegar a paralizar con el golpe.
 				ElseIf .clase = Declaraciones.eClass.Thief Then 
 					Call DoHandInmo(AtacanteIndex, VictimaIndex)
 				End If
 				
 				Call SubirSkill(VictimaIndex, Declaraciones.eSkill.Tacticas, False)
-				Call UserDañoUser(AtacanteIndex, VictimaIndex)
+				Call UserDaÃ±oUser(AtacanteIndex, VictimaIndex)
 			Else
 				' Invisible admins doesn't make sound to other clients except itself
 				If .flags.AdminInvisible = 1 Then
@@ -1049,7 +1049,7 @@ Errhandler:
 		Call LogError("Error en UsuarioAtacaUsuario. Error " & Err.Number & " : " & Err.Description)
 	End Function
 	
-	Public Sub UserDañoUser(ByVal AtacanteIndex As Short, ByVal VictimaIndex As Short)
+	Public Sub UserDaÃ±oUser(ByVal AtacanteIndex As Short, ByVal VictimaIndex As Short)
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: 12/01/2010 (ZaMa)
@@ -1059,31 +1059,31 @@ Errhandler:
 		
 		On Error GoTo Errhandler
 		
-		Dim daño As Integer
+		Dim daÃ±o As Integer
 		Dim Lugar As Byte
 		Dim absorbido As Integer
 		Dim defbarco As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualizÃ³ a Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim Resist As Byte
 		
-		daño = CalcularDaño(AtacanteIndex)
+		daÃ±o = CalcularDaÃ±o(AtacanteIndex)
 		
 		Call UserEnvenena(AtacanteIndex, VictimaIndex)
 		
 		Dim j As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj2, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj2, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Obj2 As ObjData
 		With UserList(AtacanteIndex)
 			If .flags.Navegando = 1 And .Invent.BarcoObjIndex > 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(.Invent.BarcoObjIndex)
-				daño = daño + RandomNumber(Obj_Renamed.MinHIT, Obj_Renamed.MaxHIT)
+				daÃ±o = daÃ±o + RandomNumber(Obj_Renamed.MinHIT, Obj_Renamed.MaxHIT)
 			End If
 			
 			If UserList(VictimaIndex).flags.Navegando = 1 And UserList(VictimaIndex).Invent.BarcoObjIndex > 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.BarcoObjIndex)
 				defbarco = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
 			End If
@@ -1098,36 +1098,36 @@ Errhandler:
 				Case Declaraciones.PartesCuerpo.bCabeza
 					'Si tiene casco absorbe el golpe
 					If UserList(VictimaIndex).Invent.CascoEqpObjIndex > 0 Then
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.CascoEqpObjIndex)
 						absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
 						absorbido = absorbido + defbarco - Resist
-						daño = daño - absorbido
-						If daño < 0 Then daño = 1
+						daÃ±o = daÃ±o - absorbido
+						If daÃ±o < 0 Then daÃ±o = 1
 					End If
 					
 				Case Else
 					'Si tiene armadura absorbe el golpe
 					If UserList(VictimaIndex).Invent.ArmourEqpObjIndex > 0 Then
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.ArmourEqpObjIndex)
 						If UserList(VictimaIndex).Invent.EscudoEqpObjIndex Then
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							Obj2 = ObjData_Renamed(UserList(VictimaIndex).Invent.EscudoEqpObjIndex)
 							absorbido = RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef, Obj_Renamed.MaxDef + Obj2.MaxDef)
 						Else
 							absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
 						End If
 						absorbido = absorbido + defbarco - Resist
-						daño = daño - absorbido
-						If daño < 0 Then daño = 1
+						daÃ±o = daÃ±o - absorbido
+						If daÃ±o < 0 Then daÃ±o = 1
 					End If
 			End Select
 			
-			Call WriteMultiMessage(AtacanteIndex, Declaraciones.eMessages.UserHittedUser, UserList(VictimaIndex).Char_Renamed.CharIndex, Lugar, daño)
-			Call WriteMultiMessage(VictimaIndex, Declaraciones.eMessages.UserHittedByUser, .Char_Renamed.CharIndex, Lugar, daño)
+			Call WriteMultiMessage(AtacanteIndex, Declaraciones.eMessages.UserHittedUser, UserList(VictimaIndex).Char_Renamed.CharIndex, Lugar, daÃ±o)
+			Call WriteMultiMessage(VictimaIndex, Declaraciones.eMessages.UserHittedByUser, .Char_Renamed.CharIndex, Lugar, daÃ±o)
 			
-			UserList(VictimaIndex).Stats.MinHp = UserList(VictimaIndex).Stats.MinHp - daño
+			UserList(VictimaIndex).Stats.MinHp = UserList(VictimaIndex).Stats.MinHp - daÃ±o
 			
 			If .flags.Hambre = 0 And .flags.Sed = 0 Then
 				'Si usa un arma quizas suba "Combate con armas"
@@ -1140,7 +1140,7 @@ Errhandler:
 						If ObjData_Renamed(.Invent.WeaponEqpObjIndex).Municion = 0 Then
 							' Si acuchilla
 							If ObjData_Renamed(.Invent.WeaponEqpObjIndex).Acuchilla = 1 Then
-								Call DoAcuchillar(AtacanteIndex, 0, VictimaIndex, daño)
+								Call DoAcuchillar(AtacanteIndex, 0, VictimaIndex, daÃ±o)
 							End If
 						End If
 					Else
@@ -1152,12 +1152,12 @@ Errhandler:
 					Call SubirSkill(AtacanteIndex, Declaraciones.eSkill.Wrestling, True)
 				End If
 				
-				'Trata de apuñalar por la espalda al enemigo
-				If PuedeApuñalar(AtacanteIndex) Then
-					Call DoApuñalar(AtacanteIndex, 0, VictimaIndex, daño)
+				'Trata de apuÃ±alar por la espalda al enemigo
+				If PuedeApuÃ±alar(AtacanteIndex) Then
+					Call DoApuÃ±alar(AtacanteIndex, 0, VictimaIndex, daÃ±o)
 				End If
-				'e intenta dar un golpe crítico [Pablo (ToxicWaste)]
-				Call DoGolpeCritico(AtacanteIndex, 0, VictimaIndex, daño)
+				'e intenta dar un golpe crÃ­tico [Pablo (ToxicWaste)]
+				Call DoGolpeCritico(AtacanteIndex, 0, VictimaIndex, daÃ±o)
 			End If
 			
 			If UserList(VictimaIndex).Stats.MinHp <= 0 Then
@@ -1184,7 +1184,7 @@ Errhandler:
 				Call ActStats(VictimaIndex, AtacanteIndex)
 				Call UserDie(VictimaIndex)
 			Else
-				'Está vivo - Actualizamos el HP
+				'EstÃ¡ vivo - Actualizamos el HP
 				Call WriteUpdateHP(VictimaIndex)
 			End If
 		End With
@@ -1203,7 +1203,7 @@ Errhandler:
 		If AtacanteIndex > 0 Then AtacanteNick = UserList(AtacanteIndex).name
 		If VictimaIndex > 0 Then VictimaNick = UserList(VictimaIndex).name
 		
-		Call LogError("Error en UserDañoUser. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " & AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " & VictimaNick)
+		Call LogError("Error en UserDaÃ±oUser. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " & AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " & VictimaNick)
 	End Sub
 	
 	Sub UsuarioAtacadoPorUsuario(ByVal AttackerIndex As Short, ByVal VictimIndex As Short)
@@ -1306,14 +1306,14 @@ Errhandler:
 		
 		'Estas muerto no podes atacar
 		If UserList(AttackerIndex).flags.Muerto = 1 Then
-			Call WriteConsoleMsg(AttackerIndex, "¡¡Estás muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(AttackerIndex, "Â¡Â¡EstÃ¡s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 			PuedeAtacar = False
 			Exit Function
 		End If
 		
 		'No podes atacar a alguien muerto
 		If UserList(VictimIndex).flags.Muerto = 1 Then
-			Call WriteConsoleMsg(AttackerIndex, "No puedes atacar a un espíritu.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(AttackerIndex, "No puedes atacar a un espÃ­ritu.", Protocol.FontTypeNames.FONTTYPE_INFO)
 			PuedeAtacar = False
 			Exit Function
 		End If
@@ -1358,7 +1358,7 @@ Errhandler:
 					' La victima es armada?
 					If esArmada(VictimIndex) Then
 						' No puede
-						Call WriteConsoleMsg(AttackerIndex, "Los soldados del ejército real tienen prohibido atacar ciudadanos.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+						Call WriteConsoleMsg(AttackerIndex, "Los soldados del ejÃ©rcito real tienen prohibido atacar ciudadanos.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 						Exit Function
 					End If
 				End If
@@ -1377,7 +1377,7 @@ Errhandler:
 			'Sos un Caos atacando otro caos?
 			If esCaos(VictimIndex) Then
 				If esCaos(AttackerIndex) Then
-					Call WriteConsoleMsg(AttackerIndex, "Los miembros de la legión oscura tienen prohibido atacarse entre sí.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+					Call WriteConsoleMsg(AttackerIndex, "Los miembros de la legiÃ³n oscura tienen prohibido atacarse entre sÃ­.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 					Exit Function
 				End If
 			End If
@@ -1396,7 +1396,7 @@ Errhandler:
 				' Por un armada sin seguro
 				If esArmada(AttackerIndex) Then
 					' No puede
-					Call WriteConsoleMsg(AttackerIndex, "Los soldados del ejército real tienen prohibido atacar ciudadanos.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+					Call WriteConsoleMsg(AttackerIndex, "Los soldados del ejÃ©rcito real tienen prohibido atacar ciudadanos.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 					PuedeAtacar = False
 					Exit Function
 				End If
@@ -1408,7 +1408,7 @@ Errhandler:
 			If esArmada(AttackerIndex) Then
 				If UserList(AttackerIndex).Faccion.RecompensasReal > 11 Then
 					If UserList(VictimIndex).Pos.Map = 58 Or UserList(VictimIndex).Pos.Map = 59 Or UserList(VictimIndex).Pos.Map = 60 Then
-						Call WriteConsoleMsg(VictimIndex, "¡Huye de la ciudad! Estás siendo atacado y no podrás defenderte.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+						Call WriteConsoleMsg(VictimIndex, "Â¡Huye de la ciudad! EstÃ¡s siendo atacado y no podrÃ¡s defenderte.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 						PuedeAtacar = True 'Beneficio de Armadas que atacan en su ciudad.
 						Exit Function
 					End If
@@ -1417,20 +1417,20 @@ Errhandler:
 			If esCaos(AttackerIndex) Then
 				If UserList(AttackerIndex).Faccion.RecompensasCaos > 11 Then
 					If UserList(VictimIndex).Pos.Map = 151 Or UserList(VictimIndex).Pos.Map = 156 Then
-						Call WriteConsoleMsg(VictimIndex, "¡Huye de la ciudad! Estás siendo atacado y no podrás defenderte.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+						Call WriteConsoleMsg(VictimIndex, "Â¡Huye de la ciudad! EstÃ¡s siendo atacado y no podrÃ¡s defenderte.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 						PuedeAtacar = True 'Beneficio de Caos que atacan en su ciudad.
 						Exit Function
 					End If
 				End If
 			End If
-			Call WriteConsoleMsg(AttackerIndex, "Esta es una zona segura, aquí no puedes atacar a otros usuarios.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+			Call WriteConsoleMsg(AttackerIndex, "Esta es una zona segura, aquÃ­ no puedes atacar a otros usuarios.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 			PuedeAtacar = False
 			Exit Function
 		End If
 		
 		'Estas atacando desde un trigger seguro? o tu victima esta en uno asi?
 		If MapData(UserList(VictimIndex).Pos.Map, UserList(VictimIndex).Pos.X, UserList(VictimIndex).Pos.Y).trigger = Declaraciones.eTrigger.ZONASEGURA Or MapData(UserList(AttackerIndex).Pos.Map, UserList(AttackerIndex).Pos.X, UserList(AttackerIndex).Pos.Y).trigger = Declaraciones.eTrigger.ZONASEGURA Then
-			Call WriteConsoleMsg(AttackerIndex, "No puedes pelear aquí.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+			Call WriteConsoleMsg(AttackerIndex, "No puedes pelear aquÃ­.", Protocol.FontTypeNames.FONTTYPE_WARNING)
 			PuedeAtacar = False
 			Exit Function
 		End If
@@ -1447,9 +1447,9 @@ Errhandler:
 		'Autor: Unknown Author (Original version)
 		'Returns True if AttackerIndex can attack the NpcIndex
 		'Last Modification: 16/11/2009
-		'24/01/2007 Pablo (ToxicWaste) - Orden y corrección de ataque sobre una mascota y guardias
+		'24/01/2007 Pablo (ToxicWaste) - Orden y correcciÃ³n de ataque sobre una mascota y guardias
 		'14/08/2007 Pablo (ToxicWaste) - Reescribo y agrego TODOS los casos posibles cosa de usar
-		'esta función para todo lo referente a ataque a un NPC. Ya sea Magia, Físico o a Distancia.
+		'esta funciÃ³n para todo lo referente a ataque a un NPC. Ya sea Magia, FÃ­sico o a Distancia.
 		'16/11/2009: ZaMa - Agrego validacion de pertenencia de npc.
 		'02/04/2010: ZaMa - Los armadas ya no peuden atacar npcs no hotiles.
 		'***************************************************
@@ -1458,7 +1458,7 @@ Errhandler:
 		
 		'Estas muerto?
 		If UserList(AttackerIndex).flags.Muerto = 1 Then
-			Call WriteConsoleMsg(AttackerIndex, "¡¡Estás muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(AttackerIndex, "Â¡Â¡EstÃ¡s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 			Exit Function
 		End If
 		
@@ -1482,7 +1482,7 @@ Errhandler:
 		
 		'Es valida la distancia a la cual estamos atacando?
 		If Distancia(UserList(AttackerIndex).Pos, Npclist(NpcIndex).Pos) >= MAXDISTANCIAARCO Then
-			Call WriteConsoleMsg(AttackerIndex, "Estás muy lejos para disparar.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+			Call WriteConsoleMsg(AttackerIndex, "EstÃ¡s muy lejos para disparar.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 			Exit Function
 		End If
 		
@@ -1492,14 +1492,14 @@ Errhandler:
 			If Npclist(NpcIndex).NPCtype = Declaraciones.eNPCType.Guardiascaos Then
 				'Lo quiere atacar un caos?
 				If esCaos(AttackerIndex) Then
-					Call WriteConsoleMsg(AttackerIndex, "No puedes atacar Guardias del Caos siendo de la legión oscura.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(AttackerIndex, "No puedes atacar Guardias del Caos siendo de la legiÃ³n oscura.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Function
 				End If
 				'Es guardia Real?
 			ElseIf Npclist(NpcIndex).NPCtype = Declaraciones.eNPCType.GuardiaReal Then 
 				'Lo quiere atacar un Armada?
 				If esArmada(AttackerIndex) Then
-					Call WriteConsoleMsg(AttackerIndex, "No puedes atacar Guardias Reales siendo del ejército real.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(AttackerIndex, "No puedes atacar Guardias Reales siendo del ejÃ©rcito real.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Function
 				End If
 				'Tienes el seguro puesto?
@@ -1507,13 +1507,13 @@ Errhandler:
 					Call WriteConsoleMsg(AttackerIndex, "Para poder atacar Guardias Reales debes quitarte el seguro.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Function
 				Else
-					Call WriteConsoleMsg(AttackerIndex, "¡Atacaste un Guardia Real! Eres un criminal.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(AttackerIndex, "Â¡Atacaste un Guardia Real! Eres un criminal.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Call VolverCriminal(AttackerIndex)
 					PuedeAtacarNPC = True
 					Exit Function
 				End If
 				
-				'No era un Guardia, asi que es una criatura No-Hostil común.
+				'No era un Guardia, asi que es una criatura No-Hostil comÃºn.
 				'Para asegurarnos que no sea una Mascota:
 			ElseIf Npclist(NpcIndex).MaestroUser = 0 Then 
 				'Si sos ciudadano tenes que quitar el seguro para atacarla.
@@ -1521,7 +1521,7 @@ Errhandler:
 					
 					' Si sos armada no podes atacarlo directamente
 					If esArmada(AttackerIndex) Then
-						Call WriteConsoleMsg(AttackerIndex, "Los miembros del ejército real no pueden atacar npcs no hostiles.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(AttackerIndex, "Los miembros del ejÃ©rcito real no pueden atacar npcs no hostiles.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					End If
 					
@@ -1531,7 +1531,7 @@ Errhandler:
 						Exit Function
 					Else
 						'No tiene seguro puesto. Puede atacar pero es penalizado.
-						Call WriteConsoleMsg(AttackerIndex, "Atacaste un NPC no-hostil. Continúa haciéndolo y te podrás convertir en criminal.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(AttackerIndex, "Atacaste un NPC no-hostil. ContinÃºa haciÃ©ndolo y te podrÃ¡s convertir en criminal.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						'NicoNZ: Cambio para que al atacar npcs no hostiles no bajen puntos de nobleza
 						Call DisNobAuBan(AttackerIndex, 0, 1000)
 						PuedeAtacarNPC = True
@@ -1548,7 +1548,7 @@ Errhandler:
 				'Es mascota de un Ciudadano.
 				If esArmada(AttackerIndex) Then
 					'El atacante es Armada y esta intentando atacar mascota de un Ciudadano
-					Call WriteConsoleMsg(AttackerIndex, "Los miembros del ejército real no pueden atacar mascotas de ciudadanos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(AttackerIndex, "Los miembros del ejÃ©rcito real no pueden atacar mascotas de ciudadanos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Exit Function
 				End If
 				
@@ -1560,7 +1560,7 @@ Errhandler:
 						Call WriteConsoleMsg(AttackerIndex, "Para atacar mascotas de ciudadanos debes quitarte el seguro.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					Else
-						'El atacante no tiene el seguro puesto. Recibe penalización.
+						'El atacante no tiene el seguro puesto. Recibe penalizaciÃ³n.
 						Call WriteConsoleMsg(AttackerIndex, "Has atacado la Mascota de un ciudadano. Eres un criminal.", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Call VolverCriminal(AttackerIndex)
 						PuedeAtacarNPC = True
@@ -1576,10 +1576,10 @@ Errhandler:
 			Else
 				'Es mascota de un Criminal.
 				If esCaos(Npclist(NpcIndex).MaestroUser) Then
-					'Es Caos el Dueño.
+					'Es Caos el DueÃ±o.
 					If esCaos(AttackerIndex) Then
 						'Un Caos intenta atacar una criatura de un Caos. No puede atacar.
-						Call WriteConsoleMsg(AttackerIndex, "Los miembros de la legión oscura no pueden atacar mascotas de otros legionarios. ", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(AttackerIndex, "Los miembros de la legiÃ³n oscura no pueden atacar mascotas de otros legionarios. ", Protocol.FontTypeNames.FONTTYPE_INFO)
 						Exit Function
 					End If
 				End If
@@ -1621,7 +1621,7 @@ Errhandler:
 						' Si ya esta paralizado o inmobilizado, no puedo inmobilizarlo de nuevo
 						If .flags.Inmovilizado = 1 Or .flags.Paralizado = 1 Then
 							
-							'TODO_ZAMA: Si dejo esto asi, los pks con seguro peusto van a poder inmobilizar criaturas con dueño
+							'TODO_ZAMA: Si dejo esto asi, los pks con seguro peusto van a poder inmobilizar criaturas con dueÃ±o
 							' Si es pk neutral, puede hacer lo que quiera :P.
 							If Not criminal(AttackerIndex) And Not criminal(OwnerUserIndex) Then
 								
@@ -1631,7 +1631,7 @@ Errhandler:
 									'Intententa paralizar un npc de un armada?
 									If esArmada(OwnerUserIndex) Then
 										'El atacante es Armada y esta intentando paralizar un npc de un armada: No puede
-										Call WriteConsoleMsg(AttackerIndex, "Los miembros del Ejército Real no pueden paralizar criaturas ya paralizadas pertenecientes a otros miembros del Ejército Real", Protocol.FontTypeNames.FONTTYPE_INFO)
+										Call WriteConsoleMsg(AttackerIndex, "Los miembros del EjÃ©rcito Real no pueden paralizar criaturas ya paralizadas pertenecientes a otros miembros del EjÃ©rcito Real", Protocol.FontTypeNames.FONTTYPE_INFO)
 										Exit Function
 										
 										'El atacante es Armada y esta intentando paralizar un npc de un ciuda
@@ -1641,9 +1641,9 @@ Errhandler:
 											Call WriteConsoleMsg(AttackerIndex, "Para paralizar criaturas ya paralizadas pertenecientes a ciudadanos debes quitarte el seguro.", Protocol.FontTypeNames.FONTTYPE_INFO)
 											Exit Function
 										Else
-											' Si ya estaba atacable, no podrá atacar a un npc perteneciente a otro ciuda
+											' Si ya estaba atacable, no podrÃ¡ atacar a un npc perteneciente a otro ciuda
 											If ToogleToAtackable(AttackerIndex, OwnerUserIndex) Then
-												Call WriteConsoleMsg(AttackerIndex, "Has paralizado la criatura de un ciudadano, ahora eres atacable por él.", Protocol.FontTypeNames.FONTTYPE_INFO)
+												Call WriteConsoleMsg(AttackerIndex, "Has paralizado la criatura de un ciudadano, ahora eres atacable por Ã©l.", Protocol.FontTypeNames.FONTTYPE_INFO)
 												PuedeAtacarNPC = True
 											End If
 											
@@ -1661,9 +1661,9 @@ Errhandler:
 										
 										'El atacante no tiene el seguro puesto, ataca.
 									Else
-										' Si ya estaba atacable, no podrá atacar a un npc perteneciente a otro ciuda
+										' Si ya estaba atacable, no podrÃ¡ atacar a un npc perteneciente a otro ciuda
 										If ToogleToAtackable(AttackerIndex, OwnerUserIndex) Then
-											Call WriteConsoleMsg(AttackerIndex, "Has paralizado la criatura de un ciudadano, ahora eres atacable por él.", Protocol.FontTypeNames.FONTTYPE_INFO)
+											Call WriteConsoleMsg(AttackerIndex, "Has paralizado la criatura de un ciudadano, ahora eres atacable por Ã©l.", Protocol.FontTypeNames.FONTTYPE_INFO)
 											PuedeAtacarNPC = True
 										End If
 										
@@ -1676,14 +1676,14 @@ Errhandler:
 								' Si ambos son caos
 								If esCaos(AttackerIndex) And esCaos(OwnerUserIndex) Then
 									'El atacante es Caos y esta intentando paralizar un npc de un Caos
-									Call WriteConsoleMsg(AttackerIndex, "Los miembros de la legión oscura no pueden paralizar criaturas ya paralizadas por otros legionarios.", Protocol.FontTypeNames.FONTTYPE_INFO)
+									Call WriteConsoleMsg(AttackerIndex, "Los miembros de la legiÃ³n oscura no pueden paralizar criaturas ya paralizadas por otros legionarios.", Protocol.FontTypeNames.FONTTYPE_INFO)
 									Exit Function
 								End If
 							End If
 							
 							' El npc no esta inmobilizado ni paralizado
 						Else
-							' Si no tiene dueño, puede apropiarselo
+							' Si no tiene dueÃ±o, puede apropiarselo
 							If OwnerUserIndex = 0 Then
 								' Siempre que no posea uno ya (el inmo/para no cambia pertenencia de npcs).
 								If UserList(AttackerIndex).flags.OwnedNpc = 0 Then
@@ -1691,14 +1691,14 @@ Errhandler:
 								End If
 							End If
 							
-							' Siempre se pueden paralizar/inmobilizar npcs con o sin dueño
+							' Siempre se pueden paralizar/inmobilizar npcs con o sin dueÃ±o
 							' que no tengan ese estado
 							PuedeAtacarNPC = True
 							Exit Function
 							
 						End If
 						
-						' No lanzó hechizos inmobilizantes
+						' No lanzÃ³ hechizos inmobilizantes
 					Else
 						
 						' El npc le pertenece a un ciudadano
@@ -1710,7 +1710,7 @@ Errhandler:
 								'Intententa atacar un npc de un armada?
 								If esArmada(OwnerUserIndex) Then
 									'El atacante es Armada y esta intentando atacar el npc de un armada: No puede
-									Call WriteConsoleMsg(AttackerIndex, "Los miembros del Ejército Real no pueden atacar criaturas pertenecientes a otros miembros del Ejército Real", Protocol.FontTypeNames.FONTTYPE_INFO)
+									Call WriteConsoleMsg(AttackerIndex, "Los miembros del EjÃ©rcito Real no pueden atacar criaturas pertenecientes a otros miembros del EjÃ©rcito Real", Protocol.FontTypeNames.FONTTYPE_INFO)
 									Exit Function
 									
 									'El atacante es Armada y esta intentando atacar un npc de un ciuda
@@ -1721,9 +1721,9 @@ Errhandler:
 										Call WriteConsoleMsg(AttackerIndex, "Para atacar criaturas ya pertenecientes a ciudadanos debes quitarte el seguro.", Protocol.FontTypeNames.FONTTYPE_INFO)
 										Exit Function
 									Else
-										' Si ya estaba atacable, no podrá atacar a un npc perteneciente a otro ciuda
+										' Si ya estaba atacable, no podrÃ¡ atacar a un npc perteneciente a otro ciuda
 										If ToogleToAtackable(AttackerIndex, OwnerUserIndex) Then
-											Call WriteConsoleMsg(AttackerIndex, "Has atacado a la criatura de un ciudadano, ahora eres atacable por él.", Protocol.FontTypeNames.FONTTYPE_INFO)
+											Call WriteConsoleMsg(AttackerIndex, "Has atacado a la criatura de un ciudadano, ahora eres atacable por Ã©l.", Protocol.FontTypeNames.FONTTYPE_INFO)
 											PuedeAtacarNPC = True
 										End If
 										
@@ -1745,7 +1745,7 @@ Errhandler:
 										'El atacante no tiene el seguro puesto, ataca.
 									Else
 										If ToogleToAtackable(AttackerIndex, OwnerUserIndex) Then
-											Call WriteConsoleMsg(AttackerIndex, "Has atacado a la criatura de un ciudadano, ahora eres atacable por él.", Protocol.FontTypeNames.FONTTYPE_INFO)
+											Call WriteConsoleMsg(AttackerIndex, "Has atacado a la criatura de un ciudadano, ahora eres atacable por Ã©l.", Protocol.FontTypeNames.FONTTYPE_INFO)
 											PuedeAtacarNPC = True
 										End If
 										
@@ -1767,10 +1767,10 @@ Errhandler:
 							' Es npc de un criminal
 						Else
 							If esCaos(OwnerUserIndex) Then
-								'Es Caos el Dueño.
+								'Es Caos el DueÃ±o.
 								If esCaos(AttackerIndex) Then
 									'Un Caos intenta atacar una npc de un Caos. No puede atacar.
-									Call WriteConsoleMsg(AttackerIndex, "Los miembros de la Legión Oscura no pueden atacar criaturas de otros legionarios. ", Protocol.FontTypeNames.FONTTYPE_INFO)
+									Call WriteConsoleMsg(AttackerIndex, "Los miembros de la LegiÃ³n Oscura no pueden atacar criaturas de otros legionarios. ", Protocol.FontTypeNames.FONTTYPE_INFO)
 									Exit Function
 								End If
 							End If
@@ -1778,7 +1778,7 @@ Errhandler:
 					End If
 				End If
 				
-				' Si no tiene dueño el npc, se lo apropia
+				' Si no tiene dueÃ±o el npc, se lo apropia
 			Else
 				' Solo pueden apropiarse de npcs los caos, armadas o ciudas.
 				If Not criminal(AttackerIndex) Or esCaos(AttackerIndex) Then
@@ -1786,12 +1786,12 @@ Errhandler:
 					If Not (esPretoriano(NpcIndex) <> 0) Then
 						' Si es una mascota atacando, no se apropia del npc
 						If Not IsPet Then
-							' No es dueño de ningun npc => Se lo apropia.
+							' No es dueÃ±o de ningun npc => Se lo apropia.
 							If UserList(AttackerIndex).flags.OwnedNpc = 0 Then
 								Call ApropioNpc(AttackerIndex, NpcIndex)
-								' Es dueño de un npc, pero no puede ser de este porque no tiene propietario.
+								' Es dueÃ±o de un npc, pero no puede ser de este porque no tiene propietario.
 							Else
-								' Se va a adueñar del npc (y perder el otro) solo si no inmobiliza/paraliza
+								' Se va a adueÃ±ar del npc (y perder el otro) solo si no inmobiliza/paraliza
 								If Not Paraliza Then Call ApropioNpc(AttackerIndex, NpcIndex)
 							End If
 						End If
@@ -1803,7 +1803,7 @@ Errhandler:
 		'Es el Rey Preatoriano?
 		If esPretoriano(NpcIndex) = 4 Then
 			If pretorianosVivos > 0 Then
-				Call WriteConsoleMsg(AttackerIndex, "Debes matar al resto del ejército antes de atacar al rey.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(AttackerIndex, "Debes matar al resto del ejÃ©rcito antes de atacar al rey.", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				Exit Function
 			End If
 		End If
@@ -1829,7 +1829,7 @@ Errhandler:
 		SameParty = UserList(UserIndex).PartyIndex = UserList(OtherUserIndex).PartyIndex And UserList(UserIndex).PartyIndex <> 0
 	End Function
 	
-	Sub CalcularDarExp(ByVal UserIndex As Short, ByVal NpcIndex As Short, ByVal ElDaño As Integer)
+	Sub CalcularDarExp(ByVal UserIndex As Short, ByVal NpcIndex As Short, ByVal ElDaÃ±o As Integer)
 		'***************************************************
 		'Autor: Nacho (Integer)
 		'Last Modification: 03/09/06 Nacho
@@ -1839,12 +1839,12 @@ Errhandler:
 		Dim ExpaDar As Integer
 		
 		'[Nacho] Chekeamos que las variables sean validas para las operaciones
-		If ElDaño <= 0 Then ElDaño = 0
+		If ElDaÃ±o <= 0 Then ElDaÃ±o = 0
 		If Npclist(NpcIndex).Stats.MaxHp <= 0 Then Exit Sub
-		If ElDaño > Npclist(NpcIndex).Stats.MinHp Then ElDaño = Npclist(NpcIndex).Stats.MinHp
+		If ElDaÃ±o > Npclist(NpcIndex).Stats.MinHp Then ElDaÃ±o = Npclist(NpcIndex).Stats.MinHp
 		
 		'[Nacho] La experiencia a dar es la porcion de vida quitada * toda la experiencia
-		ExpaDar = CInt(ElDaño * (Npclist(NpcIndex).GiveEXP / Npclist(NpcIndex).Stats.MaxHp))
+		ExpaDar = CInt(ElDaÃ±o * (Npclist(NpcIndex).GiveEXP / Npclist(NpcIndex).Stats.MaxHp))
 		If ExpaDar <= 0 Then Exit Sub
 		
 		'[Nacho] Vamos contando cuanta experiencia sacamos, porque se da toda la que no se dio al user que mata al NPC
@@ -1879,7 +1879,7 @@ Errhandler:
 		'***************************************************
 		
 		'TODO: Pero que rebuscado!!
-		'Nigo:  Te lo rediseñe, pero no te borro el TODO para que lo revises.
+		'Nigo:  Te lo rediseÃ±e, pero no te borro el TODO para que lo revises.
 		On Error GoTo Errhandler
 		Dim tOrg As Declaraciones.eTrigger
 		Dim tDst As Declaraciones.eTrigger
@@ -1924,8 +1924,8 @@ Errhandler:
 					
 					If RandomNumber(1, 100) < 60 Then
 						UserList(VictimaIndex).flags.Envenenado = 1
-						Call WriteConsoleMsg(VictimaIndex, "¡¡" & UserList(AtacanteIndex).name & " te ha envenenado!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
-						Call WriteConsoleMsg(AtacanteIndex, "¡¡Has envenenado a " & UserList(VictimaIndex).name & "!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(VictimaIndex, "Â¡Â¡" & UserList(AtacanteIndex).name & " te ha envenenado!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(AtacanteIndex, "Â¡Â¡Has envenenado a " & UserList(VictimaIndex).name & "!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 					End If
 				End If
 			End If

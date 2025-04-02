@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module Admin
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module Admin
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	
 	Public Structure tMotd
@@ -110,7 +110,7 @@ Module Admin
 		On Error Resume Next
 		
 		Dim i As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim MiNPC As npc
 		
 		For i = 1 To LastNPC
@@ -118,7 +118,7 @@ Module Admin
 			If Npclist(i).flags.NPCActive Then
 				
 				If InMapBounds(Npclist(i).Orig.Map, Npclist(i).Orig.X, Npclist(i).Orig.Y) And Npclist(i).Numero = Guardias Then
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					MiNPC = Npclist(i)
 					Call QuitarNPC(i)
 					Call ReSpawnNpc(MiNPC)
@@ -182,7 +182,7 @@ Module Admin
 		
 		Call SaveForums()
 		
-		Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> WorldSave ha concluÌdo.", Protocol.FontTypeNames.FONTTYPE_SERVER))
+		Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> WorldSave ha conclu√≠do.", Protocol.FontTypeNames.FONTTYPE_SERVER))
 		
 	End Sub
 	
@@ -203,7 +203,7 @@ Module Admin
 					If UserList(i).Counters.Pena < 1 Then
 						UserList(i).Counters.Pena = 0
 						Call WarpUserChar(i, Libertad.Map, Libertad.X, Libertad.Y, True)
-						Call WriteConsoleMsg(i, "°Has sido liberado!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(i, "¬°Has sido liberado!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						
 						Call FlushBuffer(i)
 					End If
@@ -226,9 +226,9 @@ Module Admin
 		Call WarpUserChar(UserIndex, Prision.Map, Prision.X, Prision.Y, True)
 		
 		If migr_LenB(GmName) = 0 Then
-			Call WriteConsoleMsg(UserIndex, "Has sido encarcelado, deber·s permanecer en la c·rcel " & Minutos & " minutos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, "Has sido encarcelado, deber√°s permanecer en la c√°rcel " & Minutos & " minutos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 		Else
-			Call WriteConsoleMsg(UserIndex, GmName & " te ha encarcelado, deber·s permanecer en la c·rcel " & Minutos & " minutos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, GmName & " te ha encarcelado, deber√°s permanecer en la c√°rcel " & Minutos & " minutos.", Protocol.FontTypeNames.FONTTYPE_INFO)
 		End If
 		If UserList(UserIndex).flags.Traveling = 1 Then
 			UserList(UserIndex).flags.Traveling = 0
@@ -357,7 +357,7 @@ Module Admin
 		Dale = True
 		LoopC = 1
 		Do While LoopC <= BanIps.Count() And Dale
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Dale = (BanIps.Item(LoopC) <> ip)
 			LoopC = LoopC + 1
 		Loop 
@@ -474,7 +474,7 @@ Module Admin
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: 03/02/07
-		'Last Modified By: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last Modified By: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'***************************************************
 		
 		If EsAdmin(name) Then
@@ -492,7 +492,7 @@ Module Admin
 	
 	Public Sub BanCharacter(ByVal bannerUserIndex As Short, ByVal UserName As String, ByVal reason As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 03/02/07
 		'
 		'***************************************************
@@ -512,13 +512,13 @@ Module Admin
 		
 		With UserList(bannerUserIndex)
 			If tUser <= 0 Then
-				Call WriteConsoleMsg(bannerUserIndex, "El usuario no est· online.", Protocol.FontTypeNames.FONTTYPE_TALK)
+				Call WriteConsoleMsg(bannerUserIndex, "El usuario no est√° online.", Protocol.FontTypeNames.FONTTYPE_TALK)
 				
 				If FileExist(CharPath & UserName & ".chr") Then
 					userPriv = UserDarPrivilegioLevel(UserName)
 					
 					If (userPriv And rank) > (.flags.Privilegios And rank) Then
-						Call WriteConsoleMsg(bannerUserIndex, "No puedes banear a al alguien de mayor jerarquÌa.", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(bannerUserIndex, "No puedes banear a al alguien de mayor jerarqu√≠a.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					Else
 						If GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban") <> "0" Then
 							Call WriteConsoleMsg(bannerUserIndex, "El personaje ya se encuentra baneado.", Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -547,7 +547,7 @@ Module Admin
 				End If
 			Else
 				If (UserList(tUser).flags.Privilegios And rank) > (.flags.Privilegios And rank) Then
-					Call WriteConsoleMsg(bannerUserIndex, "No puedes banear a al alguien de mayor jerarquÌa.", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(bannerUserIndex, "No puedes banear a al alguien de mayor jerarqu√≠a.", Protocol.FontTypeNames.FONTTYPE_INFO)
 				End If
 				
 				Call LogBan(tUser, bannerUserIndex, reason)

@@ -46,10 +46,10 @@ Friend Class SoundMapInfo
 		SOUND_COMIDA = 7
 	End Enum
 	
-	'UPGRADE_NOTE: Class_Initialize se actualizÛ a Class_Initialize_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualiz√≥ a Class_Initialize_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
 		'armar el array
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz p_Mapas ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz p_Mapas ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim p_Mapas(NumMaps)
 		Call LoadSoundMapInfo()
 	End Sub
@@ -75,11 +75,11 @@ Friend Class SoundMapInfo
 			If IsNumeric(Temps) Then
 				p_Mapas(i).Cantidad = Val(Temps)
 				
-				'UPGRADE_WARNING: El lÌmite inferior de la matriz p_Mapas(i).flags ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El l√≠mite inferior de la matriz p_Mapas(i).flags ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim p_Mapas(i).flags(p_Mapas(i).Cantidad)
-				'UPGRADE_WARNING: El lÌmite inferior de la matriz p_Mapas(i).Probabilidad ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El l√≠mite inferior de la matriz p_Mapas(i).Probabilidad ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim p_Mapas(i).Probabilidad(p_Mapas(i).Cantidad)
-				'UPGRADE_WARNING: El lÌmite inferior de la matriz p_Mapas(i).SoundIndex ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El l√≠mite inferior de la matriz p_Mapas(i).SoundIndex ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim p_Mapas(i).SoundIndex(p_Mapas(i).Cantidad)
 				
 				For j = 1 To p_Mapas(i).Cantidad

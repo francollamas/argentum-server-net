@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module Declaraciones
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module Declaraciones
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	
 	''
@@ -89,14 +89,14 @@ Module Declaraciones
 	
 	Public Enum eClass
 		Mage = 1 'Mago
-		Cleric 'ClÈrigo
+		Cleric 'Cl√©rigo
 		Warrior 'Guerrero
 		Assasin 'Asesino
-		Thief 'LadrÛn
+		Thief 'Ladr√≥n
 		Bard 'Bardo
 		Druid 'Druida
 		Bandit 'Bandido
-		Paladin 'PaladÌn
+		Paladin 'Palad√≠n
 		Hunter 'Cazador
 		Worker 'Trabajador
 		Pirat 'Pirata
@@ -155,7 +155,7 @@ Module Declaraciones
 	Public Const SLOTS_POR_FILA As Byte = 5
 	
 	Public Const PROB_ACUCHILLAR As Byte = 20
-	Public Const DA—O_ACUCHILLAR As Single = 0.2
+	Public Const DA√ëO_ACUCHILLAR As Single = 0.2
 	
 	Public Const MAXMASCOTASENTRENADOR As Byte = 7
 	
@@ -234,7 +234,7 @@ Module Declaraciones
 	
 	' TODO: Y ESTO ? LO CONOCE GD ?
 	Public Const EsfuerzoTalarGeneral As Byte = 4
-	Public Const EsfuerzoTalarLeÒador As Byte = 2
+	Public Const EsfuerzoTalarLe√±ador As Byte = 2
 	
 	Public Const EsfuerzoPescarPescador As Byte = 1
 	Public Const EsfuerzoPescarGeneral As Byte = 3
@@ -246,7 +246,7 @@ Module Declaraciones
 	
 	Public Const PORCENTAJE_MATERIALES_UPGRADE As Single = 0.85
 	
-	' La utilidad de esto es casi nula, sÛlo se revisa si fue a la cabeza...
+	' La utilidad de esto es casi nula, s√≥lo se revisa si fue a la cabeza...
 	Public Enum PartesCuerpo
 		bCabeza = 1
 		bPiernaIzquierda = 2
@@ -261,7 +261,7 @@ Module Declaraciones
 	Public Const MAX_ORO_EDIT As Integer = 5000000
 	
 	
-	Public Const STANDARD_BOUNTY_HUNTER_MESSAGE As String = "Se te ha otorgado un premio por ayudar al proyecto reportando bugs, el mismo est· disponible en tu bÛveda."
+	Public Const STANDARD_BOUNTY_HUNTER_MESSAGE As String = "Se te ha otorgado un premio por ayudar al proyecto reportando bugs, el mismo est√° disponible en tu b√≥veda."
 	Public Const TAG_USER_INVISIBLE As String = "[INVISIBLE]"
 	Public Const TAG_CONSULT_MODE As String = "[CONSULTA]"
 	
@@ -277,14 +277,14 @@ Module Declaraciones
 	Public Const LingoteHierro As Short = 386
 	Public Const LingotePlata As Short = 387
 	Public Const LingoteOro As Short = 388
-	Public Const LeÒa As Short = 58
-	Public Const LeÒaElfica As Short = 1006
+	Public Const Le√±a As Short = 58
+	Public Const Le√±aElfica As Short = 1006
 	
 	Public Const MAXNPCS As Short = 10000
 	Public Const MAXCHARS As Short = 10000
 	
-	Public Const HACHA_LE—ADOR As Short = 127
-	Public Const HACHA_LE—A_ELFICA As Short = 1005
+	Public Const HACHA_LE√ëADOR As Short = 127
+	Public Const HACHA_LE√ëA_ELFICA As Short = 1005
 	Public Const PIQUETE_MINERO As Short = 187
 	
 	Public Const DAGA As Short = 15
@@ -297,7 +297,7 @@ Module Declaraciones
 	Public Const SERRUCHO_CARPINTERO As Short = 198
 	Public Const ObjArboles As Short = 4
 	Public Const RED_PESCA As Short = 543
-	Public Const CA—A_PESCA As Short = 138
+	Public Const CA√ëA_PESCA As Short = 138
 	
 	Public Enum eNPCType
 		Comun = 0
@@ -314,7 +314,7 @@ Module Declaraciones
 		Gobernador = 11
 	End Enum
 	
-	Public Const MIN_APU—ALAR As Byte = 10
+	Public Const MIN_APU√ëALAR As Byte = 10
 	
 	'********** CONSTANTANTES ***********
 	
@@ -393,7 +393,7 @@ Module Declaraciones
 		Tacticas = 3
 		Armas = 4
 		Meditar = 5
-		ApuÒalar = 6
+		Apu√±alar = 6
 		Ocultarse = 7
 		Supervivencia = 8
 		Talar = 9
@@ -434,17 +434,17 @@ Module Declaraciones
 	Public Const AumentoSTMago As Byte = AumentoSTDef - 1
 	Public Const AumentoSTTrabajador As Byte = AumentoSTDef + 25
 	
-	'TamaÒo del mapa
+	'Tama√±o del mapa
 	Public Const XMaxMapSize As Byte = 100
 	Public Const XMinMapSize As Byte = 1
 	Public Const YMaxMapSize As Byte = 100
 	Public Const YMinMapSize As Byte = 1
 	
-	'TamaÒo del tileset
+	'Tama√±o del tileset
 	Public Const TileSizeX As Byte = 32
 	Public Const TileSizeY As Byte = 32
 	
-	'TamaÒo en Tiles de la pantalla de visualizacion
+	'Tama√±o en Tiles de la pantalla de visualizacion
 	Public Const XWindow As Byte = 17
 	Public Const YWindow As Byte = 13
 	
@@ -460,7 +460,7 @@ Module Declaraciones
 	Public Const SND_USERMUERTE As Byte = 11
 	Public Const SND_IMPACTO As Byte = 10
 	Public Const SND_IMPACTO2 As Byte = 12
-	Public Const SND_LE—ADOR As Byte = 13
+	Public Const SND_LE√ëADOR As Byte = 13
 	Public Const SND_FOGATA As Byte = 14
 	Public Const SND_AVE As Byte = 21
 	Public Const SND_AVE2 As Byte = 22
@@ -504,7 +504,7 @@ Module Declaraciones
 		otForos = 10
 		otPociones = 11
 		otBebidas = 13
-		otLeÒa = 14
+		otLe√±a = 14
 		otFogata = 15
 		otESCUDO = 16
 		otCASCO = 17
@@ -641,7 +641,7 @@ Module Declaraciones
 	End Structure
 	
 	Public Structure Inventario
-		'UPGRADE_NOTE: Object se actualizÛ a Object_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Object se actualiz√≥ a Object_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		<VBFixedArray(MAX_INVENTORY_SLOTS)> Dim Object_Renamed() As UserOBJ
 		Dim WeaponEqpObjIndex As Short
 		Dim WeaponEqpSlot As Byte
@@ -690,7 +690,7 @@ Module Declaraciones
 	End Structure
 	
 	'Datos de user o npc
-	'UPGRADE_NOTE: Char se actualizÛ a Char_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Char se actualiz√≥ a Char_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Structure Char_Renamed
 		Dim CharIndex As Short
 		Dim Head As Short
@@ -711,9 +711,9 @@ Module Declaraciones
 		Dim GrhSecundario As Short
 		'Solo contenedores
 		Dim MaxItems As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Conte, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Conte, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Conte As Inventario
-		Dim ApuÒala As Byte
+		Dim Apu√±ala As Byte
 		Dim Acuchilla As Byte
 		Dim HechizoIndex As Short
 		Dim ForoID As String
@@ -791,9 +791,9 @@ Module Declaraciones
 		Dim NoLog As Byte 'es un objeto que esta prohibido loguear?
 		Dim Upgrade As Short
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz ClaseProhibida ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz ClaseProhibida ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim ClaseProhibida(NUMCLASES)
 		End Sub
 	End Structure
@@ -809,9 +809,9 @@ Module Declaraciones
 		Dim AtaqueArmas As Double
 		Dim AtaqueProyectiles As Double
 		Dim AtaqueWrestling As Double
-		Dim DaÒoArmas As Double
-		Dim DaÒoProyectiles As Double
-		Dim DaÒoWrestling As Double
+		Dim Da√±oArmas As Double
+		Dim Da√±oProyectiles As Double
+		Dim Da√±oWrestling As Double
 		Dim Escudo As Double
 	End Structure
 	
@@ -831,7 +831,7 @@ Module Declaraciones
 	
 	'[KEVIN]
 	Public Structure BancoInventario
-		'UPGRADE_NOTE: Object se actualizÛ a Object_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Object se actualiz√≥ a Object_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		<VBFixedArray(MAX_BANCOINVENTORY_SLOTS)> Dim Object_Renamed() As UserOBJ
 		Dim NroItems As Short
 
@@ -887,15 +887,15 @@ Module Declaraciones
 		<VBFixedArray(MAX_GENERAL_POST)> Dim GeneralTitle() As String
 		<VBFixedArray(MAX_GENERAL_POST)> Dim GeneralPost() As String
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz StickyTitle ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz StickyTitle ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim StickyTitle(MAX_STICKY_POST)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz StickyPost ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz StickyPost ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim StickyPost(MAX_STICKY_POST)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz GeneralTitle ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz GeneralTitle ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim GeneralTitle(MAX_GENERAL_POST)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz GeneralPost ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz GeneralPost ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim GeneralPost(MAX_GENERAL_POST)
 		End Sub
 	End Structure
@@ -951,29 +951,29 @@ Module Declaraciones
 		<VBFixedArray(NUMSKILLS)> Dim ExpSkills() As Integer
 		<VBFixedArray(NUMSKILLS)> Dim EluSkills() As Integer
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz UserSkills ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz UserSkills ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim UserSkills(NUMSKILLS)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz UserAtributos ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz UserAtributos ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim UserAtributos(NUMATRIBUTOS)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz UserAtributosBackUP ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz UserAtributosBackUP ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim UserAtributosBackUP(NUMATRIBUTOS)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz UserHechizos ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz UserHechizos ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim UserHechizos(MAXUSERHECHIZOS)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz ExpSkills ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz ExpSkills ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim ExpSkills(NUMSKILLS)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz EluSkills ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz EluSkills ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim EluSkills(NUMSKILLS)
 		End Sub
 	End Structure
 	
 	'Flags
 	Public Structure UserFlags
-		Dim Muerto As Byte 'øEsta muerto?
-		Dim Escondido As Byte 'øEsta escondido?
-		Dim Comerciando As Boolean 'øEsta comerciando?
-		Dim UserLogged As Boolean 'øEsta online?
+		Dim Muerto As Byte '¬øEsta muerto?
+		Dim Escondido As Byte '¬øEsta escondido?
+		Dim Comerciando As Boolean '¬øEsta comerciando?
+		Dim UserLogged As Boolean '¬øEsta online?
 		Dim Meditando As Boolean
 		Dim Descuento As String
 		Dim Hambre As Byte
@@ -1003,14 +1003,14 @@ Module Declaraciones
 		Dim Seguro As Boolean
 		Dim SeguroResu As Boolean
 		Dim DuracionEfecto As Integer
-		Dim TargetNPC As Short ' Npc seÒalado por el usuario
-		Dim TargetNpcTipo As eNPCType ' Tipo del npc seÒalado
+		Dim TargetNPC As Short ' Npc se√±alado por el usuario
+		Dim TargetNpcTipo As eNPCType ' Tipo del npc se√±alado
 		Dim OwnedNpc As Short ' Npc que le pertenece (no puede ser atacado)
 		Dim NpcInv As Short
 		Dim Ban As Byte
 		Dim AdministrativeBan As Byte
-		Dim TargetUser As Short ' Usuario seÒalado
-		Dim TargetObj As Short ' Obj seÒalado
+		Dim TargetUser As Short ' Usuario se√±alado
+		Dim TargetObj As Short ' Obj se√±alado
 		Dim TargetObjMap As Short
 		Dim TargetObjX As Short
 		Dim TargetObjY As Short
@@ -1049,7 +1049,7 @@ Module Declaraciones
 		Dim Mimetizado As Byte
 		Dim CentinelaOK As Boolean 'Centinela
 		Dim lastMap As Short
-		Dim Traveling As Byte 'Travelin Band ø?
+		Dim Traveling As Byte 'Travelin Band ¬ø?
 	End Structure
 	
 	Public Structure UserCounters
@@ -1126,7 +1126,7 @@ Module Declaraciones
 		Dim name As String
 		Dim ID As Integer
 		Dim showName As Boolean 'Permite que los GMs oculten su nick con el comando /SHOWNAME
-		'UPGRADE_NOTE: Char se actualizÛ a Char_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Char se actualiz√≥ a Char_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Char_Renamed As Char_Renamed 'Define la apariencia
 		Dim CharMimetizado As Char_Renamed
 		Dim OrigChar As Char_Renamed
@@ -1137,13 +1137,13 @@ Module Declaraciones
 		Dim Genero As eGenero
 		Dim email As String
 		Dim Hogar As eCiudad
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Invent, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Invent, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Invent As Inventario
 		Dim Pos As WorldPos
 		Dim ConnIDValida As Boolean
 		Dim ConnID As Short 'ID
 		'[KEVIN]
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura BancoInvent, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura BancoInvent, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim BancoInvent As BancoInventario
 		'[/KEVIN]
 		Dim Counters As UserCounters
@@ -1151,7 +1151,7 @@ Module Declaraciones
 		<VBFixedArray(MAXMASCOTAS)> Dim MascotasIndex() As Short
 		<VBFixedArray(MAXMASCOTAS)> Dim MascotasType() As Short
 		Dim NroMascotas As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Stats, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Stats, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Stats As UserStats
 		Dim flags As UserFlags
 		Dim Reputacion As tReputacion
@@ -1159,7 +1159,7 @@ Module Declaraciones
 		Dim LogOnTime As Date
 		Dim UpTime As Integer
 		Dim ip As String
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura ComUsu, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura ComUsu, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim ComUsu As tCOmercioUsuario
 		Dim GuildIndex As Short 'puntero al array global de guilds
 		Dim FundandoGuildAlineacion As modGuilds.ALINEACION_GUILD 'esto esta aca hasta que se parchee el cliente y se pongan cadenas de datos distintas para cada alineacion
@@ -1173,11 +1173,11 @@ Module Declaraciones
 		Dim incomingData As clsByteQueue
 		Dim CurrentInventorySlots As Byte
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz MascotasIndex ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz MascotasIndex ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim MascotasIndex(MAXMASCOTAS)
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz MascotasType ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz MascotasType ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim MascotasType(MAXMASCOTAS)
 			Stats.Initialize()
 			ComUsu.Initialize()
@@ -1216,7 +1216,7 @@ Module Declaraciones
 		Dim AfectaParalisis As Byte
 		Dim Domable As Short
 		Dim Respawn As Byte
-		Dim NPCActive As Boolean 'øEsta vivo?
+		Dim NPCActive As Boolean '¬øEsta vivo?
 		Dim Follow As Boolean
 		Dim Faccion As Byte
 		Dim AtacaDoble As Byte
@@ -1273,7 +1273,7 @@ Module Declaraciones
 	
 	Public Structure npc
 		Dim name As String
-		'UPGRADE_NOTE: Char se actualizÛ a Char_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Char se actualiz√≥ a Char_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Char_Renamed As Char_Renamed 'Define como se vera
 		Dim desc As String
 		Dim NPCtype As eNPCType
@@ -1299,7 +1299,7 @@ Module Declaraciones
 		Dim Stats As NPCStats
 		Dim flags As NPCFlags
 		Dim Contadores As NpcCounters
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Invent, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Invent, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Invent As Inventario
 		Dim CanAttack As Byte
 		Dim NroExpresiones As Byte
@@ -1313,15 +1313,15 @@ Module Declaraciones
 		Dim MaestroNpc As Short
 		Dim Mascotas As Short
 		' New!! Needed for pathfindig
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura PFINFO, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura PFINFO, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim PFINFO As NpcPathFindingInfo
 		Dim AreasInfo As AreaInfo
 		'Hogar
 		Dim Ciudad As Byte
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz Drop ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz Drop ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim Drop(MAX_NPC_DROPS)
 			Invent.Initialize()
 		End Sub
@@ -1342,9 +1342,9 @@ Module Declaraciones
 		Dim TileExit As WorldPos
 		Dim trigger As eTrigger
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz Graphic ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz Graphic ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim Graphic(4)
 		End Sub
 	End Structure
@@ -1375,13 +1375,13 @@ Module Declaraciones
 	Public ULTIMAVERSION As String
 	Public BackUp As Boolean ' TODO: Se usa esta variable ?
 	
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz ListaRazas ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz ListaRazas ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public ListaRazas(NUMRAZAS) As String
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz SkillsNames ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz SkillsNames ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public SkillsNames(NUMSKILLS) As String
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz ListaClases ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz ListaClases ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public ListaClases(NUMCLASES) As String
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz ListaAtributos ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz ListaAtributos ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public ListaAtributos(NUMATRIBUTOS) As String
 	
 	
@@ -1447,21 +1447,21 @@ Module Declaraciones
 	
 	'*****************ARRAYS PUBLICOS*************************
 	Public UserList() As User 'USUARIOS
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz Npclist ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_WARNING: Es posible que la matriz Npclist necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz Npclist ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: Es posible que la matriz Npclist necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 	Public Npclist(MAXNPCS) As npc 'NPCS
 	Public MapData(,,) As MapBlock
-	'UPGRADE_NOTE: MapInfo se actualizÛ a MapInfo_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: MapInfo se actualiz√≥ a MapInfo_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public MapInfo_Renamed() As MapInfo
 	Public Hechizos() As tHechizo
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz CharList ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz CharList ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public CharList(MAXCHARS) As Short
-	'UPGRADE_NOTE: ObjData se actualizÛ a ObjData_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: ObjData se actualiz√≥ a ObjData_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public ObjData_Renamed() As ObjData
 	Public FX() As FXdata
 	Public SpawnList() As tCriaturasEntrenador
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz LevelSkill_Renamed ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_NOTE: LevelSkill se actualizÛ a LevelSkill_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz LevelSkill_Renamed ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_NOTE: LevelSkill se actualiz√≥ a LevelSkill_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public LevelSkill_Renamed(50) As LevelSkill
 	Public ForbidenNames() As String
 	Public ArmasHerrero() As Short
@@ -1469,21 +1469,21 @@ Module Declaraciones
 	Public ObjCarpintero() As Short
 	Public MD5s() As String
 	Public BanIps As New Collection
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz Parties ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz Parties ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public Parties(MAX_PARTIES) As clsParty
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz ModClase_Renamed ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_NOTE: ModClase se actualizÛ a ModClase_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz ModClase_Renamed ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_NOTE: ModClase se actualiz√≥ a ModClase_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public ModClase_Renamed(NUMCLASES) As ModClase
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz ModRaza_Renamed ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-	'UPGRADE_NOTE: ModRaza se actualizÛ a ModRaza_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz ModRaza_Renamed ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_NOTE: ModRaza se actualiz√≥ a ModRaza_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public ModRaza_Renamed(NUMRAZAS) As ModRaza
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz ModVida ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz ModVida ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public ModVida(NUMCLASES) As Double
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz DistribucionEnteraVida ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz DistribucionEnteraVida ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public DistribucionEnteraVida(5) As Short
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz DistribucionSemienteraVida ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz DistribucionSemienteraVida ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public DistribucionSemienteraVida(4) As Short
-	'UPGRADE_WARNING: El lÌmite inferior de la matriz Ciudades ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El l√≠mite inferior de la matriz Ciudades ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Public Ciudades(NUMCIUDADES) As WorldPos
 	Public distanceToCities() As HomeDistance
 	'*********************************************************
@@ -1491,9 +1491,9 @@ Module Declaraciones
 	Structure HomeDistance
 		<VBFixedArray(5)> Dim distanceToCity() As Short
 		
-		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+		'UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
 		Public Sub Initialize()
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz distanceToCity ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz distanceToCity ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim distanceToCity(5)
 		End Sub
 	End Structure

@@ -63,7 +63,7 @@ Module mdParty
 	
 	''
 	'Numero al que elevamos el nivel de cada miembro de la party
-	'Esto es usado para calcular la distribuciÛn de la experiencia entre los miembros
+	'Esto es usado para calcular la distribuci√≥n de la experiencia entre los miembros
 	'Se lee del archivo de balance
 	Public ExponenteNivelParty As Single
 	
@@ -110,7 +110,7 @@ Module mdParty
 			Call WriteConsoleMsg(UserIndex, "Tu carisma y liderazgo no son suficientes para liderar una party.", Protocol.FontTypeNames.FONTTYPE_PARTY)
 			PuedeCrearParty = False
 		ElseIf UserList(UserIndex).flags.Muerto = 1 Then 
-			Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+			Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 			PuedeCrearParty = False
 		End If
 	End Function
@@ -130,23 +130,23 @@ Module mdParty
 					If .Stats.UserSkills(Declaraciones.eSkill.Liderazgo) >= 5 Then
 						tInt = mdParty.NextParty
 						If tInt = -1 Then
-							Call WriteConsoleMsg(UserIndex, "Por el momento no se pueden crear m·s parties.", Protocol.FontTypeNames.FONTTYPE_PARTY)
+							Call WriteConsoleMsg(UserIndex, "Por el momento no se pueden crear m√°s parties.", Protocol.FontTypeNames.FONTTYPE_PARTY)
 							Exit Sub
 						Else
 							Parties(tInt) = New clsParty
 							If Not Parties(tInt).NuevoMiembro(UserIndex) Then
-								Call WriteConsoleMsg(UserIndex, "La party est· llena, no puedes entrar.", Protocol.FontTypeNames.FONTTYPE_PARTY)
-								'UPGRADE_NOTE: El objeto Parties() no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+								Call WriteConsoleMsg(UserIndex, "La party est√° llena, no puedes entrar.", Protocol.FontTypeNames.FONTTYPE_PARTY)
+								'UPGRADE_NOTE: El objeto Parties() no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 								Parties(tInt) = Nothing
 								Exit Sub
 							Else
-								Call WriteConsoleMsg(UserIndex, "°Has formado una party!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+								Call WriteConsoleMsg(UserIndex, "¬°Has formado una party!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 								.PartyIndex = tInt
 								.PartySolicitud = 0
 								If Not Parties(tInt).HacerLeader(UserIndex) Then
-									Call WriteConsoleMsg(UserIndex, "No puedes hacerte lÌder.", Protocol.FontTypeNames.FONTTYPE_PARTY)
+									Call WriteConsoleMsg(UserIndex, "No puedes hacerte l√≠der.", Protocol.FontTypeNames.FONTTYPE_PARTY)
 								Else
-									Call WriteConsoleMsg(UserIndex, "°Te has convertido en lÌder de la party!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+									Call WriteConsoleMsg(UserIndex, "¬°Te has convertido en l√≠der de la party!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 								End If
 							End If
 						End If
@@ -154,7 +154,7 @@ Module mdParty
 						Call WriteConsoleMsg(UserIndex, "No tienes suficientes puntos de liderazgo para liderar una party.", Protocol.FontTypeNames.FONTTYPE_PARTY)
 					End If
 				Else
-					Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+					Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 				End If
 			Else
 				Call WriteConsoleMsg(UserIndex, "Ya perteneces a una party.", Protocol.FontTypeNames.FONTTYPE_PARTY)
@@ -180,7 +180,7 @@ Module mdParty
 				Exit Sub
 			End If
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 				.PartySolicitud = 0
 				Exit Sub
 			End If
@@ -188,7 +188,7 @@ Module mdParty
 			If tInt > 0 Then
 				If UserList(tInt).PartyIndex > 0 Then
 					.PartySolicitud = UserList(tInt).PartyIndex
-					Call WriteConsoleMsg(UserIndex, "El fundador decidir· si te acepta en la party.", Protocol.FontTypeNames.FONTTYPE_PARTY)
+					Call WriteConsoleMsg(UserIndex, "El fundador decidir√° si te acepta en la party.", Protocol.FontTypeNames.FONTTYPE_PARTY)
 				Else
 					Call WriteConsoleMsg(UserIndex, UserList(tInt).name & " no es fundador de ninguna party.", Protocol.FontTypeNames.FONTTYPE_INFO)
 					.PartySolicitud = 0
@@ -214,7 +214,7 @@ Module mdParty
 		If PI > 0 Then
 			If Parties(PI).SaleMiembro(UserIndex) Then
 				'sale el leader
-				'UPGRADE_NOTE: El objeto Parties() no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+				'UPGRADE_NOTE: El objeto Parties() no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 				Parties(PI) = Nothing
 			Else
 				UserList(UserIndex).PartyIndex = 0
@@ -239,7 +239,7 @@ Module mdParty
 			If Parties(PI).SaleMiembro(OldMember) Then
 				'si la funcion me da true, entonces la party se disolvio
 				'y los partyindex fueron reseteados a 0
-				'UPGRADE_NOTE: El objeto Parties() no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+				'UPGRADE_NOTE: El objeto Parties() no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 				Parties(PI) = Nothing
 			Else
 				UserList(OldMember).PartyIndex = 0
@@ -269,7 +269,7 @@ Module mdParty
 			If Parties(PI).EsPartyLeader(User) Then
 				UserPuedeEjecutarComandos = True
 			Else
-				Call WriteConsoleMsg(User, "°No eres el lÌder de tu party!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+				Call WriteConsoleMsg(User, "¬°No eres el l√≠der de tu party!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 				Exit Function
 			End If
 		Else
@@ -303,7 +303,7 @@ Module mdParty
 							Else
 								'no pudo entrar
 								'ACA UNO PUEDE CODIFICAR OTRO TIPO DE ERRORES...
-								Call SendData(modSendData.SendTarget.ToAdmins, leader, PrepareMessageConsoleMsg(" Servidor> CAT¡STROFE EN PARTIES, NUEVOMIEMBRO DIO FALSE! :S ", Protocol.FontTypeNames.FONTTYPE_PARTY))
+								Call SendData(modSendData.SendTarget.ToAdmins, leader, PrepareMessageConsoleMsg(" Servidor> CAT√ÅSTROFE EN PARTIES, NUEVOMIEMBRO DIO FALSE! :S ", Protocol.FontTypeNames.FONTTYPE_PARTY))
 							End If
 						Else
 							'no debe entrar
@@ -319,7 +319,7 @@ Module mdParty
 						Exit Sub
 					End If
 				Else
-					Call WriteConsoleMsg(leader, "°Est· muerto, no puedes aceptar miembros en ese estado!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+					Call WriteConsoleMsg(leader, "¬°Est√° muerto, no puedes aceptar miembros en ese estado!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 					Exit Sub
 				End If
 			Else
@@ -364,12 +364,12 @@ Module mdParty
 		'*************************************************
 		'Author: Unknown
 		'Last modified: 11/27/09 (Budi)
-		'Adapte la funciÛn a los nuevos mÈtodos de clsParty
+		'Adapte la funci√≥n a los nuevos m√©todos de clsParty
 		'*************************************************
 		Dim i As Short
 		Dim PI As Short
 		Dim Text As String
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz MembersOnline ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz MembersOnline ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		Dim MembersOnline(PARTY_MAXMEMBERS) As Short
 		
 		PI = UserList(UserIndex).PartyIndex
@@ -405,12 +405,12 @@ Module mdParty
 		If PI = UserList(NewLeader).PartyIndex Then
 			If UserList(NewLeader).flags.Muerto = 0 Then
 				If Parties(PI).HacerLeader(NewLeader) Then
-					Call Parties(PI).MandarMensajeAConsola("El nuevo lÌder de la party es " & UserList(NewLeader).name, UserList(OldLeader).name)
+					Call Parties(PI).MandarMensajeAConsola("El nuevo l√≠der de la party es " & UserList(NewLeader).name, UserList(OldLeader).name)
 				Else
-					Call WriteConsoleMsg(OldLeader, "°No se ha hecho el cambio de mando!", Protocol.FontTypeNames.FONTTYPE_PARTY)
+					Call WriteConsoleMsg(OldLeader, "¬°No se ha hecho el cambio de mando!", Protocol.FontTypeNames.FONTTYPE_PARTY)
 				End If
 			Else
-				Call WriteConsoleMsg(OldLeader, "°Est· muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(OldLeader, "¬°Est√° muerto!", Protocol.FontTypeNames.FONTTYPE_INFO)
 			End If
 		Else
 			Call WriteConsoleMsg(OldLeader, LCase(UserList(NewLeader).name) & " no pertenece a tu party.", Protocol.FontTypeNames.FONTTYPE_INFO)

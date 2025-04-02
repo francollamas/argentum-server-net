@@ -15,7 +15,7 @@ Friend Class clsEstadisticasIPC
 	
 	'*************************************************
 	
-	'UPGRADE_NOTE: str se actualizÛ a str_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: str se actualiz√≥ a str_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Function BuscaVentana(ByRef Wnd As Integer, ByRef str_Renamed As String) As Integer
 		
 		BuscaVentana = 0

@@ -3,7 +3,7 @@ Option Explicit On
 Imports VB = Microsoft.VisualBasic
 Module ES
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 M·rquez Pablo Ignacio
+	'Copyright (C) 2002 M√°rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -25,10 +25,10 @@ Module ES
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 n˙mero 983 piso 7 dto A
+	'Calle 3 n√∫mero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'CÛdigo Postal 1900
-	'Pablo Ignacio M·rquez
+	'C√≥digo Postal 1900
+	'Pablo Ignacio M√°rquez
 	
 	
 	Public Sub CargarSpawnList()
@@ -200,7 +200,7 @@ Module ES
 		'
 		'***************************************************
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz ForbidenNames ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz ForbidenNames ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim ForbidenNames(TxtDimension(DatPath & "NombresInvalidos.txt"))
 		Dim N, i As Short
 		N = FreeFile()
@@ -225,10 +225,10 @@ Module ES
 		'#               ATENCION PELIGRO                  #
 		'###################################################
 		'
-		'  °°°° NO USAR GetVar PARA LEER Hechizos.dat !!!!
+		'  ¬°¬°¬°¬° NO USAR GetVar PARA LEER Hechizos.dat !!!!
 		'
-		'El que ose desafiar esta LEY, se las tendr· que ver
-		'con migo. Para leer Hechizos.dat se deber· usar
+		'El que ose desafiar esta LEY, se las tendr√° que ver
+		'con migo. Para leer Hechizos.dat se deber√° usar
 		'la nueva clase clsLeerInis.
 		'
 		'Alejo
@@ -247,7 +247,7 @@ Module ES
 		'obtiene el numero de hechizos
 		NumeroHechizos = Val(Leer.GetValue("INIT", "NumeroHechizos"))
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz Hechizos ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz Hechizos ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Hechizos(NumeroHechizos)
 		
 		frmCargando.Porcentaje.Text = "0 %"
@@ -346,7 +346,7 @@ Module ES
 			End With
 		Next Hechizo
 		
-		'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		Leer = Nothing
 		
 		Exit Sub
@@ -367,7 +367,7 @@ Errhandler:
 		
 		MaxLines = Val(GetVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "INIT", "NumLines"))
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim MOTD(MaxLines)
 		For i = 1 To MaxLines
 			MOTD(i).texto = GetVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "Motd", "Line" & i)
@@ -460,28 +460,28 @@ Errhandler:
 		Seek(FreeFileInf, 1)
 		'map Header
 		
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileMap, MapInfo_Renamed(Map).MapVersion)
 		Seek(FreeFileMap, Seek(FreeFileMap) + 263)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileMap, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileMap, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileMap, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileMap, TempInt)
 		
 		'inf Header
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FilePut(FreeFileInf, TempInt)
 		
 		'Write .map file
@@ -496,18 +496,18 @@ Errhandler:
 					If .Graphic(4) Then ByFlags = ByFlags Or 8
 					If .trigger Then ByFlags = ByFlags Or 16
 					
-					'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					FilePut(FreeFileMap, ByFlags)
 					
-					'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					FilePut(FreeFileMap, .Graphic(1))
 					
 					For LoopC = 2 To 4
-						'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						If .Graphic(LoopC) Then FilePut(FreeFileMap, .Graphic(LoopC))
 					Next LoopC
 					
-					'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					If .trigger Then FilePut(FreeFileMap, CShort(.trigger))
 					
 					'.inf file
@@ -525,25 +525,25 @@ Errhandler:
 					If .NpcIndex Then ByFlags = ByFlags Or 2
 					If .ObjInfo.ObjIndex Then ByFlags = ByFlags Or 4
 					
-					'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					FilePut(FreeFileInf, ByFlags)
 					
 					If .TileExit.Map Then
-						'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FilePut(FreeFileInf, .TileExit.Map)
-						'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FilePut(FreeFileInf, .TileExit.X)
-						'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FilePut(FreeFileInf, .TileExit.Y)
 					End If
 					
-					'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					If .NpcIndex Then FilePut(FreeFileInf, Npclist(.NpcIndex).Numero)
 					
 					If .ObjInfo.ObjIndex Then
-						'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FilePut(FreeFileInf, .ObjInfo.ObjIndex)
-						'UPGRADE_WARNING: Put se actualizÛ a FilePut y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Put se actualiz√≥ a FilePut y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FilePut(FreeFileInf, .ObjInfo.Amount)
 					End If
 				End With
@@ -591,7 +591,7 @@ Errhandler:
 		
 		N = Val(GetVar(DatPath & "ArmasHerrero.dat", "INIT", "NumArmas"))
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz ArmasHerrero ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz ArmasHerrero ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Preserve ArmasHerrero(N)
 		
 		For lc = 1 To N
@@ -611,7 +611,7 @@ Errhandler:
 		
 		N = Val(GetVar(DatPath & "ArmadurasHerrero.dat", "INIT", "NumArmaduras"))
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz ArmadurasHerrero ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz ArmadurasHerrero ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Preserve ArmadurasHerrero(N)
 		
 		For lc = 1 To N
@@ -636,9 +636,9 @@ Errhandler:
 				.AtaqueArmas = Val(GetVar(DatPath & "Balance.dat", "MODATAQUEARMAS", ListaClases(i)))
 				.AtaqueProyectiles = Val(GetVar(DatPath & "Balance.dat", "MODATAQUEPROYECTILES", ListaClases(i)))
 				.AtaqueWrestling = Val(GetVar(DatPath & "Balance.dat", "MODATAQUEWRESTLING", ListaClases(i)))
-				.DaÒoArmas = Val(GetVar(DatPath & "Balance.dat", "MODDA—OARMAS", ListaClases(i)))
-				.DaÒoProyectiles = Val(GetVar(DatPath & "Balance.dat", "MODDA—OPROYECTILES", ListaClases(i)))
-				.DaÒoWrestling = Val(GetVar(DatPath & "Balance.dat", "MODDA—OWRESTLING", ListaClases(i)))
+				.Da√±oArmas = Val(GetVar(DatPath & "Balance.dat", "MODDA√ëOARMAS", ListaClases(i)))
+				.Da√±oProyectiles = Val(GetVar(DatPath & "Balance.dat", "MODDA√ëOPROYECTILES", ListaClases(i)))
+				.Da√±oWrestling = Val(GetVar(DatPath & "Balance.dat", "MODDA√ëOWRESTLING", ListaClases(i)))
 				.Escudo = Val(GetVar(DatPath & "Balance.dat", "MODESCUDO", ListaClases(i)))
 			End With
 		Next i
@@ -659,7 +659,7 @@ Errhandler:
 			ModVida(i) = Val(GetVar(DatPath & "Balance.dat", "MODVIDA", ListaClases(i)))
 		Next i
 		
-		'DistribuciÛn de Vida
+		'Distribuci√≥n de Vida
 		For i = 1 To 5
 			DistribucionEnteraVida(i) = Val(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "E" & CStr(i)))
 		Next i
@@ -691,7 +691,7 @@ Errhandler:
 		
 		N = Val(GetVar(DatPath & "ObjCarpintero.dat", "INIT", "NumObjs"))
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz ObjCarpintero ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz ObjCarpintero ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Preserve ObjCarpintero(N)
 		
 		For lc = 1 To N
@@ -713,10 +713,10 @@ Errhandler:
 		'#               ATENCION PELIGRO                  #
 		'###################################################
 		'
-		'°°°° NO USAR GetVar PARA LEER DESDE EL OBJ.DAT !!!!
+		'¬°¬°¬°¬° NO USAR GetVar PARA LEER DESDE EL OBJ.DAT !!!!
 		'
-		'El que ose desafiar esta LEY, se las tendr· que ver
-		'con migo. Para leer desde el OBJ.DAT se deber· usar
+		'El que ose desafiar esta LEY, se las tendr√° que ver
+		'con migo. Para leer desde el OBJ.DAT se deber√° usar
 		'la nueva clase clsLeerInis.
 		'
 		'Alejo
@@ -732,7 +732,7 @@ Errhandler:
 		'*****************************************************************
 		'Carga la lista de objetos
 		'*****************************************************************
-		'UPGRADE_NOTE: Object se actualizÛ a Object_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Object se actualiz√≥ a Object_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Object_Renamed As Short
 		Dim Leer As New clsIniReader
 		
@@ -744,9 +744,9 @@ Errhandler:
 		frmCargando.Porcentaje.Text = "0 %"
 
 
-		'UPGRADE_WARNING: Es posible que la matriz ObjData_Renamed necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz ObjData_Renamed ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-		'UPGRADE_NOTE: ObjData se actualizÛ a ObjData_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Es posible que la matriz ObjData_Renamed necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz ObjData_Renamed ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_NOTE: ObjData se actualiz√≥ a ObjData_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		ReDim Preserve ObjData_Renamed(NumObjDatas)
 		ArrayInitializers.InitializeStruct(ObjData_Renamed)
 
@@ -802,7 +802,7 @@ Errhandler:
 						
 					Case Declaraciones.eOBJType.otWeapon
 						.WeaponAnim = Val(Leer.GetValue("OBJ" & Object_Renamed, "Anim"))
-						.ApuÒala = Val(Leer.GetValue("OBJ" & Object_Renamed, "ApuÒala"))
+						.Apu√±ala = Val(Leer.GetValue("OBJ" & Object_Renamed, "Apu√±ala"))
 						.Envenena = Val(Leer.GetValue("OBJ" & Object_Renamed, "Envenena"))
 						.MaxHIT = Val(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT"))
 						.MinHIT = Val(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT"))
@@ -952,7 +952,7 @@ Errhandler:
 		Next Object_Renamed
 		
 		
-		'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		Leer = Nothing
 		
 		' Inicializo los foros faccionarios
@@ -1127,7 +1127,7 @@ Errhandler:
 			.UpTime = CInt(UserFile.GetValue("INIT", "UpTime"))
 			
 			If .flags.Muerto = 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Char. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Char. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				.Char_Renamed = .OrigChar
 			Else
 				.Char_Renamed.body = iCuerpoMuerto
@@ -1297,12 +1297,12 @@ CleanExit:
 		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
 
-		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim MapData(NumMaps, XMaxMapSize, YMaxMapSize)
 		ArrayInitializers.InitializeStruct(MapData)
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz MapInfo_Renamed ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-		'UPGRADE_NOTE: MapInfo se actualizÛ a MapInfo_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz MapInfo_Renamed ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_NOTE: MapInfo se actualiz√≥ a MapInfo_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		ReDim MapInfo_Renamed(NumMaps)
 		
 		For Map = 1 To NumMaps
@@ -1354,12 +1354,12 @@ man:
 		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
 
-		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim MapData(NumMaps, XMaxMapSize, YMaxMapSize)
 		ArrayInitializers.InitializeStruct(MapData)
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz MapInfo_Renamed ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-		'UPGRADE_NOTE: MapInfo se actualizÛ a MapInfo_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz MapInfo_Renamed ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_NOTE: MapInfo se actualiz√≥ a MapInfo_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		ReDim MapInfo_Renamed(NumMaps)
 		
 		For Map = 1 To NumMaps
@@ -1407,28 +1407,28 @@ man:
 		Seek(FreeFileInf, 1)
 		
 		'map Header
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileMap, MapInfo_Renamed(Map).MapVersion)
 		Seek(FreeFileMap, Seek(FreeFileMap) + 263)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileMap, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileMap, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileMap, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileMap, TempInt)
 		
 		'inf Header
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileInf, TempInt)
-		'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileGet(FreeFileInf, TempInt)
 		
 		For Y = YMinMapSize To YMaxMapSize
@@ -1436,51 +1436,51 @@ man:
 				With MapData(Map, X, Y)
 					
 					'.dat file
-					'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					FileGet(FreeFileMap, ByFlags)
 					
 					If ByFlags And 1 Then
 						.Blocked = 1
 					End If
 					
-					'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					FileGet(FreeFileMap, .Graphic(1))
 					
 					'Layer 2 used?
-					'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					If ByFlags And 2 Then FileGet(FreeFileMap, .Graphic(2))
 					
 					'Layer 3 used?
-					'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					If ByFlags And 4 Then FileGet(FreeFileMap, .Graphic(3))
 					
 					'Layer 4 used?
-					'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					If ByFlags And 8 Then FileGet(FreeFileMap, .Graphic(4))
 					
 					'Trigger used?
 					If ByFlags And 16 Then
 						'Enums are 4 byte long in VB, so we make sure we only read 2
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileMap, TempInt)
 						.trigger = TempInt
 					End If
 					
-					'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+					'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 					FileGet(FreeFileInf, ByFlags)
 					
 					If ByFlags And 1 Then
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileInf, .TileExit.Map)
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileInf, .TileExit.X)
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileInf, .TileExit.Y)
 					End If
 					
 					If ByFlags And 2 Then
 						'Get and make NPC
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileInf, .NpcIndex)
 						
 						If .NpcIndex > 0 Then
@@ -1507,9 +1507,9 @@ man:
 					
 					If ByFlags And 4 Then
 						'Get and make Object
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileInf, .ObjInfo.ObjIndex)
-						'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+						'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 						FileGet(FreeFileInf, .ObjInfo.Amount)
 					End If
 				End With
@@ -1654,11 +1654,11 @@ errh:
 		IntervaloUserPuedeCastear = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo"))
 		FrmInterv.txtIntervaloLanzaHechizo.Text = CStr(IntervaloUserPuedeCastear)
 		
-		'UPGRADE_WARNING: La propiedad Timer TIMER_AI.Interval no puede tener un valor de 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
+		'UPGRADE_WARNING: La propiedad Timer TIMER_AI.Interval no puede tener un valor de 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
 		frmMain.TIMER_AI.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
 		FrmInterv.txtAI.Text = CStr(frmMain.TIMER_AI.Interval)
 		
-		'UPGRADE_WARNING: La propiedad Timer npcataca.Interval no puede tener un valor de 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
+		'UPGRADE_WARNING: La propiedad Timer npcataca.Interval no puede tener un valor de 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
 		frmMain.npcataca.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
 		FrmInterv.txtNPCPuedeAtacar.Text = CStr(frmMain.npcataca.Interval)
 		
@@ -1673,7 +1673,7 @@ errh:
 		IntervaloGolpeMagia = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeMagia"))
 		IntervaloGolpeUsar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeUsar"))
 		
-		'UPGRADE_WARNING: La propiedad Timer tLluvia.Interval no puede tener un valor de 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
+		'UPGRADE_WARNING: La propiedad Timer tLluvia.Interval no puede tener un valor de 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
 		frmMain.tLluvia.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
 		FrmInterv.txtIntervaloPerdidaStaminaLluvia.Text = CStr(frmMain.tLluvia.Interval)
 		
@@ -1694,14 +1694,14 @@ errh:
 		Temporal = Val(GetVar(IniPath & "Server.ini", "INIT", "MaxUsers"))
 		If MaxUsers = 0 Then
 			MaxUsers = Temporal
-			'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim UserList(MaxUsers)
 			ArrayInitializers.InitializeStruct(UserList)
 		End If
 		
 		'&&&&&&&&&&&&&&&&&&&&& BALANCE &&&&&&&&&&&&&&&&&&&&&&&
-		'Se agregÛ en LoadBalance y en el Balance.dat
+		'Se agreg√≥ en LoadBalance y en el Balance.dat
 		'PorcentajeRecuperoMana = val(GetVar(IniPath & "Server.ini", "BALANCE", "PorcentajeRecuperoMana"))
 		
 		''&&&&&&&&&&&&&&&&&&&&& FIN BALANCE &&&&&&&&&&&&&&&&&&&&&&&
@@ -1727,15 +1727,15 @@ errh:
 		Arghal.X = CShort(GetVar(DatPath & "Ciudades.dat", "Arghal", "X"))
 		Arghal.Y = CShort(GetVar(DatPath & "Ciudades.dat", "Arghal", "Y"))
 		
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cUllathorpe). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cUllathorpe). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Ciudades(Declaraciones.eCiudad.cUllathorpe) = Ullathorpe
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cNix). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cNix). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Ciudades(Declaraciones.eCiudad.cNix) = Nix
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cBanderbill). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cBanderbill). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Ciudades(Declaraciones.eCiudad.cBanderbill) = Banderbill
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cLindos). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cLindos). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Ciudades(Declaraciones.eCiudad.cLindos) = Lindos
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cArghal). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cArghal). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Ciudades(Declaraciones.eCiudad.cArghal) = Arghal
 		
 		Call MD5sCarga()
@@ -1745,10 +1745,10 @@ errh:
 	
 	' TODO MIGRA: funciona pero es lento e ineficiente
 	Public Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
-		Dim sectionNames As New Collection ' Para guardar el orden de apariciÛn de secciones
-		Dim sectionData As New Collection ' Cada elemento ser· un Scripting.Dictionary con las claves de la secciÛn
+		Dim sectionNames As New Collection ' Para guardar el orden de aparici√≥n de secciones
+		Dim sectionData As New Collection ' Cada elemento ser√° un Scripting.Dictionary con las claves de la secci√≥n
 		Dim currentSection As String
-		Dim dictKeys As Object ' As Scripting.Dictionary (lo declaramos como Object para compatibilidad en VB6 cl·sico)
+		Dim dictKeys As Object ' As Scripting.Dictionary (lo declaramos como Object para compatibilidad en VB6 cl√°sico)
 		Dim i As Integer
 		Dim line As String
 		Dim fNum As Short
@@ -1756,21 +1756,21 @@ errh:
 		Dim rawLines() As String
 		
 		' --- Leer archivo si existe ---
-		'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		If Dir(file) <> "" Then
 			fNum = FreeFile
 			FileOpen(fNum, file, OpenMode.Binary)
 			If LOF(fNum) > 0 Then
 				fileContent = Space(LOF(fNum))
-				'UPGRADE_WARNING: Get se actualizÛ a FileGet y tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+				'UPGRADE_WARNING: Get se actualiz√≥ a FileGet y tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 				FileGet(fNum, fileContent)
 			End If
 			FileClose(fNum)
 		Else
-			fileContent = "" ' Archivo no existe, se crear·
+			fileContent = "" ' Archivo no existe, se crear√°
 		End If
 		
-		' --- Separar en lÌneas ---
+		' --- Separar en l√≠neas ---
 		If Len(fileContent) > 0 Then
 			rawLines = Split(fileContent, vbCrLf)
 		Else
@@ -1778,15 +1778,15 @@ errh:
 			rawLines(0) = ""
 		End If
 		
-		' --- Inicializar secciÛn actual como vacÌo ---
+		' --- Inicializar secci√≥n actual como vac√≠o ---
 		currentSection = ""
 		
 		' -----------------------------------------------------------------------------
 		' 1) Parsear todo el archivo en memoria: secciones y claves
-		'    - Al encontrar una nueva secciÛn, si ya existe en 'sectionNames', seguimos usando la misma
+		'    - Al encontrar una nueva secci√≥n, si ya existe en 'sectionNames', seguimos usando la misma
 		'      para no duplicarla, de lo contrario se crea.
-		'    - Al encontrar "Clave=Valor", se guarda/actualiza en el diccionario de la secciÛn actual.
-		'    - Se ignoran lÌneas vacÌas.
+		'    - Al encontrar "Clave=Valor", se guarda/actualiza en el diccionario de la secci√≥n actual.
+		'    - Se ignoran l√≠neas vac√≠as.
 		' -----------------------------------------------------------------------------
 		Dim sectionExists As Boolean
 		Dim sIdx As Integer
@@ -1797,13 +1797,13 @@ errh:
 			line = Trim(rawLines(i))
 			If line <> "" Then
 				If Left(line, 1) = "[" And Right(line, 1) = "]" Then
-					' SecciÛn
+					' Secci√≥n
 					currentSection = Mid(line, 2, Len(line) - 2)
 					sectionExists = False
 					
-					' Verificar si la secciÛn ya existe
+					' Verificar si la secci√≥n ya existe
 					For sIdx = 1 To sectionNames.Count()
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						If StrComp(sectionNames.Item(sIdx), currentSection, CompareMethod.Text) = 0 Then
 							sectionExists = True
 							Exit For
@@ -1811,24 +1811,24 @@ errh:
 					Next sIdx
 					
 					If Not sectionExists Then
-						' Crear la secciÛn y su diccionario
+						' Crear la secci√≥n y su diccionario
 						sectionNames.Add(currentSection) ' se guarda en el orden en que aparece
 						dictKeys = CreateObject("Scripting.Dictionary")
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.CompareMode. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.CompareMode. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						dictKeys.CompareMode = CompareMethod.Text
 						sectionData.Add(dictKeys, currentSection)
 					End If
 					
 				ElseIf currentSection <> "" Then 
-					' Estamos dentro de una secciÛn, parsear "clave=valor"
+					' Estamos dentro de una secci√≥n, parsear "clave=valor"
 					posEqual = InStr(line, "=")
 					If posEqual > 0 Then
 						keyName = Trim(Left(line, posEqual - 1))
 						keyValue = Mid(line, posEqual + 1)
 						
-						' Recuperar diccionario de la secciÛn actual (la primera coincidencia)
+						' Recuperar diccionario de la secci√≥n actual (la primera coincidencia)
 						dictKeys = sectionData.Item(currentSection)
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						dictKeys(keyName) = keyValue
 						sectionData.Remove(currentSection)
 						sectionData.Add(dictKeys, currentSection)
@@ -1838,15 +1838,15 @@ errh:
 		Next i
 		
 		' -----------------------------------------------------------------------------
-		' 2) Agregar/actualizar la clave solicitada en la secciÛn "Main"
-		'    - Si la secciÛn no existe, se crea.
+		' 2) Agregar/actualizar la clave solicitada en la secci√≥n "Main"
+		'    - Si la secci√≥n no existe, se crea.
 		'    - Se actualiza (o se crea) la Key=Value especificada.
 		' -----------------------------------------------------------------------------
 		Dim mainExists As Boolean
 		mainExists = False
 		
 		For i = 1 To sectionNames.Count()
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			If StrComp(sectionNames.Item(i), Main, CompareMethod.Text) = 0 Then
 				mainExists = True
 				Exit For
@@ -1854,23 +1854,23 @@ errh:
 		Next i
 		
 		If Not mainExists Then
-			' Crear la secciÛn
+			' Crear la secci√≥n
 			sectionNames.Add(Main)
 			dictKeys = CreateObject("Scripting.Dictionary")
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.CompareMode. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.CompareMode. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			dictKeys.CompareMode = CompareMethod.Text
 			sectionData.Add(dictKeys, Main)
 		End If
 		
-		' Actualizar o crear la clave Var=Value dentro de la secciÛn Main
+		' Actualizar o crear la clave Var=Value dentro de la secci√≥n Main
 		dictKeys = sectionData.Item(Main)
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		dictKeys(Var) = Value
 		sectionData.Remove(Main)
 		sectionData.Add(dictKeys, Main)
 		
 		' -----------------------------------------------------------------------------
-		' 3) Reconstruir el archivo .ini: no debe haber secciones duplicadas, sin lÌneas en blanco
+		' 3) Reconstruir el archivo .ini: no debe haber secciones duplicadas, sin l√≠neas en blanco
 		' -----------------------------------------------------------------------------
 		Dim outputLines() As String
 		Dim outIndex As Integer
@@ -1879,9 +1879,9 @@ errh:
 		Dim secName As String
 		Dim key As Object
 		For i = 1 To sectionNames.Count()
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			secName = sectionNames.Item(i)
-			' Escribir la secciÛn
+			' Escribir la secci√≥n
 			outIndex = outIndex + 1
 			If outIndex = 0 Then
 				ReDim outputLines(0)
@@ -1892,17 +1892,17 @@ errh:
 			
 			' Volcar las claves
 			dictKeys = sectionData.Item(secName)
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.Keys. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.Keys. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			For	Each key In dictKeys.Keys
 				outIndex = outIndex + 1
 				ReDim Preserve outputLines(outIndex)
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto key. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto key. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				outputLines(outIndex) = key & "=" & dictKeys(key)
 			Next key
 		Next i
 		
-		' Si todo se borrÛ o no hubo nada, creamos una secciÛn y la clave
+		' Si todo se borr√≥ o no hubo nada, creamos una secci√≥n y la clave
 		If outIndex < 0 Then
 			ReDim outputLines(1)
 			outputLines(0) = "[" & Main & "]"
@@ -2008,7 +2008,7 @@ errh:
 			Call WriteVar(UserFile, "FACCIONES", "NextRecompensa", CStr(.Faccion.NextRecompensa))
 			
 			
-			'øFueron modificados los atributos del usuario?
+			'¬øFueron modificados los atributos del usuario?
 			If Not .flags.TomoPocion Then
 				For LoopC = 1 To UBound(.Stats.UserAtributos)
 					Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, CStr(.Stats.UserAtributos(LoopC)))
@@ -2436,8 +2436,8 @@ Errhandler:
 		Dim X As Short
 		Dim Y As Short
 
-		'UPGRADE_WARNING: Es posible que la matriz distanceToCities necesite tener elementos individuales inicializados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz distanceToCities ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: Es posible que la matriz distanceToCities necesite tener elementos individuales inicializados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz distanceToCities ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim distanceToCities(NumMaps)
 		ArrayInitializers.InitializeStruct(distanceToCities)
 
@@ -2517,16 +2517,16 @@ Errhandler:
 			For Y = 0 To 3
 				Select Case side
 					Case Declaraciones.eHeading.NORTH
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						getLimit = MapData(mapa, X, 7 + Y).TileExit.Map
 					Case Declaraciones.eHeading.EAST
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						getLimit = MapData(mapa, 92 - Y, X).TileExit.Map
 					Case Declaraciones.eHeading.SOUTH
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						getLimit = MapData(mapa, X, 94 - Y).TileExit.Map
 					Case Declaraciones.eHeading.WEST
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto X. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						getLimit = MapData(mapa, 9 + Y, X).TileExit.Map
 				End Select
 				If getLimit > 0 Then Exit Function

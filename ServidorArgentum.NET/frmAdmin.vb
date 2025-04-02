@@ -22,13 +22,13 @@ Friend Class frmAdmin
 	'**************************************************************************
 	
 	
-	'UPGRADE_WARNING: El evento cboPjs.TextChanged se puede desencadenar cuando se inicializa el formulario. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-	'UPGRADE_WARNING: ComboBox evento cboPjs.Change se actualizÛ a cboPjs.TextChanged, que tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
+	'UPGRADE_WARNING: El evento cboPjs.TextChanged se puede desencadenar cuando se inicializa el formulario. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
+	'UPGRADE_WARNING: ComboBox evento cboPjs.Change se actualiz√≥ a cboPjs.TextChanged, que tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
 	Private Sub cboPjs_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboPjs.TextChanged
 		Call ActualizaPjInfo()
 	End Sub
 	
-	'UPGRADE_WARNING: El evento cboPjs.SelectedIndexChanged se puede desencadenar cuando se inicializa el formulario. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
+	'UPGRADE_WARNING: El evento cboPjs.SelectedIndexChanged se puede desencadenar cuando se inicializa el formulario. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
 	Private Sub cboPjs_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboPjs.SelectedIndexChanged
 		Call ActualizaPjInfo()
 	End Sub

@@ -9,7 +9,7 @@ Module Migration
 		GetTickCount = CInt(VB.Timer() * 1000)
 	End Function
 	
-	'UPGRADE_NOTE: str se actualizÛ a str_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: str se actualiz√≥ a str_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Function migr_LenB(ByVal str_Renamed As String) As Integer
 		If str_Renamed = "" Then
 			migr_LenB = 0
@@ -22,13 +22,13 @@ Module Migration
 		Dim i As Integer
 		Dim maxPos As Integer
 		
-		' Verificar que la subcadena no sea vacÌa
+		' Verificar que la subcadena no sea vac√≠a
 		If Len(s2) = 0 Then
-			migr_InStrB = 1 ' Si la subcadena est· vacÌa, consideramos que se encuentra al principio
+			migr_InStrB = 1 ' Si la subcadena est√° vac√≠a, consideramos que se encuentra al principio
 			Exit Function
 		End If
 		
-		' La b˙squeda solo puede ir hasta la longitud de la cadena principal menos la longitud de la subcadena
+		' La b√∫squeda solo puede ir hasta la longitud de la cadena principal menos la longitud de la subcadena
 		maxPos = Len(s1) - Len(s2) + 1
 		
 		' Buscar la subcadena dentro de la cadena principal

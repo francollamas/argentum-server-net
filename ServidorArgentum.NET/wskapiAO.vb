@@ -26,7 +26,7 @@ Module wskapiAO
 		
 		Dim i As Short
 		Dim data() As Byte
-		'UPGRADE_NOTE: str se actualizÛ a str_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: str se actualiz√≥ a str_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim str_Renamed As String
 		If NewIndex <= MaxUsers Then
 			' Leer para limpiar pendientes
@@ -36,7 +36,7 @@ Module wskapiAO
 			UserList(NewIndex).ip = GetAscIP(intNext)
 			
 			For i = 1 To BanIps.Count()
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				If BanIps.Item(i) = UserList(NewIndex).ip Then
 					Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
 					Call FlushBuffer(NewIndex)
@@ -119,7 +119,7 @@ Module wskapiAO
 				'Loop through all of them to find one not being used.
 				'If it is not being used, it's state will = sckClosed (no connections).
 				For intLoop = 1 To .Winsock1.UBound
-					'UPGRADE_NOTE: State se actualizÛ a CtlState. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+					'UPGRADE_NOTE: State se actualiz√≥ a CtlState. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 					If .Winsock1(intLoop).CtlState = MSWinsockLib.StateConstants.sckClosed Then
 						'Found one not being used.
 						intFound = intLoop
@@ -168,11 +168,11 @@ Module wskapiAO
 		Winsock_Erase()
 	End Sub
 	
-	' WsApiEnviar: Env√≠a datos a trav√©s de un socket asociado a un slot.
-	' @param Slot: N√∫mero del slot.
+	' WsApiEnviar: Env√É¬≠a datos a trav√É¬©s de un socket asociado a un slot.
+	' @param Slot: N√É¬∫mero del slot.
 	' @param str: Cadena de datos a enviar.
-	' @return: Resultado del env√≠o (0 si es exitoso, -1 si falla).
-	'UPGRADE_NOTE: str se actualizÛ a str_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	' @return: Resultado del env√É¬≠o (0 si es exitoso, -1 si falla).
+	'UPGRADE_NOTE: str se actualiz√≥ a str_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Function WsApiEnviar(ByVal Slot As Short, ByRef str_Renamed As String) As Integer
 		On Error GoTo ErrorHandler
 		
@@ -216,15 +216,15 @@ ErrorHandler:
 		Call EventoSockRead(N, datos)
 	End Function
 	
-	' LogApiSock: Registra mensajes en un archivo de log para depuraci√≥n.
+	' LogApiSock: Registra mensajes en un archivo de log para depuraci√É¬≥n.
 	' @param str: Mensaje a registrar.
-	'UPGRADE_NOTE: str se actualizÛ a str_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: str se actualiz√≥ a str_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub LogApiSock(ByVal str_Renamed As String)
 		
 	End Sub
 	
 	' EventoSockRead: Maneja el evento de lectura de datos desde un socket.
-	' @param Slot: N√∫mero del slot asociado al socket.
+	' @param Slot: N√É¬∫mero del slot asociado al socket.
 	' @param Datos: Datos recibidos en formato de arreglo de bytes.
 	Public Sub EventoSockRead(ByVal Slot As Short, ByRef datos() As Byte)
 		With UserList(Slot)
@@ -239,7 +239,7 @@ ErrorHandler:
 	End Sub
 	
 	' EventoSockClose: Maneja el evento de cierre de un socket.
-	' @param Slot: N√∫mero del slot asociado al socket.
+	' @param Slot: N√É¬∫mero del slot asociado al socket.
 	Public Sub EventoSockClose(ByVal Slot As Short)
 		If Centinela.RevisandoUserIndex = Slot Then Call modCentinela.CentinelaUserLogout()
 		
@@ -262,13 +262,13 @@ ErrorHandler:
 		Next i
 		
 		For i = 1 To MaxUsers
-			'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			UserList(i).incomingData = Nothing
-			'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			UserList(i).outgoingData = Nothing
 		Next i
 
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim UserList(MaxUsers)
 		ArrayInitializers.InitializeStruct(UserList)
 		For i = 1 To MaxUsers
@@ -285,12 +285,12 @@ ErrorHandler:
 		Call IniciaWsApi(Puerto)
 	End Sub
 	
-	' BuscaSlotSock: Busca el slot asociado a un socket especÌfico.
+	' BuscaSlotSock: Busca el slot asociado a un socket espec√≠fico.
 	' @param S: Identificador del socket.
-	' @return: El n˙mero de slot asociado al socket o -1 si no se encuentra.
+	' @return: El n√∫mero de slot asociado al socket o -1 si no se encuentra.
 	Public Function BuscaSlotSock(ByVal S As Integer) As Integer
 		On Error GoTo hayerror
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto WSAPISock2Usr.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto WSAPISock2Usr.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		BuscaSlotSock = WSAPISock2Usr.Item(CStr(S))
 		Exit Function
 		
@@ -298,9 +298,9 @@ hayerror:
 		BuscaSlotSock = -1
 	End Function
 	
-	' AgregaSlotSock: Asocia un socket a un slot en la colecciÛn WSAPISock2Usr.
+	' AgregaSlotSock: Asocia un socket a un slot en la colecci√≥n WSAPISock2Usr.
 	' @param Sock: Identificador del socket.
-	' @param Slot: N˙mero del slot a asociar.
+	' @param Slot: N√∫mero del slot a asociar.
 	Public Sub AgregaSlotSock(ByVal Sock As Integer, ByVal Slot As Integer)
 		Debug.Print("AgregaSockSlot")
 		
@@ -312,7 +312,7 @@ hayerror:
 		WSAPISock2Usr.Add(CStr(Slot), CStr(Sock))
 	End Sub
 	
-	' BorraSlotSock: Elimina la asociaciÛn de un socket con un slot en la colecciÛn WSAPISock2Usr.
+	' BorraSlotSock: Elimina la asociaci√≥n de un socket con un slot en la colecci√≥n WSAPISock2Usr.
 	' @param Sock: Identificador del socket a eliminar.
 	Public Sub BorraSlotSock(ByVal Sock As Integer)
 		Dim cant As Integer

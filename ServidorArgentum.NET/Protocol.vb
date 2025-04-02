@@ -5,7 +5,7 @@ Module Protocol
 	' Protocol.bas - Handles all incoming / outgoing messages for client-server communications.
 	' Uses a binary protocol designed by myself.
 	'
-	' Designed and implemented by Juan MartÌn Sotuyo Dodero (Maraxus)
+	' Designed and implemented by Juan Mart√≠n Sotuyo Dodero (Maraxus)
 	' (juansotuyo@gmail.com)
 	'**************************************************************
 	
@@ -25,11 +25,11 @@ Module Protocol
 	
 	''
 	'Handles all incoming / outgoing packets for client - server communications
-	'The binary prtocol here used was designed by Juan MartÌn Sotuyo Dodero.
+	'The binary prtocol here used was designed by Juan Mart√≠n Sotuyo Dodero.
 	'This is the first time it's used in Alkon, though the second time it's coded.
 	'This implementation has several enhacements from the first design.
 	'
-	' @author Juan MartÌn Sotuyo Dodero (Maraxus) juansotuyo@gmail.com
+	' @author Juan Mart√≠n Sotuyo Dodero (Maraxus) juansotuyo@gmail.com
 	' @version 1.0.0
 	' @date 20060517
 	
@@ -37,7 +37,7 @@ Module Protocol
 	''
 	'When we have a list of strings, we use this to separate them and prevent
 	'having too many string lengths in the queue. Yes, each string is NULL-terminated :P
-	'UPGRADE_NOTE: SEPARATOR ha cambiado de Constant a Variable. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="C54B49D7-5804-4D48-834B-B3D81E4C2F13"'
+	'UPGRADE_NOTE: SEPARATOR ha cambiado de Constant a Variable. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="C54B49D7-5804-4D48-834B-B3D81E4C2F13"'
 	Private SEPARATOR As New VB6.FixedLengthString(1, vbNullChar)
 	
 	''
@@ -230,7 +230,7 @@ Module Protocol
 		GuildLeave '/SALIRCLAN
 		RequestAccountState '/BALANCE
 		PetStand '/QUIETO
-		PetFollow '/ACOMPA—AR
+		PetFollow '/ACOMPA√ëAR
 		ReleasePet '/LIBERAR
 		TrainList '/ENTRENAR
 		Rest '/DESCANSAR
@@ -262,7 +262,7 @@ Module Protocol
 		ChangeDescription '/DESC
 		GuildVote '/VOTO
 		Punishments '/PENAS
-		ChangePassword '/CONTRASE—A
+		ChangePassword '/CONTRASE√ëA
 		Gamble '/APOSTAR
 		InquiryVote '/ENCUESTA ( with parameters )
 		LeaveFaction '/RETIRAR ( with no arguments )
@@ -341,7 +341,7 @@ Module Protocol
 	
 	Public Sub HandleIncomingData(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/09/07
 		'
 		'***************************************************
@@ -601,7 +601,7 @@ Module Protocol
 			Case ClientPacketID.PetStand '/QUIETO
 				Call HandlePetStand(UserIndex)
 				
-			Case ClientPacketID.PetFollow '/ACOMPA—AR
+			Case ClientPacketID.PetFollow '/ACOMPA√ëAR
 				Call HandlePetFollow(UserIndex)
 				
 			Case ClientPacketID.ReleasePet '/LIBERAR
@@ -697,7 +697,7 @@ Module Protocol
 			Case ClientPacketID.Punishments '/PENAS
 				Call HandlePunishments(UserIndex)
 				
-			Case ClientPacketID.ChangePassword '/CONTRASE—A
+			Case ClientPacketID.ChangePassword '/CONTRASE√ëA
 				Call HandleChangePassword(UserIndex)
 				
 			Case ClientPacketID.Gamble '/APOSTAR
@@ -826,7 +826,7 @@ Module Protocol
 					Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'VictimIndex
 					Call .WriteLong(Arg2) 'Expe
 					
-				Case Declaraciones.eMessages.UserKill '"°" & .name & " te ha matado!"
+				Case Declaraciones.eMessages.UserKill '"¬°" & .name & " te ha matado!"
 					Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'AttackerIndex
 					
 				Case Declaraciones.eMessages.EarnExp
@@ -835,7 +835,7 @@ Module Protocol
 					Call .WriteByte(CByte(Arg1))
 					Call .WriteInteger(CShort(Arg2))
 					'El cliente no conoce nada sobre nombre de mapas y hogares, por lo tanto _
-					'hasta que no se pasen los dats e .INFs al cliente, esto queda asÌ.
+					'hasta que no se pasen los dats e .INFs al cliente, esto queda as√≠.
 					Call .WriteASCIIString(StringArg1) 'Call .WriteByte(CByte(Arg2))
 					
 			End Select
@@ -858,7 +858,7 @@ Errhandler:
 		
 		On Error GoTo Errhandler
 		
-		'UPGRADE_NOTE: Command se actualizÛ a Command_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Command se actualiz√≥ a Command_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Command_Renamed As Byte
 		
 		With UserList(UserIndex)
@@ -1283,7 +1283,7 @@ Errhandler:
 				Call setHome(UserIndex, Npclist(.flags.TargetNPC).Ciudad, .flags.TargetNPC)
 			Else
 				If .flags.Muerto = 1 Then
-					'Si es un mapa com˙n y no est· en cana
+					'Si es un mapa com√∫n y no est√° en cana
 					If UCase(MapInfo_Renamed(.Pos.Map).Restringir) = "NO" And .Counters.Pena = 0 Then
 						If .flags.Traveling = 0 Then
 							If Ciudades(.Hogar).Map <> .Pos.Map Then
@@ -1297,7 +1297,7 @@ Errhandler:
 							.Counters.goHome = 0
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "No puedes usar este comando aquÌ.", FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(UserIndex, "No puedes usar este comando aqu√≠.", FontTypeNames.FONTTYPE_FIGHT)
 					End If
 				Else
 					Call WriteConsoleMsg(UserIndex, "Debes estar muerto para utilizar este comando.", FontTypeNames.FONTTYPE_INFO)
@@ -1313,7 +1313,7 @@ Errhandler:
 	
 	Private Sub HandleLoginExistingChar(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -1341,7 +1341,7 @@ Errhandler:
 		version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
 		
 		If Not AsciiValidos(UserName) Then
-			Call WriteErrorMsg(UserIndex, "Nombre inv·lido.")
+			Call WriteErrorMsg(UserIndex, "Nombre inv√°lido.")
 			Call FlushBuffer(UserIndex)
 			Call CloseSocket(UserIndex)
 			
@@ -1359,7 +1359,7 @@ Errhandler:
 		If BANCheck(UserName) Then
 			Call WriteErrorMsg(UserIndex, "Se te ha prohibido la entrada a Argentum Online debido a tu mal comportamiento. Puedes consultar el reglamento y el sistema de soporte desde www.argentumonline.com.ar")
 		ElseIf Not VersionOK(version) Then 
-			Call WriteErrorMsg(UserIndex, "Esta versiÛn del juego es obsoleta, la versiÛn correcta es la " & ULTIMAVERSION & ". La misma se encuentra disponible en www.argentumonline.com.ar")
+			Call WriteErrorMsg(UserIndex, "Esta versi√≥n del juego es obsoleta, la versi√≥n correcta es la " & ULTIMAVERSION & ". La misma se encuentra disponible en www.argentumonline.com.ar")
 		Else
 			Call ConnectUser(UserIndex, UserName, Password)
 		End If
@@ -1368,13 +1368,13 @@ Errhandler:
 		Call UserList(UserIndex).incomingData.CopyBuffer(buffer)
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -1387,7 +1387,7 @@ Errhandler:
 	
 	Private Sub HandleThrowDices(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -1412,7 +1412,7 @@ Errhandler:
 	
 	Private Sub HandleLoginNewChar(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -1435,13 +1435,13 @@ Errhandler:
 		Dim race As Declaraciones.eRaza
 		Dim gender As Declaraciones.eGenero
 		Dim homeland As Declaraciones.eCiudad
-		'UPGRADE_NOTE: Class se actualizÛ a Class_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Class se actualiz√≥ a Class_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Class_Renamed As Declaraciones.eClass
 		Dim Head As Short
 		Dim mail As String
 		
 		If PuedeCrearPersonajes = 0 Then
-			Call WriteErrorMsg(UserIndex, "La creaciÛn de personajes en este servidor se ha deshabilitado.")
+			Call WriteErrorMsg(UserIndex, "La creaci√≥n de personajes en este servidor se ha deshabilitado.")
 			Call FlushBuffer(UserIndex)
 			Call CloseSocket(UserIndex)
 			
@@ -1449,7 +1449,7 @@ Errhandler:
 		End If
 		
 		If ServerSoloGMs <> 0 Then
-			Call WriteErrorMsg(UserIndex, "Servidor restringido a administradores. Consulte la p·gina oficial o el foro oficial para m·s informaciÛn.")
+			Call WriteErrorMsg(UserIndex, "Servidor restringido a administradores. Consulte la p√°gina oficial o el foro oficial para m√°s informaci√≥n.")
 			Call FlushBuffer(UserIndex)
 			Call CloseSocket(UserIndex)
 			
@@ -1477,7 +1477,7 @@ Errhandler:
 		homeland = buffer.ReadByte()
 		
 		If Not VersionOK(version) Then
-			Call WriteErrorMsg(UserIndex, "Esta versiÛn del juego es obsoleta, la versiÛn correcta es la " & ULTIMAVERSION & ". La misma se encuentra disponible en www.argentumonline.com.ar")
+			Call WriteErrorMsg(UserIndex, "Esta versi√≥n del juego es obsoleta, la versi√≥n correcta es la " & ULTIMAVERSION & ". La misma se encuentra disponible en www.argentumonline.com.ar")
 		Else
 			Call ConnectNewUser(UserIndex, UserName, Password, race, gender, Class_Renamed, mail, homeland, Head)
 		End If
@@ -1486,13 +1486,13 @@ Errhandler:
 		Call UserList(UserIndex).incomingData.CopyBuffer(buffer)
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -1505,7 +1505,7 @@ Errhandler:
 	
 	Private Sub HandleTalk(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 13/01/2010
 		'15/07/2009: ZaMa - Now invisible admins talk by console.
 		'23/09/2009: ZaMa - Now invisible admins can't send empty chat.
@@ -1544,13 +1544,13 @@ Errhandler:
 					If .clase = Declaraciones.eClass.Pirat Then
 						' Pierde la apariencia de fragata fantasmal
 						Call ToogleBoatBody(UserIndex)
-						Call WriteConsoleMsg(UserIndex, "°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
 						Call ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading, NingunArma, NingunEscudo, NingunCasco)
 					End If
 				Else
 					If .flags.invisible = 0 Then
 						Call UsUaRiOs.SetInvisible(UserIndex, UserList(UserIndex).Char_Renamed.CharIndex, False)
-						Call WriteConsoleMsg(UserIndex, "°Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
 					End If
 				End If
 			End If
@@ -1577,13 +1577,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -1596,7 +1596,7 @@ Errhandler:
 	
 	Private Sub HandleYell(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 13/01/2010 (ZaMa)
 		'15/07/2009: ZaMa - Now invisible admins yell by console.
 		'13/01/2010: ZaMa - Now hidden on boat pirats recover the proper boat body.
@@ -1635,13 +1635,13 @@ Errhandler:
 					If .clase = Declaraciones.eClass.Pirat Then
 						' Pierde la apariencia de fragata fantasmal
 						Call ToogleBoatBody(UserIndex)
-						Call WriteConsoleMsg(UserIndex, "°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
 						Call ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading, NingunArma, NingunEscudo, NingunCasco)
 					End If
 				Else
 					If .flags.invisible = 0 Then
 						Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
-						Call WriteConsoleMsg(UserIndex, "°Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
 					End If
 				End If
 			End If
@@ -1671,13 +1671,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -1690,7 +1690,7 @@ Errhandler:
 	
 	Private Sub HandleWhisper(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 15/07/2009
 		'28/05/2009: ZaMa - Now it doesn't appear any message when private talking to an invisible admin
 		'15/07/2009: ZaMa - Now invisible admins wisper by console.
@@ -1720,26 +1720,26 @@ Errhandler:
 			TargetUserIndex = CharIndexToUserIndex(targetCharIndex)
 			
 			If .flags.Muerto Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!! Los muertos no pueden comunicarse con el mundo de los vivos. ", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!! Los muertos no pueden comunicarse con el mundo de los vivos. ", FontTypeNames.FONTTYPE_INFO)
 			Else
 				If TargetUserIndex = INVALID_INDEX Then
 					Call WriteConsoleMsg(UserIndex, "Usuario inexistente.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					targetPriv = UserList(TargetUserIndex).flags.Privilegios
-					'A los dioses y admins no vale susurrarles si no sos uno vos mismo (asÌ no pueden ver si est·n conectados o no)
+					'A los dioses y admins no vale susurrarles si no sos uno vos mismo (as√≠ no pueden ver si est√°n conectados o no)
 					If (targetPriv And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 And (.flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios)) <> 0 Then
 						' Controlamos que no este invisible
 						If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
 							Call WriteConsoleMsg(UserIndex, "No puedes susurrarle a los Dioses y Admins.", FontTypeNames.FONTTYPE_INFO)
 						End If
-						'A los Consejeros y SemiDioses no vale susurrarles si sos un PJ com˙n.
+						'A los Consejeros y SemiDioses no vale susurrarles si sos un PJ com√∫n.
 					ElseIf (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 And (Not targetPriv And Declaraciones.PlayerType.User) <> 0 Then 
 						' Controlamos que no este invisible
 						If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
 							Call WriteConsoleMsg(UserIndex, "No puedes susurrarle a los GMs.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					ElseIf Not EstaPCarea(UserIndex, TargetUserIndex) Then 
-						Call WriteConsoleMsg(UserIndex, "Est·s muy lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Est√°s muy lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
 						
 					Else
 						'[Consejeros & GMs]
@@ -1778,13 +1778,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -1797,7 +1797,7 @@ Errhandler:
 	
 	Private Sub HandleWalk(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 13/01/2010 (ZaMa)
 		'11/19/09 Pato - Now the class bandit can walk hidden.
 		'13/01/2010: ZaMa - Now hidden on boat pirats recover the proper boat body.
@@ -1850,7 +1850,7 @@ Errhandler:
 			'If exiting, cancel
 			Call CancelExit(UserIndex)
 			
-			'TODO: DeberÌa decirle por consola que no puede?
+			'TODO: Deber√≠a decirle por consola que no puede?
 			'Esta usando el /HOGAR, no se puede mover
 			If .flags.Traveling = 1 Then Exit Sub
 			
@@ -1881,7 +1881,7 @@ Errhandler:
 				If Not .flags.UltimoMensaje = 1 Then
 					.flags.UltimoMensaje = 1
 					
-					Call WriteConsoleMsg(UserIndex, "No puedes moverte porque est·s paralizado.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No puedes moverte porque est√°s paralizado.", FontTypeNames.FONTTYPE_INFO)
 				End If
 				
 				.flags.CountSH = 0
@@ -1897,7 +1897,7 @@ Errhandler:
 						If .clase = Declaraciones.eClass.Pirat Then
 							' Pierde la apariencia de fragata fantasmal
 							Call ToogleBoatBody(UserIndex)
-							Call WriteConsoleMsg(UserIndex, "°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "¬°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
 							Call ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading, NingunArma, NingunEscudo, NingunCasco)
 						End If
 					Else
@@ -1919,7 +1919,7 @@ Errhandler:
 	
 	Private Sub HandleRequestPositionUpdate(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -1936,7 +1936,7 @@ Errhandler:
 	
 	Private Sub HandleAttack(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 13/01/2010
 		'Last Modified By: ZaMa
 		'10/01/2008: Tavo - Se cancela la salida del juego si el user esta saliendo.
@@ -1949,7 +1949,7 @@ Errhandler:
 			
 			'If dead, can't attack
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -1961,7 +1961,7 @@ Errhandler:
 			'If equiped weapon is ranged, can't attack this way
 			If .Invent.WeaponEqpObjIndex > 0 Then
 				If ObjData_Renamed(.Invent.WeaponEqpObjIndex).proyectil = 1 Then
-					Call WriteConsoleMsg(UserIndex, "No puedes usar asÌ este arma.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No puedes usar as√≠ este arma.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 			End If
@@ -1984,13 +1984,13 @@ Errhandler:
 					If .clase = Declaraciones.eClass.Pirat Then
 						' Pierde la apariencia de fragata fantasmal
 						Call ToogleBoatBody(UserIndex)
-						Call WriteConsoleMsg(UserIndex, "°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
 						Call ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading, NingunArma, NingunEscudo, NingunCasco)
 					End If
 				Else
 					If .flags.invisible = 0 Then
 						Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
-						Call WriteConsoleMsg(UserIndex, "°Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
 					End If
 				End If
 			End If
@@ -2004,9 +2004,9 @@ Errhandler:
 	
 	Private Sub HandlePickUp(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 07/25/09
-		'02/26/2006: Marco - AgreguÈ un checkeo por si el usuario trata de agarrar un item mientras comercia.
+		'02/26/2006: Marco - Agregu√© un checkeo por si el usuario trata de agarrar un item mientras comercia.
 		'***************************************************
 		With UserList(UserIndex)
 			'Remove packet ID
@@ -2021,7 +2021,7 @@ Errhandler:
 			'Lower rank administrators can't pick up items
 			If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
 				If Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
-					Call WriteConsoleMsg(UserIndex, "No puedes tomar ning˙n objeto.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No puedes tomar ning√∫n objeto.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 			End If
@@ -2037,7 +2037,7 @@ Errhandler:
 	
 	Private Sub HandleSafeToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2085,7 +2085,7 @@ Errhandler:
 	
 	Private Sub HandleRequestGuildLeaderInfo(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2102,7 +2102,7 @@ Errhandler:
 	
 	Private Sub HandleRequestAtributes(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2119,7 +2119,7 @@ Errhandler:
 	
 	Private Sub HandleRequestFame(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2136,7 +2136,7 @@ Errhandler:
 	
 	Private Sub HandleRequestSkills(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2153,7 +2153,7 @@ Errhandler:
 	
 	Private Sub HandleRequestMiniStats(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2170,7 +2170,7 @@ Errhandler:
 	
 	Private Sub HandleCommerceEnd(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2189,7 +2189,7 @@ Errhandler:
 	
 	Private Sub HandleUserCommerceEnd(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 11/03/2010
 		'11/03/2010: ZaMa - Le avisa por consola al que cencela que dejo de comerciar.
 		'***************************************************
@@ -2277,13 +2277,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -2297,7 +2297,7 @@ Errhandler:
 	
 	Private Sub HandleBankEnd(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2318,7 +2318,7 @@ Errhandler:
 	
 	Private Sub HandleUserCommerceOk(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2336,7 +2336,7 @@ Errhandler:
 	
 	Private Sub HandleUserCommerceReject(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2371,9 +2371,9 @@ Errhandler:
 	
 	Private Sub HandleDrop(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 07/25/09
-		'07/25/09: Marco - AgreguÈ un checkeo para patear a los usuarios que tiran items mientras comercian.
+		'07/25/09: Marco - Agregu√© un checkeo para patear a los usuarios que tiran items mientras comercian.
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 4 Then
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
@@ -2424,7 +2424,7 @@ Errhandler:
 	
 	Private Sub HandleCastSpell(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'13/11/2009: ZaMa - Ahora los npcs pueden atacar al usuario si quizo castear un hechizo
 		'***************************************************
@@ -2442,7 +2442,7 @@ Errhandler:
 			Spell = .incomingData.ReadByte()
 			
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -2468,7 +2468,7 @@ Errhandler:
 	
 	Private Sub HandleLeftClick(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2498,7 +2498,7 @@ Errhandler:
 	
 	Private Sub HandleDoubleClick(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2528,7 +2528,7 @@ Errhandler:
 	
 	Private Sub HandleWork(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 13/01/2010 (ZaMa)
 		'13/01/2010: ZaMa - El pirata se puede ocultar en barca
 		'***************************************************
@@ -2556,7 +2556,7 @@ Errhandler:
 				Case Declaraciones.eSkill.Ocultarse
 					
 					If .flags.EnConsulta Then
-						Call WriteConsoleMsg(UserIndex, "No puedes ocultarte si est·s en consulta.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes ocultarte si est√°s en consulta.", FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
@@ -2564,7 +2564,7 @@ Errhandler:
 						If .clase <> Declaraciones.eClass.Pirat Then
 							'[CDT 17-02-2004]
 							If Not .flags.UltimoMensaje = 3 Then
-								Call WriteConsoleMsg(UserIndex, "No puedes ocultarte si est·s navegando.", FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "No puedes ocultarte si est√°s navegando.", FontTypeNames.FONTTYPE_INFO)
 								.flags.UltimoMensaje = 3
 							End If
 							'[/CDT]
@@ -2575,7 +2575,7 @@ Errhandler:
 					If .flags.Oculto = 1 Then
 						'[CDT 17-02-2004]
 						If Not .flags.UltimoMensaje = 2 Then
-							Call WriteConsoleMsg(UserIndex, "Ya est·s oculto.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Ya est√°s oculto.", FontTypeNames.FONTTYPE_INFO)
 							.flags.UltimoMensaje = 2
 						End If
 						'[/CDT]
@@ -2624,7 +2624,7 @@ Errhandler:
 	
 	Private Sub HandleUseSpellMacro(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2646,7 +2646,7 @@ Errhandler:
 	
 	Private Sub HandleUseItem(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2682,7 +2682,7 @@ Errhandler:
 	
 	Private Sub HandleCraftBlacksmith(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2714,7 +2714,7 @@ Errhandler:
 	
 	Private Sub HandleCraftCarpenter(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -2746,11 +2746,11 @@ Errhandler:
 	
 	Private Sub HandleWorkLeftClick(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 14/01/2010 (ZaMa)
 		'16/11/2009: ZaMa - Agregada la posibilidad de extraer madera elfica.
 		'12/01/2010: ZaMa - Ahora se admiten armas arrojadizas (proyectiles sin municiones).
-		'14/01/2010: ZaMa - Ya no se pierden municiones al atacar npcs con dueÒo.
+		'14/01/2010: ZaMa - Ya no se pierden municiones al atacar npcs con due√±o.
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 4 Then
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
@@ -2802,15 +2802,15 @@ Errhandler:
 						' Tiene arma equipada?
 						If .WeaponEqpObjIndex = 0 Then
 							DummyInt = 1
-							' En un slot v·lido?
+							' En un slot v√°lido?
 						ElseIf .WeaponEqpSlot < 1 Or .WeaponEqpSlot > UserList(UserIndex).CurrentInventorySlots Then 
 							DummyInt = 1
-							' Usa municiÛn? (Si no la usa, puede ser un arma arrojadiza)
+							' Usa munici√≥n? (Si no la usa, puede ser un arma arrojadiza)
 						ElseIf ObjData_Renamed(.WeaponEqpObjIndex).Municion = 1 Then 
 							' La municion esta equipada en un slot valido?
 							If .MunicionEqpSlot < 1 Or .MunicionEqpSlot > UserList(UserIndex).CurrentInventorySlots Then
 								DummyInt = 1
-								' Tiene municiÛn?
+								' Tiene munici√≥n?
 							ElseIf .MunicionEqpObjIndex = 0 Then 
 								DummyInt = 1
 								' Son flechas?
@@ -2842,9 +2842,9 @@ Errhandler:
 						Call QuitarSta(UserIndex, RandomNumber(1, 10))
 					Else
 						If .Genero = Declaraciones.eGenero.Hombre Then
-							Call WriteConsoleMsg(UserIndex, "Est·s muy cansado para luchar.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Est√°s muy cansado para luchar.", FontTypeNames.FONTTYPE_INFO)
 						Else
-							Call WriteConsoleMsg(UserIndex, "Est·s muy cansada para luchar.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Est√°s muy cansada para luchar.", FontTypeNames.FONTTYPE_INFO)
 						End If
 						Exit Sub
 					End If
@@ -2858,13 +2858,13 @@ Errhandler:
 					If tU > 0 Then
 						'Only allow to atack if the other one can retaliate (can see us)
 						If System.Math.Abs(UserList(tU).Pos.Y - .Pos.Y) > RANGO_VISION_Y Then
-							Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para atacar.", FontTypeNames.FONTTYPE_WARNING)
+							Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para atacar.", FontTypeNames.FONTTYPE_WARNING)
 							Exit Sub
 						End If
 						
 						'Prevent from hitting self
 						If tU = UserIndex Then
-							Call WriteConsoleMsg(UserIndex, "°No puedes atacarte a vos mismo!", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "¬°No puedes atacarte a vos mismo!", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
@@ -2874,7 +2874,7 @@ Errhandler:
 					ElseIf tN > 0 Then 
 						'Only allow to atack if the other one can retaliate (can see us)
 						If System.Math.Abs(Npclist(tN).Pos.Y - .Pos.Y) > RANGO_VISION_Y And System.Math.Abs(Npclist(tN).Pos.X - .Pos.X) > RANGO_VISION_X Then
-							Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para atacar.", FontTypeNames.FONTTYPE_WARNING)
+							Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para atacar.", FontTypeNames.FONTTYPE_WARNING)
 							Exit Sub
 						End If
 						
@@ -2886,7 +2886,7 @@ Errhandler:
 						End If
 					End If
 					
-					' Solo pierde la municiÛn si pudo atacar al target, o tiro al aire
+					' Solo pierde la munici√≥n si pudo atacar al target, o tiro al aire
 					If Atacked Then
 						With .Invent
 							' Tiene equipado arco y flecha?
@@ -2932,7 +2932,7 @@ Errhandler:
 				Case Declaraciones.eSkill.Magia
 					'Check the map allows spells to be casted.
 					If MapInfo_Renamed(.Pos.Map).MagiaSinEfecto > 0 Then
-						Call WriteConsoleMsg(UserIndex, "Una fuerza oscura te impide canalizar tu energÌa.", FontTypeNames.FONTTYPE_FIGHT)
+						Call WriteConsoleMsg(UserIndex, "Una fuerza oscura te impide canalizar tu energ√≠a.", FontTypeNames.FONTTYPE_FIGHT)
 						Exit Sub
 					End If
 					
@@ -2941,7 +2941,7 @@ Errhandler:
 					
 					'If it's outside range log it and exit
 					If System.Math.Abs(.Pos.X - X) > RANGO_VISION_X Or System.Math.Abs(.Pos.Y - Y) > RANGO_VISION_Y Then
-						Call LogCheating("Ataque fuera de rango de " & .name & "(" & .Pos.Map & "/" & .Pos.X & "/" & .Pos.Y & ") ip: " & .ip & " a la posiciÛn (" & .Pos.Map & "/" & X & "/" & Y & ")")
+						Call LogCheating("Ataque fuera de rango de " & .name & "(" & .Pos.Map & "/" & .Pos.X & "/" & .Pos.Y & ") ip: " & .ip & " a la posici√≥n (" & .Pos.Map & "/" & X & "/" & Y & ")")
 						Exit Sub
 					End If
 					
@@ -2963,7 +2963,7 @@ Errhandler:
 						Call LanzarHechizo(.flags.Hechizo, UserIndex)
 						.flags.Hechizo = 0
 					Else
-						Call WriteConsoleMsg(UserIndex, "°Primero selecciona el hechizo que quieres lanzar!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°Primero selecciona el hechizo que quieres lanzar!", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case Declaraciones.eSkill.Pesca
@@ -2982,12 +2982,12 @@ Errhandler:
 					
 					If HayAgua(.Pos.Map, X, Y) Then
 						Select Case DummyInt
-							Case CA—A_PESCA
+							Case CA√ëA_PESCA
 								Call DoPescar(UserIndex)
 								
 							Case RED_PESCA
 								If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
-									Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos para pescar.", FontTypeNames.FONTTYPE_INFO)
+									Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos para pescar.", FontTypeNames.FONTTYPE_INFO)
 									Exit Sub
 								End If
 								
@@ -3000,7 +3000,7 @@ Errhandler:
 						'Play sound!
 						Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_PESCAR, .Pos.X, .Pos.Y))
 					Else
-						Call WriteConsoleMsg(UserIndex, "No hay agua donde pescar. Busca un lago, rÌo o mar.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No hay agua donde pescar. Busca un lago, r√≠o o mar.", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case Declaraciones.eSkill.Robar
@@ -3020,19 +3020,19 @@ Errhandler:
 							If UserList(tU).flags.Privilegios And Declaraciones.PlayerType.User Then
 								If UserList(tU).flags.Muerto = 0 Then
 									If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 1 Then
-										Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+										Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 										Exit Sub
 									End If
 									
 									'17/09/02
 									'Check the trigger
 									If MapData(UserList(tU).Pos.Map, X, Y).trigger = Declaraciones.eTrigger.ZONASEGURA Then
-										Call WriteConsoleMsg(UserIndex, "No puedes robar aquÌ.", FontTypeNames.FONTTYPE_WARNING)
+										Call WriteConsoleMsg(UserIndex, "No puedes robar aqu√≠.", FontTypeNames.FONTTYPE_WARNING)
 										Exit Sub
 									End If
 									
 									If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ZONASEGURA Then
-										Call WriteConsoleMsg(UserIndex, "No puedes robar aquÌ.", FontTypeNames.FONTTYPE_WARNING)
+										Call WriteConsoleMsg(UserIndex, "No puedes robar aqu√≠.", FontTypeNames.FONTTYPE_WARNING)
 										Exit Sub
 									End If
 									
@@ -3040,10 +3040,10 @@ Errhandler:
 								End If
 							End If
 						Else
-							Call WriteConsoleMsg(UserIndex, "°No hay a quien robarle!", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "¬°No hay a quien robarle!", FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "°No puedes robar en zonas seguras!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°No puedes robar en zonas seguras!", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case Declaraciones.eSkill.Talar
@@ -3051,12 +3051,12 @@ Errhandler:
 					If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
 					
 					If .Invent.WeaponEqpObjIndex = 0 Then
-						Call WriteConsoleMsg(UserIndex, "DeberÌas equiparte el hacha.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Deber√≠as equiparte el hacha.", FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
-					If .Invent.WeaponEqpObjIndex <> HACHA_LE—ADOR And .Invent.WeaponEqpObjIndex <> HACHA_LE—A_ELFICA Then
-						' Podemos llegar ac· si el user equipÛ el anillo dsp de la U y antes del click
+					If .Invent.WeaponEqpObjIndex <> HACHA_LE√ëADOR And .Invent.WeaponEqpObjIndex <> HACHA_LE√ëA_ELFICA Then
+						' Podemos llegar ac√° si el user equip√≥ el anillo dsp de la U y antes del click
 						Exit Sub
 					End If
 					
@@ -3064,22 +3064,22 @@ Errhandler:
 					
 					If DummyInt > 0 Then
 						If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
-							Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
 						'Barrin 29/9/03
 						If .Pos.X = X And .Pos.Y = Y Then
-							Call WriteConsoleMsg(UserIndex, "No puedes talar desde allÌ.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "No puedes talar desde all√≠.", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
-						'øHay un arbol donde clickeo?
-						If ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArboles And .Invent.WeaponEqpObjIndex = HACHA_LE—ADOR Then
+						'¬øHay un arbol donde clickeo?
+						If ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArboles And .Invent.WeaponEqpObjIndex = HACHA_LE√ëADOR Then
 							Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
 							Call DoTalar(UserIndex)
-						ElseIf ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArbolElfico And .Invent.WeaponEqpObjIndex = HACHA_LE—A_ELFICA Then 
-							If .Invent.WeaponEqpObjIndex = HACHA_LE—A_ELFICA Then
+						ElseIf ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArbolElfico And .Invent.WeaponEqpObjIndex = HACHA_LE√ëA_ELFICA Then 
+							If .Invent.WeaponEqpObjIndex = HACHA_LE√ëA_ELFICA Then
 								Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
 								Call DoTalar(UserIndex, True)
 							Else
@@ -3087,7 +3087,7 @@ Errhandler:
 							End If
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "No hay ning˙n ·rbol ahÌ.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No hay ning√∫n √°rbol ah√≠.", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case Declaraciones.eSkill.Mineria
@@ -3096,7 +3096,7 @@ Errhandler:
 					If .Invent.WeaponEqpObjIndex = 0 Then Exit Sub
 					
 					If .Invent.WeaponEqpObjIndex <> PIQUETE_MINERO Then
-						' Podemos llegar ac· si el user equipÛ el anillo dsp de la U y antes del click
+						' Podemos llegar ac√° si el user equip√≥ el anillo dsp de la U y antes del click
 						Exit Sub
 					End If
 					
@@ -3108,19 +3108,19 @@ Errhandler:
 					If DummyInt > 0 Then
 						'Check distance
 						If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
-							Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
 						
 						DummyInt = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex 'CHECK
-						'øHay un yacimiento donde clickeo?
+						'¬øHay un yacimiento donde clickeo?
 						If ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otYacimiento Then
 							Call DoMineria(UserIndex)
 						Else
-							Call WriteConsoleMsg(UserIndex, "AhÌ no hay ning˙n yacimiento.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Ah√≠ no hay ning√∫n yacimiento.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "AhÌ no hay ning˙n yacimiento.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Ah√≠ no hay ning√∫n yacimiento.", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case Declaraciones.eSkill.Domar
@@ -3135,12 +3135,12 @@ Errhandler:
 					If tN > 0 Then
 						If Npclist(tN).flags.Domable > 0 Then
 							If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
-								Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
 							
 							If migr_LenB(Npclist(tN).flags.AttackedBy) <> 0 Then
-								Call WriteConsoleMsg(UserIndex, "No puedes domar una criatura que est· luchando con un jugador.", FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "No puedes domar una criatura que est√° luchando con un jugador.", FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
 							
@@ -3149,7 +3149,7 @@ Errhandler:
 							Call WriteConsoleMsg(UserIndex, "No puedes domar a esa criatura.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "°No hay ninguna criatura allÌ!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬°No hay ninguna criatura all√≠!", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case FundirMetal 'UGLY!!! This is a constant, not a skill!!
@@ -3167,7 +3167,7 @@ Errhandler:
 							''chequeamos que no se zarpe duplicando oro
 							If .Invent.Object_Renamed(.flags.TargetObjInvSlot).ObjIndex <> .flags.TargetObjInvIndex Then
 								If .Invent.Object_Renamed(.flags.TargetObjInvSlot).ObjIndex = 0 Or .Invent.Object_Renamed(.flags.TargetObjInvSlot).Amount = 0 Then
-									Call WriteConsoleMsg(UserIndex, "No tienes m·s minerales.", FontTypeNames.FONTTYPE_INFO)
+									Call WriteConsoleMsg(UserIndex, "No tienes m√°s minerales.", FontTypeNames.FONTTYPE_INFO)
 									Exit Sub
 								End If
 								
@@ -3183,10 +3183,10 @@ Errhandler:
 								Call FundirArmas(UserIndex)
 							End If
 						Else
-							Call WriteConsoleMsg(UserIndex, "AhÌ no hay ninguna fragua.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Ah√≠ no hay ninguna fragua.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "AhÌ no hay ninguna fragua.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Ah√≠ no hay ninguna fragua.", FontTypeNames.FONTTYPE_INFO)
 					End If
 					
 				Case Declaraciones.eSkill.Herreria
@@ -3199,10 +3199,10 @@ Errhandler:
 							Call EnivarArmadurasConstruibles(UserIndex)
 							Call WriteShowBlacksmithForm(UserIndex)
 						Else
-							Call WriteConsoleMsg(UserIndex, "AhÌ no hay ning˙n yunque.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Ah√≠ no hay ning√∫n yunque.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "AhÌ no hay ning˙n yunque.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Ah√≠ no hay ning√∫n yunque.", FontTypeNames.FONTTYPE_INFO)
 					End If
 			End Select
 		End With
@@ -3215,7 +3215,7 @@ Errhandler:
 	
 	Private Sub HandleCreateNewGuild(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/11/09
 		'05/11/09: Pato - Ahora se quitan los espacios del principio y del fin del nombre del clan
 		'***************************************************
@@ -3245,7 +3245,7 @@ Errhandler:
 			codex = Split(buffer.ReadASCIIString(), SEPARATOR.Value)
 			
 			If modGuilds.CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) Then
-				Call SendData(modSendData.SendTarget.ToAll, UserIndex, PrepareMessageConsoleMsg(.name & " fundÛ el clan " & GuildName & " de alineaciÛn " & modGuilds.GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+				Call SendData(modSendData.SendTarget.ToAll, UserIndex, PrepareMessageConsoleMsg(.name & " fund√≥ el clan " & GuildName & " de alineaci√≥n " & modGuilds.GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayWave(44, NO_3D_SOUND, NO_3D_SOUND))
 				
 				
@@ -3260,13 +3260,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -3279,7 +3279,7 @@ Errhandler:
 	
 	Private Sub HandleSpellInfo(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3299,7 +3299,7 @@ Errhandler:
 			
 			'Validate slot
 			If spellSlot < 1 Or spellSlot > MAXUSERHECHIZOS Then
-				Call WriteConsoleMsg(UserIndex, "°Primero selecciona el hechizo!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°Primero selecciona el hechizo!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -3308,7 +3308,7 @@ Errhandler:
 			If Spell > 0 And Spell < NumeroHechizos + 1 Then
 				With Hechizos(Spell)
 					'Send information
-					Call WriteConsoleMsg(UserIndex, "%%%%%%%%%%%% INFO DEL HECHIZO %%%%%%%%%%%%" & vbCrLf & "Nombre:" & .Nombre & vbCrLf & "DescripciÛn:" & .desc & vbCrLf & "Skill requerido: " & .MinSkill & " de magia." & vbCrLf & "Man· necesario: " & .ManaRequerido & vbCrLf & "EnergÌa necesaria: " & .StaRequerido & vbCrLf & "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "%%%%%%%%%%%% INFO DEL HECHIZO %%%%%%%%%%%%" & vbCrLf & "Nombre:" & .Nombre & vbCrLf & "Descripci√≥n:" & .desc & vbCrLf & "Skill requerido: " & .MinSkill & " de magia." & vbCrLf & "Man√° necesario: " & .ManaRequerido & vbCrLf & "Energ√≠a necesaria: " & .StaRequerido & vbCrLf & "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", FontTypeNames.FONTTYPE_INFO)
 				End With
 			End If
 		End With
@@ -3321,7 +3321,7 @@ Errhandler:
 	
 	Private Sub HandleEquipItem(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3357,11 +3357,11 @@ Errhandler:
 	
 	Private Sub HandleChangeHeading(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 06/28/2008
 		'Last Modified By: NicoNZ
 		' 10/01/2008: Tavo - Se cancela la salida del juego si el user esta saliendo
-		' 06/28/2008: NicoNZ - SÛlo se puede cambiar si est· inmovilizado.
+		' 06/28/2008: NicoNZ - S√≥lo se puede cambiar si est√° inmovilizado.
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 2 Then
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
@@ -3410,7 +3410,7 @@ Errhandler:
 	
 	Private Sub HandleModifySkills(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 11/19/09
 		'11/19/09: Pato - Adapting to new skills system.
 		'***************************************************
@@ -3421,7 +3421,7 @@ Errhandler:
 		
 		Dim i As Integer
 		Dim Count As Short
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz points ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz points ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		Dim points(NUMSKILLS) As Byte
 		With UserList(UserIndex)
 			'Remove packet ID
@@ -3434,7 +3434,7 @@ Errhandler:
 				points(i) = .incomingData.ReadByte()
 				
 				If points(i) < 0 Then
-					Call LogHackAttemp(.name & " IP:" & .ip & " tratÛ de hackear los skills.")
+					Call LogHackAttemp(.name & " IP:" & .ip & " trat√≥ de hackear los skills.")
 					.Stats.SkillPts = 0
 					Call CloseSocket(UserIndex)
 					Exit Sub
@@ -3444,7 +3444,7 @@ Errhandler:
 			Next i
 			
 			If Count > .Stats.SkillPts Then
-				Call LogHackAttemp(.name & " IP:" & .ip & " tratÛ de hackear los skills.")
+				Call LogHackAttemp(.name & " IP:" & .ip & " trat√≥ de hackear los skills.")
 				Call CloseSocket(UserIndex)
 				Exit Sub
 			End If
@@ -3478,7 +3478,7 @@ Errhandler:
 	
 	Private Sub HandleTrain(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3511,7 +3511,7 @@ Errhandler:
 					End If
 				End If
 			Else
-				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No puedo traer m·s criaturas, mata las existentes.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
+				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No puedo traer m√°s criaturas, mata las existentes.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
 			End If
 		End With
 	End Sub
@@ -3523,7 +3523,7 @@ Errhandler:
 	
 	Private Sub HandleCommerceBuy(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3544,22 +3544,22 @@ Errhandler:
 			
 			'Dead people can't commerce...
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
-			'øEl target es un NPC valido?
+			'¬øEl target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
 			
-			'øEl NPC puede comerciar?
+			'¬øEl NPC puede comerciar?
 			If Npclist(.flags.TargetNPC).Comercia = 0 Then
-				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No tengo ning˙n interÈs en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
+				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No tengo ning√∫n inter√©s en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
 				Exit Sub
 			End If
 			
 			'Only if in commerce mode....
 			If Not .flags.Comerciando Then
-				Call WriteConsoleMsg(UserIndex, "No est·s comerciando.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No est√°s comerciando.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -3575,7 +3575,7 @@ Errhandler:
 	
 	Private Sub HandleBankExtractItem(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3596,14 +3596,14 @@ Errhandler:
 			
 			'Dead people can't commerce
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
-			'øEl target es un NPC valido?
+			'¬øEl target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
 			
-			'øEs el banquero?
+			'¬øEs el banquero?
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then
 				Exit Sub
 			End If
@@ -3620,7 +3620,7 @@ Errhandler:
 	
 	Private Sub HandleCommerceSell(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3641,16 +3641,16 @@ Errhandler:
 			
 			'Dead people can't commerce...
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
-			'øEl target es un NPC valido?
+			'¬øEl target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
 			
-			'øEl NPC puede comerciar?
+			'¬øEl NPC puede comerciar?
 			If Npclist(.flags.TargetNPC).Comercia = 0 Then
-				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No tengo ning˙n interÈs en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
+				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No tengo ning√∫n inter√©s en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
 				Exit Sub
 			End If
 			
@@ -3666,7 +3666,7 @@ Errhandler:
 	
 	Private Sub HandleBankDeposit(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3687,14 +3687,14 @@ Errhandler:
 			
 			'Dead people can't commerce...
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
-			'øEl target es un NPC valido?
+			'¬øEl target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
 			
-			'øEl NPC puede comerciar?
+			'¬øEl NPC puede comerciar?
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then
 				Exit Sub
 			End If
@@ -3711,7 +3711,7 @@ Errhandler:
 	
 	Private Sub HandleForumPost(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 02/01/2010
 		'02/01/2010: ZaMa - Implemento nuevo sistema de foros
 		'***************************************************
@@ -3767,13 +3767,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -3786,7 +3786,7 @@ Errhandler:
 	
 	Private Sub HandleMoveSpell(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3795,7 +3795,7 @@ Errhandler:
 			Exit Sub
 		End If
 		
-		'UPGRADE_NOTE: dir se actualizÛ a dir_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: dir se actualiz√≥ a dir_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim dir_Renamed As Short
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
@@ -3830,7 +3830,7 @@ Errhandler:
 		
 		Dim Slot As Byte
 		Dim TempItem As Obj
-		'UPGRADE_NOTE: dir se actualizÛ a dir_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: dir se actualiz√≥ a dir_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim dir_Renamed As Short
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
@@ -3851,12 +3851,12 @@ Errhandler:
 			TempItem.Amount = .BancoInvent.Object_Renamed(Slot).Amount
 			
 			If dir_Renamed = 1 Then 'Mover arriba
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				.BancoInvent.Object_Renamed(Slot) = .BancoInvent.Object_Renamed(Slot - 1)
 				.BancoInvent.Object_Renamed(Slot - 1).ObjIndex = TempItem.ObjIndex
 				.BancoInvent.Object_Renamed(Slot - 1).Amount = TempItem.Amount
 			Else 'mover abajo
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				.BancoInvent.Object_Renamed(Slot) = .BancoInvent.Object_Renamed(Slot + 1)
 				.BancoInvent.Object_Renamed(Slot + 1).ObjIndex = TempItem.ObjIndex
 				.BancoInvent.Object_Renamed(Slot + 1).Amount = TempItem.Amount
@@ -3875,7 +3875,7 @@ Errhandler:
 	
 	Private Sub HandleClanCodexUpdate(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -3906,13 +3906,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -3925,7 +3925,7 @@ Errhandler:
 	
 	Private Sub HandleUserCommerceOffer(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 24/11/2009
 		'24/11/2009: ZaMa - Nuevo sistema de comercio
 		'***************************************************
@@ -3999,14 +3999,14 @@ Errhandler:
 				'Don't allow to sell boats if they are equipped (you can't take them off in the water and causes trouble)
 				If .flags.Navegando = 1 Then
 					If .Invent.BarcoSlot = Slot Then
-						Call WriteCommerceChat(UserIndex, "No puedes vender tu barco mientras lo estÈs usando.", FontTypeNames.FONTTYPE_TALK)
+						Call WriteCommerceChat(UserIndex, "No puedes vender tu barco mientras lo est√©s usando.", FontTypeNames.FONTTYPE_TALK)
 						Exit Sub
 					End If
 				End If
 				
 				If .Invent.MochilaEqpSlot > 0 Then
 					If .Invent.MochilaEqpSlot = Slot Then
-						Call WriteCommerceChat(UserIndex, "No puedes vender tu mochila mientras la estÈs usando.", FontTypeNames.FONTTYPE_TALK)
+						Call WriteCommerceChat(UserIndex, "No puedes vender tu mochila mientras la est√©s usando.", FontTypeNames.FONTTYPE_TALK)
 						Exit Sub
 					End If
 				End If
@@ -4027,7 +4027,7 @@ Errhandler:
 	
 	Private Sub HandleGuildAcceptPeace(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4065,13 +4065,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4084,7 +4084,7 @@ Errhandler:
 	
 	Private Sub HandleGuildRejectAlliance(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4122,13 +4122,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4141,7 +4141,7 @@ Errhandler:
 	
 	Private Sub HandleGuildRejectPeace(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4179,13 +4179,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4198,7 +4198,7 @@ Errhandler:
 	
 	Private Sub HandleGuildAcceptAlliance(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4236,13 +4236,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4255,7 +4255,7 @@ Errhandler:
 	
 	Private Sub HandleGuildOfferPeace(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4291,13 +4291,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4310,7 +4310,7 @@ Errhandler:
 	
 	Private Sub HandleGuildOfferAlliance(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4346,13 +4346,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4365,7 +4365,7 @@ Errhandler:
 	
 	Private Sub HandleGuildAllianceDetails(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4402,13 +4402,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4421,7 +4421,7 @@ Errhandler:
 	
 	Private Sub HandleGuildPeaceDetails(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4458,13 +4458,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4477,7 +4477,7 @@ Errhandler:
 	
 	Private Sub HandleGuildRequestJoinerInfo(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4489,7 +4489,7 @@ Errhandler:
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim details As String
-		'UPGRADE_NOTE: User se actualizÛ a User_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: User se actualiz√≥ a User_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim User_Renamed As String
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -4504,7 +4504,7 @@ Errhandler:
 			details = modGuilds.a_DetallesAspirante(UserIndex, User_Renamed)
 			
 			If migr_LenB(details) = 0 Then
-				Call WriteConsoleMsg(UserIndex, "El personaje no ha mandado solicitud, o no est·s habilitado para verla.", FontTypeNames.FONTTYPE_GUILD)
+				Call WriteConsoleMsg(UserIndex, "El personaje no ha mandado solicitud, o no est√°s habilitado para verla.", FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteShowUserRequest(UserIndex, details)
 			End If
@@ -4514,13 +4514,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4533,7 +4533,7 @@ Errhandler:
 	
 	Private Sub HandleGuildAlliancePropList(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4550,7 +4550,7 @@ Errhandler:
 	
 	Private Sub HandleGuildPeacePropList(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4567,7 +4567,7 @@ Errhandler:
 	
 	Private Sub HandleGuildDeclareWar(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4608,13 +4608,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4627,7 +4627,7 @@ Errhandler:
 	
 	Private Sub HandleGuildNewWebsite(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4652,13 +4652,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4671,7 +4671,7 @@ Errhandler:
 	
 	Private Sub HandleGuildAcceptNewMember(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4713,13 +4713,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4732,7 +4732,7 @@ Errhandler:
 	
 	Private Sub HandleGuildRejectNewMember(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/08/07
 		'Last Modification by: (liquid)
 		'
@@ -4777,13 +4777,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4796,7 +4796,7 @@ Errhandler:
 	
 	Private Sub HandleGuildKickMember(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4833,13 +4833,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4852,7 +4852,7 @@ Errhandler:
 	
 	Private Sub HandleGuildUpdateNews(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4877,13 +4877,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4896,7 +4896,7 @@ Errhandler:
 	
 	Private Sub HandleGuildMemberInfo(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4921,13 +4921,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -4940,11 +4940,11 @@ Errhandler:
 	
 	Private Sub HandleGuildOpenElections(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As String
 		With UserList(UserIndex)
 			'Remove packet ID
@@ -4954,7 +4954,7 @@ Errhandler:
 			If Not modGuilds.v_AbrirElecciones(UserIndex, error_Renamed) Then
 				Call WriteConsoleMsg(UserIndex, error_Renamed, FontTypeNames.FONTTYPE_GUILD)
 			Else
-				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg("°Han comenzado las elecciones del clan! Puedes votar escribiendo /VOTO seguido del nombre del personaje, por ejemplo: /VOTO " & .name, FontTypeNames.FONTTYPE_GUILD))
+				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg("¬°Han comenzado las elecciones del clan! Puedes votar escribiendo /VOTO seguido del nombre del personaje, por ejemplo: /VOTO " & .name, FontTypeNames.FONTTYPE_GUILD))
 			End If
 		End With
 	End Sub
@@ -4966,7 +4966,7 @@ Errhandler:
 	
 	Private Sub HandleGuildRequestMembership(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -4994,7 +4994,7 @@ Errhandler:
 			If Not modGuilds.a_NuevoAspirante(UserIndex, guild, application, errorStr) Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
-				Call WriteConsoleMsg(UserIndex, "Tu solicitud ha sido enviada. Espera prontas noticias del lÌder de " & guild & ".", FontTypeNames.FONTTYPE_GUILD)
+				Call WriteConsoleMsg(UserIndex, "Tu solicitud ha sido enviada. Espera prontas noticias del l√≠der de " & guild & ".", FontTypeNames.FONTTYPE_GUILD)
 			End If
 			
 			'If we got here then packet is complete, copy data back to original queue
@@ -5002,13 +5002,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -5021,7 +5021,7 @@ Errhandler:
 	
 	Private Sub HandleGuildRequestDetails(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5046,13 +5046,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -5065,7 +5065,7 @@ Errhandler:
 	
 	Private Sub HandleOnline(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5082,7 +5082,7 @@ Errhandler:
 				End If
 			Next i
 			
-			Call WriteConsoleMsg(UserIndex, "N˙mero de usuarios: " & CStr(Count), FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, "N√∫mero de usuarios: " & CStr(Count), FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
 	
@@ -5093,7 +5093,7 @@ Errhandler:
 	
 	Private Sub HandleQuit(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/15/2008 (NicoNZ)
 		'If user is invisible, it automatically becomes
 		'visible before doing the countdown to exit
@@ -5137,7 +5137,7 @@ Errhandler:
 	
 	Private Sub HandleGuildLeave(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5154,7 +5154,7 @@ Errhandler:
 				Call WriteConsoleMsg(UserIndex, "Dejas el clan.", FontTypeNames.FONTTYPE_GUILD)
 				Call SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex, PrepareMessageConsoleMsg(.name & " deja el clan.", FontTypeNames.FONTTYPE_GUILD))
 			Else
-				Call WriteConsoleMsg(UserIndex, "T˙ no puedes salir de este clan.", FontTypeNames.FONTTYPE_GUILD)
+				Call WriteConsoleMsg(UserIndex, "T√∫ no puedes salir de este clan.", FontTypeNames.FONTTYPE_GUILD)
 			End If
 		End With
 	End Sub
@@ -5166,7 +5166,7 @@ Errhandler:
 	
 	Private Sub HandleRequestAccountState(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5179,18 +5179,18 @@ Errhandler:
 			
 			'Dead people can't check their accounts
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5223,7 +5223,7 @@ Errhandler:
 	
 	Private Sub HandlePetStand(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5233,19 +5233,19 @@ Errhandler:
 			
 			'Dead people can't use pets
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5266,7 +5266,7 @@ Errhandler:
 	
 	Private Sub HandlePetFollow(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5276,19 +5276,19 @@ Errhandler:
 			
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5320,19 +5320,19 @@ Errhandler:
 			
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5352,7 +5352,7 @@ Errhandler:
 	
 	Private Sub HandleTrainList(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5362,19 +5362,19 @@ Errhandler:
 			
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5392,7 +5392,7 @@ Errhandler:
 	
 	Private Sub HandleRest(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5402,7 +5402,7 @@ Errhandler:
 			
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!! Solo puedes usar Ìtems cuando est·s vivo.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!! Solo puedes usar √≠tems cuando est√°s vivo.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5410,7 +5410,7 @@ Errhandler:
 				Call WriteRestOK(UserIndex)
 				
 				If Not .flags.Descansar Then
-					Call WriteConsoleMsg(UserIndex, "Te acomod·s junto a la fogata y comienzas a descansar.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Te acomod√°s junto a la fogata y comienzas a descansar.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Te levantas.", FontTypeNames.FONTTYPE_INFO)
 				End If
@@ -5437,9 +5437,9 @@ Errhandler:
 	
 	Private Sub HandleMeditate(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/15/08 (NicoNZ)
-		'ArreglÈ un bug que mandaba un index de la meditacion diferente
+		'Arregl√© un bug que mandaba un index de la meditacion diferente
 		'al que decia el server.
 		'***************************************************
 		With UserList(UserIndex)
@@ -5448,20 +5448,20 @@ Errhandler:
 			
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!! SÛlo puedes meditar cuando est·s vivo.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!! S√≥lo puedes meditar cuando est√°s vivo.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Can he meditate?
 			If .Stats.MaxMAN = 0 Then
-				Call WriteConsoleMsg(UserIndex, "SÛlo las clases m·gicas conocen el arte de la meditaciÛn.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "S√≥lo las clases m√°gicas conocen el arte de la meditaci√≥n.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Admins don't have to wait :D
 			If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
 				.Stats.MinMAN = .Stats.MaxMAN
-				Call WriteConsoleMsg(UserIndex, "Man· restaurado.", FontTypeNames.FONTTYPE_VENENO)
+				Call WriteConsoleMsg(UserIndex, "Man√° restaurado.", FontTypeNames.FONTTYPE_VENENO)
 				Call WriteUpdateMana(UserIndex)
 				Exit Sub
 			End If
@@ -5476,7 +5476,7 @@ Errhandler:
 			If .flags.Meditando Then
 				.Counters.tInicioMeditar = GetTickCount() And &H7FFFFFFF
 				
-				Call WriteConsoleMsg(UserIndex, "Te est·s concentrando. En " & Fix(TIEMPO_INICIOMEDITAR / 1000) & " segundos comenzar·s a meditar.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Te est√°s concentrando. En " & Fix(TIEMPO_INICIOMEDITAR / 1000) & " segundos comenzar√°s a meditar.", FontTypeNames.FONTTYPE_INFO)
 				
 				.Char_Renamed.loops = INFINITE_LOOPS
 				
@@ -5515,7 +5515,7 @@ Errhandler:
 	
 	Private Sub HandleResucitate(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5525,7 +5525,7 @@ Errhandler:
 			
 			'Se asegura que el target es un npc
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5534,12 +5534,12 @@ Errhandler:
 			
 			'Make sure it's close enough
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "El sacerdote no puede resucitarte debido a que est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "El sacerdote no puede resucitarte debido a que est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			Call RevivirUsuario(UserIndex)
-			Call WriteConsoleMsg(UserIndex, "°°Has sido resucitado!!", FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, "¬°¬°Has sido resucitado!!", FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
 	
@@ -5570,7 +5570,7 @@ Errhandler:
 			
 			'Se asegura que el target es un usuario
 			If UserConsulta = 0 Then
-				Call WriteConsoleMsg(CShort(UserIndex), "Primero tienes que seleccionar un usuario, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(CShort(UserIndex), "Primero tienes que seleccionar un usuario, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5626,7 +5626,7 @@ Errhandler:
 	
 	Private Sub HandleHeal(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5636,14 +5636,14 @@ Errhandler:
 			
 			'Se asegura que el target es un npc
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Revividor And Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.ResucitadorNewbie) Or .flags.Muerto <> 0 Then Exit Sub
 			
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5651,7 +5651,7 @@ Errhandler:
 			
 			Call WriteUpdateHP(UserIndex)
 			
-			Call WriteConsoleMsg(UserIndex, "°°Has sido curado!!", FontTypeNames.FONTTYPE_INFO)
+			Call WriteConsoleMsg(UserIndex, "¬°¬°Has sido curado!!", FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
 	
@@ -5662,7 +5662,7 @@ Errhandler:
 	
 	Private Sub HandleRequestStats(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5679,7 +5679,7 @@ Errhandler:
 	
 	Private Sub HandleHelp(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5696,7 +5696,7 @@ Errhandler:
 	
 	Private Sub HandleCommerceStart(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5707,13 +5707,13 @@ Errhandler:
 			
 			'Dead people can't commerce
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Is it already in commerce mode??
 			If .flags.Comerciando Then
-				Call WriteConsoleMsg(UserIndex, "Ya est·s comerciando.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Ya est√°s comerciando.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5722,14 +5722,14 @@ Errhandler:
 				'Does the NPC want to trade??
 				If Npclist(.flags.TargetNPC).Comercia = 0 Then
 					If migr_LenB(Npclist(.flags.TargetNPC).desc) <> 0 Then
-						Call WriteChatOverHead(UserIndex, "No tengo ning˙n interÈs en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "No tengo ning√∫n inter√©s en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					End If
 					
 					Exit Sub
 				End If
 				
 				If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
-					Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 				
@@ -5740,25 +5740,25 @@ Errhandler:
 				'User commerce...
 				'Can he commerce??
 				If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
-					Call WriteConsoleMsg(UserIndex, "No puedes vender Ìtems.", FontTypeNames.FONTTYPE_WARNING)
+					Call WriteConsoleMsg(UserIndex, "No puedes vender √≠tems.", FontTypeNames.FONTTYPE_WARNING)
 					Exit Sub
 				End If
 				
 				'Is the other one dead??
 				If UserList(.flags.TargetUser).flags.Muerto = 1 Then
-					Call WriteConsoleMsg(UserIndex, "°°No puedes comerciar con los muertos!!", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°¬°No puedes comerciar con los muertos!!", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 				
 				'Is it me??
 				If .flags.TargetUser = UserIndex Then
-					Call WriteConsoleMsg(UserIndex, "°°No puedes comerciar con vos mismo!!", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°¬°No puedes comerciar con vos mismo!!", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 				
 				'Check distance
 				If Distancia(UserList(.flags.TargetUser).Pos, .Pos) > 3 Then
-					Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 				
@@ -5795,7 +5795,7 @@ Errhandler:
 	
 	Private Sub HandleBankStart(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5805,19 +5805,19 @@ Errhandler:
 			
 			'Dead people can't commerce
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If .flags.Comerciando Then
-				Call WriteConsoleMsg(UserIndex, "Ya est·s comerciando.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Ya est√°s comerciando.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC > 0 Then
 				If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
-					Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
 				
@@ -5838,7 +5838,7 @@ Errhandler:
 	
 	Private Sub HandleEnlist(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5848,14 +5848,14 @@ Errhandler:
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
 			
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
-				Call WriteConsoleMsg(UserIndex, "Debes acercarte m·s.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Debes acercarte m√°s.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5874,7 +5874,7 @@ Errhandler:
 	
 	Private Sub HandleInformation(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5888,14 +5888,14 @@ Errhandler:
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
 			
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -5904,7 +5904,7 @@ Errhandler:
 			
 			If Npclist(.flags.TargetNPC).flags.Faccion = 0 Then
 				If .Faccion.ArmadaReal = 0 Then
-					Call WriteChatOverHead(UserIndex, "°°No perteneces a las tropas reales!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°¬°No perteneces a las tropas reales!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
 				
@@ -5912,13 +5912,13 @@ Errhandler:
 				Diferencia = NextRecom - Matados
 				
 				If Diferencia > 0 Then
-					Call WriteChatOverHead(UserIndex, "Tu deber es combatir criminales, mata " & Diferencia & " criminales m·s y te darÈ una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Tu deber es combatir criminales, mata " & Diferencia & " criminales m√°s y te dar√© una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
 					Call WriteChatOverHead(UserIndex, "Tu deber es combatir criminales, y ya has matado los suficientes como para merecerte una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				End If
 			Else
 				If .Faccion.FuerzasCaos = 0 Then
-					Call WriteChatOverHead(UserIndex, "°°No perteneces a la legiÛn oscura!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°¬°No perteneces a la legi√≥n oscura!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
 				
@@ -5926,9 +5926,9 @@ Errhandler:
 				Diferencia = NextRecom - Matados
 				
 				If Diferencia > 0 Then
-					Call WriteChatOverHead(UserIndex, "Tu deber es sembrar el caos y la desesperanza, mata " & Diferencia & " ciudadanos m·s y te darÈ una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Tu deber es sembrar el caos y la desesperanza, mata " & Diferencia & " ciudadanos m√°s y te dar√© una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
-					Call WriteChatOverHead(UserIndex, "Tu deber es sembrar el caos y la desesperanza, y creo que est·s en condiciones de merecer una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "Tu deber es sembrar el caos y la desesperanza, y creo que est√°s en condiciones de merecer una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				End If
 			End If
 		End With
@@ -5941,7 +5941,7 @@ Errhandler:
 	
 	Private Sub HandleReward(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -5951,26 +5951,26 @@ Errhandler:
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
 			
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Npclist(.flags.TargetNPC).flags.Faccion = 0 Then
 				If .Faccion.ArmadaReal = 0 Then
-					Call WriteChatOverHead(UserIndex, "°°No perteneces a las tropas reales!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°¬°No perteneces a las tropas reales!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
 				Call RecompensaArmadaReal(UserIndex)
 			Else
 				If .Faccion.FuerzasCaos = 0 Then
-					Call WriteChatOverHead(UserIndex, "°°No perteneces a la legiÛn oscura!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°¬°No perteneces a la legi√≥n oscura!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
 				Call RecompensaCaos(UserIndex)
@@ -5985,7 +5985,7 @@ Errhandler:
 	
 	Private Sub HandleRequestMOTD(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6002,7 +6002,7 @@ Errhandler:
 	
 	Private Sub HandleUpTime(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/10/08
 		'01/10/2008 - Marcos Martinez (ByVal) - Automatic restart removed from the server along with all their assignments and varibles
 		'***************************************************
@@ -6026,9 +6026,9 @@ Errhandler:
 		time = time \ 24
 		
 		If time = 1 Then
-			UpTimeStr = time & " dÌa, " & UpTimeStr
+			UpTimeStr = time & " d√≠a, " & UpTimeStr
 		Else
-			UpTimeStr = time & " dÌas, " & UpTimeStr
+			UpTimeStr = time & " d√≠as, " & UpTimeStr
 		End If
 		
 		Call WriteConsoleMsg(UserIndex, "Server Online: " & UpTimeStr, FontTypeNames.FONTTYPE_INFO)
@@ -6041,7 +6041,7 @@ Errhandler:
 	
 	Private Sub HandlePartyLeave(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6058,7 +6058,7 @@ Errhandler:
 	
 	Private Sub HandlePartyCreate(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6077,7 +6077,7 @@ Errhandler:
 	
 	Private Sub HandlePartyJoin(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6121,7 +6121,7 @@ Errhandler:
 				' Caos can only share with other caos
 				If esCaos(UserIndex) Then
 					If Not esCaos(TargetUserIndex) Then
-						Call WriteConsoleMsg(UserIndex, "Solo puedes compartir npcs con miembros de tu misma facciÛn!!", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Solo puedes compartir npcs con miembros de tu misma facci√≥n!!", FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
 					
@@ -6198,7 +6198,7 @@ Errhandler:
 	
 	Private Sub HandleInquiry(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6215,7 +6215,7 @@ Errhandler:
 	
 	Private Sub HandleGuildMessage(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 15/07/2009
 		'02/03/2009: ZaMa - Arreglado un indice mal pasado a la funcion de cartel de clanes overhead.
 		'15/07/2009: ZaMa - Now invisible admins only speak by console
@@ -6254,13 +6254,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6273,7 +6273,7 @@ Errhandler:
 	
 	Private Sub HandlePartyMessage(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6301,7 +6301,7 @@ Errhandler:
 				
 				Call mdParty.BroadCastParty(UserIndex, Chat)
 				'TODO : Con la 0.12.1 se debe definir si esto vuelve o se borra (/CMSG overhead)
-				'Call SendData(SendTarget.ToPartyArea, UserIndex, UserList(UserIndex).Pos.map, "||" & vbYellow & "∞< " & mid$(rData, 7) & " >∞" & CStr(UserList(UserIndex).Char.CharIndex))
+				'Call SendData(SendTarget.ToPartyArea, UserIndex, UserList(UserIndex).Pos.map, "||" & vbYellow & "¬∞< " & mid$(rData, 7) & " >¬∞" & CStr(UserList(UserIndex).Char.CharIndex))
 			End If
 			
 			'If we got here then packet is complete, copy data back to original queue
@@ -6309,13 +6309,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6328,7 +6328,7 @@ Errhandler:
 	
 	Private Sub HandleCentinelReport(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6352,7 +6352,7 @@ Errhandler:
 	
 	Private Sub HandleGuildOnline(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6365,9 +6365,9 @@ Errhandler:
 			onlineList = modGuilds.m_ListaDeMiembrosOnline(UserIndex, .GuildIndex)
 			
 			If .GuildIndex <> 0 Then
-				Call WriteConsoleMsg(UserIndex, "CompaÒeros de tu clan conectados: " & onlineList, FontTypeNames.FONTTYPE_GUILDMSG)
+				Call WriteConsoleMsg(UserIndex, "Compa√±eros de tu clan conectados: " & onlineList, FontTypeNames.FONTTYPE_GUILDMSG)
 			Else
-				Call WriteConsoleMsg(UserIndex, "No pertences a ning˙n clan.", FontTypeNames.FONTTYPE_GUILDMSG)
+				Call WriteConsoleMsg(UserIndex, "No pertences a ning√∫n clan.", FontTypeNames.FONTTYPE_GUILDMSG)
 			End If
 		End With
 	End Sub
@@ -6379,7 +6379,7 @@ Errhandler:
 	
 	Private Sub HandlePartyOnline(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6396,7 +6396,7 @@ Errhandler:
 	
 	Private Sub HandleCouncilMessage(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6434,13 +6434,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6453,7 +6453,7 @@ Errhandler:
 	
 	Private Sub HandleRoleMasterRequest(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6485,13 +6485,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6504,7 +6504,7 @@ Errhandler:
 	
 	Private Sub HandleGMRequest(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6513,12 +6513,12 @@ Errhandler:
 			Call .incomingData.ReadByte()
 			
 			If Not Ayuda.Existe(.name) Then
-				Call WriteConsoleMsg(UserIndex, "El mensaje ha sido entregado, ahora sÛlo debes esperar que se desocupe alg˙n GM.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "El mensaje ha sido entregado, ahora s√≥lo debes esperar que se desocupe alg√∫n GM.", FontTypeNames.FONTTYPE_INFO)
 				Call Ayuda.Push(.name)
 			Else
 				Call Ayuda.Quitar(.name)
 				Call Ayuda.Push(.name)
-				Call WriteConsoleMsg(UserIndex, "Ya habÌas mandado un mensaje, tu mensaje ha sido movido al final de la cola de mensajes.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Ya hab√≠as mandado un mensaje, tu mensaje ha sido movido al final de la cola de mensajes.", FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
 	End Sub
@@ -6530,7 +6530,7 @@ Errhandler:
 	
 	Private Sub HandleBugReport(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6567,13 +6567,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6586,7 +6586,7 @@ Errhandler:
 	
 	Private Sub HandleChangeDescription(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6609,13 +6609,13 @@ Errhandler:
 			Description = buffer.ReadASCIIString()
 			
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "No puedes cambiar la descripciÛn estando muerto.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No puedes cambiar la descripci√≥n estando muerto.", FontTypeNames.FONTTYPE_INFO)
 			Else
 				If Not AsciiValidos(Description) Then
-					Call WriteConsoleMsg(UserIndex, "La descripciÛn tiene caracteres inv·lidos.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "La descripci√≥n tiene caracteres inv√°lidos.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					.desc = Trim(Description)
-					Call WriteConsoleMsg(UserIndex, "La descripciÛn ha cambiado.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "La descripci√≥n ha cambiado.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -6624,13 +6624,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6643,7 +6643,7 @@ Errhandler:
 	
 	Private Sub HandleGuildVote(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6677,13 +6677,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6717,7 +6717,7 @@ Errhandler:
 	
 	Private Sub HandlePunishments(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 25/08/2009
 		'25/08/2009: ZaMa - Now only admins can see other admins' punishment list
 		'***************************************************
@@ -6778,13 +6778,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6797,7 +6797,7 @@ Errhandler:
 	
 	Private Sub HandleChangePassword(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Creation Date: 10/10/07
 		'Last Modified By: Rapsodius
 		'***************************************************
@@ -6823,15 +6823,15 @@ Errhandler:
 			newPass = UCase(buffer.ReadASCIIString())
 			
 			If migr_LenB(newPass) = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Debes especificar una contraseÒa nueva, intÈntalo de nuevo.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Debes especificar una contrase√±a nueva, int√©ntalo de nuevo.", FontTypeNames.FONTTYPE_INFO)
 			Else
 				oldPass2 = UCase(GetVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password"))
 				
 				If oldPass2 <> oldPass Then
-					Call WriteConsoleMsg(UserIndex, "La contraseÒa actual proporcionada no es correcta. La contraseÒa no ha sido cambiada, intÈntalo de nuevo.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "La contrase√±a actual proporcionada no es correcta. La contrase√±a no ha sido cambiada, int√©ntalo de nuevo.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password", newPass)
-					Call WriteConsoleMsg(UserIndex, "La contraseÒa fue cambiada con Èxito.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "La contrase√±a fue cambiada con √©xito.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -6840,13 +6840,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -6860,7 +6860,7 @@ Errhandler:
 	
 	Private Sub HandleGamble(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6878,24 +6878,24 @@ Errhandler:
 			Amount = .incomingData.ReadInteger()
 			
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 			ElseIf .flags.TargetNPC = 0 Then 
 				'Validate target NPC
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 			ElseIf Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then 
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 			ElseIf Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Timbero Then 
-				Call WriteChatOverHead(UserIndex, "No tengo ning˙n interÈs en apostar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "No tengo ning√∫n inter√©s en apostar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			ElseIf Amount < 1 Then 
-				Call WriteChatOverHead(UserIndex, "El mÌnimo de apuesta es 1 moneda.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "El m√≠nimo de apuesta es 1 moneda.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			ElseIf Amount > 5000 Then 
-				Call WriteChatOverHead(UserIndex, "El m·ximo de apuesta es 5000 monedas.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "El m√°ximo de apuesta es 5000 monedas.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			ElseIf .Stats.GLD < Amount Then 
 				Call WriteChatOverHead(UserIndex, "No tienes esa cantidad.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			Else
 				If RandomNumber(1, 100) <= 47 Then
 					.Stats.GLD = .Stats.GLD + Amount
-					Call WriteChatOverHead(UserIndex, "°Felicidades! Has ganado " & CStr(Amount) & " monedas de oro.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°Felicidades! Has ganado " & CStr(Amount) & " monedas de oro.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					
 					Apuestas.Perdidas = Apuestas.Perdidas + Amount
 					Call WriteVar(DatPath & "apuestas.dat", "Main", "Perdidas", CStr(Apuestas.Perdidas))
@@ -6923,7 +6923,7 @@ Errhandler:
 	
 	Private Sub HandleInquiryVote(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6951,7 +6951,7 @@ Errhandler:
 	
 	Private Sub HandleBankExtractGold(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -6970,27 +6970,27 @@ Errhandler:
 			
 			'Dead people can't leave a faction.. they can't talk...
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then Exit Sub
 			
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Amount > 0 And Amount <= .Stats.Banco Then
 				.Stats.Banco = .Stats.Banco - Amount
 				.Stats.GLD = .Stats.GLD + Amount
-				Call WriteChatOverHead(UserIndex, "TenÈs " & .Stats.Banco & " monedas de oro en tu cuenta.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Ten√©s " & .Stats.Banco & " monedas de oro en tu cuenta.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			Else
 				Call WriteChatOverHead(UserIndex, "No tienes esa cantidad.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			End If
@@ -7007,7 +7007,7 @@ Errhandler:
 	
 	Private Sub HandleLeaveFaction(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7022,7 +7022,7 @@ Errhandler:
 			
 			'Dead people can't leave a faction.. they can't talk...
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -7045,12 +7045,12 @@ Errhandler:
 			If .Faccion.ArmadaReal = 1 Then
 				' Si le pidio al demonio salir de la armada, este le responde.
 				If TalkToDemon Then
-					Call WriteChatOverHead(UserIndex, "°°°Sal de aquÌ bufÛn!!!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°¬°¬°Sal de aqu√≠ buf√≥n!!!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					
 				Else
 					' Si le pidio al rey salir de la armada, le responde.
 					If TalkToKing Then
-						Call WriteChatOverHead(UserIndex, "Ser·s bienvenido a las fuerzas imperiales si deseas regresar.", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Ser√°s bienvenido a las fuerzas imperiales si deseas regresar.", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					End If
 					
 					Call ExpulsarFaccionReal(UserIndex, False)
@@ -7061,11 +7061,11 @@ Errhandler:
 			ElseIf .Faccion.FuerzasCaos = 1 Then 
 				' Si le pidio al rey salir del caos, le responde.
 				If TalkToKing Then
-					Call WriteChatOverHead(UserIndex, "°°°Sal de aquÌ maldito criminal!!!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°¬°¬°Sal de aqu√≠ maldito criminal!!!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
 					' Si le pidio al demonio salir del caos, este le responde.
 					If TalkToDemon Then
-						Call WriteChatOverHead(UserIndex, "Ya volver·s arrastrandote.", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+						Call WriteChatOverHead(UserIndex, "Ya volver√°s arrastrandote.", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					End If
 					
 					Call ExpulsarFaccionCaos(UserIndex, False)
@@ -7075,9 +7075,9 @@ Errhandler:
 				
 				' Si le hablaba al rey o demonio, le repsonden ellos
 				If NpcIndex > 0 Then
-					Call WriteChatOverHead(UserIndex, "°No perteneces a ninguna facciÛn!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+					Call WriteChatOverHead(UserIndex, "¬°No perteneces a ninguna facci√≥n!", Npclist(NpcIndex).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
-					Call WriteConsoleMsg(UserIndex, "°No perteneces a ninguna facciÛn!", FontTypeNames.FONTTYPE_FIGHT)
+					Call WriteConsoleMsg(UserIndex, "¬°No perteneces a ninguna facci√≥n!", FontTypeNames.FONTTYPE_FIGHT)
 				End If
 				
 			End If
@@ -7093,7 +7093,7 @@ Errhandler:
 	
 	Private Sub HandleBankDepositGold(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7112,18 +7112,18 @@ Errhandler:
 			
 			'Dead people can't leave a faction.. they can't talk...
 			If .flags.Muerto = 1 Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
-				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre Èl.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre √©l.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
-				Call WriteConsoleMsg(UserIndex, "Est·s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Est√°s demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -7132,12 +7132,12 @@ Errhandler:
 			If Amount > 0 And Amount <= .Stats.GLD Then
 				.Stats.Banco = .Stats.Banco + Amount
 				.Stats.GLD = .Stats.GLD - Amount
-				Call WriteChatOverHead(UserIndex, "TenÈs " & .Stats.Banco & " monedas de oro en tu cuenta.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "Ten√©s " & .Stats.Banco & " monedas de oro en tu cuenta.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				
 				Call WriteUpdateGold(UserIndex)
 				Call WriteUpdateBankGold(UserIndex)
 			Else
-				Call WriteChatOverHead(UserIndex, "No tenÈs esa cantidad.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+				Call WriteChatOverHead(UserIndex, "No ten√©s esa cantidad.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 			End If
 		End With
 	End Sub
@@ -7149,7 +7149,7 @@ Errhandler:
 	
 	Private Sub HandleDenounce(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7184,13 +7184,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7216,7 +7216,7 @@ Errhandler:
 			Call .incomingData.ReadByte()
 			
 			If HasFound(.name) Then
-				Call WriteConsoleMsg(UserIndex, "°Ya has fundado un clan, no puedes fundar otro!", FontTypeNames.FONTTYPE_INFOBOLD)
+				Call WriteConsoleMsg(UserIndex, "¬°Ya has fundado un clan, no puedes fundar otro!", FontTypeNames.FONTTYPE_INFOBOLD)
 				Exit Sub
 			End If
 			
@@ -7241,7 +7241,7 @@ Errhandler:
 		End If
 		
 		Dim clanType As Declaraciones.eClanType
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As String
 		With UserList(UserIndex)
 			'Remove packet ID
@@ -7251,7 +7251,7 @@ Errhandler:
 			clanType = .incomingData.ReadByte()
 			
 			If HasFound(.name) Then
-				Call WriteConsoleMsg(UserIndex, "°Ya has fundado un clan, no puedes fundar otro!", FontTypeNames.FONTTYPE_INFOBOLD)
+				Call WriteConsoleMsg(UserIndex, "¬°Ya has fundado un clan, no puedes fundar otro!", FontTypeNames.FONTTYPE_INFOBOLD)
 				Call LogCheating("El usuario " & .name & " ha intentado fundar un clan ya habiendo fundado otro desde la IP " & .ip)
 				Exit Sub
 			End If
@@ -7270,7 +7270,7 @@ Errhandler:
 				Case CStr(Declaraciones.eClanType.ct_Criminal)
 					.FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_CRIMINAL
 				Case Else
-					Call WriteConsoleMsg(UserIndex, "AlineaciÛn inv·lida.", FontTypeNames.FONTTYPE_GUILD)
+					Call WriteConsoleMsg(UserIndex, "Alineaci√≥n inv√°lida.", FontTypeNames.FONTTYPE_GUILD)
 					Exit Sub
 			End Select
 			
@@ -7290,7 +7290,7 @@ Errhandler:
 	
 	Private Sub HandlePartyKick(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/05/09
 		'Last Modification by: Marco Vanotti (Marco)
 		'- 05/05/09: Now it uses "UserPuedeEjecutarComandos" to check if the user can use party commands
@@ -7333,13 +7333,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7352,7 +7352,7 @@ Errhandler:
 	
 	Private Sub HandlePartySetLeader(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/05/09
 		'Last Modification by: Marco Vanotti (MarKoxX)
 		'- 05/05/09: Now it uses "UserPuedeEjecutarComandos" to check if the user can use party commands
@@ -7400,13 +7400,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7419,7 +7419,7 @@ Errhandler:
 	
 	Private Sub HandlePartyAcceptMember(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/05/09
 		'Last Modification by: Marco Vanotti (Marco)
 		'- 05/05/09: Now it uses "UserPuedeEjecutarComandos" to check if the user can use party commands
@@ -7447,7 +7447,7 @@ Errhandler:
 			
 			UserName = buffer.ReadASCIIString()
 			If UserList(UserIndex).flags.Muerto Then
-				Call WriteConsoleMsg(UserIndex, "°°Est·s muerto!!", FontTypeNames.FONTTYPE_PARTY)
+				Call WriteConsoleMsg(UserIndex, "¬°¬°Est√°s muerto!!", FontTypeNames.FONTTYPE_PARTY)
 			Else
 				bUserVivo = True
 			End If
@@ -7459,7 +7459,7 @@ Errhandler:
 					If (UserList(tUser).flags.Privilegios And rank) <= (.flags.Privilegios And rank) Then
 						Call mdParty.AprobarIngresoAParty(UserIndex, tUser)
 					Else
-						Call WriteConsoleMsg(UserIndex, "No puedes incorporar a tu party a personajes de mayor jerarquÌa.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes incorporar a tu party a personajes de mayor jerarqu√≠a.", FontTypeNames.FONTTYPE_INFO)
 					End If
 				Else
 					If InStr(UserName, "+") Then
@@ -7470,7 +7470,7 @@ Errhandler:
 					If (UserDarPrivilegioLevel(UserName) And rank) <= (.flags.Privilegios And rank) Then
 						Call WriteConsoleMsg(UserIndex, LCase(UserName) & " no ha solicitado ingresar a tu party.", FontTypeNames.FONTTYPE_PARTY)
 					Else
-						Call WriteConsoleMsg(UserIndex, "No puedes incorporar a tu party a personajes de mayor jerarquÌa.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes incorporar a tu party a personajes de mayor jerarqu√≠a.", FontTypeNames.FONTTYPE_INFO)
 					End If
 				End If
 			End If
@@ -7480,13 +7480,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7499,7 +7499,7 @@ Errhandler:
 	
 	Private Sub HandleGuildMemberList(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7550,13 +7550,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7569,7 +7569,7 @@ Errhandler:
 	
 	Private Sub HandleGMMessage(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/08/07
 		'Last Modification by: (liquid)
 		'***************************************************
@@ -7607,13 +7607,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7626,7 +7626,7 @@ Errhandler:
 	
 	Private Sub HandleShowName(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7649,7 +7649,7 @@ Errhandler:
 	
 	Private Sub HandleOnlineRoyalArmy(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7687,7 +7687,7 @@ Errhandler:
 	
 	Private Sub HandleOnlineChaosLegion(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7725,7 +7725,7 @@ Errhandler:
 	
 	Private Sub HandleGoNearby(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/10/07
 		'
 		'***************************************************
@@ -7757,7 +7757,7 @@ Errhandler:
 			
 			'Check the user has enough powers
 			If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Consejero) Then
-				'Si es dios o Admins no podemos salvo que nosotros tambiÈn lo seamos
+				'Si es dios o Admins no podemos salvo que nosotros tambi√©n lo seamos
 				If Not (EsDios(UserName) Or EsAdmin(UserName)) Or (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) Then
 					If tIndex <= 0 Then 'existe el usuario destino?
 						Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
@@ -7783,7 +7783,7 @@ Errhandler:
 						
 						'No space found??
 						If Not found Then
-							Call WriteConsoleMsg(UserIndex, "Todos los lugares est·n ocupados.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "Todos los lugares est√°n ocupados.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					End If
 				End If
@@ -7794,13 +7794,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7813,7 +7813,7 @@ Errhandler:
 	
 	Private Sub HandleComment(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7844,13 +7844,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7863,7 +7863,7 @@ Errhandler:
 	
 	Private Sub HandleServerTime(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/08/07
 		'Last Modification by: (liquid)
 		'***************************************************
@@ -7886,7 +7886,7 @@ Errhandler:
 	
 	Private Sub HandleWhere(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -7915,7 +7915,7 @@ Errhandler:
 					Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					If (UserList(tUser).flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios)) <> 0 Or ((UserList(tUser).flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) <> 0) And (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0) Then
-						Call WriteConsoleMsg(UserIndex, "UbicaciÛn  " & UserName & ": " & UserList(tUser).Pos.Map & ", " & UserList(tUser).Pos.X & ", " & UserList(tUser).Pos.Y & ".", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Ubicaci√≥n  " & UserName & ": " & UserList(tUser).Pos.Map & ", " & UserList(tUser).Pos.X & ", " & UserList(tUser).Pos.Y & ".", FontTypeNames.FONTTYPE_INFO)
 						Call LogGM(.name, "/Donde " & UserName)
 					End If
 				End If
@@ -7926,13 +7926,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -7945,9 +7945,9 @@ Errhandler:
 	
 	Private Sub HandleCreaturesInMap(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 30/07/06
-		'Pablo (ToxicWaste): modificaciones generales para simplificar la visualizaciÛn.
+		'Pablo (ToxicWaste): modificaciones generales para simplificar la visualizaci√≥n.
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 3 Then
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
@@ -7975,40 +7975,40 @@ Errhandler:
 			If MapaValido(Map) Then
 				For i = 1 To LastNPC
 					'VB isn't lazzy, so we put more restrictive condition first to speed up the process
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					If Npclist(i).Pos.Map = Map Then
-						'øesta vivo?
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'¬øesta vivo?
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						If Npclist(i).flags.NPCActive And Npclist(i).Hostile = 1 And Npclist(i).Stats.Alineacion = 2 Then
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							If NPCcount1 = 0 Then
 								ReDim List1(0)
 								ReDim NPCcant1(0)
-								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 								NPCcount1 = 1
-								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 								List1(0) = Npclist(i).name & ": (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
 								NPCcant1(0) = 1
 							Else
-								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 								For j = 0 To NPCcount1 - 1
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									If Left(List1(j), Len(Npclist(i).name)) = Npclist(i).name Then
-										'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+										'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 										List1(j) = List1(j) & ", (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
 										NPCcant1(j) = NPCcant1(j) + 1
 										Exit For
 									End If
 								Next j
-								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 								If j = NPCcount1 Then
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									ReDim Preserve List1(NPCcount1)
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									ReDim Preserve NPCcant1(NPCcount1)
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									NPCcount1 = NPCcount1 + 1
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									List1(j) = Npclist(i).name & ": (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
 									NPCcant1(j) = 1
 								End If
@@ -8018,14 +8018,14 @@ Errhandler:
 								ReDim List2(0)
 								ReDim NPCcant2(0)
 								NPCcount2 = 1
-								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+								'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 								List2(0) = Npclist(i).name & ": (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
 								NPCcant2(0) = 1
 							Else
 								For j = 0 To NPCcount2 - 1
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									If Left(List2(j), Len(Npclist(i).name)) = Npclist(i).name Then
-										'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+										'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 										List2(j) = List2(j) & ", (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
 										NPCcant2(j) = NPCcant2(j) + 1
 										Exit For
@@ -8035,7 +8035,7 @@ Errhandler:
 									ReDim Preserve List2(NPCcount2)
 									ReDim Preserve NPCcant2(NPCcount2)
 									NPCcount2 = NPCcount2 + 1
-									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+									'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 									List2(j) = Npclist(i).name & ": (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
 									NPCcant2(j) = 1
 								End If
@@ -8045,18 +8045,18 @@ Errhandler:
 				Next i
 				
 				Call WriteConsoleMsg(UserIndex, "Npcs Hostiles en mapa: ", FontTypeNames.FONTTYPE_WARNING)
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				If NPCcount1 = 0 Then
 					Call WriteConsoleMsg(UserIndex, "No hay NPCS Hostiles.", FontTypeNames.FONTTYPE_INFO)
 				Else
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					For j = 0 To NPCcount1 - 1
 						Call WriteConsoleMsg(UserIndex, NPCcant1(j) & " " & List1(j), FontTypeNames.FONTTYPE_INFO)
 					Next j
 				End If
 				Call WriteConsoleMsg(UserIndex, "Otros Npcs en mapa: ", FontTypeNames.FONTTYPE_WARNING)
 				If NPCcount2 = 0 Then
-					Call WriteConsoleMsg(UserIndex, "No hay m·s NPCS.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No hay m√°s NPCS.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					For j = 0 To NPCcount2 - 1
 						Call WriteConsoleMsg(UserIndex, NPCcant2(j) & " " & List2(j), FontTypeNames.FONTTYPE_INFO)
@@ -8074,7 +8074,7 @@ Errhandler:
 	
 	Private Sub HandleWarpMeToTarget(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 26/03/09
 		'26/03/06: ZaMa - Chequeo que no se teletransporte donde haya un char o npc
 		'***************************************************
@@ -8103,7 +8103,7 @@ Errhandler:
 	
 	Private Sub HandleWarpChar(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 26/03/2009
 		'26/03/2009: ZaMa -  Chequeo que no se teletransporte a un tile donde haya un char o npc.
 		'***************************************************
@@ -8148,7 +8148,7 @@ Errhandler:
 						Call FindLegalPos(tUser, Map, X, Y)
 						Call WarpUserChar(tUser, Map, X, Y, True, True)
 						Call WriteConsoleMsg(UserIndex, UserList(tUser).name & " transportado.", FontTypeNames.FONTTYPE_INFO)
-						Call LogGM(.name, "TransportÛ a " & UserList(tUser).name & " hacia " & "Mapa" & Map & " X:" & X & " Y:" & Y)
+						Call LogGM(.name, "Transport√≥ a " & UserList(tUser).name & " hacia " & "Mapa" & Map & " X:" & X & " Y:" & Y)
 					End If
 				End If
 			End If
@@ -8158,13 +8158,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -8177,7 +8177,7 @@ Errhandler:
 	
 	Private Sub HandleSilence(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8209,7 +8209,7 @@ Errhandler:
 					If UserList(tUser).flags.Silenciado = 0 Then
 						UserList(tUser).flags.Silenciado = 1
 						Call WriteConsoleMsg(UserIndex, "Usuario silenciado.", FontTypeNames.FONTTYPE_INFO)
-						Call WriteShowMessageBox(tUser, "Estimado usuario, ud. ha sido silenciado por los administradores. Sus denuncias ser·n ignoradas por el servidor de aquÌ en m·s. Utilice /GM para contactar un administrador.")
+						Call WriteShowMessageBox(tUser, "Estimado usuario, ud. ha sido silenciado por los administradores. Sus denuncias ser√°n ignoradas por el servidor de aqu√≠ en m√°s. Utilice /GM para contactar un administrador.")
 						Call LogGM(.name, "/silenciar " & UserList(tUser).name)
 						
 						'Flush the other user's buffer
@@ -8227,13 +8227,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -8246,7 +8246,7 @@ Errhandler:
 	
 	Private Sub HandleSOSShowList(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8277,7 +8277,7 @@ Errhandler:
 				Call WriteShowPartyForm(UserIndex)
 				
 			Else
-				Call WriteConsoleMsg(UserIndex, "No perteneces a ning˙n grupo!", FontTypeNames.FONTTYPE_INFOBOLD)
+				Call WriteConsoleMsg(UserIndex, "No perteneces a ning√∫n grupo!", FontTypeNames.FONTTYPE_INFOBOLD)
 			End If
 		End With
 	End Sub
@@ -8315,7 +8315,7 @@ Errhandler:
 	
 	Private Sub HandleSOSRemove(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8343,13 +8343,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -8362,7 +8362,7 @@ Errhandler:
 	
 	Private Sub HandleGoToChar(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 26/03/2009
 		'26/03/2009: ZaMa -  Chequeo que no se teletransporte a un tile donde haya un char o npc.
 		'***************************************************
@@ -8389,7 +8389,7 @@ Errhandler:
 			tUser = NameIndex(UserName)
 			
 			If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Consejero) Then
-				'Si es dios o Admins no podemos salvo que nosotros tambiÈn lo seamos
+				'Si es dios o Admins no podemos salvo que nosotros tambi√©n lo seamos
 				If Not (EsDios(UserName) Or EsAdmin(UserName)) Or (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Then
 					If tUser <= 0 Then
 						Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
@@ -8415,13 +8415,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -8434,7 +8434,7 @@ Errhandler:
 	
 	Private Sub HandleInvisible(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8456,7 +8456,7 @@ Errhandler:
 	
 	Private Sub HandleGMPanel(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8477,7 +8477,7 @@ Errhandler:
 	
 	Private Sub HandleRequestUserList(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/09/07
 		'Last modified by: Lucas Tavolaro Ortiz (Tavo)
 		'I haven`t found a solution to split, so i make an array of names
@@ -8492,7 +8492,7 @@ Errhandler:
 			
 			If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
 			
-			'UPGRADE_WARNING: El lÌmite inferior de la matriz names ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El l√≠mite inferior de la matriz names ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim names(LastUser)
 			Count = 1
 			
@@ -8516,7 +8516,7 @@ Errhandler:
 	
 	Private Sub HandleWorking(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8554,7 +8554,7 @@ Errhandler:
 	
 	Private Sub HandleHiding(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8589,7 +8589,7 @@ Errhandler:
 	
 	Private Sub HandleJail(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'
 		'***************************************************
@@ -8629,12 +8629,12 @@ Errhandler:
 					tUser = NameIndex(UserName)
 					
 					If tUser <= 0 Then
-						Call WriteConsoleMsg(UserIndex, "El usuario no est· online.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "El usuario no est√° online.", FontTypeNames.FONTTYPE_INFO)
 					Else
 						If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
 							Call WriteConsoleMsg(UserIndex, "No puedes encarcelar a administradores.", FontTypeNames.FONTTYPE_INFO)
 						ElseIf jailTime > 60 Then 
-							Call WriteConsoleMsg(UserIndex, "No puedÈs encarcelar por m·s de 60 minutos.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "No pued√©s encarcelar por m√°s de 60 minutos.", FontTypeNames.FONTTYPE_INFO)
 						Else
 							If (migr_InStrB(UserName, "\") <> 0) Then
 								UserName = Replace(UserName, "\", "")
@@ -8650,7 +8650,7 @@ Errhandler:
 							End If
 							
 							Call Encarcelar(tUser, jailTime, .name)
-							Call LogGM(.name, " encarcelÛ a " & UserName)
+							Call LogGM(.name, " encarcel√≥ a " & UserName)
 						End If
 					End If
 				End If
@@ -8661,13 +8661,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -8680,12 +8680,12 @@ Errhandler:
 	
 	Private Sub HandleKillNPC(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/22/08 (NicoNZ)
 		'
 		'***************************************************
 		Dim tNPC As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura auxNPC, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura auxNPC, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim auxNPC As npc
 		With UserList(UserIndex)
 			'Remove packet ID
@@ -8707,7 +8707,7 @@ Errhandler:
 			If tNPC > 0 Then
 				Call WriteConsoleMsg(UserIndex, "RMatas (con posible respawn) a: " & Npclist(tNPC).name, FontTypeNames.FONTTYPE_INFO)
 				
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto auxNPC. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto auxNPC. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				auxNPC = Npclist(tNPC)
 				Call QuitarNPC(tNPC)
 				Call ReSpawnNpc(auxNPC)
@@ -8785,13 +8785,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -8855,16 +8855,16 @@ Errhandler:
 			If .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
 				Select Case .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Consejero)
 					Case Declaraciones.PlayerType.Consejero
-						' Los RMs consejeros sÛlo se pueden editar su head, body y level
+						' Los RMs consejeros s√≥lo se pueden editar su head, body y level
 						valido = tUser = UserIndex And (opcion = eEditOptions.eo_Body Or opcion = eEditOptions.eo_Head Or opcion = eEditOptions.eo_Level)
 						
 					Case Declaraciones.PlayerType.SemiDios
-						' Los RMs sÛlo se pueden editar su level y el head y body de cualquiera
+						' Los RMs s√≥lo se pueden editar su level y el head y body de cualquiera
 						valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or opcion = eEditOptions.eo_Head
 						
 					Case Declaraciones.PlayerType.Dios
 						' Los DRMs pueden aplicar los siguientes comandos sobre cualquiera
-						' pero si quiere modificar el level sÛlo lo puede hacer sobre sÌ mismo
+						' pero si quiere modificar el level s√≥lo lo puede hacer sobre s√≠ mismo
 						valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or opcion = eEditOptions.eo_Head Or opcion = eEditOptions.eo_CiticensKilled Or opcion = eEditOptions.eo_CriminalsKilled Or opcion = eEditOptions.eo_Class Or opcion = eEditOptions.eo_Skills Or opcion = eEditOptions.eo_addGold
 				End Select
 				
@@ -8875,8 +8875,8 @@ Errhandler:
 			If valido Then
 				UserCharPath = CharPath & UserName & ".chr"
 				If tUser <= 0 And Not FileExist(UserCharPath) Then
-					Call WriteConsoleMsg(UserIndex, "Est·s intentando editar un usuario inexistente.", FontTypeNames.FONTTYPE_INFO)
-					Call LogGM(.name, "IntentÛ editar un usuario inexistente.")
+					Call WriteConsoleMsg(UserIndex, "Est√°s intentando editar un usuario inexistente.", FontTypeNames.FONTTYPE_INFO)
+					Call LogGM(.name, "Intent√≥ editar un usuario inexistente.")
 				Else
 					'For making the Log
 					CommandString = "/MOD "
@@ -8892,7 +8892,7 @@ Errhandler:
 									Call WriteUpdateGold(tUser)
 								End If
 							Else
-								Call WriteConsoleMsg(UserIndex, "No est· permitido utilizar valores mayores a " & MAX_ORO_EDIT & ". Su comando ha quedado en los logs del juego.", FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "No est√° permitido utilizar valores mayores a " & MAX_ORO_EDIT & ". Su comando ha quedado en los logs del juego.", FontTypeNames.FONTTYPE_INFO)
 							End If
 							
 							' Log it
@@ -8986,7 +8986,7 @@ Errhandler:
 										
 										Call SendData(modSendData.SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg(UserName & " deja el clan.", FontTypeNames.FONTTYPE_GUILD))
 										' Si esta online le avisamos
-										If tUser > 0 Then Call WriteConsoleMsg(tUser, "°Ya tienes la madurez suficiente como para decidir bajo que estandarte pelear·s! Por esta razÛn, hasta tanto no te enlistes en la facciÛn bajo la cual tu clan est· alineado, estar·s excluÌdo del mismo.", FontTypeNames.FONTTYPE_GUILD)
+										If tUser > 0 Then Call WriteConsoleMsg(tUser, "¬°Ya tienes la madurez suficiente como para decidir bajo que estandarte pelear√°s! Por esta raz√≥n, hasta tanto no te enlistes en la facci√≥n bajo la cual tu clan est√° alineado, estar√°s exclu√≠do del mismo.", FontTypeNames.FONTTYPE_GUILD)
 									End If
 								End If
 							End If
@@ -9141,7 +9141,7 @@ Errhandler:
 							
 							
 							If System.Math.Abs(CDbl(Arg1)) > MAX_ORO_EDIT Then
-								Call WriteConsoleMsg(UserIndex, "No est· permitido utilizar valores mayores a " & MAX_ORO_EDIT & ".", FontTypeNames.FONTTYPE_INFO)
+								Call WriteConsoleMsg(UserIndex, "No est√° permitido utilizar valores mayores a " & MAX_ORO_EDIT & ".", FontTypeNames.FONTTYPE_INFO)
 							Else
 								If tUser <= 0 Then
 									bankGold = CInt(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
@@ -9172,13 +9172,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9238,13 +9238,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9298,13 +9298,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9358,13 +9358,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9419,13 +9419,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9480,13 +9480,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9552,13 +9552,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9653,13 +9653,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9781,7 +9781,7 @@ Errhandler:
 						Call VolverCiudadano(tUser)
 					Else
 						Call LogGM(.name, "Intento perdonar un personaje de nivel avanzado.")
-						Call WriteConsoleMsg(UserIndex, "SÛlo se permite perdonar newbies.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "S√≥lo se permite perdonar newbies.", FontTypeNames.FONTTYPE_INFO)
 					End If
 				End If
 			End If
@@ -9791,13 +9791,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9840,14 +9840,14 @@ Errhandler:
 				tUser = NameIndex(UserName)
 				
 				If tUser <= 0 Then
-					Call WriteConsoleMsg(UserIndex, "El usuario no est· online.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "El usuario no est√° online.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					If (UserList(tUser).flags.Privilegios And rank) > (.flags.Privilegios And rank) Then
-						Call WriteConsoleMsg(UserIndex, "No puedes echar a alguien con jerarquÌa mayor a la tuya.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "No puedes echar a alguien con jerarqu√≠a mayor a la tuya.", FontTypeNames.FONTTYPE_INFO)
 					Else
-						Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " echÛ a " & UserName & ".", FontTypeNames.FONTTYPE_INFO))
+						Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " ech√≥ a " & UserName & ".", FontTypeNames.FONTTYPE_INFO))
 						Call CloseSocket(tUser)
-						Call LogGM(.name, "EchÛ a " & UserName)
+						Call LogGM(.name, "Ech√≥ a " & UserName)
 					End If
 				End If
 			End If
@@ -9857,13 +9857,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9904,14 +9904,14 @@ Errhandler:
 				
 				If tUser > 0 Then
 					If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
-						Call WriteConsoleMsg(UserIndex, "øøEst·s loco?? øøCÛmo vas a piÒatear un gm?? :@", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "¬ø¬øEst√°s loco?? ¬ø¬øC√≥mo vas a pi√±atear un gm?? :@", FontTypeNames.FONTTYPE_INFO)
 					Else
 						Call UserDie(tUser)
 						Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " ha ejecutado a " & UserName & ".", FontTypeNames.FONTTYPE_EJECUCION))
 						Call LogGM(.name, " ejecuto a " & UserName)
 					End If
 				Else
-					Call WriteConsoleMsg(UserIndex, "No est· online.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No est√° online.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -9920,13 +9920,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -9972,13 +9972,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10036,7 +10036,7 @@ Errhandler:
 						Call LogGM(.name, "/UNBAN a " & UserName)
 						Call WriteConsoleMsg(UserIndex, UserName & " unbanned.", FontTypeNames.FONTTYPE_INFO)
 					Else
-						Call WriteConsoleMsg(UserIndex, UserName & " no est· baneado. Imposible unbanear.", FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, UserName & " no est√° baneado. Imposible unbanear.", FontTypeNames.FONTTYPE_INFO)
 					End If
 				End If
 			End If
@@ -10046,13 +10046,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10120,7 +10120,7 @@ Errhandler:
 				tUser = NameIndex(UserName)
 				
 				If tUser <= 0 Then
-					Call WriteConsoleMsg(UserIndex, "El jugador no est· online.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "El jugador no est√° online.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					If (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Or (UserList(tUser).flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.User)) <> 0 Then
 						Call WriteConsoleMsg(tUser, .name & " te ha trasportado.", FontTypeNames.FONTTYPE_INFO)
@@ -10140,13 +10140,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10189,7 +10189,7 @@ Errhandler:
 			Exit Sub
 		End If
 		
-		'UPGRADE_NOTE: npc se actualizÛ a npc_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: npc se actualiz√≥ a npc_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim npc_Renamed As Short
 		With UserList(UserIndex)
 			'Remove packet ID
@@ -10292,13 +10292,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10365,7 +10365,7 @@ Errhandler:
 						Call WriteConsoleMsg(UserIndex, "Los personajes con ip " & ip & " son: " & lista, FontTypeNames.FONTTYPE_INFO)
 					End If
 				Else
-					Call WriteConsoleMsg(UserIndex, "No hay ning˙n personaje con ese nick.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No hay ning√∫n personaje con ese nick.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -10374,13 +10374,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10488,13 +10488,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10684,13 +10684,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10815,7 +10815,7 @@ Errhandler:
 			
 			'Solo dioses, admins y RMS
 			If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) Then
-				Call SendData(modSendData.SendTarget.ToRealYRMs, 0, PrepareMessageConsoleMsg("EJ…RCITO REAL> " & message, FontTypeNames.FONTTYPE_TALK))
+				Call SendData(modSendData.SendTarget.ToRealYRMs, 0, PrepareMessageConsoleMsg("EJ√âRCITO REAL> " & message, FontTypeNames.FONTTYPE_TALK))
 			End If
 			
 			'If we got here then packet is complete, copy data back to original queue
@@ -10823,13 +10823,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10873,13 +10873,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10923,13 +10923,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -10973,13 +10973,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11028,13 +11028,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11129,13 +11129,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11193,13 +11193,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11285,13 +11285,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11343,13 +11343,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11442,13 +11442,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11541,7 +11541,7 @@ Errhandler:
 			Call LogGM(.name, "/BANIPLIST")
 			
 			For LoopC = 1 To BanIps.Count()
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				lista = lista & BanIps.Item(LoopC) & ", "
 			Next LoopC
 			
@@ -11614,7 +11614,7 @@ Errhandler:
 				If Not FileExist(tFile) Then
 					Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
 				Else
-					Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " baneÛ al clan " & UCase(GuildName), FontTypeNames.FONTTYPE_FIGHT))
+					Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " bane√≥ al clan " & UCase(GuildName), FontTypeNames.FONTTYPE_FIGHT))
 					
 					'baneamos a los miembros
 					Call LogGM(.name, "BANCLAN a " & UCase(GuildName))
@@ -11650,13 +11650,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11669,11 +11669,11 @@ Errhandler:
 	
 	Private Sub HandleBanIP(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 07/02/09
 		'Agregado un CopyBuffer porque se producia un bucle
 		'inifito al intentar banear una ip ya baneada. (NicoNZ)
-		'07/02/09 Pato - Ahora no es posible saber si un gm est· o no online.
+		'07/02/09 Pato - Ahora no es posible saber si un gm est√° o no online.
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 6 Then
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
@@ -11717,7 +11717,7 @@ Errhandler:
 						Call WriteConsoleMsg(UserIndex, "La IP " & bannedIP & " ya se encuentra en la lista de bans.", FontTypeNames.FONTTYPE_INFO)
 					Else
 						Call BanIpAgrega(bannedIP)
-						Call SendData(modSendData.SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(.name & " baneÛ la IP " & bannedIP & " por " & reason, FontTypeNames.FONTTYPE_FIGHT))
+						Call SendData(modSendData.SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(.name & " bane√≥ la IP " & bannedIP & " por " & reason, FontTypeNames.FONTTYPE_FIGHT))
 						
 						'Find every player with that ip and ban him!
 						For i = 1 To LastUser
@@ -11729,7 +11729,7 @@ Errhandler:
 						Next i
 					End If
 				ElseIf tUser <= 0 Then 
-					Call WriteConsoleMsg(UserIndex, "El personaje no est· online.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "El personaje no est√° online.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -11738,13 +11738,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11757,7 +11757,7 @@ Errhandler:
 	
 	Private Sub HandleUnbanIP(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/30/06
 		'
 		'***************************************************
@@ -11825,7 +11825,7 @@ Errhandler:
 			'Is the object not null?
 			If migr_LenB(ObjData_Renamed(tObj).name) = 0 Then Exit Sub
 			
-			Call WriteConsoleMsg(UserIndex, "°°ATENCI”N: FUERON CREADOS ***100*** ÕTEMS, TIRE Y /DEST LOS QUE NO NECESITE!!", FontTypeNames.FONTTYPE_GUILD)
+			Call WriteConsoleMsg(UserIndex, "¬°¬°ATENCI√ìN: FUERON CREADOS ***100*** √çTEMS, TIRE Y /DEST LOS QUE NO NECESITE!!", FontTypeNames.FONTTYPE_GUILD)
 			
 			Objeto.Amount = 100
 			Objeto.ObjIndex = tObj
@@ -11856,7 +11856,7 @@ Errhandler:
 			
 			If ObjData_Renamed(MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex).OBJType = Declaraciones.eOBJType.otTeleport And MapData(.Pos.Map, .Pos.X, .Pos.Y).TileExit.Map > 0 Then
 				
-				Call WriteConsoleMsg(UserIndex, "No puede destruir teleports asÌ. Utilice /DT.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "No puede destruir teleports as√≠. Utilice /DT.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
 			
@@ -11928,13 +11928,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -11979,7 +11979,7 @@ Errhandler:
 				End If
 				tUser = NameIndex(UserName)
 				
-				Call LogGM(.name, "ECH” DE LA REAL A: " & UserName)
+				Call LogGM(.name, "ECH√ì DE LA REAL A: " & UserName)
 				
 				If tUser > 0 Then
 					Call ExpulsarFaccionReal(tUser, True)
@@ -12004,13 +12004,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -12041,7 +12041,7 @@ Errhandler:
 			
 			If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then Exit Sub
 			
-			Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " broadcast m˙sica: " & midiID, FontTypeNames.FONTTYPE_SERVER))
+			Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(.name & " broadcast m√∫sica: " & midiID, FontTypeNames.FONTTYPE_SERVER))
 			
 			Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayMidi(midiID))
 		End With
@@ -12121,7 +12121,7 @@ Errhandler:
 					End If
 					
 					If FileExist(CharPath & UserName & ".chr") Then
-						Call LogGM(.name, " borro la pena: " & punishment & "-" & GetVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment) & " de " & UserName & " y la cambiÛ por: " & NewText)
+						Call LogGM(.name, " borro la pena: " & punishment & "-" & GetVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment) & " de " & UserName & " y la cambi√≥ por: " & NewText)
 						
 						Call WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment, LCase(.name) & ": <" & NewText & "> " & Today & " " & TimeOfDay)
 						
@@ -12135,13 +12135,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -12288,7 +12288,7 @@ Errhandler:
 					Call LogGM(.name, "/LASTIP " & UserName)
 					
 					If FileExist(CharPath & UserName & ".chr") Then
-						lista = "Las ultimas IPs con las que " & UserName & " se conectÛ son:"
+						lista = "Las ultimas IPs con las que " & UserName & " se conect√≥ son:"
 						For LoopC = 1 To 5
 							lista = lista & vbCrLf & LoopC & " - " & GetVar(CharPath & UserName & ".chr", "INIT", "LastIP" & LoopC)
 						Next LoopC
@@ -12297,7 +12297,7 @@ Errhandler:
 						Call WriteConsoleMsg(UserIndex, "Charfile """ & UserName & """ inexistente.", FontTypeNames.FONTTYPE_INFO)
 					End If
 				Else
-					Call WriteConsoleMsg(UserIndex, UserName & " es de mayor jerarquÌa que vos.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, UserName & " es de mayor jerarqu√≠a que vos.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -12306,13 +12306,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -12327,7 +12327,7 @@ Errhandler:
 		'***************************************************
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 12/23/06
-		'Last modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Change the user`s chat color
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 4 Then
@@ -12406,17 +12406,17 @@ Errhandler:
 			If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Dios) Then
 				tIndex = NameIndex(UserName) 'Que user index?
 				
-				Call LogGM(.name, .name & " CheckeÛ el slot " & Slot & " de " & UserName)
+				Call LogGM(.name, .name & " Checke√≥ el slot " & Slot & " de " & UserName)
 				
 				If tIndex > 0 Then
 					If Slot > 0 And Slot <= UserList(tIndex).CurrentInventorySlots Then
 						If UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex > 0 Then
 							Call WriteConsoleMsg(UserIndex, " Objeto " & Slot & ") " & ObjData_Renamed(UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex).name & " Cantidad:" & UserList(tIndex).Invent.Object_Renamed(Slot).Amount, FontTypeNames.FONTTYPE_INFO)
 						Else
-							Call WriteConsoleMsg(UserIndex, "No hay ning˙n objeto en slot seleccionado.", FontTypeNames.FONTTYPE_INFO)
+							Call WriteConsoleMsg(UserIndex, "No hay ning√∫n objeto en slot seleccionado.", FontTypeNames.FONTTYPE_INFO)
 						End If
 					Else
-						Call WriteConsoleMsg(UserIndex, "Slot Inv·lido.", FontTypeNames.FONTTYPE_TALK)
+						Call WriteConsoleMsg(UserIndex, "Slot Inv√°lido.", FontTypeNames.FONTTYPE_TALK)
 					End If
 				Else
 					Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_TALK)
@@ -12428,13 +12428,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -12481,7 +12481,7 @@ Errhandler:
 			If UCase(.name) <> "MARAXUS" Then Exit Sub
 			
 			'time and Time BUG!
-			Call LogGM(.name, .name & " reiniciÛ el mundo.")
+			Call LogGM(.name, .name & " reinici√≥ el mundo.")
 			
 			Call ReiniciarServidor(True)
 		End With
@@ -12613,7 +12613,7 @@ Errhandler:
 		'***************************************************
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 12/23/06
-		'Last modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'
 		'***************************************************
 		Dim i As Integer
@@ -12714,7 +12714,7 @@ Errhandler:
 		'***************************************************
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 12/24/06
-		'Last modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Change the backup`s info of the map
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 2 Then
@@ -12732,7 +12732,7 @@ Errhandler:
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) = 0 Then Exit Sub
 			
-			Call LogGM(.name, .name & " ha cambiado la informaciÛn sobre el BackUp.")
+			Call LogGM(.name, .name & " ha cambiado la informaci√≥n sobre el BackUp.")
 			
 			'Change the boolean to byte in a fast way
 			If doTheBackUp Then
@@ -12757,7 +12757,7 @@ Errhandler:
 		'***************************************************
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 12/24/06
-		'Last modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Change the pk`s info of the  map
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 2 Then
@@ -12775,7 +12775,7 @@ Errhandler:
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) = 0 Then Exit Sub
 			
-			Call LogGM(.name, .name & " ha cambiado la informaciÛn sobre si es PK el mapa.")
+			Call LogGM(.name, .name & " ha cambiado la informaci√≥n sobre si es PK el mapa.")
 			
 			MapInfo_Renamed(.Pos.Map).Pk = isMapPk
 			
@@ -12817,7 +12817,7 @@ Errhandler:
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
 				If tStr = "NEWBIE" Or tStr = "NO" Or tStr = "ARMADA" Or tStr = "CAOS" Or tStr = "FACCION" Then
-					Call LogGM(.name, .name & " ha cambiado la informaciÛn sobre si es restringido el mapa.")
+					Call LogGM(.name, .name & " ha cambiado la informaci√≥n sobre si es restringido el mapa.")
 					MapInfo_Renamed(UserList(UserIndex).Pos.Map).Restringir = tStr
 					Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Restringir", tStr)
 					Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Restringido: " & MapInfo_Renamed(.Pos.Map).Restringir, FontTypeNames.FONTTYPE_INFO)
@@ -12831,13 +12831,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -12868,7 +12868,7 @@ Errhandler:
 			nomagic = .incomingData.ReadBoolean
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-				Call LogGM(.name, .name & " ha cambiado la informaciÛn sobre si est· permitido usar la magia el mapa.")
+				Call LogGM(.name, .name & " ha cambiado la informaci√≥n sobre si est√° permitido usar la magia el mapa.")
 				MapInfo_Renamed(UserList(UserIndex).Pos.Map).MagiaSinEfecto = nomagic
 				Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "MagiaSinEfecto", CStr(nomagic))
 				Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " MagiaSinEfecto: " & MapInfo_Renamed(.Pos.Map).MagiaSinEfecto, FontTypeNames.FONTTYPE_INFO)
@@ -12901,7 +12901,7 @@ Errhandler:
 			noinvi = .incomingData.ReadBoolean()
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-				Call LogGM(.name, .name & " ha cambiado la informaciÛn sobre si est· permitido usar la invisibilidad en el mapa.")
+				Call LogGM(.name, .name & " ha cambiado la informaci√≥n sobre si est√° permitido usar la invisibilidad en el mapa.")
 				MapInfo_Renamed(UserList(UserIndex).Pos.Map).InviSinEfecto = noinvi
 				Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "InviSinEfecto", CStr(noinvi))
 				Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " InviSinEfecto: " & MapInfo_Renamed(.Pos.Map).InviSinEfecto, FontTypeNames.FONTTYPE_INFO)
@@ -12934,7 +12934,7 @@ Errhandler:
 			noresu = .incomingData.ReadBoolean()
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-				Call LogGM(.name, .name & " ha cambiado la informaciÛn sobre si est· permitido usar el resucitar en el mapa.")
+				Call LogGM(.name, .name & " ha cambiado la informaci√≥n sobre si est√° permitido usar el resucitar en el mapa.")
 				MapInfo_Renamed(UserList(UserIndex).Pos.Map).ResuSinEfecto = noresu
 				Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "ResuSinEfecto", CStr(noresu))
 				Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " ResuSinEfecto: " & MapInfo_Renamed(.Pos.Map).ResuSinEfecto, FontTypeNames.FONTTYPE_INFO)
@@ -12973,13 +12973,13 @@ Errhandler:
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
 				If tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or tStr = "DUNGEON" Then
-					Call LogGM(.name, .name & " ha cambiado la informaciÛn del terreno del mapa.")
+					Call LogGM(.name, .name & " ha cambiado la informaci√≥n del terreno del mapa.")
 					MapInfo_Renamed(UserList(UserIndex).Pos.Map).Terreno = tStr
 					Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Terreno", tStr)
 					Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Terreno: " & MapInfo_Renamed(.Pos.Map).Terreno, FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'", FontTypeNames.FONTTYPE_INFO)
-					Call WriteConsoleMsg(UserIndex, "Igualmente, el ˙nico ˙til es 'NIEVE' ya que al ingresarlo, la gente muere de frÌo en el mapa.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Igualmente, el √∫nico √∫til es 'NIEVE' ya que al ingresarlo, la gente muere de fr√≠o en el mapa.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -12988,13 +12988,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13031,13 +13031,13 @@ Errhandler:
 			
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
 				If tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or tStr = "DUNGEON" Then
-					Call LogGM(.name, .name & " ha cambiado la informaciÛn de la zona del mapa.")
+					Call LogGM(.name, .name & " ha cambiado la informaci√≥n de la zona del mapa.")
 					MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = tStr
 					Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Zona", tStr)
 					Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Zona: " & MapInfo_Renamed(.Pos.Map).Zona, FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'", FontTypeNames.FONTTYPE_INFO)
-					Call WriteConsoleMsg(UserIndex, "Igualmente, el ˙nico ˙til es 'DUNGEON' ya que al ingresarlo, NO se sentir· el efecto de la lluvia en este mapa.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Igualmente, el √∫nico √∫til es 'DUNGEON' ya que al ingresarlo, NO se sentir√° el efecto de la lluvia en este mapa.", FontTypeNames.FONTTYPE_INFO)
 				End If
 			End If
 			
@@ -13046,13 +13046,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13092,7 +13092,7 @@ Errhandler:
 		'***************************************************
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 12/24/06
-		'Last modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Allows admins to read guild messages
 		'***************************************************
 		If UserList(UserIndex).incomingData.length < 3 Then
@@ -13122,13 +13122,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13166,7 +13166,7 @@ Errhandler:
 		'***************************************************
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 12/26/06
-		'Last modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Activate or desactivate the Centinel
 		'***************************************************
 		With UserList(UserIndex)
@@ -13203,7 +13203,7 @@ Errhandler:
 	
 	Public Sub HandleAlterName(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/26/06
 		'Change user name
 		'***************************************************
@@ -13238,7 +13238,7 @@ Errhandler:
 					changeNameUI = NameIndex(UserName)
 					
 					If changeNameUI > 0 Then
-						Call WriteConsoleMsg(UserIndex, "El Pj est· online, debe salir para hacer el cambio.", FontTypeNames.FONTTYPE_WARNING)
+						Call WriteConsoleMsg(UserIndex, "El Pj est√° online, debe salir para hacer el cambio.", FontTypeNames.FONTTYPE_WARNING)
 					Else
 						If Not FileExist(CharPath & UserName & ".chr") Then
 							Call WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.", FontTypeNames.FONTTYPE_INFO)
@@ -13277,13 +13277,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13296,7 +13296,7 @@ Errhandler:
 	
 	Public Sub HandleAlterMail(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/26/06
 		'Change user password
 		'***************************************************
@@ -13340,13 +13340,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13359,7 +13359,7 @@ Errhandler:
 	
 	Public Sub HandleAlterPassword(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/26/06
 		'Change user password
 		'***************************************************
@@ -13385,7 +13385,7 @@ Errhandler:
 			copyFrom = Replace(buffer.ReadASCIIString(), "+", " ")
 			
 			If (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-				Call LogGM(.name, "Ha alterado la contraseÒa de " & UserName)
+				Call LogGM(.name, "Ha alterado la contrase√±a de " & UserName)
 				
 				If migr_LenB(UserName) = 0 Or migr_LenB(copyFrom) = 0 Then
 					Call WriteConsoleMsg(UserIndex, "usar /APASS <pjsinpass>@<pjconpass>", FontTypeNames.FONTTYPE_INFO)
@@ -13406,13 +13406,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13425,7 +13425,7 @@ Errhandler:
 	
 	Public Sub HandleCreateNPC(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/24/06
 		'
 		'***************************************************
@@ -13447,7 +13447,7 @@ Errhandler:
 			NpcIndex = SpawnNpc(NpcIndex, .Pos, True, False)
 			
 			If NpcIndex <> 0 Then
-				Call LogGM(.name, "SumoneÛ a " & Npclist(NpcIndex).name & " en mapa " & .Pos.Map)
+				Call LogGM(.name, "Sumone√≥ a " & Npclist(NpcIndex).name & " en mapa " & .Pos.Map)
 			End If
 		End With
 	End Sub
@@ -13460,7 +13460,7 @@ Errhandler:
 	
 	Public Sub HandleCreateNPCWithRespawn(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/24/06
 		'
 		'***************************************************
@@ -13482,7 +13482,7 @@ Errhandler:
 			NpcIndex = SpawnNpc(NpcIndex, .Pos, True, True)
 			
 			If NpcIndex <> 0 Then
-				Call LogGM(.name, "SumoneÛ con respawn " & Npclist(NpcIndex).name & " en mapa " & .Pos.Map)
+				Call LogGM(.name, "Sumone√≥ con respawn " & Npclist(NpcIndex).name & " en mapa " & .Pos.Map)
 			End If
 		End With
 	End Sub
@@ -13494,7 +13494,7 @@ Errhandler:
 	
 	Public Sub HandleImperialArmour(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/24/06
 		'
 		'***************************************************
@@ -13538,7 +13538,7 @@ Errhandler:
 	
 	Public Sub HandleChaosArmour(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/24/06
 		'
 		'***************************************************
@@ -13582,7 +13582,7 @@ Errhandler:
 	
 	Public Sub HandleNavigateToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 01/12/07
 		'
 		'***************************************************
@@ -13610,7 +13610,7 @@ Errhandler:
 	
 	Public Sub HandleServerOpenToUsersToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/24/06
 		'
 		'***************************************************
@@ -13637,7 +13637,7 @@ Errhandler:
 	
 	Public Sub HandleTurnOffServer(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/24/06
 		'Turns off the server
 		'***************************************************
@@ -13650,7 +13650,7 @@ Errhandler:
 			If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
 			
 			Call LogGM(.name, "/APAGAR")
-			Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("°°°" & .name & " VA A APAGAR EL SERVIDOR!!!", FontTypeNames.FONTTYPE_FIGHT))
+			Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("¬°¬°¬°" & .name & " VA A APAGAR EL SERVIDOR!!!", FontTypeNames.FONTTYPE_FIGHT))
 			
 			'Log
 			handle = FreeFile
@@ -13671,7 +13671,7 @@ Errhandler:
 	
 	Public Sub HandleTurnCriminal(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/26/06
 		'
 		'***************************************************
@@ -13706,13 +13706,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13725,7 +13725,7 @@ Errhandler:
 	
 	Public Sub HandleResetFactions(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 06/09/09
 		'
 		'***************************************************
@@ -13738,7 +13738,7 @@ Errhandler:
 		Dim buffer As New clsByteQueue
 		Dim UserName As String
 		Dim tUser As Short
-		'UPGRADE_NOTE: Char se actualizÛ a Char_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: Char se actualiz√≥ a Char_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Char_Renamed As String
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -13765,7 +13765,7 @@ Errhandler:
 						Call WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", CStr(0))
 						Call WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", CStr(0))
 						Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoCaos", CStr(0))
-						Call WriteVar(Char_Renamed, "FACCIONES", "FechaIngreso", "No ingresÛ a ninguna FacciÛn")
+						Call WriteVar(Char_Renamed, "FACCIONES", "FechaIngreso", "No ingres√≥ a ninguna Facci√≥n")
 						Call WriteVar(Char_Renamed, "FACCIONES", "rArCaos", CStr(0))
 						Call WriteVar(Char_Renamed, "FACCIONES", "rArReal", CStr(0))
 						Call WriteVar(Char_Renamed, "FACCIONES", "rExCaos", CStr(0))
@@ -13787,13 +13787,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13806,7 +13806,7 @@ Errhandler:
 	
 	Public Sub HandleRemoveCharFromGuild(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/26/06
 		'
 		'***************************************************
@@ -13835,7 +13835,7 @@ Errhandler:
 				GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
 				
 				If GuildIndex = 0 Then
-					Call WriteConsoleMsg(UserIndex, "No pertenece a ning˙n clan o es fundador.", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "No pertenece a ning√∫n clan o es fundador.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Expulsado.", FontTypeNames.FONTTYPE_INFO)
 					Call SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex, PrepareMessageConsoleMsg(UserName & " ha sido expulsado del clan por los administradores del servidor.", FontTypeNames.FONTTYPE_GUILD))
@@ -13847,13 +13847,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13866,7 +13866,7 @@ Errhandler:
 	
 	Public Sub HandleRequestCharMail(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/26/06
 		'Request user mail
 		'***************************************************
@@ -13902,13 +13902,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13953,13 +13953,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -13975,7 +13975,7 @@ Errhandler:
 		'Author: Lucas Tavolaro Ortiz (Tavo)
 		'Last Modification: 03/31/07
 		'Set the MOTD
-		'Modified by: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Modified by: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'   - Fixed a bug that prevented from properly setting the new number of lines.
 		'   - Fixed a bug that caused the player to be kicked.
 		'***************************************************
@@ -14005,7 +14005,7 @@ Errhandler:
 				
 				MaxLines = UBound(auxiliaryString) + 1
 				
-				'UPGRADE_WARNING: El lÌmite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El l√≠mite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim MOTD(MaxLines)
 				
 				Call WriteVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "INIT", "NumLines", CStr(MaxLines))
@@ -14016,7 +14016,7 @@ Errhandler:
 					MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
 				Next LoopC
 				
-				Call WriteConsoleMsg(UserIndex, "Se ha cambiado el MOTD con Èxito.", FontTypeNames.FONTTYPE_INFO)
+				Call WriteConsoleMsg(UserIndex, "Se ha cambiado el MOTD con √©xito.", FontTypeNames.FONTTYPE_INFO)
 			End If
 			
 			'If we got here then packet is complete, copy data back to original queue
@@ -14024,13 +14024,13 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
 		
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -14043,7 +14043,7 @@ Errhandler:
 	
 	Public Sub HandleChangeMOTD(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n sotuyo Dodero (Maraxus)
 		'Last Modification: 12/29/06
 		'Change the MOTD
 		'***************************************************
@@ -14123,7 +14123,7 @@ Errhandler:
 			Call buffer.ReadByte()
 			
 			
-			'Obtengo los par·metros
+			'Obtengo los par√°metros
 			sLlave = buffer.ReadASCIIString()
 			sClave = buffer.ReadASCIIString()
 			sValor = buffer.ReadASCIIString()
@@ -14132,16 +14132,16 @@ Errhandler:
 				
 				'No podemos modificar [INIT]Dioses ni [Dioses]*
 				If (UCase(sLlave) = "INIT" And UCase(sClave) = "DIOSES") Or UCase(sLlave) = "DIOSES" Then
-					Call WriteConsoleMsg(UserIndex, "°No puedes modificar esa informaciÛn desde aquÌ!", FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "¬°No puedes modificar esa informaci√≥n desde aqu√≠!", FontTypeNames.FONTTYPE_INFO)
 				Else
-					'Obtengo el valor seg˙n llave y clave
+					'Obtengo el valor seg√∫n llave y clave
 					sTmp = GetVar(IniPath & "Server.ini", sLlave, sClave)
 					
 					'Si obtengo un valor escribo en el server.ini
 					If migr_LenB(sTmp) Then
 						Call WriteVar(IniPath & "Server.ini", sLlave, sClave, sValor)
-						Call LogGM(.name, "ModificÛ en server.ini (" & sLlave & " " & sClave & ") el valor " & sTmp & " por " & sValor)
-						Call WriteConsoleMsg(UserIndex, "ModificÛ " & sLlave & " " & sClave & " a " & sValor & ". Valor anterior " & sTmp, FontTypeNames.FONTTYPE_INFO)
+						Call LogGM(.name, "Modific√≥ en server.ini (" & sLlave & " " & sClave & ") el valor " & sTmp & " por " & sValor)
+						Call WriteConsoleMsg(UserIndex, "Modific√≥ " & sLlave & " " & sClave & " a " & sValor & ". Valor anterior " & sTmp, FontTypeNames.FONTTYPE_INFO)
 					Else
 						Call WriteConsoleMsg(UserIndex, "No existe la llave y/o clave", FontTypeNames.FONTTYPE_INFO)
 					End If
@@ -14153,14 +14153,14 @@ Errhandler:
 		End With
 		
 Errhandler: 
-		'UPGRADE_NOTE: error se actualizÛ a error_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: error se actualiz√≥ a error_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		
 		error_Renamed = Err.Number
 		
 		On Error GoTo 0
 		'Destroy auxiliar buffer
-		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
 		
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
@@ -14174,7 +14174,7 @@ Errhandler:
 	
 	Public Sub WriteLoggedMessage(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Logged" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14197,7 +14197,7 @@ Errhandler:
 	
 	Public Sub WriteRemoveAllDialogs(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "RemoveDialogs" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14221,7 +14221,7 @@ Errhandler:
 	
 	Public Sub WriteRemoveCharDialog(ByVal UserIndex As Short, ByVal CharIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "RemoveCharDialog" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14244,7 +14244,7 @@ Errhandler:
 	
 	Public Sub WriteNavigateToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "NavigateToggle" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14267,7 +14267,7 @@ Errhandler:
 	
 	Public Sub WriteDisconnect(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Disconnect" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14314,7 +14314,7 @@ Errhandler:
 	
 	Public Sub WriteCommerceEnd(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CommerceEnd" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14337,7 +14337,7 @@ Errhandler:
 	
 	Public Sub WriteBankEnd(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "BankEnd" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14360,7 +14360,7 @@ Errhandler:
 	
 	Public Sub WriteCommerceInit(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CommerceInit" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14383,7 +14383,7 @@ Errhandler:
 	
 	Public Sub WriteBankInit(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "BankInit" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14407,7 +14407,7 @@ Errhandler:
 	
 	Public Sub WriteUserCommerceInit(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UserCommerceInit" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14431,7 +14431,7 @@ Errhandler:
 	
 	Public Sub WriteUserCommerceEnd(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UserCommerceEnd" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14454,7 +14454,7 @@ Errhandler:
 	
 	Public Sub WriteShowBlacksmithForm(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowBlacksmithForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14477,7 +14477,7 @@ Errhandler:
 	
 	Public Sub WriteShowCarpenterForm(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowCarpenterForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14500,7 +14500,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateSta(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateMana" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14526,7 +14526,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateMana(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateMana" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14552,7 +14552,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateHP(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateMana" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14578,7 +14578,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateGold(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateGold" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14631,7 +14631,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateExp(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateExp" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14736,7 +14736,7 @@ Errhandler:
 	
 	Public Sub WriteChangeMap(ByVal UserIndex As Short, ByVal Map As Short, ByVal version As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ChangeMap" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14763,7 +14763,7 @@ Errhandler:
 	
 	Public Sub WritePosUpdate(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "PosUpdate" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14793,7 +14793,7 @@ Errhandler:
 	
 	Public Sub WriteChatOverHead(ByVal UserIndex As Short, ByVal Chat As String, ByVal CharIndex As Short, ByVal color As Integer)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ChatOverHead" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14818,7 +14818,7 @@ Errhandler:
 	
 	Public Sub WriteConsoleMsg(ByVal UserIndex As Short, ByVal Chat As String, ByVal FontIndex As FontTypeNames)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ConsoleMsg" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14859,7 +14859,7 @@ Errhandler:
 	
 	Public Sub WriteGuildChat(ByVal UserIndex As Short, ByVal Chat As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "GuildChat" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14883,7 +14883,7 @@ Errhandler:
 	
 	Public Sub WriteShowMessageBox(ByVal UserIndex As Short, ByVal message As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowMessageBox" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14909,7 +14909,7 @@ Errhandler:
 	
 	Public Sub WriteUserIndexInServer(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UserIndexInServer" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14935,7 +14935,7 @@ Errhandler:
 	
 	Public Sub WriteUserCharIndexInServer(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UserIndexInServer" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14975,7 +14975,7 @@ Errhandler:
 	
 	Public Sub WriteCharacterCreate(ByVal UserIndex As Short, ByVal body As Short, ByVal Head As Short, ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short, ByVal FXLoops As Short, ByVal helmet As Short, ByVal name As String, ByVal NickColor As Byte, ByVal Privileges As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CharacterCreate" message to the given user's outgoing data buffer
 		'***************************************************
@@ -14999,7 +14999,7 @@ Errhandler:
 	
 	Public Sub WriteCharacterRemove(ByVal UserIndex As Short, ByVal CharIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CharacterRemove" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15025,7 +15025,7 @@ Errhandler:
 	
 	Public Sub WriteCharacterMove(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CharacterMove" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15047,14 +15047,14 @@ Errhandler:
 		'Writes the "ForceCharMove" message to the given user's outgoing data buffer
 		'***************************************************
 		On Error GoTo Errhandler
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageForceCharMove(Direccion))
 		Exit Sub
 		
 Errhandler: 
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Call FlushBuffer(UserIndex)
 			Resume 
 		End If
@@ -15077,7 +15077,7 @@ Errhandler:
 	
 	Public Sub WriteCharacterChange(ByVal UserIndex As Short, ByVal body As Short, ByVal Head As Short, ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short, ByVal FXLoops As Short, ByVal helmet As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CharacterChange" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15103,7 +15103,7 @@ Errhandler:
 	
 	Public Sub WriteObjectCreate(ByVal UserIndex As Short, ByVal GrhIndex As Short, ByVal X As Byte, ByVal Y As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ObjectCreate" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15128,7 +15128,7 @@ Errhandler:
 	
 	Public Sub WriteObjectDelete(ByVal UserIndex As Short, ByVal X As Byte, ByVal Y As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ObjectDelete" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15154,7 +15154,7 @@ Errhandler:
 	
 	Public Sub WriteBlockPosition(ByVal UserIndex As Short, ByVal X As Byte, ByVal Y As Byte, ByVal Blocked As Boolean)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "BlockPosition" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15184,7 +15184,7 @@ Errhandler:
 	
 	Public Sub WritePlayMidi(ByVal UserIndex As Short, ByVal midi As Byte, Optional ByVal loops As Short = -1)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "PlayMidi" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15210,7 +15210,7 @@ Errhandler:
 	
 	Public Sub WritePlayWave(ByVal UserIndex As Short, ByVal wave As Byte, ByVal X As Byte, ByVal Y As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 08/08/07
 		'Last Modified by: Rapsodius
 		'Added X and Y positions for 3D Sounds
@@ -15235,7 +15235,7 @@ Errhandler:
 	
 	Public Sub WriteGuildList(ByVal UserIndex As Short, ByRef guildList() As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "GuildList" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15272,7 +15272,7 @@ Errhandler:
 	
 	Public Sub WriteAreaChanged(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "AreaChanged" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15299,7 +15299,7 @@ Errhandler:
 	
 	Public Sub WritePauseToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "PauseToggle" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15322,7 +15322,7 @@ Errhandler:
 	
 	Public Sub WriteRainToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "RainToggle" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15348,7 +15348,7 @@ Errhandler:
 	
 	Public Sub WriteCreateFX(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal FX As Short, ByVal FXLoops As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CreateFX" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15371,7 +15371,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateUserStats(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateUserStats" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15407,7 +15407,7 @@ Errhandler:
 	
 	Public Sub WriteWorkRequestTarget(ByVal UserIndex As Short, ByVal Skill As Declaraciones.eSkill)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "WorkRequestTarget" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15434,14 +15434,14 @@ Errhandler:
 	
 	Public Sub WriteChangeInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 3/12/09
 		'Writes the "ChangeInventorySlot" message to the given user's outgoing data buffer
 		'3/12/09: Budi - Ahora se envia MaxDef y MinDef en lugar de Def
 		'***************************************************
 		On Error GoTo Errhandler
 		Dim ObjIndex As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura obData, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura obData, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim obData As ObjData
 		With UserList(UserIndex).outgoingData
 			Call .WriteByte(ServerPacketID.ChangeInventorySlot)
@@ -15451,7 +15451,7 @@ Errhandler:
 			ObjIndex = UserList(UserIndex).Invent.Object_Renamed(Slot).ObjIndex
 			
 			If ObjIndex > 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obData. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obData. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				obData = ObjData_Renamed(ObjIndex)
 			End If
 			
@@ -15498,14 +15498,14 @@ Errhandler:
 	
 	Public Sub WriteChangeBankSlot(ByVal UserIndex As Short, ByVal Slot As Byte)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/03/09
 		'Writes the "ChangeBankSlot" message to the given user's outgoing data buffer
-		'12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de sÛlo Def
+		'12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de s√≥lo Def
 		'***************************************************
 		On Error GoTo Errhandler
 		Dim ObjIndex As Short
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura obData, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura obData, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim obData As ObjData
 		With UserList(UserIndex).outgoingData
 			Call .WriteByte(ServerPacketID.ChangeBankSlot)
@@ -15517,7 +15517,7 @@ Errhandler:
 			Call .WriteInteger(ObjIndex)
 			
 			If ObjIndex > 0 Then
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obData. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obData. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				obData = ObjData_Renamed(ObjIndex)
 			End If
 			
@@ -15549,7 +15549,7 @@ Errhandler:
 	
 	Public Sub WriteChangeSpellSlot(ByVal UserIndex As Short, ByVal Slot As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ChangeSpellSlot" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15582,7 +15582,7 @@ Errhandler:
 	
 	Public Sub WriteAttributes(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Atributes" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15612,19 +15612,19 @@ Errhandler:
 	
 	Public Sub WriteBlacksmithWeapons(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
 		'Writes the "BlacksmithWeapons" message to the given user's outgoing data buffer
 		'***************************************************
 		On Error GoTo Errhandler
 		Dim i As Integer
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizÛ a Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualiz√≥ a Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim validIndexes() As Short
 		Dim Count As Short
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim validIndexes(UBound(ArmasHerrero))
 		
 		With UserList(UserIndex).outgoingData
@@ -15643,7 +15643,7 @@ Errhandler:
 			
 			' Write the needed data of each object
 			For i = 1 To Count
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(ArmasHerrero(validIndexes(i)))
 				Call .WriteASCIIString(Obj_Renamed.name)
 				Call .WriteInteger(Obj_Renamed.GrhIndex)
@@ -15671,19 +15671,19 @@ Errhandler:
 	
 	Public Sub WriteBlacksmithArmors(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
 		'Writes the "BlacksmithArmors" message to the given user's outgoing data buffer
 		'***************************************************
 		On Error GoTo Errhandler
 		Dim i As Integer
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizÛ a Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualiz√≥ a Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim validIndexes() As Short
 		Dim Count As Short
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim validIndexes(UBound(ArmadurasHerrero))
 		
 		With UserList(UserIndex).outgoingData
@@ -15702,7 +15702,7 @@ Errhandler:
 			
 			' Write the needed data of each object
 			For i = 1 To Count
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(ArmadurasHerrero(validIndexes(i)))
 				Call .WriteASCIIString(Obj_Renamed.name)
 				Call .WriteInteger(Obj_Renamed.GrhIndex)
@@ -15730,19 +15730,19 @@ Errhandler:
 	
 	Public Sub WriteCarpenterObjects(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CarpenterObjects" message to the given user's outgoing data buffer
 		'***************************************************
 		On Error GoTo Errhandler
 		Dim i As Integer
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-		'UPGRADE_NOTE: Obj se actualizÛ a Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_NOTE: Obj se actualiz√≥ a Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Obj_Renamed As ObjData
 		Dim validIndexes() As Short
 		Dim Count As Short
 		
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim validIndexes(UBound(ObjCarpintero))
 		
 		With UserList(UserIndex).outgoingData
@@ -15761,7 +15761,7 @@ Errhandler:
 			
 			' Write the needed data of each object
 			For i = 1 To Count
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Obj_Renamed = ObjData_Renamed(ObjCarpintero(validIndexes(i)))
 				Call .WriteASCIIString(Obj_Renamed.name)
 				Call .WriteInteger(Obj_Renamed.GrhIndex)
@@ -15788,7 +15788,7 @@ Errhandler:
 	
 	Public Sub WriteRestOK(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "RestOK" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15812,7 +15812,7 @@ Errhandler:
 	
 	Public Sub WriteErrorMsg(ByVal UserIndex As Short, ByVal message As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ErrorMsg" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15835,7 +15835,7 @@ Errhandler:
 	
 	Public Sub WriteBlind(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Blind" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15858,7 +15858,7 @@ Errhandler:
 	
 	Public Sub WriteDumb(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Dumb" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15882,7 +15882,7 @@ Errhandler:
 	
 	Public Sub WriteShowSignal(ByVal UserIndex As Short, ByVal ObjIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowSignal" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15912,18 +15912,18 @@ Errhandler:
 	
 	Public Sub WriteChangeNPCInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte, ByRef Obj As Obj, ByVal price As Single)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/03/09
 		'Last Modified by: Budi
 		'Writes the "ChangeNPCInventorySlot" message to the given user's outgoing data buffer
-		'12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de sÛlo Def
+		'12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de s√≥lo Def
 		'***************************************************
 		On Error GoTo Errhandler
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura ObjInfo, antes de poder utilizarlas. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura ObjInfo, antes de poder utilizarlas. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim ObjInfo As ObjData
 		
 		If Obj.ObjIndex >= LBound(ObjData_Renamed) And Obj.ObjIndex <= UBound(ObjData_Renamed) Then
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto ObjInfo. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto ObjInfo. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			ObjInfo = ObjData_Renamed(Obj.ObjIndex)
 		End If
 		
@@ -15958,7 +15958,7 @@ Errhandler:
 	
 	Public Sub WriteUpdateHungerAndThirst(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "UpdateHungerAndThirst" message to the given user's outgoing data buffer
 		'***************************************************
@@ -15987,7 +15987,7 @@ Errhandler:
 	
 	Public Sub WriteFame(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Fame" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16020,7 +16020,7 @@ Errhandler:
 	
 	Public Sub WriteMiniStats(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "MiniStats" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16031,7 +16031,7 @@ Errhandler:
 			Call .WriteLong(UserList(UserIndex).Faccion.CiudadanosMatados)
 			Call .WriteLong(UserList(UserIndex).Faccion.CriminalesMatados)
 			
-			'TODO : Este valor es calculable, no deberÌa NI EXISTIR, ya sea en el servidor ni en el cliente!!!
+			'TODO : Este valor es calculable, no deber√≠a NI EXISTIR, ya sea en el servidor ni en el cliente!!!
 			Call .WriteLong(UserList(UserIndex).Stats.UsuariosMatados)
 			
 			Call .WriteInteger(UserList(UserIndex).Stats.NPCsMuertos)
@@ -16056,7 +16056,7 @@ Errhandler:
 	
 	Public Sub WriteLevelUp(ByVal UserIndex As Short, ByVal skillPoints As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "LevelUp" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16083,7 +16083,7 @@ Errhandler:
 	
 	Public Sub WriteAddForumMsg(ByVal UserIndex As Short, ByVal ForumType As Declaraciones.eForumType, ByRef Title As String, ByRef Author As String, ByRef message As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 02/01/2010
 		'Writes the "AddForumMsg" message to the given user's outgoing data buffer
 		'02/01/2010: ZaMa - Now sends Author and forum type
@@ -16113,7 +16113,7 @@ Errhandler:
 	
 	Public Sub WriteShowForumForm(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowForumForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16167,7 +16167,7 @@ Errhandler:
 	
 	Public Sub WriteSetInvisible(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal invisible As Boolean)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "SetInvisible" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16190,7 +16190,7 @@ Errhandler:
 	
 	Public Sub WriteDiceRoll(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "DiceRoll" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16221,7 +16221,7 @@ Errhandler:
 	
 	Public Sub WriteMeditateToggle(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "MeditateToggle" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16244,7 +16244,7 @@ Errhandler:
 	
 	Public Sub WriteBlindNoMore(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "BlindNoMore" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16267,7 +16267,7 @@ Errhandler:
 	
 	Public Sub WriteDumbNoMore(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "DumbNoMore" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16290,7 +16290,7 @@ Errhandler:
 	
 	Public Sub WriteSendSkills(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 11/19/09
 		'Writes the "SendSkills" message to the given user's outgoing data buffer
 		'11/19/09: Pato - Now send the percentage of progress of the skills.
@@ -16329,13 +16329,13 @@ Errhandler:
 	
 	Public Sub WriteTrainerCreatureList(ByVal UserIndex As Short, ByVal NpcIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "TrainerCreatureList" message to the given user's outgoing data buffer
 		'***************************************************
 		On Error GoTo Errhandler
 		Dim i As Integer
-		'UPGRADE_NOTE: str se actualizÛ a str_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: str se actualiz√≥ a str_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim str_Renamed As String
 		
 		With UserList(UserIndex).outgoingData
@@ -16369,7 +16369,7 @@ Errhandler:
 	
 	Public Sub WriteGuildNews(ByVal UserIndex As Short, ByVal guildNews As String, ByRef enemies() As String, ByRef allies() As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "GuildNews" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16419,7 +16419,7 @@ Errhandler:
 	
 	Public Sub WriteOfferDetails(ByVal UserIndex As Short, ByVal details As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "OfferDetails" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16449,7 +16449,7 @@ Errhandler:
 	
 	Public Sub WriteAlianceProposalsList(ByVal UserIndex As Short, ByRef guilds() As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "AlianceProposalsList" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16487,7 +16487,7 @@ Errhandler:
 	
 	Public Sub WritePeaceProposalsList(ByVal UserIndex As Short, ByRef guilds() As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "PeaceProposalsList" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16536,10 +16536,10 @@ Errhandler:
 	' @param    criminalsKilled The number of criminals killed by the requested char.
 	' @remarks  The data is not actually sent until the buffer is properly flushed.
 	
-	'UPGRADE_NOTE: Class se actualizÛ a Class_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class se actualiz√≥ a Class_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub WriteCharacterInfo(ByVal UserIndex As Short, ByVal charName As String, ByVal race As Declaraciones.eRaza, ByVal Class_Renamed As Declaraciones.eClass, ByVal gender As Declaraciones.eGenero, ByVal level As Byte, ByVal gold As Integer, ByVal bank As Integer, ByVal reputation As Integer, ByVal previousPetitions As String, ByVal currentGuild As String, ByVal previousGuilds As String, ByVal RoyalArmy As Boolean, ByVal CaosLegion As Boolean, ByVal citicensKilled As Integer, ByVal criminalsKilled As Integer)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "CharacterInfo" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16588,7 +16588,7 @@ Errhandler:
 	
 	Public Sub WriteGuildLeaderInfo(ByVal UserIndex As Short, ByRef guildList() As String, ByRef MemberList() As String, ByVal guildNews As String, ByRef joinRequests() As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "GuildLeaderInfo" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16710,7 +16710,7 @@ Errhandler:
 	
 	Public Sub WriteGuildDetails(ByVal UserIndex As Short, ByVal GuildName As String, ByVal founder As String, ByVal foundationDate As String, ByVal leader As String, ByVal URL As String, ByVal memberCount As Short, ByVal electionsOpen As Boolean, ByVal alignment As String, ByVal enemiesCount As Short, ByVal AlliesCount As Short, ByVal antifactionPoints As String, ByRef codex() As String, ByVal guildDesc As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "GuildDetails" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16788,7 +16788,7 @@ Errhandler:
 	
 	Public Sub WriteShowGuildFundationForm(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowGuildFundationForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16811,7 +16811,7 @@ Errhandler:
 	
 	Public Sub WriteParalizeOK(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 08/12/07
 		'Last Modified By: Lucas Tavolaro Ortiz (Tavo)
 		'Writes the "ParalizeOK" message to the given user's outgoing data buffer
@@ -16838,7 +16838,7 @@ Errhandler:
 	
 	Public Sub WriteShowUserRequest(ByVal UserIndex As Short, ByVal details As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowUserRequest" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16865,7 +16865,7 @@ Errhandler:
 	
 	Public Sub WriteTradeOK(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "TradeOK" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16888,7 +16888,7 @@ Errhandler:
 	
 	Public Sub WriteBankOK(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "BankOK" message to the given user's outgoing data buffer
 		'***************************************************
@@ -16913,11 +16913,11 @@ Errhandler:
 	
 	Public Sub WriteChangeUserTradeSlot(ByVal UserIndex As Short, ByVal OfferSlot As Byte, ByVal ObjIndex As Short, ByVal Amount As Integer)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 12/03/09
 		'Writes the "ChangeUserTradeSlot" message to the given user's outgoing data buffer
 		'25/11/2009: ZaMa - Now sends the specific offer slot to be modified.
-		'12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de sÛlo Def
+		'12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de s√≥lo Def
 		'***************************************************
 		On Error GoTo Errhandler
 		With UserList(UserIndex).outgoingData
@@ -16992,7 +16992,7 @@ Errhandler:
 	
 	Public Sub WriteSpawnList(ByVal UserIndex As Short, ByRef npcNames() As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "SpawnList" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17028,7 +17028,7 @@ Errhandler:
 	
 	Public Sub WriteShowSOSForm(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowSOSForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17113,7 +17113,7 @@ Errhandler:
 	
 	Public Sub WriteShowMOTDEditionForm(ByVal UserIndex As Short, ByVal currentMOTD As String)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowMOTDEditionForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17140,7 +17140,7 @@ Errhandler:
 	
 	Public Sub WriteShowGMPanelForm(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "ShowGMPanelForm" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17165,7 +17165,7 @@ Errhandler:
 	
 	Public Sub WriteUserNameList(ByVal UserIndex As Short, ByRef userNamesList() As String, ByVal cant As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06 NIGO:
 		'Writes the "UserNameList" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17202,7 +17202,7 @@ Errhandler:
 	
 	Public Sub WritePong(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "Pong" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17224,7 +17224,7 @@ Errhandler:
 	
 	Public Sub FlushBuffer(ByVal UserIndex As Short)
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Sends all data existing in the buffer
 		'***************************************************
@@ -17249,7 +17249,7 @@ Errhandler:
 	
 	Public Function PrepareMessageSetInvisible(ByVal CharIndex As Short, ByVal invisible As Boolean) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "SetInvisible" message and returns it.
 		'***************************************************
@@ -17290,7 +17290,7 @@ Errhandler:
 	
 	Public Function PrepareMessageChatOverHead(ByVal Chat As String, ByVal CharIndex As Short, ByVal color As Integer) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "ChatOverHead" message and returns it.
 		'***************************************************
@@ -17318,7 +17318,7 @@ Errhandler:
 	
 	Public Function PrepareMessageConsoleMsg(ByVal Chat As String, ByVal FontIndex As FontTypeNames) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "ConsoleMsg" message and returns it.
 		'***************************************************
@@ -17358,7 +17358,7 @@ Errhandler:
 	
 	Public Function PrepareMessageCreateFX(ByVal CharIndex As Short, ByVal FX As Short, ByVal FXLoops As Short) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "CreateFX" message and returns it
 		'***************************************************
@@ -17383,7 +17383,7 @@ Errhandler:
 	
 	Public Function PrepareMessagePlayWave(ByVal wave As Byte, ByVal X As Byte, ByVal Y As Byte) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 08/08/07
 		'Last Modified by: Rapsodius
 		'Added X and Y positions for 3D Sounds
@@ -17407,7 +17407,7 @@ Errhandler:
 	
 	Public Function PrepareMessageGuildChat(ByVal Chat As String) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "GuildChat" message and returns it
 		'***************************************************
@@ -17451,7 +17451,7 @@ Errhandler:
 	
 	Public Function PrepareMessagePlayMidi(ByVal midi As Byte, Optional ByVal loops As Short = -1) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "GuildChat" message and returns it
 		'***************************************************
@@ -17472,7 +17472,7 @@ Errhandler:
 	
 	Public Function PrepareMessagePauseToggle() As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "PauseToggle" message and returns it
 		'***************************************************
@@ -17490,7 +17490,7 @@ Errhandler:
 	
 	Public Function PrepareMessageRainToggle() As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "RainToggle" message and returns it
 		'***************************************************
@@ -17511,7 +17511,7 @@ Errhandler:
 	
 	Public Function PrepareMessageObjectDelete(ByVal X As Byte, ByVal Y As Byte) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "ObjectDelete" message and returns it
 		'***************************************************
@@ -17561,7 +17561,7 @@ Errhandler:
 	
 	Public Function PrepareMessageObjectCreate(ByVal GrhIndex As Short, ByVal X As Byte, ByVal Y As Byte) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'prepares the "ObjectCreate" message and returns it
 		'***************************************************
@@ -17584,7 +17584,7 @@ Errhandler:
 	
 	Public Function PrepareMessageCharacterRemove(ByVal CharIndex As Short) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "CharacterRemove" message and returns it
 		'***************************************************
@@ -17605,7 +17605,7 @@ Errhandler:
 	
 	Public Function PrepareMessageRemoveCharDialog(ByVal CharIndex As Short) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Writes the "RemoveCharDialog" message to the given user's outgoing data buffer
 		'***************************************************
@@ -17639,7 +17639,7 @@ Errhandler:
 	
 	Public Function PrepareMessageCharacterCreate(ByVal body As Short, ByVal Head As Short, ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short, ByVal FXLoops As Short, ByVal helmet As Short, ByVal name As String, ByVal NickColor As Byte, ByVal Privileges As Byte) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "CharacterCreate" message and returns it
 		'***************************************************
@@ -17682,7 +17682,7 @@ Errhandler:
 	
 	Public Function PrepareMessageCharacterChange(ByVal body As Short, ByVal Head As Short, ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short, ByVal FXLoops As Short, ByVal helmet As Short) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "CharacterChange" message and returns it
 		'***************************************************
@@ -17714,7 +17714,7 @@ Errhandler:
 	
 	Public Function PrepareMessageCharacterMove(ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "CharacterMove" message and returns it
 		'***************************************************
@@ -17755,7 +17755,7 @@ Errhandler:
 		'***************************************************
 		'Author: Alejandro Salvo (Salvito)
 		'Last Modification: 04/07/07
-		'Last Modified By: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Last Modified By: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Prepares the "UpdateTagAndStatus" message and returns it
 		'15/01/2010: ZaMa - Now sends the nick color instead of the status.
 		'***************************************************
@@ -17778,7 +17778,7 @@ Errhandler:
 	
 	Public Function PrepareMessageErrorMsg(ByVal message As String) As String
 		'***************************************************
-		'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+		'Author: Juan Mart√≠n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Prepares the "ErrorMsg" message and returns it
 		'***************************************************

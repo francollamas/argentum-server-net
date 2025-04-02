@@ -4,7 +4,7 @@ Module Characters
 	'**************************************************************
 	' Characters.bas - library of functions to manipulate characters.
 	'
-	' Designed and implemented by Juan Martín Sotuyo Dodero (Maraxus)
+	' Designed and implemented by Juan MartÃ­n Sotuyo Dodero (Maraxus)
 	' (juansotuyo@gmail.com)
 	'**************************************************************
 	
@@ -36,7 +36,7 @@ Module Characters
 	
 	Public Function CharIndexToUserIndex(ByVal CharIndex As Short) As Short
 		'***************************************************
-		'Autor: Juan Martín Sotuyo Dodero (Maraxus)
+		'Autor: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Takes a CharIndex and transforms it into a UserIndex. Returns INVALID_INDEX in case of error.
 		'***************************************************

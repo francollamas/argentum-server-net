@@ -3,7 +3,7 @@ Option Explicit On
 Friend Class frmMain
 	Inherits System.Windows.Forms.Form
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -25,10 +25,10 @@ Friend Class frmMain
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Public ESCUCHADAS As Integer
@@ -114,9 +114,9 @@ errhand:
 		
 		Minutos = Minutos + 1
 		
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		Call ModAreas.AreasOptimizacion()
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		
 		'Actualizamos el centinela
 		Call modCentinela.PasarMinutoCentinela()
@@ -214,7 +214,7 @@ Errhandler:
 		
 		End
 		
-		'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		SonidosMapas = Nothing
 		
 	End Sub
@@ -245,7 +245,7 @@ hayerror:
 			With UserList(iUserIndex)
 				'Conexion activa?
 				If .ConnID <> -1 Then
-					'¿User valido?
+					'Â¿User valido?
 					
 					If .ConnIDValida And .flags.UserLogged Then
 						
@@ -389,9 +389,9 @@ hayerror:
 	
 	Private Function salir() As Boolean
 		Dim f As Object
-		If MsgBox("¡¡Atencion!! Si cierra el servidor puede provocar la perdida de datos. ¿Desea hacerlo de todas maneras?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+		If MsgBox("Â¡Â¡Atencion!! Si cierra el servidor puede provocar la perdida de datos. Â¿Desea hacerlo de todas maneras?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
 			For Each f In Application.OpenForms
-				'UPGRADE_ISSUE: f de descarga no se actualizó. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="875EBAD7-D704-4539-9969-BC7DBDAA62A2"'
+				'UPGRADE_ISSUE: f de descarga no se actualizÃ³. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="875EBAD7-D704-4539-9969-BC7DBDAA62A2"'
 				f.Close()
 			Next f
 			salir = True
@@ -425,7 +425,7 @@ hayerror:
 	Private Sub npcataca_Tick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles npcataca.Tick
 		
 		On Error Resume Next
-		'UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+		'UPGRADE_NOTE: npc se actualizÃ³ a npc_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim npc_Renamed As Integer
 		
 		For npc_Renamed = 1 To LastNPC
@@ -436,7 +436,7 @@ hayerror:
 	
 	Private Sub packetResend_Tick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles packetResend.Tick
 		'***************************************************
-		'Autor: Juan Martín Sotuyo Dodero (Maraxus)
+		'Autor: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modification: 04/01/07
 		'Attempts to resend to the user all data that may be enqueued.
 		'***************************************************
@@ -476,7 +476,7 @@ Errhandler:
 				With Npclist(NpcIndex)
 					If .flags.NPCActive Then 'Nos aseguramos que sea INTELIGENTE!
 						
-						' Chequea si contiua teniendo dueño
+						' Chequea si contiua teniendo dueÃ±o
 						If .Owner > 0 Then Call ValidarPermanenciaNpc(NpcIndex)
 						
 						If .flags.Paralizado = 1 Then
@@ -593,7 +593,7 @@ ErrorHandler:
 				If .flags.UserLogged Then
 					If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ANTIPIQUETE Then
 						.Counters.PiqueteC = .Counters.PiqueteC + 1
-						Call WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(i, "Â¡Â¡Â¡EstÃ¡s obstruyendo la vÃ­a pÃºblica, muÃ©vete o serÃ¡s encarcelado!!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						
 						If .Counters.PiqueteC > 23 Then
 							.Counters.PiqueteC = 0
@@ -626,15 +626,15 @@ ErrorHandler:
 						NuevaA = False
 						' NuevoL = False
 						If Not modGuilds.m_ValidarPermanencia(i, True, NuevaA) Then
-							Call WriteConsoleMsg(i, "Has sido expulsado del clan. ¡El clan ha sumado un punto de antifacción!", Protocol.FontTypeNames.FONTTYPE_GUILD)
+							Call WriteConsoleMsg(i, "Has sido expulsado del clan. Â¡El clan ha sumado un punto de antifacciÃ³n!", Protocol.FontTypeNames.FONTTYPE_GUILD)
 						End If
 						If NuevaA Then
-							Call SendData(modSendData.SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan ha pasado a tener alineación " & GuildAlignment(GI) & "!", Protocol.FontTypeNames.FONTTYPE_GUILD))
-							Call LogClanes("¡El clan cambio de alineación!")
+							Call SendData(modSendData.SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("Â¡El clan ha pasado a tener alineaciÃ³n " & GuildAlignment(GI) & "!", Protocol.FontTypeNames.FONTTYPE_GUILD))
+							Call LogClanes("Â¡El clan cambio de alineaciÃ³n!")
 						End If
 						'                    If NuevoL Then
-						'                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan tiene un nuevo líder!", FontTypeNames.FONTTYPE_GUILD))
-						'                        Call LogClanes("¡El clan tiene nuevo lider!")
+						'                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("Â¡El clan tiene un nuevo lÃ­der!", FontTypeNames.FONTTYPE_GUILD))
+						'                        Call LogClanes("Â¡El clan tiene nuevo lider!")
 						'                    End If
 					End If
 					

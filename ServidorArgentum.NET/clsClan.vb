@@ -157,7 +157,7 @@ Friend Class clsClan
 	'INICIALIZADORES
 	'
 	
-	'UPGRADE_NOTE: Class_Initialize se actualizÛ a Class_Initialize_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualiz√≥ a Class_Initialize_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
 		GUILDPATH = My.Application.Info.DirectoryPath & "\GUILDS\"
 		GUILDINFOFILE = GUILDPATH & "guildsinfo.inf"
@@ -167,15 +167,15 @@ Friend Class clsClan
 		Class_Initialize_Renamed()
 	End Sub
 	
-	'UPGRADE_NOTE: Class_Terminate se actualizÛ a Class_Terminate_Renamed. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Terminate se actualiz√≥ a Class_Terminate_Renamed. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Terminate_Renamed()
-		'UPGRADE_NOTE: El objeto p_OnlineMembers no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto p_OnlineMembers no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		p_OnlineMembers = Nothing
-		'UPGRADE_NOTE: El objeto p_GMsOnline no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto p_GMsOnline no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		p_GMsOnline = Nothing
-		'UPGRADE_NOTE: El objeto p_PropuestasDePaz no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto p_PropuestasDePaz no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		p_PropuestasDePaz = Nothing
-		'UPGRADE_NOTE: El objeto p_PropuestasDeAlianza no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto p_PropuestasDeAlianza no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		p_PropuestasDeAlianza = Nothing
 	End Sub
 	Protected Overrides Sub Finalize()
@@ -206,7 +206,7 @@ Friend Class clsClan
 		p_IteradorPropuesta = 0
 		p_IteradorOnlineGMs = 0
 		p_IteradorRelaciones = 0
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz p_Relaciones ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz p_Relaciones ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Preserve p_Relaciones(CANTIDADDECLANES)
 		For i = 1 To CANTIDADDECLANES
 			p_Relaciones(i) = String2Relacion(GetVar(RELACIONESFILE, "RELACIONES", CStr(i)))
@@ -254,7 +254,7 @@ Friend Class clsClan
 	End Sub
 	
 	Public Sub ProcesarFundacionDeOtroClan()
-		'UPGRADE_WARNING: El lÌmite inferior de la matriz p_Relaciones ha cambiado de 1 a 0. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El l√≠mite inferior de la matriz p_Relaciones ha cambiado de 1 a 0. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Preserve p_Relaciones(CANTIDADDECLANES)
 		p_Relaciones(CANTIDADDECLANES) = modGuilds.RELACIONES_GUILD.PAZ
 	End Sub
@@ -294,7 +294,7 @@ Friend Class clsClan
 	Public Sub DesConectarMiembro(ByVal UserIndex As Short)
 		Dim i As Short
 		For i = 1 To p_OnlineMembers.Count()
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_OnlineMembers.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_OnlineMembers.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			If p_OnlineMembers.Item(i) = UserIndex Then
 				p_OnlineMembers.Remove(i)
 				
@@ -344,7 +344,7 @@ Friend Class clsClan
 		Dim EsMiembro As Boolean
 		Dim MiembroDe As String
 		
-		'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		If migr_LenB(Dir(CharPath & Nombre & ".chr")) <> 0 Then
 			OldQ = CShort(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
 			i = 1
@@ -578,7 +578,7 @@ Friend Class clsClan
 	End Sub
 	
 	Public Function YaVoto(ByRef Votante As Object) As Boolean
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Votante. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Votante. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		YaVoto = ((migr_LenB(Trim(GetVar(VOTACIONESFILE, "VOTOS", Votante)))) <> 0)
 	End Function
 	
@@ -608,11 +608,11 @@ Friend Class clsClan
 				
 				'si voto a alguien contabilizamos el voto
 				If migr_LenB(tempV) <> 0 Then
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto d.At(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto d.At(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					voteCount = d.At(tempV)
 					If Not voteCount Is Nothing Then 'cuantos votos tiene?
-						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+						'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						Call d.AtPut(tempV, CShort(voteCount) + 1)
 					Else
 						Call d.AtPut(tempV, 1)
@@ -623,14 +623,14 @@ Friend Class clsClan
 			'quien quedo con mas votos, y cuantos tuvieron esos votos?
 			ContarVotos = d.MayorValor(CantGanadores)
 			
-			'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			d = Nothing
 		End If
 		
 		Exit Function
 errh: 
 		LogError(("clsClan.Contarvotos: " & Err.Description))
-		'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolecciÛn de los elementos no utilizados. Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+		'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolecci√≥n de los elementos no utilizados. Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		If Not d Is Nothing Then d = Nothing
 		ContarVotos = vbNullString
 	End Function
@@ -655,7 +655,7 @@ errh:
 				
 				If CantGanadores > 1 Then
 					'empate en la votacion
-					Call SetGuildNews("*Empate en la votaciÛn. " & Ganador & " con " & CantGanadores & " votos ganaron las elecciones del clan.")
+					Call SetGuildNews("*Empate en la votaci√≥n. " & Ganador & " con " & CantGanadores & " votos ganaron las elecciones del clan.")
 				ElseIf CantGanadores = 1 Then 
 					list = VB6.CopyArray(Me.GetMemberList())
 					
@@ -664,14 +664,14 @@ errh:
 					Next i
 					
 					If i <= UBound(list) Then
-						Call SetGuildNews("*" & Ganador & " ganÛ la elecciÛn del clan*")
+						Call SetGuildNews("*" & Ganador & " gan√≥ la elecci√≥n del clan*")
 						Call Me.SetLeader(Ganador)
 						RevisarElecciones = True
 					Else
-						Call SetGuildNews("*" & Ganador & " ganÛ la elecciÛn del clan pero abandonÛ las filas por lo que la votaciÛn queda desierta*")
+						Call SetGuildNews("*" & Ganador & " gan√≥ la elecci√≥n del clan pero abandon√≥ las filas por lo que la votaci√≥n queda desierta*")
 					End If
 				Else
-					Call SetGuildNews("*El perÌodo de votaciÛn se cerrÛ sin votos*")
+					Call SetGuildNews("*El per√≠odo de votaci√≥n se cerr√≥ sin votos*")
 				End If
 				
 				Call CerrarElecciones()
@@ -710,12 +710,12 @@ errh:
 		Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Detalle", vbNullString)
 		Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Pendiente", "0")
 		For i = 1 To p_PropuestasDePaz.Count()
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			If p_PropuestasDePaz.Item(i) = OtroGuild Then p_PropuestasDePaz.Remove((i))
 			Exit Sub
 		Next i
 		For i = 1 To p_PropuestasDeAlianza.Count()
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			If p_PropuestasDeAlianza.Item(i) = OtroGuild Then p_PropuestasDeAlianza.Remove((i))
 			Exit Sub
 		Next i
@@ -735,14 +735,14 @@ errh:
 		Select Case Tipo
 			Case modGuilds.RELACIONES_GUILD.ALIADOS
 				For i = 1 To p_PropuestasDeAlianza.Count()
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					If p_PropuestasDeAlianza.Item(i) = OtroGuild Then
 						HayPropuesta = True
 					End If
 				Next i
 			Case modGuilds.RELACIONES_GUILD.PAZ
 				For i = 1 To p_PropuestasDePaz.Count()
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					If p_PropuestasDePaz.Item(i) = OtroGuild Then
 						HayPropuesta = True
 					End If
@@ -773,7 +773,7 @@ errh:
 			Case modGuilds.RELACIONES_GUILD.ALIADOS
 				If p_IteradorPropuesta < p_PropuestasDeAlianza.Count() Then
 					p_IteradorPropuesta = p_IteradorPropuesta + 1
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					Iterador_ProximaPropuesta = p_PropuestasDeAlianza.Item(p_IteradorPropuesta)
 				End If
 				
@@ -783,7 +783,7 @@ errh:
 			Case modGuilds.RELACIONES_GUILD.PAZ
 				If p_IteradorPropuesta < p_PropuestasDePaz.Count() Then
 					p_IteradorPropuesta = p_IteradorPropuesta + 1
-					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+					'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					Iterador_ProximaPropuesta = p_PropuestasDePaz.Item(p_IteradorPropuesta)
 				End If
 				
@@ -798,7 +798,7 @@ errh:
 		
 		If p_IteradorOnlineMembers < p_OnlineMembers.Count() Then
 			p_IteradorOnlineMembers = p_IteradorOnlineMembers + 1
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_OnlineMembers.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_OnlineMembers.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			m_Iterador_ProximoUserIndex = p_OnlineMembers.Item(p_IteradorOnlineMembers)
 		Else
 			p_IteradorOnlineMembers = 0
@@ -810,7 +810,7 @@ errh:
 		
 		If p_IteradorOnlineGMs < p_GMsOnline.Count() Then
 			p_IteradorOnlineGMs = p_IteradorOnlineGMs + 1
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_GMsOnline.Item(). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_GMsOnline.Item(). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Iterador_ProximoGM = p_GMsOnline.Item(p_IteradorOnlineGMs)
 		Else
 			p_IteradorOnlineGMs = 0
@@ -849,7 +849,7 @@ errh:
 	Public Sub DesconectarGM(ByVal UserIndex As Short)
 		Dim i As Short
 		For i = 1 To p_GMsOnline.Count()
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_GMsOnline.Item(i). Haga clic aquÌ para obtener m·s informaciÛn: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_GMsOnline.Item(i). Haga clic aqu√≠ para obtener m√°s informaci√≥n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			If p_GMsOnline.Item(i) = UserIndex Then
 				p_GMsOnline.Remove((i))
 			End If
@@ -869,8 +869,8 @@ errh:
 		If migr_InStrB(S, Chr(10)) <> 0 Then
 			S = Replace(S, Chr(10), vbNullString)
 		End If
-		If migr_InStrB(S, "¨") <> 0 Then
-			S = Replace(S, "¨", vbNullString) 'morgo usaba esto como "separador"
+		If migr_InStrB(S, "¬¨") <> 0 Then
+			S = Replace(S, "¬¨", vbNullString) 'morgo usaba esto como "separador"
 		End If
 	End Sub
 End Class

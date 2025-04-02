@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module modNuevoTimer
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module modNuevoTimer
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	'
@@ -213,9 +213,9 @@ Module modNuevoTimer
 			
 			'UserList(UserIndex).Counters.failedUsageAttempts = UserList(UserIndex).Counters.failedUsageAttempts + 1
 			
-			'Tolerancia arbitraria - 20 es MUY alta, la está chiteando zarpado
+			'Tolerancia arbitraria - 20 es MUY alta, la estÃ¡ chiteando zarpado
 			'If UserList(UserIndex).Counters.failedUsageAttempts = 20 Then
-			'Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(UserList(UserIndex).name & " kicked by the server por posible modificación de intervalos.", FontTypeNames.FONTTYPE_FIGHT))
+			'Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(UserList(UserIndex).name & " kicked by the server por posible modificaciÃ³n de intervalos.", FontTypeNames.FONTTYPE_FIGHT))
 			'Call CloseSocket(UserIndex)
 			'End If
 		End If

@@ -1,8 +1,8 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> Partial Class frmServidor
-#Region "Código generado por el Diseñador de Windows Forms "
+#Region "CÃ³digo generado por el DiseÃ±ador de Windows Forms "
 	<System.Diagnostics.DebuggerNonUserCode()> Public Sub New()
 		MyBase.New()
-		'Llamada necesaria para el Diseñador de Windows Forms.
+		'Llamada necesaria para el DiseÃ±ador de Windows Forms.
 		InitializeComponent()
 	End Sub
 	'Form invalida a Dispose para limpiar la lista de componentes.
@@ -14,7 +14,7 @@
 		End If
 		MyBase.Dispose(Disposing)
 	End Sub
-	'Requerido por el Diseñador de Windows Forms
+	'Requerido por el DiseÃ±ador de Windows Forms
 	Private components As System.ComponentModel.IContainer
 	Public ToolTip1 As System.Windows.Forms.ToolTip
 	Public WithEvents Command1 As System.Windows.Forms.Button
@@ -46,9 +46,9 @@
 	Public WithEvents Command4 As System.Windows.Forms.Button
 	Public WithEvents Command2 As System.Windows.Forms.Button
 	Public WithEvents Command20 As System.Windows.Forms.Button
-	'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
-	'Se puede modificar mediante el Diseñador de Windows Forms.
-	'No lo modifique con el editor de código.
+	'NOTA: el DiseÃ±ador de Windows Forms necesita el siguiente procedimiento
+	'Se puede modificar mediante el DiseÃ±ador de Windows Forms.
+	'No lo modifique con el editor de cÃ³digo.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmServidor))
 		Me.components = New System.ComponentModel.Container()
@@ -374,7 +374,7 @@
 		Me.Command21.TabStop = True
 		Me.Command21.Name = "Command21"
 		Me.Command22.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-		Me.Command22.Text = "Administración"
+		Me.Command22.Text = "AdministraciÃ³n"
 		Me.Command22.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
 		Me.Command22.Size = New System.Drawing.Size(273, 17)
 		Me.Command22.Location = New System.Drawing.Point(8, 280)

@@ -21,7 +21,7 @@ Friend Class clsParty
 	'**************************************************************************
 	
 	
-	'UPGRADE_WARNING: El límite inferior de la matriz p_members ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+	'UPGRADE_WARNING: El lÃ­mite inferior de la matriz p_members ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 	Private p_members(PARTY_MAXMEMBERS) As tPartyMember
 	'miembros
 	
@@ -40,7 +40,7 @@ Friend Class clsParty
 	'datos en los pjs: | indexParty(indice en p_members), partyLeader(userindex del lider) |
 	
 	'Constructor de clase
-	'UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Initialize se actualizÃ³ a Class_Initialize_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub Class_Initialize_Renamed()
 		'***************************************************
 		'Author: Unknown
@@ -59,7 +59,7 @@ Friend Class clsParty
 	End Sub
 	
 	'Destructor de clase
-	'UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: Class_Terminate se actualizÃ³ a Class_Terminate_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub Class_Terminate_Renamed()
 	End Sub
 	Protected Overrides Sub Finalize()
@@ -88,7 +88,7 @@ Friend Class clsParty
 		'Last Modification By: Budi
 		' - 09/29/07 Experience is round to the biggest number less than that number
 		' - 09/29/07 Now experience is a real-number
-		' - 11/27/09 Arreglé el Out of Range.
+		' - 11/27/09 ArreglÃ© el Out of Range.
 		'***************************************************
 		'Me dice cuanta experiencia tengo colectada ya en la party
 		Dim i As Short
@@ -216,7 +216,7 @@ Friend Class clsParty
 		If i = 1 Then
 			'sale el founder, la party se disuelve
 			SaleMiembro = True
-			Call MandarMensajeAConsola("El líder disuelve la party.", "Servidor")
+			Call MandarMensajeAConsola("El lÃ­der disuelve la party.", "Servidor")
 			
 			For j = PARTY_MAXMEMBERS To 1 Step -1
 				
@@ -309,7 +309,7 @@ Friend Class clsParty
 		If UserIndexIndex = 0 Then
 			'catastrofe! esto no deberia pasar nunca! pero como es AO.... :p
 			Call LogError("INCONSISTENCIA DE PARTIES")
-			Call SendData(modSendData.SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("¡¡¡Inconsistencia de parties en HACERLEADER (UII = 0), AVISE A UN PROGRAMADOR ESTO ES UNA CATASTROFE!!!!", Protocol.FontTypeNames.FONTTYPE_GUILD))
+			Call SendData(modSendData.SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("Â¡Â¡Â¡Inconsistencia de parties en HACERLEADER (UII = 0), AVISE A UN PROGRAMADOR ESTO ES UNA CATASTROFE!!!!", Protocol.FontTypeNames.FONTTYPE_GUILD))
 			HacerLeader = False
 			Exit Function
 		End If
@@ -339,7 +339,7 @@ Friend Class clsParty
 		' - 09/29/07 Experience is round to the biggest number less than that number
 		' - 09/29/07 Now experience is a real-number (Tavo)
 		' - 08/18/08 Now TotalExperience is fixed (MarKoxX)
-		' - 11/27/09 Rehice la función, ahora devuelve el array con los UI online (Budi)
+		' - 11/27/09 Rehice la funciÃ³n, ahora devuelve el array con los UI online (Budi)
 		'***************************************************
 		
 		Dim i As Short
@@ -391,22 +391,22 @@ Friend Class clsParty
 					'aspirante armada en party crimi
 					If UI > 0 Then
 						If esArmada And criminal(UI) Then
-							razon = "Los miembros del ejército real no entran a una party con criminales."
+							razon = "Los miembros del ejÃ©rcito real no entran a una party con criminales."
 							rv = False
 						End If
 						'aspirante caos en party ciuda
 						If esCaos And Not criminal(UI) Then
-							razon = "Los miembros de la legión oscura no entran a una party con ciudadanos."
+							razon = "Los miembros de la legiÃ³n oscura no entran a una party con ciudadanos."
 							rv = False
 						End If
 						'aspirante crimi en party armada
 						If UserList(UI).Faccion.ArmadaReal = 1 And criminal(UserIndex) Then
-							razon = "Los criminales no entran a parties con miembros del ejército real."
+							razon = "Los criminales no entran a parties con miembros del ejÃ©rcito real."
 							rv = False
 						End If
 						'aspirante ciuda en party caos
 						If UserList(UI).Faccion.FuerzasCaos = 1 And Not criminal(UserIndex) Then
-							razon = "Los ciudadanos no entran a parties con miembros de la legión oscura."
+							razon = "Los ciudadanos no entran a parties con miembros de la legiÃ³n oscura."
 							rv = False
 						End If
 						
@@ -417,7 +417,7 @@ Friend Class clsParty
 				razon = "La mayor cantidad de miembros es " & PARTY_MAXMEMBERS
 			End If
 		Else
-			'¿Con o sin nombre?
+			'Â¿Con o sin nombre?
 			razon = "El usuario " & UserList(UserIndex).name & " se encuentra muy lejos."
 		End If
 		

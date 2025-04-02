@@ -1,8 +1,8 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> Partial Class frmCargando
-#Region "Código generado por el Diseñador de Windows Forms "
+#Region "CÃ³digo generado por el DiseÃ±ador de Windows Forms "
 	<System.Diagnostics.DebuggerNonUserCode()> Public Sub New()
 		MyBase.New()
-		'Llamada necesaria para el Diseñador de Windows Forms.
+		'Llamada necesaria para el DiseÃ±ador de Windows Forms.
 		InitializeComponent()
 	End Sub
 	'Form invalida a Dispose para limpiar la lista de componentes.
@@ -14,7 +14,7 @@
 		End If
 		MyBase.Dispose(Disposing)
 	End Sub
-	'Requerido por el Diseñador de Windows Forms
+	'Requerido por el DiseÃ±ador de Windows Forms
 	Private components As System.ComponentModel.IContainer
 	Public ToolTip1 As System.Windows.Forms.ToolTip
 	Public WithEvents _Label1_3 As System.Windows.Forms.Label
@@ -22,9 +22,9 @@
 	Public WithEvents porcentaje As System.Windows.Forms.Label
 	Public WithEvents _Label1_2 As System.Windows.Forms.Label
 	Public WithEvents Label1 As Microsoft.VisualBasic.Compatibility.VB6.LabelArray
-	'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
-	'Se puede modificar mediante el Diseñador de Windows Forms.
-	'No lo modifique con el editor de código.
+	'NOTA: el DiseÃ±ador de Windows Forms necesita el siguiente procedimiento
+	'Se puede modificar mediante el DiseÃ±ador de Windows Forms.
+	'No lo modifique con el editor de cÃ³digo.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmCargando))
 		Me.components = New System.ComponentModel.Container()

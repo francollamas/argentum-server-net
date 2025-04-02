@@ -1,8 +1,8 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> Partial Class frmAdmin
-#Region "Código generado por el Diseñador de Windows Forms "
+#Region "CÃ³digo generado por el DiseÃ±ador de Windows Forms "
 	<System.Diagnostics.DebuggerNonUserCode()> Public Sub New()
 		MyBase.New()
-		'Llamada necesaria para el Diseñador de Windows Forms.
+		'Llamada necesaria para el DiseÃ±ador de Windows Forms.
 		InitializeComponent()
 	End Sub
 	'Form invalida a Dispose para limpiar la lista de componentes.
@@ -14,7 +14,7 @@
 		End If
 		MyBase.Dispose(Disposing)
 	End Sub
-	'Requerido por el Diseñador de Windows Forms
+	'Requerido por el DiseÃ±ador de Windows Forms
 	Private components As System.ComponentModel.IContainer
 	Public ToolTip1 As System.Windows.Forms.ToolTip
 	Public WithEvents Text1 As System.Windows.Forms.TextBox
@@ -24,9 +24,9 @@
 	Public WithEvents Command1 As System.Windows.Forms.Button
 	Public WithEvents _Frame1_0 As System.Windows.Forms.GroupBox
 	Public WithEvents Frame1 As Microsoft.VisualBasic.Compatibility.VB6.GroupBoxArray
-	'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
-	'Se puede modificar mediante el Diseñador de Windows Forms.
-	'No lo modifique con el editor de código.
+	'NOTA: el DiseÃ±ador de Windows Forms necesita el siguiente procedimiento
+	'Se puede modificar mediante el DiseÃ±ador de Windows Forms.
+	'No lo modifique con el editor de cÃ³digo.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmAdmin))
 		Me.components = New System.ComponentModel.Container()
@@ -43,7 +43,7 @@
 		Me.ToolTip1.Active = True
 		CType(Me.Frame1, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.BackColor = System.Drawing.Color.FromARGB(192, 192, 192)
-		Me.Text = "Administración del servidor"
+		Me.Text = "AdministraciÃ³n del servidor"
 		Me.ClientSize = New System.Drawing.Size(312, 209)
 		Me.Location = New System.Drawing.Point(4, 30)
 		Me.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultLocation

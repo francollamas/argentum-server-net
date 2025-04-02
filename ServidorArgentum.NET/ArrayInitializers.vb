@@ -1,4 +1,4 @@
-﻿Module ArrayInitializers
+Module ArrayInitializers
     Public Sub InitializeStruct(struct As ObjData())
         Dim i As Integer
         For i = 0 To struct.Length - 1

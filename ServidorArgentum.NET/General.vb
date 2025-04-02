@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module General
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,10 +24,10 @@ Module General
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
 	Public LeerNPCs As New clsIniReader
@@ -161,7 +161,7 @@ Module General
 			d = TrashCollector.Item(i)
 			Call EraseObj(1, d.Map, d.X, d.Y)
 			Call TrashCollector.Remove(i)
-			'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			d = Nothing
 		Next i
 		
@@ -183,7 +183,7 @@ Errhandler:
 		Dim k As Integer
 		Dim npcNames() As String
 		
-		'UPGRADE_WARNING: El límite inferior de la matriz npcNames ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: El lÃ­mite inferior de la matriz npcNames ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim npcNames(UBound(SpawnList))
 		
 		For k = 1 To UBound(SpawnList)
@@ -194,7 +194,7 @@ Errhandler:
 		
 	End Sub
 	
-	'UPGRADE_WARNING: La aplicación terminará cuando Sub Main() finalice. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'
+	'UPGRADE_WARNING: La aplicaciÃ³n terminarÃ¡ cuando Sub Main() finalice. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'
 	Public Sub Main()
 		'***************************************************
 		'Author: Unknown
@@ -309,10 +309,10 @@ Errhandler:
 		
 		SkillsNames(Declaraciones.eSkill.Magia) = "Magia"
 		SkillsNames(Declaraciones.eSkill.Robar) = "Robar"
-		SkillsNames(Declaraciones.eSkill.Tacticas) = "Evasión en combate"
+		SkillsNames(Declaraciones.eSkill.Tacticas) = "EvasiÃ³n en combate"
 		SkillsNames(Declaraciones.eSkill.Armas) = "Combate con armas"
 		SkillsNames(Declaraciones.eSkill.Meditar) = "Meditar"
-		SkillsNames(Declaraciones.eSkill.Apuñalar) = "Apuñalar"
+		SkillsNames(Declaraciones.eSkill.ApuÃ±alar) = "ApuÃ±alar"
 		SkillsNames(Declaraciones.eSkill.Ocultarse) = "Ocultarse"
 		SkillsNames(Declaraciones.eSkill.Supervivencia) = "Supervivencia"
 		SkillsNames(Declaraciones.eSkill.Talar) = "Talar"
@@ -356,7 +356,7 @@ Errhandler:
 		
 		Call CargarSpawnList()
 		Call CargarForbidenWords()
-		'¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿ CARGAMOS DATOS DESDE ARCHIVOS Â¿??Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		frmCargando.Label1(2).Text = "Cargando Server.ini"
 		
 		MaxUsers = 0
@@ -376,11 +376,11 @@ Errhandler:
 		Call CargarHechizos()
 		
 		
-		frmCargando.Label1(2).Text = "Cargando Objetos de Herrería"
+		frmCargando.Label1(2).Text = "Cargando Objetos de HerrerÃ­a"
 		Call LoadArmasHerreria()
 		Call LoadArmadurasHerreria()
 		
-		frmCargando.Label1(2).Text = "Cargando Objetos de Carpintería"
+		frmCargando.Label1(2).Text = "Cargando Objetos de CarpinterÃ­a"
 		Call LoadObjCarpintero()
 		
 		frmCargando.Label1(2).Text = "Cargando Balance.Dat"
@@ -405,7 +405,7 @@ Errhandler:
 		
 		'Comentado porque hay worldsave en ese mapa!
 		'Call CrearClanPretoriano(MAPA_PRETORIANO, ALCOBA2_X, ALCOBA2_Y)
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		
 		Dim LoopC As Short
 		
@@ -417,7 +417,7 @@ Errhandler:
 			UserList(LoopC).outgoingData = New clsByteQueue
 		Next LoopC
 		
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		
 		With frmMain
 			.AutoSave.Enabled = True
@@ -432,7 +432,7 @@ Errhandler:
 			.npcataca.Enabled = True
 		End With
 		
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		'Configuracion de los sockets
 		
 		Call SecurityIp.InitIpTables(1000)
@@ -440,7 +440,7 @@ Errhandler:
 		Call IniciaWsApi(Puerto)
 		
 		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+		'Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 		
 		frmCargando.Close()
 		
@@ -458,7 +458,7 @@ Errhandler:
 		Application.SetCompatibleTextRenderingDefault(False)
 
 		Dim mainForm As New frmMain()
-		Application.Run(mainForm) ' Mantiene la aplicación viva hasta que se cierre frmMain
+		Application.Run(mainForm) ' Mantiene la aplicaciÃ³n viva hasta que se cierre frmMain
 
 	End Sub
 	
@@ -468,7 +468,7 @@ Errhandler:
 		'*****************************************************************
 		
 		On Error Resume Next
-		'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+		'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
 		FileExist = (Dir(file) <> "")
 		On Error GoTo 0
 	End Function
@@ -476,7 +476,7 @@ Errhandler:
 	Function ReadField(ByVal Pos As Short, ByRef Text As String, ByVal SepASCII As Byte) As String
 		'*****************************************************************
 		'Gets a field from a string
-		'Author: Juan Martín Sotuyo Dodero (Maraxus)
+		'Author: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modify Date: 11/15/2004
 		'Gets a field from a delimited string
 		'*****************************************************************
@@ -517,7 +517,7 @@ Errhandler:
 		'
 		'***************************************************
 		
-		frmMain.CantUsuarios.Text = "Número de usuarios jugando: " & NumUsers
+		frmMain.CantUsuarios.Text = "NÃºmero de usuarios jugando: " & NumUsers
 		
 	End Sub
 	
@@ -673,7 +673,7 @@ Errhandler:
 	End Sub
 	
 	
-	'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: str se actualizÃ³ a str_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub LogClanes(ByVal str_Renamed As String)
 		'***************************************************
 		'Author: Unknown
@@ -689,7 +689,7 @@ Errhandler:
 		
 	End Sub
 	
-	'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: str se actualizÃ³ a str_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub LogIP(ByVal str_Renamed As String)
 		'***************************************************
 		'Author: Unknown
@@ -706,7 +706,7 @@ Errhandler:
 	End Sub
 	
 	
-	'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+	'UPGRADE_NOTE: str se actualizÃ³ a str_Renamed. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub LogDesarrollo(ByVal str_Renamed As String)
 		'***************************************************
 		'Author: Unknown
@@ -727,7 +727,7 @@ Errhandler:
 		'Author: Unknown
 		'Last Modification: -
 		'
-		'***************************************************ç
+		'***************************************************Ã§
 		
 		On Error GoTo Errhandler
 		
@@ -923,14 +923,14 @@ Errhandler:
 		Call Statistics.Initialize()
 		
 		For LoopC = 1 To UBound(UserList)
-			'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			UserList(LoopC).incomingData = Nothing
-			'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+			'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolecciÃ³n de los elementos no utilizados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			UserList(LoopC).outgoingData = Nothing
 		Next LoopC
 
-		'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-		'UPGRADE_WARNING: El límite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+		'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+		'UPGRADE_WARNING: El lÃ­mite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim UserList(MaxUsers)
 		ArrayInitializers.InitializeStruct(UserList)
 
@@ -1047,12 +1047,12 @@ Errhandler:
 				.Counters.Frio = .Counters.Frio + 1
 			Else
 				If MapInfo_Renamed(.Pos.Map).Terreno = Nieve Then
-					Call WriteConsoleMsg(UserIndex, "¡¡Estás muriendo de frío, abrigate o morirás!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Â¡Â¡EstÃ¡s muriendo de frÃ­o, abrigate o morirÃ¡s!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					modifi = Porcentaje(.Stats.MaxHp, 5)
 					.Stats.MinHp = .Stats.MinHp - modifi
 					
 					If .Stats.MinHp < 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Has muerto de frío!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡Has muerto de frÃ­o!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						.Stats.MinHp = 0
 						Call UserDie(UserIndex)
 					End If
@@ -1081,11 +1081,11 @@ Errhandler:
 				.Counters.Lava = .Counters.Lava + 1
 			Else
 				If HayLava(.Pos.Map, .Pos.X, .Pos.Y) Then
-					Call WriteConsoleMsg(UserIndex, "¡¡Quitate de la lava, te estás quemando!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+					Call WriteConsoleMsg(UserIndex, "Â¡Â¡Quitate de la lava, te estÃ¡s quemando!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 					.Stats.MinHp = .Stats.MinHp - Porcentaje(.Stats.MaxHp, 5)
 					
 					If .Stats.MinHp < 1 Then
-						Call WriteConsoleMsg(UserIndex, "¡¡Has muerto quemado!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+						Call WriteConsoleMsg(UserIndex, "Â¡Â¡Has muerto quemado!!", Protocol.FontTypeNames.FONTTYPE_INFO)
 						.Stats.MinHp = 0
 						Call UserDie(UserIndex)
 					End If
@@ -1132,7 +1132,7 @@ Errhandler:
 		'Last Update: 12/01/2010 (ZaMa)
 		'12/01/2010: ZaMa - Los druidas pierden la inmunidad de ser atacados cuando pierden el efecto del mimetismo.
 		'******************************************************
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Barco, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Barco, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim Barco As ObjData
 		
 		With UserList(UserIndex)
@@ -1149,7 +1149,7 @@ Errhandler:
 						ElseIf .Faccion.FuerzasCaos = 1 Then 
 							.Char_Renamed.body = iFragataCaos
 						Else
-							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Barco. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+							'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Barco. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 							Barco = ObjData_Renamed(UserList(UserIndex).Invent.BarcoObjIndex)
 							If criminal(UserIndex) Then
 								If Barco.Ropaje = iBarca Then .Char_Renamed.body = iBarcaPk
@@ -1294,7 +1294,7 @@ Errhandler:
 				Else
 					EnviarStats = True
 					.Counters.STACounter = 0
-					If .flags.Desnudo Then Exit Sub 'Desnudo no sube energía. (ToxicWaste)
+					If .flags.Desnudo Then Exit Sub 'Desnudo no sube energÃ­a. (ToxicWaste)
 					
 					massta = RandomNumber(1, Porcentaje(.Stats.MaxSta, 5))
 					.Stats.MinSta = .Stats.MinSta + massta
@@ -1320,7 +1320,7 @@ Errhandler:
 			If .Counters.Veneno < IntervaloVeneno Then
 				.Counters.Veneno = .Counters.Veneno + 1
 			Else
-				Call WriteConsoleMsg(UserIndex, "Estás envenenado, si no te curas morirás.", Protocol.FontTypeNames.FONTTYPE_VENENO)
+				Call WriteConsoleMsg(UserIndex, "EstÃ¡s envenenado, si no te curas morirÃ¡s.", Protocol.FontTypeNames.FONTTYPE_VENENO)
 				.Counters.Veneno = 0
 				N = RandomNumber(1, 5)
 				.Stats.MinHp = .Stats.MinHp - N
@@ -1335,7 +1335,7 @@ Errhandler:
 		'***************************************************
 		'Author: ??????
 		'Last Modification: 11/27/09 (Budi)
-		'Cuando se pierde el efecto de la poción updatea fz y agi (No me gusta que ambos atributos aunque se haya modificado solo uno, pero bueno :p)
+		'Cuando se pierde el efecto de la pociÃ³n updatea fz y agi (No me gusta que ambos atributos aunque se haya modificado solo uno, pero bueno :p)
 		'***************************************************
 		Dim loopX As Short
 		With UserList(UserIndex)
@@ -1558,7 +1558,7 @@ Errhandler:
 	
 	Public Sub FreeNPCs()
 		'***************************************************
-		'Autor: Juan Martín Sotuyo Dodero (Maraxus)
+		'Autor: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Releases all NPC Indexes
 		'***************************************************
@@ -1572,7 +1572,7 @@ Errhandler:
 	
 	Public Sub FreeCharIndexes()
 		'***************************************************
-		'Autor: Juan Martín Sotuyo Dodero (Maraxus)
+		'Autor: Juan MartÃ­n Sotuyo Dodero (Maraxus)
 		'Last Modification: 05/17/06
 		'Releases all char indexes
 		'***************************************************

@@ -2,7 +2,7 @@ Option Strict Off
 Option Explicit On
 Module NPCs
 	'Argentum Online 0.12.2
-	'Copyright (C) 2002 Márquez Pablo Ignacio
+	'Copyright (C) 2002 MÃ¡rquez Pablo Ignacio
 	'
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -24,25 +24,25 @@ Module NPCs
 	'You can contact me at:
 	'morgolock@speedy.com.ar
 	'www.geocities.com/gmorgolock
-	'Calle 3 número 983 piso 7 dto A
+	'Calle 3 nÃºmero 983 piso 7 dto A
 	'La Plata - Pcia, Buenos Aires - Republica Argentina
-	'Código Postal 1900
-	'Pablo Ignacio Márquez
+	'CÃ³digo Postal 1900
+	'Pablo Ignacio MÃ¡rquez
 	
 	
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 	'                        Modulo NPC
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 	'Contiene todas las rutinas necesarias para cotrolar los
 	'NPCs meno la rutina de AI que se encuentra en el modulo
 	'AI_NPCs para su mejor comprension.
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-	'?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
+	'?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿?Â¿
 	
 	
 	Sub QuitarMascota(ByVal UserIndex As Short, ByVal NpcIndex As Short)
@@ -81,12 +81,12 @@ Module NPCs
 		'Llamado cuando la vida de un NPC llega a cero.
 		'Last Modify Date: 24/01/2007
 		'22/06/06: (Nacho) Chequeamos si es pretoriano
-		'24/01/2007: Pablo (ToxicWaste): Agrego para actualización de tag si cambia de status.
+		'24/01/2007: Pablo (ToxicWaste): Agrego para actualizaciÃ³n de tag si cambia de status.
 		'********************************************************
 		On Error GoTo Errhandler
-		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+		'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
 		Dim MiNPC As npc
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		MiNPC = Npclist(NpcIndex)
 		Dim EraCriminal As Boolean
 		Dim IsPretoriano As Boolean
@@ -163,7 +163,7 @@ Module NPCs
 				End If
 				
 				'[/KEVIN]
-				Call WriteConsoleMsg(UserIndex, "¡Has matado a la criatura!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+				Call WriteConsoleMsg(UserIndex, "Â¡Has matado a la criatura!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 				If .Stats.NPCsMuertos < 32000 Then .Stats.NPCsMuertos = .Stats.NPCsMuertos + 1
 				
 				EraCriminal = criminal(UserIndex)
@@ -398,7 +398,7 @@ Errhandler:
 		With Npclist(NpcIndex)
 			.flags.NPCActive = False
 			
-			.Owner = 0 ' Murio, no necesita mas dueños :P.
+			.Owner = 0 ' Murio, no necesita mas dueÃ±os :P.
 			
 			If InMapBounds(.Pos.Map, .Pos.X, .Pos.Y) Then
 				Call EraseNPCChar(NpcIndex)
@@ -514,9 +514,9 @@ Errhandler:
 			Map = OrigPos.Map
 			X = OrigPos.X
 			Y = OrigPos.Y
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Orig. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Orig. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Npclist(nIndex).Orig = OrigPos
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Npclist(nIndex).Pos = OrigPos
 			
 		Else
@@ -531,7 +531,7 @@ Errhandler:
 				Call ClosestLegalPos(Pos, newpos, PuedeAgua, PuedeTierra) 'Nos devuelve la posicion valida mas cercana
 				If newpos.X <> 0 And newpos.Y <> 0 Then
 					altpos.X = newpos.X
-					altpos.Y = newpos.Y 'posicion alternativa (para evitar el anti respawn, pero intentando qeu si tenía que ser en el agua, sea en el agua.)
+					altpos.Y = newpos.Y 'posicion alternativa (para evitar el anti respawn, pero intentando qeu si tenÃ­a que ser en el agua, sea en el agua.)
 				Else
 					Call ClosestLegalPos(Pos, newpos, PuedeAgua)
 					If newpos.X <> 0 And newpos.Y <> 0 Then
@@ -684,7 +684,7 @@ Errhandler:
 		Dim UserIndex As Short
 		
 		With Npclist(NpcIndex)
-			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+			'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			nPos = .Pos
 			Call HeadtoPos(nHeading, nPos)
 			
@@ -720,7 +720,7 @@ Errhandler:
 				
 				'Update map and user pos
 				MapData(.Pos.Map, .Pos.X, .Pos.Y).NpcIndex = 0
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				.Pos = nPos
 				.Char_Renamed.heading = nHeading
 				MapData(.Pos.Map, nPos.X, nPos.Y).NpcIndex = NpcIndex
@@ -772,7 +772,7 @@ Errhandler:
 		N = RandomNumber(1, 100)
 		If N < 30 Then
 			UserList(UserIndex).flags.Envenenado = 1
-			Call WriteConsoleMsg(UserIndex, "¡¡La criatura te ha envenenado!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
+			Call WriteConsoleMsg(UserIndex, "Â¡Â¡La criatura te ha envenenado!!", Protocol.FontTypeNames.FONTTYPE_FIGHT)
 		End If
 		
 	End Sub
@@ -782,7 +782,7 @@ Errhandler:
 		'Autor: Unknown (orginal version)
 		'Last Modification: 06/15/2008
 		'23/01/2007 -> Pablo (ToxicWaste): Creates an NPC of the type Npcindex
-		'06/15/2008 -> Optimizé el codigo. (NicoNZ)
+		'06/15/2008 -> OptimizÃ© el codigo. (NicoNZ)
 		'***************************************************
 		Dim newpos As WorldPos
 		Dim altpos As WorldPos
@@ -898,10 +898,10 @@ Errhandler:
 		'#               ATENCION PELIGRO                  #
 		'###################################################
 		'
-		'    ¡¡¡¡ NO USAR GetVar PARA LEER LOS NPCS !!!!
+		'    Â¡Â¡Â¡Â¡ NO USAR GetVar PARA LEER LOS NPCS !!!!
 		'
-		'El que ose desafiar esta LEY, se las tendrá que ver
-		'conmigo. Para leer los NPCS se deberá usar la
+		'El que ose desafiar esta LEY, se las tendrÃ¡ que ver
+		'conmigo. Para leer los NPCS se deberÃ¡ usar la
 		'nueva clase clsIniReader.
 		'
 		'Alejo
@@ -992,7 +992,7 @@ Errhandler:
 			
 			
 			.flags.LanzaSpells = Val(Leer.GetValue("NPC" & NpcNumber, "LanzaSpells"))
-			'UPGRADE_WARNING: El límite inferior de la matriz .Spells ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El lÃ­mite inferior de la matriz .Spells ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			If .flags.LanzaSpells > 0 Then ReDim .Spells(.flags.LanzaSpells)
 			For LoopC = 1 To .flags.LanzaSpells
 				.Spells(LoopC) = Val(Leer.GetValue("NPC" & NpcNumber, "Sp" & LoopC))
@@ -1000,7 +1000,7 @@ Errhandler:
 			
 			If .NPCtype = Declaraciones.eNPCType.Entrenador Then
 				.NroCriaturas = Val(Leer.GetValue("NPC" & NpcNumber, "NroCriaturas"))
-				'UPGRADE_WARNING: El límite inferior de la matriz .Criaturas ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+				'UPGRADE_WARNING: El lÃ­mite inferior de la matriz .Criaturas ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim .Criaturas(.NroCriaturas)
 				For LoopC = 1 To .NroCriaturas
 					.Criaturas(LoopC).NpcIndex = CShort(Leer.GetValue("NPC" & NpcNumber, "CI" & LoopC))
@@ -1011,7 +1011,7 @@ Errhandler:
 			With .flags
 				.NPCActive = True
 				
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Respawn. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Respawn. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				If Respawn Then
 					.Respawn = Val(Leer.GetValue("NPC" & NpcNumber, "ReSpawn"))
 				Else
@@ -1029,7 +1029,7 @@ Errhandler:
 			
 			'<<<<<<<<<<<<<< Expresiones >>>>>>>>>>>>>>>>
 			.NroExpresiones = Val(Leer.GetValue("NPC" & NpcNumber, "NROEXP"))
-			'UPGRADE_WARNING: El límite inferior de la matriz .Expresiones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+			'UPGRADE_WARNING: El lÃ­mite inferior de la matriz .Expresiones ha cambiado de 1 a 0. Haga clic aquÃ­ para obtener mÃ¡s informaciÃ³n: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			If .NroExpresiones > 0 Then ReDim .Expresiones(.NroExpresiones)
 			For LoopC = 1 To .NroExpresiones
 				.Expresiones(LoopC) = Leer.GetValue("NPC" & NpcNumber, "Exp" & LoopC)
@@ -1092,7 +1092,7 @@ Errhandler:
 		'***************************************************
 		'Author: Unknown
 		'Last Modification: -
-		'Chequea si el npc continua perteneciendo a algún usuario
+		'Chequea si el npc continua perteneciendo a algÃºn usuario
 		'***************************************************
 		
 		With Npclist(NpcIndex)
