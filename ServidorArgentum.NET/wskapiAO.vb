@@ -1,326 +1,320 @@
 Option Strict Off
 Option Explicit On
-Module wskapiAO
-	
-	Private Const MAX_INT As Short = 32767
-	Public WSAPISock2Usr As New Collection
-	
-	Public Function GetAscIP(ByVal inn As Integer) As String
-		GetAscIP = frmMain.Winsock1(inn).RemoteHostIP
-	End Function
-	
-	Public Function Winsock_ConnectionRequest(ByRef Index As Short, ByVal requestID As Integer) As Object
-		Dim intNext As Short
-		
-		intNext = Winsock_NextOpenSocket
-		
-		If intNext <= 0 Then
-			Exit Function
-		End If
-		
-		'Found a socket to use; accept connection.
-		frmMain.Winsock1(intNext).Accept(requestID)
-		
-		Dim NewIndex As Short
-		NewIndex = NextOpenUser ' Nuevo indice
-		
-		Dim i As Short
-		Dim data() As Byte
-		'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-		Dim str_Renamed As String
-		If NewIndex <= MaxUsers Then
-			' Leer para limpiar pendientes
-			Call UserList(NewIndex).incomingData.ReadASCIIStringFixed(UserList(NewIndex).incomingData.length)
-			Call UserList(NewIndex).outgoingData.ReadASCIIStringFixed(UserList(NewIndex).outgoingData.length)
-			
-			UserList(NewIndex).ip = GetAscIP(intNext)
-			
-			For i = 1 To BanIps.Count()
-				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto BanIps.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				If BanIps.Item(i) = UserList(NewIndex).ip Then
-					Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
-					Call FlushBuffer(NewIndex)
-					Call Winsock_Close(intNext)
-					Exit Function
-				End If
-			Next i
-			
-			If NewIndex > LastUser Then LastUser = NewIndex
-			
-			UserList(NewIndex).ConnID = intNext
-			UserList(NewIndex).ConnIDValida = True
-			
-			Call AgregaSlotSock(intNext, NewIndex)
-		Else
-			
-			str_Renamed = Protocol.PrepareMessageErrorMsg("El servidor se encuentra lleno en este momento. Disculpe las molestias ocasionadas.")
-			
-			ReDim Preserve data(Len(str_Renamed) - 1)
-			
-			frmMain.Winsock1(intNext).SendData(data)
-			
-			Call Winsock_Close(intNext)
-		End If
-		
-	End Function
-	
-	Public Function Winsock_Close(ByRef Index As Short) As Object
-		Dim N As Short
-		N = BuscaSlotSock(Index)
-		If Index > 0 Then frmMain.Winsock1(Index).Close()
-		
-		If N > 0 Then
-			Call BorraSlotSock(Index)
-			UserList(N).ConnID = -1
-			UserList(N).ConnIDValida = False
-			Call EventoSockClose(N)
-		End If
-	End Function
-	
-	Public Sub Winsock_Erase()
-		'Steps:
-		'------
-		'1. Unload & close all Winsock controls.
-		'2. Erase udtUsers() array to clear up memory.
-		
-		Dim intLoop As Short
-		
-		With frmMain
-			.Winsock1(0).Close() 'Close first control.
-			
-			If .Winsock1.UBound > 0 Then
-				'More than one Winsock control in the array.
-				'Loop through and close/unload all of them.
-				For intLoop = 1 To .Winsock1.UBound
-					.Winsock1(intLoop).Close()
-					.Winsock1.Unload(intLoop)
-				Next intLoop
-			End If
-			
-		End With
-	End Sub
-	
-	'Finds an available Winsock control to use for an incoming connection.
-	'You can just copy/paste this code into your chat program if you want.
-	'Just change "sckServer" to the name of your Winsock control (array).
-	'And change MAX_INT to max simultaneous connections that you want (it is at top of this module).
-	Private Function Winsock_NextOpenSocket() As Short
-		Dim intLoop, intFound As Short
-		
-		With frmMain
-			'First, see if there is only one Winsock control.
-			If .Winsock1.UBound = 0 Then
-				'Just load #1.
-				.Winsock1.Load(1)
-				.Winsock1(1).Close()
-				Winsock_NextOpenSocket = 1
-			Else
-				'There is more than 1.
-				'Loop through all of them to find one not being used.
-				'If it is not being used, it's state will = sckClosed (no connections).
-				For intLoop = 1 To .Winsock1.UBound
-					'UPGRADE_NOTE: State se actualizó a CtlState. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-					If .Winsock1(intLoop).CtlState = MSWinsockLib.StateConstants.sckClosed Then
-						'Found one not being used.
-						intFound = intLoop
-						Exit For
-					End If
-				Next intLoop
-				
-				'Check if we found one.
-				If intFound > 0 Then
-					Winsock_NextOpenSocket = intFound
-				Else
-					'Didn't find one.
-					'Load a new one.
-					'Unless we reached MAX_INT
-					'which is max number of clients.
-					If .Winsock1.UBound + 1 < MAX_INT Then
-						'There is room for another one.
-						intFound = .Winsock1.UBound + 1
-						.Winsock1.Load(intFound)
-						.Winsock1(intFound).Close()
-						Winsock_NextOpenSocket = intFound
-					Else
-						'Server is full!
-						Debug.Print("CONNECTION REJECTED! MAX CLIENTS (" & MAX_INT & ") REACHED!")
-					End If
-					
-				End If
-			End If
-		End With
-		
-	End Function
-	
-	
-	' IniciaWsApi: Inicializa la API de sockets, creando una ventana oculta para manejar mensajes de red.
-	' @param hwndParent: Handle de la ventana principal del programa.
-	Public Sub IniciaWsApi(ByVal port As Short)
-		Winsock_Erase()
-		
-		frmMain.Winsock1(0).Close()
-		frmMain.Winsock1(0).LocalPort = port
-		frmMain.Winsock1(0).Listen()
-	End Sub
-	
-	' LimpiaWsApi: Limpia los recursos utilizados por la API de sockets, destruyendo la ventana oculta y restaurando el procedimiento de ventana original.
-	Public Sub LimpiaWsApi()
-		Winsock_Erase()
-	End Sub
-	
-	' WsApiEnviar: EnvÃ­a datos a travÃ©s de un socket asociado a un slot.
-	' @param Slot: NÃºmero del slot.
-	' @param str: Cadena de datos a enviar.
-	' @return: Resultado del envÃ­o (0 si es exitoso, -1 si falla).
-	'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-	Public Function WsApiEnviar(ByVal Slot As Short, ByRef str_Renamed As String) As Integer
-		On Error GoTo ErrorHandler
-		
-		Dim Retorno As Integer
-		Retorno = 0
-		
-		Dim slotIndex As Short
-		If UserList(Slot).ConnID <> -1 And UserList(Slot).ConnIDValida Then
-			slotIndex = UserList(Slot).ConnID
-			frmMain.Winsock1(slotIndex).SendData(str_Renamed)
-			System.Windows.Forms.Application.DoEvents()
-		ElseIf UserList(Slot).ConnID <> -1 And Not UserList(Slot).ConnIDValida Then 
-			If Not UserList(Slot).Counters.Saliendo Then
-				Retorno = -1
-			End If
-		End If
-		
-		WsApiEnviar = Retorno
-		
-		Exit Function
-		
-ErrorHandler: 
-		Call UserList(Slot).outgoingData.WriteASCIIStringFixed(str_Renamed)
-		Resume Next
-		
-	End Function
-	
-	Public Function Winsock_DataArrival(ByRef Index As Short, ByVal bytesTotal As Integer) As Object
-		Dim N As Short
-		N = BuscaSlotSock(Index)
-		
-		If N < 0 And Index = 0 Then
-			Call Winsock_Close(Index)
-			Exit Function
-		End If
-		
-		
-		Dim datos() As Byte
-		frmMain.Winsock1(Index).GetData(datos, VariantType.Array + VariantType.Byte, bytesTotal)
-		
-		Call EventoSockRead(N, datos)
-	End Function
-	
-	' LogApiSock: Registra mensajes en un archivo de log para depuraciÃ³n.
-	' @param str: Mensaje a registrar.
-	'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-	Public Sub LogApiSock(ByVal str_Renamed As String)
-		
-	End Sub
-	
-	' EventoSockRead: Maneja el evento de lectura de datos desde un socket.
-	' @param Slot: NÃºmero del slot asociado al socket.
-	' @param Datos: Datos recibidos en formato de arreglo de bytes.
-	Public Sub EventoSockRead(ByVal Slot As Short, ByRef datos() As Byte)
-		With UserList(Slot)
-			Call .incomingData.WriteBlock(datos)
-			
-			If .ConnID <> -1 Then
-				Call HandleIncomingData(Slot)
-			Else
-				Exit Sub
-			End If
-		End With
-	End Sub
-	
-	' EventoSockClose: Maneja el evento de cierre de un socket.
-	' @param Slot: NÃºmero del slot asociado al socket.
-	Public Sub EventoSockClose(ByVal Slot As Short)
-		If Centinela.RevisandoUserIndex = Slot Then Call modCentinela.CentinelaUserLogout()
-		
-		If UserList(Slot).flags.UserLogged Then
-			Call CloseSocketSL(Slot)
-			Call Cerrar_Usuario(Slot)
-		Else
-			Call CloseSocket(Slot)
-		End If
-	End Sub
-	
-	' WSApiReiniciarSockets: Reinicia todos los sockets, limpiando y reconfigurando los recursos.
-	Public Sub WSApiReiniciarSockets()
-		Dim i As Integer
-		
-		For i = 1 To MaxUsers
-			If UserList(i).ConnID <> -1 And UserList(i).ConnIDValida Then
-				Call CloseSocket(i)
-			End If
-		Next i
-		
-		For i = 1 To MaxUsers
-			'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-			UserList(i).incomingData = Nothing
-			'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-			UserList(i).outgoingData = Nothing
-		Next i
+Imports System.Collections.Generic
 
-		'UPGRADE_WARNING: El límite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-		ReDim UserList(MaxUsers)
-		ArrayInitializers.InitializeStruct(UserList)
-		For i = 1 To MaxUsers
-			UserList(i).ConnID = -1
-			UserList(i).ConnIDValida = False
-			
-			UserList(i).incomingData = New clsByteQueue
-			UserList(i).outgoingData = New clsByteQueue
-		Next i
-		
-		LastUser = 1
-		NumUsers = 0
-		
-		Call IniciaWsApi(Puerto)
-	End Sub
-	
-	' BuscaSlotSock: Busca el slot asociado a un socket específico.
-	' @param S: Identificador del socket.
-	' @return: El número de slot asociado al socket o -1 si no se encuentra.
-	Public Function BuscaSlotSock(ByVal S As Integer) As Integer
-		On Error GoTo hayerror
-		'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto WSAPISock2Usr.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		BuscaSlotSock = WSAPISock2Usr.Item(CStr(S))
-		Exit Function
-		
-hayerror: 
-		BuscaSlotSock = -1
-	End Function
-	
-	' AgregaSlotSock: Asocia un socket a un slot en la colección WSAPISock2Usr.
-	' @param Sock: Identificador del socket.
-	' @param Slot: Número del slot a asociar.
-	Public Sub AgregaSlotSock(ByVal Sock As Integer, ByVal Slot As Integer)
-		Debug.Print("AgregaSockSlot")
-		
-		If WSAPISock2Usr.Count() > MaxUsers Then
-			Call CloseSocket(Slot)
-			Exit Sub
-		End If
-		
-		WSAPISock2Usr.Add(CStr(Slot), CStr(Sock))
-	End Sub
-	
-	' BorraSlotSock: Elimina la asociación de un socket con un slot en la colección WSAPISock2Usr.
-	' @param Sock: Identificador del socket a eliminar.
-	Public Sub BorraSlotSock(ByVal Sock As Integer)
-		Dim cant As Integer
-		cant = WSAPISock2Usr.Count()
-		
-		On Error Resume Next
-		WSAPISock2Usr.Remove(CStr(Sock))
-		
-		Debug.Print("BorraSockSlot " & cant & " -> " & WSAPISock2Usr.Count())
-	End Sub
+Module wskapiAO
+
+    Private Const MAX_INT As Short = 32767
+    ' Change from Collection to Dictionary (socket ID → user slot)
+    Public WSAPISock2Usr As New Dictionary(Of Integer, Integer)
+
+    ' Our new socket manager
+    Private WithEvents socketManager As SocketManager = Nothing
+
+    Public Function GetAscIP(ByVal inn As Integer) As String
+        ' Manteniendo la firma original del método para compatibilidad
+        If socketManager IsNot Nothing Then
+            Return socketManager.GetClientIP(inn)
+        End If
+        Return String.Empty
+    End Function
+
+    Public Function Winsock_ConnectionRequest(ByRef Index As Short, ByVal requestID As Integer) As Object
+        ' This function is no longer needed with the new implementation
+        ' It's kept for backward compatibility
+        Debug.Print("Winsock_ConnectionRequest should not be called directly anymore")
+        Return Nothing
+    End Function
+
+    ' This handler is called when a new connection is accepted by the SocketManager
+    Private Sub SocketManager_ConnectionAccepted(ByVal socketId As Integer, ByVal client As System.Net.Sockets.TcpClient) Handles socketManager.ConnectionAccepted
+        Debug.Print("New connection accepted: socket=" & socketId)
+        Dim NewIndex As Short
+        NewIndex = NextOpenUser() ' Nuevo indice
+
+        If NewIndex <= MaxUsers Then
+            ' Leer para limpiar pendientes
+            Call UserList(NewIndex).incomingData.ReadASCIIStringFixed(UserList(NewIndex).incomingData.length)
+            Call UserList(NewIndex).outgoingData.ReadASCIIStringFixed(UserList(NewIndex).outgoingData.length)
+
+            UserList(NewIndex).ip = GetAscIP(socketId)
+            Debug.Print("Connection from IP: " & UserList(NewIndex).ip)
+
+            Dim i As Short
+            For i = 1 To BanIps.Count()
+                If BanIps.Item(i) = UserList(NewIndex).ip Then
+                    Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
+                    Call FlushBuffer(NewIndex)
+                    Call CloseSocket(NewIndex)
+                    Debug.Print("Banned IP rejected: " & UserList(NewIndex).ip)
+                    Exit Sub
+                End If
+            Next i
+
+            If NewIndex > LastUser Then LastUser = NewIndex
+
+            UserList(NewIndex).ConnID = socketId
+            UserList(NewIndex).ConnIDValida = True
+
+            Call AgregaSlotSock(socketId, NewIndex)
+        Else
+            ' Server is full
+            Dim str_Renamed As String = Protocol.PrepareMessageErrorMsg("El servidor se encuentra lleno en este momento. Disculpe las molestias ocasionadas.")
+
+            socketManager.SendString(socketId, str_Renamed)
+            socketManager.CloseSocket(socketId)
+            Debug.Print("Server full - connection rejected")
+        End If
+    End Sub
+
+    Public Function Winsock_Close(ByRef Index As Short) As Object
+        If socketManager IsNot Nothing Then
+            socketManager.CloseSocket(Index)
+        End If
+        Return Nothing
+    End Function
+
+    Public Sub Winsock_Erase()
+        If socketManager IsNot Nothing Then
+            socketManager.StopListening()
+            socketManager = Nothing
+        End If
+    End Sub
+
+    ' No longer needed - SocketManager handles this internally
+    Private Function Winsock_NextOpenSocket() As Short
+        Debug.Print("Winsock_NextOpenSocket is no longer used")
+        Return 0
+    End Function
+
+    Public Sub IniciaWsApi(ByVal port As Short)
+        ' Clean up existing resources first
+        Winsock_Erase()
+
+        ' Clear the socket dictionary to prevent stale mappings
+        WSAPISock2Usr.Clear()
+
+        socketManager = New SocketManager(port, MAX_INT)
+        socketManager.StartListening()
+
+        Debug.Print("Socket server initialized on port " & port)
+    End Sub
+
+    Public Sub LimpiaWsApi()
+        Winsock_Erase()
+    End Sub
+
+    Public Function WsApiEnviar(ByVal Slot As Short, ByRef str_Renamed As String) As Integer
+        On Error GoTo ErrorHandler
+
+        Dim Retorno As Integer
+        Retorno = 0
+
+        If UserList(Slot).ConnID <> -1 And UserList(Slot).ConnIDValida Then
+            Dim slotIndex As Integer = UserList(Slot).ConnID
+            Dim data() As Byte = System.Text.Encoding.Default.GetBytes(str_Renamed)
+
+            Debug.Print("> Enviando data: [len]: " + str_Renamed.Length.ToString() + " [data]: " + String.Join(" ", Array.ConvertAll(data, Function(b) b.ToString())))
+
+            If socketManager Is Nothing OrElse socketManager.SendData(slotIndex, data) = False Then
+                Retorno = -1
+            End If
+        ElseIf UserList(Slot).ConnID <> -1 And Not UserList(Slot).ConnIDValida Then
+            If Not UserList(Slot).Counters.Saliendo Then
+                Retorno = -1
+            End If
+        End If
+
+        WsApiEnviar = Retorno
+
+        Exit Function
+
+ErrorHandler:
+        Call UserList(Slot).outgoingData.WriteASCIIStringFixed(str_Renamed)
+        Resume Next
+    End Function
+
+    ' This function is called by the SocketManager when data is received
+    Private Sub SocketManager_DataReceived(ByVal socketId As Integer, ByVal data() As Byte, ByVal bytesTotal As Integer) Handles socketManager.DataReceived
+        Dim N As Short
+        N = BuscaSlotSock(socketId)
+
+        If N <= 0 Then
+            socketManager.CloseSocket(socketId)
+            Exit Sub
+        End If
+
+        Dim datosInString As String = String.Join(" ", Array.ConvertAll(data, Function(b) b.ToString()))
+        Debug.Print("< Recibiendo data: [len]: " + data.Length.ToString() + " [data]: " + datosInString)
+
+        Call EventoSockRead(N, data)
+    End Sub
+
+    ' This function is called by the SocketManager when a client disconnects
+    Private Sub SocketManager_ClientDisconnected(ByVal socketId As Integer) Handles socketManager.ClientDisconnected
+        Dim N As Short = BuscaSlotSock(socketId)
+
+        If N > 0 Then
+            Call BorraSlotSock(socketId)
+            UserList(N).ConnID = -1
+            UserList(N).ConnIDValida = False
+            Call EventoSockClose(N)
+        End If
+    End Sub
+
+    Public Sub LogApiSock(ByVal str_Renamed As String)
+        ' This can be implemented if logging is needed
+    End Sub
+
+    Public Sub EventoSockRead(ByVal Slot As Short, ByRef datos() As Byte)
+        With UserList(Slot)
+            Call .incomingData.WriteBlock(datos)
+
+            If .ConnID <> -1 Then
+                Call HandleIncomingData(Slot)
+            Else
+                Exit Sub
+            End If
+        End With
+    End Sub
+
+    Public Sub EventoSockClose(ByVal Slot As Short)
+        If Centinela.RevisandoUserIndex = Slot Then Call modCentinela.CentinelaUserLogout()
+
+        If UserList(Slot).flags.UserLogged Then
+            Call CloseSocketSL(Slot)
+            Call Cerrar_Usuario(Slot)
+        Else
+            Call CloseSocket(Slot)
+        End If
+    End Sub
+
+    Public Sub WSApiReiniciarSockets()
+        Dim i As Integer
+
+        For i = 1 To MaxUsers
+            If UserList(i).ConnID <> -1 And UserList(i).ConnIDValida Then
+                Call CloseSocket(i)
+            End If
+        Next i
+
+        For i = 1 To MaxUsers
+            UserList(i).incomingData = Nothing
+            UserList(i).outgoingData = Nothing
+        Next i
+
+        ReDim UserList(MaxUsers)
+        ArrayInitializers.InitializeStruct(UserList)
+        For i = 1 To MaxUsers
+            UserList(i).ConnID = -1
+            UserList(i).ConnIDValida = False
+
+            UserList(i).incomingData = New clsByteQueue
+            UserList(i).outgoingData = New clsByteQueue
+        Next i
+
+        LastUser = 1
+        NumUsers = 0
+
+        Call IniciaWsApi(Puerto)
+    End Sub
+
+    Public Function BuscaSlotSock(ByVal S As Integer) As Integer
+        If S <= 0 Then
+            Debug.Print("BuscaSlotSock: Invalid socket ID: " & S)
+            Return -1
+        End If
+
+        Try
+            If WSAPISock2Usr.ContainsKey(S) Then
+                Return WSAPISock2Usr(S)
+            Else
+                Debug.Print("BuscaSlotSock: Socket " & S & " not found in dictionary")
+                Return -1
+            End If
+        Catch ex As Exception
+            Debug.Print("BuscaSlotSock error: " & ex.Message)
+            Return -1
+        End Try
+    End Function
+
+    Public Sub AgregaSlotSock(ByVal Sock As Integer, ByVal Slot As Integer)
+        Debug.Print("AgregaSockSlot: Socket=" & Sock & ", Slot=" & Slot)
+
+        If Sock <= 0 Then
+            Debug.Print("ERROR: Attempted to add invalid socket ID: " & Sock)
+            Exit Sub
+        End If
+
+        If WSAPISock2Usr.Count >= MaxUsers Then
+            Debug.Print("WARNING: Socket dictionary full, closing connection")
+            Call CloseSocket(Slot)
+            Exit Sub
+        End If
+
+        Try
+            ' Check if any other socket is already assigned to this slot
+            Dim socketsToRemove As New List(Of Integer)
+
+            For Each kvp As KeyValuePair(Of Integer, Integer) In WSAPISock2Usr
+                If kvp.Value = Slot AndAlso kvp.Key <> Sock Then
+                    Debug.Print("WARNING: Slot " & Slot & " already mapped to socket " & kvp.Key)
+                    socketsToRemove.Add(kvp.Key)
+                End If
+            Next
+
+            ' Remove any sockets that were assigned to this slot
+            For Each sockToRemove As Integer In socketsToRemove
+                WSAPISock2Usr.Remove(sockToRemove)
+                Debug.Print("Removed existing mapping for socket " & sockToRemove)
+            Next
+
+            ' Check if this socket already exists
+            If WSAPISock2Usr.ContainsKey(Sock) Then
+                Dim existingSlot As Integer = WSAPISock2Usr(Sock)
+
+                ' Socket already exists, remove it first
+                Debug.Print("Socket already in use, removing old entry")
+                WSAPISock2Usr.Remove(Sock)
+
+                ' If there was a user with this socket, clean up that user
+                If existingSlot > 0 AndAlso existingSlot <> Slot Then
+                    Debug.Print("Cleaning up old user in slot " & existingSlot)
+                    UserList(existingSlot).ConnID = -1
+                    UserList(existingSlot).ConnIDValida = False
+                End If
+            End If
+
+            ' Make sure this user slot is valid
+            If Slot <= 0 OrElse Slot > MaxUsers Then
+                Debug.Print("ERROR: Invalid slot number: " & Slot)
+                If socketManager IsNot Nothing Then socketManager.CloseSocket(Sock)
+                Exit Sub
+            End If
+
+            ' Finally add the mapping
+            WSAPISock2Usr.Add(Sock, Slot)
+            Debug.Print("Added socket " & Sock & " with slot " & Slot & " to dictionary, count=" & WSAPISock2Usr.Count)
+
+        Catch ex As Exception
+            Debug.Print("Error in AgregaSlotSock: " & ex.Message)
+            If socketManager IsNot Nothing Then socketManager.CloseSocket(Sock)
+        End Try
+    End Sub
+
+    Public Sub BorraSlotSock(ByVal Sock As Integer)
+        Debug.Print("BorraSlotSock: " & Sock)
+        Dim cant As Integer = WSAPISock2Usr.Count
+
+        Try
+            If WSAPISock2Usr.ContainsKey(Sock) Then
+                WSAPISock2Usr.Remove(Sock)
+                Debug.Print("BorraSockSlot " & cant & " -> " & WSAPISock2Usr.Count)
+            Else
+                Debug.Print("Socket " & Sock & " not found in dictionary")
+            End If
+        Catch ex As Exception
+            Debug.Print("Error removing socket " & Sock & " from dictionary: " & ex.Message)
+        End Try
+    End Sub
 End Module

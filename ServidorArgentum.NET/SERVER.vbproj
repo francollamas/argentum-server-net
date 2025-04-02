@@ -311,6 +311,7 @@
     <Compile Include="SistemaCombate.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SocketManager.vb" />
     <Compile Include="Statistics.vb">
       <SubType>Code</SubType>
     </Compile>
