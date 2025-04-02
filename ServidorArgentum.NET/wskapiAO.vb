@@ -129,7 +129,7 @@ Module wskapiAO
 
         If UserList(Slot).ConnID <> -1 And UserList(Slot).ConnIDValida Then
             Dim slotIndex As Integer = UserList(Slot).ConnID
-            Dim data() As Byte = System.Text.Encoding.Default.GetBytes(str_Renamed)
+            Dim data() As Byte = System.Text.Encoding.GetEncoding(1252).GetBytes(str_Renamed)
 
             Debug.Print("> Enviando data: [len]: " + str_Renamed.Length.ToString() + " [data]: " + String.Join(" ", Array.ConvertAll(data, Function(b) b.ToString())))
 
