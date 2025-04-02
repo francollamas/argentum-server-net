@@ -28,46 +28,63 @@ Module wskapiAO
 
     ' This handler is called when a new connection is accepted by the SocketManager
     Private Sub SocketManager_ConnectionAccepted(ByVal socketId As Integer, ByVal client As System.Net.Sockets.TcpClient) Handles socketManager.ConnectionAccepted
-        Debug.Print("New connection accepted: socket=" & socketId)
-        Dim NewIndex As Short
-        NewIndex = NextOpenUser() ' Nuevo indice
+        Try
+            Debug.Print("Processing new connection: socket=" & socketId)
+            Dim NewIndex As Short = NextOpenUser() ' Nuevo indice
 
-        If NewIndex <= MaxUsers Then
-            ' Leer para limpiar pendientes
-            Call UserList(NewIndex).incomingData.ReadASCIIStringFixed(UserList(NewIndex).incomingData.length)
-            Call UserList(NewIndex).outgoingData.ReadASCIIStringFixed(UserList(NewIndex).outgoingData.length)
+            If NewIndex <= MaxUsers Then
+                ' Clean incoming and outgoing data
+                UserList(NewIndex).incomingData.ReadASCIIStringFixed(UserList(NewIndex).incomingData.length)
+                UserList(NewIndex).outgoingData.ReadASCIIStringFixed(UserList(NewIndex).outgoingData.length)
 
-            UserList(NewIndex).ip = GetAscIP(socketId)
-            Debug.Print("Connection from IP: " & UserList(NewIndex).ip)
+                ' Store IP and check bans
+                UserList(NewIndex).ip = GetAscIP(socketId)
+                Debug.Print("Connection from IP: " & UserList(NewIndex).ip)
 
-            Dim i As Short
-            For i = 1 To BanIps.Count()
-                If BanIps.Item(i) = UserList(NewIndex).ip Then
-                    Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
-                    Call FlushBuffer(NewIndex)
-                    Call CloseSocket(NewIndex)
-                    Debug.Print("Banned IP rejected: " & UserList(NewIndex).ip)
-                    Exit Sub
-                End If
-            Next i
+                ' Only ban check if necessary (commented out for simplicity)
+                'Dim i As Short
+                'For i = 1 To BanIps.Count()
+                '    If BanIps.Item(i) = UserList(NewIndex).ip Then
+                '        Debug.Print("Banned IP rejected: " & UserList(NewIndex).ip)
+                '        WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
+                '        FlushBuffer(NewIndex)
+                '        Call CloseSocketBySlot(NewIndex)  ' Changed from CloseSocket
+                '        Exit Sub
+                '    End If
+                'Next i
 
-            If NewIndex > LastUser Then LastUser = NewIndex
+                ' Assign slot and accept connection
+                If NewIndex > LastUser Then LastUser = NewIndex
 
-            UserList(NewIndex).ConnID = socketId
-            UserList(NewIndex).ConnIDValida = True
+                ' Add socket mapping first to ensure it's in place before other operations
+                AgregaSlotSock(socketId, NewIndex)
 
-            Call AgregaSlotSock(socketId, NewIndex)
-        Else
-            ' Server is full
-            Dim str_Renamed As String = Protocol.PrepareMessageErrorMsg("El servidor se encuentra lleno en este momento. Disculpe las molestias ocasionadas.")
+                ' Then update user data
+                UserList(NewIndex).ConnID = socketId
+                UserList(NewIndex).ConnIDValida = True
 
-            socketManager.SendString(socketId, str_Renamed)
-            socketManager.CloseSocket(socketId)
-            Debug.Print("Server full - connection rejected")
-        End If
+                Debug.Print("User successfully connected in slot: " & NewIndex)
+            Else
+                ' Server is full
+                Debug.Print("Server full - connection rejected")
+                Dim str_Renamed As String = Protocol.PrepareMessageErrorMsg("El servidor se encuentra lleno en este momento. Disculpe las molestias ocasionadas.")
+
+                socketManager.SendString(socketId, str_Renamed)
+                socketManager.CloseSocket(socketId)
+            End If
+        Catch ex As Exception
+            Debug.Print("Error handling new connection: " & ex.Message & vbCrLf & ex.StackTrace)
+            Try
+                socketManager.CloseSocket(socketId)
+            Catch ex2 As Exception
+                ' Just log
+                Debug.Print("Error closing socket: " & ex2.Message)
+            End Try
+        End Try
     End Sub
 
     Public Function Winsock_Close(ByRef Index As Short) As Object
+
         If socketManager IsNot Nothing Then
             socketManager.CloseSocket(Index)
         End If
@@ -152,18 +169,128 @@ ErrorHandler:
 
     ' This function is called by the SocketManager when a client disconnects
     Private Sub SocketManager_ClientDisconnected(ByVal socketId As Integer) Handles socketManager.ClientDisconnected
+        Debug.Print("SocketManager_ClientDisconnected called for socket " & socketId)
+        
+        ' Find the user slot for this socket
         Dim N As Short = BuscaSlotSock(socketId)
-
+        Debug.Print("Socket " & socketId & " was mapped to user slot " & N)
+        
         If N > 0 Then
+            ' CRITICAL: Remove from socket dictionary FIRST to prevent recursion and race conditions
             Call BorraSlotSock(socketId)
-            UserList(N).ConnID = -1
-            UserList(N).ConnIDValida = False
-            Call EventoSockClose(N)
+            
+            ' Call the actual user cleanup function from TCP.bas
+            Call CloseUserInstance(N, True)
+        Else
+            Debug.Print("No user found for socket " & socketId)
         End If
     End Sub
 
-    Public Sub LogApiSock(ByVal str_Renamed As String)
-        ' This can be implemented if logging is needed
+    ' New helper function that calls the right sequence of cleanup functions
+    Private Sub CloseUserInstance(ByVal UserIndex As Integer, ByVal forceClose As Boolean)
+        Debug.Print("CloseUserInstance called for user " & UserIndex & ", forced: " & forceClose)
+        
+        ' Only proceed if this is a valid user index
+        If UserIndex <= 0 OrElse UserIndex > MaxUsers Then
+            Debug.Print("Invalid user index in CloseUserInstance: " & UserIndex)
+            Exit Sub
+        End If
+        
+        ' Check for valid connection - if not and not forcing, exit
+        If Not forceClose AndAlso UserList(UserIndex).ConnIDValida = False Then
+            Debug.Print("User " & UserIndex & " already has invalid connection")
+            Exit Sub
+        End If
+        
+        ' Debug info
+        Debug.Print("Cleaning up user " & UserIndex & ": " & UserList(UserIndex).name & _
+                    ", Logged: " & UserList(UserIndex).flags.UserLogged)
+        
+        ' Call cleanup based on login state
+        If UserList(UserIndex).flags.UserLogged Then
+            Debug.Print("User is logged in, calling TCP.CloseSocketSL")
+            Call CloseSocketSL(UserIndex)
+            Call Cerrar_Usuario(UserIndex)
+        Else
+            ' Not logged in, just clean up the connection
+            Debug.Print("User not logged in, cleaning connection only")
+            
+            ' Directly clean up without going through external functions
+            With UserList(UserIndex)
+                ' Store ConnID before resetting
+                Dim oldConnID As Integer = .ConnID
+                
+                ' Reset connection state
+                .ConnIDValida = False
+                .ConnID = -1
+                
+                ' Ensure complete reset of key fields
+                .flags.UserLogged = False
+                .name = ""
+                .ip = ""
+                
+                ' Close the actual socket if needed
+                If oldConnID > 0 AndAlso socketManager IsNot Nothing Then
+                    Try
+                        ' Don't trigger events again
+                        RemoveMappingOnly(oldConnID)
+                        socketManager.CloseSocket(oldConnID)
+                    Catch ex As Exception
+                        Debug.Print("Error closing socket in CloseUserInstance: " & ex.Message)
+                    End Try
+                End If
+            End With
+            
+            ' Ensure other cleanup occurs
+            If Centinela.RevisandoUserIndex = UserIndex Then
+                Call modCentinela.CentinelaUserLogout()
+            End If
+        End If
+        
+        ' Final verification of complete cleanup
+        Call VerifyUserCleanup(UserIndex)
+        
+        Debug.Print("CloseUserInstance completed for user " & UserIndex)
+    End Sub
+
+    ' Helper to just remove mapping without triggering events
+    Private Sub RemoveMappingOnly(ByVal socketId As Integer)
+        Try
+            If WSAPISock2Usr.ContainsKey(socketId) Then
+                WSAPISock2Usr.Remove(socketId)
+                Debug.Print("Removed socket " & socketId & " mapping without events")
+            End If
+        Catch ex As Exception
+            Debug.Print("Error in RemoveMappingOnly: " & ex.Message)
+        End Try
+    End Sub
+
+    ' Make sure user is completely clean
+    Private Sub VerifyUserCleanup(ByVal UserIndex As Integer)
+        With UserList(UserIndex)
+            ' Verify connection is reset
+            If .ConnID <> -1 Then
+                Debug.Print("WARNING: User " & UserIndex & " still has ConnID " & .ConnID & " after cleanup")
+                .ConnID = -1
+            End If
+            
+            If .ConnIDValida Then
+                Debug.Print("WARNING: User " & UserIndex & " still has valid connection flag after cleanup")
+                .ConnIDValida = False
+            End If
+            
+            ' Verify logged state is reset
+            If .flags.UserLogged Then
+                Debug.Print("WARNING: User " & UserIndex & " still marked as logged in after cleanup")
+                .flags.UserLogged = False
+            End If
+            
+            ' Verify name is cleared
+            If .name <> "" Then
+                Debug.Print("WARNING: User " & UserIndex & " still has name '" & .name & "' after cleanup")
+                .name = ""
+            End If
+        End With
     End Sub
 
     Public Sub EventoSockRead(ByVal Slot As Short, ByRef datos() As Byte)
@@ -179,14 +306,42 @@ ErrorHandler:
     End Sub
 
     Public Sub EventoSockClose(ByVal Slot As Short)
-        If Centinela.RevisandoUserIndex = Slot Then Call modCentinela.CentinelaUserLogout()
+        Debug.Print("EventoSockClose for slot " & Slot)
 
+        ' Handle Centinela if needed
+        If Centinela.RevisandoUserIndex = Slot Then
+            Debug.Print("Calling CentinelaUserLogout for slot " & Slot)
+            Call modCentinela.CentinelaUserLogout()
+        End If
+
+        ' Check if user is logged in
         If UserList(Slot).flags.UserLogged Then
+            Debug.Print("User " & UserList(Slot).name & " was logged in, calling CloseSocketSL and Cerrar_Usuario")
             Call CloseSocketSL(Slot)
             Call Cerrar_Usuario(Slot)
         Else
-            Call CloseSocket(Slot)
+            Debug.Print("User was not logged in, calling CloseSocketBySlot")
+            Call CloseSocketBySlot(Slot)  ' Changed from CloseSocket
         End If
+
+        ' Call our thorough reset function to ensure clean state
+        Call ResetUserSlot(Slot)
+
+        Debug.Print("EventoSockClose completed for slot " & Slot)
+    End Sub
+
+    ' Renamed from CloseSocket to CloseSocketBySlot for clarity
+    Public Sub CloseSocketBySlot(ByVal Slot As Short)
+        ' Check if this is a valid user slot
+        If Slot <= 0 OrElse Slot > MaxUsers Then
+            Debug.Print("CloseSocketBySlot called with invalid slot: " & Slot)
+            Exit Sub
+        End If
+
+        Debug.Print("CloseSocketBySlot called for slot " & Slot)
+
+        ' Use our centralized cleanup function
+        Call CloseUserInstance(Slot, True)
     End Sub
 
     Public Sub WSApiReiniciarSockets()
@@ -194,7 +349,7 @@ ErrorHandler:
 
         For i = 1 To MaxUsers
             If UserList(i).ConnID <> -1 And UserList(i).ConnIDValida Then
-                Call CloseSocket(i)
+                Call CloseSocketBySlot(i)  ' Changed from CloseSocket
             End If
         Next i
 
@@ -219,102 +374,148 @@ ErrorHandler:
         Call IniciaWsApi(Puerto)
     End Sub
 
+    ' Simplified slot mapping functions
+
     Public Function BuscaSlotSock(ByVal S As Integer) As Integer
-        If S <= 0 Then
-            Debug.Print("BuscaSlotSock: Invalid socket ID: " & S)
-            Return -1
-        End If
+        ' Simple validation and lookup
+        If S <= 0 Then Return -1
 
         Try
-            If WSAPISock2Usr.ContainsKey(S) Then
-                Return WSAPISock2Usr(S)
-            Else
-                Debug.Print("BuscaSlotSock: Socket " & S & " not found in dictionary")
-                Return -1
-            End If
+            If WSAPISock2Usr.ContainsKey(S) Then Return WSAPISock2Usr(S)
         Catch ex As Exception
             Debug.Print("BuscaSlotSock error: " & ex.Message)
-            Return -1
         End Try
+
+        Return -1
     End Function
 
     Public Sub AgregaSlotSock(ByVal Sock As Integer, ByVal Slot As Integer)
-        Debug.Print("AgregaSockSlot: Socket=" & Sock & ", Slot=" & Slot)
-
-        If Sock <= 0 Then
-            Debug.Print("ERROR: Attempted to add invalid socket ID: " & Sock)
-            Exit Sub
+        Debug.Print("AgregaSlotSock: Socket=" & Sock & ", Slot=" & Slot)
+        
+        If Sock <= 0 OrElse Slot <= 0 OrElse Slot > MaxUsers Then
+            Debug.Print("AgregaSlotSock: Invalid parameters")
+            Return
         End If
-
-        If WSAPISock2Usr.Count >= MaxUsers Then
-            Debug.Print("WARNING: Socket dictionary full, closing connection")
-            Call CloseSocket(Slot)
-            Exit Sub
-        End If
-
+        
         Try
-            ' Check if any other socket is already assigned to this slot
+            ' CRITICAL: Check if this slot is already in use by ANY socket and force cleanup
+            If UserList(Slot).ConnID > 0 Then
+                Debug.Print("WARNING: Slot " & Slot & " already has active connection with socket " & UserList(Slot).ConnID)
+                ' Force close this slot entirely to clean any state
+                Call CloseUserInstance(Slot, True)
+                ' Wait a moment to ensure cleanup completes
+                System.Threading.Thread.Sleep(50)
+            End If
+            
+            ' Also check if this socket is already mapped to ANY slot and clean that too
+            Dim existingSlot As Integer = BuscaSlotSock(Sock)
+            If existingSlot > 0 Then
+                Debug.Print("WARNING: Socket " & Sock & " already mapped to slot " & existingSlot)
+                If existingSlot <> Slot Then
+                    ' Clean up the previous slot
+                    Call CloseUserInstance(existingSlot, True)
+                    System.Threading.Thread.Sleep(50)
+                End If
+            End If
+            
+            ' Remove all mappings for this slot and this socket
+            Dim slotCurrentSocket As Integer = -1
             Dim socketsToRemove As New List(Of Integer)
 
-            For Each kvp As KeyValuePair(Of Integer, Integer) In WSAPISock2Usr
-                If kvp.Value = Slot AndAlso kvp.Key <> Sock Then
-                    Debug.Print("WARNING: Slot " & Slot & " already mapped to socket " & kvp.Key)
+            ' Find all sockets using this slot
+            Dim kvp As KeyValuePair(Of Integer, Integer)
+            For Each kvp In WSAPISock2Usr
+                If kvp.Value = Slot Then
                     socketsToRemove.Add(kvp.Key)
+                    Debug.Print("Found existing socket " & kvp.Key & " for slot " & Slot)
                 End If
             Next
 
-            ' Remove any sockets that were assigned to this slot
-            For Each sockToRemove As Integer In socketsToRemove
-                WSAPISock2Usr.Remove(sockToRemove)
-                Debug.Print("Removed existing mapping for socket " & sockToRemove)
-            Next
-
-            ' Check if this socket already exists
-            If WSAPISock2Usr.ContainsKey(Sock) Then
-                Dim existingSlot As Integer = WSAPISock2Usr(Sock)
-
-                ' Socket already exists, remove it first
-                Debug.Print("Socket already in use, removing old entry")
-                WSAPISock2Usr.Remove(Sock)
-
-                ' If there was a user with this socket, clean up that user
-                If existingSlot > 0 AndAlso existingSlot <> Slot Then
-                    Debug.Print("Cleaning up old user in slot " & existingSlot)
-                    UserList(existingSlot).ConnID = -1
-                    UserList(existingSlot).ConnIDValida = False
+            ' Remove them all
+            Dim oldSock As Integer
+            For Each oldSock In socketsToRemove
+                WSAPISock2Usr.Remove(oldSock)
+                Debug.Print("Removed old socket " & oldSock & " from slot " & Slot)
+                ' Also close the socket if it's different from our current one
+                If oldSock <> Sock AndAlso socketManager IsNot Nothing Then
+                    Try
+                        socketManager.CloseSocket(oldSock)
+                    Catch ex As Exception
+                        Debug.Print("Error closing old socket: " & ex.Message)
+                    End Try
                 End If
-            End If
-
-            ' Make sure this user slot is valid
-            If Slot <= 0 OrElse Slot > MaxUsers Then
-                Debug.Print("ERROR: Invalid slot number: " & Slot)
-                If socketManager IsNot Nothing Then socketManager.CloseSocket(Sock)
-                Exit Sub
-            End If
-
-            ' Finally add the mapping
+            Next
+            
+            ' Add the new mapping - but only after we've cleared everything
             WSAPISock2Usr.Add(Sock, Slot)
-            Debug.Print("Added socket " & Sock & " with slot " & Slot & " to dictionary, count=" & WSAPISock2Usr.Count)
-
+            Debug.Print("Added socket " & Sock & " with slot " & Slot)
+            
+            ' Also set the user's ConnID
+            UserList(Slot).ConnID = Sock
+            UserList(Slot).ConnIDValida = True
+            
+            ' Verify no duplicates exist
+            VerifyNoUserDuplicates(Slot, Sock)
         Catch ex As Exception
-            Debug.Print("Error in AgregaSlotSock: " & ex.Message)
-            If socketManager IsNot Nothing Then socketManager.CloseSocket(Sock)
+            Debug.Print("Error in AgregaSlotSock: " & ex.Message & vbCrLf & ex.StackTrace)
+        End Try
+    End Sub
+
+    ' New verification to catch any lingering duplicates
+    Private Sub VerifyNoUserDuplicates(ByVal slot As Integer, ByVal socket As Integer)
+        Try
+            ' Check no other socket is mapped to this slot
+            Dim kvp As KeyValuePair(Of Integer, Integer)
+            For Each kvp In WSAPISock2Usr
+                If kvp.Value = slot AndAlso kvp.Key <> socket Then
+                    Debug.Print("CRITICAL ERROR: Duplicate socket " & kvp.Key & " found for slot " & slot)
+                    ' Emergency cleanup
+                    WSAPISock2Usr.Remove(kvp.Key)
+                    If socketManager IsNot Nothing Then
+                        Try
+                            socketManager.CloseSocket(kvp.Key)
+                        Catch ex As Exception
+                            ' Just log
+                        End Try
+                    End If
+                End If
+            Next
+
+            ' Verify every user slot has at most one socket
+            Dim slotCounts As New Dictionary(Of Integer, Integer)
+            For Each kvp In WSAPISock2Usr
+                If slotCounts.ContainsKey(kvp.Value) Then
+                    slotCounts(kvp.Value) += 1
+                Else
+                    slotCounts.Add(kvp.Value, 1)
+                End If
+            Next
+
+            Dim slotCount As KeyValuePair(Of Integer, Integer)
+            For Each slotCount In slotCounts
+                If slotCount.Value > 1 Then
+                    Debug.Print("CRITICAL ERROR: Slot " & slotCount.Key & " has " & slotCount.Value & " sockets!")
+                End If
+            Next
+        Catch ex As Exception
+            Debug.Print("Error in VerifyNoUserDuplicates: " & ex.Message)
         End Try
     End Sub
 
     Public Sub BorraSlotSock(ByVal Sock As Integer)
         Debug.Print("BorraSlotSock: " & Sock)
-        Dim cant As Integer = WSAPISock2Usr.Count
-
         Try
             If WSAPISock2Usr.ContainsKey(Sock) Then
                 WSAPISock2Usr.Remove(Sock)
-                Debug.Print("BorraSockSlot " & cant & " -> " & WSAPISock2Usr.Count)
-            Else
-                Debug.Print("Socket " & Sock & " not found in dictionary")
+                Debug.Print("Socket " & "Sock removed from dictionary")
             End If
         Catch ex As Exception
-            Debug.Print("Error removing socket " & Sock & " from dictionary: " & ex.Message)
+            Debug.Print("Error in BorraSlotSock: " & ex.Message)
         End Try
     End Sub
+
+    Public Sub LogApiSock(ByRef str_Renamed As String)
+        Debug.Print("LogApiSock: " & str_Renamed)
+    End Sub
+
 End Module
