@@ -1232,30 +1232,35 @@ Errhandler:
 		End With
 		
 	End Sub
-	
+
 	' TODO MIGRA: funciona pero es lento e ineficiente
 	Public Function GetVar(ByVal filePath As String, ByVal sectionName As String, ByVal keyName As String, Optional ByRef EmptySpaces As Integer = 1024) As String
 		Dim fileNumber As Short
 		Dim currentLine As String
 		Dim currentSection As String
 		Dim equalPos As Integer
-		
+
 		GetVar = "" ' Default return if not found
-		
+
+		' Check if file exists
+		If Not IO.File.Exists(filePath) Then
+			Exit Function
+		End If
+
 		On Error GoTo CleanExit ' Basic error handling
-		
-		fileNumber = FreeFile
+
+		fileNumber = FreeFile()
 		FileOpen(fileNumber, filePath, OpenMode.Input)
-		
+
 		currentSection = ""
 		While Not EOF(fileNumber)
 			currentLine = LineInput(fileNumber)
 			currentLine = Trim(currentLine)
-			
+
 			' Check if it's a section line, e.g. [SECTION]
 			If Left(currentLine, 1) = "[" And Right(currentLine, 1) = "]" Then
 				currentSection = Mid(currentLine, 2, Len(currentLine) - 2)
-			ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then 
+			ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then
 				' We are in the correct section, check if line contains the key
 				equalPos = InStr(1, currentLine, "=", CompareMethod.Text)
 				If equalPos > 1 Then
@@ -1268,11 +1273,11 @@ Errhandler:
 				End If
 			End If
 		End While
-		
-CleanExit: 
+
+CleanExit:
 		FileClose(fileNumber)
 	End Function
-	
+
 	Sub CargarBackUp()
 		'***************************************************
 		'Author: Unknown

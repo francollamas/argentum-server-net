@@ -451,15 +451,11 @@ Errhandler:
 		PrintLine(N, Today & " " & TimeOfDay & " server iniciado " & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision)
 		FileClose(N)
 
-		tInicioServer = GetTickCount() And &H7FFFFFFF
+		tInicioServer = GetTickCount()
 		Call InicializaEstadisticas()
-
-		Application.EnableVisualStyles()
-		Application.SetCompatibleTextRenderingDefault(False)
 
 		Dim mainForm As New frmMain()
 		Application.Run(mainForm) ' Mantiene la aplicación viva hasta que se cierre frmMain
-
 	End Sub
 	
 	Function FileExist(ByVal file As String) As Boolean
@@ -1546,8 +1542,8 @@ Errhandler:
 		'***************************************************
 		
 		Dim Ta As Integer
-		Ta = GetTickCount() And &H7FFFFFFF
-		
+		Ta = GetTickCount()
+
 		Call EstadisticasWeb.Inicializa(frmMain.Handle.ToInt32)
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_MAPAS, NumMaps)
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)

@@ -2055,7 +2055,7 @@ Errhandler:
 			
 			'Barrin 3/10/03
 			'Esperamos a que se termine de concentrar
-			TActual = GetTickCount() And &H7FFFFFFF
+			TActual = GetTickCount()
 			If TActual - .Counters.tInicioMeditar < TIEMPO_INICIOMEDITAR Then
 				Exit Sub
 			End If

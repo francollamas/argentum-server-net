@@ -45,9 +45,9 @@ Module modNuevoTimer
 		'***************************************************
 		
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerLanzarSpell >= IntervaloUserPuedeCastear Then
 			If Actualizar Then
 				UserList(UserIndex).Counters.TimerLanzarSpell = TActual
@@ -67,9 +67,9 @@ Module modNuevoTimer
 		'***************************************************
 		
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloUserPuedeAtacar Then
 			If Actualizar Then
 				UserList(UserIndex).Counters.TimerPuedeAtacar = TActual
@@ -89,9 +89,9 @@ Module modNuevoTimer
 		'***************************************************
 		
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerGolpeUsar >= IntervaloGolpeUsar Then
 			If Actualizar Then
 				UserList(UserIndex).Counters.TimerGolpeUsar = TActual
@@ -114,9 +114,9 @@ Module modNuevoTimer
 			If .Counters.TimerMagiaGolpe > .Counters.TimerLanzarSpell Then
 				Exit Function
 			End If
-			
-			TActual = GetTickCount() And &H7FFFFFFF
-			
+
+			TActual = GetTickCount()
+
 			If TActual - .Counters.TimerLanzarSpell >= IntervaloMagiaGolpe Then
 				If Actualizar Then
 					.Counters.TimerMagiaGolpe = TActual
@@ -142,9 +142,9 @@ Module modNuevoTimer
 		If UserList(UserIndex).Counters.TimerGolpeMagia > UserList(UserIndex).Counters.TimerPuedeAtacar Then
 			Exit Function
 		End If
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloGolpeMagia Then
 			If Actualizar Then
 				UserList(UserIndex).Counters.TimerGolpeMagia = TActual
@@ -155,12 +155,12 @@ Module modNuevoTimer
 			IntervaloPermiteGolpeMagia = False
 		End If
 	End Function
-	
+
 	' ATAQUE CUERPO A CUERPO
 	'Public Function IntervaloPermiteAtacar(ByVal UserIndex As Integer, Optional ByVal Actualizar As Boolean = True) As Boolean
 	'Dim TActual As Long
 	'
-	'TActual = GetTickCount() And &H7FFFFFFF''
+	'TActual = GetTickCount()''
 	'
 	'If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloUserPuedeAtacar Then
 	'    If Actualizar Then UserList(UserIndex).Counters.TimerPuedeAtacar = TActual
@@ -169,7 +169,7 @@ Module modNuevoTimer
 	'    IntervaloPermiteAtacar = False
 	'End If
 	'End Function
-	
+
 	' TRABAJO
 	Public Function IntervaloPermiteTrabajar(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) As Boolean
 		'***************************************************
@@ -179,9 +179,9 @@ Module modNuevoTimer
 		'***************************************************
 		
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerPuedeTrabajar >= IntervaloUserPuedeTrabajar Then
 			If Actualizar Then UserList(UserIndex).Counters.TimerPuedeTrabajar = TActual
 			IntervaloPermiteTrabajar = True
@@ -199,9 +199,9 @@ Module modNuevoTimer
 		'***************************************************
 		
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerUsar >= IntervaloUserPuedeUsar Then
 			If Actualizar Then
 				UserList(UserIndex).Counters.TimerUsar = TActual
@@ -230,9 +230,9 @@ Module modNuevoTimer
 		'***************************************************
 		
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		If TActual - UserList(UserIndex).Counters.TimerPuedeUsarArco >= IntervaloFlechasCazadores Then
 			If Actualizar Then UserList(UserIndex).Counters.TimerPuedeUsarArco = TActual
 			IntervaloPermiteUsarArcos = True
@@ -250,9 +250,9 @@ Module modNuevoTimer
 		'13/11/2009: ZaMa - Add the Timer which determines wether the user can be atacked by a NPc or not
 		'**************************************************************
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		With UserList(UserIndex)
 			' Inicializa el timer
 			If Actualizar Then
@@ -279,9 +279,9 @@ Module modNuevoTimer
 		'13/11/2009: ZaMa - Add the Timer which determines wether the user still owns a Npc or not
 		'**************************************************************
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		With UserList(UserIndex)
 			' Inicializa el timer
 			If Actualizar Then
@@ -306,9 +306,9 @@ Module modNuevoTimer
 		'13/01/2010: ZaMa - Add the Timer which determines wether the user can be atacked by an user or not
 		'**************************************************************
 		Dim TActual As Integer
-		
-		TActual = GetTickCount() And &H7FFFFFFF
-		
+
+		TActual = GetTickCount()
+
 		With UserList(UserIndex)
 			' Inicializa el timer
 			If Actualizar Then

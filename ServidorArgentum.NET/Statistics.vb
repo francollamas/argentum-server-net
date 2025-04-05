@@ -76,8 +76,8 @@ Module Statistics
 		
 		'A new user connected, load it's trainning time count
 		trainningInfo(UserIndex).trainningTime = Val(GetVar(CharPath & UCase(UserList(UserIndex).name) & ".chr", "RESEARCH", "TrainningTime", 30))
-		
-		trainningInfo(UserIndex).startTick = (GetTickCount() And &H7FFFFFFF)
+
+		trainningInfo(UserIndex).startTick = GetTickCount()
 	End Sub
 	
 	Public Sub UserDisconnected(ByVal UserIndex As Short)
@@ -89,10 +89,10 @@ Module Statistics
 		
 		With trainningInfo(UserIndex)
 			'Update trainning time
-			.trainningTime = .trainningTime + CShort(CShort(GetTickCount() And &H7FFFFFFF) - .startTick) / 1000
-			
-			.startTick = (GetTickCount() And &H7FFFFFFF)
-			
+			.trainningTime = .trainningTime + (GetTickCount() - .startTick) / 1000
+
+			.startTick = GetTickCount()
+
 			'Store info in char file
 			Call WriteVar(CharPath & UCase(UserList(UserIndex).name) & ".chr", "RESEARCH", "TrainningTime", CStr(.trainningTime))
 		End With
@@ -111,14 +111,14 @@ Module Statistics
 		With trainningInfo(UserIndex)
 			'Log the data
 			FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\statistics.log", OpenMode.Append, , OpenShare.Shared)
-			
-			PrintLine(handle, UCase(UserList(UserIndex).name) & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainningTime + CShort(CShort(GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos.")
-			
+
+			PrintLine(handle, UCase(UserList(UserIndex).name) & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainningTime + (GetTickCount() - .startTick) / 1000) & " segundos.")
+
 			FileClose(handle)
 			
 			'Reset data
 			.trainningTime = 0
-			.startTick = (GetTickCount() And &H7FFFFFFF)
+			.startTick = GetTickCount()
 		End With
 	End Sub
 	
