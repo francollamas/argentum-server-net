@@ -78,6 +78,7 @@
         Me.CantUsuarios = New System.Windows.Forms.Label()
         Me.txStatus = New System.Windows.Forms.Label()
         Me.Label1 = New Microsoft.VisualBasic.Compatibility.VB6.LabelArray(Me.components)
+        Me.ConnectionTimer = New System.Windows.Forms.Timer(Me.components)
         Me.MainMenu1.SuspendLayout()
         Me.Frame1.SuspendLayout()
         CType(Me.Label1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -192,6 +193,9 @@
         '
         Me.KillLog.Interval = 60000
         '
+        'TIMER_AI
+        '
+        '
         'Frame1
         '
         Me.Frame1.BackColor = System.Drawing.SystemColors.Control
@@ -247,7 +251,7 @@
         Me.BroadMsg.MaxLength = 0
         Me.BroadMsg.Name = "BroadMsg"
         Me.BroadMsg.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.BroadMsg.Size = New System.Drawing.Size(249, 21)
+        Me.BroadMsg.Size = New System.Drawing.Size(249, 20)
         Me.BroadMsg.TabIndex = 4
         '
         '_Label1_0
@@ -300,6 +304,11 @@
         Me.txStatus.Size = New System.Drawing.Size(0, 14)
         Me.txStatus.TabIndex = 0
         '
+        'ConnectionTimer
+        '
+        Me.ConnectionTimer.Enabled = True
+        Me.ConnectionTimer.Interval = 5
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
@@ -327,10 +336,13 @@
         Me.MainMenu1.ResumeLayout(False)
         Me.MainMenu1.PerformLayout()
         Me.Frame1.ResumeLayout(False)
+        Me.Frame1.PerformLayout()
         CType(Me.Label1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
+
+    Friend WithEvents ConnectionTimer As Timer
 #End Region
 End Class

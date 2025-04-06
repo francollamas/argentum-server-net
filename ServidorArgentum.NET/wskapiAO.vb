@@ -28,6 +28,7 @@ Module wskapiAO
     ''' Handles a connection request from a client
     ''' </summary>
     Private Sub HandleConnectionReceived(socketID As Integer, clientIP As String)
+        ' This runs on the main thread via the Windows.Forms event system
         Dim NewIndex As Integer = NextOpenUser()
         
         If NewIndex <= MaxUsers Then
@@ -66,6 +67,7 @@ Module wskapiAO
     ''' Handles data received from a client
     ''' </summary>
     Private Sub HandleDataReceived(socketID As Integer, data() As Byte)
+        ' This now runs on the main thread via the synchronized queue system
         Dim userIndex As Integer = BuscaSlotSock(socketID)
         
         If userIndex > 0 Then
@@ -83,6 +85,7 @@ Module wskapiAO
     ''' Handles closure of a socket connection
     ''' </summary>
     Private Sub HandleConnectionClosed(socketID As Integer)
+        ' This runs on the main thread via the Windows.Forms event system
         Dim userIndex As Integer = BuscaSlotSock(socketID)
 
         If userIndex > 0 Then
@@ -95,17 +98,19 @@ Module wskapiAO
         End If
     End Sub
 
-
     ''' <summary>
     ''' Handles connection error
     ''' </summary>
     Private Sub HandleConnectionError(errorMessage As String)
+        ' This runs on the main thread via the Windows.Forms event system
         Debug.Print("Connection Error: " & errorMessage)
     End Sub
+    
     ''' <summary>
     ''' Closes a socket connection
     ''' </summary>
     Public Function Winsock_Close(ByRef socketID As Integer) As Object
+        ' This is called from the main thread
         Dim userIndex As Integer = BuscaSlotSock(socketID)
 
         If socketID > 0 Then
@@ -126,6 +131,7 @@ Module wskapiAO
     ''' Initializes the socket API
     ''' </summary>
     Public Sub IniciaWsApi(ByVal port As Integer)
+        ' Set up event handlers to process messages on the main thread
         AddHandler SocketManager.ConnectionReceived, AddressOf HandleConnectionReceived
         AddHandler SocketManager.DataReceived, AddressOf HandleDataReceived
         AddHandler SocketManager.ConnectionClosed, AddressOf HandleConnectionClosed
@@ -165,7 +171,8 @@ Module wskapiAO
                 returnCode = -1
             End If
             
-            System.Windows.Forms.Application.DoEvents()
+            ' Process any pending messages that may have arrived
+            SocketManager.ProcessPendingMessages()
         ElseIf socketID <> -1 AndAlso Not UserList(userIndex).ConnIDValida Then
             If Not UserList(userIndex).Counters.Saliendo Then
                 returnCode = -1
@@ -180,6 +187,14 @@ ErrorHandler:
         Call UserList(userIndex).outgoingData.WriteASCIIStringFixed(message)
         Resume Next
     End Function
+    
+    ''' <summary>
+    ''' Process any pending messages in the queue (can be called from main game loop)
+    ''' </summary>
+    Public Sub ProcessNetworkMessages()
+        ' Call this from your main game loop or timer to ensure messages get processed
+        SocketManager.ProcessPendingMessages()
+    End Sub
     
     ''' <summary>
     ''' Reinitializes all sockets
