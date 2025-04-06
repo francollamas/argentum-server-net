@@ -579,14 +579,14 @@ ErrorHandler:
 		Call LogError("Error tLluviaTimer")
 		
 	End Sub
-	
+
 	Private Sub tPiqueteC_Tick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles tPiqueteC.Tick
 		Dim NuevaA As Boolean
 		' Dim NuevoL As Boolean
 		Dim GI As Short
-		
+
 		Dim i As Integer
-		
+
 		On Error GoTo Errhandler
 		For i = 1 To LastUser
 			With UserList(i)
@@ -594,7 +594,7 @@ ErrorHandler:
 					If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ANTIPIQUETE Then
 						.Counters.PiqueteC = .Counters.PiqueteC + 1
 						Call WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!", Protocol.FontTypeNames.FONTTYPE_INFO)
-						
+
 						If .Counters.PiqueteC > 23 Then
 							.Counters.PiqueteC = 0
 							Call Encarcelar(i, TIEMPO_CARCEL_PIQUETE)
@@ -602,7 +602,7 @@ ErrorHandler:
 					Else
 						.Counters.PiqueteC = 0
 					End If
-					
+
 					If .flags.Muerto = 1 Then
 						If .flags.Traveling = 1 Then
 							If .Counters.goHome <= 0 Then
@@ -615,12 +615,12 @@ ErrorHandler:
 							End If
 						End If
 					End If
-					
+
 					'ustedes se preguntaran que hace esto aca?
 					'bueno la respuesta es simple: el codigo de AO es una mierda y encontrar
 					'todos los puntos en los cuales la alineacion puede cambiar es un dolor de
 					'huevos, asi que lo controlo aca, cada 6 segundos, lo cual es razonable
-					
+
 					GI = .GuildIndex
 					If GI > 0 Then
 						NuevaA = False
@@ -637,29 +637,14 @@ ErrorHandler:
 						'                        Call LogClanes("¡El clan tiene nuevo lider!")
 						'                    End If
 					End If
-					
+
 					Call FlushBuffer(i)
 				End If
 			End With
 		Next i
 		Exit Sub
-		
-Errhandler: 
+
+Errhandler:
 		Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
-	End Sub
-	
-	Private Sub Winsock1_CloseEvent(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Winsock1.CloseEvent
-		Dim Index As Short = Winsock1.GetIndex(eventSender)
-		Winsock_Close(Index)
-	End Sub
-	
-	Private Sub Winsock1_ConnectionRequest(ByVal eventSender As System.Object, ByVal eventArgs As AxMSWinsockLib.DMSWinsockControlEvents_ConnectionRequestEvent) Handles Winsock1.ConnectionRequest
-		Dim Index As Short = Winsock1.GetIndex(eventSender)
-		Winsock_ConnectionRequest(Index, eventArgs.requestID)
-	End Sub
-	
-	Private Sub Winsock1_DataArrival(ByVal eventSender As System.Object, ByVal eventArgs As AxMSWinsockLib.DMSWinsockControlEvents_DataArrivalEvent) Handles Winsock1.DataArrival
-		Dim Index As Short = Winsock1.GetIndex(eventSender)
-		Winsock_DataArrival(Index, eventArgs.bytesTotal)
 	End Sub
 End Class
