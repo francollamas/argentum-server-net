@@ -193,7 +193,7 @@ Errhandler:
 		Call WriteSpawnList(UserIndex, npcNames)
 		
 	End Sub
-
+	
 	'UPGRADE_WARNING: La aplicación terminará cuando Sub Main() finalice. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'
 	Public Sub Main()
 		'***************************************************
@@ -201,16 +201,13 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-
-		'Application.EnableVisualStyles()
-		' Application.SetCompatibleTextRenderingDefault(False)
-
+		
 		On Error Resume Next
 		Dim f As Date
-
+		
 		ChDir(My.Application.Info.DirectoryPath)
 		ChDrive(My.Application.Info.DirectoryPath)
-
+		
 		Call LoadMotd()
 		Call BanIpCargar()
 
@@ -224,21 +221,21 @@ Errhandler:
 
 		Prision.Map = 66
 		Libertad.Map = 66
-
+		
 		Prision.X = 75
 		Prision.Y = 47
 		Libertad.X = 75
 		Libertad.Y = 65
-
-
+		
+		
 		LastBackup = VB6.Format(Now, "Short Time")
 		Minutos = VB6.Format(Now, "Short Time")
-
+		
 		IniPath = My.Application.Info.DirectoryPath & "\"
 		DatPath = My.Application.Info.DirectoryPath & "\Dat\"
-
-
-
+		
+		
+		
 		LevelSkill_Renamed(1).LevelValue = 3
 		LevelSkill_Renamed(2).LevelValue = 5
 		LevelSkill_Renamed(3).LevelValue = 7
@@ -289,14 +286,14 @@ Errhandler:
 		LevelSkill_Renamed(48).LevelValue = 100
 		LevelSkill_Renamed(49).LevelValue = 100
 		LevelSkill_Renamed(50).LevelValue = 100
-
-
+		
+		
 		ListaRazas(Declaraciones.eRaza.Humano) = "Humano"
 		ListaRazas(Declaraciones.eRaza.Elfo) = "Elfo"
 		ListaRazas(Declaraciones.eRaza.Drow) = "Drow"
 		ListaRazas(Declaraciones.eRaza.Gnomo) = "Gnomo"
 		ListaRazas(Declaraciones.eRaza.Enano) = "Enano"
-
+		
 		ListaClases(Declaraciones.eClass.Mage) = "Mago"
 		ListaClases(Declaraciones.eClass.Cleric) = "Clerigo"
 		ListaClases(Declaraciones.eClass.Warrior) = "Guerrero"
@@ -309,7 +306,7 @@ Errhandler:
 		ListaClases(Declaraciones.eClass.Hunter) = "Cazador"
 		ListaClases(Declaraciones.eClass.Worker) = "Trabajador"
 		ListaClases(Declaraciones.eClass.Pirat) = "Pirata"
-
+		
 		SkillsNames(Declaraciones.eSkill.Magia) = "Magia"
 		SkillsNames(Declaraciones.eSkill.Robar) = "Robar"
 		SkillsNames(Declaraciones.eSkill.Tacticas) = "Evasión en combate"
@@ -330,88 +327,88 @@ Errhandler:
 		SkillsNames(Declaraciones.eSkill.Proyectiles) = "Combate a distancia"
 		SkillsNames(Declaraciones.eSkill.Wrestling) = "Combate sin armas"
 		SkillsNames(Declaraciones.eSkill.Navegacion) = "Navegacion"
-
+		
 		ListaAtributos(Declaraciones.eAtributos.Fuerza) = "Fuerza"
 		ListaAtributos(Declaraciones.eAtributos.Agilidad) = "Agilidad"
 		ListaAtributos(Declaraciones.eAtributos.Inteligencia) = "Inteligencia"
 		ListaAtributos(Declaraciones.eAtributos.Carisma) = "Carisma"
 		ListaAtributos(Declaraciones.eAtributos.Constitucion) = "Constitucion"
-
+		
 		frmCargando.Show()
-
+		
 		'Call PlayWaveAPI(App.Path & "\wav\harp3.wav")
-
+		
 		frmMain.Text = frmMain.Text & " V." & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision
 		IniPath = My.Application.Info.DirectoryPath & "\"
 		CharPath = My.Application.Info.DirectoryPath & "\Charfile\"
-
+		
 		'Bordes del mapa
 		MinXBorder = XMinMapSize + (XWindow \ 2)
 		MaxXBorder = XMaxMapSize - (XWindow \ 2)
 		MinYBorder = YMinMapSize + (YWindow \ 2)
 		MaxYBorder = YMaxMapSize - (YWindow \ 2)
 		System.Windows.Forms.Application.DoEvents()
-
+		
 		frmCargando.Label1(2).Text = "Iniciando Arrays..."
-
+		
 		Call LoadGuildsDB()
-
-
+		
+		
 		Call CargarSpawnList()
 		Call CargarForbidenWords()
 		'¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
 		frmCargando.Label1(2).Text = "Cargando Server.ini"
-
+		
 		MaxUsers = 0
 		Call LoadSini()
 		Call CargaApuestas()
-
+		
 		'*************************************************
 		frmCargando.Label1(2).Text = "Cargando NPCs.Dat"
 		Call CargaNpcsDat()
 		'*************************************************
-
+		
 		frmCargando.Label1(2).Text = "Cargando Obj.Dat"
 		'Call LoadOBJData
 		Call LoadOBJData()
-
+		
 		frmCargando.Label1(2).Text = "Cargando Hechizos.Dat"
 		Call CargarHechizos()
-
-
+		
+		
 		frmCargando.Label1(2).Text = "Cargando Objetos de Herrería"
 		Call LoadArmasHerreria()
 		Call LoadArmadurasHerreria()
-
+		
 		frmCargando.Label1(2).Text = "Cargando Objetos de Carpintería"
 		Call LoadObjCarpintero()
-
+		
 		frmCargando.Label1(2).Text = "Cargando Balance.Dat"
 		Call LoadBalance() '4/01/08 Pablo ToxicWaste
-
+		
 		frmCargando.Label1(2).Text = "Cargando ArmadurasFaccionarias.dat"
 		Call LoadArmadurasFaccion()
-
+		
 		If BootDelBackUp Then
-
+			
 			frmCargando.Label1(2).Text = "Cargando BackUp"
 			Call CargarBackUp()
 		Else
 			frmCargando.Label1(2).Text = "Cargando Mapas"
 			Call LoadMapData()
 		End If
-
-
+		
+		
 		Call SonidosMapas.LoadSoundMapInfo()
-
+		
 		Call generateMatrix(MATRIX_INITIAL_MAP)
-
+		
 		'Comentado porque hay worldsave en ese mapa!
 		'Call CrearClanPretoriano(MAPA_PRETORIANO, ALCOBA2_X, ALCOBA2_Y)
 		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
+		
 		Dim LoopC As Short
-
+		
 		'Resetea las conexiones de los usuarios
 		For LoopC = 1 To MaxUsers
 			UserList(LoopC).ConnID = -1
@@ -419,9 +416,9 @@ Errhandler:
 			UserList(LoopC).incomingData = New clsByteQueue
 			UserList(LoopC).outgoingData = New clsByteQueue
 		Next LoopC
-
+		
 		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
+		
 		With frmMain
 			.AutoSave.Enabled = True
 			.tLluvia.Enabled = True
@@ -434,22 +431,22 @@ Errhandler:
 			.TIMER_AI.Enabled = True
 			.npcataca.Enabled = True
 		End With
-
+		
 		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 		'Configuracion de los sockets
-
+		
 		Call SecurityIp.InitIpTables(1000)
-
+		
 		Call IniciaWsApi(Puerto)
-
+		
 		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
 		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
+		
 		frmCargando.Close()
-
+		
 		'Log
 		Dim N As Short
-		N = FreeFile()
+		N = FreeFile
 		FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(N, Today & " " & TimeOfDay & " server iniciado " & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision)
 		FileClose(N)
@@ -457,9 +454,10 @@ Errhandler:
 		tInicioServer = GetTickCount()
 		Call InicializaEstadisticas()
 
-		Application.Run(New frmMain()) ' Mantiene la aplicación viva hasta que se cierre frmMain
+		Dim mainForm As New frmMain()
+		Application.Run(mainForm) ' Mantiene la aplicación viva hasta que se cierre frmMain
 	End Sub
-
+	
 	Function FileExist(ByVal file As String) As Boolean
 		'*****************************************************************
 		'Se fija si existe el archivo
@@ -514,9 +512,9 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-
+		
 		frmMain.CantUsuarios.Text = "Número de usuarios jugando: " & NumUsers
-
+		
 	End Sub
 	
 	

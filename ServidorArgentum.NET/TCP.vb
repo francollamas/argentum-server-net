@@ -1547,9 +1547,11 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-
+		
 		On Error GoTo Errhandler
-
+		
+		Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
+		
 		If NumUsers <= 0 Then
 			Call WSApiReiniciarSockets()
 		End If
