@@ -12,17 +12,6 @@ Imports System.Windows.Forms
 ''' Manages socket connections for the server.
 ''' </summary>
 Public Class SocketManager
-    ' Simple message structure for the queue
-    Public Class QueuedMessage
-        Public SocketID As Integer
-        Public Data() As Byte
-        
-        Public Sub New(socketId As Integer, data() As Byte)
-            Me.SocketID = socketId
-            Me.Data = data
-        End Sub
-    End Class
-    
     ' State object for reading client data asynchronously
     Public Class SocketState
         ' Client socket.
@@ -49,70 +38,39 @@ Public Class SocketManager
     ' Maps socket IDs to socket state objects
     Public Shared SocketStates As New Dictionary(Of Integer, SocketState)
 
-    ' Pending operations tracking
+    ' Pending receive operations to avoid concurrent operations on the same socket
     Private Shared _pendingReceives As New HashSet(Of Integer)
-    Private Shared _pendingSends As New HashSet(Of Integer)
 
-    ' Simple synchronized message queue
-    Private Shared _messageQueue As New Queue(Of QueuedMessage)
-    Private Shared _messageQueueLock As New Object()
-    Private Shared _messageTimer As System.Windows.Forms.Timer
+    ' Pending send operations
+    Private Shared _pendingSends As New HashSet(Of Integer)
 
     ' Lock objects
     Private Shared _socketStatesLock As New Object()
     Private Shared _pendingReceivesLock As New Object()
     Private Shared _pendingSendsLock As New Object()
 
+    ' Synchronization context for switching back to the UI thread
+    Private Shared _syncContext As SynchronizationContext = Nothing
+
     ' Events
     Public Shared Event ConnectionReceived(socketID As Integer, clientIP As String)
     Public Shared Event DataReceived(socketID As Integer, data() As Byte)
     Public Shared Event ConnectionClosed(socketID As Integer)
     Public Shared Event ServerError(errorMessage As String)
-    
-    ' Flag to control if message processing is enabled
-    Public Shared ProcessMessagesEnabled As Boolean = True
 
     ''' <summary>
     ''' Initializes the socket server to listen on the specified port.
     ''' </summary>
     Public Shared Sub Initialize(port As Integer)
-        _listeningPort = port
-
-        ' Initialize the message queue timer
-        _messageTimer = New System.Windows.Forms.Timer()
-        _messageTimer.Interval = 10 ' Check queue every 10ms 
-        AddHandler _messageTimer.Tick, AddressOf ProcessMessageQueue
-        _messageTimer.Start()
-        
-        StartListening()
-    End Sub
-
-    ''' <summary>
-    ''' Process queued messages on the main thread
-    ''' </summary>
-    Private Shared Sub ProcessMessageQueue(sender As Object, e As EventArgs)
-        ' Skip if processing is disabled
-        If Not ProcessMessagesEnabled Then
-            Return
+        ' Store the synchronization context for later use
+        _syncContext = SynchronizationContext.Current
+        If _syncContext Is Nothing Then
+            ' If we don't have a synchronization context, create one for Windows Forms
+            _syncContext = New WindowsFormsSynchronizationContext()
         End If
-        
-        ' Process all available messages in one go
-        While True
-            Dim message As QueuedMessage = Nothing
-            
-            SyncLock _messageQueueLock
-                If _messageQueue.Count > 0 Then
-                    message = _messageQueue.Dequeue()
-                Else
-                    Exit While
-                End If
-            End SyncLock
-            
-            ' Process message on the main thread
-            If message IsNot Nothing Then
-                RaiseEvent DataReceived(message.SocketID, message.Data)
-            End If
-        End While
+
+        _listeningPort = port
+        StartListening()
     End Sub
 
     ''' <summary>
@@ -133,7 +91,7 @@ Public Class SocketManager
             ' Start an asynchronous socket to listen for connections
             _listener.BeginAccept(New AsyncCallback(AddressOf AcceptCallback), _listener)
         Catch ex As Exception
-            RaiseEvent ServerError("Error starting server: " & ex.Message)
+            OnServerError("Error starting server: " & ex.Message)
         End Try
     End Sub
 
@@ -167,8 +125,8 @@ Public Class SocketManager
             ' Get client IP
             Dim clientIP As String = CType(socket.RemoteEndPoint, IPEndPoint).Address.ToString()
 
-            ' Notify about the new connection
-            RaiseEvent ConnectionReceived(socketID, clientIP)
+            ' Notify about the new connection on the main thread
+            _syncContext.Post(Sub(s) RaiseEvent ConnectionReceived(socketID, clientIP), Nothing)
 
             ' Begin receiving data from the client
             StartReceive(state)
@@ -180,7 +138,7 @@ Public Class SocketManager
         Catch ex As ObjectDisposedException
             ' Socket was closed
         Catch ex As Exception
-            RaiseEvent ServerError("Error accepting connection: " & ex.Message)
+            OnServerError("Error accepting connection: " & ex.Message)
 
             ' Try to continue listening
             Try
@@ -231,7 +189,7 @@ Public Class SocketManager
             SyncLock _pendingReceivesLock
                 _pendingReceives.Remove(socketID)
             End SyncLock
-            RaiseEvent ServerError("Error starting receive: " & ex.Message)
+            OnServerError("Error starting receive: " & ex.Message)
             CloseSocketInternal(socketID)
         End Try
     End Sub
@@ -256,7 +214,7 @@ Public Class SocketManager
                 _pendingReceives.Remove(socketID)
             End SyncLock
 
-            ' Check if the socket is valid
+            ' Check if the socket is valid and not being closed
             If state.Socket Is Nothing OrElse Not state.Socket.Connected OrElse state.IsClosing Then
                 CloseSocketInternal(socketID)
                 Return
@@ -270,13 +228,13 @@ Public Class SocketManager
                 Dim data(bytesRead - 1) As Byte
                 Array.Copy(state.Buffer, data, bytesRead)
 
-                ' Add to message queue instead of raising event directly
-                EnqueueMessage(socketID, data)
+                ' Process the data on the main thread
+                _syncContext.Post(Sub(s) RaiseEvent DataReceived(socketID, data), Nothing)
 
-                ' Start receiving more data
+                ' Get ready to receive more data
                 StartReceive(state)
             Else
-                ' Connection closed by the client
+                ' Connection closed by the client (0 bytes read)
                 CloseSocketInternal(socketID)
             End If
         Catch ex As ObjectDisposedException
@@ -287,26 +245,9 @@ Public Class SocketManager
             If socketID >= 0 Then CloseSocketInternal(socketID)
         Catch ex As Exception
             ' Other error
-            RaiseEvent ServerError("Error reading from socket: " & ex.Message)
+            OnServerError("Error reading from socket: " & ex.Message)
             If socketID >= 0 Then CloseSocketInternal(socketID)
         End Try
-    End Sub
-    
-    ''' <summary>
-    ''' Adds a message to the queue for processing on the main thread
-    ''' </summary>
-    Private Shared Sub EnqueueMessage(socketID As Integer, data() As Byte)
-        SyncLock _messageQueueLock
-            _messageQueue.Enqueue(New QueuedMessage(socketID, data))
-        End SyncLock
-    End Sub
-
-    ''' <summary>
-    ''' Manually process any pending messages
-    ''' </summary>
-    Public Shared Sub ProcessPendingMessages()
-        ' Only call this from the main thread
-        ProcessMessageQueue(Nothing, EventArgs.Empty)
     End Sub
 
     ''' <summary>
@@ -354,7 +295,7 @@ Public Class SocketManager
             CloseSocketInternal(socketID)
             Return False
         Catch ex As Exception
-            RaiseEvent ServerError("Error sending data: " & ex.Message)
+            OnServerError("Error sending data: " & ex.Message)
             SyncLock _pendingSendsLock
                 _pendingSends.Remove(socketID)
             End SyncLock
@@ -396,7 +337,7 @@ Public Class SocketManager
             ' Socket error
             If socketID >= 0 Then CloseSocketInternal(socketID)
         Catch ex As Exception
-            RaiseEvent ServerError("Error completing send: " & ex.Message)
+            OnServerError("Error completing send: " & ex.Message)
             If socketID >= 0 Then CloseSocketInternal(socketID)
         End Try
     End Sub
@@ -504,8 +445,8 @@ Public Class SocketManager
             ' Other errors during shutdown/close
         End Try
 
-        ' Notify about the closed connection
-        RaiseEvent ConnectionClosed(socketID)
+        ' Notify about the closed connection on the main thread
+        _syncContext.Post(Sub(s) RaiseEvent ConnectionClosed(socketID), Nothing)
     End Sub
 
     ''' <summary>
@@ -526,19 +467,6 @@ Public Class SocketManager
     ''' Shutdown the socket server.
     ''' </summary>
     Public Shared Sub Shutdown()
-        ' Stop the message processing timer
-        If _messageTimer IsNot Nothing Then
-            _messageTimer.Stop()
-            RemoveHandler _messageTimer.Tick, AddressOf ProcessMessageQueue
-            _messageTimer.Dispose()
-            _messageTimer = Nothing
-        End If
-
-        ' Clear the message queue
-        SyncLock _messageQueueLock
-            _messageQueue.Clear()
-        End SyncLock
-
         ' Close all client sockets
         Dim allSocketIDs As New List(Of Integer)
 
@@ -554,6 +482,9 @@ Public Class SocketManager
             CloseSocketInternal(socketID)
         Next
 
+        ' Allow time for clean shutdown of sockets
+        Thread.Sleep(500)
+
         ' Close the listening socket
         Try
             If _listener IsNot Nothing Then
@@ -564,4 +495,33 @@ Public Class SocketManager
             ' Ignore errors during shutdown
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Raises the ServerError event.
+    ''' </summary>
+    Private Shared Sub OnServerError(errorMessage As String)
+        _syncContext.Post(Sub(s) RaiseEvent ServerError(errorMessage), Nothing)
+    End Sub
+
+    ''' <summary>
+    ''' Checks if a socket is still connected.
+    ''' </summary>
+    Public Shared Function IsSocketConnected(socketID As Integer) As Boolean
+        Dim state As SocketState = Nothing
+
+        SyncLock _socketStatesLock
+            If Not SocketStates.TryGetValue(socketID, state) Then
+                Return False
+            End If
+        End SyncLock
+
+        Try
+            Return state IsNot Nothing AndAlso
+                   state.Socket IsNot Nothing AndAlso
+                   state.Socket.Connected AndAlso
+                   Not state.IsClosing
+        Catch
+            Return False
+        End Try
+    End Function
 End Class

@@ -647,8 +647,4 @@ ErrorHandler:
 Errhandler:
 		Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
 	End Sub
-
-    Private Sub ConnectionTimer_Tick(sender As Object, e As EventArgs) Handles ConnectionTimer.Tick
-		ProcessNetworkMessages()
-	End Sub
 End Class

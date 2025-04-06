@@ -1,5 +1,6 @@
 Option Strict Off
 Option Explicit On
+Imports VB = Microsoft.VisualBasic
 Module Migration
 
 	Private StopWatch As Stopwatch = Stopwatch.StartNew()
