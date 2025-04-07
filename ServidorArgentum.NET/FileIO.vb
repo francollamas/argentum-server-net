@@ -1,6 +1,5 @@
 Option Strict Off
 Option Explicit On
-Imports VB = Microsoft.VisualBasic
 Module ES
 	'Argentum Online 0.12.2
 	'Copyright (C) 2002 Márquez Pablo Ignacio
@@ -2054,7 +2053,7 @@ errh:
 			
 			TempDate = System.Date.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
 			.LogOnTime = Now
-			.UpTime = .UpTime + (System.Math.Abs(VB.Day(TempDate) - 30) * 24 * 3600) + Hour(TempDate) * 3600 + Minute(TempDate) * 60 + Second(TempDate)
+			.UpTime = .UpTime + (System.Math.Abs(TempDate.Day - 30) * 24 * 3600) + Hour(TempDate) * 3600 + Minute(TempDate) * 60 + Second(TempDate)
 			.UpTime = .UpTime
 			Call WriteVar(UserFile, "INIT", "UpTime", CStr(.UpTime))
 			

@@ -201,10 +201,10 @@ Module modGuilds
 		
 		' Si devuelve true, cambio a neutro y echamos a todos los que estén de mas, sino no echamos a nadie
 		If guilds(GuildIndex).CambiarAlineacion(BajarGrado(GuildIndex)) Then 'ALINEACION_NEUTRO)
-			
+
 			'uso GetMemberList y no los iteradores pq voy a rajar gente y puedo alterar
 			'internamente al iterador en el proceso
-			GuildMembers = VB6.CopyArray(guilds(GuildIndex).GetMemberList())
+			GuildMembers = guilds(GuildIndex).GetMemberList()
 			TotalMembers = UBound(GuildMembers)
 			
 			For MemberIndex = 0 To TotalMembers
@@ -920,9 +920,9 @@ Module modGuilds
 				refError = "No hay elecciones abiertas en tu clan."
 				Exit Function
 			End If
-			
-			
-			list = VB6.CopyArray(.GetMemberList())
+
+
+			list = .GetMemberList()
 			For i = 0 To UBound(list)
 				If UCase(Votado) = list(i) Then Exit For
 			Next i
@@ -1058,8 +1058,8 @@ errh:
 				tStr(i - 1) = guilds(i).GuildName
 			Next i
 		End If
-		
-		PrepareGuildsList = VB6.CopyArray(tStr)
+
+		Return tStr
 	End Function
 	
 	Public Sub SendGuildDetails(ByVal UserIndex As Short, ByRef GuildName As String)
@@ -1098,25 +1098,25 @@ errh:
 		
 		With UserList(UserIndex)
 			GI = .GuildIndex
-			
-			guildList = VB6.CopyArray(PrepareGuildsList)
-			
+
+			guildList = PrepareGuildsList()
+
 			If GI <= 0 Or GI > CANTIDADDECLANES Then
 				'Send the guild list instead
 				Call WriteGuildList(UserIndex, guildList)
 				Exit Sub
 			End If
-			
-			MemberList = VB6.CopyArray(guilds(GI).GetMemberList())
-			
+
+			MemberList = guilds(GI).GetMemberList()
+
 			If Not m_EsGuildLeader(.name, GI) Then
 				'Send the guild list instead
 				Call WriteGuildMemberInfo(UserIndex, guildList, MemberList)
 				Exit Sub
 			End If
-			
-			aspirantsList = VB6.CopyArray(guilds(GI).GetAspirantes())
-			
+
+			aspirantsList = guilds(GI).GetAspirantes()
+
 			Call WriteGuildLeaderInfo(UserIndex, guildList, MemberList, guilds(GI).GetGuildNews(), aspirantsList)
 		End With
 	End Sub
@@ -1607,8 +1607,8 @@ errh:
 				Next i
 			End With
 		End If
-		
-		r_ListaDePropuestas = VB6.CopyArray(proposals)
+
+		Return proposals
 	End Function
 	
 	Public Sub a_RechazarAspiranteChar(ByRef Aspirante As String, ByVal guild As Short, ByRef Detalles As String)
@@ -1750,8 +1750,8 @@ errh:
 		NroAsp = guilds(GI).NumeroDeAspirante(Personaje)
 		
 		If NroAsp = 0 Then
-			list = VB6.CopyArray(guilds(GI).GetMemberList())
-			
+			list = guilds(GI).GetMemberList()
+
 			For i = 0 To UBound(list)
 				If Personaje = list(i) Then Exit For
 			Next i

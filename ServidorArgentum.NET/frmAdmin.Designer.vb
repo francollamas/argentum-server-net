@@ -23,7 +23,6 @@
 	Public WithEvents cboPjs As System.Windows.Forms.ComboBox
 	Public WithEvents Command1 As System.Windows.Forms.Button
 	Public WithEvents _Frame1_0 As System.Windows.Forms.GroupBox
-	Public WithEvents Frame1 As Microsoft.VisualBasic.Compatibility.VB6.GroupBoxArray
 	'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
 	'Se puede modificar mediante el Diseñador de Windows Forms.
 	'No lo modifique con el editor de código.
@@ -37,11 +36,9 @@
 		Me.Command2 = New System.Windows.Forms.Button
 		Me.cboPjs = New System.Windows.Forms.ComboBox
 		Me.Command1 = New System.Windows.Forms.Button
-		Me.Frame1 = New Microsoft.VisualBasic.Compatibility.VB6.GroupBoxArray(components)
 		Me._Frame1_0.SuspendLayout()
 		Me.SuspendLayout()
 		Me.ToolTip1.Active = True
-		CType(Me.Frame1, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.BackColor = System.Drawing.Color.FromARGB(192, 192, 192)
 		Me.Text = "Administración del servidor"
 		Me.ClientSize = New System.Drawing.Size(312, 209)
@@ -159,8 +156,6 @@
 		Me._Frame1_0.Controls.Add(Command2)
 		Me._Frame1_0.Controls.Add(cboPjs)
 		Me._Frame1_0.Controls.Add(Command1)
-		Me.Frame1.SetIndex(_Frame1_0, CType(0, Short))
-		CType(Me.Frame1, System.ComponentModel.ISupportInitialize).EndInit()
 		Me._Frame1_0.ResumeLayout(False)
 		Me.ResumeLayout(False)
 		Me.PerformLayout()

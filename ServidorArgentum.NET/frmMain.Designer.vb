@@ -42,8 +42,7 @@
 	Public WithEvents Frame1 As System.Windows.Forms.GroupBox
 	Public WithEvents Escuch As System.Windows.Forms.Label
 	Public WithEvents CantUsuarios As System.Windows.Forms.Label
-	Public WithEvents txStatus As System.Windows.Forms.Label
-    Public WithEvents Label1 As Microsoft.VisualBasic.Compatibility.VB6.LabelArray
+    Public WithEvents txStatus As System.Windows.Forms.Label
     'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
     'Se puede modificar mediante el Diseñador de Windows Forms.
     'No lo modifique con el editor de código.
@@ -77,11 +76,9 @@
         Me.Escuch = New System.Windows.Forms.Label()
         Me.CantUsuarios = New System.Windows.Forms.Label()
         Me.txStatus = New System.Windows.Forms.Label()
-        Me.Label1 = New Microsoft.VisualBasic.Compatibility.VB6.LabelArray(Me.components)
         Me.ConnectionTimer = New System.Windows.Forms.Timer(Me.components)
         Me.MainMenu1.SuspendLayout()
         Me.Frame1.SuspendLayout()
-        CType(Me.Label1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MainMenu1
@@ -259,7 +256,6 @@
         Me._Label1_0.BackColor = System.Drawing.SystemColors.Control
         Me._Label1_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._Label1_0.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label1.SetIndex(Me._Label1_0, CType(0, Short))
         Me._Label1_0.Location = New System.Drawing.Point(8, 16)
         Me._Label1_0.Name = "_Label1_0"
         Me._Label1_0.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -337,7 +333,6 @@
         Me.MainMenu1.PerformLayout()
         Me.Frame1.ResumeLayout(False)
         Me.Frame1.PerformLayout()
-        CType(Me.Label1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

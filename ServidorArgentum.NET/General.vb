@@ -231,8 +231,8 @@ Errhandler:
 		Libertad.Y = 65
 
 
-		LastBackup = VB6.Format(Now, "Short Time")
-		Minutos = VB6.Format(Now, "Short Time")
+		LastBackup = DateTime.Now.ToString("HH:mm")
+		Minutos = DateTime.Now.ToString("HH:mm")
 
 		IniPath = My.Application.Info.DirectoryPath & "\"
 		DatPath = My.Application.Info.DirectoryPath & "\Dat\"
@@ -352,7 +352,7 @@ Errhandler:
 		MaxYBorder = YMaxMapSize - (YWindow \ 2)
 		System.Windows.Forms.Application.DoEvents()
 
-		frmCargando.Label1(2).Text = "Iniciando Arrays..."
+		frmCargando.Label2.Text = "Iniciando Arrays..."
 
 		Call LoadGuildsDB()
 
@@ -360,44 +360,44 @@ Errhandler:
 		Call CargarSpawnList()
 		Call CargarForbidenWords()
 		'¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
-		frmCargando.Label1(2).Text = "Cargando Server.ini"
+		frmCargando.Label2.Text = "Cargando Server.ini"
 
 		MaxUsers = 0
 		Call LoadSini()
 		Call CargaApuestas()
 
 		'*************************************************
-		frmCargando.Label1(2).Text = "Cargando NPCs.Dat"
+		frmCargando.Label2.Text = "Cargando NPCs.Dat"
 		Call CargaNpcsDat()
 		'*************************************************
 
-		frmCargando.Label1(2).Text = "Cargando Obj.Dat"
+		frmCargando.Label2.Text = "Cargando Obj.Dat"
 		'Call LoadOBJData
 		Call LoadOBJData()
 
-		frmCargando.Label1(2).Text = "Cargando Hechizos.Dat"
+		frmCargando.Label2.Text = "Cargando Hechizos.Dat"
 		Call CargarHechizos()
 
 
-		frmCargando.Label1(2).Text = "Cargando Objetos de Herrería"
+		frmCargando.Label2.Text = "Cargando Objetos de Herrería"
 		Call LoadArmasHerreria()
 		Call LoadArmadurasHerreria()
 
-		frmCargando.Label1(2).Text = "Cargando Objetos de Carpintería"
+		frmCargando.Label2.Text = "Cargando Objetos de Carpintería"
 		Call LoadObjCarpintero()
 
-		frmCargando.Label1(2).Text = "Cargando Balance.Dat"
+		frmCargando.Label2.Text = "Cargando Balance.Dat"
 		Call LoadBalance() '4/01/08 Pablo ToxicWaste
 
-		frmCargando.Label1(2).Text = "Cargando ArmadurasFaccionarias.dat"
+		frmCargando.Label2.Text = "Cargando ArmadurasFaccionarias.dat"
 		Call LoadArmadurasFaccion()
 
 		If BootDelBackUp Then
 
-			frmCargando.Label1(2).Text = "Cargando BackUp"
+			frmCargando.Label2.Text = "Cargando BackUp"
 			Call CargarBackUp()
 		Else
-			frmCargando.Label1(2).Text = "Cargando Mapas"
+			frmCargando.Label2.Text = "Cargando Mapas"
 			Call LoadMapData()
 		End If
 

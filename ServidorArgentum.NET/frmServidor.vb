@@ -268,12 +268,12 @@ eh:
 	'UPGRADE_NOTE: VS1.Change pasó de ser un evento a un procedimiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="4E2DC008-5EDA-4547-8317-C9316952674F"'
 	'UPGRADE_WARNING: VScrollBar evento VS1.Change tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
 	Private Sub VS1_Change(ByVal newScrollValue As Integer)
-		picCont.Top = VB6.TwipsToPixelsY(-newScrollValue)
+		picCont.Top = -newScrollValue
 	End Sub
 	
 	'UPGRADE_NOTE: VS1.Scroll pasó de ser un evento a un procedimiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="4E2DC008-5EDA-4547-8317-C9316952674F"'
 	Private Sub VS1_Scroll_Renamed(ByVal newScrollValue As Integer)
-		picCont.Top = VB6.TwipsToPixelsY(-newScrollValue)
+		picCont.Top = -newScrollValue
 	End Sub
 	Private Sub VS1_Scroll(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.ScrollEventArgs) Handles VS1.Scroll
 		Select Case eventArgs.type

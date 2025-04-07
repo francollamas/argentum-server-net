@@ -1,6 +1,5 @@
 Option Strict Off
 Option Explicit On
-Imports VB = Microsoft.VisualBasic
 Module UsUaRiOs
 	'Argentum Online 0.12.2
 	'Copyright (C) 2002 Márquez Pablo Ignacio
@@ -918,7 +917,7 @@ Errhandler:
 			End If
 			
 			TempDate = System.Date.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
-			TempSecs = (.UpTime + (System.Math.Abs(VB.Day(TempDate) - 30) * 24 * 3600) + (Hour(TempDate) * 3600) + (Minute(TempDate) * 60) + Second(TempDate))
+			TempSecs = (.UpTime + (System.Math.Abs(TempDate.Day - 30) * 24 * 3600) + (Hour(TempDate) * 3600) + (Minute(TempDate) * 60) + Second(TempDate))
 			tempStr = (TempSecs \ 86400) & " Dias, " & ((TempSecs Mod 86400) \ 3600) & " Horas, " & ((TempSecs Mod 86400) Mod 3600) \ 60 & " Minutos, " & (((TempSecs Mod 86400) Mod 3600) Mod 60) & " Segundos."
 			Call WriteConsoleMsg(sendIndex, "Logeado hace: " & Hour(TempDate) & ":" & Minute(TempDate) & ":" & Second(TempDate), Protocol.FontTypeNames.FONTTYPE_INFO)
 			Call WriteConsoleMsg(sendIndex, "Total: " & tempStr, Protocol.FontTypeNames.FONTTYPE_INFO)

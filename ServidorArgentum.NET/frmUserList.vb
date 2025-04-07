@@ -33,7 +33,7 @@ Friend Class frmUserList
 		List1.Items.Clear()
 		
 		For LoopC = 1 To MaxUsers
-			List1.Items.Add(New VB6.ListBoxItem(VB6.Format(LoopC, "000") & " " & IIf(UserList(LoopC).flags.UserLogged, UserList(LoopC).name, ""), LoopC))
+			List1.Items.Add(LoopC.ToString("000") & " " & IIf(UserList(LoopC).flags.UserLogged, UserList(LoopC).name, ""))
 		Next LoopC
 		
 		
@@ -54,7 +54,7 @@ Friend Class frmUserList
 	Private Sub List1_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles List1.SelectedIndexChanged
 		Dim UserIndex As Short
 		If List1.SelectedIndex <> -1 Then
-			UserIndex = VB6.GetItemData(List1, List1.SelectedIndex)
+			UserIndex = List1.SelectedItem.ToString()
 			If UserIndex > 0 And UserIndex <= MaxUsers Then
 				With UserList(UserIndex)
 					Text1.Text = "UserLogged: " & .flags.UserLogged & vbCrLf

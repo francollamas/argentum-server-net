@@ -279,8 +279,8 @@ Friend Class clsClan
 		For i = 1 To OldQ
 			list(i - 1) = UCase(GetVar(MEMBERSFILE, "Members", "Member" & i))
 		Next i
-		
-		GetMemberList = VB6.CopyArray(list)
+
+		Return list
 	End Function
 	
 	Public Sub ConectarMiembro(ByVal UserIndex As Short)
@@ -399,8 +399,8 @@ Friend Class clsClan
 		For i = 1 To OldQ
 			list(i - 1) = GetVar(SOLICITUDESFILE, "SOLICITUD" & i, "Nombre")
 		Next i
-		
-		GetAspirantes = VB6.CopyArray(list)
+
+		Return list
 	End Function
 	
 	Public Function CantidadAspirantes() As Short
@@ -557,7 +557,7 @@ Friend Class clsClan
 	
 	Public Sub AbrirElecciones()
 		Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "EleccionesAbiertas", "1")
-		Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "EleccionesFinalizan", CStr(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 1, Now)))
+		Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "EleccionesFinalizan", (DateTime.Now.AddDays(1)).ToString())
 		Call WriteVar(VOTACIONESFILE, "INIT", "NumVotos", "0")
 	End Sub
 	
@@ -656,9 +656,9 @@ errh:
 				If CantGanadores > 1 Then
 					'empate en la votacion
 					Call SetGuildNews("*Empate en la votación. " & Ganador & " con " & CantGanadores & " votos ganaron las elecciones del clan.")
-				ElseIf CantGanadores = 1 Then 
-					list = VB6.CopyArray(Me.GetMemberList())
-					
+				ElseIf CantGanadores = 1 Then
+					list = GetMemberList()
+
 					For i = 0 To UBound(list)
 						If Ganador = list(i) Then Exit For
 					Next i

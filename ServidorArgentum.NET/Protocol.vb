@@ -8,7 +8,7 @@ Module Protocol
 	' Designed and implemented by Juan Martín Sotuyo Dodero (Maraxus)
 	' (juansotuyo@gmail.com)
 	'**************************************************************
-	
+
 	'**************************************************************************
 	'This program is free software; you can redistribute it and/or modify
 	'it under the terms of the Affero General Public License;
@@ -22,7 +22,7 @@ Module Protocol
 	'You should have received a copy of the Affero General Public License
 	'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 	'**************************************************************************
-	
+
 	''
 	'Handles all incoming / outgoing packets for client - server communications
 	'The binary prtocol here used was designed by Juan Martín Sotuyo Dodero.
@@ -32,14 +32,14 @@ Module Protocol
 	' @author Juan Martín Sotuyo Dodero (Maraxus) juansotuyo@gmail.com
 	' @version 1.0.0
 	' @date 20060517
-	
-	
+
+
 	''
 	'When we have a list of strings, we use this to separate them and prevent
 	'having too many string lengths in the queue. Yes, each string is NULL-terminated :P
 	'UPGRADE_NOTE: SEPARATOR ha cambiado de Constant a Variable. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="C54B49D7-5804-4D48-834B-B3D81E4C2F13"'
-	Private SEPARATOR As New VB6.FixedLengthString(1, vbNullChar)
-	
+	Private SEPARATOR As Char = Chr(0)
+
 	''
 	'Auxiliar ByteQueue used as buffer to generate messages not intended to be sent right away.
 	'Specially usefull to create a message once and send it over to several clients.
@@ -3242,7 +3242,7 @@ Errhandler:
 			desc = buffer.ReadASCIIString()
 			GuildName = Trim(buffer.ReadASCIIString())
 			site = buffer.ReadASCIIString()
-			codex = Split(buffer.ReadASCIIString(), SEPARATOR.Value)
+			codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
 			If modGuilds.CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) Then
 				Call SendData(modSendData.SendTarget.ToAll, UserIndex, PrepareMessageConsoleMsg(.name & " fundó el clan " & GuildName & " de alineación " & modGuilds.GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
@@ -3897,7 +3897,7 @@ Errhandler:
 
 
 			desc = buffer.ReadASCIIString()
-			codex = Split(buffer.ReadASCIIString(), SEPARATOR.Value)
+			codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
 			Call modGuilds.ChangeCodexAndDesc(desc, codex, .GuildIndex)
 
@@ -15248,7 +15248,7 @@ Errhandler:
 			
 			' Prepare guild name's list
 			For i = LBound(guildList) To UBound(guildList)
-				Tmp = Tmp & guildList(i) & SEPARATOR.Value
+				Tmp = Tmp & guildList(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16342,7 +16342,7 @@ Errhandler:
 			Call .WriteByte(ServerPacketID.TrainerCreatureList)
 			
 			For i = 1 To Npclist(NpcIndex).NroCriaturas
-				str_Renamed = str_Renamed & Npclist(NpcIndex).Criaturas(i).NpcName & SEPARATOR.Value
+				str_Renamed = str_Renamed & Npclist(NpcIndex).Criaturas(i).NpcName & SEPARATOR
 			Next i
 			
 			If migr_LenB(str_Renamed) > 0 Then str_Renamed = Left(str_Renamed, Len(str_Renamed) - 1)
@@ -16384,7 +16384,7 @@ Errhandler:
 			
 			'Prepare enemies' list
 			For i = LBound(enemies) To UBound(enemies)
-				Tmp = Tmp & enemies(i) & SEPARATOR.Value
+				Tmp = Tmp & enemies(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16394,7 +16394,7 @@ Errhandler:
 			Tmp = vbNullString
 			'Prepare allies' list
 			For i = LBound(allies) To UBound(allies)
-				Tmp = Tmp & allies(i) & SEPARATOR.Value
+				Tmp = Tmp & allies(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16462,7 +16462,7 @@ Errhandler:
 			
 			' Prepare guild's list
 			For i = LBound(guilds) To UBound(guilds)
-				Tmp = Tmp & guilds(i) & SEPARATOR.Value
+				Tmp = Tmp & guilds(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16500,7 +16500,7 @@ Errhandler:
 			
 			' Prepare guilds' list
 			For i = LBound(guilds) To UBound(guilds)
-				Tmp = Tmp & guilds(i) & SEPARATOR.Value
+				Tmp = Tmp & guilds(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16601,7 +16601,7 @@ Errhandler:
 			
 			' Prepare guild name's list
 			For i = LBound(guildList) To UBound(guildList)
-				Tmp = Tmp & guildList(i) & SEPARATOR.Value
+				Tmp = Tmp & guildList(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16611,7 +16611,7 @@ Errhandler:
 			' Prepare guild member's list
 			Tmp = vbNullString
 			For i = LBound(MemberList) To UBound(MemberList)
-				Tmp = Tmp & MemberList(i) & SEPARATOR.Value
+				Tmp = Tmp & MemberList(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16624,7 +16624,7 @@ Errhandler:
 			' Prepare the join request's list
 			Tmp = vbNullString
 			For i = LBound(joinRequests) To UBound(joinRequests)
-				Tmp = Tmp & joinRequests(i) & SEPARATOR.Value
+				Tmp = Tmp & joinRequests(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16663,7 +16663,7 @@ Errhandler:
 			
 			' Prepare guild name's list
 			For i = LBound(guildList) To UBound(guildList)
-				Tmp = Tmp & guildList(i) & SEPARATOR.Value
+				Tmp = Tmp & guildList(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16673,7 +16673,7 @@ Errhandler:
 			' Prepare guild member's list
 			Tmp = vbNullString
 			For i = LBound(MemberList) To UBound(MemberList)
-				Tmp = Tmp & MemberList(i) & SEPARATOR.Value
+				Tmp = Tmp & MemberList(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -16738,7 +16738,7 @@ Errhandler:
 			Call .WriteASCIIString(antifactionPoints)
 			
 			For i = LBound(codex) To UBound(codex)
-				temp = temp & codex(i) & SEPARATOR.Value
+				temp = temp & codex(i) & SEPARATOR
 			Next i
 			
 			If Len(temp) > 1 Then temp = Left(temp, Len(temp) - 1)
@@ -17004,7 +17004,7 @@ Errhandler:
 			Call .WriteByte(ServerPacketID.SpawnList)
 			
 			For i = LBound(npcNames) To UBound(npcNames)
-				Tmp = Tmp & npcNames(i) & SEPARATOR.Value
+				Tmp = Tmp & npcNames(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -17040,7 +17040,7 @@ Errhandler:
 			Call .WriteByte(ServerPacketID.ShowSOSForm)
 			
 			For i = 1 To Ayuda.Longitud
-				Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR.Value
+				Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR
 			Next i
 			
 			If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
@@ -17085,7 +17085,7 @@ Errhandler:
 				Call Parties(PI).ObtenerMiembrosOnline(members)
 				For i = 1 To PARTY_MAXMEMBERS
 					If members(i) > 0 Then
-						Tmp = Tmp & UserList(members(i)).name & " (" & Fix(Parties(PI).MiExperiencia(members(i))) & ")" & SEPARATOR.Value
+						Tmp = Tmp & UserList(members(i)).name & " (" & Fix(Parties(PI).MiExperiencia(members(i))) & ")" & SEPARATOR
 					End If
 				Next i
 			End If
@@ -17178,7 +17178,7 @@ Errhandler:
 			
 			' Prepare user's names list
 			For i = 1 To cant
-				Tmp = Tmp & userNamesList(i) & SEPARATOR.Value
+				Tmp = Tmp & userNamesList(i) & SEPARATOR
 			Next i
 			
 			If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)

@@ -53,7 +53,7 @@ Friend Class frmAdmin
 			For LoopC = 1 To LastUser
 				If UserList(LoopC).flags.UserLogged And UserList(LoopC).ConnID >= 0 And UserList(LoopC).ConnIDValida Then
 					If UserList(LoopC).flags.Privilegios And Declaraciones.PlayerType.User Then
-						.Items.Add(New VB6.ListBoxItem(UserList(LoopC).name, LoopC))
+						.Items.Add(UserList(LoopC).name)
 					End If
 				End If
 			Next LoopC
