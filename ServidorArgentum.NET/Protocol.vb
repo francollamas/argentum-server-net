@@ -1819,23 +1819,23 @@ Errhandler:
 			
 			'Prevent SpeedHack
 			If .flags.TimesWalk >= 30 Then
-				TempTick = GetTickCount And &H7FFFFFFF
+				TempTick = GetTickCount()
 				dummy = (TempTick - .flags.StartWalk)
-				
+
 				' 5800 is actually less than what would be needed in perfect conditions to take 30 steps
 				'(it's about 193 ms per step against the over 200 needed in perfect conditions)
 				If dummy < 5800 Then
 					If TempTick - .flags.CountSH > 30000 Then
 						.flags.CountSH = 0
 					End If
-					
+
 					If Not .flags.CountSH = 0 Then
 						If dummy <> 0 Then dummy = 126000 \ dummy
-						
+
 						Call LogHackAttemp("Tramposo SH: " & .name & " , " & dummy)
 						Call SendData(modSendData.SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("Servidor> " & .name & " ha sido echado por el servidor por posible uso de SH.", FontTypeNames.FONTTYPE_SERVER))
 						Call CloseSocket(UserIndex)
-						
+
 						Exit Sub
 					Else
 						.flags.CountSH = TempTick
@@ -1844,35 +1844,35 @@ Errhandler:
 				.flags.StartWalk = TempTick
 				.flags.TimesWalk = 0
 			End If
-			
+
 			.flags.TimesWalk = .flags.TimesWalk + 1
-			
+
 			'If exiting, cancel
 			Call CancelExit(UserIndex)
-			
+
 			'TODO: Debería decirle por consola que no puede?
 			'Esta usando el /HOGAR, no se puede mover
 			If .flags.Traveling = 1 Then Exit Sub
-			
+
 			If .flags.Paralizado = 0 Then
 				If .flags.Meditando Then
 					'Stop meditating, next action will start movement.
 					.flags.Meditando = False
 					.Char_Renamed.FX = 0
 					.Char_Renamed.loops = 0
-					
+
 					Call WriteMeditateToggle(UserIndex)
 					Call WriteConsoleMsg(UserIndex, "Dejas de meditar.", FontTypeNames.FONTTYPE_INFO)
-					
+
 					Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char_Renamed.CharIndex, 0, 0))
 				Else
 					'Move user
 					Call MoveUserChar(UserIndex, heading)
-					
+
 					'Stop resting if needed
 					If .flags.Descansar Then
 						.flags.Descansar = False
-						
+
 						Call WriteRestOK(UserIndex)
 						Call WriteConsoleMsg(UserIndex, "Has dejado de descansar.", FontTypeNames.FONTTYPE_INFO)
 					End If
@@ -1880,19 +1880,19 @@ Errhandler:
 			Else 'paralized
 				If Not .flags.UltimoMensaje = 1 Then
 					.flags.UltimoMensaje = 1
-					
+
 					Call WriteConsoleMsg(UserIndex, "No puedes moverte porque estás paralizado.", FontTypeNames.FONTTYPE_INFO)
 				End If
-				
+
 				.flags.CountSH = 0
 			End If
-			
+
 			'Can't move while hidden except he is a thief
 			If .flags.Oculto = 1 And .flags.AdminInvisible = 0 Then
 				If .clase <> Declaraciones.eClass.Thief And .clase <> Declaraciones.eClass.Bandit Then
 					.flags.Oculto = 0
 					.Counters.TiempoOculto = 0
-					
+
 					If .flags.Navegando = 1 Then
 						If .clase = Declaraciones.eClass.Pirat Then
 							' Pierde la apariencia de fragata fantasmal
@@ -1911,12 +1911,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "RequestPositionUpdate" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestPositionUpdate(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -1925,15 +1925,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call WritePosUpdate(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "Attack" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleAttack(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -1946,18 +1946,18 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'If dead, can't attack
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'If user meditates, can't attack
 			If .flags.Meditando Then
 				Exit Sub
 			End If
-			
+
 			'If equiped weapon is ranged, can't attack this way
 			If .Invent.WeaponEqpObjIndex > 0 Then
 				If ObjData_Renamed(.Invent.WeaponEqpObjIndex).proyectil = 1 Then
@@ -1965,21 +1965,21 @@ Errhandler:
 					Exit Sub
 				End If
 			End If
-			
+
 			'If exiting, cancel
 			Call CancelExit(UserIndex)
-			
+
 			'Attack!
 			Call UsuarioAtaca(UserIndex)
-			
+
 			'Now you can be atacked
 			.flags.NoPuedeSerAtacado = False
-			
+
 			'I see you...
 			If .flags.Oculto > 0 And .flags.AdminInvisible = 0 Then
 				.flags.Oculto = 0
 				.Counters.TiempoOculto = 0
-				
+
 				If .flags.Navegando = 1 Then
 					If .clase = Declaraciones.eClass.Pirat Then
 						' Pierde la apariencia de fragata fantasmal
@@ -1996,12 +1996,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "PickUp" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandlePickUp(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2011,13 +2011,13 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'If dead, it can't pick up objects
 			If .flags.Muerto = 1 Then Exit Sub
-			
+
 			'If user is trading items and attempts to pickup an item, he's cheating, so we kick him.
 			If .flags.Comerciando Then Exit Sub
-			
+
 			'Lower rank administrators can't pick up items
 			If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
 				If Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
@@ -2025,16 +2025,16 @@ Errhandler:
 					Exit Sub
 				End If
 			End If
-			
+
 			Call GetObj(UserIndex)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "SafeToggle" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleSafeToggle(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2044,22 +2044,22 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			If .flags.Seguro Then
 				Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.SafeModeOff) 'Call WriteSafeModeOff(UserIndex)
 			Else
 				Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.SafeModeOn) 'Call WriteSafeModeOn(UserIndex)
 			End If
-			
+
 			.flags.Seguro = Not .flags.Seguro
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "ResuscitationSafeToggle" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleResuscitationToggle(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Rapsodius
@@ -2067,9 +2067,9 @@ Errhandler:
 		'***************************************************
 		With UserList(UserIndex)
 			Call .incomingData.ReadByte()
-			
+
 			.flags.SeguroResu = Not .flags.SeguroResu
-			
+
 			If .flags.SeguroResu Then
 				Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.ResuscitationSafeOn) 'Call WriteResuscitationSafeOn(UserIndex)
 			Else
@@ -2077,12 +2077,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "RequestGuildLeaderInfo" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestGuildLeaderInfo(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2091,15 +2091,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call modGuilds.SendGuildLeaderInfo(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "RequestAtributes" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestAtributes(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2108,15 +2108,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call WriteAttributes(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "RequestFame" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestFame(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2125,15 +2125,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call EnviarFama(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "RequestSkills" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestSkills(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2142,15 +2142,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call WriteSendSkills(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "RequestMiniStats" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestMiniStats(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2159,15 +2159,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call WriteMiniStats(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "CommerceEnd" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCommerceEnd(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2176,17 +2176,17 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		'User quits commerce mode
 		UserList(UserIndex).flags.Comerciando = False
 		Call WriteCommerceEnd(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "UserCommerceEnd" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUserCommerceEnd(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2196,23 +2196,23 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Quits commerce mode with user
 			If .ComUsu.DestUsu > 0 Then
 				If UserList(.ComUsu.DestUsu).ComUsu.DestUsu = UserIndex Then
 					Call WriteConsoleMsg(.ComUsu.DestUsu, .name & " ha dejado de comerciar con vos.", FontTypeNames.FONTTYPE_TALK)
 					Call FinComerciarUsu(.ComUsu.DestUsu)
-					
+
 					'Send data in the outgoing buffer of the other user
 					Call FlushBuffer(.ComUsu.DestUsu)
 				End If
 			End If
-			
+
 			Call FinComerciarUsu(UserIndex)
 			Call WriteConsoleMsg(UserIndex, "Has dejado de comerciar.", FontTypeNames.FONTTYPE_TALK)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "UserCommerceConfirm" message.
 	'
@@ -2223,19 +2223,19 @@ Errhandler:
 		'Last Modification: 14/12/2009
 		'
 		'***************************************************
-		
+
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		'Validate the commerce
 		If PuedeSeguirComerciando(UserIndex) Then
 			'Tell the other user the confirmation of the offer
 			Call WriteUserOfferConfirm(UserList(UserIndex).ComUsu.DestUsu)
 			UserList(UserIndex).ComUsu.Confirmo = True
 		End If
-		
+
 	End Sub
-	
+
 	Private Sub HandleCommerceChat(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: ZaMa
@@ -2246,55 +2246,55 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim Chat As String
 		With UserList(UserIndex)
-			
+
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			Chat = buffer.ReadASCIIString()
-			
+
 			If migr_LenB(Chat) <> 0 Then
 				If PuedeSeguirComerciando(UserIndex) Then
 					'Analize chat...
 					Call Statistics.ParseChat(Chat)
-					
+
 					Chat = UserList(UserIndex).name & "> " & Chat
 					Call WriteCommerceChat(UserIndex, Chat, FontTypeNames.FONTTYPE_PARTY)
 					Call WriteCommerceChat(UserList(UserIndex).ComUsu.DestUsu, Chat, FontTypeNames.FONTTYPE_PARTY)
 				End If
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
-	
+
+
 	''
 	' Handles the "BankEnd" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleBankEnd(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2304,18 +2304,18 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'User exits banking mode
 			.flags.Comerciando = False
 			Call WriteBankEnd(UserIndex)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "UserCommerceOk" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUserCommerceOk(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2324,16 +2324,16 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		'Trade accepted
 		Call AceptarComercioUsu(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "UserCommerceReject" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUserCommerceReject(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2341,34 +2341,34 @@ Errhandler:
 		'
 		'***************************************************
 		Dim otherUser As Short
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			otherUser = .ComUsu.DestUsu
-			
+
 			'Offer rejected
 			If otherUser > 0 Then
 				If UserList(otherUser).flags.UserLogged Then
 					Call WriteConsoleMsg(otherUser, .name & " ha rechazado tu oferta.", FontTypeNames.FONTTYPE_TALK)
 					Call FinComerciarUsu(otherUser)
-					
+
 					'Send data in the outgoing buffer of the other user
 					Call FlushBuffer(otherUser)
 				End If
 			End If
-			
+
 			Call WriteConsoleMsg(UserIndex, "Has rechazado la oferta del otro usuario.", FontTypeNames.FONTTYPE_TALK)
 			Call FinComerciarUsu(UserIndex)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Drop" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleDrop(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2379,30 +2379,30 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		Dim Amount As Short
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			Slot = .incomingData.ReadByte()
 			Amount = .incomingData.ReadInteger()
-			
-			
+
+
 			'low rank admins can't drop item. Neither can the dead nor those sailing.
 			If .flags.Navegando = 1 Or .flags.Muerto = 1 Or ((.flags.Privilegios And Declaraciones.PlayerType.Consejero) <> 0 And (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0) Then Exit Sub
-			
+
 			'If the user is trading, he can't drop items => He's cheating, we kick him.
 			If .flags.Comerciando Then Exit Sub
-			
+
 			'Are we dropping gold or other items??
 			If Slot = FLAGORO Then
 				If Amount > 10000 Then Exit Sub 'Don't drop too much gold
-				
+
 				Call TirarOro(Amount, UserIndex)
-				
+
 				Call WriteUpdateGold(UserIndex)
 			Else
 				'Only drop valid slots
@@ -2410,18 +2410,18 @@ Errhandler:
 					If .Invent.Object_Renamed(Slot).ObjIndex = 0 Then
 						Exit Sub
 					End If
-					
+
 					Call DropObj(UserIndex, Slot, Amount, .Pos.Map, .Pos.X, .Pos.Y)
 				End If
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "CastSpell" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCastSpell(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2432,40 +2432,40 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Spell As Byte
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Spell = .incomingData.ReadByte()
-			
+
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Now you can be atacked
 			.flags.NoPuedeSerAtacado = False
-			
+
 			If Spell < 1 Then
 				.flags.Hechizo = 0
 				Exit Sub
-			ElseIf Spell > MAXUSERHECHIZOS Then 
+			ElseIf Spell > MAXUSERHECHIZOS Then
 				.flags.Hechizo = 0
 				Exit Sub
 			End If
-			
+
 			.flags.Hechizo = .Stats.UserHechizos(Spell)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "LeftClick" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleLeftClick(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2476,26 +2476,26 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim X As Byte
 		Dim Y As Byte
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
 			Call .ReadByte()
-			
-			
+
+
 			X = .ReadByte()
 			Y = .ReadByte()
-			
+
 			Call LookatTile(UserIndex, UserList(UserIndex).Pos.Map, X, Y)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "DoubleClick" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleDoubleClick(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2506,26 +2506,26 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim X As Byte
 		Dim Y As Byte
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
 			Call .ReadByte()
-			
-			
+
+
 			X = .ReadByte()
 			Y = .ReadByte()
-			
+
 			Call Accion(UserIndex, UserList(UserIndex).Pos.Map, X, Y)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Work" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleWork(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2536,30 +2536,30 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Skill As Declaraciones.eSkill
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Skill = .incomingData.ReadByte()
-			
+
 			If UserList(UserIndex).flags.Muerto = 1 Then Exit Sub
-			
+
 			'If exiting, cancel
 			Call CancelExit(UserIndex)
-			
+
 			Select Case Skill
 				Case Declaraciones.eSkill.Robar, Declaraciones.eSkill.Magia, Declaraciones.eSkill.Domar
 					Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.WorkRequestTarget, Skill) 'Call WriteWorkRequestTarget(UserIndex, Skill)
 				Case Declaraciones.eSkill.Ocultarse
-					
+
 					If .flags.EnConsulta Then
 						Call WriteConsoleMsg(UserIndex, "No puedes ocultarte si estás en consulta.", FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
-					
+
 					If .flags.Navegando = 1 Then
 						If .clase <> Declaraciones.eClass.Pirat Then
 							'[CDT 17-02-2004]
@@ -2571,7 +2571,7 @@ Errhandler:
 							Exit Sub
 						End If
 					End If
-					
+
 					If .flags.Oculto = 1 Then
 						'[CDT 17-02-2004]
 						If Not .flags.UltimoMensaje = 2 Then
@@ -2581,17 +2581,17 @@ Errhandler:
 						'[/CDT]
 						Exit Sub
 					End If
-					
+
 					Call DoOcultarse(UserIndex)
 			End Select
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "InitCrafting" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleInitCrafting(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: ZaMa
@@ -2600,28 +2600,28 @@ Errhandler:
 		'***************************************************
 		Dim TotalItems As Integer
 		Dim ItemsPorCiclo As Short
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			TotalItems = .incomingData.ReadLong
 			ItemsPorCiclo = .incomingData.ReadInteger
-			
+
 			If TotalItems > 0 Then
-				
+
 				.Construir.Cantidad = TotalItems
 				.Construir.PorCiclo = MinimoInt(MaxItemsConstruibles(UserIndex), ItemsPorCiclo)
-				
+
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "UseSpellMacro" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUseSpellMacro(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2631,19 +2631,19 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			Call SendData(modSendData.SendTarget.ToAdmins, UserIndex, PrepareMessageConsoleMsg(.name & " fue expulsado por Anti-macro de hechizos.", FontTypeNames.FONTTYPE_VENENO))
 			Call WriteErrorMsg(UserIndex, "Has sido expulsado por usar macro de hechizos. Recomendamos leer el reglamento sobre el tema macros.")
 			Call FlushBuffer(UserIndex)
 			Call CloseSocket(UserIndex)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "UseItem" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUseItem(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2654,32 +2654,32 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Slot = .incomingData.ReadByte()
-			
+
 			If Slot <= .CurrentInventorySlots And Slot > 0 Then
 				If .Invent.Object_Renamed(Slot).ObjIndex = 0 Then Exit Sub
 			End If
-			
+
 			If .flags.Meditando Then
 				Exit Sub 'The error message should have been provided by the client.
 			End If
-			
+
 			Call UseInvItem(UserIndex, Slot)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "CraftBlacksmith" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCraftBlacksmith(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2690,28 +2690,28 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Item As Short
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
 			Call .ReadByte()
-			
-			
+
+
 			Item = .ReadInteger()
-			
+
 			If Item < 1 Then Exit Sub
-			
+
 			If ObjData_Renamed(Item).SkHerreria = 0 Then Exit Sub
-			
+
 			Call HerreroConstruirItem(UserIndex, Item)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "CraftCarpenter" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCraftCarpenter(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2722,28 +2722,28 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Item As Short
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
 			Call .ReadByte()
-			
-			
+
+
 			Item = .ReadInteger()
-			
+
 			If Item < 1 Then Exit Sub
-			
+
 			If ObjData_Renamed(Item).SkCarpinteria = 0 Then Exit Sub
-			
+
 			Call CarpinteroConstruirItem(UserIndex, Item)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "WorkLeftClick" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleWorkLeftClick(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -2756,7 +2756,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim X As Byte
 		Dim Y As Byte
 		Dim Skill As Declaraciones.eSkill
@@ -2767,76 +2767,76 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			X = .incomingData.ReadByte()
 			Y = .incomingData.ReadByte()
-			
+
 			Skill = .incomingData.ReadByte()
-			
-			
+
+
 			If .flags.Muerto = 1 Or .flags.Descansar Or .flags.Meditando Or Not InMapBounds(.Pos.Map, X, Y) Then Exit Sub
-			
+
 			If Not InRangoVision(UserIndex, X, Y) Then
 				Call WritePosUpdate(UserIndex)
 				Exit Sub
 			End If
-			
+
 			'If exiting, cancel
 			Call CancelExit(UserIndex)
-			
+
 			Select Case Skill
 				Case Declaraciones.eSkill.Proyectiles
-					
+
 					'Check attack interval
 					If Not IntervaloPermiteAtacar(UserIndex, False) Then Exit Sub
 					'Check Magic interval
 					If Not IntervaloPermiteLanzarSpell(UserIndex, False) Then Exit Sub
 					'Check bow's interval
 					If Not IntervaloPermiteUsarArcos(UserIndex) Then Exit Sub
-					
+
 					Atacked = True
-					
+
 					'Make sure the item is valid and there is ammo equipped.
 					With .Invent
 						' Tiene arma equipada?
 						If .WeaponEqpObjIndex = 0 Then
 							DummyInt = 1
 							' En un slot válido?
-						ElseIf .WeaponEqpSlot < 1 Or .WeaponEqpSlot > UserList(UserIndex).CurrentInventorySlots Then 
+						ElseIf .WeaponEqpSlot < 1 Or .WeaponEqpSlot > UserList(UserIndex).CurrentInventorySlots Then
 							DummyInt = 1
 							' Usa munición? (Si no la usa, puede ser un arma arrojadiza)
-						ElseIf ObjData_Renamed(.WeaponEqpObjIndex).Municion = 1 Then 
+						ElseIf ObjData_Renamed(.WeaponEqpObjIndex).Municion = 1 Then
 							' La municion esta equipada en un slot valido?
 							If .MunicionEqpSlot < 1 Or .MunicionEqpSlot > UserList(UserIndex).CurrentInventorySlots Then
 								DummyInt = 1
 								' Tiene munición?
-							ElseIf .MunicionEqpObjIndex = 0 Then 
+							ElseIf .MunicionEqpObjIndex = 0 Then
 								DummyInt = 1
 								' Son flechas?
-							ElseIf ObjData_Renamed(.MunicionEqpObjIndex).OBJType <> Declaraciones.eOBJType.otFlechas Then 
+							ElseIf ObjData_Renamed(.MunicionEqpObjIndex).OBJType <> Declaraciones.eOBJType.otFlechas Then
 								DummyInt = 1
 								' Tiene suficientes?
-							ElseIf .Object_Renamed(.MunicionEqpSlot).Amount < 1 Then 
+							ElseIf .Object_Renamed(.MunicionEqpSlot).Amount < 1 Then
 								DummyInt = 1
 							End If
 							' Es un arma de proyectiles?
-						ElseIf ObjData_Renamed(.WeaponEqpObjIndex).proyectil <> 1 Then 
+						ElseIf ObjData_Renamed(.WeaponEqpObjIndex).proyectil <> 1 Then
 							DummyInt = 2
 						End If
-						
+
 						If DummyInt <> 0 Then
 							If DummyInt = 1 Then
 								Call WriteConsoleMsg(UserIndex, "No tienes municiones.", FontTypeNames.FONTTYPE_INFO)
-								
+
 								Call Desequipar(UserIndex, .WeaponEqpSlot)
 							End If
-							
+
 							Call Desequipar(UserIndex, .MunicionEqpSlot)
 							Exit Sub
 						End If
 					End With
-					
+
 					'Quitamos stamina
 					If .Stats.MinSta >= 10 Then
 						Call QuitarSta(UserIndex, RandomNumber(1, 10))
@@ -2848,12 +2848,12 @@ Errhandler:
 						End If
 						Exit Sub
 					End If
-					
+
 					Call LookatTile(UserIndex, .Pos.Map, X, Y)
-					
+
 					tU = .flags.TargetUser
 					tN = .flags.TargetNPC
-					
+
 					'Validate target
 					If tU > 0 Then
 						'Only allow to atack if the other one can retaliate (can see us)
@@ -2861,42 +2861,42 @@ Errhandler:
 							Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos para atacar.", FontTypeNames.FONTTYPE_WARNING)
 							Exit Sub
 						End If
-						
+
 						'Prevent from hitting self
 						If tU = UserIndex Then
 							Call WriteConsoleMsg(UserIndex, "¡No puedes atacarte a vos mismo!", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
-						
+
 						'Attack!
 						Atacked = UsuarioAtacaUsuario(UserIndex, tU)
-						
-					ElseIf tN > 0 Then 
+
+					ElseIf tN > 0 Then
 						'Only allow to atack if the other one can retaliate (can see us)
 						If System.Math.Abs(Npclist(tN).Pos.Y - .Pos.Y) > RANGO_VISION_Y And System.Math.Abs(Npclist(tN).Pos.X - .Pos.X) > RANGO_VISION_X Then
 							Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos para atacar.", FontTypeNames.FONTTYPE_WARNING)
 							Exit Sub
 						End If
-						
+
 						'Is it attackable???
 						If Npclist(tN).Attackable <> 0 Then
-							
+
 							'Attack!
 							Atacked = UsuarioAtacaNpc(UserIndex, tN)
 						End If
 					End If
-					
+
 					' Solo pierde la munición si pudo atacar al target, o tiro al aire
 					If Atacked Then
 						With .Invent
 							' Tiene equipado arco y flecha?
 							If ObjData_Renamed(.WeaponEqpObjIndex).Municion = 1 Then
 								DummyInt = .MunicionEqpSlot
-								
-								
+
+
 								'Take 1 arrow away - we do it AFTER hitting, since if Ammo Slot is 0 it gives a rt9 and kicks players
 								Call QuitarUserInvItem(UserIndex, DummyInt, 1)
-								
+
 								If .Object_Renamed(DummyInt).Amount > 0 Then
 									'QuitarUserInvItem unequips the ammo, so we equip it again
 									.MunicionEqpSlot = DummyInt
@@ -2909,10 +2909,10 @@ Errhandler:
 								' Tiene equipado un arma arrojadiza
 							Else
 								DummyInt = .WeaponEqpSlot
-								
+
 								'Take 1 knife away
 								Call QuitarUserInvItem(UserIndex, DummyInt, 1)
-								
+
 								If .Object_Renamed(DummyInt).Amount > 0 Then
 									'QuitarUserInvItem unequips the weapon, so we equip it again
 									.WeaponEqpSlot = DummyInt
@@ -2922,33 +2922,33 @@ Errhandler:
 									.WeaponEqpSlot = 0
 									.WeaponEqpObjIndex = 0
 								End If
-								
+
 							End If
-							
+
 							Call UpdateUserInv(False, UserIndex, DummyInt)
 						End With
 					End If
-					
+
 				Case Declaraciones.eSkill.Magia
 					'Check the map allows spells to be casted.
 					If MapInfo_Renamed(.Pos.Map).MagiaSinEfecto > 0 Then
 						Call WriteConsoleMsg(UserIndex, "Una fuerza oscura te impide canalizar tu energía.", FontTypeNames.FONTTYPE_FIGHT)
 						Exit Sub
 					End If
-					
+
 					'Target whatever is in that tile
 					Call LookatTile(UserIndex, .Pos.Map, X, Y)
-					
+
 					'If it's outside range log it and exit
 					If System.Math.Abs(.Pos.X - X) > RANGO_VISION_X Or System.Math.Abs(.Pos.Y - Y) > RANGO_VISION_Y Then
 						Call LogCheating("Ataque fuera de rango de " & .name & "(" & .Pos.Map & "/" & .Pos.X & "/" & .Pos.Y & ") ip: " & .ip & " a la posición (" & .Pos.Map & "/" & X & "/" & Y & ")")
 						Exit Sub
 					End If
-					
+
 					'Check bow's interval
 					If Not IntervaloPermiteUsarArcos(UserIndex, False) Then Exit Sub
-					
-					
+
+
 					'Check Spell-Hit interval
 					If Not IntervaloPermiteGolpeMagia(UserIndex) Then
 						'Check Magic interval
@@ -2956,8 +2956,8 @@ Errhandler:
 							Exit Sub
 						End If
 					End If
-					
-					
+
+
 					'Check intervals and cast
 					If .flags.Hechizo > 0 Then
 						Call LanzarHechizo(.flags.Hechizo, UserIndex)
@@ -2965,56 +2965,56 @@ Errhandler:
 					Else
 						Call WriteConsoleMsg(UserIndex, "¡Primero selecciona el hechizo que quieres lanzar!", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case Declaraciones.eSkill.Pesca
 					DummyInt = .Invent.WeaponEqpObjIndex
 					If DummyInt = 0 Then Exit Sub
-					
+
 					'Check interval
 					If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
-					
+
 					'Basado en la idea de Barrin
 					'Comentario por Barrin: jah, "basado", caradura ! ^^
 					If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 1 Then
 						Call WriteConsoleMsg(UserIndex, "No puedes pescar desde donde te encuentras.", FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
-					
+
 					If HayAgua(.Pos.Map, X, Y) Then
 						Select Case DummyInt
 							Case CAÑA_PESCA
 								Call DoPescar(UserIndex)
-								
+
 							Case RED_PESCA
 								If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
 									Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos para pescar.", FontTypeNames.FONTTYPE_INFO)
 									Exit Sub
 								End If
-								
+
 								Call DoPescarRed(UserIndex)
-								
+
 							Case Else
 								Exit Sub 'Invalid item!
 						End Select
-						
+
 						'Play sound!
 						Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_PESCAR, .Pos.X, .Pos.Y))
 					Else
 						Call WriteConsoleMsg(UserIndex, "No hay agua donde pescar. Busca un lago, río o mar.", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case Declaraciones.eSkill.Robar
 					'Does the map allow us to steal here?
 					If MapInfo_Renamed(.Pos.Map).Pk Then
-						
+
 						'Check interval
 						If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
-						
+
 						'Target whatever is in that tile
 						Call LookatTile(UserIndex, UserList(UserIndex).Pos.Map, X, Y)
-						
+
 						tU = .flags.TargetUser
-						
+
 						If tU > 0 And tU <> UserIndex Then
 							'Can't steal administrative players
 							If UserList(tU).flags.Privilegios And Declaraciones.PlayerType.User Then
@@ -3023,19 +3023,19 @@ Errhandler:
 										Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 										Exit Sub
 									End If
-									
+
 									'17/09/02
 									'Check the trigger
 									If MapData(UserList(tU).Pos.Map, X, Y).trigger = Declaraciones.eTrigger.ZONASEGURA Then
 										Call WriteConsoleMsg(UserIndex, "No puedes robar aquí.", FontTypeNames.FONTTYPE_WARNING)
 										Exit Sub
 									End If
-									
+
 									If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ZONASEGURA Then
 										Call WriteConsoleMsg(UserIndex, "No puedes robar aquí.", FontTypeNames.FONTTYPE_WARNING)
 										Exit Sub
 									End If
-									
+
 									Call DoRobar(UserIndex, tU)
 								End If
 							End If
@@ -3045,40 +3045,40 @@ Errhandler:
 					Else
 						Call WriteConsoleMsg(UserIndex, "¡No puedes robar en zonas seguras!", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case Declaraciones.eSkill.Talar
 					'Check interval
 					If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
-					
+
 					If .Invent.WeaponEqpObjIndex = 0 Then
 						Call WriteConsoleMsg(UserIndex, "Deberías equiparte el hacha.", FontTypeNames.FONTTYPE_INFO)
 						Exit Sub
 					End If
-					
+
 					If .Invent.WeaponEqpObjIndex <> HACHA_LEÑADOR And .Invent.WeaponEqpObjIndex <> HACHA_LEÑA_ELFICA Then
 						' Podemos llegar acá si el user equipó el anillo dsp de la U y antes del click
 						Exit Sub
 					End If
-					
+
 					DummyInt = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
-					
+
 					If DummyInt > 0 Then
 						If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
 							Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
-						
+
 						'Barrin 29/9/03
 						If .Pos.X = X And .Pos.Y = Y Then
 							Call WriteConsoleMsg(UserIndex, "No puedes talar desde allí.", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
-						
+
 						'¿Hay un arbol donde clickeo?
 						If ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArboles And .Invent.WeaponEqpObjIndex = HACHA_LEÑADOR Then
 							Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
 							Call DoTalar(UserIndex)
-						ElseIf ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArbolElfico And .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then 
+						ElseIf ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArbolElfico And .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then
 							If .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then
 								Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
 								Call DoTalar(UserIndex, True)
@@ -3089,29 +3089,29 @@ Errhandler:
 					Else
 						Call WriteConsoleMsg(UserIndex, "No hay ningún árbol ahí.", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case Declaraciones.eSkill.Mineria
 					If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
-					
+
 					If .Invent.WeaponEqpObjIndex = 0 Then Exit Sub
-					
+
 					If .Invent.WeaponEqpObjIndex <> PIQUETE_MINERO Then
 						' Podemos llegar acá si el user equipó el anillo dsp de la U y antes del click
 						Exit Sub
 					End If
-					
+
 					'Target whatever is in the tile
 					Call LookatTile(UserIndex, .Pos.Map, X, Y)
-					
+
 					DummyInt = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
-					
+
 					If DummyInt > 0 Then
 						'Check distance
 						If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
 							Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 							Exit Sub
 						End If
-						
+
 						DummyInt = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex 'CHECK
 						'¿Hay un yacimiento donde clickeo?
 						If ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otYacimiento Then
@@ -3122,28 +3122,28 @@ Errhandler:
 					Else
 						Call WriteConsoleMsg(UserIndex, "Ahí no hay ningún yacimiento.", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case Declaraciones.eSkill.Domar
 					'Modificado 25/11/02
 					'Optimizado y solucionado el bug de la doma de
 					'criaturas hostiles.
-					
+
 					'Target whatever is that tile
 					Call LookatTile(UserIndex, .Pos.Map, X, Y)
 					tN = .flags.TargetNPC
-					
+
 					If tN > 0 Then
 						If Npclist(tN).flags.Domable > 0 Then
 							If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
 								Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
-							
+
 							If migr_LenB(Npclist(tN).flags.AttackedBy) <> 0 Then
 								Call WriteConsoleMsg(UserIndex, "No puedes domar una criatura que está luchando con un jugador.", FontTypeNames.FONTTYPE_INFO)
 								Exit Sub
 							End If
-							
+
 							Call DoDomar(UserIndex, tN)
 						Else
 							Call WriteConsoleMsg(UserIndex, "No puedes domar a esa criatura.", FontTypeNames.FONTTYPE_INFO)
@@ -3151,11 +3151,11 @@ Errhandler:
 					Else
 						Call WriteConsoleMsg(UserIndex, "¡No hay ninguna criatura allí!", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case FundirMetal 'UGLY!!! This is a constant, not a skill!!
 					'Check interval
 					If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
-					
+
 					'Check there is a proper item there
 					If .flags.TargetObj > 0 Then
 						If ObjData_Renamed(.flags.TargetObj).OBJType = Declaraciones.eOBJType.otFragua Then
@@ -3163,14 +3163,14 @@ Errhandler:
 							If .flags.TargetObjInvSlot < 1 Or .flags.TargetObjInvSlot > .CurrentInventorySlots Then
 								Exit Sub
 							End If
-							
+
 							''chequeamos que no se zarpe duplicando oro
 							If .Invent.Object_Renamed(.flags.TargetObjInvSlot).ObjIndex <> .flags.TargetObjInvIndex Then
 								If .Invent.Object_Renamed(.flags.TargetObjInvSlot).ObjIndex = 0 Or .Invent.Object_Renamed(.flags.TargetObjInvSlot).Amount = 0 Then
 									Call WriteConsoleMsg(UserIndex, "No tienes más minerales.", FontTypeNames.FONTTYPE_INFO)
 									Exit Sub
 								End If
-								
+
 								''FUISTE
 								Call WriteErrorMsg(UserIndex, "Has sido expulsado por el sistema anti cheats.")
 								Call FlushBuffer(UserIndex)
@@ -3179,7 +3179,7 @@ Errhandler:
 							End If
 							If ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = Declaraciones.eOBJType.otMinerales Then
 								Call FundirMineral(UserIndex)
-							ElseIf ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = Declaraciones.eOBJType.otWeapon Then 
+							ElseIf ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = Declaraciones.eOBJType.otWeapon Then
 								Call FundirArmas(UserIndex)
 							End If
 						Else
@@ -3188,11 +3188,11 @@ Errhandler:
 					Else
 						Call WriteConsoleMsg(UserIndex, "Ahí no hay ninguna fragua.", FontTypeNames.FONTTYPE_INFO)
 					End If
-					
+
 				Case Declaraciones.eSkill.Herreria
 					'Target wehatever is in that tile
 					Call LookatTile(UserIndex, .Pos.Map, X, Y)
-					
+
 					If .flags.TargetObj > 0 Then
 						If ObjData_Renamed(.flags.TargetObj).OBJType = Declaraciones.eOBJType.otYunque Then
 							Call EnivarArmasConstruibles(UserIndex)
@@ -3207,12 +3207,12 @@ Errhandler:
 			End Select
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "CreateNewGuild" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCreateNewGuild(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3223,7 +3223,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim desc As String
@@ -3234,49 +3234,49 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			desc = buffer.ReadASCIIString()
 			GuildName = Trim(buffer.ReadASCIIString())
 			site = buffer.ReadASCIIString()
 			codex = Split(buffer.ReadASCIIString(), SEPARATOR.Value)
-			
+
 			If modGuilds.CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) Then
 				Call SendData(modSendData.SendTarget.ToAll, UserIndex, PrepareMessageConsoleMsg(.name & " fundó el clan " & GuildName & " de alineación " & modGuilds.GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayWave(44, NO_3D_SOUND, NO_3D_SOUND))
-				
-				
+
+
 				'Update tag
 				Call RefreshCharStatus(UserIndex)
 			Else
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "SpellInfo" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleSpellInfo(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3287,22 +3287,22 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim spellSlot As Byte
 		Dim Spell As Short
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			spellSlot = .incomingData.ReadByte()
-			
+
 			'Validate slot
 			If spellSlot < 1 Or spellSlot > MAXUSERHECHIZOS Then
 				Call WriteConsoleMsg(UserIndex, "¡Primero selecciona el hechizo!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate spell in the slot
 			Spell = .Stats.UserHechizos(spellSlot)
 			If Spell > 0 And Spell < NumeroHechizos + 1 Then
@@ -3313,12 +3313,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "EquipItem" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleEquipItem(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3329,32 +3329,32 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim itemSlot As Byte
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			itemSlot = .incomingData.ReadByte()
-			
+
 			'Dead users can't equip items
 			If .flags.Muerto = 1 Then Exit Sub
-			
+
 			'Validate item slot
 			If itemSlot > .CurrentInventorySlots Or itemSlot < 1 Then Exit Sub
-			
+
 			If .Invent.Object_Renamed(itemSlot).ObjIndex = 0 Then Exit Sub
-			
+
 			Call EquiparInvItem(UserIndex, itemSlot)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "ChangeHeading" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleChangeHeading(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3367,17 +3367,17 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim heading As Declaraciones.eHeading
 		Dim posX As Short
 		Dim posY As Short
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			heading = .incomingData.ReadByte()
-			
+
 			If .flags.Paralizado = 1 And .flags.Inmovilizado = 0 Then
 				Select Case heading
 					Case Declaraciones.eHeading.NORTH
@@ -3389,12 +3389,12 @@ Errhandler:
 					Case Declaraciones.eHeading.WEST
 						posX = -1
 				End Select
-				
+
 				If LegalPos(.Pos.Map, .Pos.X + posX, .Pos.Y + posY, CBool(.flags.Navegando), Not CBool(.flags.Navegando)) Then
 					Exit Sub
 				End If
 			End If
-			
+
 			'Validate heading (VB won't say invalid cast if not a valid index like .Net languages would do... *sigh*)
 			If heading > 0 And heading < 5 Then
 				.Char_Renamed.heading = heading
@@ -3402,12 +3402,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "ModifySkills" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleModifySkills(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3418,7 +3418,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim i As Integer
 		Dim Count As Short
 		'UPGRADE_WARNING: El límite inferior de la matriz points ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -3426,56 +3426,56 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			'Codigo para prevenir el hackeo de los skills
 			'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			For i = 1 To NUMSKILLS
 				points(i) = .incomingData.ReadByte()
-				
+
 				If points(i) < 0 Then
 					Call LogHackAttemp(.name & " IP:" & .ip & " trató de hackear los skills.")
 					.Stats.SkillPts = 0
 					Call CloseSocket(UserIndex)
 					Exit Sub
 				End If
-				
+
 				Count = Count + points(i)
 			Next i
-			
+
 			If Count > .Stats.SkillPts Then
 				Call LogHackAttemp(.name & " IP:" & .ip & " trató de hackear los skills.")
 				Call CloseSocket(UserIndex)
 				Exit Sub
 			End If
 			'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-			
+
 			.Counters.AsignedSkills = MinimoInt(10, .Counters.AsignedSkills + Count)
-			
+
 			With .Stats
 				For i = 1 To NUMSKILLS
 					If points(i) > 0 Then
 						.SkillPts = .SkillPts - points(i)
 						.UserSkills(i) = .UserSkills(i) + points(i)
-						
+
 						'Client should prevent this, but just in case...
 						If .UserSkills(i) > 100 Then
 							.SkillPts = .SkillPts + .UserSkills(i) - 100
 							.UserSkills(i) = 100
 						End If
-						
+
 						Call CheckEluSkill(UserIndex, i, True)
 					End If
 				Next i
 			End With
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Train" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleTrain(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3486,25 +3486,25 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim SpawnedNpc As Short
 		Dim PetIndex As Byte
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			PetIndex = .incomingData.ReadByte()
-			
+
 			If .flags.TargetNPC = 0 Then Exit Sub
-			
+
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Entrenador Then Exit Sub
-			
+
 			If Npclist(.flags.TargetNPC).Mascotas < MAXMASCOTASENTRENADOR Then
 				If PetIndex > 0 And PetIndex < Npclist(.flags.TargetNPC).NroCriaturas + 1 Then
 					'Create the creature
 					SpawnedNpc = SpawnNpc(Npclist(.flags.TargetNPC).Criaturas(PetIndex).NpcIndex, Npclist(.flags.TargetNPC).Pos, True, False)
-					
+
 					If SpawnedNpc > 0 Then
 						Npclist(SpawnedNpc).MaestroNpc = .flags.TargetNPC
 						Npclist(.flags.TargetNPC).Mascotas = Npclist(.flags.TargetNPC).Mascotas + 1
@@ -3515,12 +3515,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "CommerceBuy" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCommerceBuy(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3531,48 +3531,48 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		Dim Amount As Short
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Slot = .incomingData.ReadByte()
 			Amount = .incomingData.ReadInteger()
-			
+
 			'Dead people can't commerce...
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'¿El target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
-			
+
 			'¿El NPC puede comerciar?
 			If Npclist(.flags.TargetNPC).Comercia = 0 Then
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No tengo ningún interés en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
 				Exit Sub
 			End If
-			
+
 			'Only if in commerce mode....
 			If Not .flags.Comerciando Then
 				Call WriteConsoleMsg(UserIndex, "No estás comerciando.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'User compra el item
 			Call Comercio(modSistemaComercio.eModoComercio.Compra, UserIndex, .flags.TargetNPC, Slot, Amount)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "BankExtractItem" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleBankExtractItem(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3583,41 +3583,41 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		Dim Amount As Short
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Slot = .incomingData.ReadByte()
 			Amount = .incomingData.ReadInteger()
-			
+
 			'Dead people can't commerce
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'¿El target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
-			
+
 			'¿Es el banquero?
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then
 				Exit Sub
 			End If
-			
+
 			'User retira el item del slot
 			Call UserRetiraItem(UserIndex, Slot, Amount)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "CommerceSell" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCommerceSell(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3628,42 +3628,42 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		Dim Amount As Short
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Slot = .incomingData.ReadByte()
 			Amount = .incomingData.ReadInteger()
-			
+
 			'Dead people can't commerce...
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'¿El target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
-			
+
 			'¿El NPC puede comerciar?
 			If Npclist(.flags.TargetNPC).Comercia = 0 Then
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("No tengo ningún interés en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
 				Exit Sub
 			End If
-			
+
 			'User compra el item del slot
 			Call Comercio(modSistemaComercio.eModoComercio.Venta, UserIndex, .flags.TargetNPC, Slot, Amount)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "BankDeposit" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleBankDeposit(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3674,41 +3674,41 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		Dim Amount As Short
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Slot = .incomingData.ReadByte()
 			Amount = .incomingData.ReadInteger()
-			
+
 			'Dead people can't commerce...
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'¿El target es un NPC valido?
 			If .flags.TargetNPC < 1 Then Exit Sub
-			
+
 			'¿El NPC puede comerciar?
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then
 				Exit Sub
 			End If
-			
+
 			'User deposita el item del slot rdata
 			Call UserDepositaItem(UserIndex, Slot, Amount)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "ForumPost" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleForumPost(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3719,7 +3719,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim ForumMsgType As Declaraciones.eForumMsgType
@@ -3732,58 +3732,58 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
-			
+
+
+
 			ForumMsgType = buffer.ReadByte()
-			
+
 			Title = buffer.ReadASCIIString()
 			Post = buffer.ReadASCIIString()
-			
+
 			If .flags.TargetObj > 0 Then
 				ForumType = ForumAlignment(ForumMsgType)
-				
+
 				Select Case ForumType
-					
+
 					Case Declaraciones.eForumType.ieGeneral
 						ForumIndex = GetForumIndex(ObjData_Renamed(.flags.TargetObj).ForoID)
-						
+
 					Case Declaraciones.eForumType.ieREAL
 						ForumIndex = GetForumIndex(FORO_REAL_ID)
-						
+
 					Case Declaraciones.eForumType.ieCAOS
 						ForumIndex = GetForumIndex(FORO_CAOS_ID)
-						
+
 				End Select
-				
+
 				Call AddPost(ForumIndex, Post, .name, Title, EsAnuncio(ForumMsgType))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "MoveSpell" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleMoveSpell(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3794,29 +3794,29 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		'UPGRADE_NOTE: dir se actualizó a dir_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim dir_Renamed As Short
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
 			Call .ReadByte()
-			
-			
+
+
 			If .ReadBoolean() Then
 				dir_Renamed = 1
 			Else
 				dir_Renamed = -1
 			End If
-			
+
 			Call DesplazarHechizo(UserIndex, dir_Renamed, .ReadByte())
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "MoveBank" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleMoveBank(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Torres Patricio (Pato)
@@ -3827,7 +3827,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Slot As Byte
 		Dim TempItem As Obj
 		'UPGRADE_NOTE: dir se actualizó a dir_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -3835,21 +3835,21 @@ Errhandler:
 		With UserList(UserIndex).incomingData
 			'Remove packet ID
 			Call .ReadByte()
-			
-			
+
+
 			If .ReadBoolean() Then
 				dir_Renamed = 1
 			Else
 				dir_Renamed = -1
 			End If
-			
+
 			Slot = .ReadByte()
 		End With
-		
+
 		With UserList(UserIndex)
 			TempItem.ObjIndex = .BancoInvent.Object_Renamed(Slot).ObjIndex
 			TempItem.Amount = .BancoInvent.Object_Renamed(Slot).Amount
-			
+
 			If dir_Renamed = 1 Then 'Mover arriba
 				'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				.BancoInvent.Object_Renamed(Slot) = .BancoInvent.Object_Renamed(Slot - 1)
@@ -3862,17 +3862,17 @@ Errhandler:
 				.BancoInvent.Object_Renamed(Slot + 1).Amount = TempItem.Amount
 			End If
 		End With
-		
+
 		Call UpdateBanUserInv(True, UserIndex, 0)
 		Call UpdateVentanaBanco(UserIndex)
-		
+
 	End Sub
-	
+
 	''
 	' Handles the "ClanCodexUpdate" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleClanCodexUpdate(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3883,7 +3883,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim desc As String
@@ -3891,38 +3891,38 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			desc = buffer.ReadASCIIString()
 			codex = Split(buffer.ReadASCIIString(), SEPARATOR.Value)
-			
+
 			Call modGuilds.ChangeCodexAndDesc(desc, codex, .GuildIndex)
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "UserCommerceOffer" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUserCommerceOffer(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3933,7 +3933,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		Dim Amount As Integer
 		Dim Slot As Byte
 		Dim tUser As Short
@@ -3942,38 +3942,38 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			Slot = .incomingData.ReadByte()
 			Amount = .incomingData.ReadLong()
 			OfferSlot = .incomingData.ReadByte()
-			
+
 			'Get the other player
 			tUser = .ComUsu.DestUsu
-			
+
 			' If he's already confirmed his offer, but now tries to change it, then he's cheating
 			If UserList(UserIndex).ComUsu.Confirmo = True Then
-				
+
 				' Finish the trade
 				Call FinComerciarUsu(UserIndex)
-				
+
 				If tUser <= 0 Or tUser > MaxUsers Then
 					Call FinComerciarUsu(tUser)
 					Call Protocol.FlushBuffer(tUser)
 				End If
-				
+
 				Exit Sub
 			End If
-			
+
 			'If slot is invalid and it's not gold or it's not 0 (Substracting), then ignore it.
 			If ((Slot < 0 Or Slot > UserList(UserIndex).CurrentInventorySlots) And Slot <> FLAGORO) Then Exit Sub
-			
+
 			'If OfferSlot is invalid, then ignore it.
 			If OfferSlot < 1 Or OfferSlot > MAX_OFFER_SLOTS + 1 Then Exit Sub
-			
+
 			' Can be negative if substracted from the offer, but never 0.
 			If Amount = 0 Then Exit Sub
-			
+
 			'Has he got enough??
 			If Slot = FLAGORO Then
 				' Can't offer more than he has
@@ -3986,16 +3986,16 @@ Errhandler:
 				If Slot <> 0 Then ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
 				' Can't offer more than he has
 				If Not TieneObjetos(ObjIndex, TotalOfferItems(ObjIndex, UserIndex) + Amount, UserIndex) Then
-					
+
 					Call WriteCommerceChat(UserIndex, "No tienes esa cantidad.", FontTypeNames.FONTTYPE_TALK)
 					Exit Sub
 				End If
-				
+
 				If ItemNewbie(ObjIndex) Then
 					Call WriteCancelOfferItem(UserIndex, OfferSlot)
 					Exit Sub
 				End If
-				
+
 				'Don't allow to sell boats if they are equipped (you can't take them off in the water and causes trouble)
 				If .flags.Navegando = 1 Then
 					If .Invent.BarcoSlot = Slot Then
@@ -4003,7 +4003,7 @@ Errhandler:
 						Exit Sub
 					End If
 				End If
-				
+
 				If .Invent.MochilaEqpSlot > 0 Then
 					If .Invent.MochilaEqpSlot = Slot Then
 						Call WriteCommerceChat(UserIndex, "No puedes vender tu mochila mientras la estés usando.", FontTypeNames.FONTTYPE_TALK)
@@ -4011,20 +4011,20 @@ Errhandler:
 					End If
 				End If
 			End If
-			
-			
-			
+
+
+
 			Call AgregarOferta(UserIndex, OfferSlot, ObjIndex, Amount, Slot = FLAGORO)
-			
+
 			Call EnviarOferta(tUser, OfferSlot)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "GuildAcceptPeace" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildAcceptPeace(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4035,7 +4035,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4044,44 +4044,44 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDePaz(UserIndex, guild, errorStr))
-			
+
 			If CDbl(otherClanIndex) = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & guild & ".", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex), PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & modGuilds.GuildName(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildRejectAlliance" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildRejectAlliance(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4092,7 +4092,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4101,44 +4101,44 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr))
-			
+
 			If CDbl(otherClanIndex) = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de alianza de " & guild, FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex), PrepareMessageConsoleMsg(modGuilds.GuildName(.GuildIndex) & " ha rechazado nuestra propuesta de alianza con su clan.", FontTypeNames.FONTTYPE_GUILD))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildRejectPeace" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildRejectPeace(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4149,7 +4149,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4158,44 +4158,44 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDePaz(UserIndex, guild, errorStr))
-			
+
 			If CDbl(otherClanIndex) = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de paz de " & guild & ".", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex), PrepareMessageConsoleMsg(modGuilds.GuildName(.GuildIndex) & " ha rechazado nuestra propuesta de paz con su clan.", FontTypeNames.FONTTYPE_GUILD))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildAcceptAlliance" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildAcceptAlliance(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4206,7 +4206,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4215,44 +4215,44 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr))
-			
+
 			If CDbl(otherClanIndex) = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg("Tu clan ha firmado la alianza con " & guild & ".", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex), PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & modGuilds.GuildName(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildOfferPeace" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildOfferPeace(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4263,7 +4263,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4272,42 +4272,42 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
 			proposal = buffer.ReadASCIIString()
-			
+
 			If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, proposal, errorStr) Then
 				Call WriteConsoleMsg(UserIndex, "Propuesta de paz enviada.", FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildOfferAlliance" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildOfferAlliance(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4318,7 +4318,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4327,42 +4327,42 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
 			proposal = buffer.ReadASCIIString()
-			
+
 			If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, proposal, errorStr) Then
 				Call WriteConsoleMsg(UserIndex, "Propuesta de alianza enviada.", FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildAllianceDetails" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildAllianceDetails(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4373,7 +4373,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4382,43 +4382,43 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, errorStr)
-			
+
 			If migr_LenB(details) = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteOfferDetails(UserIndex, details)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildPeaceDetails" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildPeaceDetails(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4429,7 +4429,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4438,43 +4438,43 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, errorStr)
-			
+
 			If migr_LenB(details) = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteOfferDetails(UserIndex, details)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildRequestJoinerInfo" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildRequestJoinerInfo(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4485,7 +4485,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim details As String
@@ -4494,43 +4494,43 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			User_Renamed = buffer.ReadASCIIString()
-			
+
 			details = modGuilds.a_DetallesAspirante(UserIndex, User_Renamed)
-			
+
 			If migr_LenB(details) = 0 Then
 				Call WriteConsoleMsg(UserIndex, "El personaje no ha mandado solicitud, o no estás habilitado para verla.", FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteShowUserRequest(UserIndex, details)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildAlliancePropList" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildAlliancePropList(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4539,15 +4539,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call WriteAlianceProposalsList(UserIndex, r_ListaDePropuestas(UserIndex, modGuilds.RELACIONES_GUILD.ALIADOS))
 	End Sub
-	
+
 	''
 	' Handles the "GuildPeacePropList" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildPeacePropList(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4556,15 +4556,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call WritePeaceProposalsList(UserIndex, r_ListaDePropuestas(UserIndex, modGuilds.RELACIONES_GUILD.PAZ))
 	End Sub
-	
+
 	''
 	' Handles the "GuildDeclareWar" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildDeclareWar(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4575,7 +4575,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4584,15 +4584,15 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
-			
+
 			otherGuildIndex = modGuilds.r_DeclararGuerra(UserIndex, guild, errorStr)
-			
+
 			If otherGuildIndex = 0 Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
@@ -4602,29 +4602,29 @@ Errhandler:
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, otherGuildIndex, PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildNewWebsite" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildNewWebsite(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4635,40 +4635,40 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
+
 			Call modGuilds.ActualizarWebSite(UserIndex, buffer.ReadASCIIString())
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildAcceptNewMember" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildAcceptNewMember(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4679,7 +4679,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim errorStr As String
@@ -4688,13 +4688,13 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			UserName = buffer.ReadASCIIString()
-			
+
 			If Not modGuilds.a_AceptarAspirante(UserIndex, UserName, errorStr) Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
@@ -4703,33 +4703,33 @@ Errhandler:
 					Call modGuilds.m_ConectarMiembroAClan(tUser, .GuildIndex)
 					Call RefreshCharStatus(tUser)
 				End If
-				
+
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessageConsoleMsg(UserName & " ha sido aceptado como miembro del clan.", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex, PrepareMessagePlayWave(43, NO_3D_SOUND, NO_3D_SOUND))
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildRejectNewMember" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildRejectNewMember(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4741,7 +4741,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim errorStr As String
@@ -4751,19 +4751,19 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			UserName = buffer.ReadASCIIString()
 			reason = buffer.ReadASCIIString()
-			
+
 			If Not modGuilds.a_RechazarAspirante(UserIndex, UserName, errorStr) Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				tUser = NameIndex(UserName)
-				
+
 				If tUser > 0 Then
 					Call WriteConsoleMsg(tUser, errorStr & " : " & reason, FontTypeNames.FONTTYPE_GUILD)
 				Else
@@ -4771,29 +4771,29 @@ Errhandler:
 					Call modGuilds.a_RechazarAspiranteChar(UserName, .GuildIndex, reason)
 				End If
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildKickMember" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildKickMember(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4804,7 +4804,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim UserName As String
@@ -4812,44 +4812,44 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			UserName = buffer.ReadASCIIString()
-			
+
 			GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
-			
+
 			If GuildIndex > 0 Then
 				Call SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex, PrepareMessageConsoleMsg(UserName & " fue expulsado del clan.", FontTypeNames.FONTTYPE_GUILD))
 				Call SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex, PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
 			Else
 				Call WriteConsoleMsg(UserIndex, "No puedes expulsar ese personaje del clan.", FontTypeNames.FONTTYPE_GUILD)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildUpdateNews" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildUpdateNews(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4860,40 +4860,40 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
+
 			Call modGuilds.ActualizarNoticias(UserIndex, buffer.ReadASCIIString())
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildMemberInfo" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildMemberInfo(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4904,40 +4904,40 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
+
 			Call modGuilds.SendDetallesPersonaje(UserIndex, buffer.ReadASCIIString())
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildOpenElections" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildOpenElections(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4949,8 +4949,8 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
-			
+
+
 			If Not modGuilds.v_AbrirElecciones(UserIndex, error_Renamed) Then
 				Call WriteConsoleMsg(UserIndex, error_Renamed, FontTypeNames.FONTTYPE_GUILD)
 			Else
@@ -4958,12 +4958,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "GuildRequestMembership" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildRequestMembership(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -4974,7 +4974,7 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		Dim guild As String
@@ -4983,42 +4983,42 @@ Errhandler:
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
-			
+
+
 			guild = buffer.ReadASCIIString()
 			application = buffer.ReadASCIIString()
-			
+
 			If Not modGuilds.a_NuevoAspirante(UserIndex, guild, application, errorStr) Then
 				Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
 			Else
 				Call WriteConsoleMsg(UserIndex, "Tu solicitud ha sido enviada. Espera prontas noticias del líder de " & guild & ".", FontTypeNames.FONTTYPE_GUILD)
 			End If
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "GuildRequestDetails" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildRequestDetails(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5029,40 +5029,40 @@ Errhandler:
 			Err.Raise(UserList(UserIndex).incomingData.NotEnoughDataErrCode)
 			Exit Sub
 		End If
-		
+
 		On Error GoTo Errhandler
 		Dim buffer As New clsByteQueue
 		With UserList(UserIndex)
 			'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 			Call buffer.CopyBuffer(.incomingData)
-			
+
 			'Remove packet ID
 			Call buffer.ReadByte()
-			
+
 			Call modGuilds.SendGuildDetails(UserIndex, buffer.ReadASCIIString())
-			
+
 			'If we got here then packet is complete, copy data back to original queue
 			Call .incomingData.CopyBuffer(buffer)
 		End With
-		
-Errhandler: 
+
+Errhandler:
 		'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim error_Renamed As Integer
 		error_Renamed = Err.Number
 		On Error GoTo 0
-		
+
 		'Destroy auxiliar buffer
 		'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		buffer = Nothing
-		
+
 		If error_Renamed <> 0 Then Err.Raise(error_Renamed)
 	End Sub
-	
+
 	''
 	' Handles the "Online" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleOnline(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5071,26 +5071,26 @@ Errhandler:
 		'***************************************************
 		Dim i As Integer
 		Dim Count As Integer
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			For i = 1 To LastUser
 				If migr_LenB(UserList(i).name) <> 0 Then
 					If UserList(i).flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then Count = Count + 1
 				End If
 			Next i
-			
+
 			Call WriteConsoleMsg(UserIndex, "Número de usuarios: " & CStr(Count), FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Quit" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleQuit(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5101,40 +5101,40 @@ Errhandler:
 		'***************************************************
 		Dim tUser As Short
 		Dim isNotVisible As Boolean
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			If .flags.Paralizado = 1 Then
 				Call WriteConsoleMsg(UserIndex, "No puedes salir estando paralizado.", FontTypeNames.FONTTYPE_WARNING)
 				Exit Sub
 			End If
-			
+
 			'exit secure commerce
 			If .ComUsu.DestUsu > 0 Then
 				tUser = .ComUsu.DestUsu
-				
+
 				If UserList(tUser).flags.UserLogged Then
 					If UserList(tUser).ComUsu.DestUsu = UserIndex Then
 						Call WriteConsoleMsg(tUser, "Comercio cancelado por el otro usuario.", FontTypeNames.FONTTYPE_TALK)
 						Call FinComerciarUsu(tUser)
 					End If
 				End If
-				
+
 				Call WriteConsoleMsg(UserIndex, "Comercio cancelado.", FontTypeNames.FONTTYPE_TALK)
 				Call FinComerciarUsu(UserIndex)
 			End If
-			
+
 			Call Cerrar_Usuario(UserIndex)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "GuildLeave" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleGuildLeave(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5142,14 +5142,14 @@ Errhandler:
 		'
 		'***************************************************
 		Dim GuildIndex As Short
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'obtengo el guildindex
 			GuildIndex = m_EcharMiembroDeClan(UserIndex, .name)
-			
+
 			If GuildIndex > 0 Then
 				Call WriteConsoleMsg(UserIndex, "Dejas el clan.", FontTypeNames.FONTTYPE_GUILD)
 				Call SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex, PrepareMessageConsoleMsg(.name & " deja el clan.", FontTypeNames.FONTTYPE_GUILD))
@@ -5158,12 +5158,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "RequestAccountState" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestAccountState(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5172,55 +5172,55 @@ Errhandler:
 		'***************************************************
 		Dim earnings As Short
 		Dim Percentage As Short
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead people can't check their accounts
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			Select Case Npclist(.flags.TargetNPC).NPCtype
 				Case Declaraciones.eNPCType.Banquero
 					Call WriteChatOverHead(UserIndex, "Tienes " & .Stats.Banco & " monedas de oro en tu cuenta.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
-					
+
 				Case Declaraciones.eNPCType.Timbero
 					If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
 						earnings = Apuestas.Ganancias - Apuestas.Perdidas
-						
+
 						If earnings >= 0 And Apuestas.Ganancias <> 0 Then
 							Percentage = Int(earnings * 100 / Apuestas.Ganancias)
 						End If
-						
+
 						If earnings < 0 And Apuestas.Perdidas <> 0 Then
 							Percentage = Int(earnings * 100 / Apuestas.Perdidas)
 						End If
-						
+
 						Call WriteConsoleMsg(UserIndex, "Entradas: " & Apuestas.Ganancias & " Salida: " & Apuestas.Perdidas & " Ganancia Neta: " & earnings & " (" & Percentage & "%) Jugadas: " & Apuestas.Jugadas, FontTypeNames.FONTTYPE_INFO)
 					End If
 			End Select
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "PetStand" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandlePetStand(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5230,40 +5230,40 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead people can't use pets
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make sure it's his pet
 			If Npclist(.flags.TargetNPC).MaestroUser <> UserIndex Then Exit Sub
-			
+
 			'Do it!
 			Npclist(.flags.TargetNPC).Movement = AI.TipoAI.ESTATICO
-			
+
 			Call Expresar(.flags.TargetNPC, UserIndex)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "PetFollow" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandlePetFollow(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5273,41 +5273,41 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make usre it's the user's pet
 			If Npclist(.flags.TargetNPC).MaestroUser <> UserIndex Then Exit Sub
-			
+
 			'Do it
 			Call FollowAmo(.flags.TargetNPC)
-			
+
 			Call Expresar(.flags.TargetNPC, UserIndex)
 		End With
 	End Sub
-	
-	
+
+
 	''
 	' Handles the "ReleasePet" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleReleasePet(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: ZaMa
@@ -5317,39 +5317,39 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make usre it's the user's pet
 			If Npclist(.flags.TargetNPC).MaestroUser <> UserIndex Then Exit Sub
-			
+
 			'Do it
 			Call QuitarPet(UserIndex, .flags.TargetNPC)
-			
+
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "TrainList" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleTrainList(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5359,37 +5359,37 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make sure it's close enough
 			If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Make sure it's the trainer
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Entrenador Then Exit Sub
-			
+
 			Call WriteTrainerCreatureList(UserIndex, .flags.TargetNPC)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Rest" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRest(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5399,42 +5399,42 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Solo puedes usar ítems cuando estás vivo.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If HayOBJarea(.Pos, FOGATA) Then
 				Call WriteRestOK(UserIndex)
-				
+
 				If Not .flags.Descansar Then
 					Call WriteConsoleMsg(UserIndex, "Te acomodás junto a la fogata y comienzas a descansar.", FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Te levantas.", FontTypeNames.FONTTYPE_INFO)
 				End If
-				
+
 				.flags.Descansar = Not .flags.Descansar
 			Else
 				If .flags.Descansar Then
 					Call WriteRestOK(UserIndex)
 					Call WriteConsoleMsg(UserIndex, "Te levantas.", FontTypeNames.FONTTYPE_INFO)
-					
+
 					.flags.Descansar = False
 					Exit Sub
 				End If
-				
+
 				Call WriteConsoleMsg(UserIndex, "No hay ninguna fogata junto a la cual descansar.", FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Meditate" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleMeditate(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5445,19 +5445,19 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead users can't use pets
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!! Sólo puedes meditar cuando estás vivo.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Can he meditate?
 			If .Stats.MaxMAN = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Sólo las clases mágicas conocen el arte de la meditación.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Admins don't have to wait :D
 			If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
 				.Stats.MinMAN = .Stats.MaxMAN
@@ -5465,54 +5465,54 @@ Errhandler:
 				Call WriteUpdateMana(UserIndex)
 				Exit Sub
 			End If
-			
+
 			Call WriteMeditateToggle(UserIndex)
-			
+
 			If .flags.Meditando Then Call WriteConsoleMsg(UserIndex, "Dejas de meditar.", FontTypeNames.FONTTYPE_INFO)
-			
+
 			.flags.Meditando = Not .flags.Meditando
-			
+
 			'Barrin 3/10/03 Tiempo de inicio al meditar
 			If .flags.Meditando Then
-				.Counters.tInicioMeditar = GetTickCount() And &H7FFFFFFF
-				
+				.Counters.tInicioMeditar = GetTickCount()
+
 				Call WriteConsoleMsg(UserIndex, "Te estás concentrando. En " & Fix(TIEMPO_INICIOMEDITAR / 1000) & " segundos comenzarás a meditar.", FontTypeNames.FONTTYPE_INFO)
-				
+
 				.Char_Renamed.loops = INFINITE_LOOPS
-				
+
 				'Show proper FX according to level
 				If .Stats.ELV < 13 Then
 					.Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARCHICO
-					
-				ElseIf .Stats.ELV < 25 Then 
+
+				ElseIf .Stats.ELV < 25 Then
 					.Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARMEDIANO
-					
-				ElseIf .Stats.ELV < 35 Then 
+
+				ElseIf .Stats.ELV < 35 Then
 					.Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARGRANDE
-					
-				ElseIf .Stats.ELV < 42 Then 
+
+				ElseIf .Stats.ELV < 42 Then
 					.Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARXGRANDE
-					
+
 				Else
 					.Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARXXGRANDE
 				End If
-				
+
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char_Renamed.CharIndex, .Char_Renamed.FX, INFINITE_LOOPS))
 			Else
 				.Counters.bPuedeMeditar = False
-				
+
 				.Char_Renamed.FX = 0
 				.Char_Renamed.loops = 0
 				Call SendData(modSendData.SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char_Renamed.CharIndex, 0, 0))
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Resucitate" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleResucitate(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5522,32 +5522,32 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Se asegura que el target es un npc
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate NPC and make sure player is dead
 			If (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Revividor And (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.ResucitadorNewbie Or Not EsNewbie(UserIndex))) Or .flags.Muerto = 0 Then Exit Sub
-			
+
 			'Make sure it's close enough
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
 				Call WriteConsoleMsg(UserIndex, "El sacerdote no puede resucitarte debido a que estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			Call RevivirUsuario(UserIndex)
 			Call WriteConsoleMsg(UserIndex, "¡¡Has sido resucitado!!", FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Consultation" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleConsultation(ByVal UserIndex As String)
 		'***************************************************
 		'Author: ZaMa
@@ -5555,75 +5555,75 @@ Errhandler:
 		'Habilita/Deshabilita el modo consulta.
 		'01/05/2010: ZaMa - Agrego validaciones.
 		'***************************************************
-		
+
 		Dim UserConsulta As Short
-		
+
 		Dim UserName As String
 		With UserList(CInt(UserIndex))
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			' Comando exclusivo para gms
 			If Not EsGM(CShort(UserIndex)) Then Exit Sub
-			
+
 			UserConsulta = .flags.TargetUser
-			
+
 			'Se asegura que el target es un usuario
 			If UserConsulta = 0 Then
 				Call WriteConsoleMsg(CShort(UserIndex), "Primero tienes que seleccionar un usuario, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			' No podes ponerte a vos mismo en modo consulta.
 			If UserConsulta = CDbl(UserIndex) Then Exit Sub
-			
+
 			' No podes estra en consulta con otro gm
 			If EsGM(UserConsulta) Then
 				Call WriteConsoleMsg(CShort(UserIndex), "No puedes iniciar el modo consulta con otro administrador.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			UserName = UserList(UserConsulta).name
-			
+
 			' Si ya estaba en consulta, termina la consulta
 			If UserList(UserConsulta).flags.EnConsulta Then
 				Call WriteConsoleMsg(CShort(UserIndex), "Has terminado el modo consulta con " & UserName & ".", FontTypeNames.FONTTYPE_INFOBOLD)
 				Call WriteConsoleMsg(UserConsulta, "Has terminado el modo consulta.", FontTypeNames.FONTTYPE_INFOBOLD)
 				Call LogGM(.name, "Termino consulta con " & UserName)
-				
+
 				UserList(UserConsulta).flags.EnConsulta = False
-				
+
 				' Sino la inicia
 			Else
 				Call WriteConsoleMsg(CShort(UserIndex), "Has iniciado el modo consulta con " & UserName & ".", FontTypeNames.FONTTYPE_INFOBOLD)
 				Call WriteConsoleMsg(UserConsulta, "Has iniciado el modo consulta.", FontTypeNames.FONTTYPE_INFOBOLD)
 				Call LogGM(.name, "Inicio consulta con " & UserName)
-				
+
 				With UserList(UserConsulta)
 					.flags.EnConsulta = True
-					
+
 					' Pierde invi u ocu
 					If .flags.invisible = 1 Or .flags.Oculto = 1 Then
 						.flags.Oculto = 0
 						.flags.invisible = 0
 						.Counters.TiempoOculto = 0
 						.Counters.Invisibilidad = 0
-						
+
 						Call UsUaRiOs.SetInvisible(UserConsulta, UserList(UserConsulta).Char_Renamed.CharIndex, False)
 					End If
 				End With
 			End If
-			
+
 			Call UsUaRiOs.SetConsulatMode(UserConsulta)
 		End With
-		
+
 	End Sub
-	
+
 	''
 	' Handles the "Heal" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleHeal(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5633,33 +5633,33 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Se asegura que el target es un npc
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Revividor And Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.ResucitadorNewbie) Or .flags.Muerto <> 0 Then Exit Sub
-			
+
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
 				Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			.Stats.MinHp = .Stats.MaxHp
-			
+
 			Call WriteUpdateHP(UserIndex)
-			
+
 			Call WriteConsoleMsg(UserIndex, "¡¡Has sido curado!!", FontTypeNames.FONTTYPE_INFO)
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "RequestStats" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestStats(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5668,15 +5668,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call SendUserStatsTxt(UserIndex, UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "Help" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleHelp(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5685,15 +5685,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call SendHelp(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "CommerceStart" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleCommerceStart(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5704,19 +5704,19 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead people can't commerce
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Is it already in commerce mode??
 			If .flags.Comerciando Then
 				Call WriteConsoleMsg(UserIndex, "Ya estás comerciando.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC > 0 Then
 				'Does the NPC want to trade??
@@ -5724,50 +5724,50 @@ Errhandler:
 					If migr_LenB(Npclist(.flags.TargetNPC).desc) <> 0 Then
 						Call WriteChatOverHead(UserIndex, "No tengo ningún interés en comerciar.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					End If
-					
+
 					Exit Sub
 				End If
-				
+
 				If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
 					Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
-				
+
 				'Start commerce....
 				Call IniciarComercioNPC(UserIndex)
 				'[Alejo]
-			ElseIf .flags.TargetUser > 0 Then 
+			ElseIf .flags.TargetUser > 0 Then
 				'User commerce...
 				'Can he commerce??
 				If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
 					Call WriteConsoleMsg(UserIndex, "No puedes vender ítems.", FontTypeNames.FONTTYPE_WARNING)
 					Exit Sub
 				End If
-				
+
 				'Is the other one dead??
 				If UserList(.flags.TargetUser).flags.Muerto = 1 Then
 					Call WriteConsoleMsg(UserIndex, "¡¡No puedes comerciar con los muertos!!", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
-				
+
 				'Is it me??
 				If .flags.TargetUser = UserIndex Then
 					Call WriteConsoleMsg(UserIndex, "¡¡No puedes comerciar con vos mismo!!", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
-				
+
 				'Check distance
 				If Distancia(UserList(.flags.TargetUser).Pos, .Pos) > 3 Then
 					Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
-				
+
 				'Is he already trading?? is it with me or someone else??
 				If UserList(.flags.TargetUser).flags.Comerciando = True And UserList(.flags.TargetUser).ComUsu.DestUsu <> UserIndex Then
 					Call WriteConsoleMsg(UserIndex, "No puedes comerciar con el usuario en este momento.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
-				
+
 				'Initialize some variables...
 				.ComUsu.DestUsu = .flags.TargetUser
 				.ComUsu.DestNick = UserList(.flags.TargetUser).name
@@ -5776,10 +5776,10 @@ Errhandler:
 					.ComUsu.Objeto(i) = 0
 				Next i
 				.ComUsu.GoldAmount = 0
-				
+
 				.ComUsu.Acepto = False
 				.ComUsu.Confirmo = False
-				
+
 				'Rutina para comerciar con otro usuario
 				Call IniciarComercioConUsuario(UserIndex, .flags.TargetUser)
 			Else
@@ -5787,12 +5787,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "BankStart" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleBankStart(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5802,25 +5802,25 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Dead people can't commerce
 			If .flags.Muerto = 1 Then
 				Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If .flags.Comerciando Then
 				Call WriteConsoleMsg(UserIndex, "Ya estás comerciando.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC > 0 Then
 				If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
 					Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
 					Exit Sub
 				End If
-				
+
 				'If it's the banker....
 				If Npclist(.flags.TargetNPC).NPCtype = Declaraciones.eNPCType.Banquero Then
 					Call IniciarDeposito(UserIndex)
@@ -5830,12 +5830,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Enlist" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleEnlist(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5845,20 +5845,20 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
-			
+
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
 				Call WriteConsoleMsg(UserIndex, "Debes acercarte más.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If Npclist(.flags.TargetNPC).flags.Faccion = 0 Then
 				Call EnlistarArmadaReal(UserIndex)
 			Else
@@ -5866,12 +5866,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Information" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleInformation(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5881,36 +5881,36 @@ Errhandler:
 		Dim Matados As Short
 		Dim NextRecom As Short
 		Dim Diferencia As Short
-		
+
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
-			
+
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
-			
+
+
 			NextRecom = .Faccion.NextRecompensa
-			
+
 			If Npclist(.flags.TargetNPC).flags.Faccion = 0 Then
 				If .Faccion.ArmadaReal = 0 Then
 					Call WriteChatOverHead(UserIndex, "¡¡No perteneces a las tropas reales!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
-				
+
 				Matados = .Faccion.CriminalesMatados
 				Diferencia = NextRecom - Matados
-				
+
 				If Diferencia > 0 Then
 					Call WriteChatOverHead(UserIndex, "Tu deber es combatir criminales, mata " & Diferencia & " criminales más y te daré una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
@@ -5921,10 +5921,10 @@ Errhandler:
 					Call WriteChatOverHead(UserIndex, "¡¡No perteneces a la legión oscura!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 					Exit Sub
 				End If
-				
+
 				Matados = .Faccion.CiudadanosMatados
 				Diferencia = NextRecom - Matados
-				
+
 				If Diferencia > 0 Then
 					Call WriteChatOverHead(UserIndex, "Tu deber es sembrar el caos y la desesperanza, mata " & Diferencia & " ciudadanos más y te daré una recompensa.", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
 				Else
@@ -5933,12 +5933,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "Reward" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleReward(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5948,20 +5948,20 @@ Errhandler:
 		With UserList(UserIndex)
 			'Remove packet ID
 			Call .incomingData.ReadByte()
-			
+
 			'Validate target NPC
 			If .flags.TargetNPC = 0 Then
 				Call WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
-			
+
 			If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
 				Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 				Exit Sub
 			End If
-			
+
 			If Npclist(.flags.TargetNPC).flags.Faccion = 0 Then
 				If .Faccion.ArmadaReal = 0 Then
 					Call WriteChatOverHead(UserIndex, "¡¡No perteneces a las tropas reales!!", Npclist(.flags.TargetNPC).Char_Renamed.CharIndex, System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
@@ -5977,12 +5977,12 @@ Errhandler:
 			End If
 		End With
 	End Sub
-	
+
 	''
 	' Handles the "RequestMOTD" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleRequestMOTD(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -5991,15 +5991,15 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Call SendMOTD(UserIndex)
 	End Sub
-	
+
 	''
 	' Handles the "UpTime" message.
 	'
 	' @param    userIndex The index of the user sending the message.
-	
+
 	Private Sub HandleUpTime(ByVal UserIndex As Short)
 		'***************************************************
 		'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -6008,13 +6008,13 @@ Errhandler:
 		'***************************************************
 		'Remove packet ID
 		Call UserList(UserIndex).incomingData.ReadByte()
-		
+
 		Dim time As Integer
 		Dim UpTimeStr As String
-		
+
 		'Get total time in seconds
-		time = (CShort(GetTickCount() And &H7FFFFFFF) - tInicioServer) \ 1000
-		
+		time = (GetTickCount() - tInicioServer) \ 1000
+
 		'Get times in dd:hh:mm:ss format
 		UpTimeStr = (time Mod 60) & " segundos."
 		time = time \ 60

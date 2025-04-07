@@ -58,15 +58,15 @@ Module modCentinela
 		'############################################################
 		'Makes noise and FX to call the user's attention.
 		'############################################################
-		If CShort(GetTickCount() And &H7FFFFFFF) - Centinela.spawnTime >= 5000 Then
+		If GetTickCount() - Centinela.spawnTime >= 5000 Then
 			If Centinela.RevisandoUserIndex <> 0 And centinelaActivado Then
 				If Not UserList(Centinela.RevisandoUserIndex).flags.CentinelaOK Then
 					Call WritePlayWave(Centinela.RevisandoUserIndex, SND_WARP, Npclist(CentinelaNPCIndex).Pos.X, Npclist(CentinelaNPCIndex).Pos.Y)
 					Call WriteCreateFX(Centinela.RevisandoUserIndex, Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex, Declaraciones.FXIDs.FXWARP, 0)
-					
+
 					'Resend the key
 					Call CentinelaSendClave(Centinela.RevisandoUserIndex)
-					
+
 					Call FlushBuffer(Centinela.RevisandoUserIndex)
 				End If
 			End If
@@ -86,8 +86,8 @@ Module modCentinela
 					Centinela.RevisandoUserIndex = LoopC
 					Centinela.TiempoRestante = TIEMPO_INICIAL
 					Centinela.clave = RandomNumber(1, 32000)
-					Centinela.spawnTime = GetTickCount() And &H7FFFFFFF
-					
+					Centinela.spawnTime = GetTickCount()
+
 					'Ponemos al centinela en posición
 					Call WarpCentinela(LoopC)
 					

@@ -66,20 +66,6 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <COMReference Include="AxMSWinsockLib">
-      <Guid>{248DD890-BB45-11CF-9ABC-0080C7E7B78D}</Guid>
-      <Lcid>0</Lcid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <WrapperTool>aximp</WrapperTool>
-    </COMReference>
-    <COMReference Include="MSWinsockLib">
-      <Guid>{248DD890-BB45-11CF-9ABC-0080C7E7B78D}</Guid>
-      <Lcid>0</Lcid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <WrapperTool>tlbimp</WrapperTool>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -103,9 +89,6 @@
     </Compile>
     <Compile Include="ArrayInitializers.vb" />
     <Compile Include="AssemblyInfo.vb" />
-    <Compile Include="AxWinsockArray.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="cColaArray.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -311,6 +294,7 @@
     <Compile Include="SistemaCombate.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SocketManager.vb" />
     <Compile Include="Statistics.vb">
       <SubType>Code</SubType>
     </Compile>
