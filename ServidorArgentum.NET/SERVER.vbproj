@@ -1,12 +1,8 @@
-﻿<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <ProjectType>Local</ProjectType>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E391982F-5C76-4955-8C31-D9F07D4A8FA4}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyName>ServidorArgentum</AssemblyName>
     <OutputType>WinExe</OutputType>
     <StartupObject>ServidorArgentum.General</StartupObject>
@@ -18,336 +14,142 @@
     <StartWithIE>False</StartWithIE>
     <ApplicationIcon>SERVER.ico</ApplicationIcon>
     <RootNamespace>ServidorArgentum</RootNamespace>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>ServidorArgentum.xml</DocumentationFile>
-    <DebugSymbols>True</DebugSymbols>
-    <DefineDebug>True</DefineDebug>
-    <DefineTrace>True</DefineTrace>
     <DefineConstants>Win32=True</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
-    <DebugType>full</DebugType>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>ServidorArgentum.xml</DocumentationFile>
-    <DebugSymbols>False</DebugSymbols>
     <DefineDebug>False</DefineDebug>
-    <DefineTrace>True</DefineTrace>
     <DefineConstants>Win32=True</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>none</DebugType>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System">
+    <Reference Update="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data">
+    <Reference Update="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Drawing">
+    <Reference Update="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Name>System.Windows.Forms</Name>
-    </Reference>
-    <Reference Include="System.XML">
+    <Reference Update="System.XML">
       <Name>System.XML</Name>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.Compatibility" />
-    <Import Include="System" />
-    <Import Include="System.Collections" />
-    <Import Include="System.Data" />
-    <Import Include="System.Diagnostics" />
     <Import Include="System.Drawing" />
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acciones.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Admin.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AI_NPC.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ArrayInitializers.vb" />
-    <Compile Include="AssemblyInfo.vb" />
-    <Compile Include="cColaArray.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="cGarbage.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Characters.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsAntiMassClon.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsByteQueue.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsClan.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsdicc.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsEstadisticasIPC.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsIniReader.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsMapSoundManager.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsParty.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Comercio.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ConsultasPopulares.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="cSolicitud.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Declares.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FileIO.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="frmAdmin.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmAdmin.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmAdmin.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmCargando.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmCargando.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmCargando.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmConID.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmConID.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmConID.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmDebugNpc.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmDebugNpc.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmDebugNpc.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmInterv.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>FrmInterv.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FrmInterv.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMain.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmMain.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmMain.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmServidor.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmServidor.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmServidor.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmStat.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>FrmStat.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FrmStat.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmTrafic.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmTrafic.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmTrafic.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmUserList.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>frmUserList.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmUserList.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GameLogic.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="General.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="History.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InvUsuario.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Matematicas.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mdlCOmercioConUsuario.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mdParty.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Migration.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ModAreas.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modBanco.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modCentinela.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ModCola.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ModFacciones.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modForum.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modGuilds.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modHechizos.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modHexaStrings.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modInvisibles.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modNuevoTimer.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modSendData.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modulo_InventANDobj.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MODULO_NPCs.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modulo_UsUaRiOs.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PathFinding.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="praetorians.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Protocol.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Queue.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SecurityIp.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SistemaCombate.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SocketManager.vb" />
-    <Compile Include="Statistics.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TCP.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Trabajo.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="wskapiAO.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <EmbeddedResource Include="frmAdmin.resX">
-      <DependentUpon>frmAdmin.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmCargando.resX">
-      <DependentUpon>frmCargando.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmConID.resX">
-      <DependentUpon>frmConID.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmDebugNpc.resX">
-      <DependentUpon>frmDebugNpc.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmInterv.resX">
-      <DependentUpon>FrmInterv.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resX">
-      <DependentUpon>frmMain.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmServidor.resX">
-      <DependentUpon>frmServidor.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmStat.resX">
-      <DependentUpon>FrmStat.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmTrafic.resX">
-      <DependentUpon>frmTrafic.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmUserList.resX">
-      <DependentUpon>frmUserList.vb</DependentUpon>
-    </EmbeddedResource>
     <Content Include="SERVER.ico" />
-    <None Include="app.config" />
-    <None Include="_UpgradeReport.htm">
+    <None Update="_UpgradeReport.htm">
       <SubType>Preview</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="My Project\" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <ItemGroup>
+    <Compile Remove="Backup\Acciones.vb" />
+    <Compile Remove="Backup\Admin.vb" />
+    <Compile Remove="Backup\AI_NPC.vb" />
+    <Compile Remove="Backup\AssemblyInfo.vb" />
+    <Compile Remove="Backup\AxWinsockArray.vb" />
+    <Compile Remove="Backup\cColaArray.vb" />
+    <Compile Remove="Backup\cGarbage.vb" />
+    <Compile Remove="Backup\Characters.vb" />
+    <Compile Remove="Backup\clsAntiMassClon.vb" />
+    <Compile Remove="Backup\clsByteQueue.vb" />
+    <Compile Remove="Backup\clsClan.vb" />
+    <Compile Remove="Backup\clsdicc.vb" />
+    <Compile Remove="Backup\clsEstadisticasIPC.vb" />
+    <Compile Remove="Backup\clsIniReader.vb" />
+    <Compile Remove="Backup\clsMapSoundManager.vb" />
+    <Compile Remove="Backup\clsParty.vb" />
+    <Compile Remove="Backup\Comercio.vb" />
+    <Compile Remove="Backup\ConsultasPopulares.vb" />
+    <Compile Remove="Backup\cSolicitud.vb" />
+    <Compile Remove="Backup\Declares.vb" />
+    <Compile Remove="Backup\FileIO.vb" />
+    <Compile Remove="Backup\frmAdmin.Designer.vb" />
+    <Compile Remove="Backup\frmAdmin.vb" />
+    <Compile Remove="Backup\frmCargando.Designer.vb" />
+    <Compile Remove="Backup\frmCargando.vb" />
+    <Compile Remove="Backup\frmConID.Designer.vb" />
+    <Compile Remove="Backup\frmConID.vb" />
+    <Compile Remove="Backup\frmDebugNpc.Designer.vb" />
+    <Compile Remove="Backup\frmDebugNpc.vb" />
+    <Compile Remove="Backup\FrmInterv.Designer.vb" />
+    <Compile Remove="Backup\FrmInterv.vb" />
+    <Compile Remove="Backup\frmMain.Designer.vb" />
+    <Compile Remove="Backup\frmMain.vb" />
+    <Compile Remove="Backup\frmServidor.Designer.vb" />
+    <Compile Remove="Backup\frmServidor.vb" />
+    <Compile Remove="Backup\FrmStat.Designer.vb" />
+    <Compile Remove="Backup\FrmStat.vb" />
+    <Compile Remove="Backup\frmTrafic.Designer.vb" />
+    <Compile Remove="Backup\frmTrafic.vb" />
+    <Compile Remove="Backup\frmUserList.Designer.vb" />
+    <Compile Remove="Backup\frmUserList.vb" />
+    <Compile Remove="Backup\GameLogic.vb" />
+    <Compile Remove="Backup\General.vb" />
+    <Compile Remove="Backup\History.vb" />
+    <Compile Remove="Backup\InvUsuario.vb" />
+    <Compile Remove="Backup\Matematicas.vb" />
+    <Compile Remove="Backup\mdlCOmercioConUsuario.vb" />
+    <Compile Remove="Backup\mdParty.vb" />
+    <Compile Remove="Backup\Migration.vb" />
+    <Compile Remove="Backup\ModAreas.vb" />
+    <Compile Remove="Backup\modBanco.vb" />
+    <Compile Remove="Backup\modCentinela.vb" />
+    <Compile Remove="Backup\ModCola.vb" />
+    <Compile Remove="Backup\ModFacciones.vb" />
+    <Compile Remove="Backup\modForum.vb" />
+    <Compile Remove="Backup\modGuilds.vb" />
+    <Compile Remove="Backup\modHechizos.vb" />
+    <Compile Remove="Backup\modHexaStrings.vb" />
+    <Compile Remove="Backup\modInvisibles.vb" />
+    <Compile Remove="Backup\modNuevoTimer.vb" />
+    <Compile Remove="Backup\modSendData.vb" />
+    <Compile Remove="Backup\Modulo_InventANDobj.vb" />
+    <Compile Remove="Backup\MODULO_NPCs.vb" />
+    <Compile Remove="Backup\Modulo_UsUaRiOs.vb" />
+    <Compile Remove="Backup\PathFinding.vb" />
+    <Compile Remove="Backup\praetorians.vb" />
+    <Compile Remove="Backup\Protocol.vb" />
+    <Compile Remove="Backup\Queue.vb" />
+    <Compile Remove="Backup\SecurityIp.vb" />
+    <Compile Remove="Backup\SistemaCombate.vb" />
+    <Compile Remove="Backup\Statistics.vb" />
+    <Compile Remove="Backup\TCP.vb" />
+    <Compile Remove="Backup\Trabajo.vb" />
+    <Compile Remove="Backup\wskapiAO.vb" />
+    <EmbeddedResource Remove="Backup\frmAdmin.resX" />
+    <EmbeddedResource Remove="Backup\frmCargando.resX" />
+    <EmbeddedResource Remove="Backup\frmConID.resX" />
+    <EmbeddedResource Remove="Backup\frmDebugNpc.resX" />
+    <EmbeddedResource Remove="Backup\FrmInterv.resX" />
+    <EmbeddedResource Remove="Backup\frmMain.resX" />
+    <EmbeddedResource Remove="Backup\frmServidor.resX" />
+    <EmbeddedResource Remove="Backup\FrmStat.resX" />
+    <EmbeddedResource Remove="Backup\frmTrafic.resX" />
+    <EmbeddedResource Remove="Backup\frmUserList.resX" />
+  </ItemGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <Company>M</Company>
+    <Product>Argentum Server</Product>
+    <Copyright>Argentum Online is copyright of Pablo Ignacio Marquez</Copyright>
+    <AssemblyVersion>0.13.%2a</AssemblyVersion>
   </PropertyGroup>
 </Project>
