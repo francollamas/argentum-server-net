@@ -151,26 +151,21 @@ Module Admin
 		Call ReSpawnOrigPosNpcs() 'respawn de los guardias en las pos originales
 		
 		Dim j, k As Short
-		
+
 		For j = 1 To NumMaps
 			If MapInfo_Renamed(j).BackUp = 1 Then k = k + 1
 		Next j
-		
-		FrmStat.Porcentaje.Text = "0 %"
-		
+
 		For loopX = 1 To NumMaps
 			'DoEvents
-			
+
 			If MapInfo_Renamed(loopX).BackUp = 1 Then
-				
+
 				Call GrabarMapa(loopX, My.Application.Info.DirectoryPath & "\WorldBackUp\Mapa" & loopX)
-				FrmStat.Porcentaje.Text = loopX / NumMaps * 100 & " %"
 			End If
-			
+
 		Next loopX
-		
-		FrmStat.Visible = False
-		
+
 		If FileExist(DatPath & "\bkNpc.dat") Then Kill((DatPath & "bkNpc.dat"))
 		'If FileExist(DatPath & "\bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
 		

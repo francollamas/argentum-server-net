@@ -245,12 +245,10 @@ Module ES
 		
 		'obtiene el numero de hechizos
 		NumeroHechizos = Val(Leer.GetValue("INIT", "NumeroHechizos"))
-		
+
 		'UPGRADE_WARNING: El límite inferior de la matriz Hechizos ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Hechizos(NumeroHechizos)
-		
-		frmCargando.Porcentaje.Text = "0 %"
-		
+
 		'Llena la lista
 		For Hechizo = 1 To NumeroHechizos
 			With Hechizos(Hechizo)
@@ -336,10 +334,9 @@ Module ES
 				
 				'Barrin 30/9/03
 				.StaRequerido = Val(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido"))
-				
+
 				.Target = Val(Leer.GetValue("Hechizo" & Hechizo, "Target"))
-				frmCargando.Porcentaje.Text = Hechizo / NumeroHechizos * 100 & " %"
-				
+
 				.NeedStaff = Val(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
 				.StaffAffected = CBool(Val(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
 			End With
@@ -736,12 +733,9 @@ Errhandler:
 		Dim Leer As New clsIniReader
 		
 		Call Leer.Initialize(DatPath & "Obj.dat")
-		
+
 		'obtiene el numero de obj
 		NumObjDatas = Val(Leer.GetValue("INIT", "NumObjs"))
-		
-		frmCargando.Porcentaje.Text = "0 %"
-
 
 		'UPGRADE_WARNING: Es posible que la matriz ObjData_Renamed necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 		'UPGRADE_WARNING: El límite inferior de la matriz ObjData_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -945,8 +939,7 @@ Errhandler:
 				.NoSeCae = Val(Leer.GetValue("OBJ" & Object_Renamed, "NoSeCae"))
 				
 				.Upgrade = Val(Leer.GetValue("OBJ" & Object_Renamed, "Upgrade"))
-				
-				frmCargando.Porcentaje.Text = Object_Renamed / NumObjDatas * 100 & " %"
+
 			End With
 		Next Object_Renamed
 		
@@ -1295,11 +1288,8 @@ CleanExit:
 		
 		NumMaps = Val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
 		Call InitAreas()
-		
-		frmCargando.Porcentaje.Text = "0 %"
-		
-		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
+		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
 		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 		'UPGRADE_WARNING: El límite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -1319,11 +1309,8 @@ CleanExit:
 			Else
 				tFileName = My.Application.Info.DirectoryPath & MapPath & "Mapa" & Map
 			End If
-			
+
 			Call CargarMapa(Map, tFileName)
-			
-			frmCargando.Porcentaje.Text = Map / NumMaps * 100 & " %"
-			System.Windows.Forms.Application.DoEvents()
 		Next Map
 		
 		Exit Sub
@@ -1352,11 +1339,8 @@ man:
 		
 		NumMaps = Val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
 		Call InitAreas()
-		
-		frmCargando.Porcentaje.Text = "0 %"
-		
-		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
+		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
 		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 		'UPGRADE_WARNING: El límite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -1370,9 +1354,6 @@ man:
 			
 			tFileName = My.Application.Info.DirectoryPath & MapPath & "Mapa" & Map
 			Call CargarMapa(Map, tFileName)
-			
-			frmCargando.Porcentaje.Text = Map / NumMaps * 100 & " %"
-			System.Windows.Forms.Application.DoEvents()
 		Next Map
 		
 		Exit Sub
@@ -1608,79 +1589,49 @@ errh:
 		MAPA_PRETORIANO = Val(GetVar(IniPath & "Server.ini", "INIT", "MapaPretoriano"))
 		
 		EnTesting = Val(GetVar(IniPath & "Server.ini", "INIT", "Testing"))
-		
+
 		'Intervalos
 		SanaIntervaloSinDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloSinDescansar"))
-		FrmInterv.txtSanaIntervaloSinDescansar.Text = CStr(SanaIntervaloSinDescansar)
-		
 		StaminaIntervaloSinDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloSinDescansar"))
-		FrmInterv.txtStaminaIntervaloSinDescansar.Text = CStr(StaminaIntervaloSinDescansar)
-		
 		SanaIntervaloDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloDescansar"))
-		FrmInterv.txtSanaIntervaloDescansar.Text = CStr(SanaIntervaloDescansar)
-		
 		StaminaIntervaloDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloDescansar"))
-		FrmInterv.txtStaminaIntervaloDescansar.Text = CStr(StaminaIntervaloDescansar)
-		
+
 		IntervaloSed = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloSed"))
-		FrmInterv.txtIntervaloSed.Text = CStr(IntervaloSed)
-		
 		IntervaloHambre = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloHambre"))
-		FrmInterv.txtIntervaloHambre.Text = CStr(IntervaloHambre)
-		
 		IntervaloVeneno = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloVeneno"))
-		FrmInterv.txtIntervaloVeneno.Text = CStr(IntervaloVeneno)
-		
 		IntervaloParalizado = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParalizado"))
-		FrmInterv.txtIntervaloParalizado.Text = CStr(IntervaloParalizado)
-		
 		IntervaloInvisible = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvisible"))
-		FrmInterv.txtIntervaloInvisible.Text = CStr(IntervaloInvisible)
-		
 		IntervaloFrio = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloFrio"))
-		FrmInterv.txtIntervaloFrio.Text = CStr(IntervaloFrio)
-		
 		IntervaloWavFx = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWAVFX"))
-		FrmInterv.txtIntervaloWAVFX.Text = CStr(IntervaloWavFx)
-		
 		IntervaloInvocacion = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvocacion"))
-		FrmInterv.txtInvocacion.Text = CStr(IntervaloInvocacion)
-		
 		IntervaloParaConexion = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParaConexion"))
-		FrmInterv.txtIntervaloParaConexion.Text = CStr(IntervaloParaConexion)
-		
+
 		'&&&&&&&&&&&&&&&&&&&&& TIMERS &&&&&&&&&&&&&&&&&&&&&&&
-		
+
 		IntervaloPuedeSerAtacado = 5000 ' Cargar desde balance.dat
 		IntervaloAtacable = 60000 ' Cargar desde balance.dat
 		IntervaloOwnedNpc = 18000 ' Cargar desde balance.dat
-		
+
 		IntervaloUserPuedeCastear = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo"))
-		FrmInterv.txtIntervaloLanzaHechizo.Text = CStr(IntervaloUserPuedeCastear)
-		
+
 		'UPGRADE_WARNING: La propiedad Timer TIMER_AI.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
 		frmMain.TIMER_AI.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
-		FrmInterv.txtAI.Text = CStr(frmMain.TIMER_AI.Interval)
-		
+
 		'UPGRADE_WARNING: La propiedad Timer npcataca.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
 		frmMain.npcataca.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
-		FrmInterv.txtNPCPuedeAtacar.Text = CStr(frmMain.npcataca.Interval)
-		
+
 		IntervaloUserPuedeTrabajar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo"))
-		FrmInterv.txtTrabajo.Text = CStr(IntervaloUserPuedeTrabajar)
-		
+
 		IntervaloUserPuedeAtacar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar"))
-		FrmInterv.txtPuedeAtacar.Text = CStr(IntervaloUserPuedeAtacar)
-		
+
 		'TODO : Agregar estos intervalos al form!!!
 		IntervaloMagiaGolpe = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloMagiaGolpe"))
 		IntervaloGolpeMagia = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeMagia"))
 		IntervaloGolpeUsar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeUsar"))
-		
+
 		'UPGRADE_WARNING: La propiedad Timer tLluvia.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
 		frmMain.tLluvia.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
-		FrmInterv.txtIntervaloPerdidaStaminaLluvia.Text = CStr(frmMain.tLluvia.Interval)
-		
+
 		MinutosWs = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWS"))
 		If MinutosWs < 60 Then MinutosWs = 180
 		

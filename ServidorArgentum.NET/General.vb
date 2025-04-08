@@ -337,8 +337,6 @@ Errhandler:
 		ListaAtributos(Declaraciones.eAtributos.Carisma) = "Carisma"
 		ListaAtributos(Declaraciones.eAtributos.Constitucion) = "Constitucion"
 
-		frmCargando.Show()
-
 		'Call PlayWaveAPI(App.Path & "\wav\harp3.wav")
 
 		frmMain.Text = frmMain.Text & " V." & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision
@@ -350,9 +348,6 @@ Errhandler:
 		MaxXBorder = XMaxMapSize - (XWindow \ 2)
 		MinYBorder = YMinMapSize + (YWindow \ 2)
 		MaxYBorder = YMaxMapSize - (YWindow \ 2)
-		System.Windows.Forms.Application.DoEvents()
-
-		frmCargando.Label2.Text = "Iniciando Arrays..."
 
 		Call LoadGuildsDB()
 
@@ -360,44 +355,22 @@ Errhandler:
 		Call CargarSpawnList()
 		Call CargarForbidenWords()
 		'¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
-		frmCargando.Label2.Text = "Cargando Server.ini"
 
 		MaxUsers = 0
 		Call LoadSini()
 		Call CargaApuestas()
-
-		'*************************************************
-		frmCargando.Label2.Text = "Cargando NPCs.Dat"
 		Call CargaNpcsDat()
-		'*************************************************
-
-		frmCargando.Label2.Text = "Cargando Obj.Dat"
-		'Call LoadOBJData
 		Call LoadOBJData()
-
-		frmCargando.Label2.Text = "Cargando Hechizos.Dat"
 		Call CargarHechizos()
-
-
-		frmCargando.Label2.Text = "Cargando Objetos de Herrería"
 		Call LoadArmasHerreria()
 		Call LoadArmadurasHerreria()
-
-		frmCargando.Label2.Text = "Cargando Objetos de Carpintería"
 		Call LoadObjCarpintero()
-
-		frmCargando.Label2.Text = "Cargando Balance.Dat"
 		Call LoadBalance() '4/01/08 Pablo ToxicWaste
-
-		frmCargando.Label2.Text = "Cargando ArmadurasFaccionarias.dat"
 		Call LoadArmadurasFaccion()
 
 		If BootDelBackUp Then
-
-			frmCargando.Label2.Text = "Cargando BackUp"
 			Call CargarBackUp()
 		Else
-			frmCargando.Label2.Text = "Cargando Mapas"
 			Call LoadMapData()
 		End If
 
@@ -444,8 +417,6 @@ Errhandler:
 
 		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
 		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
-		frmCargando.Close()
 
 		'Log
 		Dim N As Short

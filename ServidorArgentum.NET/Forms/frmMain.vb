@@ -404,7 +404,7 @@ hayerror:
 	Private Sub mnusalir_Click()
 		Me.Close()
 	End Sub
-	
+
 	Private Sub KillLog_Tick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles KillLog.Tick
 		On Error Resume Next
 		If FileExist(My.Application.Info.DirectoryPath & "\logs\connect.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\connect.log")
@@ -415,13 +415,9 @@ hayerror:
 		If Not FileExist(My.Application.Info.DirectoryPath & "\logs\nokillwsapi.txt") Then
 			If FileExist(My.Application.Info.DirectoryPath & "\logs\wsapi.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\wsapi.log")
 		End If
-		
+
 	End Sub
-	
-	Public Sub mnuServidor_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuServidor.Click
-		frmServidor.Visible = True
-	End Sub
-	
+
 	Private Sub npcataca_Tick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles npcataca.Tick
 		
 		On Error Resume Next
