@@ -58,7 +58,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="FormsCode\" />
     <Folder Include="My Project\" />
   </ItemGroup>
   <ItemGroup>

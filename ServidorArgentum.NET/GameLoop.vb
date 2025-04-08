@@ -5,18 +5,18 @@ Imports System.Threading
 
 Module GameLoop
 
-    Const piqueteCInterval As Integer = 6000
-    Const packetResendInterval As Integer = 10
-    Const fxInterval As Integer = 4000
-    Const auditoriaInterval As Integer = 1000
-    Const gameTimerInterval As Integer = 40
-    Const lluviaEventInterval As Integer = 60000
-    Const lluviaInterval As Integer = 500
-    Const autoSaveInterval As Integer = 60000
-    Const npcAtacaInterval As Integer = 4000
-    Const killLogInterval As Integer = 60000
-    Const timerAIInterval As Integer = 100
-    Const connectionTimerInterval As Integer = 5
+    Public piqueteCInterval As Integer = 6000
+    Public packetResendInterval As Integer = 10
+    Public fxInterval As Integer = 4000
+    Public auditoriaInterval As Integer = 1000
+    Public gameTimerInterval As Integer = 40
+    Public lluviaEventInterval As Integer = 60000
+    Public lluviaInterval As Integer = 500
+    Public autoSaveInterval As Integer = 60000
+    Public npcAtacaInterval As Integer = 4000
+    Public killLogInterval As Integer = 60000
+    Public timerAIInterval As Integer = 100
+    Public connectionTimerInterval As Integer = 5
 
     ' Últimos tiempos de ejecución
     Dim lastPiqueteC As Double = 0
@@ -32,7 +32,7 @@ Module GameLoop
     Dim lastTimerAI As Double = 0
     Dim lastConnection As Double = 0
 
-    Public Sub DoEvents()
+    Public Sub DoGameLoop()
 
         Dim sw As Stopwatch = Stopwatch.StartNew()
 
@@ -102,8 +102,6 @@ Module GameLoop
             ' Pausa mínima para evitar uso excesivo de CPU
             Thread.Sleep(1)
         End While
-
-        Console.WriteLine("Servidor detenido.")
     End Sub
 
     ' =====================
@@ -620,6 +618,33 @@ ErrorHandler:
                 End If
             End With
         Next iUserIndex
+    End Sub
+
+    Public Sub CloseServer()
+        On Error Resume Next
+
+        'Save stats!!!
+        Call Statistics.DumpStatistics()
+
+        Call LimpiaWsApi()
+
+        Dim LoopC As Short
+
+        For LoopC = 1 To MaxUsers
+            If UserList(LoopC).ConnID <> -1 Then Call CloseSocket(LoopC)
+        Next
+
+        'Log
+        Dim N As Short
+        N = FreeFile()
+        FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+        PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
+        FileClose(N)
+
+        End
+
+        'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+        SonidosMapas = Nothing
     End Sub
 
 End Module

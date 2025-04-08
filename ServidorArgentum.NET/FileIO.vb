@@ -219,7 +219,7 @@ Module ES
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		'###################################################
 		'#               ATENCION PELIGRO                  #
 		'###################################################
@@ -233,11 +233,9 @@ Module ES
 		'Alejo
 		'
 		'###################################################
-		
+
 		On Error GoTo Errhandler
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando Hechizos."
-		
+
 		Dim Hechizo As Short
 		Dim Leer As New clsIniReader
 		
@@ -704,7 +702,7 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		'###################################################
 		'#               ATENCION PELIGRO                  #
 		'###################################################
@@ -718,13 +716,11 @@ Errhandler:
 		'Alejo
 		'
 		'###################################################
-		
+
 		'Call LogTarea("Sub LoadOBJData")
-		
+
 		On Error GoTo Errhandler
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando base de datos de los objetos."
-		
+
 		'*****************************************************************
 		'Carga la lista de objetos
 		'*****************************************************************
@@ -1276,9 +1272,7 @@ CleanExit:
 		'Last Modification: -
 		'
 		'***************************************************
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando backup."
-		
+
 		Dim Map As Short
 		Dim TempInt As Short
 		Dim tFileName As String
@@ -1327,9 +1321,7 @@ man:
 		'Last Modification: -
 		'
 		'***************************************************
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando mapas..."
-		
+
 		Dim Map As Short
 		Dim TempInt As Short
 		Dim tFileName As String
@@ -1542,11 +1534,9 @@ errh:
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		Dim Temporal As Integer
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando info de inicio del server."
-		
+
 		BootDelBackUp = Val(GetVar(IniPath & "Server.ini", "INIT", "IniciarDesdeBackUp"))
 		
 		Puerto = Val(GetVar(IniPath & "Server.ini", "INIT", "StartPort"))
@@ -1615,10 +1605,10 @@ errh:
 		IntervaloUserPuedeCastear = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo"))
 
 		'UPGRADE_WARNING: La propiedad Timer TIMER_AI.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-		frmMain.TIMER_AI.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
+		GameLoop.timerAIInterval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
 
 		'UPGRADE_WARNING: La propiedad Timer npcataca.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-		frmMain.npcataca.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
+		GameLoop.npcAtacaInterval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
 
 		IntervaloUserPuedeTrabajar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo"))
 
@@ -1630,7 +1620,7 @@ errh:
 		IntervaloGolpeUsar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeUsar"))
 
 		'UPGRADE_WARNING: La propiedad Timer tLluvia.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-		frmMain.tLluvia.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
+		GameLoop.lluviaInterval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
 
 		MinutosWs = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWS"))
 		If MinutosWs < 60 Then MinutosWs = 180
@@ -2227,10 +2217,7 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-		
-		'Status
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando backup Npc"
-		
+
 		Dim npcfile As String
 		
 		'If NpcNumber > 499 Then

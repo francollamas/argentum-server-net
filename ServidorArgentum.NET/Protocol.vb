@@ -10283,7 +10283,6 @@ Errhandler:
 					Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg(UserList(UserIndex).name & "> " & message, FontTypeNames.FONTTYPE_TALK))
 					''''''''''''''''SOLO PARA EL TESTEO'''''''
 					''''''''''SE USA PARA COMUNICARSE CON EL SERVER'''''''''''
-					frmMain.txtChat.Text = frmMain.txtChat.Text & vbNewLine & UserList(UserIndex).name & " > " & message
 				End If
 			End If
 			
@@ -12654,7 +12653,6 @@ Errhandler:
 			
 			Call LogGM(.name, .name & " ha solicitado mostrar el formulario del servidor.")
 			' TODO FIX: no funciona como se espera, de todas formas no es algo funcional
-			Call frmMain.Show()
 		End With
 	End Sub
 	
@@ -13657,10 +13655,8 @@ Errhandler:
 			FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 			
 			PrintLine(handle, Today & " " & TimeOfDay & " server apagado por " & .name & ". ")
-			
+
 			FileClose(handle)
-			
-			frmMain.Close()
 		End With
 	End Sub
 	

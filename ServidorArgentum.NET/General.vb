@@ -339,7 +339,6 @@ Errhandler:
 
 		'Call PlayWaveAPI(App.Path & "\wav\harp3.wav")
 
-		frmMain.Text = frmMain.Text & " V." & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision
 		IniPath = My.Application.Info.DirectoryPath & "\"
 		CharPath = My.Application.Info.DirectoryPath & "\Charfile\"
 
@@ -393,26 +392,9 @@ Errhandler:
 			UserList(LoopC).outgoingData = New clsByteQueue
 		Next LoopC
 
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
-		With frmMain
-			.AutoSave.Enabled = True
-			.tLluvia.Enabled = True
-			.tPiqueteC.Enabled = True
-			.GameTimer.Enabled = True
-			.tLluviaEvent.Enabled = True
-			.FX.Enabled = True
-			.Auditoria.Enabled = True
-			.KillLog.Enabled = True
-			.TIMER_AI.Enabled = True
-			.npcataca.Enabled = True
-		End With
-
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 		'Configuracion de los sockets
 
 		Call SecurityIp.InitIpTables(1000)
-
 		Call IniciaWsApi(Puerto)
 
 		'Log
@@ -425,7 +407,9 @@ Errhandler:
 		tInicioServer = GetTickCount()
 		Call InicializaEstadisticas()
 
-		Call GameLoop.DoEvents()
+		Call GameLoop.DoGameLoop()
+
+		Call GameLoop.CloseServer()
 	End Sub
 
 	Function FileExist(ByVal file As String) As Boolean
@@ -482,9 +466,7 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-
-		frmMain.CantUsuarios.Text = "Número de usuarios jugando: " & NumUsers
-
+		' TODO MIGRA: completar si veo que es necesario
 	End Sub
 	
 	
@@ -874,12 +856,10 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		'Se asegura de que los sockets estan cerrados e ignora cualquier err
 		On Error Resume Next
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Reiniciando."
-		
+
 		Dim LoopC As Integer
 		
 		'Inicia el socket de escucha
@@ -919,20 +899,16 @@ Errhandler:
 		Call LoadOBJData()
 		
 		Call LoadMapData()
-		
+
 		Call CargarHechizos()
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
-		
+
 		'Log it
 		Dim N As Short
 		N = FreeFile
 		FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
 		FileClose(N)
-		
-		frmMain.Show()
-		
+
 	End Sub
 	
 	
@@ -1469,12 +1445,9 @@ Errhandler:
 		
 		'Guardar Pjs
 		Call GuardarUsuarios()
-		
+
 		If EjecutarLauncher Then Shell(My.Application.Info.DirectoryPath & "\launcher.exe")
-		
-		'Chauuu
-		frmMain.Close()
-		
+
 	End Sub
 	
 	
@@ -1514,7 +1487,7 @@ Errhandler:
 		Dim Ta As Integer
 		Ta = GetTickCount()
 
-		Call EstadisticasWeb.Inicializa(frmMain.Handle.ToInt32)
+		Call EstadisticasWeb.Inicializa()
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_MAPAS, NumMaps)
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.UPTIME_SERVER, (Ta - tInicioServer) / 1000)
