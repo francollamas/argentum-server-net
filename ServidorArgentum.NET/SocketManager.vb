@@ -76,6 +76,7 @@ Public Class SocketManager
     ''' Initializes the socket server to listen on the specified port.
     ''' </summary>
     Public Shared Sub Initialize(port As Integer)
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
         _listeningPort = port
 
         ' Initialize the message queue timer
@@ -83,7 +84,7 @@ Public Class SocketManager
         _messageTimer.Interval = 10 ' Check queue every 10ms 
         AddHandler _messageTimer.Tick, AddressOf ProcessMessageQueue
         _messageTimer.Start()
-        
+
         StartListening()
     End Sub
 
