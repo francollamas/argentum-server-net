@@ -415,9 +415,6 @@ Errhandler:
 
 		Call IniciaWsApi(Puerto)
 
-		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
 		'Log
 		Dim N As Short
 		N = FreeFile()
@@ -428,7 +425,7 @@ Errhandler:
 		tInicioServer = GetTickCount()
 		Call InicializaEstadisticas()
 
-		Application.Run(New frmMain()) ' Mantiene la aplicación viva hasta que se cierre frmMain
+		Call GameLoop.DoEvents()
 	End Sub
 
 	Function FileExist(ByVal file As String) As Boolean
