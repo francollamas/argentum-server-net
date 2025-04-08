@@ -161,7 +161,7 @@ Module Admin
 
 			If MapInfo_Renamed(loopX).BackUp = 1 Then
 
-				Call GrabarMapa(loopX, My.Application.Info.DirectoryPath & "\WorldBackUp\Mapa" & loopX)
+				Call GrabarMapa(loopX, AppDomain.CurrentDomain.BaseDirectory & "\WorldBackUp\Mapa" & loopX)
 			End If
 
 		Next loopX
@@ -253,7 +253,7 @@ Module Admin
 		'
 		'***************************************************
 		
-		BANCheck = (Val(GetVar(My.Application.Info.DirectoryPath & "\charfile\" & name & ".chr", "FLAGS", "Ban")) = 1)
+		BANCheck = (Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\charfile\" & name & ".chr", "FLAGS", "Ban")) = 1)
 		
 	End Function
 	
@@ -276,11 +276,11 @@ Module Admin
 		'***************************************************
 		
 		'Unban the character
-		Call WriteVar(My.Application.Info.DirectoryPath & "\charfile\" & name & ".chr", "FLAGS", "Ban", "0")
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\charfile\" & name & ".chr", "FLAGS", "Ban", "0")
 		
 		'Remove it from the banned people database
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat", name, "BannedBy", "NOBODY")
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat", name, "Reason", "NO REASON")
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", name, "BannedBy", "NOBODY")
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", name, "Reason", "NO REASON")
 	End Function
 	
 	Public Function MD5ok(ByVal md5formateado As String) As Boolean
@@ -397,7 +397,7 @@ Module Admin
 		Dim ArchN As Integer
 		Dim LoopC As Integer
 		
-		ArchivoBanIp = My.Application.Info.DirectoryPath & "\Dat\BanIps.dat"
+		ArchivoBanIp = AppDomain.CurrentDomain.BaseDirectory & "\Dat\BanIps.dat"
 		
 		ArchN = FreeFile
 		FileOpen(ArchN, ArchivoBanIp, OpenMode.Output)
@@ -421,7 +421,7 @@ Module Admin
 		Dim Tmp As String
 		Dim ArchivoBanIp As String
 		
-		ArchivoBanIp = My.Application.Info.DirectoryPath & "\Dat\BanIps.dat"
+		ArchivoBanIp = AppDomain.CurrentDomain.BaseDirectory & "\Dat\BanIps.dat"
 		
 		Do While BanIps.Count() > 0
 			BanIps.Remove(1)

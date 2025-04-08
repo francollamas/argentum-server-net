@@ -501,7 +501,7 @@ Errhandler:
         '<<<<<-------- Log the number of users online ------>>>
         Dim N As Short
         N = FreeFile()
-        FileOpen(N, My.Application.Info.DirectoryPath & "\logs\numusers.log", OpenMode.Output, , OpenShare.Shared)
+        FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\numusers.log", OpenMode.Output, , OpenShare.Shared)
         PrintLine(N, NumUsers)
         FileClose(N)
         '<<<<<-------- Log the number of users online ------>>>
@@ -524,13 +524,13 @@ Errhandler:
 
     Private Sub TickKillLog()
         On Error Resume Next
-        If FileExist(My.Application.Info.DirectoryPath & "\logs\connect.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\connect.log")
-        If FileExist(My.Application.Info.DirectoryPath & "\logs\haciendo.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\haciendo.log")
-        If FileExist(My.Application.Info.DirectoryPath & "\logs\stats.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\stats.log")
-        If FileExist(My.Application.Info.DirectoryPath & "\logs\Asesinatos.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\Asesinatos.log")
-        If FileExist(My.Application.Info.DirectoryPath & "\logs\HackAttemps.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\HackAttemps.log")
-        If Not FileExist(My.Application.Info.DirectoryPath & "\logs\nokillwsapi.txt") Then
-            If FileExist(My.Application.Info.DirectoryPath & "\logs\wsapi.log") Then Kill(My.Application.Info.DirectoryPath & "\logs\wsapi.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\connect.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "\logs\connect.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\haciendo.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "\logs\haciendo.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\stats.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "\logs\stats.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\Asesinatos.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "\logs\Asesinatos.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\HackAttemps.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "\logs\HackAttemps.log")
+        If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\nokillwsapi.txt") Then
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "\logs\wsapi.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "\logs\wsapi.log")
         End If
     End Sub
 
@@ -654,7 +654,7 @@ ErrorHandler:
         'Log
         Dim N As Short
         N = FreeFile()
-        FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+        FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
         FileClose(N)
 

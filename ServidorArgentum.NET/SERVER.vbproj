@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ProjectType>Local</ProjectType>
-    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <AssemblyName>ServidorArgentum</AssemblyName>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <StartupObject>ServidorArgentum.General</StartupObject>
     <AssemblyMajorVersion>0</AssemblyMajorVersion>
     <AssemblyMinorVersion>13</AssemblyMinorVersion>
@@ -15,8 +14,6 @@
     <ApplicationIcon>SERVER.ico</ApplicationIcon>
     <RootNamespace>ServidorArgentum</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
@@ -39,17 +36,9 @@
     <Reference Update="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Update="System.Drawing">
-      <Name>System.Drawing</Name>
-    </Reference>
     <Reference Update="System.XML">
       <Name>System.XML</Name>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Import Include="Microsoft.VisualBasic.Compatibility" />
-    <Import Include="System.Drawing" />
-    <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SERVER.ico" />
@@ -59,92 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="My Project\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Backup\Acciones.vb" />
-    <Compile Remove="Backup\Admin.vb" />
-    <Compile Remove="Backup\AI_NPC.vb" />
-    <Compile Remove="Backup\AssemblyInfo.vb" />
-    <Compile Remove="Backup\AxWinsockArray.vb" />
-    <Compile Remove="Backup\cColaArray.vb" />
-    <Compile Remove="Backup\cGarbage.vb" />
-    <Compile Remove="Backup\Characters.vb" />
-    <Compile Remove="Backup\clsAntiMassClon.vb" />
-    <Compile Remove="Backup\clsByteQueue.vb" />
-    <Compile Remove="Backup\clsClan.vb" />
-    <Compile Remove="Backup\clsdicc.vb" />
-    <Compile Remove="Backup\clsEstadisticasIPC.vb" />
-    <Compile Remove="Backup\clsIniReader.vb" />
-    <Compile Remove="Backup\clsMapSoundManager.vb" />
-    <Compile Remove="Backup\clsParty.vb" />
-    <Compile Remove="Backup\Comercio.vb" />
-    <Compile Remove="Backup\ConsultasPopulares.vb" />
-    <Compile Remove="Backup\cSolicitud.vb" />
-    <Compile Remove="Backup\Declares.vb" />
-    <Compile Remove="Backup\FileIO.vb" />
-    <Compile Remove="Backup\frmAdmin.Designer.vb" />
-    <Compile Remove="Backup\frmAdmin.vb" />
-    <Compile Remove="Backup\frmCargando.Designer.vb" />
-    <Compile Remove="Backup\frmCargando.vb" />
-    <Compile Remove="Backup\frmConID.Designer.vb" />
-    <Compile Remove="Backup\frmConID.vb" />
-    <Compile Remove="Backup\frmDebugNpc.Designer.vb" />
-    <Compile Remove="Backup\frmDebugNpc.vb" />
-    <Compile Remove="Backup\FrmInterv.Designer.vb" />
-    <Compile Remove="Backup\FrmInterv.vb" />
-    <Compile Remove="Backup\frmMain.Designer.vb" />
-    <Compile Remove="Backup\frmMain.vb" />
-    <Compile Remove="Backup\frmServidor.Designer.vb" />
-    <Compile Remove="Backup\frmServidor.vb" />
-    <Compile Remove="Backup\FrmStat.Designer.vb" />
-    <Compile Remove="Backup\FrmStat.vb" />
-    <Compile Remove="Backup\frmTrafic.Designer.vb" />
-    <Compile Remove="Backup\frmTrafic.vb" />
-    <Compile Remove="Backup\frmUserList.Designer.vb" />
-    <Compile Remove="Backup\frmUserList.vb" />
-    <Compile Remove="Backup\GameLogic.vb" />
-    <Compile Remove="Backup\General.vb" />
-    <Compile Remove="Backup\History.vb" />
-    <Compile Remove="Backup\InvUsuario.vb" />
-    <Compile Remove="Backup\Matematicas.vb" />
-    <Compile Remove="Backup\mdlCOmercioConUsuario.vb" />
-    <Compile Remove="Backup\mdParty.vb" />
-    <Compile Remove="Backup\Migration.vb" />
-    <Compile Remove="Backup\ModAreas.vb" />
-    <Compile Remove="Backup\modBanco.vb" />
-    <Compile Remove="Backup\modCentinela.vb" />
-    <Compile Remove="Backup\ModCola.vb" />
-    <Compile Remove="Backup\ModFacciones.vb" />
-    <Compile Remove="Backup\modForum.vb" />
-    <Compile Remove="Backup\modGuilds.vb" />
-    <Compile Remove="Backup\modHechizos.vb" />
-    <Compile Remove="Backup\modHexaStrings.vb" />
-    <Compile Remove="Backup\modInvisibles.vb" />
-    <Compile Remove="Backup\modNuevoTimer.vb" />
-    <Compile Remove="Backup\modSendData.vb" />
-    <Compile Remove="Backup\Modulo_InventANDobj.vb" />
-    <Compile Remove="Backup\MODULO_NPCs.vb" />
-    <Compile Remove="Backup\Modulo_UsUaRiOs.vb" />
-    <Compile Remove="Backup\PathFinding.vb" />
-    <Compile Remove="Backup\praetorians.vb" />
-    <Compile Remove="Backup\Protocol.vb" />
-    <Compile Remove="Backup\Queue.vb" />
-    <Compile Remove="Backup\SecurityIp.vb" />
-    <Compile Remove="Backup\SistemaCombate.vb" />
-    <Compile Remove="Backup\Statistics.vb" />
-    <Compile Remove="Backup\TCP.vb" />
-    <Compile Remove="Backup\Trabajo.vb" />
-    <Compile Remove="Backup\wskapiAO.vb" />
-    <EmbeddedResource Remove="Backup\frmAdmin.resX" />
-    <EmbeddedResource Remove="Backup\frmCargando.resX" />
-    <EmbeddedResource Remove="Backup\frmConID.resX" />
-    <EmbeddedResource Remove="Backup\frmDebugNpc.resX" />
-    <EmbeddedResource Remove="Backup\FrmInterv.resX" />
-    <EmbeddedResource Remove="Backup\frmMain.resX" />
-    <EmbeddedResource Remove="Backup\frmServidor.resX" />
-    <EmbeddedResource Remove="Backup\FrmStat.resX" />
-    <EmbeddedResource Remove="Backup\frmTrafic.resX" />
-    <EmbeddedResource Remove="Backup\frmUserList.resX" />
   </ItemGroup>
   <PropertyGroup>
     <Company>M</Company>

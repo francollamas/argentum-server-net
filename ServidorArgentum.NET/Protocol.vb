@@ -6555,7 +6555,7 @@ Errhandler:
 			bugReport = buffer.ReadASCIIString()
 			
 			N = FreeFile
-			FileOpen(N, My.Application.Info.DirectoryPath & "\LOGS\BUGs.log", OpenMode.Append, , OpenShare.Shared)
+			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\LOGS\BUGs.log", OpenMode.Append, , OpenShare.Shared)
 			PrintLine(N, "Usuario:" & .name & "  Fecha:" & Today & "    Hora:" & TimeOfDay)
 			PrintLine(N, "BUG:")
 			PrintLine(N, bugReport)
@@ -7532,13 +7532,13 @@ Errhandler:
 					guild = Replace(guild, "/", "")
 				End If
 				
-				If Not FileExist(My.Application.Info.DirectoryPath & "\guilds\" & guild & "-members.mem") Then
+				If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "\guilds\" & guild & "-members.mem") Then
 					Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
 				Else
-					memberCount = Val(GetVar(My.Application.Info.DirectoryPath & "\Guilds\" & guild & "-Members" & ".mem", "INIT", "NroMembers"))
+					memberCount = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Guilds\" & guild & "-Members" & ".mem", "INIT", "NroMembers"))
 					
 					For i = 1 To memberCount
-						UserName = GetVar(My.Application.Info.DirectoryPath & "\Guilds\" & guild & "-Members" & ".mem", "Members", "Member" & i)
+						UserName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Guilds\" & guild & "-Members" & ".mem", "Members", "Member" & i)
 						
 						Call WriteConsoleMsg(UserIndex, UserName & "<" & guild & ">", FontTypeNames.FONTTYPE_INFO)
 					Next i
@@ -11608,7 +11608,7 @@ Errhandler:
 			GuildName = buffer.ReadASCIIString()
 			
 			If (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-				tFile = My.Application.Info.DirectoryPath & "\guilds\" & GuildName & "-members.mem"
+				tFile = AppDomain.CurrentDomain.BaseDirectory & "\guilds\" & GuildName & "-members.mem"
 				
 				If Not FileExist(tFile) Then
 					Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
@@ -12740,7 +12740,7 @@ Errhandler:
 			End If
 			
 			'Change the boolean to string in a fast way
-			Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & .Pos.Map & ".dat", "Mapa" & .Pos.Map, "backup", CStr(MapInfo_Renamed(.Pos.Map).BackUp))
+			Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & .Pos.Map & ".dat", "Mapa" & .Pos.Map, "backup", CStr(MapInfo_Renamed(.Pos.Map).BackUp))
 			
 			Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Backup: " & MapInfo_Renamed(.Pos.Map).BackUp, FontTypeNames.FONTTYPE_INFO)
 		End With
@@ -12778,7 +12778,7 @@ Errhandler:
 			MapInfo_Renamed(.Pos.Map).Pk = isMapPk
 			
 			'Change the boolean to string in a fast way
-			Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & .Pos.Map & ".dat", "Mapa" & .Pos.Map, "Pk", IIf(isMapPk, "1", "0"))
+			Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & .Pos.Map & ".dat", "Mapa" & .Pos.Map, "Pk", IIf(isMapPk, "1", "0"))
 			
 			Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " PK: " & MapInfo_Renamed(.Pos.Map).Pk, FontTypeNames.FONTTYPE_INFO)
 		End With
@@ -12817,7 +12817,7 @@ Errhandler:
 				If tStr = "NEWBIE" Or tStr = "NO" Or tStr = "ARMADA" Or tStr = "CAOS" Or tStr = "FACCION" Then
 					Call LogGM(.name, .name & " ha cambiado la información sobre si es restringido el mapa.")
 					MapInfo_Renamed(UserList(UserIndex).Pos.Map).Restringir = tStr
-					Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Restringir", tStr)
+					Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Restringir", tStr)
 					Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Restringido: " & MapInfo_Renamed(.Pos.Map).Restringir, FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Opciones para restringir: 'NEWBIE', 'NO', 'ARMADA', 'CAOS', 'FACCION'", FontTypeNames.FONTTYPE_INFO)
@@ -12868,7 +12868,7 @@ Errhandler:
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
 				Call LogGM(.name, .name & " ha cambiado la información sobre si está permitido usar la magia el mapa.")
 				MapInfo_Renamed(UserList(UserIndex).Pos.Map).MagiaSinEfecto = nomagic
-				Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "MagiaSinEfecto", CStr(nomagic))
+				Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "MagiaSinEfecto", CStr(nomagic))
 				Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " MagiaSinEfecto: " & MapInfo_Renamed(.Pos.Map).MagiaSinEfecto, FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
@@ -12901,7 +12901,7 @@ Errhandler:
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
 				Call LogGM(.name, .name & " ha cambiado la información sobre si está permitido usar la invisibilidad en el mapa.")
 				MapInfo_Renamed(UserList(UserIndex).Pos.Map).InviSinEfecto = noinvi
-				Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "InviSinEfecto", CStr(noinvi))
+				Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "InviSinEfecto", CStr(noinvi))
 				Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " InviSinEfecto: " & MapInfo_Renamed(.Pos.Map).InviSinEfecto, FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
@@ -12934,7 +12934,7 @@ Errhandler:
 			If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
 				Call LogGM(.name, .name & " ha cambiado la información sobre si está permitido usar el resucitar en el mapa.")
 				MapInfo_Renamed(UserList(UserIndex).Pos.Map).ResuSinEfecto = noresu
-				Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "ResuSinEfecto", CStr(noresu))
+				Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "ResuSinEfecto", CStr(noresu))
 				Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " ResuSinEfecto: " & MapInfo_Renamed(.Pos.Map).ResuSinEfecto, FontTypeNames.FONTTYPE_INFO)
 			End If
 		End With
@@ -12973,7 +12973,7 @@ Errhandler:
 				If tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or tStr = "DUNGEON" Then
 					Call LogGM(.name, .name & " ha cambiado la información del terreno del mapa.")
 					MapInfo_Renamed(UserList(UserIndex).Pos.Map).Terreno = tStr
-					Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Terreno", tStr)
+					Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Terreno", tStr)
 					Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Terreno: " & MapInfo_Renamed(.Pos.Map).Terreno, FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'", FontTypeNames.FONTTYPE_INFO)
@@ -13031,7 +13031,7 @@ Errhandler:
 				If tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or tStr = "DUNGEON" Then
 					Call LogGM(.name, .name & " ha cambiado la información de la zona del mapa.")
 					MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = tStr
-					Call WriteVar(My.Application.Info.DirectoryPath & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Zona", tStr)
+					Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Zona", tStr)
 					Call WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Zona: " & MapInfo_Renamed(.Pos.Map).Zona, FontTypeNames.FONTTYPE_INFO)
 				Else
 					Call WriteConsoleMsg(UserIndex, "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'", FontTypeNames.FONTTYPE_INFO)
@@ -13075,7 +13075,7 @@ Errhandler:
 			
 			Call LogGM(.name, .name & " ha guardado el mapa " & CStr(.Pos.Map))
 			
-			Call GrabarMapa(.Pos.Map, My.Application.Info.DirectoryPath & "\WorldBackUp\Mapa" & .Pos.Map)
+			Call GrabarMapa(.Pos.Map, AppDomain.CurrentDomain.BaseDirectory & "\WorldBackUp\Mapa" & .Pos.Map)
 			
 			Call WriteConsoleMsg(UserIndex, "Mapa Guardado.", FontTypeNames.FONTTYPE_INFO)
 		End With
@@ -13652,7 +13652,7 @@ Errhandler:
 			
 			'Log
 			handle = FreeFile
-			FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+			FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 			
 			PrintLine(handle, Today & " " & TimeOfDay & " server apagado por " & .name & ". ")
 
@@ -14004,10 +14004,10 @@ Errhandler:
 				'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim MOTD(MaxLines)
 				
-				Call WriteVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "INIT", "NumLines", CStr(MaxLines))
+				Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "INIT", "NumLines", CStr(MaxLines))
 				
 				For LoopC = 1 To MaxLines
-					Call WriteVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "Motd", "Line" & CStr(LoopC), auxiliaryString(LoopC - 1))
+					Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "Motd", "Line" & CStr(LoopC), auxiliaryString(LoopC - 1))
 					
 					MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
 				Next LoopC

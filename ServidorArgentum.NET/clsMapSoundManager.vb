@@ -64,7 +64,7 @@ Friend Class SoundMapInfo
 		Dim Temps As String
 		Dim MAPFILE As String
 		
-		MAPFILE = My.Application.Info.DirectoryPath & MapPath & "MAPA"
+		MAPFILE = AppDomain.CurrentDomain.BaseDirectory & MapPath & "MAPA"
 		
 		'Usage of Val() prevents errors when dats are corrputed or incomplete. All invalid values are assumed to be zero.
 		

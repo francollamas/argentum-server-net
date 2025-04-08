@@ -1,6 +1,6 @@
 [NPC20]
 Name=Sastre
-Desc=°AcÈrquese! Tengo pequeÒas prendas que ser·n de su agrado...
+Desc=¬°Ac√©rquese! Tengo peque√±as prendas que ser√°n de su agrado...
 Head=303
 Body=180
 Heading=3
@@ -26,9 +26,9 @@ NroItems=6
 Obj1=240-1000
 Obj2=527-1000
 Obj3=486-1000
-Obj4=507-999
+Obj4=507-1000
 Obj5=502-1000
-Obj6=707-999
+Obj6=707-1000
 Obj7=0-0
 Obj8=0-0
 Obj9=0-0
@@ -55,7 +55,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC12]
 Name=Sastre
-Desc=°Hola forastero! Soy el Sastre de Ullathorpe, Bienvenido!
+Desc=¬°Hola forastero! Soy el Sastre de Ullathorpe, Bienvenido!
 Head=9
 Body=50
 Heading=3
@@ -110,7 +110,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC19]
 Name=Sastre
-Desc=°Bienvenida Viajera! Tengo hermosas vestimentas para ofrecerte...
+Desc=¬°Bienvenida Viajera! Tengo hermosas vestimentas para ofrecerte...
 Head=70
 Body=80
 Heading=3
@@ -275,7 +275,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC80]
 Name=Mercader
-Desc=°°Hola buen amigo, compro y vendo todo tipo de mercancÌas!!
+Desc=¬°¬°Hola buen amigo, compro y vendo todo tipo de mercanc√≠as!!
 Head=2
 Body=3
 Heading=3
@@ -385,7 +385,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC54]
 Name=Armaduras
-Desc=AcÈrcate, tengo algunas armaduras que podrÌan protegerte.
+Desc=Ac√©rcate, tengo algunas armaduras que podr√≠an protegerte.
 Head=6
 Body=93
 Heading=4
@@ -440,7 +440,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC46]
 Name=Mago
-Desc=Bienvenido a mi pequeÒa tienda de Ullathorpe... Tengo algunos hechizos que podrÌan interesarte.
+Desc=Bienvenido a mi peque√±a tienda de Ullathorpe... Tengo algunos hechizos que podr√≠an interesarte.
 Head=110
 Body=46
 Heading=3
@@ -494,8 +494,8 @@ Obj28=0-0
 Obj29=0-0
 Obj30=0-0
 [NPC33]
-Name=LeÒador
-Desc=°Hola muchacho!, si deseas vender o comprar madera escribe /COMERCIAR.
+Name=Le√±ador
+Desc=¬°Hola muchacho!, si deseas vender o comprar madera escribe /COMERCIAR.
 Head=4
 Body=1
 Heading=3
@@ -517,9 +517,9 @@ MinHp=0
 ReSpawn=0
 BackUp=1
 Domable=0
-NroItems=1
+NroItems=2
 Obj1=127-1000
-Obj2=0-0
+Obj2=1005-1000
 Obj3=0-0
 Obj4=0-0
 Obj5=0-0
@@ -550,7 +550,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC34]
 Name=Cullighan
-Desc=Usted sabe que no hay persona noble o respetable en estas tierras que no tenga su propia vivienda. °acÈrquese y sea dueÒo de una de las exclusivas casas de Ullathorpe. °Ser· admirado por toda la poblaciÛn!
+Desc=Usted sabe que no hay persona noble o respetable en estas tierras que no tenga su propia vivienda. ¬°ac√©rquese y sea due√±o de una de las exclusivas casas de Ullathorpe. ¬°Ser√° admirado por toda la poblaci√≥n!
 Head=33
 Body=240
 Heading=3
@@ -605,7 +605,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC44]
 Name=Carpintero
-Desc=°Hola muchacho!, bienvenido a mi humilde CarpinterÌa.
+Desc=¬°Hola muchacho!, bienvenido a mi humilde Carpinter√≠a.
 Head=2
 Body=1
 Heading=3
@@ -660,7 +660,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC42]
 Name=Antogne
-Desc=°Hola aventurero! Si estais hambriento habeis venido al lugar apropiador, tengo todo tipo de frutas.
+Desc=¬°Hola aventurero! Si estais hambriento habeis venido al lugar apropiador, tengo todo tipo de frutas.
 Head=505
 Body=202
 Heading=3
@@ -715,7 +715,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC35]
 Name=Moraday
-Desc=øHa descubierto que la ciudad de Nix es la m·s hermosa de todo Argentum, verdad? °Pues quÈ mejor que ser un terrateniente de este paraÌso! °AcÈrcate que haremos negocios!
+Desc=¬øHa descubierto que la ciudad de Nix es la m√°s hermosa de todo Argentum, verdad? ¬°Pues qu√© mejor que ser un terrateniente de este para√≠so! ¬°Ac√©rcate que haremos negocios!
 Head=35
 Body=239
 Heading=3
@@ -825,7 +825,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC15]
 Name=Thorkis
-Desc=°QuÈ tal amigo! Entra, pues tengo las mejores provisiones de Nix!
+Desc=¬°Qu√© tal amigo! Entra, pues tengo las mejores provisiones de Nix!
 Head=504
 Body=202
 Heading=3
@@ -935,7 +935,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC47]
 Name=Mago
-Desc=Bienvenido a mi pequeÒa tienda de Nix... Tengo algunos hechizos que podrÌan interesarte.
+Desc=Bienvenido a mi peque√±a tienda de Nix... Tengo algunos hechizos que podr√≠an interesarte.
 Head=110
 Body=46
 Heading=3
@@ -990,7 +990,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC41]
 Name=Pescador
-Desc=°Bienvenido al gremio de pescadores!                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+Desc=¬°Bienvenido al gremio de pescadores!
 Head=2
 Body=3
 Heading=3
@@ -1045,7 +1045,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC99]
 Name=Mago
-Desc=øEst·s buscando los hechizos m·s poderosos? A buen puerto has llegado...
+Desc=¬øEst√°s buscando los hechizos m√°s poderosos? A buen puerto has llegado...
 Head=110
 Body=46
 Heading=3
@@ -1100,7 +1100,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC52]
 Name=Rantarisk
-Desc=De lejos pude ver vuestro blazÛn, seguro busca una de las moradas m·s lujosas de todo el Argentum. En la ciudad real de Banderbill es donde deben habitar la flor y la nata de la nobleza °Venga y hagamos negocios!
+Desc=De lejos pude ver vuestro blaz√≥n, seguro busca una de las moradas m√°s lujosas de todo el Argentum. En la ciudad real de Banderbill es donde deben habitar la flor y la nata de la nobleza ¬°Venga y hagamos negocios!
 Head=32
 Body=241
 Heading=3
@@ -1155,7 +1155,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC50]
 Name=Tellez
-Desc=°Hola! Bienvenido al "MesÛn Hostigado", øQuÈ desea que le sirva?
+Desc=¬°Hola! Bienvenido al "Mes√≥n Hostigado", ¬øQu√© desea que le sirva?
 Head=505
 Body=202
 Heading=3
@@ -1210,7 +1210,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC51]
 Name=Mago
-Desc=Bienvenido a mi pequeÒa Tienda de Banderbill... Tengo algunos hechizos que podrÌan interesarte.
+Desc=Bienvenido a mi peque√±a Tienda de Banderbill... Tengo algunos hechizos que podr√≠an interesarte.
 Head=110
 Body=46
 Heading=3
@@ -1265,7 +1265,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC38]
 Name=Herrero
-Desc=°Ven, pasa, que he fabricado las m·s poderosas armas de Banderbill para tÌ!
+Desc=¬°Ven, pasa, que he fabricado las m√°s poderosas armas de Banderbill para t√≠!
 Head=505
 Body=199
 Heading=3
@@ -1320,7 +1320,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC25]
 Name=Sastre
-Desc=°Bienvenido a la SastrerÌa de Banderbill! øEn quÈ lo puedo ayudar?
+Desc=¬°Bienvenido a la Sastrer√≠a de Banderbill! ¬øEn qu√© lo puedo ayudar?
 Head=7
 Body=56
 Heading=3
@@ -1375,7 +1375,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC43]
 Name=Sorks
-Desc=ø°Est·is sediento y hambriento!?
+Desc=¬ø¬°Est√°is sediento y hambriento!?
 Head=505
 Body=202
 Heading=3
@@ -1430,7 +1430,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC27]
 Name=Sastre
-Desc=°Ven y mira estas prendas que he confeccionado para nuestra raza!
+Desc=¬°Ven y mira estas prendas que he confeccionado para nuestra raza!
 Head=305
 Body=159
 Heading=3
@@ -1485,7 +1485,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC26]
 Name=Sastre
-Desc=°Adelante hermosa niÒa! En mi tienda encontrar·s vestidos hechos para tÌ!
+Desc=¬°Adelante hermosa ni√±a! En mi tienda encontrar√°s vestidos hechos para t√≠!
 Head=173
 Body=121
 Heading=3
@@ -1595,7 +1595,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC114]
 Name=SR
-Desc=Bienvenido a la SastrerÌa Real.
+Desc=Bienvenido a la Sastrer√≠a Real.
 Head=171
 Body=174
 Heading=3
@@ -1650,7 +1650,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC58]
 Name=Pescador
-Desc=°Bienvenido al gremio de pescadores!
+Desc=¬°Bienvenido al gremio de pescadores!
 Head=101
 Body=3
 Heading=4
@@ -1695,7 +1695,7 @@ Obj19=0-0
 Obj20=0-0
 [NPC31]
 Name=Sastre
-Desc=°Ven aquÌ! Te puedo ofrecer las mejores ropas de la isla...
+Desc=¬°Ven aqu√≠! Te puedo ofrecer las mejores ropas de la isla...
 Head=7
 Body=46
 Heading=3
@@ -1750,7 +1750,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC32]
 Name=Sastre
-Desc=°Ven y mira estas vestimentas, seguro te encantar·n!
+Desc=¬°Ven y mira estas vestimentas, seguro te encantar√°n!
 Head=75
 Body=118
 Heading=3
@@ -1805,7 +1805,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC39]
 Name=Sastre
-Desc=°Hola forastero! confeccionamos las mejores ropas de la zona.
+Desc=¬°Hola forastero! confeccionamos las mejores ropas de la zona.
 Head=304
 Body=135
 Heading=3
@@ -1860,7 +1860,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC113]
 Name=Armaduras
-Desc=°Tengo a la venta las mejores armaduras de la isla!
+Desc=¬°Tengo a la venta las mejores armaduras de la isla!
 Head=6
 Body=93
 Heading=4
@@ -1905,7 +1905,7 @@ Obj19=0-0
 Obj20=0-0
 [NPC56]
 Name=Herrero
-Desc=°Ven, pasa, que he fabricado, aquÌ en Lindos, poderosas armas para tÌ!
+Desc=¬°Ven, pasa, que he fabricado, aqu√≠ en Lindos, poderosas armas para t√≠!
 Head=505
 Body=199
 Heading=3
@@ -1960,7 +1960,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC69]
 Name=Mago
-Desc=Ven por aquÌ joven, las artes m·gicas superiores te est·n llamando...
+Desc=Ven por aqu√≠ joven, las artes m√°gicas superiores te est√°n llamando...
 Head=110
 Body=46
 Heading=3
@@ -2015,7 +2015,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC62]
 Name=Guldorf
-Desc=Si est· buscando la paz y la tranquilidad en estas tierras ha llegado al lugar indicado... adquiera una de nuestras exclusivas residencias, y cambie su vida para siempre.
+Desc=Si est√° buscando la paz y la tranquilidad en estas tierras ha llegado al lugar indicado... adquiera una de nuestras exclusivas residencias, y cambie su vida para siempre.
 Head=36
 Body=234
 Heading=3
@@ -2070,7 +2070,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC109]
 Name=Sastre
-Desc=°Bienvenidos a la Gran SastrerÌa de la Ciudad Perdida! AquÌ encontrar·n las ropas m·s exÛticas del mundo...
+Desc=¬°Bienvenidos a la Gran Sastrer√≠a de la Ciudad Perdida! Aqu√≠ encontrar√°n las ropas m√°s ex√≥ticas del mundo...
 Head=406
 Body=130
 Heading=3
@@ -2125,7 +2125,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC110]
 Name=Sastre
-Desc=°Entra! Jam·s ver·s prendas m·s bellas que las que tengo para ofrecerte...
+Desc=¬°Entra! Jam√°s ver√°s prendas m√°s bellas que las que tengo para ofrecerte...
 Head=474
 Body=124
 Heading=3
@@ -2180,7 +2180,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC117]
 Name=Sastre
-Desc=°AquÌ en la Ciudad Perdida encontrar·n las mejores ropas pequeÒas de todo el mundo!
+Desc=¬°Aqu√≠ en la Ciudad Perdida encontrar√°n las mejores ropas peque√±as de todo el mundo!
 Head=402
 Body=136
 Heading=3
@@ -2235,7 +2235,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC116]
 Name=Armaduras
-Desc=Si est·s buscando las mejores armaduras de estas tierras, has llegado al lugar correcto...
+Desc=Si est√°s buscando las mejores armaduras de estas tierras, has llegado al lugar correcto...
 Head=6
 Body=93
 Heading=4
@@ -2345,7 +2345,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC61]
 Name=Mago
-Desc=Bienvenido a mi pequeÒa tienda de Arkhein... Tengo algunos hechizos que podrÌan interesarte.
+Desc=Bienvenido a mi peque√±a tienda de Arkhein... Tengo algunos hechizos que podr√≠an interesarte.
 Head=110
 Body=46
 Heading=3
@@ -2400,7 +2400,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC40]
 Name=Tolloz
-Desc=°Hola! Bienvenido a la Taberna de Arkhein, øQuÈ desea que le sirva?
+Desc=¬°Hola! Bienvenido a la Taberna de Arkhein, ¬øQu√© desea que le sirva?
 Head=505
 Body=202
 Heading=3
@@ -2455,7 +2455,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC55]
 Name=Herrero
-Desc=°Ven, pasa, que he fabricado las m·s poderosas armas de Arkhein para tÌ!
+Desc=¬°Ven, pasa, que he fabricado las m√°s poderosas armas de Arkhein para t√≠!
 Head=505
 Body=199
 Heading=3
@@ -2500,7 +2500,7 @@ Obj19=0-0
 Obj20=0-0
 [NPC28]
 Name=Sastre
-Desc=°Entrad Valiente Viajero! En la SastrerÌa de Arkhein est·n las mejores ropas del continente.
+Desc=¬°Entrad Valiente Viajero! En la Sastrer√≠a de Arkhein est√°n las mejores ropas del continente.
 Head=15
 Body=56
 Heading=3
@@ -2555,7 +2555,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC29]
 Name=Sastre
-Desc=°Ven y mira estas vestimentas, seguro te encantar·n!
+Desc=¬°Ven y mira estas vestimentas, seguro te encantar√°n!
 Head=173
 Body=80
 Heading=3
@@ -2610,7 +2610,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC30]
 Name=Sastre
-Desc=AquÌ encontrar·s las mejores prendas para enanos °Y a muy buen precio!
+Desc=Aqu√≠ encontrar√°s las mejores prendas para enanos ¬°Y a muy buen precio!
 Head=404
 Body=159
 Heading=3
@@ -2665,7 +2665,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC101]
 Name=Vendedor de propiedades.
-Desc=En estas tierras demonÌacas est·n las mejores residencias para los miembros de la LegiÛn Oscura... Si no eres legionario puedes tambiÈn vivir ac·, °pero os aseguro que los augura un infierno! jajaja!
+Desc=En estas tierras demon√≠acas est√°n las mejores residencias para los miembros de la Legi√≥n Oscura... Si no eres legionario puedes tambi√©n vivir ac√°, ¬°pero os aseguro que los augura un infierno! jajaja!
 Head=34
 Body=170
 Heading=3
@@ -2720,7 +2720,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC115]
 Name=SC
-Desc=°AQUÕ OBTENDR¡S TU ARMADURA LEGIONARIA!
+Desc=¬°AQU√ç OBTENDR√ÅS TU ARMADURA LEGIONARIA!
 Head=0
 Body=69
 Heading=3
@@ -2775,7 +2775,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC9]
 Name=Ralph
-Desc=°Hola, pequeÒo aventurero, tengo aquÌ unas mercaderÌas para saciar tu hambre y sed!.
+Desc=¬°Hola, peque√±o aventurero, tengo aqu√≠ unas mercader√≠as para saciar tu hambre y sed!.
 Head=504
 Body=202
 Heading=3
@@ -2830,7 +2830,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC103]
 Name=Carahuel
-Desc=°Hola, pequeÒo amigo! øEst·s buscando algo para llenar tu estÛmago? Creo que puedo ayudarte...
+Desc=¬°Hola, peque√±o amigo! ¬øEst√°s buscando algo para llenar tu est√≥mago? Creo que puedo ayudarte...
 Head=474
 Body=309
 Heading=3
@@ -2885,7 +2885,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC57]
 Name=Bhoemond
-Desc= °Sea bienvenido a la famosa Taberna de Arghal!, AquÌ podr· saciarse con la mejor comida y la mejor bebida de toda la zona.
+Desc= ¬°Sea bienvenido a la famosa Taberna de Arghal!, Aqu√≠ podr√° saciarse con la mejor comida y la mejor bebida de toda la zona.
 Head=17
 Body=100
 Heading=3
@@ -2940,7 +2940,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC68]
 Name=Odkon
-Desc=°AcÈrquese pequeÒo vistante de Arghal... Tengo prendas a su medida.
+Desc=¬°Ac√©rquese peque√±o vistante de Arghal... Tengo prendas a su medida.
 Head=404
 Body=371
 Heading=3
@@ -2995,7 +2995,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC64]
 Name=Virgin
-Desc=°Bienvenida jovencita! Soy quien hace los mejores atuendos femeninos de todo Arghal, ven y prueba mi mercaderÌa.
+Desc=¬°Bienvenida jovencita! Soy quien hace los mejores atuendos femeninos de todo Arghal, ven y prueba mi mercader√≠a.
 Head=70
 Body=80
 Heading=3
@@ -3050,7 +3050,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC112]
 Name=Herrero
-Desc=Con estas manos he construÌdo algunas armas que te podr·n servir en tus aventuras... °paga por ellas y ser·n tuyas!
+Desc=Con estas manos he constru√≠do algunas armas que te podr√°n servir en tus aventuras... ¬°paga por ellas y ser√°n tuyas!
 Head=16
 Body=199
 Heading=3
@@ -3105,7 +3105,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC73]
 Name=Armaduras
-Desc=Si tienes agallas como para abandonar la ciudad y enfrentar el peligro de los bosques, deber·s comprar una de las armaduras que he fabricado.
+Desc=Si tienes agallas como para abandonar la ciudad y enfrentar el peligro de los bosques, deber√°s comprar una de las armaduras que he fabricado.
 Head=39
 Body=93
 Heading=3
@@ -3160,7 +3160,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC63]
 Name=Steve
-Desc=Ven, acÈrcate, que tengo para ofrecerte las mejores prendas masculinas de todo Arghal...
+Desc=Ven, ac√©rcate, que tengo para ofrecerte las mejores prendas masculinas de todo Arghal...
 Head=22
 Body=342
 Heading=3
@@ -3215,7 +3215,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC59]
 Name=Mago
-Desc=Bienvenido, neÛfito a Èsta, a mi pequeÒa escuela de Magia, ubicada en el corazÛn mismo de la ciudad de Arghal.
+Desc=Bienvenido, ne√≥fito a √©sta, a mi peque√±a escuela de Magia, ubicada en el coraz√≥n mismo de la ciudad de Arghal.
 Head=20
 Body=34
 Heading=3
@@ -3270,7 +3270,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC21]
 Name=Sastre
-Desc=°Hola forastero! Soy el Sastre de Nix, Bienvenido!
+Desc=¬°Hola forastero! Soy el Sastre de Nix, Bienvenido!
 Head=7
 Body=50
 Heading=3
@@ -3325,7 +3325,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC22]
 Name=Sastre
-Desc=°Bienvenida Viajera! Entra a mi tienda, °Tengo las mejores prendas de Nix!
+Desc=¬°Bienvenida Viajera! Entra a mi tienda, ¬°Tengo las mejores prendas de Nix!
 Head=71
 Body=80
 Heading=3
@@ -3380,7 +3380,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC23]
 Name=Sastre
-Desc=°AcÈrquese! Tengo pequeÒas prendas que ser·n de su agrado...
+Desc=¬°Ac√©rquese! Tengo peque√±as prendas que ser√°n de su agrado...
 Head=404
 Body=180
 Heading=3
@@ -3435,7 +3435,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC70]
 Name=Armaduras
-Desc=AcÈrcate, tengo algunas armaduras que podrÌan protegerte.
+Desc=Ac√©rcate, tengo algunas armaduras que podr√≠an protegerte.
 Head=6
 Body=93
 Heading=4
@@ -3490,7 +3490,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC71]
 Name=Herrero
-Desc=Tened aquÌ las armas m·s poderosas de estas tierras... °Pasad y ved!
+Desc=Tened aqu√≠ las armas m√°s poderosas de estas tierras... ¬°Pasad y ved!
 Head=505
 Body=199
 Heading=3
@@ -3710,7 +3710,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC125]
 Name=Torke
-Desc=Solo tengo ropajes para ENANOS, si no las puedes usar, °vete de aqui!
+Desc=Solo tengo ropajes para ENANOS, si no las puedes usar, ¬°vete de aqui!
 Head=371
 Body=306
 Heading=3
@@ -3765,7 +3765,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC121]
 Name=Isaac
-Desc=øBuscas ropas para HOMBRES HUMANOS? Entonces has hecho bien en acudir a mÌ.
+Desc=¬øBuscas ropas para HOMBRES HUMANOS? Entonces has hecho bien en acudir a m√≠.
 Head=7
 Body=240
 Heading=3
@@ -3820,7 +3820,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC122]
 Name=Nelvi
-Desc=Poseo una gran cantidad de ropajes para los astutos GNOMOS, øDeseas algo en particular?
+Desc=Poseo una gran cantidad de ropajes para los astutos GNOMOS, ¬øDeseas algo en particular?
 Head=403
 Body=294
 Heading=3
@@ -3930,7 +3930,7 @@ Obj29=0-0
 Obj30=0-0
 [NPC53]
 Name=Roksar
-Desc=°Hola, buen viajero! Dispongo de todo tipo de provisiones... øQuÈ deseas?
+Desc=¬°Hola, buen viajero! Dispongo de todo tipo de provisiones... ¬øQu√© deseas?
 Head=505
 Body=202
 Heading=3

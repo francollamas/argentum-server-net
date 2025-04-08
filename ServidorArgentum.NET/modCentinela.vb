@@ -304,7 +304,7 @@ Error_Handler:
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
 		
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\Centinela.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\Centinela.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		Exit Sub

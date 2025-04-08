@@ -110,7 +110,7 @@ Module Statistics
 		
 		With trainningInfo(UserIndex)
 			'Log the data
-			FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\statistics.log", OpenMode.Append, , OpenShare.Shared)
+			FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "\logs\statistics.log", OpenMode.Append, , OpenShare.Shared)
 
 			PrintLine(handle, UCase(UserList(UserIndex).name) & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainningTime + (GetTickCount() - .startTick) / 1000) & " segundos.")
 
@@ -212,7 +212,7 @@ Module Statistics
 		Dim i As Integer
 		Dim j As Integer
 		
-		FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\frags.txt", OpenMode.Output)
+		FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "\logs\frags.txt", OpenMode.Output)
 		
 		'Save lvl vs lvl frag matrix for each class - we use GNU Octave's ASCII file format
 		
@@ -521,7 +521,7 @@ Module Statistics
 		'Dump Chat statistics
 		handle = FreeFile
 		
-		FileOpen(handle, My.Application.Info.DirectoryPath & "\logs\huffman.log", OpenMode.Output)
+		FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "\logs\huffman.log", OpenMode.Output)
 		
 		Dim Total As Decimal
 		
