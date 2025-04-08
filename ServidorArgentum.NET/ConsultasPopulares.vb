@@ -65,17 +65,17 @@ Friend Class ConsultasPopulares
 		Dim CantOpciones As Short
 		Dim i As Short
 		
-		pEncuestaActualNum = Val(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
-		pEncuestaActualTex = GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "INIT", "ConsultaActualTexto")
-		pNivelRequerido = CShort(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
+		pEncuestaActualNum = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
+		pEncuestaActualTex = GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActualTexto")
+		pNivelRequerido = CShort(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
 		
 		If pEncuestaActualNum > 0 Then
 			'cargo todas las opciones
-			CantOpciones = Val(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES"))
+			CantOpciones = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES"))
 			'UPGRADE_WARNING: El límite inferior de la matriz pOpciones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 			ReDim pOpciones(CantOpciones)
 			For i = 1 To CantOpciones
-				pOpciones(i) = Val(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i))
+				pOpciones(i) = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i))
 			Next i
 		End If
 	End Sub
@@ -104,9 +104,9 @@ Friend Class ConsultasPopulares
 				If Not YaVoto Then
 					If Not MailYaVoto(UserList(UserIndex).email) Then
 						'pj apto para votar
-						sufragio = CInt(Val(GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
+						sufragio = CInt(Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
 						sufragio = sufragio + 1
-						Call WriteVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "RESULTADOS" & pEncuestaActualNum, "V" & opcion, Str(sufragio))
+						Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "RESULTADOS" & pEncuestaActualNum, "V" & opcion, Str(sufragio))
 						doVotar = "Tu voto ha sido computado. Opcion: " & opcion
 						Call MarcarPjComoQueYaVoto(UserIndex)
 						Call MarcarMailComoQueYaVoto(UserList(UserIndex).email)
@@ -138,7 +138,7 @@ errorh:
 		Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, Protocol.FontTypeNames.FONTTYPE_GUILD)
 		Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", Protocol.FontTypeNames.FONTTYPE_GUILDMSG)
 		For i = 1 To UBound(pOpciones)
-			Call WriteConsoleMsg(UserIndex, "(Opcion " & i & "): " & GetVar(My.Application.Info.DirectoryPath & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i), Protocol.FontTypeNames.FONTTYPE_GUILDMSG)
+			Call WriteConsoleMsg(UserIndex, "(Opcion " & i & "): " & GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "ENCUESTA" & pEncuestaActualNum, "OPCION" & i), Protocol.FontTypeNames.FONTTYPE_GUILDMSG)
 		Next i
 		Call WriteConsoleMsg(UserIndex, " Para votar una opcion, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opcion 1, escribe /encuesta 1. Tu voto no podra ser cambiado.", Protocol.FontTypeNames.FONTTYPE_VENENO)
 	End Function
@@ -158,7 +158,7 @@ errorh:
 		
 		ArchN = FreeFile
 		
-		FileOpen(ArchN, My.Application.Info.DirectoryPath & ARCHIVOMAILS, OpenMode.Input)
+		FileOpen(ArchN, AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS, OpenMode.Input)
 		
 		Do While Not EOF(ArchN)
 			Tmp = LineInput(ArchN)
@@ -178,7 +178,7 @@ errorh:
 		
 		ArchN = FreeFile
 		
-		FileOpen(ArchN, My.Application.Info.DirectoryPath & ARCHIVOMAILS, OpenMode.Append)
+		FileOpen(ArchN, AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS, OpenMode.Append)
 		PrintLine(ArchN, email)
 		
 		FileClose(ArchN)

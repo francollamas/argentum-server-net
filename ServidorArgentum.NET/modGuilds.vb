@@ -93,7 +93,7 @@ Module modGuilds
 		Dim tempStr As String
 		Dim Alin As ALINEACION_GUILD
 		
-		GUILDINFOFILE = My.Application.Info.DirectoryPath & "\guilds\guildsinfo.inf"
+		GUILDINFOFILE = AppDomain.CurrentDomain.BaseDirectory & "\guilds\guildsinfo.inf"
 		
 		CantClanes = GetVar(GUILDINFOFILE, "INIT", "nroGuilds")
 		

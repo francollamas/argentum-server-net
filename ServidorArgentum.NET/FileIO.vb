@@ -38,11 +38,11 @@ Module ES
 		'***************************************************
 		
 		Dim N, LoopC As Short
-		N = Val(GetVar(My.Application.Info.DirectoryPath & "\Dat\Invokar.dat", "INIT", "NumNPCs"))
+		N = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Invokar.dat", "INIT", "NumNPCs"))
 		ReDim SpawnList(N)
 		For LoopC = 1 To N
-			SpawnList(LoopC).NpcIndex = Val(GetVar(My.Application.Info.DirectoryPath & "\Dat\Invokar.dat", "LIST", "NI" & LoopC))
-			SpawnList(LoopC).NpcName = GetVar(My.Application.Info.DirectoryPath & "\Dat\Invokar.dat", "LIST", "NN" & LoopC)
+			SpawnList(LoopC).NpcIndex = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Invokar.dat", "LIST", "NI" & LoopC))
+			SpawnList(LoopC).NpcName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Invokar.dat", "LIST", "NN" & LoopC)
 		Next LoopC
 		
 	End Sub
@@ -219,7 +219,7 @@ Module ES
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		'###################################################
 		'#               ATENCION PELIGRO                  #
 		'###################################################
@@ -233,11 +233,9 @@ Module ES
 		'Alejo
 		'
 		'###################################################
-		
+
 		On Error GoTo Errhandler
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando Hechizos."
-		
+
 		Dim Hechizo As Short
 		Dim Leer As New clsIniReader
 		
@@ -245,12 +243,10 @@ Module ES
 		
 		'obtiene el numero de hechizos
 		NumeroHechizos = Val(Leer.GetValue("INIT", "NumeroHechizos"))
-		
+
 		'UPGRADE_WARNING: El límite inferior de la matriz Hechizos ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim Hechizos(NumeroHechizos)
-		
-		frmCargando.Porcentaje.Text = "0 %"
-		
+
 		'Llena la lista
 		For Hechizo = 1 To NumeroHechizos
 			With Hechizos(Hechizo)
@@ -336,10 +332,9 @@ Module ES
 				
 				'Barrin 30/9/03
 				.StaRequerido = Val(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido"))
-				
+
 				.Target = Val(Leer.GetValue("Hechizo" & Hechizo, "Target"))
-				frmCargando.Porcentaje.Text = Hechizo / NumeroHechizos * 100 & " %"
-				
+
 				.NeedStaff = Val(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
 				.StaffAffected = CBool(Val(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
 			End With
@@ -364,12 +359,12 @@ Errhandler:
 		
 		Dim i As Short
 		
-		MaxLines = Val(GetVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "INIT", "NumLines"))
+		MaxLines = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "INIT", "NumLines"))
 		
 		'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim MOTD(MaxLines)
 		For i = 1 To MaxLines
-			MOTD(i).texto = GetVar(My.Application.Info.DirectoryPath & "\Dat\Motd.ini", "Motd", "Line" & i)
+			MOTD(i).texto = GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "Motd", "Line" & i)
 			MOTD(i).Formato = vbNullString
 		Next i
 		
@@ -419,7 +414,7 @@ Errhandler:
 		On Error Resume Next
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\BackUps.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\BackUps.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay)
 		FileClose(nfile)
 	End Sub
@@ -707,7 +702,7 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		'###################################################
 		'#               ATENCION PELIGRO                  #
 		'###################################################
@@ -721,13 +716,11 @@ Errhandler:
 		'Alejo
 		'
 		'###################################################
-		
+
 		'Call LogTarea("Sub LoadOBJData")
-		
+
 		On Error GoTo Errhandler
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando base de datos de los objetos."
-		
+
 		'*****************************************************************
 		'Carga la lista de objetos
 		'*****************************************************************
@@ -736,12 +729,9 @@ Errhandler:
 		Dim Leer As New clsIniReader
 		
 		Call Leer.Initialize(DatPath & "Obj.dat")
-		
+
 		'obtiene el numero de obj
 		NumObjDatas = Val(Leer.GetValue("INIT", "NumObjs"))
-		
-		frmCargando.Porcentaje.Text = "0 %"
-
 
 		'UPGRADE_WARNING: Es posible que la matriz ObjData_Renamed necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 		'UPGRADE_WARNING: El límite inferior de la matriz ObjData_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -945,8 +935,7 @@ Errhandler:
 				.NoSeCae = Val(Leer.GetValue("OBJ" & Object_Renamed, "NoSeCae"))
 				
 				.Upgrade = Val(Leer.GetValue("OBJ" & Object_Renamed, "Upgrade"))
-				
-				frmCargando.Porcentaje.Text = Object_Renamed / NumObjDatas * 100 & " %"
+
 			End With
 		Next Object_Renamed
 		
@@ -1283,9 +1272,7 @@ CleanExit:
 		'Last Modification: -
 		'
 		'***************************************************
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando backup."
-		
+
 		Dim Map As Short
 		Dim TempInt As Short
 		Dim tFileName As String
@@ -1295,11 +1282,8 @@ CleanExit:
 		
 		NumMaps = Val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
 		Call InitAreas()
-		
-		frmCargando.Porcentaje.Text = "0 %"
-		
-		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
+		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
 		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 		'UPGRADE_WARNING: El límite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -1310,20 +1294,17 @@ CleanExit:
 		ReDim MapInfo_Renamed(NumMaps)
 		
 		For Map = 1 To NumMaps
-			If Val(GetVar(My.Application.Info.DirectoryPath & MapPath & "Mapa" & Map & ".Dat", "Mapa" & Map, "BackUp")) <> 0 Then
-				tFileName = My.Application.Info.DirectoryPath & "\WorldBackUp\Mapa" & Map
+			If Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map & ".Dat", "Mapa" & Map, "BackUp")) <> 0 Then
+				tFileName = AppDomain.CurrentDomain.BaseDirectory & "\WorldBackUp\Mapa" & Map
 				
 				If Not FileExist(tFileName & ".*") Then 'Miramos que exista al menos uno de los 3 archivos, sino lo cargamos de la carpeta de los mapas
-					tFileName = My.Application.Info.DirectoryPath & MapPath & "Mapa" & Map
+					tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
 				End If
 			Else
-				tFileName = My.Application.Info.DirectoryPath & MapPath & "Mapa" & Map
+				tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
 			End If
-			
+
 			Call CargarMapa(Map, tFileName)
-			
-			frmCargando.Porcentaje.Text = Map / NumMaps * 100 & " %"
-			System.Windows.Forms.Application.DoEvents()
 		Next Map
 		
 		Exit Sub
@@ -1340,9 +1321,7 @@ man:
 		'Last Modification: -
 		'
 		'***************************************************
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando mapas..."
-		
+
 		Dim Map As Short
 		Dim TempInt As Short
 		Dim tFileName As String
@@ -1352,11 +1331,8 @@ man:
 		
 		NumMaps = Val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
 		Call InitAreas()
-		
-		frmCargando.Porcentaje.Text = "0 %"
-		
-		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
+		MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
 
 		'UPGRADE_WARNING: Es posible que la matriz MapData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
 		'UPGRADE_WARNING: El límite inferior de la matriz MapData ha cambiado de 1,XMinMapSize,YMinMapSize a 0,0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -1368,11 +1344,8 @@ man:
 		
 		For Map = 1 To NumMaps
 			
-			tFileName = My.Application.Info.DirectoryPath & MapPath & "Mapa" & Map
+			tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
 			Call CargarMapa(Map, tFileName)
-			
-			frmCargando.Porcentaje.Text = Map / NumMaps * 100 & " %"
-			System.Windows.Forms.Application.DoEvents()
 		Next Map
 		
 		Exit Sub
@@ -1561,11 +1534,9 @@ errh:
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		Dim Temporal As Integer
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando info de inicio del server."
-		
+
 		BootDelBackUp = Val(GetVar(IniPath & "Server.ini", "INIT", "IniciarDesdeBackUp"))
 		
 		Puerto = Val(GetVar(IniPath & "Server.ini", "INIT", "StartPort"))
@@ -1608,79 +1579,49 @@ errh:
 		MAPA_PRETORIANO = Val(GetVar(IniPath & "Server.ini", "INIT", "MapaPretoriano"))
 		
 		EnTesting = Val(GetVar(IniPath & "Server.ini", "INIT", "Testing"))
-		
+
 		'Intervalos
 		SanaIntervaloSinDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloSinDescansar"))
-		FrmInterv.txtSanaIntervaloSinDescansar.Text = CStr(SanaIntervaloSinDescansar)
-		
 		StaminaIntervaloSinDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloSinDescansar"))
-		FrmInterv.txtStaminaIntervaloSinDescansar.Text = CStr(StaminaIntervaloSinDescansar)
-		
 		SanaIntervaloDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloDescansar"))
-		FrmInterv.txtSanaIntervaloDescansar.Text = CStr(SanaIntervaloDescansar)
-		
 		StaminaIntervaloDescansar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloDescansar"))
-		FrmInterv.txtStaminaIntervaloDescansar.Text = CStr(StaminaIntervaloDescansar)
-		
+
 		IntervaloSed = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloSed"))
-		FrmInterv.txtIntervaloSed.Text = CStr(IntervaloSed)
-		
 		IntervaloHambre = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloHambre"))
-		FrmInterv.txtIntervaloHambre.Text = CStr(IntervaloHambre)
-		
 		IntervaloVeneno = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloVeneno"))
-		FrmInterv.txtIntervaloVeneno.Text = CStr(IntervaloVeneno)
-		
 		IntervaloParalizado = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParalizado"))
-		FrmInterv.txtIntervaloParalizado.Text = CStr(IntervaloParalizado)
-		
 		IntervaloInvisible = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvisible"))
-		FrmInterv.txtIntervaloInvisible.Text = CStr(IntervaloInvisible)
-		
 		IntervaloFrio = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloFrio"))
-		FrmInterv.txtIntervaloFrio.Text = CStr(IntervaloFrio)
-		
 		IntervaloWavFx = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWAVFX"))
-		FrmInterv.txtIntervaloWAVFX.Text = CStr(IntervaloWavFx)
-		
 		IntervaloInvocacion = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvocacion"))
-		FrmInterv.txtInvocacion.Text = CStr(IntervaloInvocacion)
-		
 		IntervaloParaConexion = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParaConexion"))
-		FrmInterv.txtIntervaloParaConexion.Text = CStr(IntervaloParaConexion)
-		
+
 		'&&&&&&&&&&&&&&&&&&&&& TIMERS &&&&&&&&&&&&&&&&&&&&&&&
-		
+
 		IntervaloPuedeSerAtacado = 5000 ' Cargar desde balance.dat
 		IntervaloAtacable = 60000 ' Cargar desde balance.dat
 		IntervaloOwnedNpc = 18000 ' Cargar desde balance.dat
-		
+
 		IntervaloUserPuedeCastear = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo"))
-		FrmInterv.txtIntervaloLanzaHechizo.Text = CStr(IntervaloUserPuedeCastear)
-		
+
 		'UPGRADE_WARNING: La propiedad Timer TIMER_AI.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-		frmMain.TIMER_AI.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
-		FrmInterv.txtAI.Text = CStr(frmMain.TIMER_AI.Interval)
-		
+		GameLoop.timerAIInterval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
+
 		'UPGRADE_WARNING: La propiedad Timer npcataca.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-		frmMain.npcataca.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
-		FrmInterv.txtNPCPuedeAtacar.Text = CStr(frmMain.npcataca.Interval)
-		
+		GameLoop.npcAtacaInterval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
+
 		IntervaloUserPuedeTrabajar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo"))
-		FrmInterv.txtTrabajo.Text = CStr(IntervaloUserPuedeTrabajar)
-		
+
 		IntervaloUserPuedeAtacar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar"))
-		FrmInterv.txtPuedeAtacar.Text = CStr(IntervaloUserPuedeAtacar)
-		
+
 		'TODO : Agregar estos intervalos al form!!!
 		IntervaloMagiaGolpe = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloMagiaGolpe"))
 		IntervaloGolpeMagia = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeMagia"))
 		IntervaloGolpeUsar = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeUsar"))
-		
+
 		'UPGRADE_WARNING: La propiedad Timer tLluvia.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-		frmMain.tLluvia.Interval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
-		FrmInterv.txtIntervaloPerdidaStaminaLluvia.Text = CStr(frmMain.tLluvia.Interval)
-		
+		GameLoop.lluviaInterval = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
+
 		MinutosWs = Val(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWS"))
 		If MinutosWs < 60 Then MinutosWs = 180
 		
@@ -2276,10 +2217,7 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-		
-		'Status
-		If frmMain.Visible Then frmMain.txStatus.Text = "Cargando backup Npc"
-		
+
 		Dim npcfile As String
 		
 		'If NpcNumber > 499 Then
@@ -2362,13 +2300,13 @@ Errhandler:
 		'
 		'***************************************************
 		
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.log", UserList(BannedIndex).name, "BannedBy", UserList(UserIndex).name)
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.log", UserList(BannedIndex).name, "Reason", motivo)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.log", UserList(BannedIndex).name, "BannedBy", UserList(UserIndex).name)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.log", UserList(BannedIndex).name, "Reason", motivo)
 		
 		'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
 		Dim mifile As Short
 		mifile = FreeFile
-		FileOpen(mifile, My.Application.Info.DirectoryPath & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(mifile, UserList(BannedIndex).name)
 		FileClose(mifile)
 		
@@ -2382,13 +2320,13 @@ Errhandler:
 		'
 		'***************************************************
 		
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat", BannedName, "BannedBy", UserList(UserIndex).name)
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat", BannedName, "Reason", motivo)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "BannedBy", UserList(UserIndex).name)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "Reason", motivo)
 		
 		'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
 		Dim mifile As Short
 		mifile = FreeFile
-		FileOpen(mifile, My.Application.Info.DirectoryPath & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(mifile, BannedName)
 		FileClose(mifile)
 		
@@ -2402,14 +2340,14 @@ Errhandler:
 		'
 		'***************************************************
 		
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat", BannedName, "BannedBy", Baneador)
-		Call WriteVar(My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat", BannedName, "Reason", motivo)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "BannedBy", Baneador)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "Reason", motivo)
 		
 		
 		'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
 		Dim mifile As Short
 		mifile = FreeFile
-		FileOpen(mifile, My.Application.Info.DirectoryPath & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(mifile, BannedName)
 		FileClose(mifile)
 		

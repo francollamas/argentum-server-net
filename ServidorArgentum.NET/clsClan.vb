@@ -159,7 +159,7 @@ Friend Class clsClan
 	
 	'UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Private Sub Class_Initialize_Renamed()
-		GUILDPATH = My.Application.Info.DirectoryPath & "\GUILDS\"
+		GUILDPATH = AppDomain.CurrentDomain.BaseDirectory & "\GUILDS\"
 		GUILDINFOFILE = GUILDPATH & "guildsinfo.inf"
 	End Sub
 	Public Sub New()

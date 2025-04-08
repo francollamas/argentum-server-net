@@ -208,8 +208,8 @@ Errhandler:
 		On Error Resume Next
 		Dim f As Date
 
-		ChDir(My.Application.Info.DirectoryPath)
-		ChDrive(My.Application.Info.DirectoryPath)
+		ChDir(AppDomain.CurrentDomain.BaseDirectory)
+		ChDrive(AppDomain.CurrentDomain.BaseDirectory)
 
 		Call LoadMotd()
 		Call BanIpCargar()
@@ -234,8 +234,8 @@ Errhandler:
 		LastBackup = DateTime.Now.ToString("HH:mm")
 		Minutos = DateTime.Now.ToString("HH:mm")
 
-		IniPath = My.Application.Info.DirectoryPath & "\"
-		DatPath = My.Application.Info.DirectoryPath & "\Dat\"
+		IniPath = AppDomain.CurrentDomain.BaseDirectory & "\"
+		DatPath = AppDomain.CurrentDomain.BaseDirectory & "\Dat\"
 
 
 
@@ -337,22 +337,16 @@ Errhandler:
 		ListaAtributos(Declaraciones.eAtributos.Carisma) = "Carisma"
 		ListaAtributos(Declaraciones.eAtributos.Constitucion) = "Constitucion"
 
-		frmCargando.Show()
-
 		'Call PlayWaveAPI(App.Path & "\wav\harp3.wav")
 
-		frmMain.Text = frmMain.Text & " V." & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision
-		IniPath = My.Application.Info.DirectoryPath & "\"
-		CharPath = My.Application.Info.DirectoryPath & "\Charfile\"
+		IniPath = AppDomain.CurrentDomain.BaseDirectory & "\"
+		CharPath = AppDomain.CurrentDomain.BaseDirectory & "\Charfile\"
 
 		'Bordes del mapa
 		MinXBorder = XMinMapSize + (XWindow \ 2)
 		MaxXBorder = XMaxMapSize - (XWindow \ 2)
 		MinYBorder = YMinMapSize + (YWindow \ 2)
 		MaxYBorder = YMaxMapSize - (YWindow \ 2)
-		System.Windows.Forms.Application.DoEvents()
-
-		frmCargando.Label2.Text = "Iniciando Arrays..."
 
 		Call LoadGuildsDB()
 
@@ -360,44 +354,22 @@ Errhandler:
 		Call CargarSpawnList()
 		Call CargarForbidenWords()
 		'¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
-		frmCargando.Label2.Text = "Cargando Server.ini"
 
 		MaxUsers = 0
 		Call LoadSini()
 		Call CargaApuestas()
-
-		'*************************************************
-		frmCargando.Label2.Text = "Cargando NPCs.Dat"
 		Call CargaNpcsDat()
-		'*************************************************
-
-		frmCargando.Label2.Text = "Cargando Obj.Dat"
-		'Call LoadOBJData
 		Call LoadOBJData()
-
-		frmCargando.Label2.Text = "Cargando Hechizos.Dat"
 		Call CargarHechizos()
-
-
-		frmCargando.Label2.Text = "Cargando Objetos de Herrería"
 		Call LoadArmasHerreria()
 		Call LoadArmadurasHerreria()
-
-		frmCargando.Label2.Text = "Cargando Objetos de Carpintería"
 		Call LoadObjCarpintero()
-
-		frmCargando.Label2.Text = "Cargando Balance.Dat"
 		Call LoadBalance() '4/01/08 Pablo ToxicWaste
-
-		frmCargando.Label2.Text = "Cargando ArmadurasFaccionarias.dat"
 		Call LoadArmadurasFaccion()
 
 		If BootDelBackUp Then
-
-			frmCargando.Label2.Text = "Cargando BackUp"
 			Call CargarBackUp()
 		Else
-			frmCargando.Label2.Text = "Cargando Mapas"
 			Call LoadMapData()
 		End If
 
@@ -420,44 +392,24 @@ Errhandler:
 			UserList(LoopC).outgoingData = New clsByteQueue
 		Next LoopC
 
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
-		With frmMain
-			.AutoSave.Enabled = True
-			.tLluvia.Enabled = True
-			.tPiqueteC.Enabled = True
-			.GameTimer.Enabled = True
-			.tLluviaEvent.Enabled = True
-			.FX.Enabled = True
-			.Auditoria.Enabled = True
-			.KillLog.Enabled = True
-			.TIMER_AI.Enabled = True
-			.npcataca.Enabled = True
-		End With
-
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 		'Configuracion de los sockets
 
 		Call SecurityIp.InitIpTables(1000)
-
 		Call IniciaWsApi(Puerto)
-
-		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
-		'¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-
-		frmCargando.Close()
 
 		'Log
 		Dim N As Short
 		N = FreeFile()
-		FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
-		PrintLine(N, Today & " " & TimeOfDay & " server iniciado " & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Revision)
+		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 		FileClose(N)
 
 		tInicioServer = GetTickCount()
 		Call InicializaEstadisticas()
 
-		Application.Run(New frmMain()) ' Mantiene la aplicación viva hasta que se cierre frmMain
+		Call GameLoop.DoGameLoop()
+
+		Call GameLoop.CloseServer()
+		Debug.Print("Server finalizado!")
 	End Sub
 
 	Function FileExist(ByVal file As String) As Boolean
@@ -514,9 +466,7 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-
-		frmMain.CantUsuarios.Text = "Número de usuarios jugando: " & NumUsers
-
+		' TODO MIGRA: completar si veo que es necesario
 	End Sub
 	
 	
@@ -531,7 +481,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\Eventos.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\Eventos.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -552,7 +502,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\EjercitoReal.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\EjercitoReal.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, desc)
 		FileClose(nfile)
 		
@@ -573,7 +523,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\EjercitoCaos.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\EjercitoCaos.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, desc)
 		FileClose(nfile)
 		
@@ -595,7 +545,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\" & Index & ".log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\" & Index & ".log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -617,7 +567,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\errores.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\errores.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -638,7 +588,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\Stats.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\Stats.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -659,7 +609,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile() ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\haciendo.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\haciendo.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -681,7 +631,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\clanes.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\clanes.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
 		FileClose(nfile)
 		
@@ -697,7 +647,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\IP.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\IP.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
 		FileClose(nfile)
 		
@@ -714,7 +664,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\desarrollo" & Month(Today) & Year(Today) & ".log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\desarrollo" & Month(Today) & Year(Today) & ".log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
 		FileClose(nfile)
 		
@@ -732,7 +682,7 @@ Errhandler:
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
 		'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\" & Nombre & ".log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\" & Nombre & ".log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		
@@ -754,7 +704,7 @@ Errhandler:
 		
 		nfile = FreeFile ' obtenemos un canal
 		
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\asesinatos.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\asesinatos.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		
@@ -775,7 +725,7 @@ Errhandler:
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
 		
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\propiedades.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\propiedades.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, "----------------------------------------------------------")
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "----------------------------------------------------------")
@@ -797,7 +747,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\HackAttemps.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\HackAttemps.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, "----------------------------------------------------------")
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "----------------------------------------------------------")
@@ -820,7 +770,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\CH.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\CH.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		
@@ -842,7 +792,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\CriticalHackAttemps.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\CriticalHackAttemps.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, "----------------------------------------------------------")
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "----------------------------------------------------------")
@@ -865,7 +815,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, My.Application.Info.DirectoryPath & "\logs\AntiCheat.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\AntiCheat.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "")
 		FileClose(nfile)
@@ -906,12 +856,10 @@ Errhandler:
 		'Last Modification: -
 		'
 		'***************************************************
-		
+
 		'Se asegura de que los sockets estan cerrados e ignora cualquier err
 		On Error Resume Next
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Reiniciando."
-		
+
 		Dim LoopC As Integer
 		
 		'Inicia el socket de escucha
@@ -951,20 +899,16 @@ Errhandler:
 		Call LoadOBJData()
 		
 		Call LoadMapData()
-		
+
 		Call CargarHechizos()
-		
-		If frmMain.Visible Then frmMain.txStatus.Text = "Escuchando conexiones entrantes ..."
-		
+
 		'Log it
 		Dim N As Short
 		N = FreeFile
-		FileOpen(N, My.Application.Info.DirectoryPath & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
 		FileClose(N)
-		
-		frmMain.Show()
-		
+
 	End Sub
 	
 	
@@ -1482,7 +1426,7 @@ Errhandler:
 		'
 		'***************************************************
 		
-		ReiniciarAutoUpdate = Shell(My.Application.Info.DirectoryPath & "\autoupdater\aoau.exe", AppWinStyle.MinimizedNoFocus)
+		ReiniciarAutoUpdate = Shell(AppDomain.CurrentDomain.BaseDirectory & "\autoupdater\aoau.exe", AppWinStyle.MinimizedNoFocus)
 		
 	End Function
 	
@@ -1501,12 +1445,9 @@ Errhandler:
 		
 		'Guardar Pjs
 		Call GuardarUsuarios()
-		
-		If EjecutarLauncher Then Shell(My.Application.Info.DirectoryPath & "\launcher.exe")
-		
-		'Chauuu
-		frmMain.Close()
-		
+
+		If EjecutarLauncher Then Shell(AppDomain.CurrentDomain.BaseDirectory & "\launcher.exe")
+
 	End Sub
 	
 	
@@ -1546,7 +1487,7 @@ Errhandler:
 		Dim Ta As Integer
 		Ta = GetTickCount()
 
-		Call EstadisticasWeb.Inicializa(frmMain.Handle.ToInt32)
+		Call EstadisticasWeb.Inicializa()
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_MAPAS, NumMaps)
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)
 		Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.UPTIME_SERVER, (Ta - tInicioServer) / 1000)

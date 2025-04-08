@@ -80,7 +80,7 @@ Module modForum
 		ReDim Preserve Foros(NumForos)
 		ArrayInitializers.InitializeStruct(Foros)
 
-		ForumPath = My.Application.Info.DirectoryPath & "\foros\" & sForoID & ".for"
+		ForumPath = AppDomain.CurrentDomain.BaseDirectory & "\foros\" & sForoID & ".for"
 		
 		With Foros(NumForos)
 			
@@ -93,7 +93,7 @@ Module modForum
 				' Cargo posts
 				For PostIndex = 1 To .CantPosts
 					FileIndex = FreeFile
-					PostPath = My.Application.Info.DirectoryPath & "\foros\" & sForoID & PostIndex & ".for"
+					PostPath = AppDomain.CurrentDomain.BaseDirectory & "\foros\" & sForoID & PostIndex & ".for"
 					
 					FileOpen(FileIndex, PostPath, OpenMode.Input, , OpenShare.Shared)
 					
@@ -110,7 +110,7 @@ Module modForum
 				' Cargo anuncios
 				For PostIndex = 1 To .CantAnuncios
 					FileIndex = FreeFile
-					PostPath = My.Application.Info.DirectoryPath & "\foros\" & sForoID & PostIndex & "a.for"
+					PostPath = AppDomain.CurrentDomain.BaseDirectory & "\foros\" & sForoID & PostIndex & "a.for"
 					
 					FileOpen(FileIndex, PostPath, OpenMode.Input, , OpenShare.Shared)
 					
@@ -214,13 +214,13 @@ Module modForum
 		With Foros(ForumIndex)
 			
 			' Guardo info del foro
-			Call WriteVar(My.Application.Info.DirectoryPath & "\Foros\" & .ID & ".for", "INFO", "CantMSG", CStr(.CantPosts))
-			Call WriteVar(My.Application.Info.DirectoryPath & "\Foros\" & .ID & ".for", "INFO", "CantAnuncios", CStr(.CantAnuncios))
+			Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & ".for", "INFO", "CantMSG", CStr(.CantPosts))
+			Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & ".for", "INFO", "CantAnuncios", CStr(.CantAnuncios))
 			
 			' Guardo posts
 			For PostIndex = 1 To .CantPosts
 				
-				PostPath = My.Application.Info.DirectoryPath & "\Foros\" & .ID & PostIndex & ".for"
+				PostPath = AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & PostIndex & ".for"
 				FileIndex = FreeFile
 				FileOpen(FileIndex, PostPath, OpenMode.Output)
 				
@@ -237,7 +237,7 @@ Module modForum
 			' Guardo Anuncios
 			For PostIndex = 1 To .CantAnuncios
 				
-				PostPath = My.Application.Info.DirectoryPath & "\Foros\" & .ID & PostIndex & "a.for"
+				PostPath = AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & PostIndex & "a.for"
 				FileIndex = FreeFile
 				FileOpen(FileIndex, PostPath, OpenMode.Output)
 				
@@ -268,14 +268,14 @@ Module modForum
 		With Foros(ForumIndex)
 			
 			' Elimino todo
-			ForumPath = My.Application.Info.DirectoryPath & "\Foros\" & .ID & ".for"
+			ForumPath = AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & ".for"
 			If FileExist(ForumPath) Then
 				
 				NumPost = Val(GetVar(ForumPath, "INFO", "CantMSG"))
 				
 				' Elimino los post viejos
 				For PostIndex = 1 To NumPost
-					Kill(My.Application.Info.DirectoryPath & "\Foros\" & .ID & PostIndex & ".for")
+					Kill(AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & PostIndex & ".for")
 				Next PostIndex
 				
 				
@@ -283,12 +283,12 @@ Module modForum
 				
 				' Elimino los post viejos
 				For PostIndex = 1 To NumPost
-					Kill(My.Application.Info.DirectoryPath & "\Foros\" & .ID & PostIndex & "a.for")
+					Kill(AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & PostIndex & "a.for")
 				Next PostIndex
 				
 				
 				' Elimino el foro
-				Kill(My.Application.Info.DirectoryPath & "\Foros\" & .ID & ".for")
+				Kill(AppDomain.CurrentDomain.BaseDirectory & "\Foros\" & .ID & ".for")
 				
 			End If
 		End With

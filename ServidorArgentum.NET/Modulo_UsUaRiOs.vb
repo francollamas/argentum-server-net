@@ -980,7 +980,7 @@ Errhandler:
 		Dim Ban As String
 		Dim BanDetailPath As String
 		
-		BanDetailPath = My.Application.Info.DirectoryPath & "\logs\" & "BanDetail.dat"
+		BanDetailPath = AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat"
 		CharFile = CharPath & charName & ".chr"
 		
 		If FileExist(CharFile) Then

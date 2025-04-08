@@ -6,7 +6,7 @@ Imports System.Net.Sockets
 Imports System.Text
 Imports System.Threading
 Imports System.Collections.Generic
-Imports System.Windows.Forms
+Imports System.Timers
 
 ''' <summary>
 ''' Manages socket connections for the server.
@@ -16,13 +16,13 @@ Public Class SocketManager
     Public Class QueuedMessage
         Public SocketID As Integer
         Public Data() As Byte
-        
+
         Public Sub New(socketId As Integer, data() As Byte)
             Me.SocketID = socketId
             Me.Data = data
         End Sub
     End Class
-    
+
     ' State object for reading client data asynchronously
     Public Class SocketState
         ' Client socket.
@@ -56,7 +56,7 @@ Public Class SocketManager
     ' Simple synchronized message queue
     Private Shared _messageQueue As New Queue(Of QueuedMessage)
     Private Shared _messageQueueLock As New Object()
-    Private Shared _messageTimer As System.Windows.Forms.Timer
+    Private Shared _messageTimer As System.Timers.Timer
 
     ' Lock objects
     Private Shared _socketStatesLock As New Object()
@@ -68,7 +68,7 @@ Public Class SocketManager
     Public Shared Event DataReceived(socketID As Integer, data() As Byte)
     Public Shared Event ConnectionClosed(socketID As Integer)
     Public Shared Event ServerError(errorMessage As String)
-    
+
     ' Flag to control if message processing is enabled
     Public Shared ProcessMessagesEnabled As Boolean = True
 
@@ -79,10 +79,10 @@ Public Class SocketManager
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
         _listeningPort = port
 
-        ' Initialize the message queue timer
-        _messageTimer = New System.Windows.Forms.Timer()
-        _messageTimer.Interval = 10 ' Check queue every 10ms 
-        AddHandler _messageTimer.Tick, AddressOf ProcessMessageQueue
+        ' Initialize the message queue timer using System.Timers.Timer
+        _messageTimer = New System.Timers.Timer(10) ' Check queue every 10ms
+        AddHandler _messageTimer.Elapsed, AddressOf ProcessMessageQueue
+        _messageTimer.AutoReset = True
         _messageTimer.Start()
 
         StartListening()
@@ -91,16 +91,16 @@ Public Class SocketManager
     ''' <summary>
     ''' Process queued messages on the main thread
     ''' </summary>
-    Private Shared Sub ProcessMessageQueue(sender As Object, e As EventArgs)
+    Private Shared Sub ProcessMessageQueue(sender As Object, e As ElapsedEventArgs)
         ' Skip if processing is disabled
         If Not ProcessMessagesEnabled Then
             Return
         End If
-        
+
         ' Process all available messages in one go
         While True
             Dim message As QueuedMessage = Nothing
-            
+
             SyncLock _messageQueueLock
                 If _messageQueue.Count > 0 Then
                     message = _messageQueue.Dequeue()
@@ -108,7 +108,7 @@ Public Class SocketManager
                     Exit While
                 End If
             End SyncLock
-            
+
             ' Process message on the main thread
             If message IsNot Nothing Then
                 RaiseEvent DataReceived(message.SocketID, message.Data)
@@ -292,7 +292,7 @@ Public Class SocketManager
             If socketID >= 0 Then CloseSocketInternal(socketID)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Adds a message to the queue for processing on the main thread
     ''' </summary>
@@ -307,7 +307,7 @@ Public Class SocketManager
     ''' </summary>
     Public Shared Sub ProcessPendingMessages()
         ' Only call this from the main thread
-        ProcessMessageQueue(Nothing, EventArgs.Empty)
+        ProcessMessageQueue(Nothing, Nothing)
     End Sub
 
     ''' <summary>
@@ -530,7 +530,7 @@ Public Class SocketManager
         ' Stop the message processing timer
         If _messageTimer IsNot Nothing Then
             _messageTimer.Stop()
-            RemoveHandler _messageTimer.Tick, AddressOf ProcessMessageQueue
+            RemoveHandler _messageTimer.Elapsed, AddressOf ProcessMessageQueue
             _messageTimer.Dispose()
             _messageTimer = Nothing
         End If

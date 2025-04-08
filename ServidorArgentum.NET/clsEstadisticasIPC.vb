@@ -33,11 +33,11 @@ Friend Class clsEstadisticasIPC
 		EstadisticasAndando = False
 		
 	End Function
-	
-	Public Sub Inicializa(ByVal hWnd As Integer)
-		
+
+	Public Sub Inicializa()
+
 	End Sub
-	
+
 	Private Sub BuscaWndEstadisticas()
 		
 	End Sub
