@@ -5,6 +5,9 @@ Imports System.Threading
 
 Module GameLoop
 
+    ' TODO: verificar si el servidor se esta cerrando correctamente!!
+    Private running As Boolean = True
+
     Public piqueteCInterval As Integer = 6000
     Public packetResendInterval As Integer = 10
     Public fxInterval As Integer = 4000
@@ -32,11 +35,25 @@ Module GameLoop
     Dim lastTimerAI As Double = 0
     Dim lastConnection As Double = 0
 
+    Private Sub OnExit(sender As Object, e As EventArgs)
+        Console.WriteLine("Evento: ProcessExit")
+        running = False
+    End Sub
+
+    Private Sub OnCancel(sender As Object, e As ConsoleCancelEventArgs)
+        Console.WriteLine("Evento: CancelKeyPress")
+        e.Cancel = True ' Previene salida inmediata
+        running = False
+    End Sub
+
     Public Sub DoGameLoop()
+
+        AddHandler AppDomain.CurrentDomain.ProcessExit, AddressOf OnExit
+        AddHandler Console.CancelKeyPress, AddressOf OnCancel
 
         Dim sw As Stopwatch = Stopwatch.StartNew()
 
-        While True
+        While running
             Dim now As Double = sw.Elapsed.TotalMilliseconds
 
             If now - lastPiqueteC >= piqueteCInterval Then

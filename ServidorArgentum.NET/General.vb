@@ -410,6 +410,7 @@ Errhandler:
 		Call GameLoop.DoGameLoop()
 
 		Call GameLoop.CloseServer()
+		Debug.Print("Server finalizado!")
 	End Sub
 
 	Function FileExist(ByVal file As String) As Boolean
