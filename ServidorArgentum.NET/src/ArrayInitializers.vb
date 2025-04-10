@@ -74,5 +74,4 @@ Module ArrayInitializers
             struct(i).Initialize()
         Next
     End Sub
-
 End Module

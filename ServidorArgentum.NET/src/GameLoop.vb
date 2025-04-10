@@ -4,7 +4,6 @@ Option Explicit On
 Imports System.Threading
 
 Module GameLoop
-
     ' TODO: verificar si el servidor se esta cerrando correctamente!!
     Private running As Boolean = True
 
@@ -138,7 +137,9 @@ Module GameLoop
                 If .flags.UserLogged Then
                     If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ANTIPIQUETE Then
                         .Counters.PiqueteC = .Counters.PiqueteC + 1
-                        Call WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+                        Call _
+                            WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!",
+                                            Protocol.FontTypeNames.FONTTYPE_INFO)
 
                         If .Counters.PiqueteC > 23 Then
                             .Counters.PiqueteC = 0
@@ -171,10 +172,17 @@ Module GameLoop
                         NuevaA = False
                         ' NuevoL = False
                         If Not modGuilds.m_ValidarPermanencia(i, True, NuevaA) Then
-                            Call WriteConsoleMsg(i, "Has sido expulsado del clan. ¡El clan ha sumado un punto de antifacción!", Protocol.FontTypeNames.FONTTYPE_GUILD)
+                            Call _
+                                WriteConsoleMsg(i,
+                                                "Has sido expulsado del clan. ¡El clan ha sumado un punto de antifacción!",
+                                                Protocol.FontTypeNames.FONTTYPE_GUILD)
                         End If
                         If NuevaA Then
-                            Call SendData(modSendData.SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan ha pasado a tener alineación " & GuildAlignment(GI) & "!", Protocol.FontTypeNames.FONTTYPE_GUILD))
+                            Call _
+                                SendData(modSendData.SendTarget.ToGuildMembers, GI,
+                                         PrepareMessageConsoleMsg(
+                                             "¡El clan ha pasado a tener alineación " & GuildAlignment(GI) & "!",
+                                             Protocol.FontTypeNames.FONTTYPE_GUILD))
                             Call LogClanes("¡El clan cambio de alineación!")
                         End If
                         '                    If NuevoL Then
@@ -189,7 +197,7 @@ Module GameLoop
         Next i
         Exit Sub
 
-Errhandler:
+        Errhandler:
         Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
     End Sub
 
@@ -205,14 +213,16 @@ Errhandler:
         For i = 1 To MaxUsers
             If UserList(i).ConnIDValida Then
                 If UserList(i).outgoingData.length > 0 Then
-                    Call EnviarDatosASlot(i, UserList(i).outgoingData.ReadASCIIStringFixed(UserList(i).outgoingData.length))
+                    Call _
+                        EnviarDatosASlot(i,
+                                         UserList(i).outgoingData.ReadASCIIStringFixed(UserList(i).outgoingData.length))
                 End If
             End If
         Next i
 
         Exit Sub
 
-Errhandler:
+        Errhandler:
         LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
         Resume Next
     End Sub
@@ -223,7 +233,7 @@ Errhandler:
         Call SonidosMapas.ReproducirSonidosDeMapas()
 
         Exit Sub
-hayerror:
+        hayerror:
     End Sub
 
     Private Sub TickAuditoria()
@@ -245,7 +255,7 @@ hayerror:
 
         Exit Sub
 
-errhand:
+        errhand:
 
         Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
         Resume Next
@@ -266,7 +276,7 @@ errhand:
         For iUserIndex = 1 To MaxUsers 'LastUser
             With UserList(iUserIndex)
                 'Conexion activa?
-                If .ConnID <> -1 Then
+                If .ConnID <> - 1 Then
                     '¿User valido?
 
                     If .ConnIDValida And .flags.UserLogged Then
@@ -287,11 +297,13 @@ errhand:
                             '[Consejeros]
                             If (.flags.Privilegios And Declaraciones.PlayerType.User) Then Call EfectoLava(iUserIndex)
 
-                            If .flags.Desnudo <> 0 And (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then Call EfectoFrio(iUserIndex)
+                            If .flags.Desnudo <> 0 And (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then _
+                                Call EfectoFrio(iUserIndex)
 
                             If .flags.Meditando Then Call DoMeditar(iUserIndex)
 
-                            If .flags.Envenenado <> 0 And (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then Call EfectoVeneno(iUserIndex)
+                            If .flags.Envenenado <> 0 And (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 _
+                                Then Call EfectoVeneno(iUserIndex)
 
                             If .flags.AdminInvisible <> 1 Then
                                 If .flags.invisible = 1 Then Call EfectoInvisibilidad(iUserIndex)
@@ -336,7 +348,9 @@ errhand:
                                             'termina de descansar automaticamente
                                             If .Stats.MaxHp = .Stats.MinHp And .Stats.MaxSta = .Stats.MinSta Then
                                                 Call WriteRestOK(iUserIndex)
-                                                Call WriteConsoleMsg(iUserIndex, "Has terminado de descansar.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                                                Call _
+                                                    WriteConsoleMsg(iUserIndex, "Has terminado de descansar.",
+                                                                    Protocol.FontTypeNames.FONTTYPE_INFO)
                                                 .flags.Descansar = False
                                             End If
 
@@ -373,7 +387,9 @@ errhand:
                                         'termina de descansar automaticamente
                                         If .Stats.MaxHp = .Stats.MinHp And .Stats.MaxSta = .Stats.MinSta Then
                                             Call WriteRestOK(iUserIndex)
-                                            Call WriteConsoleMsg(iUserIndex, "Has terminado de descansar.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                                            Call _
+                                                WriteConsoleMsg(iUserIndex, "Has terminado de descansar.",
+                                                                Protocol.FontTypeNames.FONTTYPE_INFO)
                                             .flags.Descansar = False
                                         End If
 
@@ -401,7 +417,7 @@ errhand:
         Next iUserIndex
         Exit Sub
 
-hayerror:
+        hayerror:
         LogError(("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex))
     End Sub
 
@@ -439,7 +455,7 @@ hayerror:
         End If
 
         Exit Sub
-ErrorHandler:
+        ErrorHandler:
         Call LogError("Error tLluviaTimer")
     End Sub
 
@@ -454,7 +470,7 @@ ErrorHandler:
         End If
 
         Exit Sub
-Errhandler:
+        Errhandler:
         Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
     End Sub
 
@@ -478,7 +494,9 @@ Errhandler:
         Call modCentinela.PasarMinutoCentinela()
 
         If Minutos = MinutosWs - 1 Then
-            Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Worldsave en 1 minuto ...", Protocol.FontTypeNames.FONTTYPE_VENENO))
+            Call _
+                SendData(modSendData.SendTarget.ToAll, 0,
+                         PrepareMessageConsoleMsg("Worldsave en 1 minuto ...", Protocol.FontTypeNames.FONTTYPE_VENENO))
         End If
 
         If Minutos >= MinutosWs Then
@@ -507,7 +525,7 @@ Errhandler:
         '<<<<<-------- Log the number of users online ------>>>
 
         Exit Sub
-Errhandler:
+        Errhandler:
         Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
         Resume Next
     End Sub
@@ -524,13 +542,19 @@ Errhandler:
 
     Private Sub TickKillLog()
         On Error Resume Next
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
+            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
+            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
+            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
+            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log")
+        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
+            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log")
         If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
+                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
         End If
     End Sub
 
@@ -595,7 +619,7 @@ Errhandler:
 
         Exit Sub
 
-ErrorHandler:
+        ErrorHandler:
         Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
         Call MuereNpc(NpcIndex, 0)
     End Sub
@@ -611,7 +635,7 @@ ErrorHandler:
         For iUserIndex = 1 To MaxUsers
             With UserList(iUserIndex)
                 'Conexion activa? y es un usuario loggeado?
-                If .ConnID <> -1 And .flags.UserLogged Then
+                If .ConnID <> - 1 And .flags.UserLogged Then
                     'Actualiza el contador de inactividad
                     If .flags.Traveling = 0 Then
                         .Counters.IdleCount = .Counters.IdleCount + 1
@@ -623,7 +647,9 @@ ErrorHandler:
                         If .ComUsu.DestUsu > 0 Then
                             If UserList(.ComUsu.DestUsu).flags.UserLogged Then
                                 If UserList(.ComUsu.DestUsu).ComUsu.DestUsu = iUserIndex Then
-                                    Call WriteConsoleMsg(.ComUsu.DestUsu, "Comercio cancelado por el otro usuario.", Protocol.FontTypeNames.FONTTYPE_TALK)
+                                    Call _
+                                        WriteConsoleMsg(.ComUsu.DestUsu, "Comercio cancelado por el otro usuario.",
+                                                        Protocol.FontTypeNames.FONTTYPE_TALK)
                                     Call FinComerciarUsu(.ComUsu.DestUsu)
                                     Call FlushBuffer(.ComUsu.DestUsu) 'flush the buffer to send the message right away
                                 End If
@@ -648,7 +674,7 @@ ErrorHandler:
         Dim LoopC As Short
 
         For LoopC = 1 To MaxUsers
-            If UserList(LoopC).ConnID <> -1 Then Call CloseSocket(LoopC)
+            If UserList(LoopC).ConnID <> - 1 Then Call CloseSocket(LoopC)
         Next
 
         'Log
@@ -663,5 +689,4 @@ ErrorHandler:
         'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         SonidosMapas = Nothing
     End Sub
-
 End Module

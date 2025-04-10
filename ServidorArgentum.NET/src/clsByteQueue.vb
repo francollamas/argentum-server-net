@@ -49,7 +49,8 @@ Friend Class clsByteQueue
         End If
     End Function
 
-    Private Sub ByteArrayToType(ByRef destVariable As Object, ByRef sourceArray() As Byte, ByVal startPos As Integer, ByVal length As Integer)
+    Private Sub ByteArrayToType(ByRef destVariable As Object, ByRef sourceArray() As Byte, ByVal startPos As Integer,
+                                ByVal length As Integer)
         Select Case length
             Case 1
                 destVariable = sourceArray(startPos)
@@ -86,7 +87,8 @@ Friend Class clsByteQueue
         End If
     End Sub
 
-    Private Sub CopyArrayData(ByRef destArray() As Byte, ByVal destStart As Integer, ByRef sourceArray() As Byte, ByVal sourceStart As Integer, ByVal length As Integer)
+    Private Sub CopyArrayData(ByRef destArray() As Byte, ByVal destStart As Integer, ByRef sourceArray() As Byte,
+                              ByVal sourceStart As Integer, ByVal length As Integer)
         Array.Copy(sourceArray, sourceStart, destArray, destStart, length)
     End Sub
 
@@ -97,7 +99,7 @@ Friend Class clsByteQueue
 
         ' Ensure array has enough capacity
         If queueLength + dataLength > data.Length Then
-            Array.Resize(Of Byte)(data, data.Length * 2)
+            Array.Resize (Of Byte)(data, data.Length*2)
             queueCapacity = data.Length
         End If
 
@@ -116,7 +118,8 @@ Friend Class clsByteQueue
         Return dataLength
     End Function
 
-    Private Function ReadDataWithOffset(ByRef buf() As Byte, ByVal dataLength As Integer, ByVal startPos As Integer) As Integer
+    Private Function ReadDataWithOffset(ByRef buf() As Byte, ByVal dataLength As Integer, ByVal startPos As Integer) _
+        As Integer
         If dataLength > queueLength - startPos Then
             Throw New InvalidOperationException("Not enough data in the queue")
         End If
@@ -231,7 +234,7 @@ Friend Class clsByteQueue
         Return WriteData(combinedBytes, combinedBytes.Length)
     End Function
 
-    Public Function WriteBlock(ByRef Value() As Byte, Optional ByVal length As Integer = -1) As Integer
+    Public Function WriteBlock(ByRef Value() As Byte, Optional ByVal length As Integer = - 1) As Integer
         ' Handle null array
         If Value Is Nothing Then
             Return 0
@@ -313,7 +316,7 @@ Friend Class clsByteQueue
     Public Function ReadUnicodeStringFixed(ByVal length As Integer) As String
         If length <= 0 Then Return String.Empty
 
-        Dim byteLength As Integer = length * 2
+        Dim byteLength As Integer = length*2
         Dim buf(byteLength - 1) As Byte
 
         If queueLength >= byteLength Then
@@ -356,7 +359,7 @@ Friend Class clsByteQueue
         Dim lengthBuf(1) As Byte
         ReadData(lengthBuf, 2)
         Dim length As Short = BitConverter.ToInt16(lengthBuf, 0)
-        Dim byteLength As Integer = length * 2
+        Dim byteLength As Integer = length*2
 
         If queueLength >= byteLength + 2 Then
             RemoveData(2)
@@ -450,7 +453,7 @@ Friend Class clsByteQueue
     Public Function PeekUnicodeStringFixed(ByVal length As Integer) As String
         If length <= 0 Then Return String.Empty
 
-        Dim byteLength As Integer = length * 2
+        Dim byteLength As Integer = length*2
         Dim buf(byteLength - 1) As Byte
 
         If queueLength >= byteLength Then
@@ -491,7 +494,7 @@ Friend Class clsByteQueue
         Dim lengthBuf(1) As Byte
         ReadData(lengthBuf, 2)
         Dim length As Short = BitConverter.ToInt16(lengthBuf, 0)
-        Dim byteLength As Integer = length * 2
+        Dim byteLength As Integer = length*2
 
         If queueLength >= byteLength + 2 Then
             If length > 0 Then

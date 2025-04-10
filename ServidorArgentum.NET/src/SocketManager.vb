@@ -32,7 +32,7 @@ Public Class SocketManager
         ' Receive buffer.
         Public Buffer(BufferSize) As Byte
         ' ID associated with this socket
-        Public ID As Integer = -1
+        Public ID As Integer = - 1
         ' Flag to track if socket is being closed
         Public IsClosing As Boolean = False
 
@@ -220,7 +220,8 @@ Public Class SocketManager
             End If
 
             ' Begin receiving data from the client
-            state.Socket.BeginReceive(state.Buffer, 0, SocketState.BufferSize, 0, New AsyncCallback(AddressOf ReadCallback), state)
+            state.Socket.BeginReceive(state.Buffer, 0, SocketState.BufferSize, 0,
+                                      New AsyncCallback(AddressOf ReadCallback), state)
         Catch ex As ObjectDisposedException
             ' Socket was closed
             SyncLock _pendingReceivesLock
@@ -244,7 +245,7 @@ Public Class SocketManager
         If ar Is Nothing Then Return
 
         Dim state As SocketState = Nothing
-        Dim socketID As Integer = -1
+        Dim socketID As Integer = - 1
 
         Try
             state = CType(ar.AsyncState, SocketState)
@@ -371,7 +372,7 @@ Public Class SocketManager
         If ar Is Nothing Then Return
 
         Dim state As SocketState = Nothing
-        Dim socketID As Integer = -1
+        Dim socketID As Integer = - 1
 
         Try
             state = CType(ar.AsyncState, SocketState)
@@ -440,10 +441,10 @@ Public Class SocketManager
             ' Schedule a check to see if pending operations have finished
             Dim timer As New System.Timers.Timer(100) ' Check again after 100ms
             AddHandler timer.Elapsed, Sub(sender, e)
-                                          timer.Stop()
-                                          timer.Dispose()
-                                          FinishCloseSocket(socketID)
-                                      End Sub
+                timer.Stop()
+                timer.Dispose()
+                FinishCloseSocket(socketID)
+            End Sub
             timer.AutoReset = False
             timer.Start()
         Else
@@ -481,10 +482,10 @@ Public Class SocketManager
         If hasPendingOperations Then
             Dim timer As New System.Timers.Timer(100) ' Check again after 100ms
             AddHandler timer.Elapsed, Sub(sender, e)
-                                          timer.Stop()
-                                          timer.Dispose()
-                                          FinishCloseSocket(socketID)
-                                      End Sub
+                timer.Stop()
+                timer.Dispose()
+                FinishCloseSocket(socketID)
+            End Sub
             timer.AutoReset = False
             timer.Start()
             Return
