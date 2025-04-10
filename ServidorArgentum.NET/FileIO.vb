@@ -38,11 +38,11 @@ Module ES
 		'***************************************************
 		
 		Dim N, LoopC As Short
-		N = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Invokar.dat", "INIT", "NumNPCs"))
+		N = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "INIT", "NumNPCs"))
 		ReDim SpawnList(N)
 		For LoopC = 1 To N
-			SpawnList(LoopC).NpcIndex = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Invokar.dat", "LIST", "NI" & LoopC))
-			SpawnList(LoopC).NpcName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Invokar.dat", "LIST", "NN" & LoopC)
+			SpawnList(LoopC).NpcIndex = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "LIST", "NI" & LoopC))
+			SpawnList(LoopC).NpcName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "LIST", "NN" & LoopC)
 		Next LoopC
 		
 	End Sub
@@ -359,12 +359,12 @@ Errhandler:
 		
 		Dim i As Short
 		
-		MaxLines = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "INIT", "NumLines"))
+		MaxLines = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines"))
 		
 		'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 		ReDim MOTD(MaxLines)
 		For i = 1 To MaxLines
-			MOTD(i).texto = GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "Motd", "Line" & i)
+			MOTD(i).texto = GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "Motd", "Line" & i)
 			MOTD(i).Formato = vbNullString
 		Next i
 		
@@ -414,7 +414,7 @@ Errhandler:
 		On Error Resume Next
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\BackUps.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/BackUps.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay)
 		FileClose(nfile)
 	End Sub
@@ -1295,7 +1295,7 @@ CleanExit:
 		
 		For Map = 1 To NumMaps
 			If Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map & ".Dat", "Mapa" & Map, "BackUp")) <> 0 Then
-				tFileName = AppDomain.CurrentDomain.BaseDirectory & "\WorldBackUp\Mapa" & Map
+				tFileName = AppDomain.CurrentDomain.BaseDirectory & "WorldBackUp/Mapa" & Map
 				
 				If Not FileExist(tFileName & ".*") Then 'Miramos que exista al menos uno de los 3 archivos, sino lo cargamos de la carpeta de los mapas
 					tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
@@ -1992,7 +1992,7 @@ errh:
 			Call WriteVar(UserFile, "INIT", "Escudo", CStr(.Char_Renamed.ShieldAnim))
 			Call WriteVar(UserFile, "INIT", "Casco", CStr(.Char_Renamed.CascoAnim))
 			
-			TempDate = System.Date.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
+			TempDate = DateTime.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
 			.LogOnTime = Now
 			.UpTime = .UpTime + (System.Math.Abs(TempDate.Day - 30) * 24 * 3600) + Hour(TempDate) * 3600 + Minute(TempDate) * 60 + Second(TempDate)
 			.UpTime = .UpTime
@@ -2300,13 +2300,13 @@ Errhandler:
 		'
 		'***************************************************
 		
-		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.log", UserList(BannedIndex).name, "BannedBy", UserList(UserIndex).name)
-		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.log", UserList(BannedIndex).name, "Reason", motivo)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.log", UserList(BannedIndex).name, "BannedBy", UserList(UserIndex).name)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.log", UserList(BannedIndex).name, "Reason", motivo)
 		
 		'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
 		Dim mifile As Short
 		mifile = FreeFile
-		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "logs/GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(mifile, UserList(BannedIndex).name)
 		FileClose(mifile)
 		
@@ -2320,13 +2320,13 @@ Errhandler:
 		'
 		'***************************************************
 		
-		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "BannedBy", UserList(UserIndex).name)
-		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "Reason", motivo)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat", BannedName, "BannedBy", UserList(UserIndex).name)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat", BannedName, "Reason", motivo)
 		
 		'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
 		Dim mifile As Short
 		mifile = FreeFile
-		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "logs/GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(mifile, BannedName)
 		FileClose(mifile)
 		
@@ -2340,14 +2340,14 @@ Errhandler:
 		'
 		'***************************************************
 		
-		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "BannedBy", Baneador)
-		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat", BannedName, "Reason", motivo)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat", BannedName, "BannedBy", Baneador)
+		Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat", BannedName, "Reason", motivo)
 		
 		
 		'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
 		Dim mifile As Short
 		mifile = FreeFile
-		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "\logs\GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "logs/GenteBanned.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(mifile, BannedName)
 		FileClose(mifile)
 		

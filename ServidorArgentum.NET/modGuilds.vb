@@ -33,7 +33,7 @@ Module modGuilds
 	'Y CONFIGURACION DEL SISTEMA DE CLANES
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	Private GUILDINFOFILE As String
-	'archivo .\guilds\guildinfo.ini o similar
+	'archivo ./guilds/guildinfo.ini o similar
 	
 	Private Const MAX_GUILDS As Short = 1000
 	'cantidad maxima de guilds en el servidor
@@ -93,7 +93,7 @@ Module modGuilds
 		Dim tempStr As String
 		Dim Alin As ALINEACION_GUILD
 		
-		GUILDINFOFILE = AppDomain.CurrentDomain.BaseDirectory & "\guilds\guildsinfo.inf"
+		GUILDINFOFILE = AppDomain.CurrentDomain.BaseDirectory & "guilds/guildsinfo.inf"
 		
 		CantClanes = GetVar(GUILDINFOFILE, "INIT", "nroGuilds")
 		

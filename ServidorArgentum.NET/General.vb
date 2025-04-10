@@ -234,8 +234,8 @@ Errhandler:
 		LastBackup = DateTime.Now.ToString("HH:mm")
 		Minutos = DateTime.Now.ToString("HH:mm")
 
-		IniPath = AppDomain.CurrentDomain.BaseDirectory & "\"
-		DatPath = AppDomain.CurrentDomain.BaseDirectory & "\Dat\"
+		IniPath = AppDomain.CurrentDomain.BaseDirectory
+		DatPath = AppDomain.CurrentDomain.BaseDirectory & "Dat/"
 
 
 
@@ -337,10 +337,8 @@ Errhandler:
 		ListaAtributos(Declaraciones.eAtributos.Carisma) = "Carisma"
 		ListaAtributos(Declaraciones.eAtributos.Constitucion) = "Constitucion"
 
-		'Call PlayWaveAPI(App.Path & "\wav\harp3.wav")
-
-		IniPath = AppDomain.CurrentDomain.BaseDirectory & "\"
-		CharPath = AppDomain.CurrentDomain.BaseDirectory & "\Charfile\"
+		IniPath = AppDomain.CurrentDomain.BaseDirectory
+		CharPath = AppDomain.CurrentDomain.BaseDirectory & "Charfile/"
 
 		'Bordes del mapa
 		MinXBorder = XMinMapSize + (XWindow \ 2)
@@ -400,7 +398,7 @@ Errhandler:
 		'Log
 		Dim N As Short
 		N = FreeFile()
-		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
 		FileClose(N)
 
 		tInicioServer = GetTickCount()
@@ -481,7 +479,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\Eventos.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Eventos.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -502,7 +500,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\EjercitoReal.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoReal.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, desc)
 		FileClose(nfile)
 		
@@ -523,7 +521,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\EjercitoCaos.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoCaos.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, desc)
 		FileClose(nfile)
 		
@@ -545,7 +543,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\" & Index & ".log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Index & ".log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -567,7 +565,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\errores.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/errores.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -588,7 +586,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\Stats.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Stats.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -609,7 +607,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile() ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\haciendo.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
 		FileClose(nfile)
 		
@@ -631,7 +629,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\clanes.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/clanes.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
 		FileClose(nfile)
 		
@@ -647,7 +645,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\IP.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/IP.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
 		FileClose(nfile)
 		
@@ -664,7 +662,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\desarrollo" & Month(Today) & Year(Today) & ".log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/desarrollo" & Month(Today) & Year(Today) & ".log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
 		FileClose(nfile)
 		
@@ -682,7 +680,7 @@ Errhandler:
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
 		'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\" & Nombre & ".log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Nombre & ".log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		
@@ -704,7 +702,7 @@ Errhandler:
 		
 		nfile = FreeFile ' obtenemos un canal
 		
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\asesinatos.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/asesinatos.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		
@@ -725,7 +723,7 @@ Errhandler:
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
 		
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\propiedades.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/propiedades.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, "----------------------------------------------------------")
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "----------------------------------------------------------")
@@ -747,7 +745,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\HackAttemps.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, "----------------------------------------------------------")
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "----------------------------------------------------------")
@@ -770,7 +768,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\CH.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CH.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		FileClose(nfile)
 		
@@ -792,7 +790,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\CriticalHackAttemps.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CriticalHackAttemps.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, "----------------------------------------------------------")
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "----------------------------------------------------------")
@@ -815,7 +813,7 @@ Errhandler:
 		
 		Dim nfile As Short
 		nfile = FreeFile ' obtenemos un canal
-		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "\logs\AntiCheat.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/AntiCheat.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
 		PrintLine(nfile, "")
 		FileClose(nfile)
@@ -905,7 +903,7 @@ Errhandler:
 		'Log it
 		Dim N As Short
 		N = FreeFile
-		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
 		FileClose(N)
 
@@ -1426,7 +1424,7 @@ Errhandler:
 		'
 		'***************************************************
 		
-		ReiniciarAutoUpdate = Shell(AppDomain.CurrentDomain.BaseDirectory & "\autoupdater\aoau.exe", AppWinStyle.MinimizedNoFocus)
+		ReiniciarAutoUpdate = Shell(AppDomain.CurrentDomain.BaseDirectory & "autoupdater/aoau.exe", AppWinStyle.MinimizedNoFocus)
 		
 	End Function
 	
@@ -1446,7 +1444,7 @@ Errhandler:
 		'Guardar Pjs
 		Call GuardarUsuarios()
 
-		If EjecutarLauncher Then Shell(AppDomain.CurrentDomain.BaseDirectory & "\launcher.exe")
+		If EjecutarLauncher Then Shell(AppDomain.CurrentDomain.BaseDirectory & "/launcher.exe")
 
 	End Sub
 	

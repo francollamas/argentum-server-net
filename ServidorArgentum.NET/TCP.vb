@@ -1061,13 +1061,13 @@ Err_Renamed:
 			Call MostrarNumUsers()
 			
 			N = FreeFile
-			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\numusers.log", OpenMode.Output)
+			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output)
 			PrintLine(N, NumUsers)
 			FileClose(N)
 			
 			N = FreeFile
 			'Log
-			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Connect.log", OpenMode.Append, , OpenShare.Shared)
+			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Connect.log", OpenMode.Append, , OpenShare.Shared)
 			PrintLine(N, .name & " ha entrado al juego. UserIndex:" & UserIndex & " " & TimeOfDay & " " & Today)
 			FileClose(N)
 			
@@ -1530,7 +1530,7 @@ Err_Renamed:
 		Call MostrarNumUsers()
 		
 		N = FreeFile()
-		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\logs\Connect.log", OpenMode.Append, , OpenShare.Shared)
+		FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Connect.log", OpenMode.Append, , OpenShare.Shared)
 		PrintLine(N, name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & TimeOfDay & " " & Today)
 		FileClose(N)
 		

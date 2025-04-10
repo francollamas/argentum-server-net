@@ -916,7 +916,7 @@ Errhandler:
 				'guildpts no tienen objeto
 			End If
 			
-			TempDate = System.Date.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
+			TempDate = DateTime.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
 			TempSecs = (.UpTime + (System.Math.Abs(TempDate.Day - 30) * 24 * 3600) + (Hour(TempDate) * 3600) + (Minute(TempDate) * 60) + Second(TempDate))
 			tempStr = (TempSecs \ 86400) & " Dias, " & ((TempSecs Mod 86400) \ 3600) & " Horas, " & ((TempSecs Mod 86400) Mod 3600) \ 60 & " Minutos, " & (((TempSecs Mod 86400) Mod 3600) Mod 60) & " Segundos."
 			Call WriteConsoleMsg(sendIndex, "Logeado hace: " & Hour(TempDate) & ":" & Minute(TempDate) & ":" & Second(TempDate), Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -980,7 +980,7 @@ Errhandler:
 		Dim Ban As String
 		Dim BanDetailPath As String
 		
-		BanDetailPath = AppDomain.CurrentDomain.BaseDirectory & "\logs\" & "BanDetail.dat"
+		BanDetailPath = AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat"
 		CharFile = CharPath & charName & ".chr"
 		
 		If FileExist(CharFile) Then

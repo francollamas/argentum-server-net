@@ -6555,7 +6555,7 @@ Errhandler:
 			bugReport = buffer.ReadASCIIString()
 			
 			N = FreeFile
-			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "\LOGS\BUGs.log", OpenMode.Append, , OpenShare.Shared)
+			FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "LOGS/BUGs.log", OpenMode.Append, , OpenShare.Shared)
 			PrintLine(N, "Usuario:" & .name & "  Fecha:" & Today & "    Hora:" & TimeOfDay)
 			PrintLine(N, "BUG:")
 			PrintLine(N, bugReport)
@@ -7532,13 +7532,13 @@ Errhandler:
 					guild = Replace(guild, "/", "")
 				End If
 				
-				If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "\guilds\" & guild & "-members.mem") Then
+				If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
 					Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
 				Else
-					memberCount = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Guilds\" & guild & "-Members" & ".mem", "INIT", "NroMembers"))
+					memberCount = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem", "INIT", "NroMembers"))
 					
 					For i = 1 To memberCount
-						UserName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "\Guilds\" & guild & "-Members" & ".mem", "Members", "Member" & i)
+						UserName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem", "Members", "Member" & i)
 						
 						Call WriteConsoleMsg(UserIndex, UserName & "<" & guild & ">", FontTypeNames.FONTTYPE_INFO)
 					Next i
@@ -11608,7 +11608,7 @@ Errhandler:
 			GuildName = buffer.ReadASCIIString()
 			
 			If (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-				tFile = AppDomain.CurrentDomain.BaseDirectory & "\guilds\" & GuildName & "-members.mem"
+				tFile = AppDomain.CurrentDomain.BaseDirectory & "guilds/" & GuildName & "-members.mem"
 				
 				If Not FileExist(tFile) Then
 					Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
@@ -13075,7 +13075,7 @@ Errhandler:
 			
 			Call LogGM(.name, .name & " ha guardado el mapa " & CStr(.Pos.Map))
 			
-			Call GrabarMapa(.Pos.Map, AppDomain.CurrentDomain.BaseDirectory & "\WorldBackUp\Mapa" & .Pos.Map)
+			Call GrabarMapa(.Pos.Map, AppDomain.CurrentDomain.BaseDirectory & "WorldBackUp/Mapa" & .Pos.Map)
 			
 			Call WriteConsoleMsg(UserIndex, "Mapa Guardado.", FontTypeNames.FONTTYPE_INFO)
 		End With
@@ -13652,7 +13652,7 @@ Errhandler:
 			
 			'Log
 			handle = FreeFile
-			FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "\logs\Main.log", OpenMode.Append, , OpenShare.Shared)
+			FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
 			
 			PrintLine(handle, Today & " " & TimeOfDay & " server apagado por " & .name & ". ")
 
@@ -14004,10 +14004,10 @@ Errhandler:
 				'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
 				ReDim MOTD(MaxLines)
 				
-				Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "INIT", "NumLines", CStr(MaxLines))
+				Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines", CStr(MaxLines))
 				
 				For LoopC = 1 To MaxLines
-					Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "\Dat\Motd.ini", "Motd", "Line" & CStr(LoopC), auxiliaryString(LoopC - 1))
+					Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "Motd", "Line" & CStr(LoopC), auxiliaryString(LoopC - 1))
 					
 					MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
 				Next LoopC

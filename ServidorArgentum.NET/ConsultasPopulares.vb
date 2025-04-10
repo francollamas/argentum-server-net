@@ -31,8 +31,8 @@ Friend Class ConsultasPopulares
 	'
 	'Hecha por el oso
 	
-	Private Const ARCHIVOMAILS As String = "\logs\votaron.dat"
-	Private Const ARCHIVOCONFIG As String = "\dat\consultas.dat"
+	Private Const ARCHIVOMAILS As String = "logs/votaron.dat"
+	Private Const ARCHIVOCONFIG As String = "dat/consultas.dat"
 	
 	Private pEncuestaActualNum As Short
 	Private pEncuestaActualTex As String
