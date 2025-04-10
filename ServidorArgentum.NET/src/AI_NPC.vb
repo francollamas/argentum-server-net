@@ -1079,8 +1079,6 @@ Module AI
             tmpPos.X = .PFINFO.Path(.PFINFO.CurPos).Y ' invertï¿½ las coordenadas
             tmpPos.Y = .PFINFO.Path(.PFINFO.CurPos).X
 
-            'Debug.Print "(" & tmpPos.X & "," & tmpPos.Y & ")"
-
             tHeading = FindDirection(.Pos, tmpPos)
 
             MoveNPCChar(NpcIndex, tHeading)

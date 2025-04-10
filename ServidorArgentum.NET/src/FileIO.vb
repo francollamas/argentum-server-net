@@ -1,5 +1,8 @@
 Option Strict Off
 Option Explicit On
+
+Imports System.IO
+
 Module ES
     'Argentum Online 0.12.2
     'Copyright (C) 2002 Márquez Pablo Ignacio
@@ -1290,7 +1293,7 @@ Module ES
                 tFileName = AppDomain.CurrentDomain.BaseDirectory & "WorldBackUp/Mapa" & Map
 
                 If Not FileExist(tFileName & ".*") Then _
-                    'Miramos que exista al menos uno de los 3 archivos, sino lo cargamos de la carpeta de los mapas
+'Miramos que exista al menos uno de los 3 archivos, sino lo cargamos de la carpeta de los mapas
                     tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
                 End If
             Else
@@ -1680,35 +1683,27 @@ Module ES
     End Sub
 
     ' TODO MIGRA: funciona pero es lento e ineficiente
-    Public Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
-        Dim sectionNames As New Collection ' Para guardar el orden de aparición de secciones
-        Dim sectionData As New Collection ' Cada elemento será un Scripting.Dictionary con las claves de la sección
+    Public Sub WriteVar(ByVal fileName As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
+        ' Reemplazamos Collection con estructuras modernas
+        Dim sectionNames As New List(Of String)() ' Para guardar el orden de aparición de secciones
+        Dim sectionData As New Dictionary(Of String, Dictionary(Of String, String))(StringComparer.OrdinalIgnoreCase) _
+        ' Secciones y sus claves/valores
+
         Dim currentSection As String
-        Dim dictKeys As Object ' As Scripting.Dictionary (lo declaramos como Object para compatibilidad en VB6 clásico)
-        Dim i As Integer
         Dim line As String
-        Dim fNum As Short
         Dim fileContent As String
         Dim rawLines() As String
 
         ' --- Leer archivo si existe ---
-        'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(file) <> "" Then
-            fNum = FreeFile
-            FileOpen(fNum, file, OpenMode.Binary)
-            If LOF(fNum) > 0 Then
-                fileContent = Space(LOF(fNum))
-                'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                FileGet(fNum, fileContent)
-            End If
-            FileClose(fNum)
+        If File.Exists(fileName) Then
+            fileContent = File.ReadAllText(fileName)
         Else
             fileContent = "" ' Archivo no existe, se creará
         End If
 
         ' --- Separar en líneas ---
-        If Len(fileContent) > 0 Then
-            rawLines = Split(fileContent, vbCrLf)
+        If Not String.IsNullOrEmpty(fileContent) Then
+            rawLines = fileContent.Split(New String() {vbCrLf}, StringSplitOptions.None)
         Else
             ReDim rawLines(0)
             rawLines(0) = ""
@@ -1724,135 +1719,88 @@ Module ES
         '    - Al encontrar "Clave=Valor", se guarda/actualiza en el diccionario de la sección actual.
         '    - Se ignoran líneas vacías.
         ' -----------------------------------------------------------------------------
-        Dim sectionExists As Boolean
-        Dim sIdx As Integer
         Dim posEqual As Integer
         Dim keyName As String
         Dim keyValue As String
-        For i = LBound(rawLines) To UBound(rawLines)
-            line = Trim(rawLines(i))
-            If line <> "" Then
-                If Left(line, 1) = "[" And Right(line, 1) = "]" Then
+
+        For i As Integer = 0 To rawLines.Length - 1
+            line = rawLines(i).Trim()
+            If Not String.IsNullOrEmpty(line) Then
+                If line.StartsWith("[") AndAlso line.EndsWith("]") Then
                     ' Sección
-                    currentSection = Mid(line, 2, Len(line) - 2)
-                    sectionExists = False
+                    currentSection = line.Substring(1, line.Length - 2)
 
                     ' Verificar si la sección ya existe
-                    For sIdx = 1 To sectionNames.Count()
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        If StrComp(sectionNames.Item(sIdx), currentSection, CompareMethod.Text) = 0 Then
-                            sectionExists = True
-                            Exit For
-                        End If
-                    Next sIdx
-
-                    If Not sectionExists Then
+                    If Not sectionNames.Contains(currentSection, StringComparer.OrdinalIgnoreCase) Then
                         ' Crear la sección y su diccionario
                         sectionNames.Add(currentSection) ' se guarda en el orden en que aparece
-                        dictKeys = CreateObject("Scripting.Dictionary")
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.CompareMode. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        dictKeys.CompareMode = CompareMethod.Text
-                        sectionData.Add(dictKeys, currentSection)
+                        sectionData.Add(currentSection,
+                                        New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase))
                     End If
 
-                ElseIf currentSection <> "" Then
+                ElseIf Not String.IsNullOrEmpty(currentSection) Then
                     ' Estamos dentro de una sección, parsear "clave=valor"
-                    posEqual = InStr(line, "=")
+                    posEqual = line.IndexOf("=")
                     If posEqual > 0 Then
-                        keyName = Trim(Left(line, posEqual - 1))
-                        keyValue = Mid(line, posEqual + 1)
+                        keyName = line.Substring(0, posEqual).Trim()
+                        keyValue = line.Substring(posEqual + 1)
 
-                        ' Recuperar diccionario de la sección actual (la primera coincidencia)
-                        dictKeys = sectionData.Item(currentSection)
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        dictKeys(keyName) = keyValue
-                        sectionData.Remove(currentSection)
-                        sectionData.Add(dictKeys, currentSection)
+                        ' Actualizar o agregar la clave
+                        If sectionData(currentSection).ContainsKey(keyName) Then
+                            sectionData(currentSection)(keyName) = keyValue
+                        Else
+                            sectionData(currentSection).Add(keyName, keyValue)
+                        End If
                     End If
                 End If
             End If
-        Next i
+        Next
 
         ' -----------------------------------------------------------------------------
         ' 2) Agregar/actualizar la clave solicitada en la sección "Main"
         '    - Si la sección no existe, se crea.
         '    - Se actualiza (o se crea) la Key=Value especificada.
         ' -----------------------------------------------------------------------------
-        Dim mainExists As Boolean
-        mainExists = False
-
-        For i = 1 To sectionNames.Count()
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            If StrComp(sectionNames.Item(i), Main, CompareMethod.Text) = 0 Then
-                mainExists = True
-                Exit For
-            End If
-        Next i
-
-        If Not mainExists Then
-            ' Crear la sección
+        ' Verificar si la sección principal existe
+        If Not sectionData.ContainsKey(Main) Then
             sectionNames.Add(Main)
-            dictKeys = CreateObject("Scripting.Dictionary")
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.CompareMode. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            dictKeys.CompareMode = CompareMethod.Text
-            sectionData.Add(dictKeys, Main)
+            sectionData.Add(Main, New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase))
         End If
 
         ' Actualizar o crear la clave Var=Value dentro de la sección Main
-        dictKeys = sectionData.Item(Main)
-        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        dictKeys(Var) = Value
-        sectionData.Remove(Main)
-        sectionData.Add(dictKeys, Main)
+        If sectionData(Main).ContainsKey(Var) Then
+            sectionData(Main)(Var) = Value
+        Else
+            sectionData(Main).Add(Var, Value)
+        End If
 
         ' -----------------------------------------------------------------------------
         ' 3) Reconstruir el archivo .ini: no debe haber secciones duplicadas, sin líneas en blanco
         ' -----------------------------------------------------------------------------
-        Dim outputLines() As String
-        Dim outIndex As Integer
-        outIndex = - 1
+        Dim outputLines As New List(Of String)()
 
-        Dim secName As String
-        Dim key As Object
-        For i = 1 To sectionNames.Count()
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto sectionNames(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            secName = sectionNames.Item(i)
+        ' Procesar las secciones en el orden en que se encontraron
+        For Each secName As String In sectionNames
             ' Escribir la sección
-            outIndex = outIndex + 1
-            If outIndex = 0 Then
-                ReDim outputLines(0)
-            Else
-                ReDim Preserve outputLines(outIndex)
-            End If
-            outputLines(outIndex) = "[" & secName & "]"
+            outputLines.Add("[" & secName & "]")
 
-            ' Volcar las claves
-            dictKeys = sectionData.Item(secName)
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys.Keys. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            For Each key In dictKeys.Keys
-                outIndex = outIndex + 1
-                ReDim Preserve outputLines(outIndex)
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto dictKeys(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto key. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                outputLines(outIndex) = key & "=" & dictKeys(key)
-            Next key
-        Next i
+            ' Escribir las claves/valores
+            For Each kvp As KeyValuePair(Of String, String) In sectionData(secName)
+                outputLines.Add(kvp.Key & "=" & kvp.Value)
+            Next
+        Next
 
-        ' Si todo se borró o no hubo nada, creamos una sección y la clave
-        If outIndex < 0 Then
-            ReDim outputLines(1)
-            outputLines(0) = "[" & Main & "]"
-            outputLines(1) = Var & "=" & Value
+        ' Si no hay contenido, crear la sección y clave por defecto
+        If outputLines.Count = 0 Then
+            outputLines.Add("[" & Main & "]")
+            outputLines.Add(Var & "=" & Value)
         End If
 
         ' -----------------------------------------------------------------------------
         ' 4) Escribir el archivo resultante
         ' -----------------------------------------------------------------------------
-        fileContent = Join(outputLines, vbCrLf)
-        fNum = FreeFile
-        FileOpen(fNum, file, OpenMode.Output)
-        PrintLine(fNum, fileContent)
-        FileClose(fNum)
+        fileContent = String.Join(vbCrLf, outputLines.ToArray())
+        File.WriteAllText(fileName, fileContent)
     End Sub
 
     Sub SaveUser(ByVal UserIndex As Short, ByVal UserFile As String)

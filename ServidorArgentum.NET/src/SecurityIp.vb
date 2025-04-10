@@ -114,12 +114,12 @@ Module SecurityIp
                 'No está saturando de connects?
                 IpTables(IpTableIndex + 1) = GetTickCount
                 IpSecurityAceptarNuevaConexion = True
-                Debug.Print("CONEXION ACEPTADA")
+                Console.WriteLine("CONEXION ACEPTADA")
                 Exit Function
             Else
                 IpSecurityAceptarNuevaConexion = False
 
-                Debug.Print("CONEXION NO ACEPTADA")
+                Console.WriteLine("CONEXION NO ACEPTADA")
                 Exit Function
             End If
         Else
@@ -181,14 +181,14 @@ Module SecurityIp
                 LogIP(
                     ("Agregamos conexion a " & ip & " iptableindex=" & IpTableIndex & ". Conexiones: " &
                      MaxConTables(IpTableIndex + 1)))
-                Debug.Print("suma conexion a " & ip & " total " & MaxConTables(IpTableIndex + 1) + 1)
+                Console.WriteLine("suma conexion a " & ip & " total " & MaxConTables(IpTableIndex + 1) + 1)
                 MaxConTables(IpTableIndex + 1) = MaxConTables(IpTableIndex + 1) + 1
                 IPSecuritySuperaLimiteConexiones = False
             Else
                 LogIP(
                     ("rechazamos conexion de " & ip & " iptableindex=" & IpTableIndex & ". Conexiones: " &
                      MaxConTables(IpTableIndex + 1)))
-                Debug.Print("rechaza conexion a " & ip)
+                Console.WriteLine("rechaza conexion a " & ip)
                 IPSecuritySuperaLimiteConexiones = True
             End If
         Else
@@ -211,9 +211,9 @@ Module SecurityIp
         'Modified by Juan Martín Sotuyo Dodero (Maraxus)
         'Modified to avoid using CopyMemory
         '*************************************************    *************
-        Debug.Print("agrega conexion a " & ip)
-        Debug.Print("(Declaraciones.MaxUsers - index) = " & (Declaraciones.MaxUsers - index))
-        Debug.Print("Agrega conexion a nueva IP " & ip)
+        Console.WriteLine("agrega conexion a " & ip)
+        Console.WriteLine("(Declaraciones.MaxUsers - index) = " & (Declaraciones.MaxUsers - index))
+        Console.WriteLine("Agrega conexion a nueva IP " & ip)
 
         Dim i As Integer
         Dim elementCount As Integer
@@ -244,7 +244,7 @@ Module SecurityIp
 
         Dim key As Integer
         Dim i As Integer
-        Debug.Print("resta conexion a " & ip)
+        Console.WriteLine("resta conexion a " & ip)
 
         key = FindTableIp(ip, e_SecurityIpTabla.IP_LIMITECONEXIONES)
 

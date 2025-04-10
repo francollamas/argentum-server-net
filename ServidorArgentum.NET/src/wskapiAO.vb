@@ -105,7 +105,7 @@ Module wskapiAO
     ''' </summary>
     Private Sub HandleConnectionError(errorMessage As String)
         ' This runs on the main thread via the Windows.Forms event system
-        Debug.Print("Connection Error: " & errorMessage)
+        Console.WriteLine("Connection Error: " & errorMessage)
     End Sub
 
     ''' <summary>
@@ -250,7 +250,7 @@ Module wskapiAO
     ''' Associates a socket ID with a user index
     ''' </summary>
     Public Sub AgregaSlotSock(ByVal socketID As Integer, ByVal userIndex As Integer)
-        Debug.Print("AgregaSlotSock: Socket " & socketID & " -> User " & userIndex)
+        Console.WriteLine("AgregaSlotSock: Socket " & socketID & " -> User " & userIndex)
 
         If SocketToUserMap.Count > MaxUsers Then
             Call CloseSocket(userIndex)
@@ -268,7 +268,7 @@ Module wskapiAO
 
         SocketToUserMap.Remove(socketID)
 
-        Debug.Print("BorraSlotSock: " & count & " -> " & SocketToUserMap.Count)
+        Console.WriteLine("BorraSlotSock: " & count & " -> " & SocketToUserMap.Count)
     End Sub
 
     ''' <summary>
