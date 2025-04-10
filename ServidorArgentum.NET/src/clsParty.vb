@@ -1,24 +1,6 @@
 Option Strict Off
 Option Explicit On
 Friend Class clsParty
-    '**************************************************************
-    ' clsParty.cls
-    '
-    '**************************************************************
-
-    '**************************************************************************
-    'This program is free software; you can redistribute it and/or modify
-    'it under the terms of the Affero General Public License;
-    'either version 1 of the License, or any later version.
-    '
-    'This program is distributed in the hope that it will be useful,
-    'but WITHOUT ANY WARRANTY; without even the implied warranty of
-    'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    'Affero General Public License for more details.
-    '
-    'You should have received a copy of the Affero General Public License
-    'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
-    '**************************************************************************
 
     'UPGRADE_WARNING: El límite inferior de la matriz p_members ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private p_members(PARTY_MAXMEMBERS) As tPartyMember

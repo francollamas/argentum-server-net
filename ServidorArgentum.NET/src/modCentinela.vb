@@ -1,39 +1,6 @@
 Option Strict Off
 Option Explicit On
 Module modCentinela
-    '*****************************************************************
-    'modCentinela.bas - ImperiumAO - v1.2
-    '
-    'Funciónes de control para usuarios que se encuentran trabajando
-    '
-    '*****************************************************************
-    'Respective portions copyrighted by contributors listed below.
-    '
-    'This program is free software; you can redistribute it and/or modify
-    'it under the terms of the Affero General Public License;
-    'either version 1 of the License, or any later version.
-    '
-    'This program is distributed in the hope that it will be useful,
-    'but WITHOUT ANY WARRANTY; without even the implied warranty of
-    'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    'Affero General Public License for more details.
-    '
-    'You should have received a copy of the Affero General Public License
-    'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
-
-    '*****************************************************************
-    'Augusto Rando(barrin@imperiumao.com.ar)
-    '   ImperiumAO 1.2
-    '   - First Relase
-    '
-    'Juan Martín Sotuyo Dodero (juansotuyo@gmail.com)
-    '   Alkon AO 0.11.5
-    '   - Small improvements and added logs to detect possible cheaters
-    '
-    'Juan Martín Sotuyo Dodero (juansotuyo@gmail.com)
-    '   Alkon AO 0.12.0
-    '   - Added several messages to spam users until they reply
-    '*****************************************************************
 
     Private Const NPC_CENTINELA_TIERRA As Short = 16 'Índice del NPC en el .dat
     Private Const NPC_CENTINELA_AGUA As Short = 16 'Ídem anterior, pero en mapas de agua

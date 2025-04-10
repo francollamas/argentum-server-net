@@ -7,18 +7,18 @@ Module GameLoop
     ' TODO: verificar si el servidor se esta cerrando correctamente!!
     Private running As Boolean = True
 
-    Public piqueteCInterval As Integer = 6000
-    Public packetResendInterval As Integer = 10
-    Public fxInterval As Integer = 4000
-    Public auditoriaInterval As Integer = 1000
-    Public gameTimerInterval As Integer = 40
-    Public lluviaEventInterval As Integer = 60000
+    Private piqueteCInterval As Integer = 6000
+    Private packetResendInterval As Integer = 10
+    Private fxInterval As Integer = 4000
+    Private auditoriaInterval As Integer = 1000
+    Private gameTimerInterval As Integer = 40
+    Private lluviaEventInterval As Integer = 60000
     Public lluviaInterval As Integer = 500
-    Public autoSaveInterval As Integer = 60000
+    Private autoSaveInterval As Integer = 60000
     Public npcAtacaInterval As Integer = 4000
-    Public killLogInterval As Integer = 60000
+    Private killLogInterval As Integer = 60000
     Public timerAIInterval As Integer = 100
-    Public connectionTimerInterval As Integer = 5
+    Private connectionTimerInterval As Integer = 5
 
     ' Últimos tiempos de ejecución
     Dim lastPiqueteC As Double = 0

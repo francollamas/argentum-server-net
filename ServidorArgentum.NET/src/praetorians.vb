@@ -1,26 +1,6 @@
 Option Strict Off
 Option Explicit On
 Module PraetoriansCoopNPC
-    '**************************************************************
-    ' PraetoriansCoopNPC.bas - Handles the Praeorians NPCs.
-    '
-    ' Implemented by Mariano Barrou (El Oso)
-    '**************************************************************
-
-    '**************************************************************************
-    'This program is free software; you can redistribute it and/or modify
-    'it under the terms of the Affero General Public License;
-    'either version 1 of the License, or any later version.
-    '
-    'This program is distributed in the hope that it will be useful,
-    'but WITHOUT ANY WARRANTY; without even the implied warranty of
-    'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    'Affero General Public License for more details.
-    '
-    'You should have received a copy of the Affero General Public License
-    'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
-    '**************************************************************************
-
     '''''''''''''''''''''''''''''''''''''''''
     '' DECLARACIONES DEL MODULO PRETORIANO ''
     '''''''''''''''''''''''''''''''''''''''''
@@ -28,6 +8,7 @@ Module PraetoriansCoopNPC
     '' los NPCs pretorianos en el NPC-HOSTILES.DAT
     '' Son FIJAS, pero se podria hacer una rutina que
     '' las lea desde el npcshostiles.dat
+
         Public Const PRCLER_NPC As Short = 900 ''"Sacerdote Pretoriano"
     Public Const PRGUER_NPC As Short = 901 ''"Guerrero  Pretoriano"
     Public Const PRMAGO_NPC As Short = 902 ''"Mago Pretoriano"

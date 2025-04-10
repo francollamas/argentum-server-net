@@ -1,36 +1,6 @@
 Option Strict Off
 Option Explicit On
 Friend Class ConsultasPopulares
-    '**************************************************************
-    ' ConsultasPopulares.cls
-    '
-    '**************************************************************
-
-    '**************************************************************************
-    'This program is free software; you can redistribute it and/or modify
-    'it under the terms of the Affero General Public License;
-    'either version 1 of the License, or any later version.
-    '
-    'This program is distributed in the hope that it will be useful,
-    'but WITHOUT ANY WARRANTY; without even the implied warranty of
-    'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    'Affero General Public License for more details.
-    '
-    'You should have received a copy of the Affero General Public License
-    'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
-    '**************************************************************************
-
-    'Modulo de consultas popluares
-    'En realidad el modulo inicial guardaba los datos de las votaciones
-    'en memoria, pero no le vi el punto, las votaciones son de vez en cuando nomas
-    'y el query a un .ini que registra todos los mails q ya votaron, es soportable
-    'si cuando uno vota y averiguo que el mail ya voto pero el PJ no, entonces seteo
-    'el flag de yavoto en el charfile ese tambien,
-    'por lo que la busqueda secuencial en el .dat que tiene todos los mails q ya votaron
-    'se hara .. 1 vez por PJ nomas.
-    '
-    'Hecha por el oso
-
     Private Const ARCHIVOMAILS As String = "logs/votaron.dat"
     Private Const ARCHIVOCONFIG As String = "dat/consultas.dat"
 
