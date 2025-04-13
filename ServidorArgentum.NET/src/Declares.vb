@@ -4,7 +4,7 @@ Module Declaraciones
     ''
     ' Modulo de declaraciones. Aca hay de todo.
     '
-    Public TrashCollector As New List(Of cGarbage)
+    Public TrashCollector As New List(Of WorldPos)
 
 
     Public Const MAXSPAWNATTEMPS As Short = 60

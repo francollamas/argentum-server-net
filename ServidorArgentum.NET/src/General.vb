@@ -124,7 +124,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim i As Short
-        Dim d As New cGarbage
+        Dim d As New WorldPos
 
         For i = TrashCollector.Count() To 1 Step - 1
             d = TrashCollector.Item(i)

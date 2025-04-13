@@ -297,7 +297,7 @@ Module Acciones
         Pos.X = X
         Pos.Y = Y
 
-        Dim Fogatita As New cGarbage
+        Dim Fogatita As New WorldPos
         With UserList(UserIndex)
             If Distancia(Pos, .Pos) > 2 Then
                 Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
