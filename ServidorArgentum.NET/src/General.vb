@@ -162,16 +162,12 @@ Module General
         Call WriteSpawnList(UserIndex, npcNames)
     End Sub
 
-    'UPGRADE_WARNING: La aplicación terminará cuando Sub Main() finalice. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'
     Public Sub Main()
         '***************************************************
         'Author: Unknown
         'Last Modification: -
         '
         '***************************************************
-
-        'Application.EnableVisualStyles()
-        ' Application.SetCompatibleTextRenderingDefault(False)
 
         On Error Resume Next
         Dim f As Date
@@ -370,7 +366,7 @@ Module General
         tInicioServer = GetTickCount()
         Call InicializaEstadisticas()
 
-        Console.WriteLine("Sever started!")
+        Console.WriteLine("Server started!")
 
         Call GameLoop.DoGameLoop()
 
