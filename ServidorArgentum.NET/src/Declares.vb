@@ -4,9 +4,7 @@ Module Declaraciones
     ''
     ' Modulo de declaraciones. Aca hay de todo.
     '
-
-    Public aClon As New clsAntiMassClon
-    Public TrashCollector As New Collection
+    Public TrashCollector As New List(Of cGarbage)
 
 
     Public Const MAXSPAWNATTEMPS As Short = 60
@@ -1443,7 +1441,7 @@ Module Declaraciones
     Public ArmadurasHerrero() As Short
     Public ObjCarpintero() As Short
     Public MD5s() As String
-    Public BanIps As New Collection
+    Public BanIps As New List(Of String)
     'UPGRADE_WARNING: El límite inferior de la matriz Parties ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Public Parties(MAX_PARTIES) As clsParty
     'UPGRADE_WARNING: El límite inferior de la matriz ModClase_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'

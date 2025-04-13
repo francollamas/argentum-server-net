@@ -501,7 +501,6 @@ Module GameLoop
 
         If Minutos >= MinutosWs Then
             Call ES.DoBackUp()
-            Call aClon.VaciarColeccion()
             Minutos = 0
         End If
 

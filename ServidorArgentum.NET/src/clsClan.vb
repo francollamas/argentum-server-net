@@ -12,10 +12,10 @@ Friend Class clsClan
 
     Private p_GuildName As String
     Private p_Alineacion As modGuilds.ALINEACION_GUILD
-    Private p_OnlineMembers As Collection 'Array de UserIndexes!
-    Private p_GMsOnline As Collection
-    Private p_PropuestasDePaz As Collection
-    Private p_PropuestasDeAlianza As Collection
+    Private p_OnlineMembers As List(Of String) 'Array de UserIndexes!
+    Private p_GMsOnline As List(Of String)
+    Private p_PropuestasDePaz As List(Of String)
+    Private p_PropuestasDeAlianza As List(Of String)
     Private p_IteradorRelaciones As Short
     Private p_IteradorOnlineMembers As Short
     Private p_IteradorPropuesta As Short
@@ -173,10 +173,10 @@ Friend Class clsClan
         p_GuildName = GuildName
         p_GuildNumber = GuildNumber
         p_Alineacion = Alineacion
-        p_OnlineMembers = New Collection
-        p_GMsOnline = New Collection
-        p_PropuestasDePaz = New Collection
-        p_PropuestasDeAlianza = New Collection
+        p_OnlineMembers = New List(Of String)
+        p_GMsOnline = New List(Of String)
+        p_PropuestasDePaz = New List(Of String)
+        p_PropuestasDeAlianza = New List(Of String)
         'ALLIESFILE = GUILDPATH & p_GuildName & "-Allied.all"
         'ENEMIESFILE = GUILDPATH & p_GuildName & "-enemys.ene"
         RELACIONESFILE = GUILDPATH & p_GuildName & "-relaciones.rel"

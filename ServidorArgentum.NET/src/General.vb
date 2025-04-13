@@ -129,7 +129,7 @@ Module General
         For i = TrashCollector.Count() To 1 Step - 1
             d = TrashCollector.Item(i)
             Call EraseObj(1, d.Map, d.X, d.Y)
-            Call TrashCollector.Remove(i)
+            Call TrashCollector.RemoveAt(i)
             'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
             d = Nothing
         Next i

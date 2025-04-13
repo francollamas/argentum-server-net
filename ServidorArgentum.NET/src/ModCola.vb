@@ -21,7 +21,7 @@ Friend Class cCola
 
     Private Const FRENTE As Short = 1
 
-    Private Cola As Collection
+    Private Cola As List(Of Integer)
 
     'UPGRADE_NOTE: Reset se actualizó a Reset_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Public Sub Reset_Renamed()
@@ -45,7 +45,7 @@ Friend Class cCola
 
     'UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Private Sub Class_Initialize_Renamed()
-        Cola = New Collection
+        Cola = New List(Of Integer)
     End Sub
 
     Public Sub New()

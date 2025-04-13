@@ -1474,14 +1474,6 @@ Module Protocol
             Exit Sub
         End If
 
-        If aClon.MaxPersonajes(UserList(UserIndex).ip) Then
-            Call WriteErrorMsg(UserIndex, "Has creado demasiados personajes.")
-            Call FlushBuffer(UserIndex)
-            Call CloseSocket(UserIndex)
-
-            Exit Sub
-        End If
-
         UserName = buffer.ReadASCIIString()
         Password = buffer.ReadASCIIString()
 
