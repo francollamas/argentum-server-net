@@ -276,7 +276,7 @@ Friend Class clsClan
 
     Public Sub DesConectarMiembro(ByVal UserIndex As Short)
         Dim i As Short
-        For i = 1 To p_OnlineMembers.Count()
+        For i = 0 To p_OnlineMembers.Count() - 1
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_OnlineMembers.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If p_OnlineMembers.Item(i) = UserIndex Then
                 p_OnlineMembers.Remove(i)
@@ -700,12 +700,12 @@ Friend Class clsClan
 
         Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Detalle", vbNullString)
         Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Pendiente", "0")
-        For i = 1 To p_PropuestasDePaz.Count()
+        For i = 0 To p_PropuestasDePaz.Count() - 1
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If p_PropuestasDePaz.Item(i) = OtroGuild Then p_PropuestasDePaz.Remove((i))
             Exit Sub
         Next i
-        For i = 1 To p_PropuestasDeAlianza.Count()
+        For i = 0 To p_PropuestasDeAlianza.Count() - 1
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If p_PropuestasDeAlianza.Item(i) = OtroGuild Then p_PropuestasDeAlianza.Remove((i))
             Exit Sub
@@ -724,14 +724,14 @@ Friend Class clsClan
         HayPropuesta = False
         Select Case Tipo
             Case modGuilds.RELACIONES_GUILD.ALIADOS
-                For i = 1 To p_PropuestasDeAlianza.Count()
+                For i = 0 To p_PropuestasDeAlianza.Count() - 1
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If p_PropuestasDeAlianza.Item(i) = OtroGuild Then
                         HayPropuesta = True
                     End If
                 Next i
             Case modGuilds.RELACIONES_GUILD.PAZ
-                For i = 1 To p_PropuestasDePaz.Count()
+                For i = 0 To p_PropuestasDePaz.Count() - 1
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If p_PropuestasDePaz.Item(i) = OtroGuild Then
                         HayPropuesta = True
@@ -836,7 +836,7 @@ Friend Class clsClan
 
     Public Sub DesconectarGM(ByVal UserIndex As Short)
         Dim i As Short
-        For i = 1 To p_GMsOnline.Count()
+        For i = 0 To p_GMsOnline.Count() - 1
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_GMsOnline.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If p_GMsOnline.Item(i) = UserIndex Then
                 p_GMsOnline.Remove((i))

@@ -19,7 +19,7 @@ Friend Class cCola
     ' Public Property Get Longitud() As Integer: devuelve la
     ' cantidad de elementos que tiene la cola.
 
-    Private Const FRENTE As Short = 1
+    Private Const FRENTE As Short = 0
 
     Private Cola As List(Of Integer)
 
@@ -28,8 +28,8 @@ Friend Class cCola
         On Error Resume Next
 
         Dim i As Short
-        For i = 1 To Me.Longitud
-            Cola.Remove(FRENTE)
+        For i = 0 To Me.Longitud - 1
+            Cola.RemoveAt(FRENTE)
         Next i
     End Sub
 
@@ -40,7 +40,7 @@ Friend Class cCola
     End Property
 
     Private Function IndexValido(ByVal i As Short) As Boolean
-        IndexValido = i >= 1 And i <= Me.Longitud
+        IndexValido = i >= 0 And i < Me.Longitud
     End Function
 
     'UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -112,7 +112,7 @@ Friend Class cCola
         Dim NombreEnMayusculas As String
         NombreEnMayusculas = UCase(Nombre)
 
-        For i = 1 To Me.Longitud
+        For i = 0 To Me.Longitud -1
             'Pablo
             V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
             '/Pablo
@@ -133,7 +133,7 @@ Friend Class cCola
 
         NombreEnMayusculas = UCase(Nombre)
 
-        For i = 1 To Me.Longitud
+        For i = 0 To Me.Longitud - 1
             'Pablo
             V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
             '/Pablo

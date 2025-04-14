@@ -18339,7 +18339,7 @@ Module Protocol
         With UserList(UserIndex).outgoingData
             Call .WriteByte(ServerPacketID.ShowSOSForm)
 
-            For i = 1 To Ayuda.Longitud
+            For i = 0 To Ayuda.Longitud - 1
                 Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR
             Next i
 

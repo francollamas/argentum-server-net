@@ -126,7 +126,7 @@ Module General
         Dim i As Short
         Dim d As New WorldPos
 
-        For i = TrashCollector.Count() To 1 Step - 1
+        For i = TrashCollector.Count() - 1 To 0 Step - 1
             d = TrashCollector.Item(i)
             Call EraseObj(1, d.Map, d.X, d.Y)
             Call TrashCollector.RemoveAt(i)
