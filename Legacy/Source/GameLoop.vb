@@ -683,7 +683,7 @@ Module GameLoop
         PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
         FileClose(N)
 
-        End
+        running = False
 
         'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         SonidosMapas = Nothing

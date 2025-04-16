@@ -1,7 +1,7 @@
 Option Strict Off
 Option Explicit On
-Module General
-    Public LeerNPCs As New clsIniReader
+Public Module General
+    Friend LeerNPCs As New clsIniReader
 
     Sub DarCuerpoDesnudo(ByVal UserIndex As Short, Optional ByVal Mimetizado As Boolean = False)
         '***************************************************
@@ -126,7 +126,7 @@ Module General
         Dim i As Short
         Dim d As New WorldPos
 
-        For i = TrashCollector.Count() - 1 To 0 Step - 1
+        For i = TrashCollector.Count() - 1 To 0 Step -1
             d = TrashCollector.Item(i)
             Call EraseObj(1, d.Map, d.X, d.Y)
             Call TrashCollector.RemoveAt(i)
@@ -138,7 +138,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
         Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
     End Sub
 
@@ -303,10 +303,10 @@ Module General
         CharPath = AppDomain.CurrentDomain.BaseDirectory & "Charfile/"
 
         'Bordes del mapa
-        MinXBorder = XMinMapSize + (XWindow\2)
-        MaxXBorder = XMaxMapSize - (XWindow\2)
-        MinYBorder = YMinMapSize + (YWindow\2)
-        MaxYBorder = YMaxMapSize - (YWindow\2)
+        MinXBorder = XMinMapSize + (XWindow \ 2)
+        MaxXBorder = XMaxMapSize - (XWindow \ 2)
+        MinYBorder = YMinMapSize + (YWindow \ 2)
+        MaxYBorder = YMaxMapSize - (YWindow \ 2)
 
         Call LoadGuildsDB()
 
@@ -346,7 +346,7 @@ Module General
 
         'Resetea las conexiones de los usuarios
         For LoopC = 1 To MaxUsers
-            UserList(LoopC).ConnID = - 1
+            UserList(LoopC).ConnID = -1
             UserList(LoopC).ConnIDValida = False
             UserList(LoopC).incomingData = New clsByteQueue
             UserList(LoopC).outgoingData = New clsByteQueue
@@ -442,14 +442,14 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Eventos.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogEjercitoReal(ByRef desc As String)
@@ -462,7 +462,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoReal.log", OpenMode.Append, ,
                  OpenShare.Shared)
         PrintLine(nfile, desc)
@@ -470,7 +470,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogEjercitoCaos(ByRef desc As String)
@@ -483,7 +483,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoCaos.log", OpenMode.Append, ,
                  OpenShare.Shared)
         PrintLine(nfile, desc)
@@ -491,7 +491,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
 
@@ -505,7 +505,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Index & ".log", OpenMode.Append, ,
                  OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
@@ -513,7 +513,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
 
@@ -527,14 +527,14 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/errores.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogStatic(ByRef desc As String)
@@ -547,14 +547,14 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Stats.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogTarea(ByRef desc As String)
@@ -574,7 +574,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
 
@@ -587,7 +587,7 @@ Module General
         '***************************************************
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/clanes.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
         FileClose(nfile)
@@ -602,7 +602,7 @@ Module General
         '***************************************************
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/IP.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
         FileClose(nfile)
@@ -618,7 +618,7 @@ Module General
         '***************************************************
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/desarrollo" & Month(Today) & Year(Today) & ".log",
                  OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
@@ -635,7 +635,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Nombre & ".log", OpenMode.Append, ,
                  OpenShare.Shared)
@@ -644,7 +644,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogAsesinato(ByRef texto As String)
@@ -657,7 +657,7 @@ Module General
         On Error GoTo Errhandler
         Dim nfile As Short
 
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
 
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/asesinatos.log", OpenMode.Append, ,
                  OpenShare.Shared)
@@ -666,7 +666,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub logVentaCasa(ByVal texto As String)
@@ -679,7 +679,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
 
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/propiedades.log", OpenMode.Append, ,
                  OpenShare.Shared)
@@ -690,7 +690,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogHackAttemp(ByRef texto As String)
@@ -703,7 +703,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log", OpenMode.Append, ,
                  OpenShare.Shared)
         PrintLine(nfile, "----------------------------------------------------------")
@@ -713,7 +713,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogCheating(ByRef texto As String)
@@ -726,14 +726,14 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CH.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         FileClose(nfile)
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
 
@@ -747,7 +747,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CriticalHackAttemps.log", OpenMode.Append, ,
                  OpenShare.Shared)
         PrintLine(nfile, "----------------------------------------------------------")
@@ -757,7 +757,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Public Sub LogAntiCheat(ByRef texto As String)
@@ -770,7 +770,7 @@ Module General
         On Error GoTo Errhandler
 
         Dim nfile As Short
-        nfile = FreeFile ' obtenemos un canal
+        nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/AntiCheat.log", OpenMode.Append, ,
                  OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
@@ -779,7 +779,7 @@ Module General
 
         Exit Sub
 
-        Errhandler:
+Errhandler:
     End Sub
 
     Function ValidInputNP(ByVal cad As String) As Boolean
@@ -836,7 +836,7 @@ Module General
         ArrayInitializers.InitializeStruct(UserList)
 
         For LoopC = 1 To MaxUsers
-            UserList(LoopC).ConnID = - 1
+            UserList(LoopC).ConnID = -1
             UserList(LoopC).ConnIDValida = False
             UserList(LoopC).incomingData = New clsByteQueue
             UserList(LoopC).outgoingData = New clsByteQueue
@@ -859,7 +859,7 @@ Module General
 
         'Log it
         Dim N As Short
-        N = FreeFile
+        N = FreeFile()
         FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
         FileClose(N)
@@ -907,7 +907,7 @@ Module General
         End If
 
         Exit Sub
-        Errhandler:
+Errhandler:
         LogError(("Error en EfectoLluvia"))
     End Sub
 
@@ -1103,7 +1103,7 @@ Module General
             If .Counters.Invisibilidad < IntervaloInvisible Then
                 .Counters.Invisibilidad = .Counters.Invisibilidad + 1
             Else
-                .Counters.Invisibilidad = RandomNumber(- 100, 100) ' Invi variable :D
+                .Counters.Invisibilidad = RandomNumber(-100, 100) ' Invi variable :D
                 .flags.invisible = 0
                 If .flags.Oculto = 0 Then
                     Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.", Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -1374,7 +1374,7 @@ Module General
         Next i
         Exit Sub
 
-        Errhandler:
+Errhandler:
         Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
         Resume Next
     End Sub
@@ -1453,7 +1453,7 @@ Module General
         Call EstadisticasWeb.Inicializa()
         Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_MAPAS, NumMaps)
         Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)
-        Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.UPTIME_SERVER, (Ta - tInicioServer)/1000)
+        Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.UPTIME_SERVER, (Ta - tInicioServer) / 1000)
         Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.RECORD_USUARIOS, recordusuarios)
     End Sub
 
