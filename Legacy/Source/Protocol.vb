@@ -329,526 +329,525 @@ Module Protocol
         'Last Modification: 01/09/07
         '
         '***************************************************
-        On Error Resume Next
-        Dim packetID As Byte
+        Try
+            Dim packetID As Byte
 
-        packetID = UserList(UserIndex).incomingData.PeekByte()
+            packetID = UserList(UserIndex).incomingData.PeekByte()
 
-        'Does the packet requires a logged user??
-        If _
+            'Does the packet requires a logged user??
+            If _
             Not _
             (packetID = ClientPacketID.ThrowDices Or packetID = ClientPacketID.LoginExistingChar Or
              packetID = ClientPacketID.LoginNewChar) Then
 
-            'Is the user actually logged?
-            If Not UserList(UserIndex).flags.UserLogged Then
-                Call CloseSocket(UserIndex)
-                Exit Sub
+                'Is the user actually logged?
+                If Not UserList(UserIndex).flags.UserLogged Then
+                    Call CloseSocket(UserIndex)
+                    Exit Sub
 
-                'He is logged. Reset idle counter if id is valid.
+                    'He is logged. Reset idle counter if id is valid.
+                ElseIf packetID <= LAST_CLIENT_PACKET_ID Then
+                    UserList(UserIndex).Counters.IdleCount = 0
+                End If
             ElseIf packetID <= LAST_CLIENT_PACKET_ID Then
                 UserList(UserIndex).Counters.IdleCount = 0
+
+                'Is the user logged?
+                If UserList(UserIndex).flags.UserLogged Then
+                    Call CloseSocket(UserIndex)
+                    Exit Sub
+                End If
             End If
-        ElseIf packetID <= LAST_CLIENT_PACKET_ID Then
-            UserList(UserIndex).Counters.IdleCount = 0
 
-            'Is the user logged?
-            If UserList(UserIndex).flags.UserLogged Then
-                Call CloseSocket(UserIndex)
-                Exit Sub
-            End If
-        End If
+            ' Ante cualquier paquete, pierde la proteccion de ser atacado.
+            UserList(UserIndex).flags.NoPuedeSerAtacado = False
 
-        ' Ante cualquier paquete, pierde la proteccion de ser atacado.
-        UserList(UserIndex).flags.NoPuedeSerAtacado = False
+            Select Case packetID
+                Case ClientPacketID.LoginExistingChar 'OLOGIN
+                    Call HandleLoginExistingChar(UserIndex)
 
-        Select Case packetID
-            Case ClientPacketID.LoginExistingChar 'OLOGIN
-                Call HandleLoginExistingChar(UserIndex)
+                Case ClientPacketID.ThrowDices 'TIRDAD
+                    Call HandleThrowDices(UserIndex)
 
-            Case ClientPacketID.ThrowDices 'TIRDAD
-                Call HandleThrowDices(UserIndex)
+                Case ClientPacketID.LoginNewChar 'NLOGIN
+                    Call HandleLoginNewChar(UserIndex)
 
-            Case ClientPacketID.LoginNewChar 'NLOGIN
-                Call HandleLoginNewChar(UserIndex)
+                Case ClientPacketID.Talk ';
+                    Call HandleTalk(UserIndex)
 
-            Case ClientPacketID.Talk ';
-                Call HandleTalk(UserIndex)
+                Case ClientPacketID.Yell '-
+                    Call HandleYell(UserIndex)
 
-            Case ClientPacketID.Yell '-
-                Call HandleYell(UserIndex)
+                Case ClientPacketID.Whisper '\
+                    Call HandleWhisper(UserIndex)
 
-            Case ClientPacketID.Whisper '\
-                Call HandleWhisper(UserIndex)
+                Case ClientPacketID.Walk 'M
+                    Call HandleWalk(UserIndex)
 
-            Case ClientPacketID.Walk 'M
-                Call HandleWalk(UserIndex)
+                Case ClientPacketID.RequestPositionUpdate 'RPU
+                    Call HandleRequestPositionUpdate(UserIndex)
 
-            Case ClientPacketID.RequestPositionUpdate 'RPU
-                Call HandleRequestPositionUpdate(UserIndex)
+                Case ClientPacketID.Attack 'AT
+                    Call HandleAttack(UserIndex)
 
-            Case ClientPacketID.Attack 'AT
-                Call HandleAttack(UserIndex)
+                Case ClientPacketID.PickUp 'AG
+                    Call HandlePickUp(UserIndex)
 
-            Case ClientPacketID.PickUp 'AG
-                Call HandlePickUp(UserIndex)
+                Case ClientPacketID.SafeToggle '/SEG & SEG  (SEG's behaviour has to be coded in the client)
+                    Call HandleSafeToggle(UserIndex)
 
-            Case ClientPacketID.SafeToggle '/SEG & SEG  (SEG's behaviour has to be coded in the client)
-                Call HandleSafeToggle(UserIndex)
+                Case ClientPacketID.ResuscitationSafeToggle
+                    Call HandleResuscitationToggle(UserIndex)
 
-            Case ClientPacketID.ResuscitationSafeToggle
-                Call HandleResuscitationToggle(UserIndex)
+                Case ClientPacketID.RequestGuildLeaderInfo 'GLINFO
+                    Call HandleRequestGuildLeaderInfo(UserIndex)
 
-            Case ClientPacketID.RequestGuildLeaderInfo 'GLINFO
-                Call HandleRequestGuildLeaderInfo(UserIndex)
+                Case ClientPacketID.RequestAtributes 'ATR
+                    Call HandleRequestAtributes(UserIndex)
 
-            Case ClientPacketID.RequestAtributes 'ATR
-                Call HandleRequestAtributes(UserIndex)
+                Case ClientPacketID.RequestFame 'FAMA
+                    Call HandleRequestFame(UserIndex)
 
-            Case ClientPacketID.RequestFame 'FAMA
-                Call HandleRequestFame(UserIndex)
+                Case ClientPacketID.RequestSkills 'ESKI
+                    Call HandleRequestSkills(UserIndex)
 
-            Case ClientPacketID.RequestSkills 'ESKI
-                Call HandleRequestSkills(UserIndex)
+                Case ClientPacketID.RequestMiniStats 'FEST
+                    Call HandleRequestMiniStats(UserIndex)
 
-            Case ClientPacketID.RequestMiniStats 'FEST
-                Call HandleRequestMiniStats(UserIndex)
+                Case ClientPacketID.CommerceEnd 'FINCOM
+                    Call HandleCommerceEnd(UserIndex)
 
-            Case ClientPacketID.CommerceEnd 'FINCOM
-                Call HandleCommerceEnd(UserIndex)
+                Case ClientPacketID.CommerceChat
+                    Call HandleCommerceChat(UserIndex)
 
-            Case ClientPacketID.CommerceChat
-                Call HandleCommerceChat(UserIndex)
+                Case ClientPacketID.UserCommerceEnd 'FINCOMUSU
+                    Call HandleUserCommerceEnd(UserIndex)
 
-            Case ClientPacketID.UserCommerceEnd 'FINCOMUSU
-                Call HandleUserCommerceEnd(UserIndex)
+                Case ClientPacketID.UserCommerceConfirm
+                    Call HandleUserCommerceConfirm(UserIndex)
 
-            Case ClientPacketID.UserCommerceConfirm
-                Call HandleUserCommerceConfirm(UserIndex)
+                Case ClientPacketID.BankEnd 'FINBAN
+                    Call HandleBankEnd(UserIndex)
 
-            Case ClientPacketID.BankEnd 'FINBAN
-                Call HandleBankEnd(UserIndex)
+                Case ClientPacketID.UserCommerceOk 'COMUSUOK
+                    Call HandleUserCommerceOk(UserIndex)
 
-            Case ClientPacketID.UserCommerceOk 'COMUSUOK
-                Call HandleUserCommerceOk(UserIndex)
+                Case ClientPacketID.UserCommerceReject 'COMUSUNO
+                    Call HandleUserCommerceReject(UserIndex)
 
-            Case ClientPacketID.UserCommerceReject 'COMUSUNO
-                Call HandleUserCommerceReject(UserIndex)
+                Case ClientPacketID.Drop 'TI
+                    Call HandleDrop(UserIndex)
 
-            Case ClientPacketID.Drop 'TI
-                Call HandleDrop(UserIndex)
+                Case ClientPacketID.CastSpell 'LH
+                    Call HandleCastSpell(UserIndex)
 
-            Case ClientPacketID.CastSpell 'LH
-                Call HandleCastSpell(UserIndex)
+                Case ClientPacketID.LeftClick 'LC
+                    Call HandleLeftClick(UserIndex)
 
-            Case ClientPacketID.LeftClick 'LC
-                Call HandleLeftClick(UserIndex)
+                Case ClientPacketID.DoubleClick 'RC
+                    Call HandleDoubleClick(UserIndex)
 
-            Case ClientPacketID.DoubleClick 'RC
-                Call HandleDoubleClick(UserIndex)
+                Case ClientPacketID.Work 'UK
+                    Call HandleWork(UserIndex)
 
-            Case ClientPacketID.Work 'UK
-                Call HandleWork(UserIndex)
+                Case ClientPacketID.UseSpellMacro 'UMH
+                    Call HandleUseSpellMacro(UserIndex)
 
-            Case ClientPacketID.UseSpellMacro 'UMH
-                Call HandleUseSpellMacro(UserIndex)
+                Case ClientPacketID.UseItem 'USA
+                    Call HandleUseItem(UserIndex)
 
-            Case ClientPacketID.UseItem 'USA
-                Call HandleUseItem(UserIndex)
+                Case ClientPacketID.CraftBlacksmith 'CNS
+                    Call HandleCraftBlacksmith(UserIndex)
 
-            Case ClientPacketID.CraftBlacksmith 'CNS
-                Call HandleCraftBlacksmith(UserIndex)
+                Case ClientPacketID.CraftCarpenter 'CNC
+                    Call HandleCraftCarpenter(UserIndex)
 
-            Case ClientPacketID.CraftCarpenter 'CNC
-                Call HandleCraftCarpenter(UserIndex)
+                Case ClientPacketID.WorkLeftClick 'WLC
+                    Call HandleWorkLeftClick(UserIndex)
 
-            Case ClientPacketID.WorkLeftClick 'WLC
-                Call HandleWorkLeftClick(UserIndex)
+                Case ClientPacketID.CreateNewGuild 'CIG
+                    Call HandleCreateNewGuild(UserIndex)
 
-            Case ClientPacketID.CreateNewGuild 'CIG
-                Call HandleCreateNewGuild(UserIndex)
+                Case ClientPacketID.SpellInfo 'INFS
+                    Call HandleSpellInfo(UserIndex)
 
-            Case ClientPacketID.SpellInfo 'INFS
-                Call HandleSpellInfo(UserIndex)
+                Case ClientPacketID.EquipItem 'EQUI
+                    Call HandleEquipItem(UserIndex)
 
-            Case ClientPacketID.EquipItem 'EQUI
-                Call HandleEquipItem(UserIndex)
+                Case ClientPacketID.ChangeHeading 'CHEA
+                    Call HandleChangeHeading(UserIndex)
 
-            Case ClientPacketID.ChangeHeading 'CHEA
-                Call HandleChangeHeading(UserIndex)
+                Case ClientPacketID.ModifySkills 'SKSE
+                    Call HandleModifySkills(UserIndex)
 
-            Case ClientPacketID.ModifySkills 'SKSE
-                Call HandleModifySkills(UserIndex)
+                Case ClientPacketID.Train 'ENTR
+                    Call HandleTrain(UserIndex)
 
-            Case ClientPacketID.Train 'ENTR
-                Call HandleTrain(UserIndex)
+                Case ClientPacketID.CommerceBuy 'COMP
+                    Call HandleCommerceBuy(UserIndex)
 
-            Case ClientPacketID.CommerceBuy 'COMP
-                Call HandleCommerceBuy(UserIndex)
+                Case ClientPacketID.BankExtractItem 'RETI
+                    Call HandleBankExtractItem(UserIndex)
 
-            Case ClientPacketID.BankExtractItem 'RETI
-                Call HandleBankExtractItem(UserIndex)
+                Case ClientPacketID.CommerceSell 'VEND
+                    Call HandleCommerceSell(UserIndex)
 
-            Case ClientPacketID.CommerceSell 'VEND
-                Call HandleCommerceSell(UserIndex)
+                Case ClientPacketID.BankDeposit 'DEPO
+                    Call HandleBankDeposit(UserIndex)
 
-            Case ClientPacketID.BankDeposit 'DEPO
-                Call HandleBankDeposit(UserIndex)
+                Case ClientPacketID.ForumPost 'DEMSG
+                    Call HandleForumPost(UserIndex)
 
-            Case ClientPacketID.ForumPost 'DEMSG
-                Call HandleForumPost(UserIndex)
+                Case ClientPacketID.MoveSpell 'DESPHE
+                    Call HandleMoveSpell(UserIndex)
 
-            Case ClientPacketID.MoveSpell 'DESPHE
-                Call HandleMoveSpell(UserIndex)
+                Case ClientPacketID.MoveBank
+                    Call HandleMoveBank(UserIndex)
 
-            Case ClientPacketID.MoveBank
-                Call HandleMoveBank(UserIndex)
+                Case ClientPacketID.ClanCodexUpdate 'DESCOD
+                    Call HandleClanCodexUpdate(UserIndex)
 
-            Case ClientPacketID.ClanCodexUpdate 'DESCOD
-                Call HandleClanCodexUpdate(UserIndex)
+                Case ClientPacketID.UserCommerceOffer 'OFRECER
+                    Call HandleUserCommerceOffer(UserIndex)
 
-            Case ClientPacketID.UserCommerceOffer 'OFRECER
-                Call HandleUserCommerceOffer(UserIndex)
+                Case ClientPacketID.GuildAcceptPeace 'ACEPPEAT
+                    Call HandleGuildAcceptPeace(UserIndex)
 
-            Case ClientPacketID.GuildAcceptPeace 'ACEPPEAT
-                Call HandleGuildAcceptPeace(UserIndex)
+                Case ClientPacketID.GuildRejectAlliance 'RECPALIA
+                    Call HandleGuildRejectAlliance(UserIndex)
 
-            Case ClientPacketID.GuildRejectAlliance 'RECPALIA
-                Call HandleGuildRejectAlliance(UserIndex)
+                Case ClientPacketID.GuildRejectPeace 'RECPPEAT
+                    Call HandleGuildRejectPeace(UserIndex)
 
-            Case ClientPacketID.GuildRejectPeace 'RECPPEAT
-                Call HandleGuildRejectPeace(UserIndex)
+                Case ClientPacketID.GuildAcceptAlliance 'ACEPALIA
+                    Call HandleGuildAcceptAlliance(UserIndex)
 
-            Case ClientPacketID.GuildAcceptAlliance 'ACEPALIA
-                Call HandleGuildAcceptAlliance(UserIndex)
+                Case ClientPacketID.GuildOfferPeace 'PEACEOFF
+                    Call HandleGuildOfferPeace(UserIndex)
 
-            Case ClientPacketID.GuildOfferPeace 'PEACEOFF
-                Call HandleGuildOfferPeace(UserIndex)
+                Case ClientPacketID.GuildOfferAlliance 'ALLIEOFF
+                    Call HandleGuildOfferAlliance(UserIndex)
 
-            Case ClientPacketID.GuildOfferAlliance 'ALLIEOFF
-                Call HandleGuildOfferAlliance(UserIndex)
+                Case ClientPacketID.GuildAllianceDetails 'ALLIEDET
+                    Call HandleGuildAllianceDetails(UserIndex)
 
-            Case ClientPacketID.GuildAllianceDetails 'ALLIEDET
-                Call HandleGuildAllianceDetails(UserIndex)
+                Case ClientPacketID.GuildPeaceDetails 'PEACEDET
+                    Call HandleGuildPeaceDetails(UserIndex)
 
-            Case ClientPacketID.GuildPeaceDetails 'PEACEDET
-                Call HandleGuildPeaceDetails(UserIndex)
+                Case ClientPacketID.GuildRequestJoinerInfo 'ENVCOMEN
+                    Call HandleGuildRequestJoinerInfo(UserIndex)
 
-            Case ClientPacketID.GuildRequestJoinerInfo 'ENVCOMEN
-                Call HandleGuildRequestJoinerInfo(UserIndex)
+                Case ClientPacketID.GuildAlliancePropList 'ENVALPRO
+                    Call HandleGuildAlliancePropList(UserIndex)
 
-            Case ClientPacketID.GuildAlliancePropList 'ENVALPRO
-                Call HandleGuildAlliancePropList(UserIndex)
+                Case ClientPacketID.GuildPeacePropList 'ENVPROPP
+                    Call HandleGuildPeacePropList(UserIndex)
 
-            Case ClientPacketID.GuildPeacePropList 'ENVPROPP
-                Call HandleGuildPeacePropList(UserIndex)
+                Case ClientPacketID.GuildDeclareWar 'DECGUERR
+                    Call HandleGuildDeclareWar(UserIndex)
 
-            Case ClientPacketID.GuildDeclareWar 'DECGUERR
-                Call HandleGuildDeclareWar(UserIndex)
+                Case ClientPacketID.GuildNewWebsite 'NEWWEBSI
+                    Call HandleGuildNewWebsite(UserIndex)
 
-            Case ClientPacketID.GuildNewWebsite 'NEWWEBSI
-                Call HandleGuildNewWebsite(UserIndex)
+                Case ClientPacketID.GuildAcceptNewMember 'ACEPTARI
+                    Call HandleGuildAcceptNewMember(UserIndex)
 
-            Case ClientPacketID.GuildAcceptNewMember 'ACEPTARI
-                Call HandleGuildAcceptNewMember(UserIndex)
+                Case ClientPacketID.GuildRejectNewMember 'RECHAZAR
+                    Call HandleGuildRejectNewMember(UserIndex)
 
-            Case ClientPacketID.GuildRejectNewMember 'RECHAZAR
-                Call HandleGuildRejectNewMember(UserIndex)
+                Case ClientPacketID.GuildKickMember 'ECHARCLA
+                    Call HandleGuildKickMember(UserIndex)
 
-            Case ClientPacketID.GuildKickMember 'ECHARCLA
-                Call HandleGuildKickMember(UserIndex)
+                Case ClientPacketID.GuildUpdateNews 'ACTGNEWS
+                    Call HandleGuildUpdateNews(UserIndex)
 
-            Case ClientPacketID.GuildUpdateNews 'ACTGNEWS
-                Call HandleGuildUpdateNews(UserIndex)
+                Case ClientPacketID.GuildMemberInfo '1HRINFO<
+                    Call HandleGuildMemberInfo(UserIndex)
 
-            Case ClientPacketID.GuildMemberInfo '1HRINFO<
-                Call HandleGuildMemberInfo(UserIndex)
+                Case ClientPacketID.GuildOpenElections 'ABREELEC
+                    Call HandleGuildOpenElections(UserIndex)
 
-            Case ClientPacketID.GuildOpenElections 'ABREELEC
-                Call HandleGuildOpenElections(UserIndex)
+                Case ClientPacketID.GuildRequestMembership 'SOLICITUD
+                    Call HandleGuildRequestMembership(UserIndex)
 
-            Case ClientPacketID.GuildRequestMembership 'SOLICITUD
-                Call HandleGuildRequestMembership(UserIndex)
+                Case ClientPacketID.GuildRequestDetails 'CLANDETAILS
+                    Call HandleGuildRequestDetails(UserIndex)
 
-            Case ClientPacketID.GuildRequestDetails 'CLANDETAILS
-                Call HandleGuildRequestDetails(UserIndex)
+                Case ClientPacketID.Online '/ONLINE
+                    Call HandleOnline(UserIndex)
 
-            Case ClientPacketID.Online '/ONLINE
-                Call HandleOnline(UserIndex)
+                Case ClientPacketID.Quit '/SALIR
+                    Call HandleQuit(UserIndex)
 
-            Case ClientPacketID.Quit '/SALIR
-                Call HandleQuit(UserIndex)
+                Case ClientPacketID.GuildLeave '/SALIRCLAN
+                    Call HandleGuildLeave(UserIndex)
 
-            Case ClientPacketID.GuildLeave '/SALIRCLAN
-                Call HandleGuildLeave(UserIndex)
+                Case ClientPacketID.RequestAccountState '/BALANCE
+                    Call HandleRequestAccountState(UserIndex)
 
-            Case ClientPacketID.RequestAccountState '/BALANCE
-                Call HandleRequestAccountState(UserIndex)
+                Case ClientPacketID.PetStand '/QUIETO
+                    Call HandlePetStand(UserIndex)
 
-            Case ClientPacketID.PetStand '/QUIETO
-                Call HandlePetStand(UserIndex)
+                Case ClientPacketID.PetFollow '/ACOMPAÑAR
+                    Call HandlePetFollow(UserIndex)
 
-            Case ClientPacketID.PetFollow '/ACOMPAÑAR
-                Call HandlePetFollow(UserIndex)
+                Case ClientPacketID.ReleasePet '/LIBERAR
+                    Call HandleReleasePet(UserIndex)
 
-            Case ClientPacketID.ReleasePet '/LIBERAR
-                Call HandleReleasePet(UserIndex)
+                Case ClientPacketID.TrainList '/ENTRENAR
+                    Call HandleTrainList(UserIndex)
 
-            Case ClientPacketID.TrainList '/ENTRENAR
-                Call HandleTrainList(UserIndex)
+                Case ClientPacketID.Rest '/DESCANSAR
+                    Call HandleRest(UserIndex)
 
-            Case ClientPacketID.Rest '/DESCANSAR
-                Call HandleRest(UserIndex)
+                Case ClientPacketID.Meditate '/MEDITAR
+                    Call HandleMeditate(UserIndex)
 
-            Case ClientPacketID.Meditate '/MEDITAR
-                Call HandleMeditate(UserIndex)
+                Case ClientPacketID.Resucitate '/RESUCITAR
+                    Call HandleResucitate(UserIndex)
 
-            Case ClientPacketID.Resucitate '/RESUCITAR
-                Call HandleResucitate(UserIndex)
+                Case ClientPacketID.Heal '/CURAR
+                    Call HandleHeal(UserIndex)
 
-            Case ClientPacketID.Heal '/CURAR
-                Call HandleHeal(UserIndex)
+                Case ClientPacketID.Help '/AYUDA
+                    Call HandleHelp(UserIndex)
 
-            Case ClientPacketID.Help '/AYUDA
-                Call HandleHelp(UserIndex)
+                Case ClientPacketID.RequestStats '/EST
+                    Call HandleRequestStats(UserIndex)
 
-            Case ClientPacketID.RequestStats '/EST
-                Call HandleRequestStats(UserIndex)
+                Case ClientPacketID.CommerceStart '/COMERCIAR
+                    Call HandleCommerceStart(UserIndex)
 
-            Case ClientPacketID.CommerceStart '/COMERCIAR
-                Call HandleCommerceStart(UserIndex)
+                Case ClientPacketID.BankStart '/BOVEDA
+                    Call HandleBankStart(UserIndex)
 
-            Case ClientPacketID.BankStart '/BOVEDA
-                Call HandleBankStart(UserIndex)
+                Case ClientPacketID.Enlist '/ENLISTAR
+                    Call HandleEnlist(UserIndex)
 
-            Case ClientPacketID.Enlist '/ENLISTAR
-                Call HandleEnlist(UserIndex)
+                Case ClientPacketID.Information '/INFORMACION
+                    Call HandleInformation(UserIndex)
 
-            Case ClientPacketID.Information '/INFORMACION
-                Call HandleInformation(UserIndex)
+                Case ClientPacketID.Reward '/RECOMPENSA
+                    Call HandleReward(UserIndex)
 
-            Case ClientPacketID.Reward '/RECOMPENSA
-                Call HandleReward(UserIndex)
+                Case ClientPacketID.RequestMOTD '/MOTD
+                    Call HandleRequestMOTD(UserIndex)
 
-            Case ClientPacketID.RequestMOTD '/MOTD
-                Call HandleRequestMOTD(UserIndex)
+                Case ClientPacketID.UpTime '/UPTIME
+                    Call HandleUpTime(UserIndex)
 
-            Case ClientPacketID.UpTime '/UPTIME
-                Call HandleUpTime(UserIndex)
+                Case ClientPacketID.PartyLeave '/SALIRPARTY
+                    Call HandlePartyLeave(UserIndex)
 
-            Case ClientPacketID.PartyLeave '/SALIRPARTY
-                Call HandlePartyLeave(UserIndex)
+                Case ClientPacketID.PartyCreate '/CREARPARTY
+                    Call HandlePartyCreate(UserIndex)
 
-            Case ClientPacketID.PartyCreate '/CREARPARTY
-                Call HandlePartyCreate(UserIndex)
+                Case ClientPacketID.PartyJoin '/PARTY
+                    Call HandlePartyJoin(UserIndex)
 
-            Case ClientPacketID.PartyJoin '/PARTY
-                Call HandlePartyJoin(UserIndex)
+                Case ClientPacketID.Inquiry '/ENCUESTA ( with no params )
+                    Call HandleInquiry(UserIndex)
 
-            Case ClientPacketID.Inquiry '/ENCUESTA ( with no params )
-                Call HandleInquiry(UserIndex)
+                Case ClientPacketID.GuildMessage '/CMSG
+                    Call HandleGuildMessage(UserIndex)
 
-            Case ClientPacketID.GuildMessage '/CMSG
-                Call HandleGuildMessage(UserIndex)
+                Case ClientPacketID.PartyMessage '/PMSG
+                    Call HandlePartyMessage(UserIndex)
 
-            Case ClientPacketID.PartyMessage '/PMSG
-                Call HandlePartyMessage(UserIndex)
+                Case ClientPacketID.CentinelReport '/CENTINELA
+                    Call HandleCentinelReport(UserIndex)
 
-            Case ClientPacketID.CentinelReport '/CENTINELA
-                Call HandleCentinelReport(UserIndex)
+                Case ClientPacketID.GuildOnline '/ONLINECLAN
+                    Call HandleGuildOnline(UserIndex)
 
-            Case ClientPacketID.GuildOnline '/ONLINECLAN
-                Call HandleGuildOnline(UserIndex)
+                Case ClientPacketID.PartyOnline '/ONLINEPARTY
+                    Call HandlePartyOnline(UserIndex)
 
-            Case ClientPacketID.PartyOnline '/ONLINEPARTY
-                Call HandlePartyOnline(UserIndex)
+                Case ClientPacketID.CouncilMessage '/BMSG
+                    Call HandleCouncilMessage(UserIndex)
 
-            Case ClientPacketID.CouncilMessage '/BMSG
-                Call HandleCouncilMessage(UserIndex)
+                Case ClientPacketID.RoleMasterRequest '/ROL
+                    Call HandleRoleMasterRequest(UserIndex)
 
-            Case ClientPacketID.RoleMasterRequest '/ROL
-                Call HandleRoleMasterRequest(UserIndex)
+                Case ClientPacketID.GMRequest '/GM
+                    Call HandleGMRequest(UserIndex)
 
-            Case ClientPacketID.GMRequest '/GM
-                Call HandleGMRequest(UserIndex)
+                Case ClientPacketID.bugReport '/_BUG
+                    Call HandleBugReport(UserIndex)
 
-            Case ClientPacketID.bugReport '/_BUG
-                Call HandleBugReport(UserIndex)
+                Case ClientPacketID.ChangeDescription '/DESC
+                    Call HandleChangeDescription(UserIndex)
 
-            Case ClientPacketID.ChangeDescription '/DESC
-                Call HandleChangeDescription(UserIndex)
+                Case ClientPacketID.GuildVote '/VOTO
+                    Call HandleGuildVote(UserIndex)
 
-            Case ClientPacketID.GuildVote '/VOTO
-                Call HandleGuildVote(UserIndex)
+                Case ClientPacketID.Punishments '/PENAS
+                    Call HandlePunishments(UserIndex)
 
-            Case ClientPacketID.Punishments '/PENAS
-                Call HandlePunishments(UserIndex)
+                Case ClientPacketID.ChangePassword '/CONTRASEÑA
+                    Call HandleChangePassword(UserIndex)
 
-            Case ClientPacketID.ChangePassword '/CONTRASEÑA
-                Call HandleChangePassword(UserIndex)
+                Case ClientPacketID.Gamble '/APOSTAR
+                    Call HandleGamble(UserIndex)
 
-            Case ClientPacketID.Gamble '/APOSTAR
-                Call HandleGamble(UserIndex)
+                Case ClientPacketID.InquiryVote '/ENCUESTA ( with parameters )
+                    Call HandleInquiryVote(UserIndex)
 
-            Case ClientPacketID.InquiryVote '/ENCUESTA ( with parameters )
-                Call HandleInquiryVote(UserIndex)
+                Case ClientPacketID.LeaveFaction '/RETIRAR ( with no arguments )
+                    Call HandleLeaveFaction(UserIndex)
 
-            Case ClientPacketID.LeaveFaction '/RETIRAR ( with no arguments )
-                Call HandleLeaveFaction(UserIndex)
+                Case ClientPacketID.BankExtractGold '/RETIRAR ( with arguments )
+                    Call HandleBankExtractGold(UserIndex)
 
-            Case ClientPacketID.BankExtractGold '/RETIRAR ( with arguments )
-                Call HandleBankExtractGold(UserIndex)
+                Case ClientPacketID.BankDepositGold '/DEPOSITAR
+                    Call HandleBankDepositGold(UserIndex)
 
-            Case ClientPacketID.BankDepositGold '/DEPOSITAR
-                Call HandleBankDepositGold(UserIndex)
+                Case ClientPacketID.Denounce '/DENUNCIAR
+                    Call HandleDenounce(UserIndex)
 
-            Case ClientPacketID.Denounce '/DENUNCIAR
-                Call HandleDenounce(UserIndex)
+                Case ClientPacketID.GuildFundate '/FUNDARCLAN
+                    Call HandleGuildFundate(UserIndex)
 
-            Case ClientPacketID.GuildFundate '/FUNDARCLAN
-                Call HandleGuildFundate(UserIndex)
+                Case ClientPacketID.GuildFundation
+                    Call HandleGuildFundation(UserIndex)
 
-            Case ClientPacketID.GuildFundation
-                Call HandleGuildFundation(UserIndex)
+                Case ClientPacketID.PartyKick '/ECHARPARTY
+                    Call HandlePartyKick(UserIndex)
 
-            Case ClientPacketID.PartyKick '/ECHARPARTY
-                Call HandlePartyKick(UserIndex)
+                Case ClientPacketID.PartySetLeader '/PARTYLIDER
+                    Call HandlePartySetLeader(UserIndex)
 
-            Case ClientPacketID.PartySetLeader '/PARTYLIDER
-                Call HandlePartySetLeader(UserIndex)
+                Case ClientPacketID.PartyAcceptMember '/ACCEPTPARTY
+                    Call HandlePartyAcceptMember(UserIndex)
 
-            Case ClientPacketID.PartyAcceptMember '/ACCEPTPARTY
-                Call HandlePartyAcceptMember(UserIndex)
+                Case ClientPacketID.Ping '/PING
+                    Call HandlePing(UserIndex)
 
-            Case ClientPacketID.Ping '/PING
-                Call HandlePing(UserIndex)
+                Case ClientPacketID.RequestPartyForm
+                    Call HandlePartyForm(UserIndex)
 
-            Case ClientPacketID.RequestPartyForm
-                Call HandlePartyForm(UserIndex)
+                Case ClientPacketID.ItemUpgrade
+                    Call HandleItemUpgrade(UserIndex)
 
-            Case ClientPacketID.ItemUpgrade
-                Call HandleItemUpgrade(UserIndex)
+                Case ClientPacketID.GMCommands 'GM Messages
+                    Call HandleGMCommands(UserIndex)
 
-            Case ClientPacketID.GMCommands 'GM Messages
-                Call HandleGMCommands(UserIndex)
+                Case ClientPacketID.InitCrafting
+                    Call HandleInitCrafting(UserIndex)
 
-            Case ClientPacketID.InitCrafting
-                Call HandleInitCrafting(UserIndex)
+                Case ClientPacketID.Home
+                    Call HandleHome(UserIndex)
 
-            Case ClientPacketID.Home
-                Call HandleHome(UserIndex)
+                Case ClientPacketID.ShowGuildNews
+                    Call HandleShowGuildNews(UserIndex)
 
-            Case ClientPacketID.ShowGuildNews
-                Call HandleShowGuildNews(UserIndex)
+                Case ClientPacketID.ShareNpc
+                    Call HandleShareNpc(UserIndex)
 
-            Case ClientPacketID.ShareNpc
-                Call HandleShareNpc(UserIndex)
+                Case ClientPacketID.StopSharingNpc
+                    Call HandleStopSharingNpc(UserIndex)
 
-            Case ClientPacketID.StopSharingNpc
-                Call HandleStopSharingNpc(UserIndex)
+                Case ClientPacketID.Consultation
+                    Call HandleConsultation(CStr(UserIndex))
 
-            Case ClientPacketID.Consultation
-                Call HandleConsultation(CStr(UserIndex))
+                Case Else
+                    'ERROR : Abort!
+                    Call CloseSocket(UserIndex)
+            End Select
 
-            Case Else
-                'ERROR : Abort!
-                Call CloseSocket(UserIndex)
-        End Select
+            'Done with this packet, move on to next one or send everything if no more packets found
+            If UserList(UserIndex).incomingData.length > 0 And Err.Number = 0 Then
+                Err.Clear()
+                Call HandleIncomingData(UserIndex)
 
-        'Done with this packet, move on to next one or send everything if no more packets found
-        If UserList(UserIndex).incomingData.length > 0 And Err.Number = 0 Then
-            Err.Clear()
-            Call HandleIncomingData(UserIndex)
-
-        ElseIf Err.Number <> 0 And Not Err.Number = UserList(UserIndex).incomingData.NotEnoughDataErrCode Then
-            'An error ocurred, log it and kick player.
-            Call _
+            ElseIf Err.Number <> 0 And Not Err.Number = UserList(UserIndex).incomingData.NotEnoughDataErrCode Then
+                'An error ocurred, log it and kick player.
+                Call _
                 LogError(
                     "Error: " & Err.Number & " [" & Err.Description & "] " & " Source: " & Err.Source & vbTab &
                     " HelpFile: " & Err.HelpFile & vbTab & " HelpContext: " & Err.HelpContext & vbTab &
                     " LastDllError: " & Err.LastDllError & vbTab & " - UserIndex: " & UserIndex &
                     " - producido al manejar el paquete: " & CStr(packetID))
-            Call CloseSocket(UserIndex)
+                Call CloseSocket(UserIndex)
 
-        Else
-            'Flush buffer - send everything that has been written
-            Call FlushBuffer(UserIndex)
-        End If
+            Else
+                'Flush buffer - send everything that has been written
+                Call FlushBuffer(UserIndex)
+            End If
+
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleIncomingData: " & ex.Message)
+        End Try
     End Sub
+
 
     Public Sub WriteMultiMessage(ByVal UserIndex As Short, ByVal MessageIndex As Short,
                                  Optional ByVal Arg1 As Integer = 0, Optional ByVal Arg2 As Integer = 0,
                                  Optional ByVal Arg3 As Integer = 0, Optional ByVal StringArg1 As String = "")
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.MultiMessage)
+                    Call .WriteByte(MessageIndex)
 
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.MultiMessage)
-            Call .WriteByte(MessageIndex)
+                    Select Case MessageIndex
+                        Case Declaraciones.eMessages.DontSeeAnything, Declaraciones.eMessages.NPCSwing,
+                            Declaraciones.eMessages.NPCKillUser, Declaraciones.eMessages.BlockedWithShieldUser,
+                            Declaraciones.eMessages.BlockedWithShieldother, Declaraciones.eMessages.UserSwing,
+                            Declaraciones.eMessages.SafeModeOn, Declaraciones.eMessages.SafeModeOff,
+                            Declaraciones.eMessages.ResuscitationSafeOff, Declaraciones.eMessages.ResuscitationSafeOn,
+                            Declaraciones.eMessages.NobilityLost, Declaraciones.eMessages.CantUseWhileMeditating,
+                            Declaraciones.eMessages.CancelHome, Declaraciones.eMessages.FinishHome
 
-            Select Case MessageIndex
-                Case Declaraciones.eMessages.DontSeeAnything, Declaraciones.eMessages.NPCSwing,
-                    Declaraciones.eMessages.NPCKillUser, Declaraciones.eMessages.BlockedWithShieldUser,
-                    Declaraciones.eMessages.BlockedWithShieldother, Declaraciones.eMessages.UserSwing,
-                    Declaraciones.eMessages.SafeModeOn, Declaraciones.eMessages.SafeModeOff,
-                    Declaraciones.eMessages.ResuscitationSafeOff, Declaraciones.eMessages.ResuscitationSafeOn,
-                    Declaraciones.eMessages.NobilityLost, Declaraciones.eMessages.CantUseWhileMeditating,
-                    Declaraciones.eMessages.CancelHome, Declaraciones.eMessages.FinishHome
+                        Case Declaraciones.eMessages.NPCHitUser
+                            Call .WriteByte(Arg1) 'Target
+                            Call .WriteInteger(Arg2) 'damage
 
-                Case Declaraciones.eMessages.NPCHitUser
-                    Call .WriteByte(Arg1) 'Target
-                    Call .WriteInteger(Arg2) 'damage
+                        Case Declaraciones.eMessages.UserHitNPC
+                            Call .WriteLong(Arg1) 'damage
 
-                Case Declaraciones.eMessages.UserHitNPC
-                    Call .WriteLong(Arg1) 'damage
+                        Case Declaraciones.eMessages.UserAttackedSwing
+                            Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex)
 
-                Case Declaraciones.eMessages.UserAttackedSwing
-                    Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex)
+                        Case Declaraciones.eMessages.UserHittedByUser
+                            Call .WriteInteger(Arg1) 'AttackerIndex
+                            Call .WriteByte(Arg2) 'Target
+                            Call .WriteInteger(Arg3) 'damage
 
-                Case Declaraciones.eMessages.UserHittedByUser
-                    Call .WriteInteger(Arg1) 'AttackerIndex
-                    Call .WriteByte(Arg2) 'Target
-                    Call .WriteInteger(Arg3) 'damage
+                        Case Declaraciones.eMessages.UserHittedUser
+                            Call .WriteInteger(Arg1) 'AttackerIndex
+                            Call .WriteByte(Arg2) 'Target
+                            Call .WriteInteger(Arg3) 'damage
 
-                Case Declaraciones.eMessages.UserHittedUser
-                    Call .WriteInteger(Arg1) 'AttackerIndex
-                    Call .WriteByte(Arg2) 'Target
-                    Call .WriteInteger(Arg3) 'damage
+                        Case Declaraciones.eMessages.WorkRequestTarget
+                            Call .WriteByte(Arg1) 'skill
 
-                Case Declaraciones.eMessages.WorkRequestTarget
-                    Call .WriteByte(Arg1) 'skill
+                        Case Declaraciones.eMessages.HaveKilledUser _
+                            '"Has matado a " & UserList(VictimIndex).name & "!" "Has ganado " & DaExp & " puntos de experiencia."
+                            Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'VictimIndex
+                            Call .WriteLong(Arg2) 'Expe
 
-                Case Declaraciones.eMessages.HaveKilledUser _
-                    '"Has matado a " & UserList(VictimIndex).name & "!" "Has ganado " & DaExp & " puntos de experiencia."
-                    Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'VictimIndex
-                    Call .WriteLong(Arg2) 'Expe
+                        Case Declaraciones.eMessages.UserKill '"¡" & .name & " te ha matado!"
+                            Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'AttackerIndex
 
-                Case Declaraciones.eMessages.UserKill '"¡" & .name & " te ha matado!"
-                    Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'AttackerIndex
+                        Case Declaraciones.eMessages.EarnExp
 
-                Case Declaraciones.eMessages.EarnExp
+                        Case Declaraciones.eMessages.Home
+                            Call .WriteByte(CByte(Arg1))
+                            Call .WriteInteger(CShort(Arg2))
+                            'El cliente no conoce nada sobre nombre de mapas y hogares, por lo tanto _
+                            'hasta que no se pasen los dats e .INFs al cliente, esto queda así.
+                            Call .WriteASCIIString(StringArg1) 'Call .WriteByte(CByte(Arg2))
 
-                Case Declaraciones.eMessages.Home
-                    Call .WriteByte(CByte(Arg1))
-                    Call .WriteInteger(CShort(Arg2))
-                    'El cliente no conoce nada sobre nombre de mapas y hogares, por lo tanto _
-                    'hasta que no se pasen los dats e .INFs al cliente, esto queda así.
-                    Call .WriteASCIIString(StringArg1) 'Call .WriteByte(CByte(Arg2))
-
-            End Select
-        End With
-        Exit Sub ''
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+                    End Select
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
+
 
     Private Sub HandleGMCommands(ByVal UserIndex As Short)
         '***************************************************
@@ -857,415 +856,416 @@ Module Protocol
         '
         '***************************************************
 
-        On Error GoTo Errhandler
-
         'UPGRADE_NOTE: Command se actualizó a Command_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
         Dim Command_Renamed As Byte
 
-        With UserList(UserIndex)
-            Call .incomingData.ReadByte()
+        Try
 
-            Command_Renamed = .incomingData.PeekByte
+            With UserList(UserIndex)
+                Call .incomingData.ReadByte()
 
-            Select Case Command_Renamed
-                Case Declaraciones.eGMCommands.GMMessage '/GMSG
-                    Call HandleGMMessage(UserIndex)
+                Command_Renamed = .incomingData.PeekByte
 
-                Case Declaraciones.eGMCommands.showName '/SHOWNAME
-                    Call HandleShowName(UserIndex)
+                Select Case Command_Renamed
+                    Case Declaraciones.eGMCommands.GMMessage '/GMSG
+                        Call HandleGMMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.OnlineRoyalArmy
-                    Call HandleOnlineRoyalArmy(UserIndex)
+                    Case Declaraciones.eGMCommands.showName '/SHOWNAME
+                        Call HandleShowName(UserIndex)
 
-                Case Declaraciones.eGMCommands.OnlineChaosLegion '/ONLINECAOS
-                    Call HandleOnlineChaosLegion(UserIndex)
+                    Case Declaraciones.eGMCommands.OnlineRoyalArmy
+                        Call HandleOnlineRoyalArmy(UserIndex)
 
-                Case Declaraciones.eGMCommands.GoNearby '/IRCERCA
-                    Call HandleGoNearby(UserIndex)
+                    Case Declaraciones.eGMCommands.OnlineChaosLegion '/ONLINECAOS
+                        Call HandleOnlineChaosLegion(UserIndex)
 
-                Case Declaraciones.eGMCommands.comment '/REM
-                    Call HandleComment(UserIndex)
+                    Case Declaraciones.eGMCommands.GoNearby '/IRCERCA
+                        Call HandleGoNearby(UserIndex)
 
-                Case Declaraciones.eGMCommands.serverTime '/HORA
-                    Call HandleServerTime(UserIndex)
+                    Case Declaraciones.eGMCommands.comment '/REM
+                        Call HandleComment(UserIndex)
 
-                Case Declaraciones.eGMCommands.Where '/DONDE
-                    Call HandleWhere(UserIndex)
+                    Case Declaraciones.eGMCommands.serverTime '/HORA
+                        Call HandleServerTime(UserIndex)
 
-                Case Declaraciones.eGMCommands.CreaturesInMap '/NENE
-                    Call HandleCreaturesInMap(UserIndex)
+                    Case Declaraciones.eGMCommands.Where '/DONDE
+                        Call HandleWhere(UserIndex)
 
-                Case Declaraciones.eGMCommands.WarpMeToTarget '/TELEPLOC
-                    Call HandleWarpMeToTarget(UserIndex)
+                    Case Declaraciones.eGMCommands.CreaturesInMap '/NENE
+                        Call HandleCreaturesInMap(UserIndex)
 
-                Case Declaraciones.eGMCommands.WarpChar '/TELEP
-                    Call HandleWarpChar(UserIndex)
+                    Case Declaraciones.eGMCommands.WarpMeToTarget '/TELEPLOC
+                        Call HandleWarpMeToTarget(UserIndex)
 
-                Case Declaraciones.eGMCommands.Silence '/SILENCIAR
-                    Call HandleSilence(UserIndex)
+                    Case Declaraciones.eGMCommands.WarpChar '/TELEP
+                        Call HandleWarpChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.SOSShowList '/SHOW SOS
-                    Call HandleSOSShowList(UserIndex)
+                    Case Declaraciones.eGMCommands.Silence '/SILENCIAR
+                        Call HandleSilence(UserIndex)
 
-                Case Declaraciones.eGMCommands.SOSRemove 'SOSDONE
-                    Call HandleSOSRemove(UserIndex)
+                    Case Declaraciones.eGMCommands.SOSShowList '/SHOW SOS
+                        Call HandleSOSShowList(UserIndex)
 
-                Case Declaraciones.eGMCommands.GoToChar '/IRA
-                    Call HandleGoToChar(UserIndex)
+                    Case Declaraciones.eGMCommands.SOSRemove 'SOSDONE
+                        Call HandleSOSRemove(UserIndex)
 
-                Case Declaraciones.eGMCommands.invisible '/INVISIBLE
-                    Call HandleInvisible(UserIndex)
+                    Case Declaraciones.eGMCommands.GoToChar '/IRA
+                        Call HandleGoToChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.GMPanel '/PANELGM
-                    Call HandleGMPanel(UserIndex)
+                    Case Declaraciones.eGMCommands.invisible '/INVISIBLE
+                        Call HandleInvisible(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestUserList 'LISTUSU
-                    Call HandleRequestUserList(UserIndex)
+                    Case Declaraciones.eGMCommands.GMPanel '/PANELGM
+                        Call HandleGMPanel(UserIndex)
 
-                Case Declaraciones.eGMCommands.Working '/TRABAJANDO
-                    Call HandleWorking(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestUserList 'LISTUSU
+                        Call HandleRequestUserList(UserIndex)
 
-                Case Declaraciones.eGMCommands.Hiding '/OCULTANDO
-                    Call HandleHiding(UserIndex)
+                    Case Declaraciones.eGMCommands.Working '/TRABAJANDO
+                        Call HandleWorking(UserIndex)
 
-                Case Declaraciones.eGMCommands.Jail '/CARCEL
-                    Call HandleJail(UserIndex)
+                    Case Declaraciones.eGMCommands.Hiding '/OCULTANDO
+                        Call HandleHiding(UserIndex)
 
-                Case Declaraciones.eGMCommands.KillNPC '/RMATA
-                    Call HandleKillNPC(UserIndex)
+                    Case Declaraciones.eGMCommands.Jail '/CARCEL
+                        Call HandleJail(UserIndex)
 
-                Case Declaraciones.eGMCommands.WarnUser '/ADVERTENCIA
-                    Call HandleWarnUser(UserIndex)
+                    Case Declaraciones.eGMCommands.KillNPC '/RMATA
+                        Call HandleKillNPC(UserIndex)
 
-                Case Declaraciones.eGMCommands.EditChar '/MOD
-                    Call HandleEditChar(UserIndex)
+                    Case Declaraciones.eGMCommands.WarnUser '/ADVERTENCIA
+                        Call HandleWarnUser(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharInfo '/INFO
-                    Call HandleRequestCharInfo(UserIndex)
+                    Case Declaraciones.eGMCommands.EditChar '/MOD
+                        Call HandleEditChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharStats '/STAT
-                    Call HandleRequestCharStats(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharInfo '/INFO
+                        Call HandleRequestCharInfo(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharGold '/BAL
-                    Call HandleRequestCharGold(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharStats '/STAT
+                        Call HandleRequestCharStats(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharInventory '/INV
-                    Call HandleRequestCharInventory(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharGold '/BAL
+                        Call HandleRequestCharGold(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharBank '/BOV
-                    Call HandleRequestCharBank(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharInventory '/INV
+                        Call HandleRequestCharInventory(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharSkills '/SKILLS
-                    Call HandleRequestCharSkills(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharBank '/BOV
+                        Call HandleRequestCharBank(UserIndex)
 
-                Case Declaraciones.eGMCommands.ReviveChar '/REVIVIR
-                    Call HandleReviveChar(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharSkills '/SKILLS
+                        Call HandleRequestCharSkills(UserIndex)
 
-                Case Declaraciones.eGMCommands.OnlineGM '/ONLINEGM
-                    Call HandleOnlineGM(UserIndex)
+                    Case Declaraciones.eGMCommands.ReviveChar '/REVIVIR
+                        Call HandleReviveChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.OnlineMap '/ONLINEMAP
-                    Call HandleOnlineMap(UserIndex)
+                    Case Declaraciones.eGMCommands.OnlineGM '/ONLINEGM
+                        Call HandleOnlineGM(UserIndex)
 
-                Case Declaraciones.eGMCommands.Forgive '/PERDON
-                    Call HandleForgive(UserIndex)
+                    Case Declaraciones.eGMCommands.OnlineMap '/ONLINEMAP
+                        Call HandleOnlineMap(UserIndex)
 
-                Case Declaraciones.eGMCommands.Kick '/ECHAR
-                    Call HandleKick(UserIndex)
+                    Case Declaraciones.eGMCommands.Forgive '/PERDON
+                        Call HandleForgive(UserIndex)
 
-                Case Declaraciones.eGMCommands.Execute '/EJECUTAR
-                    Call HandleExecute(UserIndex)
+                    Case Declaraciones.eGMCommands.Kick '/ECHAR
+                        Call HandleKick(UserIndex)
 
-                Case Declaraciones.eGMCommands.BanChar '/BAN
-                    Call HandleBanChar(UserIndex)
+                    Case Declaraciones.eGMCommands.Execute '/EJECUTAR
+                        Call HandleExecute(UserIndex)
 
-                Case Declaraciones.eGMCommands.UnbanChar '/UNBAN
-                    Call HandleUnbanChar(UserIndex)
+                    Case Declaraciones.eGMCommands.BanChar '/BAN
+                        Call HandleBanChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.NPCFollow '/SEGUIR
-                    Call HandleNPCFollow(UserIndex)
+                    Case Declaraciones.eGMCommands.UnbanChar '/UNBAN
+                        Call HandleUnbanChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.SummonChar '/SUM
-                    Call HandleSummonChar(UserIndex)
+                    Case Declaraciones.eGMCommands.NPCFollow '/SEGUIR
+                        Call HandleNPCFollow(UserIndex)
 
-                Case Declaraciones.eGMCommands.SpawnListRequest '/CC
-                    Call HandleSpawnListRequest(UserIndex)
+                    Case Declaraciones.eGMCommands.SummonChar '/SUM
+                        Call HandleSummonChar(UserIndex)
 
-                Case Declaraciones.eGMCommands.SpawnCreature 'SPA
-                    Call HandleSpawnCreature(UserIndex)
+                    Case Declaraciones.eGMCommands.SpawnListRequest '/CC
+                        Call HandleSpawnListRequest(UserIndex)
 
-                Case Declaraciones.eGMCommands.ResetNPCInventory '/RESETINV
-                    Call HandleResetNPCInventory(UserIndex)
+                    Case Declaraciones.eGMCommands.SpawnCreature 'SPA
+                        Call HandleSpawnCreature(UserIndex)
 
-                Case Declaraciones.eGMCommands.CleanWorld '/LIMPIAR
-                    Call HandleCleanWorld(UserIndex)
+                    Case Declaraciones.eGMCommands.ResetNPCInventory '/RESETINV
+                        Call HandleResetNPCInventory(UserIndex)
 
-                Case Declaraciones.eGMCommands.ServerMessage '/RMSG
-                    Call HandleServerMessage(UserIndex)
+                    Case Declaraciones.eGMCommands.CleanWorld '/LIMPIAR
+                        Call HandleCleanWorld(UserIndex)
 
-                Case Declaraciones.eGMCommands.NickToIP '/NICK2IP
-                    Call HandleNickToIP(UserIndex)
+                    Case Declaraciones.eGMCommands.ServerMessage '/RMSG
+                        Call HandleServerMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.IPToNick '/IP2NICK
-                    Call HandleIPToNick(UserIndex)
+                    Case Declaraciones.eGMCommands.NickToIP '/NICK2IP
+                        Call HandleNickToIP(UserIndex)
 
-                Case Declaraciones.eGMCommands.GuildOnlineMembers '/ONCLAN
-                    Call HandleGuildOnlineMembers(UserIndex)
+                    Case Declaraciones.eGMCommands.IPToNick '/IP2NICK
+                        Call HandleIPToNick(UserIndex)
 
-                Case Declaraciones.eGMCommands.TeleportCreate '/CT
-                    Call HandleTeleportCreate(UserIndex)
+                    Case Declaraciones.eGMCommands.GuildOnlineMembers '/ONCLAN
+                        Call HandleGuildOnlineMembers(UserIndex)
 
-                Case Declaraciones.eGMCommands.TeleportDestroy '/DT
-                    Call HandleTeleportDestroy(UserIndex)
+                    Case Declaraciones.eGMCommands.TeleportCreate '/CT
+                        Call HandleTeleportCreate(UserIndex)
 
-                Case Declaraciones.eGMCommands.RainToggle '/LLUVIA
-                    Call HandleRainToggle(UserIndex)
+                    Case Declaraciones.eGMCommands.TeleportDestroy '/DT
+                        Call HandleTeleportDestroy(UserIndex)
 
-                Case Declaraciones.eGMCommands.SetCharDescription '/SETDESC
-                    Call HandleSetCharDescription(UserIndex)
+                    Case Declaraciones.eGMCommands.RainToggle '/LLUVIA
+                        Call HandleRainToggle(UserIndex)
 
-                Case Declaraciones.eGMCommands.ForceMIDIToMap '/FORCEMIDIMAP
-                    Call HanldeForceMIDIToMap(UserIndex)
+                    Case Declaraciones.eGMCommands.SetCharDescription '/SETDESC
+                        Call HandleSetCharDescription(UserIndex)
 
-                Case Declaraciones.eGMCommands.ForceWAVEToMap '/FORCEWAVMAP
-                    Call HandleForceWAVEToMap(UserIndex)
+                    Case Declaraciones.eGMCommands.ForceMIDIToMap '/FORCEMIDIMAP
+                        Call HanldeForceMIDIToMap(UserIndex)
 
-                Case Declaraciones.eGMCommands.RoyalArmyMessage '/REALMSG
-                    Call HandleRoyalArmyMessage(UserIndex)
+                    Case Declaraciones.eGMCommands.ForceWAVEToMap '/FORCEWAVMAP
+                        Call HandleForceWAVEToMap(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChaosLegionMessage '/CAOSMSG
-                    Call HandleChaosLegionMessage(UserIndex)
+                    Case Declaraciones.eGMCommands.RoyalArmyMessage '/REALMSG
+                        Call HandleRoyalArmyMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.CitizenMessage '/CIUMSG
-                    Call HandleCitizenMessage(UserIndex)
+                    Case Declaraciones.eGMCommands.ChaosLegionMessage '/CAOSMSG
+                        Call HandleChaosLegionMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.CriminalMessage '/CRIMSG
-                    Call HandleCriminalMessage(UserIndex)
+                    Case Declaraciones.eGMCommands.CitizenMessage '/CIUMSG
+                        Call HandleCitizenMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.TalkAsNPC '/TALKAS
-                    Call HandleTalkAsNPC(UserIndex)
+                    Case Declaraciones.eGMCommands.CriminalMessage '/CRIMSG
+                        Call HandleCriminalMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.DestroyAllItemsInArea '/MASSDEST
-                    Call HandleDestroyAllItemsInArea(UserIndex)
+                    Case Declaraciones.eGMCommands.TalkAsNPC '/TALKAS
+                        Call HandleTalkAsNPC(UserIndex)
 
-                Case Declaraciones.eGMCommands.AcceptRoyalCouncilMember '/ACEPTCONSE
-                    Call HandleAcceptRoyalCouncilMember(UserIndex)
+                    Case Declaraciones.eGMCommands.DestroyAllItemsInArea '/MASSDEST
+                        Call HandleDestroyAllItemsInArea(UserIndex)
 
-                Case Declaraciones.eGMCommands.AcceptChaosCouncilMember '/ACEPTCONSECAOS
-                    Call HandleAcceptChaosCouncilMember(UserIndex)
+                    Case Declaraciones.eGMCommands.AcceptRoyalCouncilMember '/ACEPTCONSE
+                        Call HandleAcceptRoyalCouncilMember(UserIndex)
 
-                Case Declaraciones.eGMCommands.ItemsInTheFloor '/PISO
-                    Call HandleItemsInTheFloor(UserIndex)
+                    Case Declaraciones.eGMCommands.AcceptChaosCouncilMember '/ACEPTCONSECAOS
+                        Call HandleAcceptChaosCouncilMember(UserIndex)
 
-                Case Declaraciones.eGMCommands.MakeDumb '/ESTUPIDO
-                    Call HandleMakeDumb(UserIndex)
+                    Case Declaraciones.eGMCommands.ItemsInTheFloor '/PISO
+                        Call HandleItemsInTheFloor(UserIndex)
 
-                Case Declaraciones.eGMCommands.MakeDumbNoMore '/NOESTUPIDO
-                    Call HandleMakeDumbNoMore(UserIndex)
+                    Case Declaraciones.eGMCommands.MakeDumb '/ESTUPIDO
+                        Call HandleMakeDumb(UserIndex)
 
-                Case Declaraciones.eGMCommands.DumpIPTables '/DUMPSECURITY
-                    Call HandleDumpIPTables(UserIndex)
+                    Case Declaraciones.eGMCommands.MakeDumbNoMore '/NOESTUPIDO
+                        Call HandleMakeDumbNoMore(UserIndex)
 
-                Case Declaraciones.eGMCommands.CouncilKick '/KICKCONSE
-                    Call HandleCouncilKick(UserIndex)
+                    Case Declaraciones.eGMCommands.DumpIPTables '/DUMPSECURITY
+                        Call HandleDumpIPTables(UserIndex)
 
-                Case Declaraciones.eGMCommands.SetTrigger '/TRIGGER
-                    Call HandleSetTrigger(UserIndex)
+                    Case Declaraciones.eGMCommands.CouncilKick '/KICKCONSE
+                        Call HandleCouncilKick(UserIndex)
 
-                Case Declaraciones.eGMCommands.AskTrigger '/TRIGGER with no args
-                    Call HandleAskTrigger(UserIndex)
+                    Case Declaraciones.eGMCommands.SetTrigger '/TRIGGER
+                        Call HandleSetTrigger(UserIndex)
 
-                Case Declaraciones.eGMCommands.BannedIPList '/BANIPLIST
-                    Call HandleBannedIPList(UserIndex)
+                    Case Declaraciones.eGMCommands.AskTrigger '/TRIGGER with no args
+                        Call HandleAskTrigger(UserIndex)
 
-                Case Declaraciones.eGMCommands.BannedIPReload '/BANIPRELOAD
-                    Call HandleBannedIPReload(UserIndex)
+                    Case Declaraciones.eGMCommands.BannedIPList '/BANIPLIST
+                        Call HandleBannedIPList(UserIndex)
 
-                Case Declaraciones.eGMCommands.GuildMemberList '/MIEMBROSCLAN
-                    Call HandleGuildMemberList(UserIndex)
+                    Case Declaraciones.eGMCommands.BannedIPReload '/BANIPRELOAD
+                        Call HandleBannedIPReload(UserIndex)
 
-                Case Declaraciones.eGMCommands.GuildBan '/BANCLAN
-                    Call HandleGuildBan(UserIndex)
+                    Case Declaraciones.eGMCommands.GuildMemberList '/MIEMBROSCLAN
+                        Call HandleGuildMemberList(UserIndex)
 
-                Case Declaraciones.eGMCommands.BanIP '/BANIP
-                    Call HandleBanIP(UserIndex)
+                    Case Declaraciones.eGMCommands.GuildBan '/BANCLAN
+                        Call HandleGuildBan(UserIndex)
 
-                Case Declaraciones.eGMCommands.UnbanIP '/UNBANIP
-                    Call HandleUnbanIP(UserIndex)
+                    Case Declaraciones.eGMCommands.BanIP '/BANIP
+                        Call HandleBanIP(UserIndex)
 
-                Case Declaraciones.eGMCommands.CreateItem '/CI
-                    Call HandleCreateItem(UserIndex)
+                    Case Declaraciones.eGMCommands.UnbanIP '/UNBANIP
+                        Call HandleUnbanIP(UserIndex)
 
-                Case Declaraciones.eGMCommands.DestroyItems '/DEST
-                    Call HandleDestroyItems(UserIndex)
+                    Case Declaraciones.eGMCommands.CreateItem '/CI
+                        Call HandleCreateItem(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChaosLegionKick '/NOCAOS
-                    Call HandleChaosLegionKick(UserIndex)
+                    Case Declaraciones.eGMCommands.DestroyItems '/DEST
+                        Call HandleDestroyItems(UserIndex)
 
-                Case Declaraciones.eGMCommands.RoyalArmyKick '/NOREAL
-                    Call HandleRoyalArmyKick(UserIndex)
+                    Case Declaraciones.eGMCommands.ChaosLegionKick '/NOCAOS
+                        Call HandleChaosLegionKick(UserIndex)
 
-                Case Declaraciones.eGMCommands.ForceMIDIAll '/FORCEMIDI
-                    Call HandleForceMIDIAll(UserIndex)
+                    Case Declaraciones.eGMCommands.RoyalArmyKick '/NOREAL
+                        Call HandleRoyalArmyKick(UserIndex)
 
-                Case Declaraciones.eGMCommands.ForceWAVEAll '/FORCEWAV
-                    Call HandleForceWAVEAll(UserIndex)
+                    Case Declaraciones.eGMCommands.ForceMIDIAll '/FORCEMIDI
+                        Call HandleForceMIDIAll(UserIndex)
 
-                Case Declaraciones.eGMCommands.RemovePunishment '/BORRARPENA
-                    Call HandleRemovePunishment(UserIndex)
+                    Case Declaraciones.eGMCommands.ForceWAVEAll '/FORCEWAV
+                        Call HandleForceWAVEAll(UserIndex)
 
-                Case Declaraciones.eGMCommands.TileBlockedToggle '/BLOQ
-                    Call HandleTileBlockedToggle(UserIndex)
+                    Case Declaraciones.eGMCommands.RemovePunishment '/BORRARPENA
+                        Call HandleRemovePunishment(UserIndex)
 
-                Case Declaraciones.eGMCommands.KillNPCNoRespawn '/MATA
-                    Call HandleKillNPCNoRespawn(UserIndex)
+                    Case Declaraciones.eGMCommands.TileBlockedToggle '/BLOQ
+                        Call HandleTileBlockedToggle(UserIndex)
 
-                Case Declaraciones.eGMCommands.KillAllNearbyNPCs '/MASSKILL
-                    Call HandleKillAllNearbyNPCs(UserIndex)
+                    Case Declaraciones.eGMCommands.KillNPCNoRespawn '/MATA
+                        Call HandleKillNPCNoRespawn(UserIndex)
 
-                Case Declaraciones.eGMCommands.LastIP '/LASTIP
-                    Call HandleLastIP(UserIndex)
+                    Case Declaraciones.eGMCommands.KillAllNearbyNPCs '/MASSKILL
+                        Call HandleKillAllNearbyNPCs(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMOTD '/MOTDCAMBIA
-                    Call HandleChangeMOTD(UserIndex)
+                    Case Declaraciones.eGMCommands.LastIP '/LASTIP
+                        Call HandleLastIP(UserIndex)
 
-                Case Declaraciones.eGMCommands.SetMOTD 'ZMOTD
-                    Call HandleSetMOTD(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMOTD '/MOTDCAMBIA
+                        Call HandleChangeMOTD(UserIndex)
 
-                Case Declaraciones.eGMCommands.SystemMessage '/SMSG
-                    Call HandleSystemMessage(UserIndex)
+                    Case Declaraciones.eGMCommands.SetMOTD 'ZMOTD
+                        Call HandleSetMOTD(UserIndex)
 
-                Case Declaraciones.eGMCommands.CreateNPC '/ACC
-                    Call HandleCreateNPC(UserIndex)
+                    Case Declaraciones.eGMCommands.SystemMessage '/SMSG
+                        Call HandleSystemMessage(UserIndex)
 
-                Case Declaraciones.eGMCommands.CreateNPCWithRespawn '/RACC
-                    Call HandleCreateNPCWithRespawn(UserIndex)
+                    Case Declaraciones.eGMCommands.CreateNPC '/ACC
+                        Call HandleCreateNPC(UserIndex)
 
-                Case Declaraciones.eGMCommands.ImperialArmour '/AI1 - 4
-                    Call HandleImperialArmour(UserIndex)
+                    Case Declaraciones.eGMCommands.CreateNPCWithRespawn '/RACC
+                        Call HandleCreateNPCWithRespawn(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChaosArmour '/AC1 - 4
-                    Call HandleChaosArmour(UserIndex)
+                    Case Declaraciones.eGMCommands.ImperialArmour '/AI1 - 4
+                        Call HandleImperialArmour(UserIndex)
 
-                Case Declaraciones.eGMCommands.NavigateToggle '/NAVE
-                    Call HandleNavigateToggle(UserIndex)
+                    Case Declaraciones.eGMCommands.ChaosArmour '/AC1 - 4
+                        Call HandleChaosArmour(UserIndex)
 
-                Case Declaraciones.eGMCommands.ServerOpenToUsersToggle '/HABILITAR
-                    Call HandleServerOpenToUsersToggle(UserIndex)
+                    Case Declaraciones.eGMCommands.NavigateToggle '/NAVE
+                        Call HandleNavigateToggle(UserIndex)
 
-                Case Declaraciones.eGMCommands.TurnOffServer '/APAGAR
-                    Call HandleTurnOffServer(UserIndex)
+                    Case Declaraciones.eGMCommands.ServerOpenToUsersToggle '/HABILITAR
+                        Call HandleServerOpenToUsersToggle(UserIndex)
 
-                Case Declaraciones.eGMCommands.TurnCriminal '/CONDEN
-                    Call HandleTurnCriminal(UserIndex)
+                    Case Declaraciones.eGMCommands.TurnOffServer '/APAGAR
+                        Call HandleTurnOffServer(UserIndex)
 
-                Case Declaraciones.eGMCommands.ResetFactions '/RAJAR
-                    Call HandleResetFactions(UserIndex)
+                    Case Declaraciones.eGMCommands.TurnCriminal '/CONDEN
+                        Call HandleTurnCriminal(UserIndex)
 
-                Case Declaraciones.eGMCommands.RemoveCharFromGuild '/RAJARCLAN
-                    Call HandleRemoveCharFromGuild(UserIndex)
+                    Case Declaraciones.eGMCommands.ResetFactions '/RAJAR
+                        Call HandleResetFactions(UserIndex)
 
-                Case Declaraciones.eGMCommands.RequestCharMail '/LASTEMAIL
-                    Call HandleRequestCharMail(UserIndex)
+                    Case Declaraciones.eGMCommands.RemoveCharFromGuild '/RAJARCLAN
+                        Call HandleRemoveCharFromGuild(UserIndex)
 
-                Case Declaraciones.eGMCommands.AlterPassword '/APASS
-                    Call HandleAlterPassword(UserIndex)
+                    Case Declaraciones.eGMCommands.RequestCharMail '/LASTEMAIL
+                        Call HandleRequestCharMail(UserIndex)
 
-                Case Declaraciones.eGMCommands.AlterMail '/AEMAIL
-                    Call HandleAlterMail(UserIndex)
+                    Case Declaraciones.eGMCommands.AlterPassword '/APASS
+                        Call HandleAlterPassword(UserIndex)
 
-                Case Declaraciones.eGMCommands.AlterName '/ANAME
-                    Call HandleAlterName(UserIndex)
+                    Case Declaraciones.eGMCommands.AlterMail '/AEMAIL
+                        Call HandleAlterMail(UserIndex)
 
-                Case Declaraciones.eGMCommands.ToggleCentinelActivated '/CENTINELAACTIVADO
-                    Call HandleToggleCentinelActivated(UserIndex)
+                    Case Declaraciones.eGMCommands.AlterName '/ANAME
+                        Call HandleAlterName(UserIndex)
 
-                Case Declaraciones.eGMCommands.DoBackUp '/DOBACKUP
-                    Call HandleDoBackUp(UserIndex)
+                    Case Declaraciones.eGMCommands.ToggleCentinelActivated '/CENTINELAACTIVADO
+                        Call HandleToggleCentinelActivated(UserIndex)
 
-                Case Declaraciones.eGMCommands.ShowGuildMessages '/SHOWCMSG
-                    Call HandleShowGuildMessages(UserIndex)
+                    Case Declaraciones.eGMCommands.DoBackUp '/DOBACKUP
+                        Call HandleDoBackUp(UserIndex)
 
-                Case Declaraciones.eGMCommands.SaveMap '/GUARDAMAPA
-                    Call HandleSaveMap(UserIndex)
+                    Case Declaraciones.eGMCommands.ShowGuildMessages '/SHOWCMSG
+                        Call HandleShowGuildMessages(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoPK '/MODMAPINFO PK
-                    Call HandleChangeMapInfoPK(UserIndex)
+                    Case Declaraciones.eGMCommands.SaveMap '/GUARDAMAPA
+                        Call HandleSaveMap(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoBackup '/MODMAPINFO BACKUP
-                    Call HandleChangeMapInfoBackup(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoPK '/MODMAPINFO PK
+                        Call HandleChangeMapInfoPK(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoRestricted '/MODMAPINFO RESTRINGIR
-                    Call HandleChangeMapInfoRestricted(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoBackup '/MODMAPINFO BACKUP
+                        Call HandleChangeMapInfoBackup(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoNoMagic '/MODMAPINFO MAGIASINEFECTO
-                    Call HandleChangeMapInfoNoMagic(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoRestricted '/MODMAPINFO RESTRINGIR
+                        Call HandleChangeMapInfoRestricted(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoNoInvi '/MODMAPINFO INVISINEFECTO
-                    Call HandleChangeMapInfoNoInvi(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoNoMagic '/MODMAPINFO MAGIASINEFECTO
+                        Call HandleChangeMapInfoNoMagic(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoNoResu '/MODMAPINFO RESUSINEFECTO
-                    Call HandleChangeMapInfoNoResu(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoNoInvi '/MODMAPINFO INVISINEFECTO
+                        Call HandleChangeMapInfoNoInvi(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoLand '/MODMAPINFO TERRENO
-                    Call HandleChangeMapInfoLand(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoNoResu '/MODMAPINFO RESUSINEFECTO
+                        Call HandleChangeMapInfoNoResu(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChangeMapInfoZone '/MODMAPINFO ZONA
-                    Call HandleChangeMapInfoZone(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoLand '/MODMAPINFO TERRENO
+                        Call HandleChangeMapInfoLand(UserIndex)
 
-                Case Declaraciones.eGMCommands.SaveChars '/GRABAR
-                    Call HandleSaveChars(UserIndex)
+                    Case Declaraciones.eGMCommands.ChangeMapInfoZone '/MODMAPINFO ZONA
+                        Call HandleChangeMapInfoZone(UserIndex)
 
-                Case Declaraciones.eGMCommands.CleanSOS '/BORRAR SOS
-                    Call HandleCleanSOS(UserIndex)
+                    Case Declaraciones.eGMCommands.SaveChars '/GRABAR
+                        Call HandleSaveChars(UserIndex)
 
-                Case Declaraciones.eGMCommands.ShowServerForm '/SHOW INT
-                    Call HandleShowServerForm(UserIndex)
+                    Case Declaraciones.eGMCommands.CleanSOS '/BORRAR SOS
+                        Call HandleCleanSOS(UserIndex)
 
-                Case Declaraciones.eGMCommands.night '/NOCHE
-                    Call HandleNight(UserIndex)
+                    Case Declaraciones.eGMCommands.ShowServerForm '/SHOW INT
+                        Call HandleShowServerForm(UserIndex)
 
-                Case Declaraciones.eGMCommands.KickAllChars '/ECHARTODOSPJS
-                    Call HandleKickAllChars(UserIndex)
+                    Case Declaraciones.eGMCommands.night '/NOCHE
+                        Call HandleNight(UserIndex)
 
-                Case Declaraciones.eGMCommands.ReloadNPCs '/RELOADNPCS
-                    Call HandleReloadNPCs(UserIndex)
+                    Case Declaraciones.eGMCommands.KickAllChars '/ECHARTODOSPJS
+                        Call HandleKickAllChars(UserIndex)
 
-                Case Declaraciones.eGMCommands.ReloadServerIni '/RELOADSINI
-                    Call HandleReloadServerIni(UserIndex)
+                    Case Declaraciones.eGMCommands.ReloadNPCs '/RELOADNPCS
+                        Call HandleReloadNPCs(UserIndex)
 
-                Case Declaraciones.eGMCommands.ReloadSpells '/RELOADHECHIZOS
-                    Call HandleReloadSpells(UserIndex)
+                    Case Declaraciones.eGMCommands.ReloadServerIni '/RELOADSINI
+                        Call HandleReloadServerIni(UserIndex)
 
-                Case Declaraciones.eGMCommands.ReloadObjects '/RELOADOBJ
-                    Call HandleReloadObjects(UserIndex)
+                    Case Declaraciones.eGMCommands.ReloadSpells '/RELOADHECHIZOS
+                        Call HandleReloadSpells(UserIndex)
 
-                Case Declaraciones.eGMCommands.Restart '/REINICIAR
-                    Call HandleRestart(UserIndex)
+                    Case Declaraciones.eGMCommands.ReloadObjects '/RELOADOBJ
+                        Call HandleReloadObjects(UserIndex)
 
-                Case Declaraciones.eGMCommands.ResetAutoUpdate '/AUTOUPDATE
-                    Call HandleResetAutoUpdate(UserIndex)
+                    Case Declaraciones.eGMCommands.Restart '/REINICIAR
+                        Call HandleRestart(UserIndex)
 
-                Case Declaraciones.eGMCommands.ChatColor '/CHATCOLOR
-                    Call HandleChatColor(UserIndex)
+                    Case Declaraciones.eGMCommands.ResetAutoUpdate '/AUTOUPDATE
+                        Call HandleResetAutoUpdate(UserIndex)
 
-                Case Declaraciones.eGMCommands.Ignored '/IGNORADO
-                    Call HandleIgnored(UserIndex)
+                    Case Declaraciones.eGMCommands.ChatColor '/CHATCOLOR
+                        Call HandleChatColor(UserIndex)
 
-                Case Declaraciones.eGMCommands.CheckSlot '/SLOT
-                    Call HandleCheckSlot(UserIndex)
+                    Case Declaraciones.eGMCommands.Ignored '/IGNORADO
+                        Call HandleIgnored(UserIndex)
 
-                Case Declaraciones.eGMCommands.SetIniVar '/SETINIVAR LLAVE CLAVE VALOR
-                    Call HandleSetIniVar(UserIndex)
-            End Select
-        End With
+                    Case Declaraciones.eGMCommands.CheckSlot '/SLOT
+                        Call HandleCheckSlot(UserIndex)
 
-        Exit Sub
+                    Case Declaraciones.eGMCommands.SetIniVar '/SETINIVAR LLAVE CLAVE VALOR
+                        Call HandleSetIniVar(UserIndex)
+                End Select
+            End With
 
-        Errhandler:
-        Call _
-            LogError(
-                "Error en GmCommands. Error: " & Err.Number & " - " & Err.Description & ". Paquete: " & Command_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGMCommands: " & ex.Message)
+            Call _
+                LogError(
+                    "Error en GmCommands. Error: " & Err.Number & " - " & Err.Description & ". Paquete: " & Command_Renamed)
+        End Try
+
     End Sub
 
     ''
@@ -1329,67 +1329,60 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-        Dim buffer As New clsByteQueue
-        Call buffer.CopyBuffer(UserList(UserIndex).incomingData)
+        Try
+            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+            Dim buffer As New clsByteQueue
+            Call buffer.CopyBuffer(UserList(UserIndex).incomingData)
 
-        'Remove packet ID
-        Call buffer.ReadByte()
+            'Remove packet ID
+            Call buffer.ReadByte()
 
-        Dim UserName As String
-        Dim Password As String
-        Dim version As String
+            Dim UserName As String
+            Dim Password As String
+            Dim version As String
 
-        UserName = buffer.ReadASCIIString()
-        Password = buffer.ReadASCIIString()
+            UserName = buffer.ReadASCIIString()
+            Password = buffer.ReadASCIIString()
 
-        'Convert version number to string
-        version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
+            'Convert version number to string
+            version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
 
-        If Not AsciiValidos(UserName) Then
-            Call WriteErrorMsg(UserIndex, "Nombre inválido.")
-            Call FlushBuffer(UserIndex)
-            Call CloseSocket(UserIndex)
+            If Not AsciiValidos(UserName) Then
+                Call WriteErrorMsg(UserIndex, "Nombre inválido.")
+                Call FlushBuffer(UserIndex)
+                Call CloseSocket(UserIndex)
 
-            Exit Sub
-        End If
+                Exit Sub
+            End If
 
-        If Not PersonajeExiste(UserName) Then
-            Call WriteErrorMsg(UserIndex, "El personaje no existe.")
-            Call FlushBuffer(UserIndex)
-            Call CloseSocket(UserIndex)
+            If Not PersonajeExiste(UserName) Then
+                Call WriteErrorMsg(UserIndex, "El personaje no existe.")
+                Call FlushBuffer(UserIndex)
+                Call CloseSocket(UserIndex)
 
-            Exit Sub
-        End If
+                Exit Sub
+            End If
 
-        If BANCheck(UserName) Then
-            Call _
+            If BANCheck(UserName) Then
+                Call _
                 WriteErrorMsg(UserIndex,
                               "Se te ha prohibido la entrada a Argentum Online debido a tu mal comportamiento. Puedes consultar el reglamento y el sistema de soporte desde www.argentumonline.com.ar")
-        ElseIf Not VersionOK(version) Then
-            Call _
+            ElseIf Not VersionOK(version) Then
+                Call _
                 WriteErrorMsg(UserIndex,
                               "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION &
                               ". La misma se encuentra disponible en www.argentumonline.com.ar")
-        Else
-            Call ConnectUser(UserIndex, UserName, Password)
-        End If
+            Else
+                Call ConnectUser(UserIndex, UserName, Password)
+            End If
 
-        'If we got here then packet is complete, copy data back to original queue
-        Call UserList(UserIndex).incomingData.CopyBuffer(buffer)
+            'If we got here then packet is complete, copy data back to original queue
+            Call UserList(UserIndex).incomingData.CopyBuffer(buffer)
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleLoginExistingChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -1437,78 +1430,71 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-        Dim buffer As New clsByteQueue
-        Call buffer.CopyBuffer(UserList(UserIndex).incomingData)
+        Try
+            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+            Dim buffer As New clsByteQueue
+            Call buffer.CopyBuffer(UserList(UserIndex).incomingData)
 
-        'Remove packet ID
-        Call buffer.ReadByte()
+            'Remove packet ID
+            Call buffer.ReadByte()
 
-        Dim UserName As String
-        Dim Password As String
-        Dim version As String
-        Dim race As Declaraciones.eRaza
-        Dim gender As Declaraciones.eGenero
-        Dim homeland As Declaraciones.eCiudad
-        'UPGRADE_NOTE: Class se actualizó a Class_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Class_Renamed As Declaraciones.eClass
-        Dim Head As Short
-        Dim mail As String
+            Dim UserName As String
+            Dim Password As String
+            Dim version As String
+            Dim race As Declaraciones.eRaza
+            Dim gender As Declaraciones.eGenero
+            Dim homeland As Declaraciones.eCiudad
+            'UPGRADE_NOTE: Class se actualizó a Class_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim Class_Renamed As Declaraciones.eClass
+            Dim Head As Short
+            Dim mail As String
 
-        If PuedeCrearPersonajes = 0 Then
-            Call WriteErrorMsg(UserIndex, "La creación de personajes en este servidor se ha deshabilitado.")
-            Call FlushBuffer(UserIndex)
-            Call CloseSocket(UserIndex)
+            If PuedeCrearPersonajes = 0 Then
+                Call WriteErrorMsg(UserIndex, "La creación de personajes en este servidor se ha deshabilitado.")
+                Call FlushBuffer(UserIndex)
+                Call CloseSocket(UserIndex)
 
-            Exit Sub
-        End If
+                Exit Sub
+            End If
 
-        If ServerSoloGMs <> 0 Then
-            Call _
+            If ServerSoloGMs <> 0 Then
+                Call _
                 WriteErrorMsg(UserIndex,
                               "Servidor restringido a administradores. Consulte la página oficial o el foro oficial para más información.")
-            Call FlushBuffer(UserIndex)
-            Call CloseSocket(UserIndex)
+                Call FlushBuffer(UserIndex)
+                Call CloseSocket(UserIndex)
 
-            Exit Sub
-        End If
+                Exit Sub
+            End If
 
-        UserName = buffer.ReadASCIIString()
-        Password = buffer.ReadASCIIString()
+            UserName = buffer.ReadASCIIString()
+            Password = buffer.ReadASCIIString()
 
-        'Convert version number to string
-        version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
-        race = buffer.ReadByte()
-        gender = buffer.ReadByte()
-        Class_Renamed = buffer.ReadByte()
-        Head = buffer.ReadInteger
-        mail = buffer.ReadASCIIString()
-        homeland = buffer.ReadByte()
+            'Convert version number to string
+            version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
+            race = buffer.ReadByte()
+            gender = buffer.ReadByte()
+            Class_Renamed = buffer.ReadByte()
+            Head = buffer.ReadInteger
+            mail = buffer.ReadASCIIString()
+            homeland = buffer.ReadByte()
 
-        If Not VersionOK(version) Then
-            Call _
+            If Not VersionOK(version) Then
+                Call _
                 WriteErrorMsg(UserIndex,
                               "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION &
                               ". La misma se encuentra disponible en www.argentumonline.com.ar")
-        Else
-            Call ConnectNewUser(UserIndex, UserName, Password, race, gender, Class_Renamed, mail, homeland, Head)
-        End If
+            Else
+                Call ConnectNewUser(UserIndex, UserName, Password, race, gender, Class_Renamed, mail, homeland, Head)
+            End If
 
-        'If we got here then packet is complete, copy data back to original queue
-        Call UserList(UserIndex).incomingData.CopyBuffer(buffer)
+            'If we got here then packet is complete, copy data back to original queue
+            Call UserList(UserIndex).incomingData.CopyBuffer(buffer)
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleLoginNewChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -1529,87 +1515,80 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        With UserList(UserIndex)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            With UserList(UserIndex)
 
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Chat = buffer.ReadASCIIString()
+                Chat = buffer.ReadASCIIString()
 
-            '[Consejeros & GMs]
-            If .flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
-                Call LogGM(.name, "Dijo: " & Chat)
-            End If
+                '[Consejeros & GMs]
+                If .flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
+                    Call LogGM(.name, "Dijo: " & Chat)
+                End If
 
-            'I see you....
-            If .flags.Oculto > 0 Then
-                .flags.Oculto = 0
-                .Counters.TiempoOculto = 0
+                'I see you....
+                If .flags.Oculto > 0 Then
+                    .flags.Oculto = 0
+                    .Counters.TiempoOculto = 0
 
-                If .flags.Navegando = 1 Then
-                    If .clase = Declaraciones.eClass.Pirat Then
-                        ' Pierde la apariencia de fragata fantasmal
-                        Call ToogleBoatBody(UserIndex)
-                        Call _
+                    If .flags.Navegando = 1 Then
+                        If .clase = Declaraciones.eClass.Pirat Then
+                            ' Pierde la apariencia de fragata fantasmal
+                            Call ToogleBoatBody(UserIndex)
+                            Call _
                             WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                                             FontTypeNames.FONTTYPE_INFO)
-                        Call _
+                            Call _
                             ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
                                            NingunArma, NingunEscudo, NingunCasco)
-                    End If
-                Else
-                    If .flags.invisible = 0 Then
-                        Call UsUaRiOs.SetInvisible(UserIndex, UserList(UserIndex).Char_Renamed.CharIndex, False)
-                        Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+                        End If
+                    Else
+                        If .flags.invisible = 0 Then
+                            Call UsUaRiOs.SetInvisible(UserIndex, UserList(UserIndex).Char_Renamed.CharIndex, False)
+                            Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            If migr_LenB(Chat) <> 0 Then
-                'Analize chat...
-                Call Statistics.ParseChat(Chat)
+                If migr_LenB(Chat) <> 0 Then
+                    'Analize chat...
+                    Call Statistics.ParseChat(Chat)
 
-                If Not (.flags.AdminInvisible = 1) Then
-                    If .flags.Muerto = 1 Then
-                        Call _
+                    If Not (.flags.AdminInvisible = 1) Then
+                        If .flags.Muerto = 1 Then
+                            Call _
                             SendData(modSendData.SendTarget.ToDeadArea, UserIndex,
                                      PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_DEAD_CHAR))
-                    Else
-                        Call _
+                        Else
+                            Call _
                             SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                                      PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, .flags.ChatColor))
-                    End If
-                Else
-                    If RTrim(Chat) <> "" Then
-                        Call _
+                        End If
+                    Else
+                        If RTrim(Chat) <> "" Then
+                            Call _
                             SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                                      PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleTalk: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -1629,95 +1608,88 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        With UserList(UserIndex)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            With UserList(UserIndex)
 
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            Chat = buffer.ReadASCIIString()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            '[Consejeros & GMs]
-            If .flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
-                Call LogGM(.name, "Grito: " & Chat)
-            End If
+                Chat = buffer.ReadASCIIString()
 
-            'I see you....
-            If .flags.Oculto > 0 Then
-                .flags.Oculto = 0
-                .Counters.TiempoOculto = 0
 
-                If .flags.Navegando = 1 Then
-                    If .clase = Declaraciones.eClass.Pirat Then
-                        ' Pierde la apariencia de fragata fantasmal
-                        Call ToogleBoatBody(UserIndex)
-                        Call _
+                '[Consejeros & GMs]
+                If .flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
+                    Call LogGM(.name, "Grito: " & Chat)
+                End If
+
+                'I see you....
+                If .flags.Oculto > 0 Then
+                    .flags.Oculto = 0
+                    .Counters.TiempoOculto = 0
+
+                    If .flags.Navegando = 1 Then
+                        If .clase = Declaraciones.eClass.Pirat Then
+                            ' Pierde la apariencia de fragata fantasmal
+                            Call ToogleBoatBody(UserIndex)
+                            Call _
                             WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                                             FontTypeNames.FONTTYPE_INFO)
-                        Call _
+                            Call _
                             ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
                                            NingunArma, NingunEscudo, NingunCasco)
-                    End If
-                Else
-                    If .flags.invisible = 0 Then
-                        Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
-                        Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+                        End If
+                    Else
+                        If .flags.invisible = 0 Then
+                            Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
+                            Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            If migr_LenB(Chat) <> 0 Then
-                'Analize chat...
-                Call Statistics.ParseChat(Chat)
+                If migr_LenB(Chat) <> 0 Then
+                    'Analize chat...
+                    Call Statistics.ParseChat(Chat)
 
-                If .flags.Privilegios And Declaraciones.PlayerType.User Then
-                    If UserList(UserIndex).flags.Muerto = 1 Then
-                        Call _
+                    If .flags.Privilegios And Declaraciones.PlayerType.User Then
+                        If UserList(UserIndex).flags.Muerto = 1 Then
+                            Call _
                             SendData(modSendData.SendTarget.ToDeadArea, UserIndex,
                                      PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_DEAD_CHAR))
-                    Else
-                        Call _
+                        Else
+                            Call _
                             SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                                      PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex,
                                                                 System.Drawing.ColorTranslator.ToOle(
                                                                     System.Drawing.Color.Red)))
-                    End If
-                Else
-                    If Not (.flags.AdminInvisible = 1) Then
-                        Call _
+                        End If
+                    Else
+                        If Not (.flags.AdminInvisible = 1) Then
+                            Call _
                             SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                                      PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_GM_YELL))
-                    Else
-                        Call _
+                        Else
+                            Call _
                             SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                                      PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
+                        End If
                     End If
                 End If
-            End If
 
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleYell: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -1737,129 +1709,122 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        Dim targetCharIndex As Short
-        Dim TargetUserIndex As Short
-        Dim targetPriv As Declaraciones.PlayerType
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            Dim targetCharIndex As Short
+            Dim TargetUserIndex As Short
+            Dim targetPriv As Declaraciones.PlayerType
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            targetCharIndex = buffer.ReadInteger()
-            Chat = buffer.ReadASCIIString()
+                targetCharIndex = buffer.ReadInteger()
+                Chat = buffer.ReadASCIIString()
 
-            TargetUserIndex = CharIndexToUserIndex(targetCharIndex)
+                TargetUserIndex = CharIndexToUserIndex(targetCharIndex)
 
-            If .flags.Muerto Then
-                Call _
+                If .flags.Muerto Then
+                    Call _
                     WriteConsoleMsg(UserIndex,
                                     "¡¡Estás muerto!! Los muertos no pueden comunicarse con el mundo de los vivos. ",
                                     FontTypeNames.FONTTYPE_INFO)
-            Else
-                If TargetUserIndex = INVALID_INDEX Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario inexistente.", FontTypeNames.FONTTYPE_INFO)
                 Else
-                    targetPriv = UserList(TargetUserIndex).flags.Privilegios
-                    'A los dioses y admins no vale susurrarles si no sos uno vos mismo (así no pueden ver si están conectados o no)
-                    If _
+                    If TargetUserIndex = INVALID_INDEX Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario inexistente.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        targetPriv = UserList(TargetUserIndex).flags.Privilegios
+                        'A los dioses y admins no vale susurrarles si no sos uno vos mismo (así no pueden ver si están conectados o no)
+                        If _
                         (targetPriv And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 And
                         (.flags.Privilegios And
                          (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
                           Declaraciones.PlayerType.SemiDios)) <> 0 Then
-                        ' Controlamos que no este invisible
-                        If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
-                            Call _
+                            ' Controlamos que no este invisible
+                            If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
+                                Call _
                                 WriteConsoleMsg(UserIndex, "No puedes susurrarle a los Dioses y Admins.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        End If
-                        'A los Consejeros y SemiDioses no vale susurrarles si sos un PJ común.
-                    ElseIf _
+                            End If
+                            'A los Consejeros y SemiDioses no vale susurrarles si sos un PJ común.
+                        ElseIf _
                         (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 And
                         (Not targetPriv And Declaraciones.PlayerType.User) <> 0 Then
-                        ' Controlamos que no este invisible
-                        If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
-                            Call _
+                            ' Controlamos que no este invisible
+                            If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
+                                Call _
                                 WriteConsoleMsg(UserIndex, "No puedes susurrarle a los GMs.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        End If
-                    ElseIf Not EstaPCarea(UserIndex, TargetUserIndex) Then
-                        Call WriteConsoleMsg(UserIndex, "Estás muy lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
+                            End If
+                        ElseIf Not EstaPCarea(UserIndex, TargetUserIndex) Then
+                            Call WriteConsoleMsg(UserIndex, "Estás muy lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
 
-                    Else
-                        '[Consejeros & GMs]
-                        If _
+                        Else
+                            '[Consejeros & GMs]
+                            If _
                             .flags.Privilegios And
                             (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
-                            Call LogGM(.name, "Le dijo a '" & UserList(TargetUserIndex).name & "' " & Chat)
-                        End If
+                                Call LogGM(.name, "Le dijo a '" & UserList(TargetUserIndex).name & "' " & Chat)
+                            End If
 
-                        If migr_LenB(Chat) <> 0 Then
-                            'Analize chat...
-                            Call Statistics.ParseChat(Chat)
+                            If migr_LenB(Chat) <> 0 Then
+                                'Analize chat...
+                                Call Statistics.ParseChat(Chat)
 
-                            If Not (.flags.AdminInvisible = 1) Then
-                                Call _
+                                If Not (.flags.AdminInvisible = 1) Then
+                                    Call _
                                     WriteChatOverHead(UserIndex, Chat, .Char_Renamed.CharIndex,
                                                       System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue))
-                                Call _
+                                    Call _
                                     WriteChatOverHead(TargetUserIndex, Chat, .Char_Renamed.CharIndex,
                                                       System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue))
-                                Call FlushBuffer(TargetUserIndex)
+                                    Call FlushBuffer(TargetUserIndex)
 
-                                '[CDT 17-02-2004]
-                                If _
+                                    '[CDT 17-02-2004]
+                                    If _
                                     .flags.Privilegios And
                                     (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then
-                                    Call _
+                                        Call _
                                         SendData(modSendData.SendTarget.ToAdminsAreaButConsejeros, UserIndex,
                                                  PrepareMessageChatOverHead(
                                                      "A " & UserList(TargetUserIndex).name & "> " & Chat,
                                                      .Char_Renamed.CharIndex,
                                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
-                                End If
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Susurraste> " & Chat, FontTypeNames.FONTTYPE_GM)
-                                If UserIndex <> TargetUserIndex Then _
+                                    End If
+                                Else
+                                    Call WriteConsoleMsg(UserIndex, "Susurraste> " & Chat, FontTypeNames.FONTTYPE_GM)
+                                    If UserIndex <> TargetUserIndex Then _
                                     Call _
                                         WriteConsoleMsg(TargetUserIndex, "Gm susurra> " & Chat,
                                                         FontTypeNames.FONTTYPE_GM)
 
-                                If _
+                                    If _
                                     .flags.Privilegios And
                                     (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then
-                                    Call _
+                                        Call _
                                         SendData(modSendData.SendTarget.ToAdminsAreaButConsejeros, UserIndex,
                                                  PrepareMessageConsoleMsg(
                                                      "Gm dijo a " & UserList(TargetUserIndex).name & "> " & Chat,
                                                      FontTypeNames.FONTTYPE_GM))
+                                    End If
                                 End If
                             End If
                         End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleWhisper: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -1902,7 +1867,7 @@ Module Protocol
                     End If
 
                     If Not .flags.CountSH = 0 Then
-                        If dummy <> 0 Then dummy = 126000\dummy
+                        If dummy <> 0 Then dummy = 126000 \ dummy
 
                         Call LogHackAttemp("Tramposo SH: " & .name & " , " & dummy)
                         Call _
@@ -2338,46 +2303,39 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        With UserList(UserIndex)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            With UserList(UserIndex)
 
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Chat = buffer.ReadASCIIString()
+                Chat = buffer.ReadASCIIString()
 
-            If migr_LenB(Chat) <> 0 Then
-                If PuedeSeguirComerciando(UserIndex) Then
-                    'Analize chat...
-                    Call Statistics.ParseChat(Chat)
+                If migr_LenB(Chat) <> 0 Then
+                    If PuedeSeguirComerciando(UserIndex) Then
+                        'Analize chat...
+                        Call Statistics.ParseChat(Chat)
 
-                    Chat = UserList(UserIndex).name & "> " & Chat
-                    Call WriteCommerceChat(UserIndex, Chat, FontTypeNames.FONTTYPE_PARTY)
-                    Call WriteCommerceChat(UserList(UserIndex).ComUsu.DestUsu, Chat, FontTypeNames.FONTTYPE_PARTY)
+                        Chat = UserList(UserIndex).name & "> " & Chat
+                        Call WriteCommerceChat(UserIndex, Chat, FontTypeNames.FONTTYPE_PARTY)
+                        Call WriteCommerceChat(UserList(UserIndex).ComUsu.DestUsu, Chat, FontTypeNames.FONTTYPE_PARTY)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCommerceChat: " & ex.Message)
+        End Try
     End Sub
 
 
@@ -3387,57 +3345,50 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim desc As String
-        Dim GuildName As String
-        Dim site As String
-        Dim codex() As String
-        Dim errorStr As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim desc As String
+            Dim GuildName As String
+            Dim site As String
+            Dim codex() As String
+            Dim errorStr As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            desc = buffer.ReadASCIIString()
-            GuildName = Trim(buffer.ReadASCIIString())
-            site = buffer.ReadASCIIString()
-            codex = Split(buffer.ReadASCIIString(), SEPARATOR)
+                desc = buffer.ReadASCIIString()
+                GuildName = Trim(buffer.ReadASCIIString())
+                site = buffer.ReadASCIIString()
+                codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
-            If modGuilds.CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) _
+                If modGuilds.CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) _
                 Then
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToAll, UserIndex,
                              PrepareMessageConsoleMsg(
                                  .name & " fundó el clan " & GuildName & " de alineación " &
                                  modGuilds.GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
-                Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayWave(44, NO_3D_SOUND, NO_3D_SOUND))
+                    Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayWave(44, NO_3D_SOUND, NO_3D_SOUND))
 
 
-                'Update tag
-                Call RefreshCharStatus(UserIndex)
-            Else
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            End If
+                    'Update tag
+                    Call RefreshCharStatus(UserIndex)
+                Else
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCreateNewGuild: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -3555,13 +3506,13 @@ Module Protocol
             If .flags.Paralizado = 1 And .flags.Inmovilizado = 0 Then
                 Select Case heading
                     Case Declaraciones.eHeading.NORTH
-                        posY = - 1
+                        posY = -1
                     Case Declaraciones.eHeading.EAST
                         posX = 1
                     Case Declaraciones.eHeading.SOUTH
                         posY = 1
                     Case Declaraciones.eHeading.WEST
-                        posX = - 1
+                        posX = -1
                 End Select
 
                 If _
@@ -3911,62 +3862,55 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim ForumMsgType As Declaraciones.eForumMsgType
-        Dim file As String
-        Dim Title As String
-        Dim Post As String
-        Dim ForumIndex As Short
-        Dim postFile As String
-        Dim ForumType As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim ForumMsgType As Declaraciones.eForumMsgType
+            Dim file As String
+            Dim Title As String
+            Dim Post As String
+            Dim ForumIndex As Short
+            Dim postFile As String
+            Dim ForumType As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            ForumMsgType = buffer.ReadByte()
+                ForumMsgType = buffer.ReadByte()
 
-            Title = buffer.ReadASCIIString()
-            Post = buffer.ReadASCIIString()
+                Title = buffer.ReadASCIIString()
+                Post = buffer.ReadASCIIString()
 
-            If .flags.TargetObj > 0 Then
-                ForumType = ForumAlignment(ForumMsgType)
+                If .flags.TargetObj > 0 Then
+                    ForumType = ForumAlignment(ForumMsgType)
 
-                Select Case ForumType
+                    Select Case ForumType
 
-                    Case Declaraciones.eForumType.ieGeneral
-                        ForumIndex = GetForumIndex(ObjData_Renamed(.flags.TargetObj).ForoID)
+                        Case Declaraciones.eForumType.ieGeneral
+                            ForumIndex = GetForumIndex(ObjData_Renamed(.flags.TargetObj).ForoID)
 
-                    Case Declaraciones.eForumType.ieREAL
-                        ForumIndex = GetForumIndex(FORO_REAL_ID)
+                        Case Declaraciones.eForumType.ieREAL
+                            ForumIndex = GetForumIndex(FORO_REAL_ID)
 
-                    Case Declaraciones.eForumType.ieCAOS
-                        ForumIndex = GetForumIndex(FORO_CAOS_ID)
+                        Case Declaraciones.eForumType.ieCAOS
+                            ForumIndex = GetForumIndex(FORO_CAOS_ID)
 
-                End Select
+                    End Select
 
-                Call AddPost(ForumIndex, Post, .name, Title, EsAnuncio(ForumMsgType))
-            End If
+                    Call AddPost(ForumIndex, Post, .name, Title, EsAnuncio(ForumMsgType))
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleForumPost: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -3995,7 +3939,7 @@ Module Protocol
             If .ReadBoolean() Then
                 dir_Renamed = 1
             Else
-                dir_Renamed = - 1
+                dir_Renamed = -1
             End If
 
             Call DesplazarHechizo(UserIndex, dir_Renamed, .ReadByte())
@@ -4030,7 +3974,7 @@ Module Protocol
             If .ReadBoolean() Then
                 dir_Renamed = 1
             Else
-                dir_Renamed = - 1
+                dir_Renamed = -1
             End If
 
             Slot = .ReadByte()
@@ -4073,38 +4017,31 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim desc As String
-        Dim codex() As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim desc As String
+            Dim codex() As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            desc = buffer.ReadASCIIString()
-            codex = Split(buffer.ReadASCIIString(), SEPARATOR)
+                desc = buffer.ReadASCIIString()
+                codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
-            Call modGuilds.ChangeCodexAndDesc(desc, codex, .GuildIndex)
+                Call modGuilds.ChangeCodexAndDesc(desc, codex, .GuildIndex)
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleClanCodexUpdate: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4230,52 +4167,45 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim otherClanIndex As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim otherClanIndex As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDePaz(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDePaz(UserIndex, guild, errorStr))
 
-            If CDbl(otherClanIndex) = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call _
+                If CDbl(otherClanIndex) = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & guild & ".",
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
                              PrepareMessageConsoleMsg(
                                  "Tu clan ha firmado la paz con " & modGuilds.GuildName(.GuildIndex) & ".",
                                  FontTypeNames.FONTTYPE_GUILD))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildAcceptPeace: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4294,52 +4224,45 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim otherClanIndex As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim otherClanIndex As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr))
 
-            If CDbl(otherClanIndex) = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call _
+                If CDbl(otherClanIndex) = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de alianza de " & guild,
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
                              PrepareMessageConsoleMsg(
                                  modGuilds.GuildName(.GuildIndex) &
                                  " ha rechazado nuestra propuesta de alianza con su clan.", FontTypeNames.FONTTYPE_GUILD))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildRejectAlliance: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4358,52 +4281,45 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim otherClanIndex As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim otherClanIndex As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDePaz(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDePaz(UserIndex, guild, errorStr))
 
-            If CDbl(otherClanIndex) = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call _
+                If CDbl(otherClanIndex) = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de paz de " & guild & ".",
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
                              PrepareMessageConsoleMsg(
                                  modGuilds.GuildName(.GuildIndex) &
                                  " ha rechazado nuestra propuesta de paz con su clan.", FontTypeNames.FONTTYPE_GUILD))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildRejectPeace: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4422,52 +4338,45 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim otherClanIndex As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim otherClanIndex As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr))
 
-            If CDbl(otherClanIndex) = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call _
+                If CDbl(otherClanIndex) = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg("Tu clan ha firmado la alianza con " & guild & ".",
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
                              PrepareMessageConsoleMsg(
                                  "Tu clan ha firmado la paz con " & modGuilds.GuildName(.GuildIndex) & ".",
                                  FontTypeNames.FONTTYPE_GUILD))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildAcceptAlliance: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4486,44 +4395,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim proposal As String
-        Dim errorStr As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim proposal As String
+            Dim errorStr As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
-            proposal = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
+                proposal = buffer.ReadASCIIString()
 
-            If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, proposal, errorStr) _
+                If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, proposal, errorStr) _
                 Then
-                Call WriteConsoleMsg(UserIndex, "Propuesta de paz enviada.", FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            End If
+                    Call WriteConsoleMsg(UserIndex, "Propuesta de paz enviada.", FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildOfferPeace: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4542,44 +4444,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim proposal As String
-        Dim errorStr As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim proposal As String
+            Dim errorStr As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
-            proposal = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
+                proposal = buffer.ReadASCIIString()
 
-            If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, proposal, errorStr) _
+                If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, proposal, errorStr) _
                 Then
-                Call WriteConsoleMsg(UserIndex, "Propuesta de alianza enviada.", FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            End If
+                    Call WriteConsoleMsg(UserIndex, "Propuesta de alianza enviada.", FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildOfferAlliance: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4598,44 +4493,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim details As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim details As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, errorStr)
+                details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, errorStr)
 
-            If migr_LenB(details) = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call WriteOfferDetails(UserIndex, details)
-            End If
+                If migr_LenB(details) = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call WriteOfferDetails(UserIndex, details)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildAllianceDetails: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4654,44 +4542,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim details As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim details As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, errorStr)
+                details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, errorStr)
 
-            If migr_LenB(details) = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call WriteOfferDetails(UserIndex, details)
-            End If
+                If migr_LenB(details) = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call WriteOfferDetails(UserIndex, details)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildPeaceDetails: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4710,46 +4591,39 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim details As String
-        'UPGRADE_NOTE: User se actualizó a User_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim User_Renamed As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim details As String
+            'UPGRADE_NOTE: User se actualizó a User_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim User_Renamed As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            User_Renamed = buffer.ReadASCIIString()
+                User_Renamed = buffer.ReadASCIIString()
 
-            details = modGuilds.a_DetallesAspirante(UserIndex, User_Renamed)
+                details = modGuilds.a_DetallesAspirante(UserIndex, User_Renamed)
 
-            If migr_LenB(details) = 0 Then
-                Call _
+                If migr_LenB(details) = 0 Then
+                    Call _
                     WriteConsoleMsg(UserIndex, "El personaje no ha mandado solicitud, o no estás habilitado para verla.",
                                     FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call WriteShowUserRequest(UserIndex, details)
-            End If
+                Else
+                    Call WriteShowUserRequest(UserIndex, details)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildRequestJoinerInfo: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4802,59 +4676,52 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim errorStr As String
-        Dim otherGuildIndex As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim errorStr As String
+            Dim otherGuildIndex As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            otherGuildIndex = modGuilds.r_DeclararGuerra(UserIndex, guild, errorStr)
+                otherGuildIndex = modGuilds.r_DeclararGuerra(UserIndex, guild, errorStr)
 
-            If otherGuildIndex = 0 Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                'WAR shall be!
-                Call _
+                If otherGuildIndex = 0 Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    'WAR shall be!
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg("TU CLAN HA ENTRADO EN GUERRA CON " & guild & ".",
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, otherGuildIndex,
                              PrepareMessageConsoleMsg(
                                  modGuilds.GuildName(.GuildIndex) & " LE DECLARA LA GUERRA A TU CLAN.",
                                  FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, otherGuildIndex,
                              PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildDeclareWar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4873,32 +4740,25 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            Call modGuilds.ActualizarWebSite(UserIndex, buffer.ReadASCIIString())
+                Call modGuilds.ActualizarWebSite(UserIndex, buffer.ReadASCIIString())
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildNewWebsite: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4917,54 +4777,47 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim errorStr As String
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim errorStr As String
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If Not modGuilds.a_AceptarAspirante(UserIndex, UserName, errorStr) Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                tUser = NameIndex(UserName)
-                If tUser > 0 Then
-                    Call modGuilds.m_ConectarMiembroAClan(tUser, .GuildIndex)
-                    Call RefreshCharStatus(tUser)
-                End If
+                If Not modGuilds.a_AceptarAspirante(UserIndex, UserName, errorStr) Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    tUser = NameIndex(UserName)
+                    If tUser > 0 Then
+                        Call modGuilds.m_ConectarMiembroAClan(tUser, .GuildIndex)
+                        Call RefreshCharStatus(tUser)
+                    End If
 
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg(UserName & " ha sido aceptado como miembro del clan.",
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessagePlayWave(43, NO_3D_SOUND, NO_3D_SOUND))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildAcceptNewMember: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -4984,51 +4837,44 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim errorStr As String
-        Dim UserName As String
-        Dim reason As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim errorStr As String
+            Dim UserName As String
+            Dim reason As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            reason = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
+                reason = buffer.ReadASCIIString()
 
-            If Not modGuilds.a_RechazarAspirante(UserIndex, UserName, errorStr) Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                tUser = NameIndex(UserName)
-
-                If tUser > 0 Then
-                    Call WriteConsoleMsg(tUser, errorStr & " : " & reason, FontTypeNames.FONTTYPE_GUILD)
+                If Not modGuilds.a_RechazarAspirante(UserIndex, UserName, errorStr) Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
-                    'hay que grabar en el char su rechazo
-                    Call modGuilds.a_RechazarAspiranteChar(UserName, .GuildIndex, reason)
+                    tUser = NameIndex(UserName)
+
+                    If tUser > 0 Then
+                        Call WriteConsoleMsg(tUser, errorStr & " : " & reason, FontTypeNames.FONTTYPE_GUILD)
+                    Else
+                        'hay que grabar en el char su rechazo
+                        Call modGuilds.a_RechazarAspiranteChar(UserName, .GuildIndex, reason)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildRejectNewMember: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -5047,51 +4893,44 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim GuildIndex As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim GuildIndex As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
+                GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
 
-            If GuildIndex > 0 Then
-                Call _
+                If GuildIndex > 0 Then
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
                              PrepareMessageConsoleMsg(UserName & " fue expulsado del clan.",
                                                       FontTypeNames.FONTTYPE_GUILD))
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
                              PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
-            Else
-                Call _
+                Else
+                    Call _
                     WriteConsoleMsg(UserIndex, "No puedes expulsar ese personaje del clan.",
                                     FontTypeNames.FONTTYPE_GUILD)
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildKickMember: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -5110,32 +4949,25 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            Call modGuilds.ActualizarNoticias(UserIndex, buffer.ReadASCIIString())
+                Call modGuilds.ActualizarNoticias(UserIndex, buffer.ReadASCIIString())
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildUpdateNews: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -5154,32 +4986,25 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            Call modGuilds.SendDetallesPersonaje(UserIndex, buffer.ReadASCIIString())
+                Call modGuilds.SendDetallesPersonaje(UserIndex, buffer.ReadASCIIString())
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildMemberInfo: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -5228,46 +5053,39 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim application As String
-        Dim errorStr As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim application As String
+            Dim errorStr As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
-            application = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
+                application = buffer.ReadASCIIString()
 
-            If Not modGuilds.a_NuevoAspirante(UserIndex, guild, application, errorStr) Then
-                Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call _
+                If Not modGuilds.a_NuevoAspirante(UserIndex, guild, application, errorStr) Then
+                    Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call _
                     WriteConsoleMsg(UserIndex,
                                     "Tu solicitud ha sido enviada. Espera prontas noticias del líder de " & guild & ".",
                                     FontTypeNames.FONTTYPE_GUILD)
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildRequestMembership: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -5286,32 +5104,25 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            Call modGuilds.SendGuildDetails(UserIndex, buffer.ReadASCIIString())
+                Call modGuilds.SendGuildDetails(UserIndex, buffer.ReadASCIIString())
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildRequestDetails: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -5471,11 +5282,11 @@ Module Protocol
                         earnings = Apuestas.Ganancias - Apuestas.Perdidas
 
                         If earnings >= 0 And Apuestas.Ganancias <> 0 Then
-                            Percentage = Int(earnings*100/Apuestas.Ganancias)
+                            Percentage = Int(earnings * 100 / Apuestas.Ganancias)
                         End If
 
                         If earnings < 0 And Apuestas.Perdidas <> 0 Then
-                            Percentage = Int(earnings*100/Apuestas.Perdidas)
+                            Percentage = Int(earnings * 100 / Apuestas.Perdidas)
                         End If
 
                         Call _
@@ -5772,7 +5583,7 @@ Module Protocol
 
                 Call _
                     WriteConsoleMsg(UserIndex,
-                                    "Te estás concentrando. En " & Fix(TIEMPO_INICIOMEDITAR/1000) &
+                                    "Te estás concentrando. En " & Fix(TIEMPO_INICIOMEDITAR / 1000) &
                                     " segundos comenzarás a meditar.", FontTypeNames.FONTTYPE_INFO)
 
                 .Char_Renamed.loops = INFINITE_LOOPS
@@ -6391,17 +6202,17 @@ Module Protocol
         Dim UpTimeStr As String
 
         'Get total time in seconds
-        time = (GetTickCount() - tInicioServer)\1000
+        time = (GetTickCount() - tInicioServer) \ 1000
 
         'Get times in dd:hh:mm:ss format
         UpTimeStr = (time Mod 60) & " segundos."
-        time = time\60
+        time = time \ 60
 
         UpTimeStr = (time Mod 60) & " minutos, " & UpTimeStr
-        time = time\60
+        time = time \ 60
 
         UpTimeStr = (time Mod 24) & " horas, " & UpTimeStr
-        time = time\24
+        time = time \ 24
 
         If time = 1 Then
             UpTimeStr = time & " día, " & UpTimeStr
@@ -6621,52 +6432,45 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Chat = buffer.ReadASCIIString()
+                Chat = buffer.ReadASCIIString()
 
-            If migr_LenB(Chat) <> 0 Then
-                'Analize chat...
-                Call Statistics.ParseChat(Chat)
+                If migr_LenB(Chat) <> 0 Then
+                    'Analize chat...
+                    Call Statistics.ParseChat(Chat)
 
-                If .GuildIndex > 0 Then
-                    Call _
+                    If .GuildIndex > 0 Then
+                        Call _
                         SendData(modSendData.SendTarget.ToDiosesYclan, .GuildIndex,
                                  PrepareMessageGuildChat(.name & "> " & Chat))
 
-                    If Not (.flags.AdminInvisible = 1) Then _
+                        If Not (.flags.AdminInvisible = 1) Then _
                         Call _
                             SendData(modSendData.SendTarget.ToClanArea, UserIndex,
                                      PrepareMessageChatOverHead("< " & Chat & " >", .Char_Renamed.CharIndex,
                                                                 System.Drawing.ColorTranslator.ToOle(
                                                                     System.Drawing.Color.Yellow)))
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -6685,43 +6489,36 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Chat = buffer.ReadASCIIString()
+                Chat = buffer.ReadASCIIString()
 
-            If migr_LenB(Chat) <> 0 Then
-                'Analize chat...
-                Call Statistics.ParseChat(Chat)
+                If migr_LenB(Chat) <> 0 Then
+                    'Analize chat...
+                    Call Statistics.ParseChat(Chat)
 
-                Call mdParty.BroadCastParty(UserIndex, Chat)
-                'TODO : Con la 0.12.1 se debe definir si esto vuelve o se borra (/CMSG overhead)
-                'Call SendData(SendTarget.ToPartyArea, UserIndex, UserList(UserIndex).Pos.map, "||" & vbYellow & "°< " & mid$(rData, 7) & " >°" & CStr(UserList(UserIndex).Char.CharIndex))
-            End If
+                    Call mdParty.BroadCastParty(UserIndex, Chat)
+                    'TODO : Con la 0.12.1 se debe definir si esto vuelve o se borra (/CMSG overhead)
+                    'Call SendData(SendTarget.ToPartyArea, UserIndex, UserList(UserIndex).Pos.map, "||" & vbYellow & "°< " & mid$(rData, 7) & " >°" & CStr(UserList(UserIndex).Char.CharIndex))
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandlePartyMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -6810,51 +6607,44 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Chat As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Chat As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Chat = buffer.ReadASCIIString()
+                Chat = buffer.ReadASCIIString()
 
-            If migr_LenB(Chat) <> 0 Then
-                'Analize chat...
-                Call Statistics.ParseChat(Chat)
+                If migr_LenB(Chat) <> 0 Then
+                    'Analize chat...
+                    Call Statistics.ParseChat(Chat)
 
-                If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then
-                    Call _
+                    If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then
+                        Call _
                         SendData(modSendData.SendTarget.ToConsejo, UserIndex,
                                  PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
                                                           FontTypeNames.FONTTYPE_CONSEJO))
-                ElseIf .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then
-                    Call _
+                    ElseIf .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then
+                        Call _
                         SendData(modSendData.SendTarget.ToConsejoCaos, UserIndex,
                                  PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
                                                           FontTypeNames.FONTTYPE_CONSEJOCAOS))
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCouncilMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -6873,42 +6663,35 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim request As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim request As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            request = buffer.ReadASCIIString()
+                request = buffer.ReadASCIIString()
 
-            If migr_LenB(request) <> 0 Then
-                Call WriteConsoleMsg(UserIndex, "Su solicitud ha sido enviada.", FontTypeNames.FONTTYPE_INFO)
-                Call _
+                If migr_LenB(request) <> 0 Then
+                    Call WriteConsoleMsg(UserIndex, "Su solicitud ha sido enviada.", FontTypeNames.FONTTYPE_INFO)
+                    Call _
                     SendData(modSendData.SendTarget.ToRolesMasters, 0,
                              PrepareMessageConsoleMsg(.name & " PREGUNTA ROL: " & request,
                                                       FontTypeNames.FONTTYPE_GUILDMSG))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRoleMasterRequest: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -6959,44 +6742,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim N As Short
-        Dim bugReport As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+        Try
+            Dim buffer As New clsByteQueue
+            Dim N As Short
+            Dim bugReport As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 
-            Call buffer.CopyBuffer(.incomingData)
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            bugReport = buffer.ReadASCIIString()
+                bugReport = buffer.ReadASCIIString()
 
-            N = FreeFile
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "LOGS/BUGs.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, "Usuario:" & .name & "  Fecha:" & Today & "    Hora:" & TimeOfDay)
-            PrintLine(N, "BUG:")
-            PrintLine(N, bugReport)
-            PrintLine(N, "########################################################################")
-            FileClose(N)
+                N = FreeFile
+                FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "LOGS/BUGs.log", OpenMode.Append, , OpenShare.Shared)
+                PrintLine(N, "Usuario:" & .name & "  Fecha:" & Today & "    Hora:" & TimeOfDay)
+                PrintLine(N, "BUG:")
+                PrintLine(N, bugReport)
+                PrintLine(N, "########################################################################")
+                FileClose(N)
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleBugReport: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -7015,49 +6791,42 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Description As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Description As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Description = buffer.ReadASCIIString()
+                Description = buffer.ReadASCIIString()
 
-            If .flags.Muerto = 1 Then
-                Call _
+                If .flags.Muerto = 1 Then
+                    Call _
                     WriteConsoleMsg(UserIndex, "No puedes cambiar la descripción estando muerto.",
                                     FontTypeNames.FONTTYPE_INFO)
-            Else
-                If Not AsciiValidos(Description) Then
-                    Call _
+                Else
+                    If Not AsciiValidos(Description) Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "La descripción tiene caracteres inválidos.",
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    .desc = Trim(Description)
-                    Call WriteConsoleMsg(UserIndex, "La descripción ha cambiado.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        .desc = Trim(Description)
+                        Call WriteConsoleMsg(UserIndex, "La descripción ha cambiado.", FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChangeDescription: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -7076,41 +6845,34 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim vote As String
-        Dim errorStr As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim vote As String
+            Dim errorStr As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            vote = buffer.ReadASCIIString()
+                vote = buffer.ReadASCIIString()
 
-            If Not modGuilds.v_UsuarioVota(UserIndex, vote, errorStr) Then
-                Call WriteConsoleMsg(UserIndex, "Voto NO contabilizado: " & errorStr, FontTypeNames.FONTTYPE_GUILD)
-            Else
-                Call WriteConsoleMsg(UserIndex, "Voto contabilizado.", FontTypeNames.FONTTYPE_GUILD)
-            End If
+                If Not modGuilds.v_UsuarioVota(UserIndex, vote, errorStr) Then
+                    Call WriteConsoleMsg(UserIndex, "Voto NO contabilizado: " & errorStr, FontTypeNames.FONTTYPE_GUILD)
+                Else
+                    Call WriteConsoleMsg(UserIndex, "Voto contabilizado.", FontTypeNames.FONTTYPE_GUILD)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildVote: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -7150,78 +6912,71 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim name As String
-        Dim Count As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim name As String
+            Dim Count As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            name = buffer.ReadASCIIString()
+                name = buffer.ReadASCIIString()
 
-            If migr_LenB(name) <> 0 Then
-                If (migr_InStrB(name, "\") <> 0) Then
-                    name = Replace(name, "\", "")
-                End If
-                If (migr_InStrB(name, "/") <> 0) Then
-                    name = Replace(name, "/", "")
-                End If
-                If (migr_InStrB(name, ":") <> 0) Then
-                    name = Replace(name, ":", "")
-                End If
-                If (migr_InStrB(name, "|") <> 0) Then
-                    name = Replace(name, "|", "")
-                End If
+                If migr_LenB(name) <> 0 Then
+                    If (migr_InStrB(name, "\") <> 0) Then
+                        name = Replace(name, "\", "")
+                    End If
+                    If (migr_InStrB(name, "/") <> 0) Then
+                        name = Replace(name, "/", "")
+                    End If
+                    If (migr_InStrB(name, ":") <> 0) Then
+                        name = Replace(name, ":", "")
+                    End If
+                    If (migr_InStrB(name, "|") <> 0) Then
+                        name = Replace(name, "|", "")
+                    End If
 
-                If _
+                    If _
                     (EsAdmin(name) Or EsDios(name) Or EsSemiDios(name) Or EsConsejero(name) Or EsRolesMaster(name)) And
                     (UserList(UserIndex).flags.Privilegios And Declaraciones.PlayerType.User) Then
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex, "No puedes ver las penas de los administradores.",
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If FileExist(CharPath & name & ".chr") Then
-                        Count = Val(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
-                        If Count = 0 Then
-                            Call WriteConsoleMsg(UserIndex, "Sin prontuario..", FontTypeNames.FONTTYPE_INFO)
-                        Else
-                            While Count > 0
-                                Call _
+                    Else
+                        If FileExist(CharPath & name & ".chr") Then
+                            Count = Val(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
+                            If Count = 0 Then
+                                Call WriteConsoleMsg(UserIndex, "Sin prontuario..", FontTypeNames.FONTTYPE_INFO)
+                            Else
+                                While Count > 0
+                                    Call _
                                     WriteConsoleMsg(UserIndex,
                                                     Count & " - " &
                                                     GetVar(CharPath & name & ".chr", "PENAS", "P" & Count),
                                                     FontTypeNames.FONTTYPE_INFO)
-                                Count = Count - 1
-                            End While
-                        End If
-                    Else
-                        Call _
+                                    Count = Count - 1
+                                End While
+                            End If
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex, "Personaje """ & name & """ inexistente.",
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandlePunishments: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -7240,56 +6995,49 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim oldPass As String
-        Dim newPass As String
-        Dim oldPass2 As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim oldPass As String
+            Dim newPass As String
+            Dim oldPass2 As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            oldPass = UCase(buffer.ReadASCIIString())
-            newPass = UCase(buffer.ReadASCIIString())
+                oldPass = UCase(buffer.ReadASCIIString())
+                newPass = UCase(buffer.ReadASCIIString())
 
-            If migr_LenB(newPass) = 0 Then
-                Call _
+                If migr_LenB(newPass) = 0 Then
+                    Call _
                     WriteConsoleMsg(UserIndex, "Debes especificar una contraseña nueva, inténtalo de nuevo.",
                                     FontTypeNames.FONTTYPE_INFO)
-            Else
-                oldPass2 = UCase(GetVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password"))
+                Else
+                    oldPass2 = UCase(GetVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password"))
 
-                If oldPass2 <> oldPass Then
-                    Call _
+                    If oldPass2 <> oldPass Then
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "La contraseña actual proporcionada no es correcta. La contraseña no ha sido cambiada, inténtalo de nuevo.",
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call WriteVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password", newPass)
-                    Call _
+                    Else
+                        Call WriteVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password", newPass)
+                        Call _
                         WriteConsoleMsg(UserIndex, "La contraseña fue cambiada con éxito.", FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChangePassword: " & ex.Message)
+        End Try
     End Sub
 
 
@@ -7650,45 +7398,38 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim Text As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim Text As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            Text = buffer.ReadASCIIString()
+                Text = buffer.ReadASCIIString()
 
-            If .flags.Silenciado = 0 Then
-                'Analize chat...
-                Call Statistics.ParseChat(Text)
+                If .flags.Silenciado = 0 Then
+                    'Analize chat...
+                    Call Statistics.ParseChat(Text)
 
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToAdmins, 0,
                              PrepareMessageConsoleMsg(LCase(.name) & " DENUNCIA: " & Text,
                                                       FontTypeNames.FONTTYPE_GUILDMSG))
-                Call WriteConsoleMsg(UserIndex, "Denuncia enviada, espere..", FontTypeNames.FONTTYPE_INFO)
-            End If
+                    Call WriteConsoleMsg(UserIndex, "Denuncia enviada, espere..", FontTypeNames.FONTTYPE_INFO)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleDenounce: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -7802,51 +7543,44 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If UserPuedeEjecutarComandos(UserIndex) Then
-                tUser = NameIndex(UserName)
+                If UserPuedeEjecutarComandos(UserIndex) Then
+                    tUser = NameIndex(UserName)
 
-                If tUser > 0 Then
-                    Call mdParty.ExpulsarDeParty(UserIndex, tUser)
-                Else
-                    If InStr(UserName, "+") Then
-                        UserName = Replace(UserName, "+", " ")
-                    End If
+                    If tUser > 0 Then
+                        Call mdParty.ExpulsarDeParty(UserIndex, tUser)
+                    Else
+                        If InStr(UserName, "+") Then
+                            UserName = Replace(UserName, "+", " ")
+                        End If
 
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex, LCase(UserName) & " no pertenece a tu party.",
                                         FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandlePartyKick: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -7866,7 +7600,6 @@ Module Protocol
             Exit Sub
         End If
 
-        'On Error GoTo Errhandler
         Dim buffer As New clsByteQueue
         Dim UserName As String
         Dim tUser As Short
@@ -7907,18 +7640,6 @@ Module Protocol
             'If we got here then packet is complete, copy data back to original queue
             Call .incomingData.CopyBuffer(buffer)
         End With
-
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
-
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
     End Sub
 
     ''
@@ -7938,76 +7659,69 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim rank As Short
-        Dim bUserVivo As Boolean
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim rank As Short
+            Dim bUserVivo As Boolean
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
+                rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
                    Declaraciones.PlayerType.Consejero
 
-            UserName = buffer.ReadASCIIString()
-            If UserList(UserIndex).flags.Muerto Then
-                Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_PARTY)
-            Else
-                bUserVivo = True
-            End If
+                UserName = buffer.ReadASCIIString()
+                If UserList(UserIndex).flags.Muerto Then
+                    Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_PARTY)
+                Else
+                    bUserVivo = True
+                End If
 
-            If mdParty.UserPuedeEjecutarComandos(UserIndex) And bUserVivo Then
-                tUser = NameIndex(UserName)
-                If tUser > 0 Then
-                    'Validate administrative ranks - don't allow users to spoof online GMs
-                    If (UserList(tUser).flags.Privilegios And rank) <= (.flags.Privilegios And rank) Then
-                        Call mdParty.AprobarIngresoAParty(UserIndex, tUser)
-                    Else
-                        Call _
+                If mdParty.UserPuedeEjecutarComandos(UserIndex) And bUserVivo Then
+                    tUser = NameIndex(UserName)
+                    If tUser > 0 Then
+                        'Validate administrative ranks - don't allow users to spoof online GMs
+                        If (UserList(tUser).flags.Privilegios And rank) <= (.flags.Privilegios And rank) Then
+                            Call mdParty.AprobarIngresoAParty(UserIndex, tUser)
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex,
                                             "No puedes incorporar a tu party a personajes de mayor jerarquía.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    End If
-                Else
-                    If InStr(UserName, "+") Then
-                        UserName = Replace(UserName, "+", " ")
-                    End If
+                        End If
+                    Else
+                        If InStr(UserName, "+") Then
+                            UserName = Replace(UserName, "+", " ")
+                        End If
 
-                    'Don't allow users to spoof online GMs
-                    If (UserDarPrivilegioLevel(UserName) And rank) <= (.flags.Privilegios And rank) Then
-                        Call _
+                        'Don't allow users to spoof online GMs
+                        If (UserDarPrivilegioLevel(UserName) And rank) <= (.flags.Privilegios And rank) Then
+                            Call _
                             WriteConsoleMsg(UserIndex, LCase(UserName) & " no ha solicitado ingresar a tu party.",
                                             FontTypeNames.FONTTYPE_PARTY)
-                    Else
-                        Call _
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex,
                                             "No puedes incorporar a tu party a personajes de mayor jerarquía.",
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandlePartyAcceptMember: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8026,62 +7740,55 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        Dim memberCount As Short
-        Dim i As Integer
-        Dim UserName As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            Dim memberCount As Short
+            Dim i As Integer
+            Dim UserName As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
-                If (migr_InStrB(guild, "\") <> 0) Then
-                    guild = Replace(guild, "\", "")
-                End If
-                If (migr_InStrB(guild, "/") <> 0) Then
-                    guild = Replace(guild, "/", "")
-                End If
+                If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
+                    If (migr_InStrB(guild, "\") <> 0) Then
+                        guild = Replace(guild, "\", "")
+                    End If
+                    If (migr_InStrB(guild, "/") <> 0) Then
+                        guild = Replace(guild, "/", "")
+                    End If
 
-                If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
-                    Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
-                Else
-                    memberCount =
+                    If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
+                        Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        memberCount =
                         Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
                                    "INIT", "NroMembers"))
 
-                    For i = 1 To memberCount
-                        UserName =
+                        For i = 1 To memberCount
+                            UserName =
                             GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
                                    "Members", "Member" & i)
 
-                        Call WriteConsoleMsg(UserIndex, UserName & "<" & guild & ">", FontTypeNames.FONTTYPE_INFO)
-                    Next i
+                            Call WriteConsoleMsg(UserIndex, UserName & "<" & guild & ">", FontTypeNames.FONTTYPE_INFO)
+                        Next i
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildMemberList: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8100,47 +7807,40 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
-                Call LogGM(.name, "Mensaje a Gms:" & message)
+                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                    Call LogGM(.name, "Mensaje a Gms:" & message)
 
-                If migr_LenB(message) <> 0 Then
-                    'Analize chat...
-                    Call Statistics.ParseChat(message)
+                    If migr_LenB(message) <> 0 Then
+                        'Analize chat...
+                        Call Statistics.ParseChat(message)
 
-                    Call _
+                        Call _
                         SendData(modSendData.SendTarget.ToAdmins, 0,
                                  PrepareMessageConsoleMsg(.name & "> " & message, FontTypeNames.FONTTYPE_GMMSG))
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGMMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8190,7 +7890,7 @@ Module Protocol
 
 
             For i = 1 To LastUser
-                If UserList(i).ConnID <> - 1 Then
+                If UserList(i).ConnID <> -1 Then
                     If UserList(i).Faccion.ArmadaReal = 1 Then
                         If _
                             UserList(i).flags.Privilegios And
@@ -8235,7 +7935,7 @@ Module Protocol
 
 
             For i = 1 To LastUser
-                If UserList(i).ConnID <> - 1 Then
+                If UserList(i).ConnID <> -1 Then
                     If UserList(i).Faccion.FuerzasCaos = 1 Then
                         If _
                             UserList(i).flags.Privilegios And
@@ -8274,86 +7974,79 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tIndex As Short
-        Dim X As Integer
-        Dim Y As Integer
-        Dim i As Integer
-        Dim found As Boolean
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tIndex As Short
+            Dim X As Integer
+            Dim Y As Integer
+            Dim i As Integer
+            Dim found As Boolean
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            UserName = buffer.ReadASCIIString()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            tIndex = NameIndex(UserName)
+                UserName = buffer.ReadASCIIString()
 
-            'Check the user has enough powers
-            If _
+
+                tIndex = NameIndex(UserName)
+
+                'Check the user has enough powers
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
                  Declaraciones.PlayerType.Consejero) Then
-                'Si es dios o Admins no podemos salvo que nosotros también lo seamos
-                If _
+                    'Si es dios o Admins no podemos salvo que nosotros también lo seamos
+                    If _
                     Not (EsDios(UserName) Or EsAdmin(UserName)) Or
                     (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) Then
-                    If tIndex <= 0 Then 'existe el usuario destino?
-                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        For i = 2 To 5 'esto for sirve ir cambiando la distancia destino
-                            For X = UserList(tIndex).Pos.X - i To UserList(tIndex).Pos.X + i
-                                For Y = UserList(tIndex).Pos.Y - i To UserList(tIndex).Pos.Y + i
-                                    If MapData(UserList(tIndex).Pos.Map, X, Y).UserIndex = 0 Then
-                                        If LegalPos(UserList(tIndex).Pos.Map, X, Y, True, True) Then
-                                            Call WarpUserChar(UserIndex, UserList(tIndex).Pos.Map, X, Y, True)
-                                            Call _
+                        If tIndex <= 0 Then 'existe el usuario destino?
+                            Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            For i = 2 To 5 'esto for sirve ir cambiando la distancia destino
+                                For X = UserList(tIndex).Pos.X - i To UserList(tIndex).Pos.X + i
+                                    For Y = UserList(tIndex).Pos.Y - i To UserList(tIndex).Pos.Y + i
+                                        If MapData(UserList(tIndex).Pos.Map, X, Y).UserIndex = 0 Then
+                                            If LegalPos(UserList(tIndex).Pos.Map, X, Y, True, True) Then
+                                                Call WarpUserChar(UserIndex, UserList(tIndex).Pos.Map, X, Y, True)
+                                                Call _
                                                 LogGM(.name,
                                                       "/IRCERCA " & UserName & " Mapa:" & UserList(tIndex).Pos.Map &
                                                       " X:" & UserList(tIndex).Pos.X & " Y:" & UserList(tIndex).Pos.Y)
-                                            found = True
-                                            Exit For
+                                                found = True
+                                                Exit For
+                                            End If
                                         End If
-                                    End If
-                                Next Y
+                                    Next Y
+
+                                    If found Then Exit For ' Feo, pero hay que abortar 3 fors sin usar GoTo
+                                Next X
 
                                 If found Then Exit For ' Feo, pero hay que abortar 3 fors sin usar GoTo
-                            Next X
+                            Next i
 
-                            If found Then Exit For ' Feo, pero hay que abortar 3 fors sin usar GoTo
-                        Next i
-
-                        'No space found??
-                        If Not found Then
-                            Call _
+                            'No space found??
+                            If Not found Then
+                                Call _
                                 WriteConsoleMsg(UserIndex, "Todos los lugares están ocupados.",
                                                 FontTypeNames.FONTTYPE_INFO)
+                            End If
                         End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGoNearby: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8372,38 +8065,31 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim comment As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim comment As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            comment = buffer.ReadASCIIString()
+                comment = buffer.ReadASCIIString()
 
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
-                Call LogGM(.name, "Comentario: " & comment)
-                Call WriteConsoleMsg(UserIndex, "Comentario salvado...", FontTypeNames.FONTTYPE_INFO)
-            End If
+                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                    Call LogGM(.name, "Comentario: " & comment)
+                    Call WriteConsoleMsg(UserIndex, "Comentario salvado...", FontTypeNames.FONTTYPE_INFO)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleComment: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8448,26 +8134,26 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
-                tUser = NameIndex(UserName)
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If _
+                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                    tUser = NameIndex(UserName)
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If _
                         (UserList(tUser).flags.Privilegios And
                          (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
                           Declaraciones.PlayerType.SemiDios)) <> 0 Or
@@ -8475,31 +8161,24 @@ Module Protocol
                           (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) <> 0) And
                          (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0) _
                         Then
-                        Call _
+                            Call _
                             WriteConsoleMsg(UserIndex,
                                             "Ubicación  " & UserName & ": " & UserList(tUser).Pos.Map & ", " &
                                             UserList(tUser).Pos.X & ", " & UserList(tUser).Pos.Y & ".",
                                             FontTypeNames.FONTTYPE_INFO)
-                        Call LogGM(.name, "/Donde " & UserName)
+                            Call LogGM(.name, "/Donde " & UserName)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleWhere: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8677,67 +8356,60 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim Map As Short
-        Dim X As Short
-        Dim Y As Short
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim Map As Short
+            Dim X As Short
+            Dim Y As Short
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            Map = buffer.ReadInteger()
-            X = buffer.ReadByte()
-            Y = buffer.ReadByte()
+                UserName = buffer.ReadASCIIString()
+                Map = buffer.ReadInteger()
+                X = buffer.ReadByte()
+                Y = buffer.ReadByte()
 
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
-                If MapaValido(Map) And migr_LenB(UserName) <> 0 Then
-                    If UCase(UserName) <> "YO" Then
-                        If Not .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
-                            tUser = NameIndex(UserName)
+                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                    If MapaValido(Map) And migr_LenB(UserName) <> 0 Then
+                        If UCase(UserName) <> "YO" Then
+                            If Not .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
+                                tUser = NameIndex(UserName)
+                            End If
+                        Else
+                            tUser = UserIndex
                         End If
-                    Else
-                        tUser = UserIndex
-                    End If
 
-                    If tUser <= 0 Then
-                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                    ElseIf InMapBounds(Map, X, Y) Then
-                        Call FindLegalPos(tUser, Map, X, Y)
-                        Call WarpUserChar(tUser, Map, X, Y, True, True)
-                        Call _
+                        If tUser <= 0 Then
+                            Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                        ElseIf InMapBounds(Map, X, Y) Then
+                            Call FindLegalPos(tUser, Map, X, Y)
+                            Call WarpUserChar(tUser, Map, X, Y, True, True)
+                            Call _
                             WriteConsoleMsg(UserIndex, UserList(tUser).name & " transportado.",
                                             FontTypeNames.FONTTYPE_INFO)
-                        Call _
+                            Call _
                             LogGM(.name,
                                   "Transportó a " & UserList(tUser).name & " hacia " & "Mapa" & Map & " X:" & X & " Y:" &
                                   Y)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleWarpChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8756,59 +8428,52 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
-                tUser = NameIndex(UserName)
+                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                    tUser = NameIndex(UserName)
 
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If UserList(tUser).flags.Silenciado = 0 Then
-                        UserList(tUser).flags.Silenciado = 1
-                        Call WriteConsoleMsg(UserIndex, "Usuario silenciado.", FontTypeNames.FONTTYPE_INFO)
-                        Call _
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If UserList(tUser).flags.Silenciado = 0 Then
+                            UserList(tUser).flags.Silenciado = 1
+                            Call WriteConsoleMsg(UserIndex, "Usuario silenciado.", FontTypeNames.FONTTYPE_INFO)
+                            Call _
                             WriteShowMessageBox(tUser,
                                                 "Estimado usuario, ud. ha sido silenciado por los administradores. Sus denuncias serán ignoradas por el servidor de aquí en más. Utilice /GM para contactar un administrador.")
-                        Call LogGM(.name, "/silenciar " & UserList(tUser).name)
+                            Call LogGM(.name, "/silenciar " & UserList(tUser).name)
 
-                        'Flush the other user's buffer
-                        Call FlushBuffer(tUser)
-                    Else
-                        UserList(tUser).flags.Silenciado = 0
-                        Call WriteConsoleMsg(UserIndex, "Usuario des silenciado.", FontTypeNames.FONTTYPE_INFO)
-                        Call LogGM(.name, "/DESsilenciar " & UserList(tUser).name)
+                            'Flush the other user's buffer
+                            Call FlushBuffer(tUser)
+                        Else
+                            UserList(tUser).flags.Silenciado = 0
+                            Call WriteConsoleMsg(UserIndex, "Usuario des silenciado.", FontTypeNames.FONTTYPE_INFO)
+                            Call LogGM(.name, "/DESsilenciar " & UserList(tUser).name)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSilence: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8896,35 +8561,28 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then Call Ayuda.Quitar(UserName)
+                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then Call Ayuda.Quitar(UserName)
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSOSRemove: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -8943,70 +8601,63 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim X As Short
-        Dim Y As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim X As Short
+            Dim Y As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            tUser = NameIndex(UserName)
+                UserName = buffer.ReadASCIIString()
+                tUser = NameIndex(UserName)
 
-            If _
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.SemiDios Or
                  Declaraciones.PlayerType.Consejero) Then
-                'Si es dios o Admins no podemos salvo que nosotros también lo seamos
-                If _
+                    'Si es dios o Admins no podemos salvo que nosotros también lo seamos
+                    If _
                     Not (EsDios(UserName) Or EsAdmin(UserName)) Or
                     (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Then
-                    If tUser <= 0 Then
-                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        X = UserList(tUser).Pos.X
-                        Y = UserList(tUser).Pos.Y + 1
-                        Call FindLegalPos(UserIndex, UserList(tUser).Pos.Map, X, Y)
+                        If tUser <= 0 Then
+                            Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            X = UserList(tUser).Pos.X
+                            Y = UserList(tUser).Pos.Y + 1
+                            Call FindLegalPos(UserIndex, UserList(tUser).Pos.Map, X, Y)
 
-                        Call WarpUserChar(UserIndex, UserList(tUser).Pos.Map, X, Y, True)
+                            Call WarpUserChar(UserIndex, UserList(tUser).Pos.Map, X, Y, True)
 
-                        If .flags.AdminInvisible = 0 Then
-                            Call _
+                            If .flags.AdminInvisible = 0 Then
+                                Call _
                                 WriteConsoleMsg(tUser, .name & " se ha trasportado hacia donde te encuentras.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                            Call FlushBuffer(tUser)
-                        End If
+                                Call FlushBuffer(tUser)
+                            End If
 
-                        Call _
+                            Call _
                             LogGM(.name,
                                   "/IRA " & UserName & " Mapa:" & UserList(tUser).Pos.Map & " X:" &
                                   UserList(tUser).Pos.X & " Y:" & UserList(tUser).Pos.Y)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGoToChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -9183,88 +8834,81 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim reason As String
-        Dim jailTime As Byte
-        Dim Count As Byte
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim reason As String
+            Dim jailTime As Byte
+            Dim Count As Byte
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            reason = buffer.ReadASCIIString()
-            jailTime = buffer.ReadByte()
+                UserName = buffer.ReadASCIIString()
+                reason = buffer.ReadASCIIString()
+                jailTime = buffer.ReadByte()
 
-            If InStr(1, UserName, "+") Then
-                UserName = Replace(UserName, "+", " ")
-            End If
+                If InStr(1, UserName, "+") Then
+                    UserName = Replace(UserName, "+", " ")
+                End If
 
-            '/carcel nick@motivo@<tiempo>
-            If _
+                '/carcel nick@motivo@<tiempo>
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (Not .flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then
-                If migr_LenB(UserName) = 0 Or migr_LenB(reason) = 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Utilice /carcel nick@motivo@tiempo", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    tUser = NameIndex(UserName)
-
-                    If tUser <= 0 Then
-                        Call WriteConsoleMsg(UserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_INFO)
+                    If migr_LenB(UserName) = 0 Or migr_LenB(reason) = 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Utilice /carcel nick@motivo@tiempo", FontTypeNames.FONTTYPE_INFO)
                     Else
-                        If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
-                            Call _
+                        tUser = NameIndex(UserName)
+
+                        If tUser <= 0 Then
+                            Call WriteConsoleMsg(UserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
+                                Call _
                                 WriteConsoleMsg(UserIndex, "No puedes encarcelar a administradores.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        ElseIf jailTime > 60 Then
-                            Call _
+                            ElseIf jailTime > 60 Then
+                                Call _
                                 WriteConsoleMsg(UserIndex, "No puedés encarcelar por más de 60 minutos.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        Else
-                            If (migr_InStrB(UserName, "\") <> 0) Then
-                                UserName = Replace(UserName, "\", "")
-                            End If
-                            If (migr_InStrB(UserName, "/") <> 0) Then
-                                UserName = Replace(UserName, "/", "")
-                            End If
+                            Else
+                                If (migr_InStrB(UserName, "\") <> 0) Then
+                                    UserName = Replace(UserName, "\", "")
+                                End If
+                                If (migr_InStrB(UserName, "/") <> 0) Then
+                                    UserName = Replace(UserName, "/", "")
+                                End If
 
-                            If FileExist(CharPath & UserName & ".chr") Then
-                                Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
-                                Call _
+                                If FileExist(CharPath & UserName & ".chr") Then
+                                    Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                    Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
+                                    Call _
                                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
                                              LCase(.name) & ": CARCEL " & jailTime & "m, MOTIVO: " & LCase(reason) & " " &
                                              Today & " " & TimeOfDay)
-                            End If
+                                End If
 
-                            Call Encarcelar(tUser, jailTime, .name)
-                            Call LogGM(.name, " encarceló a " & UserName)
+                                Call Encarcelar(tUser, jailTime, .name)
+                                Call LogGM(.name, " encarceló a " & UserName)
+                            End If
                         End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleJail: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -9333,75 +8977,68 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim reason As String
-        Dim privs As Declaraciones.PlayerType
-        Dim Count As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim reason As String
+            Dim privs As Declaraciones.PlayerType
+            Dim Count As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            reason = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
+                reason = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (Not .flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then
-                If migr_LenB(UserName) = 0 Or migr_LenB(reason) = 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Utilice /advertencia nick@motivo", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    privs = UserDarPrivilegioLevel(UserName)
+                    If migr_LenB(UserName) = 0 Or migr_LenB(reason) = 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Utilice /advertencia nick@motivo", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        privs = UserDarPrivilegioLevel(UserName)
 
-                    If Not privs And Declaraciones.PlayerType.User Then
-                        Call _
+                        If Not privs And Declaraciones.PlayerType.User Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "No puedes advertir a administradores.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        If (migr_InStrB(UserName, "\") <> 0) Then
-                            UserName = Replace(UserName, "\", "")
-                        End If
-                        If (migr_InStrB(UserName, "/") <> 0) Then
-                            UserName = Replace(UserName, "/", "")
-                        End If
+                        Else
+                            If (migr_InStrB(UserName, "\") <> 0) Then
+                                UserName = Replace(UserName, "\", "")
+                            End If
+                            If (migr_InStrB(UserName, "/") <> 0) Then
+                                UserName = Replace(UserName, "/", "")
+                            End If
 
-                        If FileExist(CharPath & UserName & ".chr") Then
-                            Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
-                            Call _
+                            If FileExist(CharPath & UserName & ".chr") Then
+                                Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
+                                Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
                                          LCase(.name) & ": ADVERTENCIA por: " & LCase(reason) & " " & Today & " " &
                                          TimeOfDay)
 
-                            Call _
+                                Call _
                                 WriteConsoleMsg(UserIndex, "Has advertido a " & UCase(UserName) & ".",
                                                 FontTypeNames.FONTTYPE_INFO)
-                            Call LogGM(.name, " advirtio a " & UserName)
+                                Call LogGM(.name, " advirtio a " & UserName)
+                            End If
                         End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleWarnUser: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -9421,457 +9058,450 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim opcion As Byte
-        Dim Arg1 As String
-        Dim Arg2 As String
-        Dim valido As Boolean
-        Dim LoopC As Byte
-        Dim CommandString As String
-        Dim N As Byte
-        Dim UserCharPath As String
-        Dim Var As Integer
-        Dim GI As Short
-        Dim Sex As Byte
-        Dim raza As Byte
-        Dim bankGold As Integer
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim opcion As Byte
+            Dim Arg1 As String
+            Dim Arg2 As String
+            Dim valido As Boolean
+            Dim LoopC As Byte
+            Dim CommandString As String
+            Dim N As Byte
+            Dim UserCharPath As String
+            Dim Var As Integer
+            Dim GI As Short
+            Dim Sex As Byte
+            Dim raza As Byte
+            Dim bankGold As Integer
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = Replace(buffer.ReadASCIIString(), "+", " ")
+                UserName = Replace(buffer.ReadASCIIString(), "+", " ")
 
-            If UCase(UserName) = "YO" Then
-                tUser = UserIndex
-            Else
-                tUser = NameIndex(UserName)
-            End If
+                If UCase(UserName) = "YO" Then
+                    tUser = UserIndex
+                Else
+                    tUser = NameIndex(UserName)
+                End If
 
-            opcion = buffer.ReadByte()
-            Arg1 = buffer.ReadASCIIString()
-            Arg2 = buffer.ReadASCIIString()
+                opcion = buffer.ReadByte()
+                Arg1 = buffer.ReadASCIIString()
+                Arg2 = buffer.ReadASCIIString()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
-                Select Case _
+                If .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
+                    Select Case _
                     .flags.Privilegios And
                     (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
                      Declaraciones.PlayerType.Consejero)
-                    Case Declaraciones.PlayerType.Consejero
-                        ' Los RMs consejeros sólo se pueden editar su head, body y level
-                        valido = tUser = UserIndex And
+                        Case Declaraciones.PlayerType.Consejero
+                            ' Los RMs consejeros sólo se pueden editar su head, body y level
+                            valido = tUser = UserIndex And
                                  (opcion = eEditOptions.eo_Body Or opcion = eEditOptions.eo_Head Or
                                   opcion = eEditOptions.eo_Level)
 
-                    Case Declaraciones.PlayerType.SemiDios
-                        ' Los RMs sólo se pueden editar su level y el head y body de cualquiera
-                        valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or
+                        Case Declaraciones.PlayerType.SemiDios
+                            ' Los RMs sólo se pueden editar su level y el head y body de cualquiera
+                            valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or
                                  opcion = eEditOptions.eo_Head
 
-                    Case Declaraciones.PlayerType.Dios
-                        ' Los DRMs pueden aplicar los siguientes comandos sobre cualquiera
-                        ' pero si quiere modificar el level sólo lo puede hacer sobre sí mismo
-                        valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or
+                        Case Declaraciones.PlayerType.Dios
+                            ' Los DRMs pueden aplicar los siguientes comandos sobre cualquiera
+                            ' pero si quiere modificar el level sólo lo puede hacer sobre sí mismo
+                            valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or
                                  opcion = eEditOptions.eo_Head Or opcion = eEditOptions.eo_CiticensKilled Or
                                  opcion = eEditOptions.eo_CriminalsKilled Or opcion = eEditOptions.eo_Class Or
                                  opcion = eEditOptions.eo_Skills Or opcion = eEditOptions.eo_addGold
-                End Select
+                    End Select
 
-            ElseIf .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then _
-                'Si no es RM debe ser dios para poder usar este comando
-                valido = True
-            End If
+                ElseIf .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then _
+                    'Si no es RM debe ser dios para poder usar este comando
+                    valido = True
+                End If
 
-            If valido Then
-                UserCharPath = CharPath & UserName & ".chr"
-                If tUser <= 0 And Not FileExist(UserCharPath) Then
-                    Call _
+                If valido Then
+                    UserCharPath = CharPath & UserName & ".chr"
+                    If tUser <= 0 And Not FileExist(UserCharPath) Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "Estás intentando editar un usuario inexistente.",
                                         FontTypeNames.FONTTYPE_INFO)
-                    Call LogGM(.name, "Intentó editar un usuario inexistente.")
-                Else
-                    'For making the Log
-                    CommandString = "/MOD "
+                        Call LogGM(.name, "Intentó editar un usuario inexistente.")
+                    Else
+                        'For making the Log
+                        CommandString = "/MOD "
 
-                    Select Case opcion
-                        Case eEditOptions.eo_Gold
-                            If Val(Arg1) <= MAX_ORO_EDIT Then
-                                If tUser <= 0 Then ' Esta offline?
-                                    Call WriteVar(UserCharPath, "STATS", "GLD", CStr(Val(Arg1)))
-                                    Call _
+                        Select Case opcion
+                            Case eEditOptions.eo_Gold
+                                If Val(Arg1) <= MAX_ORO_EDIT Then
+                                    If tUser <= 0 Then ' Esta offline?
+                                        Call WriteVar(UserCharPath, "STATS", "GLD", CStr(Val(Arg1)))
+                                        Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
-                                Else ' Online
-                                    UserList(tUser).Stats.GLD = Val(Arg1)
-                                    Call WriteUpdateGold(tUser)
-                                End If
-                            Else
-                                Call _
+                                    Else ' Online
+                                        UserList(tUser).Stats.GLD = Val(Arg1)
+                                        Call WriteUpdateGold(tUser)
+                                    End If
+                                Else
+                                    Call _
                                     WriteConsoleMsg(UserIndex,
                                                     "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT &
                                                     ". Su comando ha quedado en los logs del juego.",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            End If
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "ORO "
+                                ' Log it
+                                CommandString = CommandString & "ORO "
 
-                        Case eEditOptions.eo_Experience
-                            If Val(Arg1) > 20000000 Then
-                                Arg1 = CStr(20000000)
-                            End If
+                            Case eEditOptions.eo_Experience
+                                If Val(Arg1) > 20000000 Then
+                                    Arg1 = CStr(20000000)
+                                End If
 
-                            If tUser <= 0 Then ' Offline
-                                Var = CInt(GetVar(UserCharPath, "STATS", "EXP"))
-                                Call WriteVar(UserCharPath, "STATS", "EXP", CStr(Var + Val(Arg1)))
-                                Call _
+                                If tUser <= 0 Then ' Offline
+                                    Var = CInt(GetVar(UserCharPath, "STATS", "EXP"))
+                                    Call WriteVar(UserCharPath, "STATS", "EXP", CStr(Var + Val(Arg1)))
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Stats.Exp = UserList(tUser).Stats.Exp + Val(Arg1)
-                                Call CheckUserLevel(tUser)
-                                Call WriteUpdateExp(tUser)
-                            End If
+                                Else ' Online
+                                    UserList(tUser).Stats.Exp = UserList(tUser).Stats.Exp + Val(Arg1)
+                                    Call CheckUserLevel(tUser)
+                                    Call WriteUpdateExp(tUser)
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "EXP "
+                                ' Log it
+                                CommandString = CommandString & "EXP "
 
-                        Case eEditOptions.eo_Body
-                            If tUser <= 0 Then
-                                Call WriteVar(UserCharPath, "INIT", "Body", Arg1)
-                                Call _
+                            Case eEditOptions.eo_Body
+                                If tUser <= 0 Then
+                                    Call WriteVar(UserCharPath, "INIT", "Body", Arg1)
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                Call _
+                                Else
+                                    Call _
                                     ChangeUserChar(tUser, Val(Arg1), UserList(tUser).Char_Renamed.Head,
                                                    UserList(tUser).Char_Renamed.heading,
                                                    UserList(tUser).Char_Renamed.WeaponAnim,
                                                    UserList(tUser).Char_Renamed.ShieldAnim,
                                                    UserList(tUser).Char_Renamed.CascoAnim)
-                            End If
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "BODY "
+                                ' Log it
+                                CommandString = CommandString & "BODY "
 
-                        Case eEditOptions.eo_Head
-                            If tUser <= 0 Then
-                                Call WriteVar(UserCharPath, "INIT", "Head", Arg1)
-                                Call _
+                            Case eEditOptions.eo_Head
+                                If tUser <= 0 Then
+                                    Call WriteVar(UserCharPath, "INIT", "Head", Arg1)
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                Call _
+                                Else
+                                    Call _
                                     ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, Val(Arg1),
                                                    UserList(tUser).Char_Renamed.heading,
                                                    UserList(tUser).Char_Renamed.WeaponAnim,
                                                    UserList(tUser).Char_Renamed.ShieldAnim,
                                                    UserList(tUser).Char_Renamed.CascoAnim)
-                            End If
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "HEAD "
+                                ' Log it
+                                CommandString = CommandString & "HEAD "
 
-                        Case eEditOptions.eo_CriminalsKilled
-                            Var = IIf(Val(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Val(Arg1))
+                            Case eEditOptions.eo_CriminalsKilled
+                                Var = IIf(Val(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Val(Arg1))
 
-                            If tUser <= 0 Then ' Offline
-                                Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", CStr(Var))
-                                Call _
+                                If tUser <= 0 Then ' Offline
+                                    Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", CStr(Var))
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Faccion.CriminalesMatados = Var
-                            End If
+                                Else ' Online
+                                    UserList(tUser).Faccion.CriminalesMatados = Var
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "CRI "
+                                ' Log it
+                                CommandString = CommandString & "CRI "
 
-                        Case eEditOptions.eo_CiticensKilled
-                            Var = IIf(Val(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Val(Arg1))
+                            Case eEditOptions.eo_CiticensKilled
+                                Var = IIf(Val(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Val(Arg1))
 
-                            If tUser <= 0 Then ' Offline
-                                Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", CStr(Var))
-                                Call _
+                                If tUser <= 0 Then ' Offline
+                                    Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", CStr(Var))
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Faccion.CiudadanosMatados = Var
-                            End If
+                                Else ' Online
+                                    UserList(tUser).Faccion.CiudadanosMatados = Var
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "CIU "
+                                ' Log it
+                                CommandString = CommandString & "CIU "
 
-                        Case eEditOptions.eo_Level
-                            If Val(Arg1) > STAT_MAXELV Then
-                                Arg1 = CStr(STAT_MAXELV)
-                                Call _
+                            Case eEditOptions.eo_Level
+                                If Val(Arg1) > STAT_MAXELV Then
+                                    Arg1 = CStr(STAT_MAXELV)
+                                    Call _
                                     WriteConsoleMsg(UserIndex,
                                                     "No puedes tener un nivel superior a " & STAT_MAXELV & ".",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            End If
-
-                            ' Chequeamos si puede permanecer en el clan
-                            If Val(Arg1) >= 25 Then
-
-                                If tUser <= 0 Then
-                                    GI = CShort(GetVar(UserCharPath, "GUILD", "GUILDINDEX"))
-                                Else
-                                    GI = UserList(tUser).GuildIndex
                                 End If
 
-                                If GI > 0 Then
-                                    If modGuilds.GuildAlignment(GI) = "Del Mal" Or modGuilds.GuildAlignment(GI) = "Real" _
-                                        Then
-                                        'We get here, so guild has factionary alignment, we have to expulse the user
-                                        Call modGuilds.m_EcharMiembroDeClan(- 1, UserName)
+                                ' Chequeamos si puede permanecer en el clan
+                                If Val(Arg1) >= 25 Then
 
-                                        Call _
+                                    If tUser <= 0 Then
+                                        GI = CShort(GetVar(UserCharPath, "GUILD", "GUILDINDEX"))
+                                    Else
+                                        GI = UserList(tUser).GuildIndex
+                                    End If
+
+                                    If GI > 0 Then
+                                        If modGuilds.GuildAlignment(GI) = "Del Mal" Or modGuilds.GuildAlignment(GI) = "Real" _
+                                        Then
+                                            'We get here, so guild has factionary alignment, we have to expulse the user
+                                            Call modGuilds.m_EcharMiembroDeClan(-1, UserName)
+
+                                            Call _
                                             SendData(modSendData.SendTarget.ToGuildMembers, GI,
                                                      PrepareMessageConsoleMsg(UserName & " deja el clan.",
                                                                               FontTypeNames.FONTTYPE_GUILD))
-                                        ' Si esta online le avisamos
-                                        If tUser > 0 Then _
+                                            ' Si esta online le avisamos
+                                            If tUser > 0 Then _
                                             Call _
                                                 WriteConsoleMsg(tUser,
                                                                 "¡Ya tienes la madurez suficiente como para decidir bajo que estandarte pelearás! Por esta razón, hasta tanto no te enlistes en la facción bajo la cual tu clan está alineado, estarás excluído del mismo.",
                                                                 FontTypeNames.FONTTYPE_GUILD)
+                                        End If
                                     End If
                                 End If
-                            End If
 
-                            If tUser <= 0 Then ' Offline
-                                Call WriteVar(UserCharPath, "STATS", "ELV", CStr(Val(Arg1)))
-                                Call _
+                                If tUser <= 0 Then ' Offline
+                                    Call WriteVar(UserCharPath, "STATS", "ELV", CStr(Val(Arg1)))
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Stats.ELV = Val(Arg1)
-                                Call WriteUpdateUserStats(tUser)
-                            End If
+                                Else ' Online
+                                    UserList(tUser).Stats.ELV = Val(Arg1)
+                                    Call WriteUpdateUserStats(tUser)
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "LEVEL "
+                                ' Log it
+                                CommandString = CommandString & "LEVEL "
 
-                        Case eEditOptions.eo_Class
-                            For LoopC = 1 To NUMCLASES
-                                If UCase(ListaClases(LoopC)) = UCase(Arg1) Then Exit For
-                            Next LoopC
+                            Case eEditOptions.eo_Class
+                                For LoopC = 1 To NUMCLASES
+                                    If UCase(ListaClases(LoopC)) = UCase(Arg1) Then Exit For
+                                Next LoopC
 
-                            If LoopC > NUMCLASES Then
-                                Call _
+                                If LoopC > NUMCLASES Then
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Clase desconocida. Intente nuevamente.",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "INIT", "Clase", CStr(LoopC))
-                                    Call _
-                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                        FontTypeNames.FONTTYPE_INFO)
-                                Else ' Online
-                                    UserList(tUser).clase = LoopC
-                                End If
-                            End If
-
-                            ' Log it
-                            CommandString = CommandString & "CLASE "
-
-                        Case eEditOptions.eo_Skills
-                            For LoopC = 1 To NUMSKILLS
-                                If UCase(Replace(SkillsNames(LoopC), " ", "+")) = UCase(Arg1) Then Exit For
-                            Next LoopC
-
-                            If LoopC > NUMSKILLS Then
-                                Call WriteConsoleMsg(UserIndex, "Skill Inexistente!", FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "Skills", "SK" & LoopC, Arg2)
-                                    Call WriteVar(UserCharPath, "Skills", "EXPSK" & LoopC, CStr(0))
-
-                                    If CDbl(Arg2) < MAXSKILLPOINTS Then
+                                Else
+                                    If tUser <= 0 Then ' Offline
+                                        Call WriteVar(UserCharPath, "INIT", "Clase", CStr(LoopC))
                                         Call _
-                                            WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC,
-                                                     CStr(ELU_SKILL_INICIAL*1.05^CDbl(Arg2)))
-                                    Else
-                                        Call WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC, CStr(0))
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
+                                    Else ' Online
+                                        UserList(tUser).clase = LoopC
                                     End If
+                                End If
 
-                                    Call _
+                                ' Log it
+                                CommandString = CommandString & "CLASE "
+
+                            Case eEditOptions.eo_Skills
+                                For LoopC = 1 To NUMSKILLS
+                                    If UCase(Replace(SkillsNames(LoopC), " ", "+")) = UCase(Arg1) Then Exit For
+                                Next LoopC
+
+                                If LoopC > NUMSKILLS Then
+                                    Call WriteConsoleMsg(UserIndex, "Skill Inexistente!", FontTypeNames.FONTTYPE_INFO)
+                                Else
+                                    If tUser <= 0 Then ' Offline
+                                        Call WriteVar(UserCharPath, "Skills", "SK" & LoopC, Arg2)
+                                        Call WriteVar(UserCharPath, "Skills", "EXPSK" & LoopC, CStr(0))
+
+                                        If CDbl(Arg2) < MAXSKILLPOINTS Then
+                                            Call _
+                                            WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC,
+                                                     CStr(ELU_SKILL_INICIAL * 1.05 ^ CDbl(Arg2)))
+                                        Else
+                                            Call WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC, CStr(0))
+                                        End If
+
+                                        Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
-                                Else ' Online
-                                    UserList(tUser).Stats.UserSkills(LoopC) = Val(Arg2)
-                                    Call CheckEluSkill(tUser, LoopC, True)
+                                    Else ' Online
+                                        UserList(tUser).Stats.UserSkills(LoopC) = Val(Arg2)
+                                        Call CheckEluSkill(tUser, LoopC, True)
+                                    End If
                                 End If
-                            End If
 
-                            ' Log it
-                            CommandString = CommandString & "SKILLS "
+                                ' Log it
+                                CommandString = CommandString & "SKILLS "
 
-                        Case eEditOptions.eo_SkillPointsLeft
-                            If tUser <= 0 Then ' Offline
-                                Call WriteVar(UserCharPath, "STATS", "SkillPtsLibres", Arg1)
-                                Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Stats.SkillPts = Val(Arg1)
-                            End If
-
-                            ' Log it
-                            CommandString = CommandString & "SKILLSLIBRES "
-
-                        Case eEditOptions.eo_Nobleza
-                            Var = IIf(Val(Arg1) > MAXREP, MAXREP, Val(Arg1))
-
-                            If tUser <= 0 Then ' Offline
-                                Call WriteVar(UserCharPath, "REP", "Nobles", CStr(Var))
-                                Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Reputacion.NobleRep = Var
-                            End If
-
-                            ' Log it
-                            CommandString = CommandString & "NOB "
-
-                        Case eEditOptions.eo_Asesino
-                            Var = IIf(Val(Arg1) > MAXREP, MAXREP, Val(Arg1))
-
-                            If tUser <= 0 Then ' Offline
-                                Call WriteVar(UserCharPath, "REP", "Asesino", CStr(Var))
-                                Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
-                            Else ' Online
-                                UserList(tUser).Reputacion.AsesinoRep = Var
-                            End If
-
-                            ' Log it
-                            CommandString = CommandString & "ASE "
-
-                        Case eEditOptions.eo_Sex
-                            Sex = IIf(UCase(Arg1) = "MUJER", Declaraciones.eGenero.Mujer, 0) ' Mujer?
-                            Sex = IIf(UCase(Arg1) = "HOMBRE", Declaraciones.eGenero.Hombre, Sex) ' Hombre?
-
-                            If Sex <> 0 Then ' Es Hombre o mujer?
-                                If tUser <= 0 Then ' OffLine
-                                    Call WriteVar(UserCharPath, "INIT", "Genero", CStr(Sex))
+                            Case eEditOptions.eo_SkillPointsLeft
+                                If tUser <= 0 Then ' Offline
+                                    Call WriteVar(UserCharPath, "STATS", "SkillPtsLibres", Arg1)
                                     Call _
+                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                    FontTypeNames.FONTTYPE_INFO)
+                                Else ' Online
+                                    UserList(tUser).Stats.SkillPts = Val(Arg1)
+                                End If
+
+                                ' Log it
+                                CommandString = CommandString & "SKILLSLIBRES "
+
+                            Case eEditOptions.eo_Nobleza
+                                Var = IIf(Val(Arg1) > MAXREP, MAXREP, Val(Arg1))
+
+                                If tUser <= 0 Then ' Offline
+                                    Call WriteVar(UserCharPath, "REP", "Nobles", CStr(Var))
+                                    Call _
+                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                    FontTypeNames.FONTTYPE_INFO)
+                                Else ' Online
+                                    UserList(tUser).Reputacion.NobleRep = Var
+                                End If
+
+                                ' Log it
+                                CommandString = CommandString & "NOB "
+
+                            Case eEditOptions.eo_Asesino
+                                Var = IIf(Val(Arg1) > MAXREP, MAXREP, Val(Arg1))
+
+                                If tUser <= 0 Then ' Offline
+                                    Call WriteVar(UserCharPath, "REP", "Asesino", CStr(Var))
+                                    Call _
+                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                    FontTypeNames.FONTTYPE_INFO)
+                                Else ' Online
+                                    UserList(tUser).Reputacion.AsesinoRep = Var
+                                End If
+
+                                ' Log it
+                                CommandString = CommandString & "ASE "
+
+                            Case eEditOptions.eo_Sex
+                                Sex = IIf(UCase(Arg1) = "MUJER", Declaraciones.eGenero.Mujer, 0) ' Mujer?
+                                Sex = IIf(UCase(Arg1) = "HOMBRE", Declaraciones.eGenero.Hombre, Sex) ' Hombre?
+
+                                If Sex <> 0 Then ' Es Hombre o mujer?
+                                    If tUser <= 0 Then ' OffLine
+                                        Call WriteVar(UserCharPath, "INIT", "Genero", CStr(Sex))
+                                        Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
-                                Else ' Online
-                                    UserList(tUser).Genero = Sex
-                                End If
-                            Else
-                                Call _
+                                    Else ' Online
+                                        UserList(tUser).Genero = Sex
+                                    End If
+                                Else
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Genero desconocido. Intente nuevamente.",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            End If
+                                End If
 
-                            ' Log it
-                            CommandString = CommandString & "SEX "
+                                ' Log it
+                                CommandString = CommandString & "SEX "
 
-                        Case eEditOptions.eo_Raza
+                            Case eEditOptions.eo_Raza
 
-                            Arg1 = UCase(Arg1)
-                            Select Case Arg1
-                                Case "HUMANO"
-                                    raza = Declaraciones.eRaza.Humano
-                                Case "ELFO"
-                                    raza = Declaraciones.eRaza.Elfo
-                                Case "DROW"
-                                    raza = Declaraciones.eRaza.Drow
-                                Case "ENANO"
-                                    raza = Declaraciones.eRaza.Enano
-                                Case "GNOMO"
-                                    raza = Declaraciones.eRaza.Gnomo
-                                Case Else
-                                    raza = 0
-                            End Select
+                                Arg1 = UCase(Arg1)
+                                Select Case Arg1
+                                    Case "HUMANO"
+                                        raza = Declaraciones.eRaza.Humano
+                                    Case "ELFO"
+                                        raza = Declaraciones.eRaza.Elfo
+                                    Case "DROW"
+                                        raza = Declaraciones.eRaza.Drow
+                                    Case "ENANO"
+                                        raza = Declaraciones.eRaza.Enano
+                                    Case "GNOMO"
+                                        raza = Declaraciones.eRaza.Gnomo
+                                    Case Else
+                                        raza = 0
+                                End Select
 
 
-                            If raza = 0 Then
-                                Call _
+                                If raza = 0 Then
+                                    Call _
                                     WriteConsoleMsg(UserIndex, "Raza desconocida. Intente nuevamente.",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                If tUser <= 0 Then
-                                    Call WriteVar(UserCharPath, "INIT", "Raza", CStr(raza))
-                                    Call _
+                                Else
+                                    If tUser <= 0 Then
+                                        Call WriteVar(UserCharPath, "INIT", "Raza", CStr(raza))
+                                        Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
-                                Else
-                                    UserList(tUser).raza = raza
+                                    Else
+                                        UserList(tUser).raza = raza
+                                    End If
                                 End If
-                            End If
 
-                            ' Log it
-                            CommandString = CommandString & "RAZA "
+                                ' Log it
+                                CommandString = CommandString & "RAZA "
 
-                        Case eEditOptions.eo_addGold
+                            Case eEditOptions.eo_addGold
 
 
-                            If System.Math.Abs(CDbl(Arg1)) > MAX_ORO_EDIT Then
-                                Call _
+                                If System.Math.Abs(CDbl(Arg1)) > MAX_ORO_EDIT Then
+                                    Call _
                                     WriteConsoleMsg(UserIndex,
                                                     "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT & ".",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                If tUser <= 0 Then
-                                    bankGold = CInt(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
-                                    Call _
+                                Else
+                                    If tUser <= 0 Then
+                                        bankGold = CInt(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
+                                        Call _
                                         WriteVar(UserCharPath, "STATS", "BANCO",
                                                  IIf(bankGold + Val(Arg1) <= 0, 0, bankGold + Val(Arg1)))
-                                    Call _
+                                        Call _
                                         WriteConsoleMsg(UserIndex,
                                                         "Se le ha agregado " & Arg1 & " monedas de oro a " & UserName &
                                                         ".", FontTypeNames.FONTTYPE_TALK)
-                                Else
-                                    UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + Val(Arg1) <= 0, 0,
+                                    Else
+                                        UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + Val(Arg1) <= 0, 0,
                                                                       UserList(tUser).Stats.Banco + Val(Arg1))
-                                    Call _
+                                        Call _
                                         WriteConsoleMsg(tUser, STANDARD_BOUNTY_HUNTER_MESSAGE,
                                                         FontTypeNames.FONTTYPE_TALK)
+                                    End If
                                 End If
-                            End If
 
-                            ' Log it
-                            CommandString = CommandString & "AGREGAR "
+                                ' Log it
+                                CommandString = CommandString & "AGREGAR "
 
-                        Case Else
-                            Call WriteConsoleMsg(UserIndex, "Comando no permitido.", FontTypeNames.FONTTYPE_INFO)
-                            CommandString = CommandString & "UNKOWN "
+                            Case Else
+                                Call WriteConsoleMsg(UserIndex, "Comando no permitido.", FontTypeNames.FONTTYPE_INFO)
+                                CommandString = CommandString & "UNKOWN "
 
-                    End Select
+                        End Select
 
-                    CommandString = CommandString & Arg1 & " " & Arg2
-                    Call LogGM(.name, CommandString & " " & UserName)
+                        CommandString = CommandString & Arg1 & " " & Arg2
+                        Call LogGM(.name, CommandString & " " & UserName)
 
+                    End If
                 End If
-            End If
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleEditChar: " & ex.Message)
+        End Try
     End Sub
 
 
@@ -9891,61 +9521,54 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim targetName As String
-        Dim TargetIndex As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim targetName As String
+            Dim TargetIndex As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            targetName = Replace(buffer.ReadASCIIString(), "+", " ")
-            TargetIndex = NameIndex(targetName)
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            If _
+                targetName = Replace(buffer.ReadASCIIString(), "+", " ")
+                TargetIndex = NameIndex(targetName)
+
+
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios) _
                 Then
-                'is the player offline?
-                If TargetIndex <= 0 Then
-                    'don't allow to retrieve administrator's info
-                    If Not (EsDios(targetName) Or EsAdmin(targetName)) Then
-                        Call _
+                    'is the player offline?
+                    If TargetIndex <= 0 Then
+                        'don't allow to retrieve administrator's info
+                        If Not (EsDios(targetName) Or EsAdmin(targetName)) Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "Usuario offline, buscando en charfile.",
                                             FontTypeNames.FONTTYPE_INFO)
-                        Call SendUserStatsTxtOFF(UserIndex, targetName)
-                    End If
-                Else
-                    'don't allow to retrieve administrator's info
-                    If _
+                            Call SendUserStatsTxtOFF(UserIndex, targetName)
+                        End If
+                    Else
+                        'don't allow to retrieve administrator's info
+                        If _
                         UserList(TargetIndex).flags.Privilegios And
                         (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
                          Declaraciones.PlayerType.SemiDios) Then
-                        Call SendUserStatsTxt(UserIndex, TargetIndex)
+                            Call SendUserStatsTxt(UserIndex, TargetIndex)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharInfo: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -9964,53 +9587,46 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                Call LogGM(.name, "/STAT " & UserName)
+                    Call LogGM(.name, "/STAT " & UserName)
 
-                tUser = NameIndex(UserName)
+                    tUser = NameIndex(UserName)
 
-                If tUser <= 0 Then
-                    Call _
+                    If tUser <= 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ", FontTypeNames.FONTTYPE_INFO)
 
-                    Call SendUserMiniStatsTxtFromChar(UserIndex, UserName)
-                Else
-                    Call SendUserMiniStatsTxt(UserIndex, tUser)
+                        Call SendUserMiniStatsTxtFromChar(UserIndex, UserName)
+                    Else
+                        Call SendUserMiniStatsTxt(UserIndex, tUser)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharStats: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10029,55 +9645,48 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            tUser = NameIndex(UserName)
+                UserName = buffer.ReadASCIIString()
+                tUser = NameIndex(UserName)
 
-            If _
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                Call LogGM(.name, "/BAL " & UserName)
+                    Call LogGM(.name, "/BAL " & UserName)
 
-                If tUser <= 0 Then
-                    Call _
+                    If tUser <= 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ", FontTypeNames.FONTTYPE_TALK)
 
-                    Call SendUserOROTxtFromChar(UserIndex, UserName)
-                Else
-                    Call _
+                        Call SendUserOROTxtFromChar(UserIndex, UserName)
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "El usuario " & UserName & " tiene " & UserList(tUser).Stats.Banco &
                                         " en el banco.", FontTypeNames.FONTTYPE_TALK)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharGold: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10096,54 +9705,47 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            UserName = buffer.ReadASCIIString()
-            tUser = NameIndex(UserName)
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            If _
+                UserName = buffer.ReadASCIIString()
+                tUser = NameIndex(UserName)
+
+
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                Call LogGM(.name, "/INV " & UserName)
+                    Call LogGM(.name, "/INV " & UserName)
 
-                If tUser <= 0 Then
-                    Call _
+                    If tUser <= 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo del charfile...",
                                         FontTypeNames.FONTTYPE_TALK)
 
-                    Call SendUserInvTxtFromChar(UserIndex, UserName)
-                Else
-                    Call SendUserInvTxt(UserIndex, tUser)
+                        Call SendUserInvTxtFromChar(UserIndex, UserName)
+                    Else
+                        Call SendUserInvTxt(UserIndex, tUser)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharInventory: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10162,53 +9764,46 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            UserName = buffer.ReadASCIIString()
-            tUser = NameIndex(UserName)
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            If _
+                UserName = buffer.ReadASCIIString()
+                tUser = NameIndex(UserName)
+
+
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                Call LogGM(.name, "/BOV " & UserName)
+                    Call LogGM(.name, "/BOV " & UserName)
 
-                If tUser <= 0 Then
-                    Call _
+                    If tUser <= 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ", FontTypeNames.FONTTYPE_TALK)
 
-                    Call SendUserBovedaTxtFromChar(UserIndex, UserName)
-                Else
-                    Call SendUserBovedaTxt(UserIndex, tUser)
+                        Call SendUserBovedaTxtFromChar(UserIndex, UserName)
+                    Else
+                        Call SendUserBovedaTxt(UserIndex, tUser)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharBank: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10227,68 +9822,61 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim LoopC As Integer
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim LoopC As Integer
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            UserName = buffer.ReadASCIIString()
-            tUser = NameIndex(UserName)
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            If _
+                UserName = buffer.ReadASCIIString()
+                tUser = NameIndex(UserName)
+
+
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                Call LogGM(.name, "/STATS " & UserName)
+                    Call LogGM(.name, "/STATS " & UserName)
 
-                If tUser <= 0 Then
-                    If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = Replace(UserName, "\", "")
-                    End If
-                    If (migr_InStrB(UserName, "/") <> 0) Then
-                        UserName = Replace(UserName, "/", "")
-                    End If
+                    If tUser <= 0 Then
+                        If (migr_InStrB(UserName, "\") <> 0) Then
+                            UserName = Replace(UserName, "\", "")
+                        End If
+                        If (migr_InStrB(UserName, "/") <> 0) Then
+                            UserName = Replace(UserName, "/", "")
+                        End If
 
-                    For LoopC = 1 To NUMSKILLS
-                        message = message & "CHAR>" & SkillsNames(LoopC) & " = " &
+                        For LoopC = 1 To NUMSKILLS
+                            message = message & "CHAR>" & SkillsNames(LoopC) & " = " &
                                   GetVar(CharPath & UserName & ".chr", "SKILLS", "SK" & LoopC) & vbCrLf
-                    Next LoopC
+                        Next LoopC
 
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         message & "CHAR> Libres:" &
                                         GetVar(CharPath & UserName & ".chr", "STATS", "SKILLPTSLIBRES"),
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call SendUserSkillsTxt(UserIndex, tUser)
+                    Else
+                        Call SendUserSkillsTxt(UserIndex, tUser)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharSkills: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10307,99 +9895,92 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim LoopC As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim LoopC As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            UserName = buffer.ReadASCIIString()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            If _
+                UserName = buffer.ReadASCIIString()
+
+
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                If UCase(UserName) <> "YO" Then
-                    tUser = NameIndex(UserName)
-                Else
-                    tUser = UserIndex
-                End If
+                    If UCase(UserName) <> "YO" Then
+                        tUser = NameIndex(UserName)
+                    Else
+                        tUser = UserIndex
+                    End If
 
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    With UserList(tUser)
-                        'If dead, show him alive (naked).
-                        If .flags.Muerto = 1 Then
-                            .flags.Muerto = 0
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        With UserList(tUser)
+                            'If dead, show him alive (naked).
+                            If .flags.Muerto = 1 Then
+                                .flags.Muerto = 0
 
-                            If .flags.Navegando = 1 Then
-                                Call ToogleBoatBody(UserIndex)
-                            Else
-                                Call DarCuerpoDesnudo(tUser)
-                            End If
+                                If .flags.Navegando = 1 Then
+                                    Call ToogleBoatBody(UserIndex)
+                                Else
+                                    Call DarCuerpoDesnudo(tUser)
+                                End If
 
-                            If .flags.Traveling = 1 Then
-                                .flags.Traveling = 0
-                                .Counters.goHome = 0
-                                Call WriteMultiMessage(tUser, Declaraciones.eMessages.CancelHome)
-                            End If
+                                If .flags.Traveling = 1 Then
+                                    .flags.Traveling = 0
+                                    .Counters.goHome = 0
+                                    Call WriteMultiMessage(tUser, Declaraciones.eMessages.CancelHome)
+                                End If
 
-                            Call _
+                                Call _
                                 ChangeUserChar(tUser, .Char_Renamed.body, .OrigChar.Head, .Char_Renamed.heading,
                                                .Char_Renamed.WeaponAnim, .Char_Renamed.ShieldAnim,
                                                .Char_Renamed.CascoAnim)
 
-                            Call _
+                                Call _
                                 WriteConsoleMsg(tUser, UserList(UserIndex).name & " te ha resucitado.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        Else
-                            Call _
+                            Else
+                                Call _
                                 WriteConsoleMsg(tUser, UserList(UserIndex).name & " te ha curado.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        End If
+                            End If
 
-                        .Stats.MinHp = .Stats.MaxHp
+                            .Stats.MinHp = .Stats.MaxHp
 
-                        If .flags.Traveling = 1 Then
-                            .Counters.goHome = 0
-                            .flags.Traveling = 0
-                            Call WriteMultiMessage(tUser, Declaraciones.eMessages.CancelHome)
-                        End If
+                            If .flags.Traveling = 1 Then
+                                .Counters.goHome = 0
+                                .flags.Traveling = 0
+                                Call WriteMultiMessage(tUser, Declaraciones.eMessages.CancelHome)
+                            End If
 
-                    End With
+                        End With
 
-                    Call WriteUpdateHP(tUser)
+                        Call WriteUpdateHP(tUser)
 
-                    Call FlushBuffer(tUser)
+                        Call FlushBuffer(tUser)
 
-                    Call LogGM(.name, "Resucito a " & UserName)
+                        Call LogGM(.name, "Resucito a " & UserName)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleReviveChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10501,53 +10082,46 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                tUser = NameIndex(UserName)
+                    tUser = NameIndex(UserName)
 
-                If tUser > 0 Then
-                    If EsNewbie(tUser) Then
-                        Call VolverCiudadano(tUser)
-                    Else
-                        Call LogGM(.name, "Intento perdonar un personaje de nivel avanzado.")
-                        Call _
+                    If tUser > 0 Then
+                        If EsNewbie(tUser) Then
+                            Call VolverCiudadano(tUser)
+                        Else
+                            Call LogGM(.name, "Intento perdonar un personaje de nivel avanzado.")
+                            Call _
                             WriteConsoleMsg(UserIndex, "Sólo se permite perdonar newbies.", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleForgive: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10566,63 +10140,56 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim rank As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim rank As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
+                rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
                    Declaraciones.PlayerType.Consejero
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                tUser = NameIndex(UserName)
+                    tUser = NameIndex(UserName)
 
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If (UserList(tUser).flags.Privilegios And rank) > (.flags.Privilegios And rank) Then
-                        Call _
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If (UserList(tUser).flags.Privilegios And rank) > (.flags.Privilegios And rank) Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "No puedes echar a alguien con jerarquía mayor a la tuya.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call _
+                        Else
+                            Call _
                             SendData(modSendData.SendTarget.ToAll, 0,
                                      PrepareMessageConsoleMsg(.name & " echó a " & UserName & ".",
                                                               FontTypeNames.FONTTYPE_INFO))
-                        Call CloseSocket(tUser)
-                        Call LogGM(.name, "Echó a " & UserName)
+                            Call CloseSocket(tUser)
+                            Call LogGM(.name, "Echó a " & UserName)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleKick: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10641,60 +10208,53 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                tUser = NameIndex(UserName)
+                    tUser = NameIndex(UserName)
 
-                If tUser > 0 Then
-                    If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
-                        Call _
+                    If tUser > 0 Then
+                        If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "¿¿Estás loco?? ¿¿Cómo vas a piñatear un gm?? :@",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call UserDie(tUser)
-                        Call _
+                        Else
+                            Call UserDie(tUser)
+                            Call _
                             SendData(modSendData.SendTarget.ToAll, 0,
                                      PrepareMessageConsoleMsg(.name & " ha ejecutado a " & UserName & ".",
                                                               FontTypeNames.FONTTYPE_EJECUCION))
-                        Call LogGM(.name, " ejecuto a " & UserName)
+                            Call LogGM(.name, " ejecuto a " & UserName)
+                        End If
+                    Else
+                        Call WriteConsoleMsg(UserIndex, "No está online.", FontTypeNames.FONTTYPE_INFO)
                     End If
-                Else
-                    Call WriteConsoleMsg(UserIndex, "No está online.", FontTypeNames.FONTTYPE_INFO)
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleExecute: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10713,44 +10273,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim reason As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim reason As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            reason = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
+                reason = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                Call BanCharacter(UserIndex, UserName, reason)
-            End If
+                    Call BanCharacter(UserIndex, UserName, reason)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleBanChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10769,70 +10322,63 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim cantPenas As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim cantPenas As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                If (migr_InStrB(UserName, "\") <> 0) Then
-                    UserName = Replace(UserName, "\", "")
-                End If
-                If (migr_InStrB(UserName, "/") <> 0) Then
-                    UserName = Replace(UserName, "/", "")
-                End If
+                    If (migr_InStrB(UserName, "\") <> 0) Then
+                        UserName = Replace(UserName, "\", "")
+                    End If
+                    If (migr_InStrB(UserName, "/") <> 0) Then
+                        UserName = Replace(UserName, "/", "")
+                    End If
 
-                If Not FileExist(CharPath & UserName & ".chr") Then
-                    Call WriteConsoleMsg(UserIndex, "Charfile inexistente (no use +).", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If (Val(GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban")) = 1) Then
-                        Call UnBan(UserName)
+                    If Not FileExist(CharPath & UserName & ".chr") Then
+                        Call WriteConsoleMsg(UserIndex, "Charfile inexistente (no use +).", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If (Val(GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban")) = 1) Then
+                            Call UnBan(UserName)
 
-                        'penas
-                        cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                        Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
-                        Call _
+                            'penas
+                            cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                            Call _
                             WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
                                      LCase(.name) & ": UNBAN. " & Today & " " & TimeOfDay)
 
-                        Call LogGM(.name, "/UNBAN a " & UserName)
-                        Call WriteConsoleMsg(UserIndex, UserName & " unbanned.", FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call _
+                            Call LogGM(.name, "/UNBAN a " & UserName)
+                            Call WriteConsoleMsg(UserIndex, UserName & " unbanned.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex, UserName & " no está baneado. Imposible unbanear.",
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleUnbanChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -10878,64 +10424,57 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim X As Short
-        Dim Y As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim X As Short
+            Dim Y As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                tUser = NameIndex(UserName)
+                    tUser = NameIndex(UserName)
 
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "El jugador no está online.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If _
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "El jugador no está online.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If _
                         (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Or
                         (UserList(tUser).flags.Privilegios And
                          (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.User)) <> 0 Then
-                        Call WriteConsoleMsg(tUser, .name & " te ha trasportado.", FontTypeNames.FONTTYPE_INFO)
-                        X = .Pos.X
-                        Y = .Pos.Y + 1
-                        Call FindLegalPos(tUser, .Pos.Map, X, Y)
-                        Call WarpUserChar(tUser, .Pos.Map, X, Y, True, True)
-                        Call LogGM(.name, "/SUM " & UserName & " Map:" & .Pos.Map & " X:" & .Pos.X & " Y:" & .Pos.Y)
-                    Else
-                        Call _
+                            Call WriteConsoleMsg(tUser, .name & " te ha trasportado.", FontTypeNames.FONTTYPE_INFO)
+                            X = .Pos.X
+                            Y = .Pos.Y + 1
+                            Call FindLegalPos(tUser, .Pos.Map, X, Y)
+                            Call WarpUserChar(tUser, .Pos.Map, X, Y, True, True)
+                            Call LogGM(.name, "/SUM " & UserName & " Map:" & .Pos.Map & " X:" & .Pos.X & " Y:" & .Pos.Y)
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex, "No puedes invocar a dioses y admins.",
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSummonChar: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11062,48 +10601,41 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
                 Then
-                If migr_LenB(message) <> 0 Then
-                    Call LogGM(.name, "Mensaje Broadcast:" & message)
-                    Call _
+                    If migr_LenB(message) <> 0 Then
+                        Call LogGM(.name, "Mensaje Broadcast:" & message)
+                        Call _
                         SendData(modSendData.SendTarget.ToAll, 0,
                                  PrepareMessageConsoleMsg(UserList(UserIndex).name & "> " & message,
                                                           FontTypeNames.FONTTYPE_TALK))
-                    ''''''''''''''''SOLO PARA EL TESTEO'''''''
-                    ''''''''''SE USA PARA COMUNICARSE CON EL SERVER'''''''''''
+                        ''''''''''''''''SOLO PARA EL TESTEO'''''''
+                        ''''''''''SE USA PARA COMUNICARSE CON EL SERVER'''''''''''
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleServerMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11122,81 +10654,74 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim priv As Declaraciones.PlayerType
-        Dim ip As String
-        Dim lista As String
-        Dim LoopC As Integer
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim priv As Declaraciones.PlayerType
+            Dim ip As String
+            Dim lista As String
+            Dim LoopC As Integer
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                tUser = NameIndex(UserName)
-                Call LogGM(.name, "NICK2IP Solicito la IP de " & UserName)
+                    tUser = NameIndex(UserName)
+                    Call LogGM(.name, "NICK2IP Solicito la IP de " & UserName)
 
-                If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) Then
-                    priv = Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
+                    If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) Then
+                        priv = Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
                            Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Dios Or
                            Declaraciones.PlayerType.Admin
-                Else
-                    priv = Declaraciones.PlayerType.User
-                End If
+                    Else
+                        priv = Declaraciones.PlayerType.User
+                    End If
 
-                If tUser > 0 Then
-                    If UserList(tUser).flags.Privilegios And priv Then
-                        Call _
+                    If tUser > 0 Then
+                        If UserList(tUser).flags.Privilegios And priv Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "El ip de " & UserName & " es " & UserList(tUser).ip,
                                             FontTypeNames.FONTTYPE_INFO)
-                        ip = UserList(tUser).ip
-                        For LoopC = 1 To LastUser
-                            If UserList(LoopC).ip = ip Then
-                                If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).flags.UserLogged Then
-                                    If UserList(LoopC).flags.Privilegios And priv Then
-                                        lista = lista & UserList(LoopC).name & ", "
+                            ip = UserList(tUser).ip
+                            For LoopC = 1 To LastUser
+                                If UserList(LoopC).ip = ip Then
+                                    If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).flags.UserLogged Then
+                                        If UserList(LoopC).flags.Privilegios And priv Then
+                                            lista = lista & UserList(LoopC).name & ", "
+                                        End If
                                     End If
                                 End If
-                            End If
-                        Next LoopC
-                        If migr_LenB(lista) <> 0 Then lista = Left(lista, Len(lista) - 2)
-                        Call _
+                            Next LoopC
+                            If migr_LenB(lista) <> 0 Then lista = Left(lista, Len(lista) - 2)
+                            Call _
                             WriteConsoleMsg(UserIndex, "Los personajes con ip " & ip & " son: " & lista,
                                             FontTypeNames.FONTTYPE_INFO)
-                    End If
-                Else
-                    Call _
+                        End If
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex, "No hay ningún personaje con ese nick.", FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleNickToIP: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11276,55 +10801,48 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim GuildName As String
-        Dim tGuild As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim GuildName As String
+            Dim tGuild As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            GuildName = buffer.ReadASCIIString()
+                GuildName = buffer.ReadASCIIString()
 
-            If (migr_InStrB(GuildName, "+") <> 0) Then
-                GuildName = Replace(GuildName, "+", " ")
-            End If
+                If (migr_InStrB(GuildName, "+") <> 0) Then
+                    GuildName = Replace(GuildName, "+", " ")
+                End If
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                tGuild = GuildIndex(GuildName)
+                    tGuild = GuildIndex(GuildName)
 
-                If tGuild > 0 Then
-                    Call _
+                    If tGuild > 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Clan " & UCase(GuildName) & ": " &
                                         modGuilds.m_ListaDeMiembrosOnline(UserIndex, tGuild),
                                         FontTypeNames.FONTTYPE_GUILDMSG)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildOnlineMembers: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11493,46 +11011,39 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim tUser As Short
-        Dim desc As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim tUser As Short
+            Dim desc As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            desc = buffer.ReadASCIIString()
+                desc = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Or
                 (.flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 Then
-                tUser = .flags.TargetUser
-                If tUser > 0 Then
-                    UserList(tUser).DescRM = desc
-                Else
-                    Call WriteConsoleMsg(UserIndex, "Haz click sobre un personaje antes.", FontTypeNames.FONTTYPE_INFO)
+                    tUser = .flags.TargetUser
+                    If tUser > 0 Then
+                        UserList(tUser).DescRM = desc
+                    Else
+                        Call WriteConsoleMsg(UserIndex, "Haz click sobre un personaje antes.", FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSetCharDescription: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11648,43 +11159,36 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            'Solo dioses, admins y RMS
-            If _
+                'Solo dioses, admins y RMS
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
                 Then
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToRealYRMs, 0,
                              PrepareMessageConsoleMsg("EJÉRCITO REAL> " & message, FontTypeNames.FONTTYPE_TALK))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRoyalArmyMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11703,43 +11207,36 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            'Solo dioses, admins y RMS
-            If _
+                'Solo dioses, admins y RMS
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
                 Then
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToCaosYRMs, 0,
                              PrepareMessageConsoleMsg("FUERZAS DEL CAOS> " & message, FontTypeNames.FONTTYPE_TALK))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChaosLegionMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11758,43 +11255,36 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            'Solo dioses, admins y RMS
-            If _
+                'Solo dioses, admins y RMS
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
                 Then
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToCiudadanosYRMs, 0,
                              PrepareMessageConsoleMsg("CIUDADANOS> " & message, FontTypeNames.FONTTYPE_TALK))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCitizenMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11813,43 +11303,36 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            'Solo dioses, admins y RMS
-            If _
+                'Solo dioses, admins y RMS
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
                 Then
-                Call _
+                    Call _
                     SendData(modSendData.SendTarget.ToCriminalesYRMs, 0,
                              PrepareMessageConsoleMsg("CRIMINALES> " & message, FontTypeNames.FONTTYPE_TALK))
-            End If
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCriminalMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11868,53 +11351,46 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            'Solo dioses, admins y RMS
-            If _
+                'Solo dioses, admins y RMS
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
                 Then
-                'Asegurarse haya un NPC seleccionado
-                If .flags.TargetNPC > 0 Then
-                    Call _
+                    'Asegurarse haya un NPC seleccionado
+                    If .flags.TargetNPC > 0 Then
+                        Call _
                         SendData(modSendData.SendTarget.ToNPCArea, .flags.TargetNPC,
                                  PrepareMessageChatOverHead(message, Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
                                                             System.Drawing.ColorTranslator.ToOle(
                                                                 System.Drawing.Color.White)))
-                Else
-                    Call _
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Debes seleccionar el NPC por el que quieres hablar antes de usar este comando.",
                                         FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleTalkAsNPC: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -11974,59 +11450,52 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim LoopC As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim LoopC As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                tUser = NameIndex(UserName)
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call _
+                    tUser = NameIndex(UserName)
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        Call _
                         SendData(modSendData.SendTarget.ToAll, 0,
                                  PrepareMessageConsoleMsg(
                                      UserName & " fue aceptado en el honorable Consejo Real de Banderbill.",
                                      FontTypeNames.FONTTYPE_CONSEJO))
-                    With UserList(tUser)
-                        If .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then _
+                        With UserList(tUser)
+                            If .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then _
                             .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.ChaosCouncil
-                        If Not .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then _
+                            If Not .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then _
                             .flags.Privilegios = .flags.Privilegios + Declaraciones.PlayerType.RoyalCouncil
 
-                        Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
-                    End With
+                            Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
+                        End With
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleAcceptRoyalCouncilMember: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12045,59 +11514,52 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        Dim LoopC As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            Dim LoopC As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                tUser = NameIndex(UserName)
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call _
+                    tUser = NameIndex(UserName)
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        Call _
                         SendData(modSendData.SendTarget.ToAll, 0,
                                  PrepareMessageConsoleMsg(UserName & " fue aceptado en el Concilio de las Sombras.",
                                                           FontTypeNames.FONTTYPE_CONSEJO))
 
-                    With UserList(tUser)
-                        If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then _
+                        With UserList(tUser)
+                            If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then _
                             .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.RoyalCouncil
-                        If Not .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then _
+                            If Not .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then _
                             .flags.Privilegios = .flags.Privilegios + Declaraciones.PlayerType.ChaosCouncil
 
-                        Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
-                    End With
+                            Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
+                        End With
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleAcceptChaosCouncilMember: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12156,48 +11618,41 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 ((.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Or
                  ((.flags.Privilegios And (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster)) =
                   (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster))) Then
-                tUser = NameIndex(UserName)
-                'para deteccion de aoice
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call WriteDumb(tUser)
+                    tUser = NameIndex(UserName)
+                    'para deteccion de aoice
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        Call WriteDumb(tUser)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleMakeDumb: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12216,49 +11671,42 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 ((.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Or
                  ((.flags.Privilegios And (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster)) =
                   (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster))) Then
-                tUser = NameIndex(UserName)
-                'para deteccion de aoice
-                If tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call WriteDumbNoMore(tUser)
-                    Call FlushBuffer(tUser)
+                    tUser = NameIndex(UserName)
+                    'para deteccion de aoice
+                    If tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        Call WriteDumbNoMore(tUser)
+                        Call FlushBuffer(tUser)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleMakeDumbNoMore: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12301,83 +11749,76 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-                tUser = NameIndex(UserName)
-                If tUser <= 0 Then
-                    If FileExist(CharPath & UserName & ".chr") Then
-                        Call _
+                    tUser = NameIndex(UserName)
+                    If tUser <= 0 Then
+                        If FileExist(CharPath & UserName & ".chr") Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "Usuario offline, echando de los consejos.",
                                             FontTypeNames.FONTTYPE_INFO)
-                        Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECE", CStr(0))
-                        Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECECAOS", CStr(0))
-                    Else
-                        Call _
+                            Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECE", CStr(0))
+                            Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECECAOS", CStr(0))
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex, "No se encuentra el charfile " & CharPath & UserName & ".chr",
                                             FontTypeNames.FONTTYPE_INFO)
-                    End If
-                Else
-                    With UserList(tUser)
-                        If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then
-                            Call _
+                        End If
+                    Else
+                        With UserList(tUser)
+                            If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then
+                                Call _
                                 WriteConsoleMsg(tUser, "Has sido echado del consejo de Banderbill.",
                                                 FontTypeNames.FONTTYPE_TALK)
-                            .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.RoyalCouncil
+                                .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.RoyalCouncil
 
-                            Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
-                            Call _
+                                Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
+                                Call _
                                 SendData(modSendData.SendTarget.ToAll, 0,
                                          PrepareMessageConsoleMsg(UserName & " fue expulsado del consejo de Banderbill.",
                                                                   FontTypeNames.FONTTYPE_CONSEJO))
-                        End If
+                            End If
 
-                        If .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then
-                            Call _
+                            If .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then
+                                Call _
                                 WriteConsoleMsg(tUser, "Has sido echado del Concilio de las Sombras.",
                                                 FontTypeNames.FONTTYPE_TALK)
-                            .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.ChaosCouncil
+                                .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.ChaosCouncil
 
-                            Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
-                            Call _
+                                Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
+                                Call _
                                 SendData(modSendData.SendTarget.ToAll, 0,
                                          PrepareMessageConsoleMsg(
                                              UserName & " fue expulsado del Concilio de las Sombras.",
                                              FontTypeNames.FONTTYPE_CONSEJO))
-                        End If
-                    End With
+                            End If
+                        End With
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCouncilKick: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12529,88 +11970,81 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim GuildName As String
-        Dim cantMembers As Short
-        Dim LoopC As Integer
-        Dim member As String
-        Dim Count As Byte
-        Dim tIndex As Short
-        Dim tFile As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim GuildName As String
+            Dim cantMembers As Short
+            Dim LoopC As Integer
+            Dim member As String
+            Dim Count As Byte
+            Dim tIndex As Short
+            Dim tFile As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            GuildName = buffer.ReadASCIIString()
+                GuildName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                tFile = AppDomain.CurrentDomain.BaseDirectory & "guilds/" & GuildName & "-members.mem"
+                    tFile = AppDomain.CurrentDomain.BaseDirectory & "guilds/" & GuildName & "-members.mem"
 
-                If Not FileExist(tFile) Then
-                    Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call _
+                    If Not FileExist(tFile) Then
+                        Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        Call _
                         SendData(modSendData.SendTarget.ToAll, 0,
                                  PrepareMessageConsoleMsg(.name & " baneó al clan " & UCase(GuildName),
                                                           FontTypeNames.FONTTYPE_FIGHT))
 
-                    'baneamos a los miembros
-                    Call LogGM(.name, "BANCLAN a " & UCase(GuildName))
+                        'baneamos a los miembros
+                        Call LogGM(.name, "BANCLAN a " & UCase(GuildName))
 
-                    cantMembers = Val(GetVar(tFile, "INIT", "NroMembers"))
+                        cantMembers = Val(GetVar(tFile, "INIT", "NroMembers"))
 
-                    For LoopC = 1 To cantMembers
-                        member = GetVar(tFile, "Members", "Member" & LoopC)
-                        'member es la victima
-                        Call Ban(member, "Administracion del servidor", "Clan Banned")
+                        For LoopC = 1 To cantMembers
+                            member = GetVar(tFile, "Members", "Member" & LoopC)
+                            'member es la victima
+                            Call Ban(member, "Administracion del servidor", "Clan Banned")
 
-                        Call _
+                            Call _
                             SendData(modSendData.SendTarget.ToAll, 0,
                                      PrepareMessageConsoleMsg(
                                          "   " & member & "<" & GuildName & "> ha sido expulsado del servidor.",
                                          FontTypeNames.FONTTYPE_FIGHT))
 
-                        tIndex = NameIndex(member)
-                        If tIndex > 0 Then
-                            'esta online
-                            UserList(tIndex).flags.Ban = 1
-                            Call CloseSocket(tIndex)
-                        End If
+                            tIndex = NameIndex(member)
+                            If tIndex > 0 Then
+                                'esta online
+                                UserList(tIndex).flags.Ban = 1
+                                Call CloseSocket(tIndex)
+                            End If
 
-                        'ponemos el flag de ban a 1
-                        Call WriteVar(CharPath & member & ".chr", "FLAGS", "Ban", "1")
-                        'ponemos la pena
-                        Count = Val(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
-                        Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", CStr(Count + 1))
-                        Call _
+                            'ponemos el flag de ban a 1
+                            Call WriteVar(CharPath & member & ".chr", "FLAGS", "Ban", "1")
+                            'ponemos la pena
+                            Count = Val(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
+                            Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", CStr(Count + 1))
+                            Call _
                             WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
                                      LCase(.name) & ": BAN AL CLAN: " & GuildName & " " & Today & " " & TimeOfDay)
-                    Next LoopC
+                        Next LoopC
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleGuildBan: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12631,79 +12065,72 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim bannedIP As String
-        Dim tUser As Short
-        Dim reason As String
-        Dim i As Integer
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim bannedIP As String
+            Dim tUser As Short
+            Dim reason As String
+            Dim i As Integer
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
-
-
-            ' Is it by ip??
-            If buffer.ReadBoolean() Then
-                bannedIP = buffer.ReadByte() & "."
-                bannedIP = bannedIP & buffer.ReadByte() & "."
-                bannedIP = bannedIP & buffer.ReadByte() & "."
-                bannedIP = bannedIP & buffer.ReadByte()
-            Else
-                tUser = NameIndex(buffer.ReadASCIIString())
-
-                If tUser > 0 Then bannedIP = UserList(tUser).ip
-            End If
-
-            reason = buffer.ReadASCIIString()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
-                If migr_LenB(bannedIP) > 0 Then
-                    Call LogGM(.name, "/BanIP " & bannedIP & " por " & reason)
+                ' Is it by ip??
+                If buffer.ReadBoolean() Then
+                    bannedIP = buffer.ReadByte() & "."
+                    bannedIP = bannedIP & buffer.ReadByte() & "."
+                    bannedIP = bannedIP & buffer.ReadByte() & "."
+                    bannedIP = bannedIP & buffer.ReadByte()
+                Else
+                    tUser = NameIndex(buffer.ReadASCIIString())
 
-                    If BanIpBuscar(bannedIP) > 0 Then
-                        Call _
+                    If tUser > 0 Then bannedIP = UserList(tUser).ip
+                End If
+
+                reason = buffer.ReadASCIIString()
+
+
+                If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
+                    If migr_LenB(bannedIP) > 0 Then
+                        Call LogGM(.name, "/BanIP " & bannedIP & " por " & reason)
+
+                        If BanIpBuscar(bannedIP) > 0 Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "La IP " & bannedIP & " ya se encuentra en la lista de bans.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call BanIpAgrega(bannedIP)
-                        Call _
+                        Else
+                            Call BanIpAgrega(bannedIP)
+                            Call _
                             SendData(modSendData.SendTarget.ToAdmins, 0,
                                      PrepareMessageConsoleMsg(.name & " baneó la IP " & bannedIP & " por " & reason,
                                                               FontTypeNames.FONTTYPE_FIGHT))
 
-                        'Find every player with that ip and ban him!
-                        For i = 1 To LastUser
-                            If UserList(i).ConnIDValida Then
-                                If UserList(i).ip = bannedIP Then
-                                    Call BanCharacter(UserIndex, UserList(i).name, "IP POR " & reason)
+                            'Find every player with that ip and ban him!
+                            For i = 1 To LastUser
+                                If UserList(i).ConnIDValida Then
+                                    If UserList(i).ip = bannedIP Then
+                                        Call BanCharacter(UserIndex, UserList(i).name, "IP POR " & reason)
+                                    End If
                                 End If
-                            End If
-                        Next i
+                            Next i
+                        End If
+                    ElseIf tUser <= 0 Then
+                        Call WriteConsoleMsg(UserIndex, "El personaje no está online.", FontTypeNames.FONTTYPE_INFO)
                     End If
-                ElseIf tUser <= 0 Then
-                    Call WriteConsoleMsg(UserIndex, "El personaje no está online.", FontTypeNames.FONTTYPE_INFO)
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleBanIP: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12856,74 +12283,67 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-                If (migr_InStrB(UserName, "\") <> 0) Then
-                    UserName = Replace(UserName, "\", "")
-                End If
-                If (migr_InStrB(UserName, "/") <> 0) Then
-                    UserName = Replace(UserName, "/", "")
-                End If
-                tUser = NameIndex(UserName)
+                    If (migr_InStrB(UserName, "\") <> 0) Then
+                        UserName = Replace(UserName, "\", "")
+                    End If
+                    If (migr_InStrB(UserName, "/") <> 0) Then
+                        UserName = Replace(UserName, "/", "")
+                    End If
+                    tUser = NameIndex(UserName)
 
-                Call LogGM(.name, "ECHO DEL CAOS A: " & UserName)
+                    Call LogGM(.name, "ECHO DEL CAOS A: " & UserName)
 
-                If tUser > 0 Then
-                    Call ExpulsarFaccionCaos(tUser, True)
-                    UserList(tUser).Faccion.Reenlistadas = 200
-                    Call _
+                    If tUser > 0 Then
+                        Call ExpulsarFaccionCaos(tUser, True)
+                        UserList(tUser).Faccion.Reenlistadas = 200
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         UserName & " expulsado de las fuerzas del caos y prohibida la reenlistada.",
                                         FontTypeNames.FONTTYPE_INFO)
-                    Call _
+                        Call _
                         WriteConsoleMsg(tUser, .name & " te ha expulsado en forma definitiva de las fuerzas del caos.",
                                         FontTypeNames.FONTTYPE_FIGHT)
-                    Call FlushBuffer(tUser)
-                Else
-                    If FileExist(CharPath & UserName & ".chr") Then
-                        Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoCaos", CStr(0))
-                        Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
-                        Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
-                        Call _
+                        Call FlushBuffer(tUser)
+                    Else
+                        If FileExist(CharPath & UserName & ".chr") Then
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoCaos", CStr(0))
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
+                            Call _
                             WriteConsoleMsg(UserIndex,
                                             UserName & " expulsado de las fuerzas del caos y prohibida la reenlistada.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call WriteConsoleMsg(UserIndex, UserName & ".chr inexistente.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, UserName & ".chr inexistente.", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChaosLegionKick: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -12942,74 +12362,67 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-                If (migr_InStrB(UserName, "\") <> 0) Then
-                    UserName = Replace(UserName, "\", "")
-                End If
-                If (migr_InStrB(UserName, "/") <> 0) Then
-                    UserName = Replace(UserName, "/", "")
-                End If
-                tUser = NameIndex(UserName)
+                    If (migr_InStrB(UserName, "\") <> 0) Then
+                        UserName = Replace(UserName, "\", "")
+                    End If
+                    If (migr_InStrB(UserName, "/") <> 0) Then
+                        UserName = Replace(UserName, "/", "")
+                    End If
+                    tUser = NameIndex(UserName)
 
-                Call LogGM(.name, "ECHÓ DE LA REAL A: " & UserName)
+                    Call LogGM(.name, "ECHÓ DE LA REAL A: " & UserName)
 
-                If tUser > 0 Then
-                    Call ExpulsarFaccionReal(tUser, True)
-                    UserList(tUser).Faccion.Reenlistadas = 200
-                    Call _
+                    If tUser > 0 Then
+                        Call ExpulsarFaccionReal(tUser, True)
+                        UserList(tUser).Faccion.Reenlistadas = 200
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         UserName & " expulsado de las fuerzas reales y prohibida la reenlistada.",
                                         FontTypeNames.FONTTYPE_INFO)
-                    Call _
+                        Call _
                         WriteConsoleMsg(tUser, .name & " te ha expulsado en forma definitiva de las fuerzas reales.",
                                         FontTypeNames.FONTTYPE_FIGHT)
-                    Call FlushBuffer(tUser)
-                Else
-                    If FileExist(CharPath & UserName & ".chr") Then
-                        Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoReal", CStr(0))
-                        Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
-                        Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
-                        Call _
+                        Call FlushBuffer(tUser)
+                    Else
+                        If FileExist(CharPath & UserName & ".chr") Then
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoReal", CStr(0))
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
+                            Call _
                             WriteConsoleMsg(UserIndex,
                                             UserName & " expulsado de las fuerzas reales y prohibida la reenlistada.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call WriteConsoleMsg(UserIndex, UserName & ".chr inexistente.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, UserName & ".chr inexistente.", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRoyalArmyKick: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -13096,69 +12509,62 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim punishment As Byte
-        Dim NewText As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim punishment As Byte
+            Dim NewText As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            punishment = buffer.ReadByte
-            NewText = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
+                punishment = buffer.ReadByte
+                NewText = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                If migr_LenB(UserName) = 0 Then
-                    Call _
+                    If migr_LenB(UserName) = 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "Utilice /borrarpena Nick@NumeroDePena@NuevaPena",
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = Replace(UserName, "\", "")
-                    End If
-                    If (migr_InStrB(UserName, "/") <> 0) Then
-                        UserName = Replace(UserName, "/", "")
-                    End If
+                    Else
+                        If (migr_InStrB(UserName, "\") <> 0) Then
+                            UserName = Replace(UserName, "\", "")
+                        End If
+                        If (migr_InStrB(UserName, "/") <> 0) Then
+                            UserName = Replace(UserName, "/", "")
+                        End If
 
-                    If FileExist(CharPath & UserName & ".chr") Then
-                        Call _
+                        If FileExist(CharPath & UserName & ".chr") Then
+                            Call _
                             LogGM(.name,
                                   " borro la pena: " & punishment & "-" &
                                   GetVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment) & " de " & UserName &
                                   " y la cambió por: " & NewText)
 
-                        Call _
+                            Call _
                             WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment,
                                      LCase(.name) & ": <" & NewText & "> " & Today & " " & TimeOfDay)
 
-                        Call WriteConsoleMsg(UserIndex, "Pena modificada.", FontTypeNames.FONTTYPE_INFO)
+                            Call WriteConsoleMsg(UserIndex, "Pena modificada.", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRemovePunishment: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -13270,89 +12676,82 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim lista As String
-        Dim LoopC As Byte
-        Dim priv As Short
-        Dim validCheck As Boolean
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim lista As String
+            Dim LoopC As Byte
+            Dim priv As Short
+            Dim validCheck As Boolean
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            priv = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
+                priv = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
                    Declaraciones.PlayerType.Consejero
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And
                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
                 0 Then
-                'Handle special chars
-                If (migr_InStrB(UserName, "\") <> 0) Then
-                    UserName = Replace(UserName, "\", "")
-                End If
-                If (migr_InStrB(UserName, "\") <> 0) Then
-                    UserName = Replace(UserName, "/", "")
-                End If
-                If (migr_InStrB(UserName, "+") <> 0) Then
-                    UserName = Replace(UserName, "+", " ")
-                End If
+                    'Handle special chars
+                    If (migr_InStrB(UserName, "\") <> 0) Then
+                        UserName = Replace(UserName, "\", "")
+                    End If
+                    If (migr_InStrB(UserName, "\") <> 0) Then
+                        UserName = Replace(UserName, "/", "")
+                    End If
+                    If (migr_InStrB(UserName, "+") <> 0) Then
+                        UserName = Replace(UserName, "+", " ")
+                    End If
 
-                'Only Gods and Admins can see the ips of adminsitrative characters. All others can be seen by every adminsitrative char.
-                If NameIndex(UserName) > 0 Then
-                    validCheck = (UserList(NameIndex(UserName)).flags.Privilegios And priv) = 0 Or
+                    'Only Gods and Admins can see the ips of adminsitrative characters. All others can be seen by every adminsitrative char.
+                    If NameIndex(UserName) > 0 Then
+                        validCheck = (UserList(NameIndex(UserName)).flags.Privilegios And priv) = 0 Or
                                  (.flags.Privilegios And
                                   (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0
-                Else
-                    validCheck = (UserDarPrivilegioLevel(UserName) And priv) = 0 Or
-                                 (.flags.Privilegios And
-                                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0
-                End If
-
-                If validCheck Then
-                    Call LogGM(.name, "/LASTIP " & UserName)
-
-                    If FileExist(CharPath & UserName & ".chr") Then
-                        lista = "Las ultimas IPs con las que " & UserName & " se conectó son:"
-                        For LoopC = 1 To 5
-                            lista = lista & vbCrLf & LoopC & " - " &
-                                    GetVar(CharPath & UserName & ".chr", "INIT", "LastIP" & LoopC)
-                        Next LoopC
-                        Call WriteConsoleMsg(UserIndex, lista, FontTypeNames.FONTTYPE_INFO)
                     Else
-                        Call _
+                        validCheck = (UserDarPrivilegioLevel(UserName) And priv) = 0 Or
+                                 (.flags.Privilegios And
+                                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0
+                    End If
+
+                    If validCheck Then
+                        Call LogGM(.name, "/LASTIP " & UserName)
+
+                        If FileExist(CharPath & UserName & ".chr") Then
+                            lista = "Las ultimas IPs con las que " & UserName & " se conectó son:"
+                            For LoopC = 1 To 5
+                                lista = lista & vbCrLf & LoopC & " - " &
+                                    GetVar(CharPath & UserName & ".chr", "INIT", "LastIP" & LoopC)
+                            Next LoopC
+                            Call WriteConsoleMsg(UserIndex, lista, FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex, "Charfile """ & UserName & """ inexistente.",
                                             FontTypeNames.FONTTYPE_INFO)
-                    End If
-                Else
-                    Call _
+                        End If
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex, UserName & " es de mayor jerarquía que vos.",
                                         FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleLastIP: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -13429,69 +12828,62 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim Slot As Byte
-        Dim tIndex As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim Slot As Byte
+            Dim tIndex As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            'Reads the UserName and Slot Packets
+                'Reads the UserName and Slot Packets
 
-            UserName = buffer.ReadASCIIString() 'Que UserName?
-            Slot = buffer.ReadByte() 'Que Slot?
+                UserName = buffer.ReadASCIIString() 'Que UserName?
+                Slot = buffer.ReadByte() 'Que Slot?
 
-            If _
+                If _
                 .flags.Privilegios And
                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Dios) _
                 Then
-                tIndex = NameIndex(UserName) 'Que user index?
+                    tIndex = NameIndex(UserName) 'Que user index?
 
-                Call LogGM(.name, .name & " Checkeó el slot " & Slot & " de " & UserName)
+                    Call LogGM(.name, .name & " Checkeó el slot " & Slot & " de " & UserName)
 
-                If tIndex > 0 Then
-                    If Slot > 0 And Slot <= UserList(tIndex).CurrentInventorySlots Then
-                        If UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex > 0 Then
-                            Call _
+                    If tIndex > 0 Then
+                        If Slot > 0 And Slot <= UserList(tIndex).CurrentInventorySlots Then
+                            If UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex > 0 Then
+                                Call _
                                 WriteConsoleMsg(UserIndex,
                                                 " Objeto " & Slot & ") " &
                                                 ObjData_Renamed(UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex).
                                                     name & " Cantidad:" &
                                                 UserList(tIndex).Invent.Object_Renamed(Slot).Amount,
                                                 FontTypeNames.FONTTYPE_INFO)
-                        Else
-                            Call _
+                            Else
+                                Call _
                                 WriteConsoleMsg(UserIndex, "No hay ningún objeto en slot seleccionado.",
                                                 FontTypeNames.FONTTYPE_INFO)
+                            End If
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Slot Inválido.", FontTypeNames.FONTTYPE_TALK)
                         End If
                     Else
-                        Call WriteConsoleMsg(UserIndex, "Slot Inválido.", FontTypeNames.FONTTYPE_TALK)
+                        Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_TALK)
                     End If
-                Else
-                    Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_TALK)
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleCheckSlot: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -13706,7 +13098,7 @@ Module Protocol
 
 
             For i = 1 To NumUsers
-                If UserList(i).flags.UserLogged And UserList(i).ConnID > - 1 Then
+                If UserList(i).flags.UserLogged And UserList(i).ConnID > -1 Then
                     Call EnviarNoche(i)
                 End If
             Next i
@@ -13898,54 +13290,47 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim tStr As String
+        Try
+            Dim tStr As String
 
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove Packet ID
-            Call buffer.ReadByte()
+                'Remove Packet ID
+                Call buffer.ReadByte()
 
-            tStr = buffer.ReadASCIIString()
+                tStr = buffer.ReadASCIIString()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-                If tStr = "NEWBIE" Or tStr = "NO" Or tStr = "ARMADA" Or tStr = "CAOS" Or tStr = "FACCION" Then
-                    Call LogGM(.name, .name & " ha cambiado la información sobre si es restringido el mapa.")
-                    MapInfo_Renamed(UserList(UserIndex).Pos.Map).Restringir = tStr
-                    Call _
+                If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                    If tStr = "NEWBIE" Or tStr = "NO" Or tStr = "ARMADA" Or tStr = "CAOS" Or tStr = "FACCION" Then
+                        Call LogGM(.name, .name & " ha cambiado la información sobre si es restringido el mapa.")
+                        MapInfo_Renamed(UserList(UserIndex).Pos.Map).Restringir = tStr
+                        Call _
                         WriteVar(
                             AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
                             ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Restringir", tStr)
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Mapa " & .Pos.Map & " Restringido: " & MapInfo_Renamed(.Pos.Map).Restringir,
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call _
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Opciones para restringir: 'NEWBIE', 'NO', 'ARMADA', 'CAOS', 'FACCION'",
                                         FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChangeMapInfoRestricted: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14086,59 +13471,52 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim tStr As String
+        Try
+            Dim tStr As String
 
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove Packet ID
-            Call buffer.ReadByte()
+                'Remove Packet ID
+                Call buffer.ReadByte()
 
-            tStr = buffer.ReadASCIIString()
+                tStr = buffer.ReadASCIIString()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-                If _
+                If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                    If _
                     tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or
                     tStr = "DUNGEON" Then
-                    Call LogGM(.name, .name & " ha cambiado la información del terreno del mapa.")
-                    MapInfo_Renamed(UserList(UserIndex).Pos.Map).Terreno = tStr
-                    Call _
+                        Call LogGM(.name, .name & " ha cambiado la información del terreno del mapa.")
+                        MapInfo_Renamed(UserList(UserIndex).Pos.Map).Terreno = tStr
+                        Call _
                         WriteVar(
                             AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
                             ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Terreno", tStr)
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Terreno: " & MapInfo_Renamed(.Pos.Map).Terreno,
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call _
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'",
                                         FontTypeNames.FONTTYPE_INFO)
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Igualmente, el único útil es 'NIEVE' ya que al ingresarlo, la gente muere de frío en el mapa.",
                                         FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChangeMapInfoLand: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14157,59 +13535,52 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim tStr As String
+        Try
+            Dim tStr As String
 
-        Dim buffer As New clsByteQueue
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+            Dim buffer As New clsByteQueue
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove Packet ID
-            Call buffer.ReadByte()
+                'Remove Packet ID
+                Call buffer.ReadByte()
 
-            tStr = buffer.ReadASCIIString()
+                tStr = buffer.ReadASCIIString()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
-                If _
+                If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                    If _
                     tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or
                     tStr = "DUNGEON" Then
-                    Call LogGM(.name, .name & " ha cambiado la información de la zona del mapa.")
-                    MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = tStr
-                    Call _
+                        Call LogGM(.name, .name & " ha cambiado la información de la zona del mapa.")
+                        MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = tStr
+                        Call _
                         WriteVar(
                             AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
                             ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Zona", tStr)
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Zona: " & MapInfo_Renamed(.Pos.Map).Zona,
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call _
+                    Else
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'",
                                         FontTypeNames.FONTTYPE_INFO)
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex,
                                         "Igualmente, el único útil es 'DUNGEON' ya que al ingresarlo, NO se sentirá el efecto de la lluvia en este mapa.",
                                         FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleChangeMapInfoZone: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14257,40 +13628,33 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim guild As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim guild As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            guild = buffer.ReadASCIIString()
+                guild = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call modGuilds.GMEscuchaClan(UserIndex, guild)
-            End If
+                    Call modGuilds.GMEscuchaClan(UserIndex, guild)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleShowGuildMessages: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14381,100 +13745,93 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim newName As String
-        Dim changeNameUI As Short
-        Dim GuildIndex As Short
-        Dim cantPenas As Byte
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim newName As String
+            Dim changeNameUI As Short
+            Dim GuildIndex As Short
+            Dim cantPenas As Byte
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            'Reads the userName and newUser Packets
+                'Reads the userName and newUser Packets
 
-            UserName = buffer.ReadASCIIString()
-            newName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
+                newName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                If migr_LenB(UserName) = 0 Or migr_LenB(newName) = 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Usar: /ANAME origen@destino", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    changeNameUI = NameIndex(UserName)
+                    If migr_LenB(UserName) = 0 Or migr_LenB(newName) = 0 Then
+                        Call WriteConsoleMsg(UserIndex, "Usar: /ANAME origen@destino", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        changeNameUI = NameIndex(UserName)
 
-                    If changeNameUI > 0 Then
-                        Call _
+                        If changeNameUI > 0 Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "El Pj está online, debe salir para hacer el cambio.",
                                             FontTypeNames.FONTTYPE_WARNING)
-                    Else
-                        If Not FileExist(CharPath & UserName & ".chr") Then
-                            Call _
+                        Else
+                            If Not FileExist(CharPath & UserName & ".chr") Then
+                                Call _
                                 WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                        Else
-                            GuildIndex = Val(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX"))
+                            Else
+                                GuildIndex = Val(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX"))
 
-                            If GuildIndex > 0 Then
-                                Call _
+                                If GuildIndex > 0 Then
+                                    Call _
                                     WriteConsoleMsg(UserIndex,
                                                     "El pj " & UserName &
                                                     " pertenece a un clan, debe salir del mismo con /salirclan para ser transferido.",
                                                     FontTypeNames.FONTTYPE_INFO)
-                            Else
-                                If Not FileExist(CharPath & newName & ".chr") Then
-                                    Call FileCopy(CharPath & UserName & ".chr", CharPath & UCase(newName) & ".chr")
+                                Else
+                                    If Not FileExist(CharPath & newName & ".chr") Then
+                                        Call FileCopy(CharPath & UserName & ".chr", CharPath & UCase(newName) & ".chr")
 
-                                    Call _
+                                        Call _
                                         WriteConsoleMsg(UserIndex, "Transferencia exitosa.", FontTypeNames.FONTTYPE_INFO)
 
-                                    Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
+                                        Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
 
 
-                                    cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                        cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
 
-                                    Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                                        Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
 
-                                    Call _
+                                        Call _
                                         WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & CStr(cantPenas + 1),
                                                  LCase(.name) & ": BAN POR Cambio de nick a " & UCase(newName) & " " &
                                                  Today & " " & TimeOfDay)
 
-                                    Call _
+                                        Call _
                                         LogGM(.name,
                                               "Ha cambiado de nombre al usuario " & UserName & ". Ahora se llama " &
                                               newName)
-                                Else
-                                    Call _
+                                    Else
+                                        Call _
                                         WriteConsoleMsg(UserIndex, "El nick solicitado ya existe.",
                                                         FontTypeNames.FONTTYPE_INFO)
+                                    End If
                                 End If
                             End If
                         End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleAlterName: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14493,57 +13850,50 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim newMail As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim newMail As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
-            newMail = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
+                newMail = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                If migr_LenB(UserName) = 0 Or migr_LenB(newMail) = 0 Then
-                    Call WriteConsoleMsg(UserIndex, "usar /AEMAIL <pj>-<nuevomail>", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If Not FileExist(CharPath & UserName & ".chr") Then
-                        Call _
+                    If migr_LenB(UserName) = 0 Or migr_LenB(newMail) = 0 Then
+                        Call WriteConsoleMsg(UserIndex, "usar /AEMAIL <pj>-<nuevomail>", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If Not FileExist(CharPath & UserName & ".chr") Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "No existe el charfile " & UserName & ".chr",
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call WriteVar(CharPath & UserName & ".chr", "CONTACTO", "Email", newMail)
-                        Call _
+                        Else
+                            Call WriteVar(CharPath & UserName & ".chr", "CONTACTO", "Email", newMail)
+                            Call _
                             WriteConsoleMsg(UserIndex, "Email de " & UserName & " cambiado a: " & newMail,
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
+
+                        Call LogGM(.name, "Le ha cambiado el mail a " & UserName)
                     End If
-
-                    Call LogGM(.name, "Le ha cambiado el mail a " & UserName)
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleAlterMail: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14562,60 +13912,53 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim copyFrom As String
-        Dim Password As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim copyFrom As String
+            Dim Password As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = Replace(buffer.ReadASCIIString(), "+", " ")
-            copyFrom = Replace(buffer.ReadASCIIString(), "+", " ")
+                UserName = Replace(buffer.ReadASCIIString(), "+", " ")
+                copyFrom = Replace(buffer.ReadASCIIString(), "+", " ")
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call LogGM(.name, "Ha alterado la contraseña de " & UserName)
+                    Call LogGM(.name, "Ha alterado la contraseña de " & UserName)
 
-                If migr_LenB(UserName) = 0 Or migr_LenB(copyFrom) = 0 Then
-                    Call WriteConsoleMsg(UserIndex, "usar /APASS <pjsinpass>@<pjconpass>", FontTypeNames.FONTTYPE_INFO)
-                Else
-                    If Not FileExist(CharPath & UserName & ".chr") Or Not FileExist(CharPath & copyFrom & ".chr") Then
-                        Call _
+                    If migr_LenB(UserName) = 0 Or migr_LenB(copyFrom) = 0 Then
+                        Call WriteConsoleMsg(UserIndex, "usar /APASS <pjsinpass>@<pjconpass>", FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If Not FileExist(CharPath & UserName & ".chr") Or Not FileExist(CharPath & copyFrom & ".chr") Then
+                            Call _
                             WriteConsoleMsg(UserIndex, "Alguno de los PJs no existe " & UserName & "@" & copyFrom,
                                             FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Password = GetVar(CharPath & copyFrom & ".chr", "INIT", "Password")
-                        Call WriteVar(CharPath & UserName & ".chr", "INIT", "Password", Password)
+                        Else
+                            Password = GetVar(CharPath & copyFrom & ".chr", "INIT", "Password")
+                            Call WriteVar(CharPath & UserName & ".chr", "INIT", "Password", Password)
 
-                        Call _
+                            Call _
                             WriteConsoleMsg(UserIndex, "Password de " & UserName & " ha cambiado por la de " & copyFrom,
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleAlterPassword: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14901,44 +14244,37 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call LogGM(.name, "/CONDEN " & UserName)
+                    Call LogGM(.name, "/CONDEN " & UserName)
 
-                tUser = NameIndex(UserName)
-                If tUser > 0 Then Call VolverCriminal(tUser)
-            End If
+                    tUser = NameIndex(UserName)
+                    If tUser > 0 Then Call VolverCriminal(tUser)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleTurnCriminal: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -14957,73 +14293,66 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim tUser As Short
-        'UPGRADE_NOTE: Char se actualizó a Char_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Char_Renamed As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim tUser As Short
+            'UPGRADE_NOTE: Char se actualizó a Char_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim Char_Renamed As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call LogGM(.name, "/RAJAR " & UserName)
+                    Call LogGM(.name, "/RAJAR " & UserName)
 
-                tUser = NameIndex(UserName)
+                    tUser = NameIndex(UserName)
 
-                If tUser > 0 Then
-                    Call ResetFacciones(tUser)
-                Else
-                    Char_Renamed = CharPath & UserName & ".chr"
-
-                    If FileExist(Char_Renamed) Then
-                        Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoReal", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoCaos", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "FechaIngreso", "No ingresó a ninguna Facción")
-                        Call WriteVar(Char_Renamed, "FACCIONES", "rArCaos", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "rArReal", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "rExCaos", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "rExReal", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "recCaos", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "recReal", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "Reenlistadas", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "NivelIngreso", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "MatadosIngreso", CStr(0))
-                        Call WriteVar(Char_Renamed, "FACCIONES", "NextRecompensa", CStr(0))
+                    If tUser > 0 Then
+                        Call ResetFacciones(tUser)
                     Else
-                        Call _
+                        Char_Renamed = CharPath & UserName & ".chr"
+
+                        If FileExist(Char_Renamed) Then
+                            Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoReal", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoCaos", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "FechaIngreso", "No ingresó a ninguna Facción")
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rArCaos", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rArReal", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rExCaos", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rExReal", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "recCaos", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "recReal", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "Reenlistadas", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "NivelIngreso", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "MatadosIngreso", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "NextRecompensa", CStr(0))
+                        Else
+                            Call _
                             WriteConsoleMsg(UserIndex, "El personaje " & UserName & " no existe.",
                                             FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleResetFactions: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -15042,56 +14371,49 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim GuildIndex As Short
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim GuildIndex As Short
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call LogGM(.name, "/RAJARCLAN " & UserName)
+                    Call LogGM(.name, "/RAJARCLAN " & UserName)
 
-                GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
+                    GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
 
-                If GuildIndex = 0 Then
-                    Call _
+                    If GuildIndex = 0 Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "No pertenece a ningún clan o es fundador.",
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    Call WriteConsoleMsg(UserIndex, "Expulsado.", FontTypeNames.FONTTYPE_INFO)
-                    Call _
+                    Else
+                        Call WriteConsoleMsg(UserIndex, "Expulsado.", FontTypeNames.FONTTYPE_INFO)
+                        Call _
                         SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
                                  PrepareMessageConsoleMsg(
                                      UserName & " ha sido expulsado del clan por los administradores del servidor.",
                                      FontTypeNames.FONTTYPE_GUILD))
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRemoveCharFromGuild: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -15110,46 +14432,39 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim UserName As String
-        Dim mail As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim UserName As String
+            Dim mail As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            UserName = buffer.ReadASCIIString()
+                UserName = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                If FileExist(CharPath & UserName & ".chr") Then
-                    mail = GetVar(CharPath & UserName & ".chr", "CONTACTO", "email")
+                    If FileExist(CharPath & UserName & ".chr") Then
+                        mail = GetVar(CharPath & UserName & ".chr", "CONTACTO", "email")
 
-                    Call _
+                        Call _
                         WriteConsoleMsg(UserIndex, "Last email de " & UserName & ":" & mail, FontTypeNames.FONTTYPE_INFO)
+                    End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleRequestCharMail: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -15168,41 +14483,34 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim message As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim message As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
-            message = buffer.ReadASCIIString()
+                message = buffer.ReadASCIIString()
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call LogGM(.name, "Mensaje de sistema:" & message)
+                    Call LogGM(.name, "Mensaje de sistema:" & message)
 
-                Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageShowMessageBox(message))
-            End If
+                    Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageShowMessageBox(message))
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSystemMessage: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -15224,61 +14532,54 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
-        Dim buffer As New clsByteQueue
-        Dim newMOTD As String
-        Dim auxiliaryString() As String
-        Dim LoopC As Integer
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-            Call buffer.CopyBuffer(.incomingData)
+        Try
+            Dim buffer As New clsByteQueue
+            Dim newMOTD As String
+            Dim auxiliaryString() As String
+            Dim LoopC As Integer
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            newMOTD = buffer.ReadASCIIString()
-            auxiliaryString = Split(newMOTD, vbCrLf)
+                newMOTD = buffer.ReadASCIIString()
+                auxiliaryString = Split(newMOTD, vbCrLf)
 
-            If _
+                If _
                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
                 (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                Call LogGM(.name, "Ha fijado un nuevo MOTD")
+                    Call LogGM(.name, "Ha fijado un nuevo MOTD")
 
-                MaxLines = UBound(auxiliaryString) + 1
+                    MaxLines = UBound(auxiliaryString) + 1
 
-                'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-                ReDim MOTD(MaxLines)
+                    'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+                    ReDim MOTD(MaxLines)
 
-                Call _
+                    Call _
                     WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines", CStr(MaxLines))
 
-                For LoopC = 1 To MaxLines
-                    Call _
+                    For LoopC = 1 To MaxLines
+                        Call _
                         WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "Motd", "Line" & CStr(LoopC),
                                  auxiliaryString(LoopC - 1))
 
-                    MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
-                Next LoopC
+                        MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
+                    Next LoopC
 
-                Call WriteConsoleMsg(UserIndex, "Se ha cambiado el MOTD con éxito.", FontTypeNames.FONTTYPE_INFO)
-            End If
+                    Call WriteConsoleMsg(UserIndex, "Se ha cambiado el MOTD con éxito.", FontTypeNames.FONTTYPE_INFO)
+                End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
-        error_Renamed = Err.Number
-        On Error GoTo 0
 
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSetMOTD: " & ex.Message)
+        End Try
     End Sub
 
     ''
@@ -15355,71 +14656,65 @@ Module Protocol
             Exit Sub
         End If
 
-        On Error GoTo Errhandler
+        Try
 
-        Dim buffer As New clsByteQueue
-        Dim sLlave As String
-        Dim sClave As String
-        Dim sValor As String
-        Dim sTmp As String
-        With UserList(UserIndex)
-            'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+            Dim buffer As New clsByteQueue
+            Dim sLlave As String
+            Dim sClave As String
+            Dim sValor As String
+            Dim sTmp As String
+            With UserList(UserIndex)
+                'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
 
-            Call buffer.CopyBuffer(.incomingData)
+                Call buffer.CopyBuffer(.incomingData)
 
-            'Remove packet ID
-            Call buffer.ReadByte()
+                'Remove packet ID
+                Call buffer.ReadByte()
 
 
-            'Obtengo los parámetros
-            sLlave = buffer.ReadASCIIString()
-            sClave = buffer.ReadASCIIString()
-            sValor = buffer.ReadASCIIString()
+                'Obtengo los parámetros
+                sLlave = buffer.ReadASCIIString()
+                sClave = buffer.ReadASCIIString()
+                sValor = buffer.ReadASCIIString()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
+                If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
 
-                'No podemos modificar [INIT]Dioses ni [Dioses]*
-                If (UCase(sLlave) = "INIT" And UCase(sClave) = "DIOSES") Or UCase(sLlave) = "DIOSES" Then
-                    Call _
+                    'No podemos modificar [INIT]Dioses ni [Dioses]*
+                    If (UCase(sLlave) = "INIT" And UCase(sClave) = "DIOSES") Or UCase(sLlave) = "DIOSES" Then
+                        Call _
                         WriteConsoleMsg(UserIndex, "¡No puedes modificar esa información desde aquí!",
                                         FontTypeNames.FONTTYPE_INFO)
-                Else
-                    'Obtengo el valor según llave y clave
-                    sTmp = GetVar(IniPath & "Server.ini", sLlave, sClave)
+                    Else
+                        'Obtengo el valor según llave y clave
+                        sTmp = GetVar(IniPath & "Server.ini", sLlave, sClave)
 
-                    'Si obtengo un valor escribo en el server.ini
-                    If migr_LenB(sTmp) Then
-                        Call WriteVar(IniPath & "Server.ini", sLlave, sClave, sValor)
-                        Call _
+                        'Si obtengo un valor escribo en el server.ini
+                        If migr_LenB(sTmp) Then
+                            Call WriteVar(IniPath & "Server.ini", sLlave, sClave, sValor)
+                            Call _
                             LogGM(.name,
                                   "Modificó en server.ini (" & sLlave & " " & sClave & ") el valor " & sTmp & " por " &
                                   sValor)
-                        Call _
+                            Call _
                             WriteConsoleMsg(UserIndex,
                                             "Modificó " & sLlave & " " & sClave & " a " & sValor & ". Valor anterior " &
                                             sTmp, FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        Call WriteConsoleMsg(UserIndex, "No existe la llave y/o clave", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "No existe la llave y/o clave", FontTypeNames.FONTTYPE_INFO)
+                        End If
                     End If
                 End If
-            End If
 
-            'If we got here then packet is complete, copy data back to original queue
-            Call .incomingData.CopyBuffer(buffer)
-        End With
+                'If we got here then packet is complete, copy data back to original queue
+                Call .incomingData.CopyBuffer(buffer)
+            End With
 
-        Errhandler:
-        'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim error_Renamed As Integer
 
-        error_Renamed = Err.Number
-
-        On Error GoTo 0
-        'Destroy auxiliar buffer
-        'UPGRADE_NOTE: El objeto buffer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        buffer = Nothing
-
-        If error_Renamed <> 0 Then Err.Raise(error_Renamed)
+        Catch ex As Exception
+            Console.WriteLine("Error in HandleSetIniVar: " & ex.Message)
+            'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim error_Renamed As Integer
+        End Try
     End Sub
 
     ''
@@ -15434,1053 +14729,668 @@ Module Protocol
         'Last Modification: 05/17/06
         'Writes the "Logged" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Logged)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Logged)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "RemoveDialogs" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteRemoveAllDialogs(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "RemoveDialogs" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.RemoveDialogs)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.RemoveDialogs)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "RemoveCharDialog" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    CharIndex Character whose dialog will be removed.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteRemoveCharDialog(ByVal UserIndex As Short, ByVal CharIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "RemoveCharDialog" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageRemoveCharDialog(CharIndex))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageRemoveCharDialog(CharIndex))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "NavigateToggle" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteNavigateToggle(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "NavigateToggle" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.NavigateToggle)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.NavigateToggle)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "Disconnect" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteDisconnect(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "Disconnect" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Disconnect)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Disconnect)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UserOfferConfirm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUserOfferConfirm(ByVal UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
         'Writes the "UserOfferConfirm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.UserOfferConfirm)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.UserOfferConfirm)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-
-    ''
-    ' Writes the "CommerceEnd" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCommerceEnd(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "CommerceEnd" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.CommerceEnd)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.CommerceEnd)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BankEnd" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBankEnd(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "BankEnd" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BankEnd)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BankEnd)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CommerceInit" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCommerceInit(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "CommerceInit" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.CommerceInit)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.CommerceInit)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BankInit" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBankInit(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "BankInit" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BankInit)
-        Call UserList(UserIndex).outgoingData.WriteLong(UserList(UserIndex).Stats.Banco)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BankInit)
+                Call UserList(UserIndex).outgoingData.WriteLong(UserList(UserIndex).Stats.Banco)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UserCommerceInit" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUserCommerceInit(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UserCommerceInit" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.UserCommerceInit)
-        Call UserList(UserIndex).outgoingData.WriteASCIIString(UserList(UserIndex).ComUsu.DestNick)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.UserCommerceInit)
+                Call UserList(UserIndex).outgoingData.WriteASCIIString(UserList(UserIndex).ComUsu.DestNick)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UserCommerceEnd" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUserCommerceEnd(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UserCommerceEnd" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.UserCommerceEnd)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.UserCommerceEnd)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowBlacksmithForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowBlacksmithForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowBlacksmithForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowBlacksmithForm)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowBlacksmithForm)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowCarpenterForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowCarpenterForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowCarpenterForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowCarpenterForm)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowCarpenterForm)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateSta" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateSta(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateMana" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateSta)
-            Call .WriteInteger(UserList(UserIndex).Stats.MinSta)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateSta)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MinSta)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateMana" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateMana(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateMana" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateMana)
-            Call .WriteInteger(UserList(UserIndex).Stats.MinMAN)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateMana)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MinMAN)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateHP" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateHP(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateMana" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateHP)
-            Call .WriteInteger(UserList(UserIndex).Stats.MinHp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateHP)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MinHp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateGold" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateGold(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateGold" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateGold)
-            Call .WriteLong(UserList(UserIndex).Stats.GLD)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateGold)
+                    Call .WriteLong(UserList(UserIndex).Stats.GLD)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateBankGold" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateBankGold(ByVal UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
         'Writes the "UpdateBankGold" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateBankGold)
-            Call .WriteLong(UserList(UserIndex).Stats.Banco)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateBankGold)
+                    Call .WriteLong(UserList(UserIndex).Stats.Banco)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-
-    ''
-    ' Writes the "UpdateExp" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateExp(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateExp" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateExp)
-            Call .WriteLong(UserList(UserIndex).Stats.Exp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateExp)
+                    Call .WriteLong(UserList(UserIndex).Stats.Exp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateStrenghtAndDexterity" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateStrenghtAndDexterity(ByVal UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
         'Writes the "UpdateStrenghtAndDexterity" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateStrenghtAndDexterity)
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateStrenghtAndDexterity)
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ' Writes the "UpdateStrenghtAndDexterity" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateDexterity(ByVal UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
         'Writes the "UpdateStrenghtAndDexterity" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateDexterity)
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateDexterity)
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ' Writes the "UpdateStrenghtAndDexterity" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateStrenght(ByVal UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
         'Writes the "UpdateStrenghtAndDexterity" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateStrenght)
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateStrenght)
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ChangeMap" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    map The new map to load.
-    ' @param    version The version of the map in the server to check if client is properly updated.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteChangeMap(ByVal UserIndex As Short, ByVal Map As Short, ByVal version As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ChangeMap" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ChangeMap)
-            Call .WriteInteger(Map)
-            Call .WriteInteger(version)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ChangeMap)
+                    Call .WriteInteger(Map)
+                    Call .WriteInteger(version)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "PosUpdate" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WritePosUpdate(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "PosUpdate" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.PosUpdate)
-            Call .WriteByte(UserList(UserIndex).Pos.X)
-            Call .WriteByte(UserList(UserIndex).Pos.Y)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.PosUpdate)
+                    Call .WriteByte(UserList(UserIndex).Pos.X)
+                    Call .WriteByte(UserList(UserIndex).Pos.Y)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ChatOverHead" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    Chat Text to be displayed over the char's head.
-    ' @param    CharIndex The character uppon which the chat will be displayed.
-    ' @param    Color The color to be used when displaying the chat.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteChatOverHead(ByVal UserIndex As Short, ByVal Chat As String, ByVal CharIndex As Short,
-                                 ByVal color As Integer)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "ChatOverHead" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageChatOverHead(Chat, CharIndex, color))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteChatOverHead(ByVal UserIndex As Short, ByVal Chat As String, ByVal CharIndex As Short, ByVal color As Integer)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageChatOverHead(Chat, CharIndex, color))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ConsoleMsg" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    Chat Text to be displayed over the char's head.
-    ' @param    FontIndex Index of the FONTTYPE structure to use.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteConsoleMsg(ByVal UserIndex As Short, ByVal Chat As String, ByVal FontIndex As FontTypeNames)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ConsoleMsg" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageConsoleMsg(Chat, FontIndex))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageConsoleMsg(Chat, FontIndex))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
     Public Sub WriteCommerceChat(ByVal UserIndex As Short, ByVal Chat As String, ByVal FontIndex As FontTypeNames)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 05/17/06
         'Writes the "ConsoleMsg" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareCommerceConsoleMsg(Chat, FontIndex))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareCommerceConsoleMsg(Chat, FontIndex))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "GuildChat" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    Chat Text to be displayed over the char's head.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteGuildChat(ByVal UserIndex As Short, ByVal Chat As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "GuildChat" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageGuildChat(Chat))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageGuildChat(Chat))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowMessageBox" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    Message Text to be displayed in the message box.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowMessageBox(ByVal UserIndex As Short, ByVal message As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowMessageBox" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ShowMessageBox)
-            Call .WriteASCIIString(message)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ShowMessageBox)
+                    Call .WriteASCIIString(message)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UserIndexInServer" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUserIndexInServer(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UserIndexInServer" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UserIndexInServer)
-            Call .WriteInteger(UserIndex)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UserIndexInServer)
+                    Call .WriteInteger(UserIndex)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UserCharIndexInServer" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUserCharIndexInServer(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UserIndexInServer" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UserCharIndexInServer)
-            Call .WriteInteger(UserList(UserIndex).Char_Renamed.CharIndex)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UserCharIndexInServer)
+                    Call .WriteInteger(UserList(UserIndex).Char_Renamed.CharIndex)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CharacterCreate" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    body Body index of the new character.
-    ' @param    head Head index of the new character.
-    ' @param    heading Heading in which the new character is looking.
-    ' @param    CharIndex The index of the new character.
-    ' @param    X X coord of the new character's position.
-    ' @param    Y Y coord of the new character's position.
-    ' @param    weapon Weapon index of the new character.
-    ' @param    shield Shield index of the new character.
-    ' @param    FX FX index to be displayed over the new character.
-    ' @param    FXLoops Number of times the FX should be rendered.
-    ' @param    helmet Helmet index of the new character.
-    ' @param    name Name of the new character.
-    ' @param    criminal Determines if the character is a criminal or not.
-    ' @param    privileges Sets if the character is a normal one or any kind of administrative character.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCharacterCreate(ByVal UserIndex As Short, ByVal body As Short, ByVal Head As Short,
-                                    ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal X As Byte,
-                                    ByVal Y As Byte, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
-                                    ByVal FXLoops As Short, ByVal helmet As Short, ByVal name As String,
-                                    ByVal NickColor As Byte, ByVal Privileges As Byte)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "CharacterCreate" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Call _
-            UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterCreate(body, Head, heading,
-                                                                                                 CharIndex, X, Y, weapon,
-                                                                                                 shield, FX, FXLoops,
-                                                                                                 helmet, name, NickColor,
-                                                                                                 Privileges))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+                                            ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal X As Byte,
+                                            ByVal Y As Byte, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
+                                            ByVal FXLoops As Short, ByVal helmet As Short, ByVal name As String,
+                                            ByVal NickColor As Byte, ByVal Privileges As Byte)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call _
+                    UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterCreate(body, Head, heading,
+                                                                                                         CharIndex, X, Y, weapon,
+                                                                                                         shield, FX, FXLoops,
+                                                                                                         helmet, name, NickColor,
+                                                                                                         Privileges))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CharacterRemove" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    CharIndex Character to be removed.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCharacterRemove(ByVal UserIndex As Short, ByVal CharIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "CharacterRemove" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterRemove(CharIndex))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterRemove(CharIndex))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CharacterMove" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    CharIndex Character which is moving.
-    ' @param    X X coord of the character's new position.
-    ' @param    Y Y coord of the character's new position.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCharacterMove(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "CharacterMove" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterMove(CharIndex, X, Y))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterMove(CharIndex, X, Y))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
     Public Sub WriteForceCharMove(ByVal UserIndex As Object, ByVal Direccion As Declaraciones.eHeading)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 26/03/2009
         'Writes the "ForceCharMove" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageForceCharMove(Direccion))
-        Exit Sub
-
-        Errhandler:
-        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserIndex. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageForceCharMove(Direccion))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CharacterChange" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    body Body index of the new character.
-    ' @param    head Head index of the new character.
-    ' @param    heading Heading in which the new character is looking.
-    ' @param    CharIndex The index of the new character.
-    ' @param    weapon Weapon index of the new character.
-    ' @param    shield Shield index of the new character.
-    ' @param    FX FX index to be displayed over the new character.
-    ' @param    FXLoops Number of times the FX should be rendered.
-    ' @param    helmet Helmet index of the new character.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCharacterChange(ByVal UserIndex As Short, ByVal body As Short, ByVal Head As Short,
-                                    ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short,
-                                    ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
-                                    ByVal FXLoops As Short, ByVal helmet As Short)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "CharacterChange" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Call _
-            UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterChange(body, Head, heading,
-                                                                                                 CharIndex, weapon,
-                                                                                                 shield, FX, FXLoops,
-                                                                                                 helmet))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+                                                ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short,
+                                            ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
+                                            ByVal FXLoops As Short, ByVal helmet As Short)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call _
+                    UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterChange(body, Head, heading,
+                                                                                                         CharIndex, weapon,
+                                                                                                         shield, FX, FXLoops,
+                                                                                                         helmet))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ObjectCreate" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    GrhIndex Grh of the object.
-    ' @param    X X coord of the character's new position.
-    ' @param    Y Y coord of the character's new position.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteObjectCreate(ByVal UserIndex As Short, ByVal GrhIndex As Short, ByVal X As Byte, ByVal Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ObjectCreate" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageObjectCreate(GrhIndex, X, Y))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageObjectCreate(GrhIndex, X, Y))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ObjectDelete" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    X X coord of the character's new position.
-    ' @param    Y Y coord of the character's new position.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteObjectDelete(ByVal UserIndex As Short, ByVal X As Byte, ByVal Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ObjectDelete" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageObjectDelete(X, Y))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageObjectDelete(X, Y))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BlockPosition" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    X X coord of the character's new position.
-    ' @param    Y Y coord of the character's new position.
-    ' @param    Blocked True if the position is blocked.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBlockPosition(ByVal UserIndex As Short, ByVal X As Byte, ByVal Y As Byte, ByVal Blocked As Boolean)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "BlockPosition" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.BlockPosition)
-            Call .WriteByte(X)
-            Call .WriteByte(Y)
-            Call .WriteBoolean(Blocked)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.BlockPosition)
+                    Call .WriteByte(X)
+                    Call .WriteByte(Y)
+                    Call .WriteBoolean(Blocked)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "PlayMidi" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    midi The midi to be played.
-    ' @param    loops Number of repets for the midi.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WritePlayMidi(ByVal UserIndex As Short, ByVal midi As Byte, Optional ByVal loops As Short = - 1)
+    Public Sub WritePlayMidi(ByVal UserIndex As Short, ByVal midi As Byte, Optional ByVal loops As Short = -1)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "PlayMidi" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayMidi(midi, loops))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayMidi(midi, loops))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "PlayWave" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    wave The wave to be played.
-    ' @param    X The X position in map coordinates from where the sound comes.
-    ' @param    Y The Y position in map coordinates from where the sound comes.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WritePlayWave(ByVal UserIndex As Short, ByVal wave As Byte, ByVal X As Byte, ByVal Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -16488,224 +15398,144 @@ Module Protocol
         'Last Modified by: Rapsodius
         'Added X and Y positions for 3D Sounds
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayWave(wave, X, Y))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayWave(wave, X, Y))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "GuildList" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    GuildList List of guilds to be sent.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteGuildList(ByVal UserIndex As Short, ByRef guildList() As String)
+    Public Sub WriteGuildList(ByVal UserIndex As Short, ByVal guildList() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "GuildList" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim Tmp As String
-        Dim i As Integer
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.guildList)
-
-            ' Prepare guild name's list
-            For i = LBound(guildList) To UBound(guildList)
-                Tmp = Tmp & guildList(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim Tmp As String
+                Dim i As Integer
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.guildList)
+                    For i = LBound(guildList) To UBound(guildList)
+                        Tmp = Tmp & guildList(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "AreaChanged" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteAreaChanged(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "AreaChanged" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.AreaChanged)
-            Call .WriteByte(UserList(UserIndex).Pos.X)
-            Call .WriteByte(UserList(UserIndex).Pos.Y)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.AreaChanged)
+                    Call .WriteByte(UserList(UserIndex).Pos.X)
+                    Call .WriteByte(UserList(UserIndex).Pos.Y)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "PauseToggle" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WritePauseToggle(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "PauseToggle" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePauseToggle())
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePauseToggle())
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "RainToggle" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteRainToggle(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "RainToggle" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageRainToggle())
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageRainToggle())
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CreateFX" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    CharIndex Character upon which the FX will be created.
-    ' @param    FX FX index to be displayed over the new character.
-    ' @param    FXLoops Number of times the FX should be rendered.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCreateFX(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal FX As Short,
-                             ByVal FXLoops As Short)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "CreateFX" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCreateFX(CharIndex, FX, FXLoops))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+                                         ByVal FXLoops As Short)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCreateFX(CharIndex, FX, FXLoops))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateUserStats" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateUserStats(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateUserStats" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateUserStats)
-            Call .WriteInteger(UserList(UserIndex).Stats.MaxHp)
-            Call .WriteInteger(UserList(UserIndex).Stats.MinHp)
-            Call .WriteInteger(UserList(UserIndex).Stats.MaxMAN)
-            Call .WriteInteger(UserList(UserIndex).Stats.MinMAN)
-            Call .WriteInteger(UserList(UserIndex).Stats.MaxSta)
-            Call .WriteInteger(UserList(UserIndex).Stats.MinSta)
-            Call .WriteLong(UserList(UserIndex).Stats.GLD)
-            Call .WriteByte(UserList(UserIndex).Stats.ELV)
-            Call .WriteLong(UserList(UserIndex).Stats.ELU)
-            Call .WriteLong(UserList(UserIndex).Stats.Exp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateUserStats)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MaxHp)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MinHp)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MaxMAN)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MinMAN)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MaxSta)
+                    Call .WriteInteger(UserList(UserIndex).Stats.MinSta)
+                    Call .WriteLong(UserList(UserIndex).Stats.GLD)
+                    Call .WriteByte(UserList(UserIndex).Stats.ELV)
+                    Call .WriteLong(UserList(UserIndex).Stats.ELU)
+                    Call .WriteLong(UserList(UserIndex).Stats.Exp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "WorkRequestTarget" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    Skill The skill for which we request a target.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteWorkRequestTarget(ByVal UserIndex As Short, ByVal Skill As Declaraciones.eSkill)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "WorkRequestTarget" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.WorkRequestTarget)
-            Call .WriteByte(Skill)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.WorkRequestTarget)
+                    Call .WriteByte(Skill)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ChangeInventorySlot" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    slot Inventory slot which needs to be updated.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteChangeInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -16713,43 +15543,35 @@ Module Protocol
         'Writes the "ChangeInventorySlot" message to the given user's outgoing data buffer
         '3/12/09: Budi - Ahora se envia MaxDef y MinDef en lugar de Def
         '***************************************************
-        On Error GoTo Errhandler
-        Dim ObjIndex As Short
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura obData, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Dim obData As ObjData
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ChangeInventorySlot)
-            Call .WriteByte(Slot)
-
-
-            ObjIndex = UserList(UserIndex).Invent.Object_Renamed(Slot).ObjIndex
-
-            If ObjIndex > 0 Then
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obData. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                obData = ObjData_Renamed(ObjIndex)
-            End If
-
-            Call .WriteInteger(ObjIndex)
-            Call .WriteASCIIString(obData.name)
-            Call .WriteInteger(UserList(UserIndex).Invent.Object_Renamed(Slot).Amount)
-            Call .WriteBoolean(UserList(UserIndex).Invent.Object_Renamed(Slot).Equipped)
-            Call .WriteInteger(obData.GrhIndex)
-            Call .WriteByte(obData.OBJType)
-            Call .WriteInteger(obData.MaxHIT)
-            Call .WriteInteger(obData.MinHIT)
-            Call .WriteInteger(obData.MaxDef)
-            Call .WriteInteger(obData.MinDef)
-            Call .WriteSingle(SalePrice(ObjIndex))
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim ObjIndex As Short
+                Dim obData As ObjData
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ChangeInventorySlot)
+                    Call .WriteByte(Slot)
+                    ObjIndex = UserList(UserIndex).Invent.Object_Renamed(Slot).ObjIndex
+                    If ObjIndex > 0 Then
+                        obData = ObjData_Renamed(ObjIndex)
+                    End If
+                    Call .WriteInteger(ObjIndex)
+                    Call .WriteASCIIString(obData.name)
+                    Call .WriteInteger(UserList(UserIndex).Invent.Object_Renamed(Slot).Amount)
+                    Call .WriteBoolean(UserList(UserIndex).Invent.Object_Renamed(Slot).Equipped)
+                    Call .WriteInteger(obData.GrhIndex)
+                    Call .WriteByte(obData.OBJType)
+                    Call .WriteInteger(obData.MaxHIT)
+                    Call .WriteInteger(obData.MinHIT)
+                    Call .WriteInteger(obData.MaxDef)
+                    Call .WriteInteger(obData.MinDef)
+                    Call .WriteSingle(SalePrice(ObjIndex))
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
     Public Sub WriteAddSlots(ByVal UserIndex As Short, ByVal Mochila As Declaraciones.eMochilas)
         '***************************************************
         'Author: Budi
@@ -16777,804 +15599,532 @@ Module Protocol
         'Writes the "ChangeBankSlot" message to the given user's outgoing data buffer
         '12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de sólo Def
         '***************************************************
-        On Error GoTo Errhandler
-        Dim ObjIndex As Short
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura obData, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Dim obData As ObjData
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ChangeBankSlot)
-            Call .WriteByte(Slot)
-
-
-            ObjIndex = UserList(UserIndex).BancoInvent.Object_Renamed(Slot).ObjIndex
-
-            Call .WriteInteger(ObjIndex)
-
-            If ObjIndex > 0 Then
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obData. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                obData = ObjData_Renamed(ObjIndex)
-            End If
-
-            Call .WriteASCIIString(obData.name)
-            Call .WriteInteger(UserList(UserIndex).BancoInvent.Object_Renamed(Slot).Amount)
-            Call .WriteInteger(obData.GrhIndex)
-            Call .WriteByte(obData.OBJType)
-            Call .WriteInteger(obData.MaxHIT)
-            Call .WriteInteger(obData.MinHIT)
-            Call .WriteInteger(obData.MaxDef)
-            Call .WriteInteger(obData.MinDef)
-            Call .WriteLong(obData.Valor)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim ObjIndex As Short
+                Dim obData As ObjData
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ChangeBankSlot)
+                    Call .WriteByte(Slot)
+                    ObjIndex = UserList(UserIndex).BancoInvent.Object_Renamed(Slot).ObjIndex
+                    Call .WriteInteger(ObjIndex)
+                    If ObjIndex > 0 Then
+                        obData = ObjData_Renamed(ObjIndex)
+                    End If
+                    Call .WriteASCIIString(obData.name)
+                    Call .WriteInteger(UserList(UserIndex).BancoInvent.Object_Renamed(Slot).Amount)
+                    Call .WriteInteger(obData.GrhIndex)
+                    Call .WriteByte(obData.OBJType)
+                    Call .WriteInteger(obData.MaxHIT)
+                    Call .WriteInteger(obData.MinHIT)
+                    Call .WriteInteger(obData.MaxDef)
+                    Call .WriteInteger(obData.MinDef)
+                    Call .WriteLong(obData.Valor)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ChangeSpellSlot" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    slot Spell slot to update.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteChangeSpellSlot(ByVal UserIndex As Short, ByVal Slot As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ChangeSpellSlot" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ChangeSpellSlot)
-            Call .WriteByte(Slot)
-            Call .WriteInteger(UserList(UserIndex).Stats.UserHechizos(Slot))
-
-            If UserList(UserIndex).Stats.UserHechizos(Slot) > 0 Then
-                Call .WriteASCIIString(Hechizos(UserList(UserIndex).Stats.UserHechizos(Slot)).Nombre)
-            Else
-                Call .WriteASCIIString("(None)")
-            End If
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ChangeSpellSlot)
+                    Call .WriteByte(Slot)
+                    Call .WriteInteger(UserList(UserIndex).Stats.UserHechizos(Slot))
+                    If UserList(UserIndex).Stats.UserHechizos(Slot) > 0 Then
+                        Call .WriteASCIIString(Hechizos(UserList(UserIndex).Stats.UserHechizos(Slot)).Nombre)
+                    Else
+                        Call .WriteASCIIString("(None)")
+                    End If
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "Atributes" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteAttributes(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "Atributes" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.Atributes)
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Carisma))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Constitucion))
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.Atributes)
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Carisma))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Constitucion))
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BlacksmithWeapons" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBlacksmithWeapons(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
         'Writes the "BlacksmithWeapons" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As ObjData
-        Dim validIndexes() As Short
-        Dim Count As Short
-
-        'UPGRADE_WARNING: El límite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-        ReDim validIndexes(UBound(ArmasHerrero))
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.BlacksmithWeapons)
-
-            For i = 1 To UBound(ArmasHerrero)
-                ' Can the user create this object? If so add it to the list....
-                If _
-                    ObjData_Renamed(ArmasHerrero(i)).SkHerreria <=
-                    System.Math.Round(
-                        UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Herreria)/
-                        ModHerreriA(UserList(UserIndex).clase), 0) Then
-                    Count = Count + 1
-                    validIndexes(Count) = i
-                End If
-            Next i
-
-            ' Write the number of objects in the list
-            Call .WriteInteger(Count)
-
-            ' Write the needed data of each object
-            For i = 1 To Count
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = ObjData_Renamed(ArmasHerrero(validIndexes(i)))
-                Call .WriteASCIIString(Obj_Renamed.name)
-                Call .WriteInteger(Obj_Renamed.GrhIndex)
-                Call .WriteInteger(Obj_Renamed.LingH)
-                Call .WriteInteger(Obj_Renamed.LingP)
-                Call .WriteInteger(Obj_Renamed.LingO)
-                Call .WriteInteger(ArmasHerrero(validIndexes(i)))
-                Call .WriteInteger(Obj_Renamed.Upgrade)
-            Next i
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Obj_Renamed As ObjData
+                Dim validIndexes() As Short
+                Dim Count As Short
+                ReDim validIndexes(UBound(ArmasHerrero))
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.BlacksmithWeapons)
+                    For i = 1 To UBound(ArmasHerrero)
+                        If _
+                            ObjData_Renamed(ArmasHerrero(i)).SkHerreria <=
+                            System.Math.Round(
+                                UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Herreria) /
+                                ModHerreriA(UserList(UserIndex).clase), 0) Then
+                            Count = Count + 1
+                            validIndexes(Count) = i
+                        End If
+                    Next i
+                    Call .WriteInteger(Count)
+                    For i = 1 To Count
+                        Obj_Renamed = ObjData_Renamed(ArmasHerrero(validIndexes(i)))
+                        Call .WriteASCIIString(Obj_Renamed.name)
+                        Call .WriteInteger(Obj_Renamed.GrhIndex)
+                        Call .WriteInteger(Obj_Renamed.LingH)
+                        Call .WriteInteger(Obj_Renamed.LingP)
+                        Call .WriteInteger(Obj_Renamed.LingO)
+                        Call .WriteInteger(ArmasHerrero(validIndexes(i)))
+                        Call .WriteInteger(Obj_Renamed.Upgrade)
+                    Next i
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BlacksmithArmors" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBlacksmithArmors(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
         'Writes the "BlacksmithArmors" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As ObjData
-        Dim validIndexes() As Short
-        Dim Count As Short
-
-        'UPGRADE_WARNING: El límite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-        ReDim validIndexes(UBound(ArmadurasHerrero))
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.BlacksmithArmors)
-
-            For i = 1 To UBound(ArmadurasHerrero)
-                ' Can the user create this object? If so add it to the list....
-                If _
-                    ObjData_Renamed(ArmadurasHerrero(i)).SkHerreria <=
-                    System.Math.Round(
-                        UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Herreria)/
-                        ModHerreriA(UserList(UserIndex).clase), 0) Then
-                    Count = Count + 1
-                    validIndexes(Count) = i
-                End If
-            Next i
-
-            ' Write the number of objects in the list
-            Call .WriteInteger(Count)
-
-            ' Write the needed data of each object
-            For i = 1 To Count
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = ObjData_Renamed(ArmadurasHerrero(validIndexes(i)))
-                Call .WriteASCIIString(Obj_Renamed.name)
-                Call .WriteInteger(Obj_Renamed.GrhIndex)
-                Call .WriteInteger(Obj_Renamed.LingH)
-                Call .WriteInteger(Obj_Renamed.LingP)
-                Call .WriteInteger(Obj_Renamed.LingO)
-                Call .WriteInteger(ArmadurasHerrero(validIndexes(i)))
-                Call .WriteInteger(Obj_Renamed.Upgrade)
-            Next i
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Obj_Renamed As ObjData
+                Dim validIndexes() As Short
+                Dim Count As Short
+                ReDim validIndexes(UBound(ArmadurasHerrero))
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.BlacksmithArmors)
+                    For i = 1 To UBound(ArmadurasHerrero)
+                        If _
+                            ObjData_Renamed(ArmadurasHerrero(i)).SkHerreria <=
+                            System.Math.Round(
+                                UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Herreria) /
+                                ModHerreriA(UserList(UserIndex).clase), 0) Then
+                            Count = Count + 1
+                            validIndexes(Count) = i
+                        End If
+                    Next i
+                    Call .WriteInteger(Count)
+                    For i = 1 To Count
+                        Obj_Renamed = ObjData_Renamed(ArmadurasHerrero(validIndexes(i)))
+                        Call .WriteASCIIString(Obj_Renamed.name)
+                        Call .WriteInteger(Obj_Renamed.GrhIndex)
+                        Call .WriteInteger(Obj_Renamed.LingH)
+                        Call .WriteInteger(Obj_Renamed.LingP)
+                        Call .WriteInteger(Obj_Renamed.LingO)
+                        Call .WriteInteger(ArmadurasHerrero(validIndexes(i)))
+                        Call .WriteInteger(Obj_Renamed.Upgrade)
+                    Next i
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CarpenterObjects" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteCarpenterObjects(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "CarpenterObjects" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As ObjData
-        Dim validIndexes() As Short
-        Dim Count As Short
-
-        'UPGRADE_WARNING: El límite inferior de la matriz validIndexes ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-        ReDim validIndexes(UBound(ObjCarpintero))
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.CarpenterObjects)
-
-            For i = 1 To UBound(ObjCarpintero)
-                ' Can the user create this object? If so add it to the list....
-                If _
-                    ObjData_Renamed(ObjCarpintero(i)).SkCarpinteria <=
-                    UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Carpinteria)\
-                    ModCarpinteria(UserList(UserIndex).clase) Then
-                    Count = Count + 1
-                    validIndexes(Count) = i
-                End If
-            Next i
-
-            ' Write the number of objects in the list
-            Call .WriteInteger(Count)
-
-            ' Write the needed data of each object
-            For i = 1 To Count
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = ObjData_Renamed(ObjCarpintero(validIndexes(i)))
-                Call .WriteASCIIString(Obj_Renamed.name)
-                Call .WriteInteger(Obj_Renamed.GrhIndex)
-                Call .WriteInteger(Obj_Renamed.Madera)
-                Call .WriteInteger(Obj_Renamed.MaderaElfica)
-                Call .WriteInteger(ObjCarpintero(validIndexes(i)))
-                Call .WriteInteger(Obj_Renamed.Upgrade)
-            Next i
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Obj_Renamed As ObjData
+                Dim validIndexes() As Short
+                Dim Count As Short
+                ReDim validIndexes(UBound(ObjCarpintero))
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.CarpenterObjects)
+                    For i = 1 To UBound(ObjCarpintero)
+                        If _
+                            ObjData_Renamed(ObjCarpintero(i)).SkCarpinteria <=
+                            UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Carpinteria) \
+                            ModCarpinteria(UserList(UserIndex).clase) Then
+                            Count = Count + 1
+                            validIndexes(Count) = i
+                        End If
+                    Next i
+                    Call .WriteInteger(Count)
+                    For i = 1 To Count
+                        Obj_Renamed = ObjData_Renamed(ObjCarpintero(validIndexes(i)))
+                        Call .WriteASCIIString(Obj_Renamed.name)
+                        Call .WriteInteger(Obj_Renamed.GrhIndex)
+                        Call .WriteInteger(Obj_Renamed.Madera)
+                        Call .WriteInteger(Obj_Renamed.MaderaElfica)
+                        Call .WriteInteger(ObjCarpintero(validIndexes(i)))
+                        Call .WriteInteger(Obj_Renamed.Upgrade)
+                    Next i
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "RestOK" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteRestOK(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "RestOK" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.RestOK)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.RestOK)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ErrorMsg" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    message The error message to be displayed.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteErrorMsg(ByVal UserIndex As Short, ByVal message As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ErrorMsg" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageErrorMsg(message))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageErrorMsg(message))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "Blind" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBlind(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "Blind" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Blind)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Blind)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "Dumb" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteDumb(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "Dumb" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Dumb)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Dumb)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowSignal" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    objIndex Index of the signal to be displayed.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowSignal(ByVal UserIndex As Short, ByVal ObjIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowSignal" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ShowSignal)
-            Call .WriteASCIIString(ObjData_Renamed(ObjIndex).texto)
-            Call .WriteInteger(ObjData_Renamed(ObjIndex).GrhSecundario)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ShowSignal)
+                    Call .WriteASCIIString(ObjData_Renamed(ObjIndex).texto)
+                    Call .WriteInteger(ObjData_Renamed(ObjIndex).GrhSecundario)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ChangeNPCInventorySlot" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex   User to which the message is intended.
-    ' @param    slot        The inventory slot in which this item is to be placed.
-    ' @param    obj         The object to be set in the NPC's inventory window.
-    ' @param    price       The value the NPC asks for the object.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteChangeNPCInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte, ByRef Obj As Obj,
-                                           ByVal price As Single)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 12/03/09
-        'Last Modified by: Budi
-        'Writes the "ChangeNPCInventorySlot" message to the given user's outgoing data buffer
-        '12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de sólo Def
-        '***************************************************
-        On Error GoTo Errhandler
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura ObjInfo, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Dim ObjInfo As ObjData
-
-        If Obj.ObjIndex >= LBound(ObjData_Renamed) And Obj.ObjIndex <= UBound(ObjData_Renamed) Then
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto ObjInfo. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            ObjInfo = ObjData_Renamed(Obj.ObjIndex)
-        End If
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ChangeNPCInventorySlot)
-            Call .WriteByte(Slot)
-            Call .WriteASCIIString(ObjInfo.name)
-            Call .WriteInteger(Obj.Amount)
-            Call .WriteSingle(price)
-            Call .WriteInteger(ObjInfo.GrhIndex)
-            Call .WriteInteger(Obj.ObjIndex)
-            Call .WriteByte(ObjInfo.OBJType)
-            Call .WriteInteger(ObjInfo.MaxHIT)
-            Call .WriteInteger(ObjInfo.MinHIT)
-            Call .WriteInteger(ObjInfo.MaxDef)
-            Call .WriteInteger(ObjInfo.MinDef)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteChangeNPCInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte, ByVal Obj As Obj, ByVal price As Single)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim ObjInfo As ObjData
+                If Obj.ObjIndex >= LBound(ObjData_Renamed) And Obj.ObjIndex <= UBound(ObjData_Renamed) Then
+                    ObjInfo = ObjData_Renamed(Obj.ObjIndex)
+                End If
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ChangeNPCInventorySlot)
+                    Call .WriteByte(Slot)
+                    Call .WriteASCIIString(ObjInfo.name)
+                    Call .WriteInteger(Obj.Amount)
+                    Call .WriteSingle(price)
+                    Call .WriteInteger(ObjInfo.GrhIndex)
+                    Call .WriteInteger(Obj.ObjIndex)
+                    Call .WriteByte(ObjInfo.OBJType)
+                    Call .WriteInteger(ObjInfo.MaxHIT)
+                    Call .WriteInteger(ObjInfo.MinHIT)
+                    Call .WriteInteger(ObjInfo.MaxDef)
+                    Call .WriteInteger(ObjInfo.MinDef)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UpdateHungerAndThirst" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteUpdateHungerAndThirst(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "UpdateHungerAndThirst" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UpdateHungerAndThirst)
-            Call .WriteByte(UserList(UserIndex).Stats.MaxAGU)
-            Call .WriteByte(UserList(UserIndex).Stats.MinAGU)
-            Call .WriteByte(UserList(UserIndex).Stats.MaxHam)
-            Call .WriteByte(UserList(UserIndex).Stats.MinHam)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UpdateHungerAndThirst)
+                    Call .WriteByte(UserList(UserIndex).Stats.MaxAGU)
+                    Call .WriteByte(UserList(UserIndex).Stats.MinAGU)
+                    Call .WriteByte(UserList(UserIndex).Stats.MaxHam)
+                    Call .WriteByte(UserList(UserIndex).Stats.MinHam)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "Fame" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteFame(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "Fame" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.Fame)
-
-            Call .WriteLong(UserList(UserIndex).Reputacion.AsesinoRep)
-            Call .WriteLong(UserList(UserIndex).Reputacion.BandidoRep)
-            Call .WriteLong(UserList(UserIndex).Reputacion.BurguesRep)
-            Call .WriteLong(UserList(UserIndex).Reputacion.LadronesRep)
-            Call .WriteLong(UserList(UserIndex).Reputacion.NobleRep)
-            Call .WriteLong(UserList(UserIndex).Reputacion.PlebeRep)
-            Call .WriteLong(UserList(UserIndex).Reputacion.Promedio)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.Fame)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.AsesinoRep)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.BandidoRep)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.BurguesRep)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.LadronesRep)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.NobleRep)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.PlebeRep)
+                    Call .WriteLong(UserList(UserIndex).Reputacion.Promedio)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "MiniStats" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteMiniStats(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "MiniStats" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.MiniStats)
-
-            Call .WriteLong(UserList(UserIndex).Faccion.CiudadanosMatados)
-            Call .WriteLong(UserList(UserIndex).Faccion.CriminalesMatados)
-
-            'TODO : Este valor es calculable, no debería NI EXISTIR, ya sea en el servidor ni en el cliente!!!
-            Call .WriteLong(UserList(UserIndex).Stats.UsuariosMatados)
-
-            Call .WriteInteger(UserList(UserIndex).Stats.NPCsMuertos)
-
-            Call .WriteByte(UserList(UserIndex).clase)
-            Call .WriteLong(UserList(UserIndex).Counters.Pena)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.MiniStats)
+                    Call .WriteLong(UserList(UserIndex).Faccion.CiudadanosMatados)
+                    Call .WriteLong(UserList(UserIndex).Faccion.CriminalesMatados)
+                    Call .WriteLong(UserList(UserIndex).Stats.UsuariosMatados)
+                    Call .WriteInteger(UserList(UserIndex).Stats.NPCsMuertos)
+                    Call .WriteByte(UserList(UserIndex).clase)
+                    Call .WriteLong(UserList(UserIndex).Counters.Pena)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "LevelUp" message to the given user's outgoing data buffer.
-    '
-    ' @param    skillPoints The number of free skill points the player has.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteLevelUp(ByVal UserIndex As Short, ByVal skillPoints As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "LevelUp" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.LevelUp)
-            Call .WriteInteger(skillPoints)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.LevelUp)
+                    Call .WriteInteger(skillPoints)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "AddForumMsg" message to the given user's outgoing data buffer.
-    '
-    ' @param    title The title of the message to display.
-    ' @param    message The message to be displayed.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteAddForumMsg(ByVal UserIndex As Short, ByVal ForumType As Declaraciones.eForumType,
-                                ByRef Title As String, ByRef Author As String, ByRef message As String)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 02/01/2010
-        'Writes the "AddForumMsg" message to the given user's outgoing data buffer
-        '02/01/2010: ZaMa - Now sends Author and forum type
-        '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.AddForumMsg)
-            Call .WriteByte(ForumType)
-            Call .WriteASCIIString(Title)
-            Call .WriteASCIIString(Author)
-            Call .WriteASCIIString(message)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteAddForumMsg(ByVal UserIndex As Short, ByVal ForumType As Declaraciones.eForumType, ByVal Title As String, ByVal Author As String, ByVal message As String)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.AddForumMsg)
+                    Call .WriteByte(ForumType)
+                    Call .WriteASCIIString(Title)
+                    Call .WriteASCIIString(Author)
+                    Call .WriteASCIIString(message)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowForumForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowForumForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowForumForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-
-        Dim Visibilidad As Byte
-        Dim CanMakeSticky As Byte
-
-        With UserList(UserIndex)
-            Call .outgoingData.WriteByte(ServerPacketID.ShowForumForm)
-
-            Visibilidad = Declaraciones.eForumVisibility.ieGENERAL_MEMBER
-
-            If esCaos(UserIndex) Or EsGM(UserIndex) Then
-                Visibilidad = Visibilidad Or Declaraciones.eForumVisibility.ieCAOS_MEMBER
-            End If
-
-            If esArmada(UserIndex) Or EsGM(UserIndex) Then
-                Visibilidad = Visibilidad Or Declaraciones.eForumVisibility.ieREAL_MEMBER
-            End If
-
-            Call .outgoingData.WriteByte(Visibilidad)
-
-            ' Pueden mandar sticky los gms o los del consejo de armada/caos
-            If EsGM(UserIndex) Then
-                CanMakeSticky = 2
-            ElseIf (.flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil) <> 0 Then
-                CanMakeSticky = 1
-            ElseIf (.flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil) <> 0 Then
-                CanMakeSticky = 1
-            End If
-
-            Call .outgoingData.WriteByte(CanMakeSticky)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim Visibilidad As Byte
+                Dim CanMakeSticky As Byte
+                With UserList(UserIndex)
+                    Call .outgoingData.WriteByte(ServerPacketID.ShowForumForm)
+                    Visibilidad = Declaraciones.eForumVisibility.ieGENERAL_MEMBER
+                    If esCaos(UserIndex) Or EsGM(UserIndex) Then
+                        Visibilidad = Visibilidad Or Declaraciones.eForumVisibility.ieCAOS_MEMBER
+                    End If
+                    If esArmada(UserIndex) Or EsGM(UserIndex) Then
+                        Visibilidad = Visibilidad Or Declaraciones.eForumVisibility.ieREAL_MEMBER
+                    End If
+                    Call .outgoingData.WriteByte(Visibilidad)
+                    If EsGM(UserIndex) Then
+                        CanMakeSticky = 2
+                    ElseIf (.flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil) <> 0 Then
+                        CanMakeSticky = 1
+                    ElseIf (.flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil) <> 0 Then
+                        CanMakeSticky = 1
+                    End If
+                    Call .outgoingData.WriteByte(CanMakeSticky)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "SetInvisible" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    CharIndex The char turning visible / invisible.
-    ' @param    invisible True if the char is no longer visible, False otherwise.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteSetInvisible(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal invisible As Boolean)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "SetInvisible" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageSetInvisible(CharIndex, invisible))
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageSetInvisible(CharIndex, invisible))
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "DiceRoll" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteDiceRoll(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "DiceRoll" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.DiceRoll)
-
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Carisma))
-            Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Constitucion))
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.DiceRoll)
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Carisma))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Constitucion))
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "MeditateToggle" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteMeditateToggle(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "MeditateToggle" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.MeditateToggle)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.MeditateToggle)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BlindNoMore" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBlindNoMore(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "BlindNoMore" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BlindNoMore)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BlindNoMore)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "DumbNoMore" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteDumbNoMore(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "DumbNoMore" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.DumbNoMore)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.DumbNoMore)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "SendSkills" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteSendSkills(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -17582,532 +16132,302 @@ Module Protocol
         'Writes the "SendSkills" message to the given user's outgoing data buffer
         '11/19/09: Pato - Now send the percentage of progress of the skills.
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-
-        With UserList(UserIndex)
-            Call .outgoingData.WriteByte(ServerPacketID.SendSkills)
-            Call .outgoingData.WriteByte(.clase)
-
-            For i = 1 To NUMSKILLS
-                Call .outgoingData.WriteByte(UserList(UserIndex).Stats.UserSkills(i))
-                If .Stats.UserSkills(i) < MAXSKILLPOINTS Then
-                    Call .outgoingData.WriteByte(Int(.Stats.ExpSkills(i)*100/.Stats.EluSkills(i)))
-                Else
-                    Call .outgoingData.WriteByte(0)
-                End If
-            Next i
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                With UserList(UserIndex)
+                    Call .outgoingData.WriteByte(ServerPacketID.SendSkills)
+                    Call .outgoingData.WriteByte(.clase)
+                    For i = 1 To NUMSKILLS
+                        Call .outgoingData.WriteByte(UserList(UserIndex).Stats.UserSkills(i))
+                        If .Stats.UserSkills(i) < MAXSKILLPOINTS Then
+                            Call .outgoingData.WriteByte(Int(.Stats.ExpSkills(i) * 100 / .Stats.EluSkills(i)))
+                        Else
+                            Call .outgoingData.WriteByte(0)
+                        End If
+                    Next i
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "TrainerCreatureList" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    npcIndex The index of the requested trainer.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteTrainerCreatureList(ByVal UserIndex As Short, ByVal NpcIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "TrainerCreatureList" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim str_Renamed As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.TrainerCreatureList)
-
-            For i = 1 To Npclist(NpcIndex).NroCriaturas
-                str_Renamed = str_Renamed & Npclist(NpcIndex).Criaturas(i).NpcName & SEPARATOR
-            Next i
-
-            If migr_LenB(str_Renamed) > 0 Then str_Renamed = Left(str_Renamed, Len(str_Renamed) - 1)
-
-            Call .WriteASCIIString(str_Renamed)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim str_Renamed As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.TrainerCreatureList)
+                    For i = 1 To Npclist(NpcIndex).NroCriaturas
+                        str_Renamed = str_Renamed & Npclist(NpcIndex).Criaturas(i).NpcName & SEPARATOR
+                    Next i
+                    If migr_LenB(str_Renamed) > 0 Then str_Renamed = Left(str_Renamed, Len(str_Renamed) - 1)
+                    Call .WriteASCIIString(str_Renamed)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "GuildNews" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    guildNews The guild's news.
-    ' @param    enemies The list of the guild's enemies.
-    ' @param    allies The list of the guild's allies.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteGuildNews(ByVal UserIndex As Short, ByVal guildNews As String, ByRef enemies() As String,
-                              ByRef allies() As String)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "GuildNews" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.guildNews)
-
-            Call .WriteASCIIString(guildNews)
-
-            'Prepare enemies' list
-            For i = LBound(enemies) To UBound(enemies)
-                Tmp = Tmp & enemies(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-
-            Tmp = vbNullString
-            'Prepare allies' list
-            For i = LBound(allies) To UBound(allies)
-                Tmp = Tmp & allies(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteGuildNews(ByVal UserIndex As Short, ByVal guildNews As String, ByVal enemies() As String, ByVal allies() As String)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.guildNews)
+                    Call .WriteASCIIString(guildNews)
+                    For i = LBound(enemies) To UBound(enemies)
+                        Tmp = Tmp & enemies(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                    Tmp = vbNullString
+                    For i = LBound(allies) To UBound(allies)
+                        Tmp = Tmp & allies(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "OfferDetails" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    details Th details of the Peace proposition.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteOfferDetails(ByVal UserIndex As Short, ByVal details As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "OfferDetails" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.OfferDetails)
-
-            Call .WriteASCIIString(details)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.OfferDetails)
+                    Call .WriteASCIIString(details)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "AlianceProposalsList" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    guilds The list of guilds which propossed an alliance.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteAlianceProposalsList(ByVal UserIndex As Short, ByRef guilds() As String)
+    Public Sub WriteAlianceProposalsList(ByVal UserIndex As Short, ByVal guilds() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "AlianceProposalsList" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.AlianceProposalsList)
-
-            ' Prepare guild's list
-            For i = LBound(guilds) To UBound(guilds)
-                Tmp = Tmp & guilds(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.AlianceProposalsList)
+                    For i = LBound(guilds) To UBound(guilds)
+                        Tmp = Tmp & guilds(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "PeaceProposalsList" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    guilds The list of guilds which propossed peace.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WritePeaceProposalsList(ByVal UserIndex As Short, ByRef guilds() As String)
+    Public Sub WritePeaceProposalsList(ByVal UserIndex As Short, ByVal guilds() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "PeaceProposalsList" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.PeaceProposalsList)
-
-            ' Prepare guilds' list
-            For i = LBound(guilds) To UBound(guilds)
-                Tmp = Tmp & guilds(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.PeaceProposalsList)
+                    For i = LBound(guilds) To UBound(guilds)
+                        Tmp = Tmp & guilds(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CharacterInfo" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    charName The requested char's name.
-    ' @param    race The requested char's race.
-    ' @param    class The requested char's class.
-    ' @param    gender The requested char's gender.
-    ' @param    level The requested char's level.
-    ' @param    gold The requested char's gold.
-    ' @param    reputation The requested char's reputation.
-    ' @param    previousPetitions The requested char's previous petitions to enter guilds.
-    ' @param    currentGuild The requested char's current guild.
-    ' @param    previousGuilds The requested char's previous guilds.
-    ' @param    RoyalArmy True if tha char belongs to the Royal Army.
-    ' @param    CaosLegion True if tha char belongs to the Caos Legion.
-    ' @param    citicensKilled The number of citicens killed by the requested char.
-    ' @param    criminalsKilled The number of criminals killed by the requested char.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    'UPGRADE_NOTE: Class se actualizó a Class_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub WriteCharacterInfo(ByVal UserIndex As Short, ByVal charName As String, ByVal race As Declaraciones.eRaza,
-                                  ByVal Class_Renamed As Declaraciones.eClass, ByVal gender As Declaraciones.eGenero,
-                                  ByVal level As Byte, ByVal gold As Integer, ByVal bank As Integer,
-                                  ByVal reputation As Integer, ByVal previousPetitions As String,
-                                  ByVal currentGuild As String, ByVal previousGuilds As String,
-                                  ByVal RoyalArmy As Boolean, ByVal CaosLegion As Boolean,
-                                  ByVal citicensKilled As Integer, ByVal criminalsKilled As Integer)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "CharacterInfo" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.CharacterInfo)
-
-            Call .WriteASCIIString(charName)
-            Call .WriteByte(race)
-            Call .WriteByte(Class_Renamed)
-            Call .WriteByte(gender)
-
-            Call .WriteByte(level)
-            Call .WriteLong(gold)
-            Call .WriteLong(bank)
-            Call .WriteLong(reputation)
-
-            Call .WriteASCIIString(previousPetitions)
-            Call .WriteASCIIString(currentGuild)
-            Call .WriteASCIIString(previousGuilds)
-
-            Call .WriteBoolean(RoyalArmy)
-            Call .WriteBoolean(CaosLegion)
-
-            Call .WriteLong(citicensKilled)
-            Call .WriteLong(criminalsKilled)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteCharacterInfo(ByVal UserIndex As Short, ByVal charName As String, ByVal race As Declaraciones.eRaza, ByVal Class_Renamed As Declaraciones.eClass, ByVal gender As Declaraciones.eGenero,
+                                          ByVal level As Byte, ByVal gold As Integer, ByVal bank As Integer,
+                                          ByVal reputation As Integer, ByVal previousPetitions As String,
+                                          ByVal currentGuild As String, ByVal previousGuilds As String,
+                                          ByVal RoyalArmy As Boolean, ByVal CaosLegion As Boolean,
+                                          ByVal citicensKilled As Integer, ByVal criminalsKilled As Integer)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.CharacterInfo)
+                    Call .WriteASCIIString(charName)
+                    Call .WriteByte(race)
+                    Call .WriteByte(Class_Renamed)
+                    Call .WriteByte(gender)
+                    Call .WriteByte(level)
+                    Call .WriteLong(gold)
+                    Call .WriteLong(bank)
+                    Call .WriteLong(reputation)
+                    Call .WriteASCIIString(previousPetitions)
+                    Call .WriteASCIIString(currentGuild)
+                    Call .WriteASCIIString(previousGuilds)
+                    Call .WriteBoolean(RoyalArmy)
+                    Call .WriteBoolean(CaosLegion)
+                    Call .WriteLong(citicensKilled)
+                    Call .WriteLong(criminalsKilled)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "GuildLeaderInfo" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    guildList The list of guild names.
-    ' @param    memberList The list of the guild's members.
-    ' @param    guildNews The guild's news.
-    ' @param    joinRequests The list of chars which requested to join the clan.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteGuildLeaderInfo(ByVal UserIndex As Short, ByRef guildList() As String, ByRef MemberList() As String,
-                                    ByVal guildNews As String, ByRef joinRequests() As String)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "GuildLeaderInfo" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.GuildLeaderInfo)
-
-            ' Prepare guild name's list
-            For i = LBound(guildList) To UBound(guildList)
-                Tmp = Tmp & guildList(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-
-            ' Prepare guild member's list
-            Tmp = vbNullString
-            For i = LBound(MemberList) To UBound(MemberList)
-                Tmp = Tmp & MemberList(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-
-            ' Store guild news
-            Call .WriteASCIIString(guildNews)
-
-            ' Prepare the join request's list
-            Tmp = vbNullString
-            For i = LBound(joinRequests) To UBound(joinRequests)
-                Tmp = Tmp & joinRequests(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteGuildLeaderInfo(ByVal UserIndex As Short, ByVal guildList() As String, ByVal MemberList() As String, ByVal guildNews As String, ByVal joinRequests() As String)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.GuildLeaderInfo)
+                    For i = LBound(guildList) To UBound(guildList)
+                        Tmp = Tmp & guildList(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                    Tmp = vbNullString
+                    For i = LBound(MemberList) To UBound(MemberList)
+                        Tmp = Tmp & MemberList(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                    Call .WriteASCIIString(guildNews)
+                    Tmp = vbNullString
+                    For i = LBound(joinRequests) To UBound(joinRequests)
+                        Tmp = Tmp & joinRequests(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "GuildLeaderInfo" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    guildList The list of guild names.
-    ' @param    memberList The list of the guild's members.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteGuildMemberInfo(ByVal UserIndex As Short, ByRef guildList() As String, ByRef MemberList() As String)
+    Public Sub WriteGuildMemberInfo(ByVal UserIndex As Short, ByVal guildList() As String, ByVal MemberList() As String)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 21/02/2010
         'Writes the "GuildMemberInfo" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.GuildMemberInfo)
-
-            ' Prepare guild name's list
-            For i = LBound(guildList) To UBound(guildList)
-                Tmp = Tmp & guildList(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-
-            ' Prepare guild member's list
-            Tmp = vbNullString
-            For i = LBound(MemberList) To UBound(MemberList)
-                Tmp = Tmp & MemberList(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.GuildMemberInfo)
+                    For i = LBound(guildList) To UBound(guildList)
+                        Tmp = Tmp & guildList(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                    Tmp = vbNullString
+                    For i = LBound(MemberList) To UBound(MemberList)
+                        Tmp = Tmp & MemberList(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "GuildDetails" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    guildName The requested guild's name.
-    ' @param    founder The requested guild's founder.
-    ' @param    foundationDate The requested guild's foundation date.
-    ' @param    leader The requested guild's current leader.
-    ' @param    URL The requested guild's website.
-    ' @param    memberCount The requested guild's member count.
-    ' @param    electionsOpen True if the clan is electing it's new leader.
-    ' @param    alignment The requested guild's alignment.
-    ' @param    enemiesCount The requested guild's enemy count.
-    ' @param    alliesCount The requested guild's ally count.
-    ' @param    antifactionPoints The requested guild's number of antifaction acts commited.
-    ' @param    codex The requested guild's codex.
-    ' @param    guildDesc The requested guild's description.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteGuildDetails(ByVal UserIndex As Short, ByVal GuildName As String, ByVal founder As String,
-                                 ByVal foundationDate As String, ByVal leader As String, ByVal URL As String,
-                                 ByVal memberCount As Short, ByVal electionsOpen As Boolean, ByVal alignment As String,
-                                 ByVal enemiesCount As Short, ByVal AlliesCount As Short,
-                                 ByVal antifactionPoints As String, ByRef codex() As String, ByVal guildDesc As String)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 05/17/06
-        'Writes the "GuildDetails" message to the given user's outgoing data buffer
-        '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim temp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.GuildDetails)
-
-            Call .WriteASCIIString(GuildName)
-            Call .WriteASCIIString(founder)
-            Call .WriteASCIIString(foundationDate)
-            Call .WriteASCIIString(leader)
-            Call .WriteASCIIString(URL)
-
-            Call .WriteInteger(memberCount)
-            Call .WriteBoolean(electionsOpen)
-
-            Call .WriteASCIIString(alignment)
-
-            Call .WriteInteger(enemiesCount)
-            Call .WriteInteger(AlliesCount)
-
-            Call .WriteASCIIString(antifactionPoints)
-
-            For i = LBound(codex) To UBound(codex)
-                temp = temp & codex(i) & SEPARATOR
-            Next i
-
-            If Len(temp) > 1 Then temp = Left(temp, Len(temp) - 1)
-
-            Call .WriteASCIIString(temp)
-
-            Call .WriteASCIIString(guildDesc)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteGuildDetails(ByVal UserIndex As Short, ByVal GuildName As String, ByVal founder As String, ByVal foundationDate As String, ByVal leader As String, ByVal URL As String,
+                                         ByVal memberCount As Short, ByVal electionsOpen As Boolean, ByVal alignment As String,
+                                         ByVal enemiesCount As Short, ByVal AlliesCount As Short,
+                                         ByVal antifactionPoints As String, ByVal codex() As String, ByVal guildDesc As String)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim temp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.GuildDetails)
+                    Call .WriteASCIIString(GuildName)
+                    Call .WriteASCIIString(founder)
+                    Call .WriteASCIIString(foundationDate)
+                    Call .WriteASCIIString(leader)
+                    Call .WriteASCIIString(URL)
+                    Call .WriteInteger(memberCount)
+                    Call .WriteBoolean(electionsOpen)
+                    Call .WriteASCIIString(alignment)
+                    Call .WriteInteger(enemiesCount)
+                    Call .WriteInteger(AlliesCount)
+                    Call .WriteASCIIString(antifactionPoints)
+                    For i = LBound(codex) To UBound(codex)
+                        temp = temp & codex(i) & SEPARATOR
+                    Next i
+                    If Len(temp) > 1 Then temp = Left(temp, Len(temp) - 1)
+                    Call .WriteASCIIString(temp)
+                    Call .WriteASCIIString(guildDesc)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-
-    ''
-    ' Writes the "ShowGuildAlign" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowGuildAlign(ByVal UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
         'Writes the "ShowGuildAlign" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowGuildAlign)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowGuildAlign)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowGuildFundationForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowGuildFundationForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowGuildFundationForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowGuildFundationForm)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowGuildFundationForm)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ParalizeOK" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteParalizeOK(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -18116,384 +16436,257 @@ Module Protocol
         'Writes the "ParalizeOK" message to the given user's outgoing data buffer
         'And updates user position
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ParalizeOK)
-        Call WritePosUpdate(UserIndex)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ParalizeOK)
+                Call WritePosUpdate(UserIndex)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowUserRequest" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    details DEtails of the char's request.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowUserRequest(ByVal UserIndex As Short, ByVal details As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowUserRequest" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ShowUserRequest)
-
-            Call .WriteASCIIString(details)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ShowUserRequest)
+                    Call .WriteASCIIString(details)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "TradeOK" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteTradeOK(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "TradeOK" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.TradeOK)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.TradeOK)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "BankOK" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteBankOK(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "BankOK" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BankOK)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.BankOK)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ChangeUserTradeSlot" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    ObjIndex The object's index.
-    ' @param    amount The number of objects offered.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteChangeUserTradeSlot(ByVal UserIndex As Short, ByVal OfferSlot As Byte, ByVal ObjIndex As Short,
-                                        ByVal Amount As Integer)
-        '***************************************************
-        'Author: Juan Martín Sotuyo Dodero (Maraxus)
-        'Last Modification: 12/03/09
-        'Writes the "ChangeUserTradeSlot" message to the given user's outgoing data buffer
-        '25/11/2009: ZaMa - Now sends the specific offer slot to be modified.
-        '12/03/09: Budi - Ahora se envia MaxDef y MinDef en lugar de sólo Def
-        '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ChangeUserTradeSlot)
-
-            Call .WriteByte(OfferSlot)
-            Call .WriteInteger(ObjIndex)
-            Call .WriteLong(Amount)
-
-            If ObjIndex > 0 Then
-                Call .WriteInteger(ObjData_Renamed(ObjIndex).GrhIndex)
-                Call .WriteByte(ObjData_Renamed(ObjIndex).OBJType)
-                Call .WriteInteger(ObjData_Renamed(ObjIndex).MaxHIT)
-                Call .WriteInteger(ObjData_Renamed(ObjIndex).MinHIT)
-                Call .WriteInteger(ObjData_Renamed(ObjIndex).MaxDef)
-                Call .WriteInteger(ObjData_Renamed(ObjIndex).MinDef)
-                Call .WriteLong(SalePrice(ObjIndex))
-                Call .WriteASCIIString(ObjData_Renamed(ObjIndex).name)
-            Else ' Borra el item
-                Call .WriteInteger(0)
-                Call .WriteByte(0)
-                Call .WriteInteger(0)
-                Call .WriteInteger(0)
-                Call .WriteInteger(0)
-                Call .WriteInteger(0)
-                Call .WriteLong(0)
-                Call .WriteASCIIString("")
-            End If
-        End With
-        Exit Sub
-
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+    Public Sub WriteChangeUserTradeSlot(ByVal UserIndex As Short, ByVal OfferSlot As Byte, ByVal ObjIndex As Short, ByVal Amount As Integer)
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ChangeUserTradeSlot)
+                    Call .WriteByte(OfferSlot)
+                    Call .WriteInteger(ObjIndex)
+                    Call .WriteLong(Amount)
+                    If ObjIndex > 0 Then
+                        Call .WriteInteger(ObjData_Renamed(ObjIndex).GrhIndex)
+                        Call .WriteByte(ObjData_Renamed(ObjIndex).OBJType)
+                        Call .WriteInteger(ObjData_Renamed(ObjIndex).MaxHIT)
+                        Call .WriteInteger(ObjData_Renamed(ObjIndex).MinHIT)
+                        Call .WriteInteger(ObjData_Renamed(ObjIndex).MaxDef)
+                        Call .WriteInteger(ObjData_Renamed(ObjIndex).MinDef)
+                        Call .WriteLong(SalePrice(ObjIndex))
+                        Call .WriteASCIIString(ObjData_Renamed(ObjIndex).name)
+                    Else ' Borra el item
+                        Call .WriteInteger(0)
+                        Call .WriteByte(0)
+                        Call .WriteInteger(0)
+                        Call .WriteInteger(0)
+                        Call .WriteInteger(0)
+                        Call .WriteInteger(0)
+                        Call .WriteLong(0)
+                        Call .WriteASCIIString("")
+                    End If
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "SendNight" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteSendNight(ByVal UserIndex As Short, ByVal night As Boolean)
         '***************************************************
         'Author: Fredy Horacio Treboux (liquid)
         'Last Modification: 01/08/07
         'Writes the "SendNight" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.SendNight)
-            Call .WriteBoolean(night)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.SendNight)
+                    Call .WriteBoolean(night)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "SpawnList" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    npcNames The names of the creatures that can be spawned.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteSpawnList(ByVal UserIndex As Short, ByRef npcNames() As String)
+    Public Sub WriteSpawnList(ByVal UserIndex As Short, ByVal npcNames() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "SpawnList" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.SpawnList)
-
-            For i = LBound(npcNames) To UBound(npcNames)
-                Tmp = Tmp & npcNames(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.SpawnList)
+                    For i = LBound(npcNames) To UBound(npcNames)
+                        Tmp = Tmp & npcNames(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowSOSForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowSOSForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowSOSForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ShowSOSForm)
-
-            For i = 0 To Ayuda.Longitud - 1
-                Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR
-            Next i
-
-            If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ShowSOSForm)
+                    For i = 0 To Ayuda.Longitud - 1
+                        Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR
+                    Next i
+                    If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-
-    ''
-    ' Writes the "ShowSOSForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowPartyForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
         'Writes the "ShowPartyForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-        Dim PI As Short
-        Dim members(PARTY_MAXMEMBERS) As Short
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ShowPartyForm)
-
-            PI = UserList(UserIndex).PartyIndex
-            Call .WriteByte(CByte(Parties(PI).EsPartyLeader(UserIndex)))
-
-            If PI > 0 Then
-                Call Parties(PI).ObtenerMiembrosOnline(members)
-                For i = 1 To PARTY_MAXMEMBERS
-                    If members(i) > 0 Then
-                        Tmp = Tmp & UserList(members(i)).name & " (" & Fix(Parties(PI).MiExperiencia(members(i))) & ")" &
-                              SEPARATOR
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                Dim PI As Short
+                Dim members(PARTY_MAXMEMBERS) As Short
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ShowPartyForm)
+                    PI = UserList(UserIndex).PartyIndex
+                    Call .WriteByte(CByte(Parties(PI).EsPartyLeader(UserIndex)))
+                    If PI > 0 Then
+                        Call Parties(PI).ObtenerMiembrosOnline(members)
+                        For i = 1 To PARTY_MAXMEMBERS
+                            If members(i) > 0 Then
+                                Tmp = Tmp & UserList(members(i)).name & " (" & Fix(Parties(PI).MiExperiencia(members(i))) & ")" &
+                                      SEPARATOR
+                            End If
+                        Next i
                     End If
-                Next i
-            End If
-
-            If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-            Call .WriteLong(Parties(PI).ObtenerExperienciaTotal)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+                    If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                    Call .WriteLong(Parties(PI).ObtenerExperienciaTotal)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowMOTDEditionForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    currentMOTD The current Message Of The Day.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowMOTDEditionForm(ByVal UserIndex As Short, ByVal currentMOTD As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowMOTDEditionForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.ShowMOTDEditionForm)
-
-            Call .WriteASCIIString(currentMOTD)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.ShowMOTDEditionForm)
+                    Call .WriteASCIIString(currentMOTD)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "ShowGMPanelForm" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
     Public Sub WriteShowGMPanelForm(ByVal UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
         'Writes the "ShowGMPanelForm" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowGMPanelForm)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.ShowGMPanelForm)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "UserNameList" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    userNameList List of user names.
-    ' @param    Cant Number of names to send.
-    ' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-    Public Sub WriteUserNameList(ByVal UserIndex As Short, ByRef userNamesList() As String, ByVal cant As Short)
+    Public Sub WriteUserNameList(ByVal UserIndex As Short, ByVal userNamesList() As String, ByVal cant As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06 NIGO:
         'Writes the "UserNameList" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Dim i As Integer
-        Dim Tmp As String
-
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.UserNameList)
-
-            ' Prepare user's names list
-            For i = 1 To cant
-                Tmp = Tmp & userNamesList(i) & SEPARATOR
-            Next i
-
-            If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
-
-            Call .WriteASCIIString(Tmp)
-        End With
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Dim i As Integer
+                Dim Tmp As String
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.UserNameList)
+                    For i = 1 To cant
+                        Tmp = Tmp & userNamesList(i) & SEPARATOR
+                    Next i
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
+                    Call .WriteASCIIString(Tmp)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
+
 
     ''
     ' Writes the "Pong" message to the given user's outgoing data buffer.
@@ -18507,15 +16700,14 @@ Module Protocol
         'Last Modification: 05/17/06
         'Writes the "Pong" message to the given user's outgoing data buffer
         '***************************************************
-        On Error GoTo Errhandler
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Pong)
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.Pong)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
 
     ''
@@ -18603,8 +16795,8 @@ Module Protocol
 
             ' Write rgb channels and save one byte from long :D
             Call .WriteByte(color And &HFF)
-            Call .WriteByte((color And &HFF00)\&H100)
-            Call .WriteByte((color And &HFF0000)\&H10000)
+            Call .WriteByte((color And &HFF00) \ &H100)
+            Call .WriteByte((color And &HFF0000) \ &H10000)
 
             PrepareMessageChatOverHead = .ReadASCIIStringFixed(.length)
         End With
@@ -18752,7 +16944,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessagePlayMidi(ByVal midi As Byte, Optional ByVal loops As Short = - 1) As String
+    Public Function PrepareMessagePlayMidi(ByVal midi As Byte, Optional ByVal loops As Short = -1) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -19105,50 +17297,47 @@ Module Protocol
     ' Writes the "StopWorking" message to the given user's outgoing data buffer.
     '
     ' @param    UserIndex User to which the message is intended.
-
     Public Sub WriteStopWorking(ByVal UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 21/02/2010
         '
         '***************************************************
-        On Error GoTo Errhandler
-
-        Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.StopWorking)
-
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.StopWorking)
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
-
-    ''
-    ' Writes the "CancelOfferItem" message to the given user's outgoing data buffer.
-    '
-    ' @param    UserIndex User to which the message is intended.
-    ' @param    Slot      The slot to cancel.
-
     Public Sub WriteCancelOfferItem(ByVal UserIndex As Short, ByVal Slot As Byte)
         '***************************************************
         'Author: Torres Patricio (Pato)
         'Last Modification: 05/03/2010
         '
         '***************************************************
-        On Error GoTo Errhandler
-        With UserList(UserIndex).outgoingData
-            Call .WriteByte(ServerPacketID.CancelOfferItem)
-            Call .WriteByte(Slot)
-        End With
-
-        Exit Sub
-
-        Errhandler:
-        If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-            Call FlushBuffer(UserIndex)
-            Resume
-        End If
+        RetryOnceIfNotEnoughSpace(
+            Sub()
+                With UserList(UserIndex).outgoingData
+                    Call .WriteByte(ServerPacketID.CancelOfferItem)
+                    Call .WriteByte(Slot)
+                End With
+            End Sub,
+            Sub()
+                FlushBuffer(UserIndex)
+            End Sub
+        )
     End Sub
+
+    Private Sub RetryOnceIfNotEnoughSpace(tryAction As Action, onRetry As Action)
+        Try
+            tryAction()
+        Catch ex As Exception
+            onRetry()
+            tryAction() ' Reintenta una sola vez
+        End Try
+    End Sub
+
 End Module

@@ -57,7 +57,7 @@ Module Extra
         Dim TelepRadio As Short
         Dim DestPos As WorldPos
 
-        On Error GoTo Errhandler
+        Try
         'Controla las salidas
         Dim attemps As Integer
         Dim exitMap As Boolean
@@ -214,11 +214,14 @@ Module Extra
                 End If
             End With
         End If
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en DotileEvents. Error: " & Err.Number & " - Desc: " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in EsNewbie: " & ex.Message)
+    Call LogError("Error en DotileEvents. Error: " & Err.Number & " - Desc: " & Err.Description)
+End Try
+End Sub
 
     Function InRangoVision(ByVal UserIndex As Short, ByVal X As Short, ByVal Y As Short) As Boolean
         '***************************************************
@@ -689,7 +692,7 @@ Module Extra
         '13/02/2009: ZaMa - EL nombre del gm que aparece por consola al clickearlo, tiene el color correspondiente a su rango
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         'Responde al click del usuario sobre el mapa
         Dim FoundChar As Byte
@@ -1016,11 +1019,14 @@ Module Extra
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en LookAtTile. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in InRangoVision: " & ex.Message)
+    Call LogError("Error en LookAtTile. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Function FindDirection(ByRef Pos As WorldPos, ByRef Target As WorldPos) As Declaraciones.eHeading
         '***************************************************

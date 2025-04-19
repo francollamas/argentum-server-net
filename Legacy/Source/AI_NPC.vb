@@ -883,7 +883,7 @@ Module AI
         '08/16/2008: MarKoxX - Now pets that do melï¿½ attacks have to be near the enemy to attack.
         '15/11/2009: ZaMa - Implementacion de npc objetos ai.
         '**************************************************************
-        On Error GoTo ErrorHandler
+        Try
         With Npclist(NpcIndex)
             '<<<<<<<<<<< Ataques >>>>>>>>>>>>>>>>
             If .MaestroUser = 0 Then
@@ -982,10 +982,12 @@ Module AI
                     End If
             End Select
         End With
-        Exit Sub
+        
 
-        ErrorHandler:
-        Call _
+        
+Catch ex As Exception
+    Console.WriteLine("Error in GuardiasAI: " & ex.Message)
+    Call _
             LogError(
                 "NPCAI " & Npclist(NpcIndex).name & " " & Npclist(NpcIndex).MaestroUser & " " &
                 Npclist(NpcIndex).MaestroNpc & " mapa:" & Npclist(NpcIndex).Pos.Map & " x:" & Npclist(NpcIndex).Pos.X &
@@ -997,7 +999,8 @@ Module AI
         MiNPC = Npclist(NpcIndex)
         Call QuitarNPC(NpcIndex)
         Call ReSpawnNpc(MiNPC)
-    End Sub
+End Try
+End Sub
 
     Function UserNear(ByVal NpcIndex As Short) As Boolean
         '***************************************************

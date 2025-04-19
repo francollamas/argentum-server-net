@@ -33,7 +33,7 @@ Module mdlCOmercioConUsuario
         'Last Modification: 25/11/2009
         '
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         'Si ambos pusieron /comerciar entonces
         If UserList(Origen).ComUsu.DestUsu = Destino And UserList(Destino).ComUsu.DestUsu = Origen Then
@@ -62,10 +62,13 @@ Module mdlCOmercioConUsuario
 
         Call FlushBuffer(Destino)
 
-        Exit Sub
-        Errhandler:
-        Call LogError("Error en IniciarComercioConUsuario: " & Err.Description)
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in Initialize: " & ex.Message)
+    Call LogError("Error en IniciarComercioConUsuario: " & Err.Description)
+End Try
+End Sub
 
     Public Sub EnviarOferta(ByVal UserIndex As Short, ByVal OfferSlot As Byte)
         '***************************************************

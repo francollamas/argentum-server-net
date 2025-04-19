@@ -966,7 +966,7 @@ Module modGuilds
 
         Dim i As Short
 
-        On Error GoTo errh
+        Try
         Call _
             SendData(modSendData.SendTarget.ToAll, 0,
                      PrepareMessageConsoleMsg("Servidor> Revisando elecciones", Protocol.FontTypeNames.FONTTYPE_SERVER))
@@ -985,11 +985,14 @@ Module modGuilds
         Call _
             SendData(modSendData.SendTarget.ToAll, 0,
                      PrepareMessageConsoleMsg("Servidor> Elecciones revisadas.", Protocol.FontTypeNames.FONTTYPE_SERVER))
-        Exit Sub
-        errh:
-        Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadGuildsDB: " & ex.Message)
+    Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
         Resume Next
-    End Sub
+End Try
+End Sub
 
     Private Function GetGuildIndexFromChar(ByRef PlayerName As String) As Short
         '***************************************************
@@ -1765,7 +1768,7 @@ Module modGuilds
         Dim list() As String
         Dim i As Integer
 
-        On Error GoTo error_Renamed
+        Try
         GI = UserList(UserIndex).GuildIndex
 
         Personaje = UCase(Personaje)
@@ -1845,9 +1848,11 @@ Module modGuilds
         'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         UserFile = Nothing
 
-        Exit Sub
-        error_Renamed:
-        'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in GetGuildIndexFromChar: " & ex.Message)
+    'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         UserFile = Nothing
         If Not (FileExist(CharPath & Personaje & ".chr")) Then
             Call _
@@ -1861,7 +1866,8 @@ Module modGuilds
                     UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo información sobre el personaje " &
                     Personaje)
         End If
-    End Sub
+End Try
+End Sub
 
     Public Function a_NuevoAspirante(ByVal UserIndex As Short, ByRef clan As String, ByRef Solicitud As String,
                                      ByRef refError As String) As Boolean

@@ -47,7 +47,7 @@ Module PraetoriansCoopNPC
     '/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 
     Public Function esPretoriano(ByVal NpcIndex As Short) As Short
-        On Error GoTo errorh
+        Try
 
         Dim N As Short
         Dim i As Short
@@ -67,12 +67,15 @@ Module PraetoriansCoopNPC
                 esPretoriano = 5
         End Select
 
-        Exit Function
+        
 
-        errorh:
-        LogError(("Error en NPCAI.EsPretoriano? " & Npclist(NpcIndex).name))
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadSIni: " & ex.Message)
+    LogError(("Error en NPCAI.EsPretoriano? " & Npclist(NpcIndex).name))
         'do nothing
-    End Function
+End Try
+End Function
 
 
     Sub CrearClanPretoriano(ByVal X As Short)
@@ -81,7 +84,7 @@ Module PraetoriansCoopNPC
         'Inicializa el clan Pretoriano.
         'Last Modify Date: 22/6/06: (Nacho) Seteamos cuantos NPCs creamos
         '********************************************************
-        On Error GoTo errorh
+        Try
 
         ''------------------------------------------------------
         ''recibe el X,Y donde EL REY ANTERIOR ESTABA POSICIONADO.
@@ -165,15 +168,18 @@ Module PraetoriansCoopNPC
         Call ClosestLegalPos(wp, nPos, False, True)
         Call CrearNPC(PRMAGO_NPC, MAPA_PRETORIANO, nPos)
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.CrearClanPretoriano "))
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CrearClanPretoriano: " & ex.Message)
+    LogError(("Error en NPCAI.CrearClanPretoriano "))
         'do nothing
-    End Sub
+End Try
+End Sub
 
     Sub PRCAZA_AI(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
         '' NO CAMBIAR:
         '' HECHIZOS: 1- FLECHA
 
@@ -343,14 +349,17 @@ Module PraetoriansCoopNPC
 
         End If
 
-        Exit Sub
-        errorh:
-        LogError(("Error en NPCAI.PRCAZA_AI "))
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PRCAZA_AI: " & ex.Message)
+    LogError(("Error en NPCAI.PRCAZA_AI "))
         'do nothing
-    End Sub
+End Try
+End Sub
 
     Sub PRMAGO_AI(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
 
         'HECHIZOS: NO CAMBIAR ACA
         'REPRESENTAN LA UBICACION DE LOS SPELLS EN NPC_HOSTILES.DAT y si se los puede cambiar en ese archivo
@@ -570,14 +579,17 @@ Module PraetoriansCoopNPC
 
         End If ''end if not matandose
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.PRMAGO_AI? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PRMAGO_AI: " & ex.Message)
+    LogError(("Error en NPCAI.PRMAGO_AI? "))
+End Try
+End Sub
 
     Sub PRREY_AI(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
         'HECHIZOS: NO CAMBIAR ACA
         'REPRESENTAN LA UBICACION DE LOS SPELLS EN NPC_HOSTILES.DAT y si se los puede cambiar en ese archivo
         '1- CURAR_LEVES 'NO MODIFICABLE
@@ -739,14 +751,17 @@ Module PraetoriansCoopNPC
 
             End If
         End If
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.PRREY_AI? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PRREY_AI: " & ex.Message)
+    LogError(("Error en NPCAI.PRREY_AI? "))
+End Try
+End Sub
 
     Sub PRGUER_AI(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
 
         Dim headingloop As Byte
         Dim nPos As WorldPos
@@ -838,14 +853,17 @@ Module PraetoriansCoopNPC
         Next headingloop
 
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.PRGUER_AI? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PRGUER_AI: " & ex.Message)
+    LogError(("Error en NPCAI.PRGUER_AI? "))
+End Try
+End Sub
 
     Sub PRCLER_AI(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
 
         'HECHIZOS: NO CAMBIAR ACA
         'REPRESENTAN LA UBICACION DE LOS SPELLS EN NPC_HOSTILES.DAT y si se los puede cambiar en ese archivo
@@ -1084,27 +1102,33 @@ Module PraetoriansCoopNPC
             End If
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.PRCLER_AI? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PRCLER_AI: " & ex.Message)
+    LogError(("Error en NPCAI.PRCLER_AI? "))
+End Try
+End Sub
 
     Function EsMagoOClerigo(ByVal PJEnInd As Short) As Boolean
-        On Error GoTo errorh
+        Try
 
         EsMagoOClerigo = UserList(PJEnInd).clase = Declaraciones.eClass.Mage Or
                          UserList(PJEnInd).clase = Declaraciones.eClass.Cleric Or
                          UserList(PJEnInd).clase = Declaraciones.eClass.Druid Or
                          UserList(PJEnInd).clase = Declaraciones.eClass.Bard
-        Exit Function
+        
 
-        errorh:
-        LogError(("Error en NPCAI.EsMagoOClerigo? "))
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in EsMagoOClerigo: " & ex.Message)
+    LogError(("Error en NPCAI.EsMagoOClerigo? "))
+End Try
+End Function
 
     Sub NPCRemueveVenenoNPC(ByVal npcind As Short, ByVal NPCAlInd As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
         indireccion = Npclist(npcind).Spells(indice)
@@ -1124,14 +1148,17 @@ Module PraetoriansCoopNPC
         Npclist(NPCAlInd).Veneno = 0
         Npclist(NPCAlInd).flags.Envenenado = 0
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCRemueveVenenoNPC? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCRemueveVenenoNPC: " & ex.Message)
+    LogError(("Error en NPCAI.NPCRemueveVenenoNPC? "))
+End Try
+End Sub
 
     Sub NPCCuraLevesNPC(ByVal npcind As Short, ByVal NPCAlInd As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
         indireccion = Npclist(npcind).Spells(indice)
@@ -1155,15 +1182,18 @@ Module PraetoriansCoopNPC
             Npclist(NPCAlInd).Stats.MinHp = Npclist(NPCAlInd).Stats.MaxHp
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCCuraLevesNPC? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCCuraLevesNPC: " & ex.Message)
+    LogError(("Error en NPCAI.NPCCuraLevesNPC? "))
+End Try
+End Sub
 
 
     Sub NPCRemueveParalisisNPC(ByVal npcind As Short, ByVal NPCAlInd As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
         indireccion = Npclist(npcind).Spells(indice)
@@ -1182,14 +1212,17 @@ Module PraetoriansCoopNPC
                                             Hechizos(indireccion).loops))
         Npclist(NPCAlInd).Contadores.Paralisis = 0
         Npclist(NPCAlInd).flags.Paralizado = 0
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCRemueveParalisisNPC? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCRemueveParalisisNPC: " & ex.Message)
+    LogError(("Error en NPCAI.NPCRemueveParalisisNPC? "))
+End Try
+End Sub
 
     Sub NPCparalizaNPC(ByVal paralizador As Short, ByVal Paralizado As Short, ByVal indice As Object)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto indice. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -1212,14 +1245,17 @@ Module PraetoriansCoopNPC
         Npclist(Paralizado).flags.Paralizado = 1
         Npclist(Paralizado).Contadores.Paralisis = IntervaloParalizado*2
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCParalizaNPC? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCparalizaNPC: " & ex.Message)
+    LogError(("Error en NPCAI.NPCParalizaNPC? "))
+End Try
+End Sub
 
     Sub NPCcuraNPC(ByVal curador As Short, ByVal curado As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
 
@@ -1242,14 +1278,17 @@ Module PraetoriansCoopNPC
         Else
             Npclist(curado).Stats.MinHp = Npclist(curado).Stats.MinHp + 30
         End If
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCcuraNPC? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCcuraNPC: " & ex.Message)
+    LogError(("Error en NPCAI.NPCcuraNPC? "))
+End Try
+End Sub
 
     Sub NPCLanzaCegueraPJ(ByVal npcind As Short, ByVal PJEnInd As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
         indireccion = Npclist(npcind).Spells(indice)
@@ -1281,14 +1320,17 @@ Module PraetoriansCoopNPC
                                 Protocol.FontTypeNames.FONTTYPE_VENENO)
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCLanzaCegueraPJ? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCLanzaCegueraPJ: " & ex.Message)
+    LogError(("Error en NPCAI.NPCLanzaCegueraPJ? "))
+End Try
+End Sub
 
     Sub NPCLanzaEstupidezPJ(ByVal npcind As Short, ByVal PJEnInd As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
 
@@ -1317,14 +1359,17 @@ Module PraetoriansCoopNPC
                 WriteConsoleMsg(PJEnInd, "El rey pretoriano te ha vuelto estúpido.",
                                 Protocol.FontTypeNames.FONTTYPE_FIGHT)
         End If
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCLanzaEstupidezPJ? "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCLanzaEstupidezPJ: " & ex.Message)
+    LogError(("Error en NPCAI.NPCLanzaEstupidezPJ? "))
+End Try
+End Sub
 
     Sub NPCRemueveInvisibilidad(ByVal npcind As Short, ByVal PJEnInd As Short, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         Dim indireccion As Short
 
         indireccion = Npclist(npcind).Spells(indice)
@@ -1356,11 +1401,14 @@ Module PraetoriansCoopNPC
         End If
 
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCRemueveInvisibilidad "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPCRemueveInvisibilidad: " & ex.Message)
+    LogError(("Error en NPCAI.NPCRemueveInvisibilidad "))
+End Try
+End Sub
 
     Sub NpcLanzaSpellSobreUser2(ByVal NpcIndex As Short, ByVal UserIndex As Short, ByVal Spell As Short)
         '***************************************************
@@ -1368,7 +1416,7 @@ Module PraetoriansCoopNPC
         'Last Modification: 05/09/09
         '05/09/09: Pato - Ahora actualiza la vida del usuario atacado
         '***************************************************
-        On Error GoTo errorh
+        Try
         ''  Igual a la otra pero ataca invisibles!!!
         '' (malditos controles de casos imposibles...)
 
@@ -1445,15 +1493,18 @@ Module PraetoriansCoopNPC
             End If
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.NPCLanzaSpellSobreUser2 "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NpcLanzaSpellSobreUser2: " & ex.Message)
+    LogError(("Error en NPCAI.NPCLanzaSpellSobreUser2 "))
+End Try
+End Sub
 
 
     Sub MagoDestruyeWand(ByVal npcind As Short, ByVal bs As Byte, ByVal indice As Short)
-        On Error GoTo errorh
+        Try
         ''sonidos: 30 y 32, y no los cambien sino termina siendo muy chistoso...
         ''Para el FX utiliza el del hechizos(indice)
         Dim X As Short
@@ -1589,15 +1640,18 @@ Module PraetoriansCoopNPC
                 Next X
         End Select
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.MagoDestruyeWand "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in MagoDestruyeWand: " & ex.Message)
+    LogError(("Error en NPCAI.MagoDestruyeWand "))
+End Try
+End Sub
 
 
     Sub GreedyWalkTo(ByVal npcorig As Short, ByVal Map As Short, ByVal X As Short, ByVal Y As Short)
-        On Error GoTo errorh
+        Try
         ''  Este procedimiento es llamado cada vez que un NPC deba ir
         ''  a otro lugar en el mismo mapa. Utiliza una técnica
         ''  de programación greedy no determinística.
@@ -1874,14 +1928,17 @@ Module PraetoriansCoopNPC
             End If
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.GreedyWalkTo"))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in GreedyWalkTo: " & ex.Message)
+    LogError(("Error en NPCAI.GreedyWalkTo"))
+End Try
+End Sub
 
     Sub MoverAba(ByVal npcorig As Short)
-        On Error GoTo errorh
+        Try
 
         Dim mapa As Short
         Dim NPCx As Short
@@ -1901,14 +1958,17 @@ Module PraetoriansCoopNPC
 
         'Revisamos sidebemos cambair el área
         Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.SOUTH)
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.MoverAba "))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in MoverAba: " & ex.Message)
+    LogError(("Error en NPCAI.MoverAba "))
+End Try
+End Sub
 
     Sub MoverArr(ByVal npcorig As Short)
-        On Error GoTo errorh
+        Try
 
         Dim mapa As Short
         Dim NPCx As Short
@@ -1928,14 +1988,17 @@ Module PraetoriansCoopNPC
 
         'Revisamos sidebemos cambair el área
         Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.NORTH)
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.MoverArr"))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in MoverArr: " & ex.Message)
+    LogError(("Error en NPCAI.MoverArr"))
+End Try
+End Sub
 
     Sub MoverIzq(ByVal npcorig As Short)
-        On Error GoTo errorh
+        Try
 
         Dim mapa As Short
         Dim NPCx As Short
@@ -1955,14 +2018,17 @@ Module PraetoriansCoopNPC
 
         'Revisamos sidebemos cambair el área
         Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.WEST)
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.MoverIzq"))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in MoverIzq: " & ex.Message)
+    LogError(("Error en NPCAI.MoverIzq"))
+End Try
+End Sub
 
     Sub MoverDer(ByVal npcorig As Short)
-        On Error GoTo errorh
+        Try
 
         Dim mapa As Short
         Dim NPCx As Short
@@ -1982,15 +2048,18 @@ Module PraetoriansCoopNPC
 
         'Revisamos sidebemos cambair el área
         Call ModAreas.CheckUpdateNeededNpc(npcorig, Declaraciones.eHeading.EAST)
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.MoverDer"))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in MoverDer: " & ex.Message)
+    LogError(("Error en NPCAI.MoverDer"))
+End Try
+End Sub
 
 
     Sub VolverAlCentro(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
 
         Dim NPCPosX As Short
         Dim NPCPosY As Short
@@ -2010,11 +2079,14 @@ Module PraetoriansCoopNPC
             End If
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.VolverAlCentro"))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in VolverAlCentro: " & ex.Message)
+    LogError(("Error en NPCAI.VolverAlCentro"))
+End Try
+End Sub
 
     Function EstoyMuyLejos(ByVal npcind As Object) As Boolean
         ''me dice si estoy fuera del anillo exterior de proteccion
@@ -2045,7 +2117,7 @@ Module PraetoriansCoopNPC
     End Function
 
     Function EstoyLejos(ByVal npcind As Object) As Boolean
-        On Error GoTo errorh
+        Try
 
         ''35,25 y 67,25 son las posiciones del rey
         ''esta fction me indica si estoy lejos del rango de vision
@@ -2072,14 +2144,17 @@ Module PraetoriansCoopNPC
             EstoyLejos = Not retvalue
         End If
 
-        Exit Function
+        
 
-        errorh:
-        LogError(("Error en NPCAI.EstoyLejos"))
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in EstoyMuyLejos: " & ex.Message)
+    LogError(("Error en NPCAI.EstoyLejos"))
+End Try
+End Function
 
     Function EsAlcanzable(ByVal npcind As Short, ByVal PJEnInd As Short) As Boolean
-        On Error GoTo errorh
+        Try
 
         ''esta funcion es especialmente hecha para el mapa pretoriano
         ''Está diseñada para que se ignore a los PJs que estan demasiado lejos
@@ -2088,7 +2163,7 @@ Module PraetoriansCoopNPC
         ''Chequea la posibilidad que les hagan /racc desde otro mapa para evitar
         ''malos comportamientos
         ''35,25 y 67,25 son las posiciones del rey
-        ''On Error Resume Next
+        ''Try
 
 
         Dim retvalue As Boolean
@@ -2129,15 +2204,22 @@ Module PraetoriansCoopNPC
 
         EsAlcanzable = retvalue
 
-        Exit Function
+        
 
-        errorh:
-        LogError(("Error en NPCAI.EsAlcanzable"))
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in EsAlcanzable: " & ex.Message)
+    LogError(("Error en NPCAI.EsAlcanzable"))
+    
+Catch ex As Exception
+    Console.WriteLine("Error in LoadSIni: " & ex.Message)
+End Try
+End Try
+End Function
 
 
     Function CasperBlock(ByVal npc As Short) As Boolean
-        On Error GoTo errorh
+        Try
 
         Dim NPCPosM As Short
         Dim NPCPosX As Short
@@ -2186,17 +2268,20 @@ Module PraetoriansCoopNPC
         End If
 
         CasperBlock = retvalue
-        Exit Function
+        
 
-        errorh:
-        '    MsgBox ("ERROR!!")
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CasperBlock: " & ex.Message)
+    '    MsgBox ("ERROR!!")
         CasperBlock = False
         LogError(("Error en NPCAI.CasperBlock"))
-    End Function
+End Try
+End Function
 
 
     Sub LiberarCasperBlock(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
 
         Dim NPCPosX As Short
         Dim NPCPosY As Short
@@ -2285,14 +2370,17 @@ Module PraetoriansCoopNPC
             Npclist(npcind).CanAttack = 0
         End If
 
-        Exit Sub
+        
 
-        errorh:
-        LogError(("Error en NPCAI.LiberarCasperBlock"))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LiberarCasperBlock: " & ex.Message)
+    LogError(("Error en NPCAI.LiberarCasperBlock"))
+End Try
+End Sub
 
     Public Sub CambiarAlcoba(ByVal npcind As Short)
-        On Error GoTo errorh
+        Try
 
         Select Case Npclist(npcind).Invent.ArmourEqpSlot
             Case 2
@@ -2324,8 +2412,11 @@ Module PraetoriansCoopNPC
                 Exit Sub
         End Select
 
-        Exit Sub
-        errorh:
-        Call LogError("Error en CambiarAlcoba " & Err.Description)
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CambiarAlcoba: " & ex.Message)
+    Call LogError("Error en CambiarAlcoba " & Err.Description)
+End Try
+End Sub
 End Module

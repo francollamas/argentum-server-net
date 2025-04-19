@@ -23,7 +23,7 @@ Module Acciones
 
         Dim tempIndex As Short
 
-        On Error Resume Next
+        Try
         '¿Rango Visión? (ToxicWaste)
         If _
             (System.Math.Abs(UserList(UserIndex).Pos.Y - Y) > RANGO_VISION_Y) Or
@@ -159,7 +159,11 @@ Module Acciones
                 End If
             End With
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in Accion: " & ex.Message)
+End Try
+End Sub
 
     Public Sub AccionParaForo(ByVal Map As Short, ByVal X As Short, ByVal Y As Short, ByVal UserIndex As Short)
         '***************************************************
@@ -168,7 +172,7 @@ Module Acciones
         '02/01/2010: ZaMa - Agrego foros faccionarios
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim Pos As WorldPos
 
@@ -184,7 +188,11 @@ Module Acciones
         If SendPosts(UserIndex, ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).ForoID) Then
             Call WriteShowForumForm(UserIndex)
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in AccionParaForo: " & ex.Message)
+End Try
+End Sub
 
     Sub AccionParaPuerta(ByVal Map As Short, ByVal X As Short, ByVal Y As Short, ByVal UserIndex As Short)
         '***************************************************
@@ -193,7 +201,7 @@ Module Acciones
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         If Not (Distance(UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y, X, Y) > 2) Then
             If ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).Llave = 0 Then
@@ -258,7 +266,11 @@ Module Acciones
         Else
             Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", Protocol.FontTypeNames.FONTTYPE_INFO)
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in AccionParaPuerta: " & ex.Message)
+End Try
+End Sub
 
     Sub AccionParaCartel(ByVal Map As Short, ByVal X As Short, ByVal Y As Short, ByVal UserIndex As Short)
         '***************************************************
@@ -267,7 +279,7 @@ Module Acciones
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         If ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).OBJType = 8 Then
 
@@ -276,7 +288,11 @@ Module Acciones
             End If
 
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in AccionParaCartel: " & ex.Message)
+End Try
+End Sub
 
     Sub AccionParaRamita(ByVal Map As Short, ByVal X As Short, ByVal Y As Short, ByVal UserIndex As Short)
         '***************************************************
@@ -285,7 +301,7 @@ Module Acciones
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim Suerte As Byte
         Dim exito As Byte
@@ -355,5 +371,9 @@ Module Acciones
             End If
 
         End With
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in AccionParaRamita: " & ex.Message)
+End Try
+End Sub
 End Module

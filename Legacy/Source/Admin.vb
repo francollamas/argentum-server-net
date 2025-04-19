@@ -79,7 +79,7 @@ Module Admin
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim i As Short
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
@@ -105,7 +105,11 @@ Module Admin
             End If
 
         Next i
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in VersionOK: " & ex.Message)
+End Try
+End Sub
 
     Sub WorldSave()
         '***************************************************
@@ -114,7 +118,7 @@ Module Admin
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim loopX As Short
         Dim Porc As Integer
@@ -156,7 +160,11 @@ Module Admin
             SendData(modSendData.SendTarget.ToAll, 0,
                      PrepareMessageConsoleMsg("Servidor> WorldSave ha concluído.",
                                               Protocol.FontTypeNames.FONTTYPE_SERVER))
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in WorldSave: " & ex.Message)
+End Try
+End Sub
 
     Public Sub PurgarPenas()
         '***************************************************
@@ -224,11 +232,15 @@ Module Admin
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
         If FileExist(CharPath & UCase(UserName) & ".chr") Then
             Kill(CharPath & UCase(UserName) & ".chr")
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in PurgarPenas: " & ex.Message)
+End Try
+End Sub
 
     Public Function BANCheck(ByVal name As String) As Boolean
         '***************************************************
@@ -352,7 +364,7 @@ Module Admin
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim N As Integer
 
@@ -364,7 +376,11 @@ Module Admin
         Else
             BanIpQuita = False
         End If
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in BANCheck: " & ex.Message)
+End Try
+End Function
 
     Public Sub BanIpGuardar()
         '***************************************************

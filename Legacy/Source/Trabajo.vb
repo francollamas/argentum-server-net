@@ -16,7 +16,7 @@ Module Trabajo
         '13/01/2010: ZaMa - Now hidden on boat pirats recover the proper boat body.
         '13/01/2010: ZaMa - Arreglo condicional para que el bandido camine oculto.
         '********************************************************
-        On Error GoTo Errhandler
+        Try
         With UserList(UserIndex)
             .Counters.TiempoOculto = .Counters.TiempoOculto - 1
             If .Counters.TiempoOculto <= 0 Then
@@ -56,11 +56,14 @@ Module Trabajo
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en Sub DoPermanecerOculto")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoPermanecerOculto: " & ex.Message)
+    Call LogError("Error en Sub DoPermanecerOculto")
+End Try
+End Sub
 
     Public Sub DoOcultarse(ByVal UserIndex As Short)
         '***************************************************
@@ -71,7 +74,7 @@ Module Trabajo
         '13/01/2010: ZaMa - El pirata se transforma en galeon fantasmal cuando se oculta en agua.
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim Suerte As Double
         Dim res As Short
@@ -126,11 +129,14 @@ Module Trabajo
             .Counters.Ocultando = .Counters.Ocultando + 1
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en Sub DoOcultarse")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoOcultarse: " & ex.Message)
+    Call LogError("Error en Sub DoOcultarse")
+End Try
+End Sub
 
     Public Sub DoNavega(ByVal UserIndex As Short, ByRef Barco As ObjData, ByVal Slot As Short)
         '***************************************************
@@ -248,7 +254,7 @@ Module Trabajo
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         With UserList(UserIndex)
             If .flags.TargetObjInvIndex > 0 Then
@@ -268,11 +274,14 @@ Module Trabajo
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en FundirMineral. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoNavega: " & ex.Message)
+    Call LogError("Error en FundirMineral. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Public Sub FundirArmas(ByVal UserIndex As Short)
         '***************************************************
@@ -281,7 +290,7 @@ Module Trabajo
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
         With UserList(UserIndex)
             If .flags.TargetObjInvIndex > 0 Then
                 If ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = Declaraciones.eOBJType.otWeapon Then
@@ -299,10 +308,13 @@ Module Trabajo
             End If
         End With
 
-        Exit Sub
-        Errhandler:
-        Call LogError("Error en FundirArmas. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in FundirArmas: " & ex.Message)
+    Call LogError("Error en FundirArmas. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Function TieneObjetos(ByVal ItemIndex As Short, ByVal cant As Short, ByVal UserIndex As Short) As Boolean
         '***************************************************
@@ -1237,7 +1249,7 @@ Module Trabajo
         '01/05/2010: ZaMa - Agrego bonificacion 11% para domar con flauta magica.
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim puntosDomar As Short
         Dim puntosRequeridos As Short
@@ -1334,11 +1346,14 @@ Module Trabajo
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en DoDomar. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TieneObjetos: " & ex.Message)
+    Call LogError("Error en DoDomar. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     ''
     ' Checks if the user can tames a pet.
@@ -1522,7 +1537,7 @@ Module Trabajo
         'Last Modification: 16/11/2009
         '16/11/2009: ZaMa - Implementado nuevo sistema de extraccion.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim Suerte As Short
         Dim res As Short
@@ -1577,11 +1592,14 @@ Module Trabajo
 
         UserList(UserIndex).Counters.Trabajando = UserList(UserIndex).Counters.Trabajando + 1
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en DoPescar. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PuedeDomarMascota: " & ex.Message)
+    Call LogError("Error en DoPescar. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Public Sub DoPescarRed(ByVal UserIndex As Short)
         '***************************************************
@@ -1589,7 +1607,7 @@ Module Trabajo
         'Last Modification: -
         '
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim iSkill As Short
         Dim Suerte As Short
@@ -1647,11 +1665,14 @@ Module Trabajo
         UserList(UserIndex).Reputacion.PlebeRep = UserList(UserIndex).Reputacion.PlebeRep + vlProleta
         If UserList(UserIndex).Reputacion.PlebeRep > MAXREP Then UserList(UserIndex).Reputacion.PlebeRep = MAXREP
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en DoPescarRed")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoPescarRed: " & ex.Message)
+    Call LogError("Error en DoPescarRed")
+End Try
+End Sub
 
     ''
     ' Try to steal an item / gold to another character
@@ -1673,7 +1694,7 @@ Module Trabajo
         '23/04/2010: ZaMa - El alcance de robo pasa a ser de 1 tile.
         '*************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If Not MapInfo_Renamed(UserList(VictimaIndex).Pos.Map).Pk Then Exit Sub
 
@@ -1837,11 +1858,14 @@ Module Trabajo
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en DoRobar. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoRobar: " & ex.Message)
+    Call LogError("Error en DoRobar. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     ''
     ' Check if one item is stealable
@@ -2093,17 +2117,20 @@ Module Trabajo
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         UserList(UserIndex).Stats.MinSta = UserList(UserIndex).Stats.MinSta - Cantidad
         If UserList(UserIndex).Stats.MinSta < 0 Then UserList(UserIndex).Stats.MinSta = 0
         Call WriteUpdateSta(UserIndex)
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en QuitarSta. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in ObjEsRobable: " & ex.Message)
+    Call LogError("Error en QuitarSta. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Public Sub DoTalar(ByVal UserIndex As Short, Optional ByVal DarMaderaElfica As Boolean = False)
         '***************************************************
@@ -2112,7 +2139,7 @@ Module Trabajo
         '16/11/2009: ZaMa - Ahora Se puede dar madera elfica.
         '16/11/2009: ZaMa - Implementado nuevo sistema de extraccion.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim Suerte As Short
         Dim res As Short
@@ -2170,11 +2197,14 @@ Module Trabajo
 
         UserList(UserIndex).Counters.Trabajando = UserList(UserIndex).Counters.Trabajando + 1
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en DoTalar")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoTalar: " & ex.Message)
+    Call LogError("Error en DoTalar")
+End Try
+End Sub
 
     Public Sub DoMineria(ByVal UserIndex As Short)
         '***************************************************
@@ -2182,7 +2212,7 @@ Module Trabajo
         'Last Modification: 16/11/2009
         '16/11/2009: ZaMa - Implementado nuevo sistema de extraccion.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim Suerte As Short
         Dim res As Short
@@ -2238,11 +2268,14 @@ Module Trabajo
             .Counters.Trabajando = UserList(UserIndex).Counters.Trabajando + 1
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en Sub DoMineria")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DoMineria: " & ex.Message)
+    Call LogError("Error en Sub DoMineria")
+End Try
+End Sub
 
     Public Sub DoMeditar(ByVal UserIndex As Short)
         '***************************************************

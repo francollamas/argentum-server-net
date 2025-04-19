@@ -221,7 +221,7 @@ Module UsUaRiOs
         '08/01/2009: ZaMa - No se borra el char de un admin invisible en todos los clientes excepto en su mismo cliente.
         '*************************************************
 
-        On Error GoTo ErrorHandler
+        Try
 
         With UserList(UserIndex)
             CharList(.Char_Renamed.CharIndex) = 0
@@ -250,11 +250,14 @@ Module UsUaRiOs
         End With
 
         NumChars = NumChars - 1
-        Exit Sub
+        
 
-        ErrorHandler:
-        Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in ActStats: " & ex.Message)
+    Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.Description)
+End Try
+End Sub
 
     Public Sub RefreshCharStatus(ByVal UserIndex As Short)
         '*************************************************
@@ -328,7 +331,7 @@ Module UsUaRiOs
         '15/01/2010: ZaMa - Ahora se envia el color del nick.
         '*************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim CharIndex As Short
         Dim ClanTag As String
@@ -391,13 +394,16 @@ Module UsUaRiOs
                 End If
             End If
         End With
-        Exit Sub
+        
 
-        Errhandler:
-        LogError(("MakeUserChar: num: " & Err.Number & " desc: " & Err.Description))
+        
+Catch ex As Exception
+    Console.WriteLine("Error in RefreshCharStatus: " & ex.Message)
+    LogError(("MakeUserChar: num: " & Err.Number & " desc: " & Err.Description))
         'Resume Next
         Call CloseSocket(UserIndex)
-    End Sub
+End Try
+End Sub
 
     ''
     ' Checks if the user gets the next level.
@@ -433,7 +439,7 @@ Module UsUaRiOs
         Dim DistVida(5) As Short
         Dim GI As Short 'Guild Index
 
-        On Error GoTo Errhandler
+        Try
 
         WasNewbie = EsNewbie(UserIndex)
 
@@ -690,13 +696,16 @@ Module UsUaRiOs
         End With
 
         Call WriteUpdateUserStats(UserIndex)
-        Exit Sub
+        
 
-        Errhandler:
-        Call _
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CheckUserLevel: " & ex.Message)
+    Call _
             LogError(
                 "Error en la subrutina CheckUserLevel - Error : " & Err.Number & " - Description : " & Err.Description)
-    End Sub
+End Try
+End Sub
 
     Public Function PuedeAtravesarAgua(ByVal UserIndex As Short) As Boolean
         '***************************************************
@@ -1168,7 +1177,7 @@ Module UsUaRiOs
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim j As Integer
 
@@ -1188,7 +1197,11 @@ Module UsUaRiOs
                 End If
             Next j
         End With
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in ActStats: " & ex.Message)
+End Try
+End Sub
 
     Sub SendUserInvTxtFromChar(ByVal sendIndex As Short, ByVal charName As String)
         '***************************************************
@@ -1197,7 +1210,7 @@ Module UsUaRiOs
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim j As Integer
         Dim CharFile, Tmp As String
@@ -1225,7 +1238,11 @@ Module UsUaRiOs
         Else
             Call WriteConsoleMsg(sendIndex, "Usuario inexistente: " & charName, Protocol.FontTypeNames.FONTTYPE_INFO)
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in SendUserInvTxtFromChar: " & ex.Message)
+End Try
+End Sub
 
     Sub SendUserSkillsTxt(ByVal sendIndex As Short, ByVal UserIndex As Short)
         '***************************************************
@@ -1234,7 +1251,7 @@ Module UsUaRiOs
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
         Dim j As Short
 
         Call WriteConsoleMsg(sendIndex, UserList(UserIndex).name, Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -1248,7 +1265,11 @@ Module UsUaRiOs
         Call _
             WriteConsoleMsg(sendIndex, "SkillLibres:" & UserList(UserIndex).Stats.SkillPts,
                             Protocol.FontTypeNames.FONTTYPE_INFO)
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in SendUserSkillsTxt: " & ex.Message)
+End Try
+End Sub
 
     Private Function EsMascotaCiudadano(ByVal NpcIndex As Short, ByVal UserIndex As Short) As Boolean
         '***************************************************
@@ -1454,7 +1475,7 @@ Module UsUaRiOs
         '27/11/2009: Budi - Al morir envia los atributos originales.
         '12/01/2010: ZaMa - Los druidas pierden la inmunidad de ser atacados cuando mueren.
         '************************************************
-        On Error GoTo ErrorHandler
+        Try
         Dim i As Integer
         Dim aN As Short
 
@@ -1653,11 +1674,14 @@ Module UsUaRiOs
             '<<Cerramos comercio seguro>>
             Call LimpiarComercioSeguro(UserIndex)
         End With
-        Exit Sub
+        
 
-        ErrorHandler:
-        Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " Descripción: " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PuedeAtravesarAgua: " & ex.Message)
+    Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " Descripción: " & Err.Description)
+End Try
+End Sub
 
     Sub ContarMuerte(ByVal Muerto As Short, ByVal Atacante As Short)
         '***************************************************
@@ -2192,7 +2216,7 @@ Module UsUaRiOs
 
         Dim CharFile As String
 
-        On Error Resume Next
+        Try
         CharFile = CharPath & charName & ".chr"
 
         If FileExist(CharFile) Then
@@ -2203,7 +2227,11 @@ Module UsUaRiOs
         Else
             Call WriteConsoleMsg(sendIndex, "Usuario inexistente: " & charName, Protocol.FontTypeNames.FONTTYPE_INFO)
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in EsMascotaCiudadano: " & ex.Message)
+End Try
+End Sub
 
     Sub VolverCriminal(ByVal UserIndex As Short)
         '**************************************************************
@@ -2438,7 +2466,7 @@ Module UsUaRiOs
         'Last Modify Date: 18/11/2009
         'Devuelve el indice de la mascota mas lejana.
         '**************************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim PetIndex As Short
         Dim Distancia As Short
@@ -2472,11 +2500,14 @@ Module UsUaRiOs
             Next PetIndex
         End With
 
-        Exit Function
+        
 
-        Errhandler:
-        Call LogError("Error en FarthestPet")
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in ContarMuerte: " & ex.Message)
+    Call LogError("Error en FarthestPet")
+End Try
+End Function
 
     ''
     ' Set the EluSkill value at the skill.

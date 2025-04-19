@@ -52,7 +52,7 @@ Friend Class ConsultasPopulares
     End Sub
 
     Public Function doVotar(ByVal UserIndex As Short, ByVal opcion As Short) As String
-        On Error GoTo errorh
+        Try
         Dim YaVoto As Boolean
         Dim CharFile As String
         Dim sufragio As Short
@@ -98,10 +98,13 @@ Friend Class ConsultasPopulares
         End If
 
 
-        Exit Function
-        errorh:
-        Call LogError("Error en ConsultasPopularse.doVotar: " & Err.Description)
-    End Function
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadData: " & ex.Message)
+    Call LogError("Error en ConsultasPopularse.doVotar: " & Err.Description)
+End Try
+End Function
 
 
     Public Function SendInfoEncuesta(ByVal UserIndex As Short) As String

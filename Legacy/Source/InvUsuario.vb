@@ -11,7 +11,7 @@ Module InvUsuario
         '17/09/02
         'Agregue que la función se asegure que el objeto no es un barco
 
-        On Error Resume Next
+        Try
 
         Dim i As Short
         Dim ObjIndex As Short
@@ -28,7 +28,11 @@ Module InvUsuario
 
             End If
         Next i
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in TieneObjetosRobables: " & ex.Message)
+End Try
+End Function
 
     Function ClasePuedeUsarItem(ByVal UserIndex As Short, ByVal ObjIndex As Short, Optional ByRef sMotivo As String = "") _
         As Boolean
@@ -38,7 +42,7 @@ Module InvUsuario
         '14/01/2010: ZaMa - Agrego el motivo por el que no puede equipar/usar el item.
         '***************************************************
 
-        On Error GoTo manejador
+        Try
 
         Dim flag As Boolean
 
@@ -58,11 +62,14 @@ Module InvUsuario
 
         ClasePuedeUsarItem = True
 
-        Exit Function
+        
 
-        manejador:
-        LogError(("Error en ClasePuedeUsarItem"))
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TieneObjetosRobables: " & ex.Message)
+    LogError(("Error en ClasePuedeUsarItem"))
+End Try
+End Function
 
     Sub QuitarNewbieObj(ByVal UserIndex As Short)
         '***************************************************
@@ -162,7 +169,7 @@ Module InvUsuario
         'Last Modification: 23/01/2007
         '23/01/2007 -> Pablo (ToxicWaste): Billetera invertida y explotar oro en el agua.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         'If Cantidad > 100000 Then Exit Sub
 
@@ -250,11 +257,14 @@ Module InvUsuario
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en TirarOro. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in QuitarNewbieObj: " & ex.Message)
+    Call LogError("Error en TirarOro. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Sub QuitarUserInvItem(ByVal UserIndex As Short, ByVal Slot As Byte, ByVal Cantidad As Short)
         '***************************************************
@@ -263,7 +273,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If Slot < 1 Or Slot > UserList(UserIndex).CurrentInventorySlots Then Exit Sub
 
@@ -282,11 +292,14 @@ Module InvUsuario
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en QuitarUserInvItem. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in QuitarUserInvItem: " & ex.Message)
+    Call LogError("Error en QuitarUserInvItem. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Sub UpdateUserInv(ByVal UpdateAll As Boolean, ByVal UserIndex As Short, ByVal Slot As Byte)
         '***************************************************
@@ -295,7 +308,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim NullObj As UserOBJ
         Dim LoopC As Integer
@@ -327,9 +340,12 @@ Module InvUsuario
             Exit Sub
         End With
 
-        Errhandler:
-        Call LogError("Error en UpdateUserInv. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in UpdateUserInv: " & ex.Message)
+    Call LogError("Error en UpdateUserInv. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Sub DropObj(ByVal UserIndex As Short, ByVal Slot As Byte, ByVal num As Short, ByVal Map As Short, ByVal X As Short,
                 ByVal Y As Short)
@@ -456,7 +472,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim X As Short
         Dim Y As Short
@@ -517,10 +533,13 @@ Module InvUsuario
         Call UpdateUserInv(False, UserIndex, Slot)
 
 
-        Exit Function
-        Errhandler:
-        Call LogError("Error en MeterItemEnInventario. Error " & Err.Number & " : " & Err.Description)
-    End Function
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DropObj: " & ex.Message)
+    Call LogError("Error en MeterItemEnInventario. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Function
 
     Sub GetObj(ByVal UserIndex As Short)
         '***************************************************
@@ -603,7 +622,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         'Desequipa el item slot del inventario
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
@@ -706,11 +725,14 @@ Module InvUsuario
         Call WriteUpdateUserStats(UserIndex)
         Call UpdateUserInv(False, UserIndex, Slot)
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en Desquipar. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in GetObj: " & ex.Message)
+    Call LogError("Error en Desquipar. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 
     Function SexoPuedeUsarItem(ByVal UserIndex As Short, ByVal ObjIndex As Short, Optional ByRef sMotivo As String = "") _
         As Boolean
@@ -720,7 +742,7 @@ Module InvUsuario
         '14/01/2010: ZaMa - Agrego el motivo por el que no puede equipar/usar el item.
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If ObjData_Renamed(ObjIndex).Mujer = 1 Then
             SexoPuedeUsarItem = UserList(UserIndex).Genero <> Declaraciones.eGenero.Hombre
@@ -732,10 +754,13 @@ Module InvUsuario
 
         If Not SexoPuedeUsarItem Then sMotivo = "Tu género no puede usar este objeto."
 
-        Exit Function
-        Errhandler:
-        Call LogError("SexoPuedeUsarItem")
-    End Function
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in SexoPuedeUsarItem: " & ex.Message)
+    Call LogError("SexoPuedeUsarItem")
+End Try
+End Function
 
 
     Function FaccionPuedeUsarItem(ByVal UserIndex As Short, ByVal ObjIndex As Short,
@@ -773,7 +798,7 @@ Module InvUsuario
         '14/01/2010: ZaMa - Agrego el motivo especifico por el que no puede equipar/usar el item.
         '*************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         'Equipa un item del inventario
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
@@ -1053,13 +1078,16 @@ Module InvUsuario
         'Actualiza
         Call UpdateUserInv(False, UserIndex, Slot)
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call _
+        
+Catch ex As Exception
+    Console.WriteLine("Error in FaccionPuedeUsarItem: " & ex.Message)
+    Call _
             LogError(
                 "EquiparInvItem Slot:" & Slot & " - Error: " & Err.Number & " - Error Description : " & Err.Description)
-    End Sub
+End Try
+End Sub
 
     Private Function CheckRazaUsaRopa(ByVal UserIndex As Short, ByRef ItemIndex As Short,
                                       Optional ByRef sMotivo As String = "") As Boolean
@@ -1069,7 +1097,7 @@ Module InvUsuario
         '14/01/2010: ZaMa - Agrego el motivo por el que no puede equipar/usar el item.
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         With UserList(UserIndex)
             'Verifica si la raza puede usar la ropa
@@ -1089,11 +1117,14 @@ Module InvUsuario
 
         If Not CheckRazaUsaRopa Then sMotivo = "Tu raza no puede usar este objeto."
 
-        Exit Function
+        
 
-        Errhandler:
-        Call LogError("Error CheckRazaUsaRopa ItemIndex:" & ItemIndex)
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CheckRazaUsaRopa: " & ex.Message)
+    Call LogError("Error CheckRazaUsaRopa ItemIndex:" & ItemIndex)
+End Try
+End Function
 
     Sub UseInvItem(ByVal UserIndex As Short, ByVal Slot As Byte)
         '*************************************************
@@ -1764,7 +1795,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim Cantidad As Integer
         With UserList(UserIndex)
@@ -1776,7 +1807,11 @@ Module InvUsuario
 
             If Cantidad > 0 Then Call TirarOro(Cantidad, UserIndex)
         End With
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in ClasePuedeUsarItem: " & ex.Message)
+End Try
+End Sub
 
     Public Function ItemSeCae(ByVal index As Short) As Boolean
         '***************************************************

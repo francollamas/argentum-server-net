@@ -43,7 +43,7 @@ Module NPCs
         '22/06/06: (Nacho) Chequeamos si es pretoriano
         '24/01/2007: Pablo (ToxicWaste): Agrego para actualización de tag si cambia de status.
         '********************************************************
-        On Error GoTo Errhandler
+        Try
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim MiNPC As npc
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -185,11 +185,14 @@ Module NPCs
         End If
 
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en MuereNpc - Error: " & Err.Number & " - Desc: " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in QuitarMascota: " & ex.Message)
+    Call LogError("Error en MuereNpc - Error: " & Err.Number & " - Desc: " & Err.Description)
+End Try
+End Sub
 
     Private Sub ResetNpcFlags(ByVal NpcIndex As Short)
         '***************************************************
@@ -358,7 +361,7 @@ Module NPCs
         'Last Modification: 16/11/2009
         '16/11/2009: ZaMa - Now npcs lose their owner
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         With Npclist(NpcIndex)
             .flags.NPCActive = False
@@ -389,11 +392,14 @@ Module NPCs
         If NumNPCs <> 0 Then
             NumNPCs = NumNPCs - 1
         End If
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en QuitarNPC")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in ResetNpcFlags: " & ex.Message)
+    Call LogError("Error en QuitarNPC")
+End Try
+End Sub
 
     Public Sub QuitarPet(ByVal UserIndex As Short, ByVal NpcIndex As Short)
         '***************************************************
@@ -401,7 +407,7 @@ Module NPCs
         'Last Modification: 18/11/2009
         'Kills a pet
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim i As Short
         Dim PetIndex As Short
@@ -425,14 +431,17 @@ Module NPCs
             Call QuitarNPC(NpcIndex)
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call _
+        
+Catch ex As Exception
+    Console.WriteLine("Error in QuitarPet: " & ex.Message)
+    Call _
             LogError(
                 "Error en QuitarPet. Error: " & Err.Number & " Desc: " & Err.Description & " NpcIndex: " & NpcIndex &
                 " UserIndex: " & UserIndex & " PetIndex: " & PetIndex)
-    End Sub
+End Try
+End Sub
 
     Private Function TestSpawnTrigger(ByRef Pos As WorldPos, Optional ByRef PuedeAgua As Boolean = False) As Boolean
         '***************************************************
@@ -657,7 +666,7 @@ Module NPCs
         '01/08/2009: ZaMa - Now npcs can't force to chance position with a dead character if that means to change the terrain the character is in
         '***************************************************
 
-        On Error GoTo errh
+        Try
         Dim nPos As WorldPos
         Dim UserIndex As Short
 
@@ -716,11 +725,14 @@ Module NPCs
                 End If
             End If
         End With
-        Exit Sub
+        
 
-        errh:
-        LogError(("Error en move npc " & NpcIndex))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TestSpawnTrigger: " & ex.Message)
+    LogError(("Error en move npc " & NpcIndex))
+End Try
+End Sub
 
     Function NextOpenNPC() As Short
         '***************************************************
@@ -729,7 +741,7 @@ Module NPCs
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
         Dim LoopC As Integer
 
         For LoopC = 1 To MAXNPCS + 1
@@ -738,11 +750,14 @@ Module NPCs
         Next LoopC
 
         NextOpenNPC = LoopC
-        Exit Function
+        
 
-        Errhandler:
-        Call LogError("Error en NextOpenNPC")
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NextOpenNPC: " & ex.Message)
+    Call LogError("Error en NextOpenNPC")
+End Try
+End Function
 
     Sub NpcEnvenenarUser(ByVal UserIndex As Short)
         '***************************************************

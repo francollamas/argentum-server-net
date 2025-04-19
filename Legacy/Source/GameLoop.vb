@@ -1,4 +1,4 @@
-﻿Option Strict Off
+Option Strict Off
 Option Explicit On
 
 Imports System.Threading
@@ -131,7 +131,7 @@ Module GameLoop
 
         Dim i As Integer
 
-        On Error GoTo Errhandler
+        Try
         For i = 1 To LastUser
             With UserList(i)
                 If .flags.UserLogged Then
@@ -195,11 +195,14 @@ Module GameLoop
                 End If
             End With
         Next i
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in OnExit: " & ex.Message)
+    Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
+End Try
+End Sub
 
     Private Sub TickPacketResend()
         '***************************************************
@@ -207,7 +210,7 @@ Module GameLoop
         'Last Modification: 04/01/07
         'Attempts to resend to the user all data that may be enqueued.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
         Dim i As Integer
 
         For i = 1 To MaxUsers
@@ -220,24 +223,31 @@ Module GameLoop
             End If
         Next i
 
-        Exit Sub
+        
 
-        Errhandler:
-        LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickPacketResend: " & ex.Message)
+    LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
         Resume Next
-    End Sub
+End Try
+End Sub
 
     Private Sub TickFx()
-        On Error GoTo hayerror
+        Try
 
         Call SonidosMapas.ReproducirSonidosDeMapas()
 
-        Exit Sub
-        hayerror:
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickFx: " & ex.Message)
+    
+End Try
+End Sub
 
     Private Sub TickAuditoria()
-        On Error GoTo errhand
+        Try
         Static centinelSecs As Byte
 
         centinelSecs = centinelSecs + 1
@@ -253,13 +263,15 @@ Module GameLoop
 
         Call ActualizaEstadisticasWeb()
 
-        Exit Sub
+        
 
-        errhand:
-
-        Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickAuditoria: " & ex.Message)
+    Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
         Resume Next
-    End Sub
+End Try
+End Sub
 
     Private Sub TickGameTimer()
         '********************************************************
@@ -270,7 +282,7 @@ Module GameLoop
         Dim bEnviarStats As Boolean
         Dim bEnviarAyS As Boolean
 
-        On Error GoTo hayerror
+        Try
 
         '<<<<<< Procesa eventos de los usuarios >>>>>>
         For iUserIndex = 1 To MaxUsers 'LastUser
@@ -415,14 +427,17 @@ Module GameLoop
                 End If
             End With
         Next iUserIndex
-        Exit Sub
+        
 
-        hayerror:
-        LogError(("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex))
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickGameTimer: " & ex.Message)
+    LogError(("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex))
+End Try
+End Sub
 
     Private Sub TickLluviaEvent()
-        On Error GoTo ErrorHandler
+        Try
         Static MinutosLloviendo As Integer
         Static MinutosSinLluvia As Integer
 
@@ -454,13 +469,16 @@ Module GameLoop
             End If
         End If
 
-        Exit Sub
-        ErrorHandler:
-        Call LogError("Error tLluviaTimer")
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickLluviaEvent: " & ex.Message)
+    Call LogError("Error tLluviaTimer")
+End Try
+End Sub
 
     Private Sub TickLluvia()
-        On Error GoTo Errhandler
+        Try
 
         Dim iCount As Integer
         If Lloviendo Then
@@ -469,13 +487,16 @@ Module GameLoop
             Next iCount
         End If
 
-        Exit Sub
-        Errhandler:
-        Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickLluvia: " & ex.Message)
+    Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
+End Try
+End Sub
 
     Private Sub TickAutoSave()
-        On Error GoTo Errhandler
+        Try
         'fired every minute
         Static Minutos As Integer
         Static MinutosLatsClean As Integer
@@ -523,24 +544,31 @@ Module GameLoop
         FileClose(N)
         '<<<<<-------- Log the number of users online ------>>>
 
-        Exit Sub
-        Errhandler:
-        Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickAutoSave: " & ex.Message)
+    Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
         Resume Next
-    End Sub
+End Try
+End Sub
 
     Private Sub TickNpcAtaca()
-        On Error Resume Next
+        Try
         'UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
         Dim npc_Renamed As Integer
 
         For npc_Renamed = 1 To LastNPC
             Npclist(npc_Renamed).CanAttack = 1
         Next npc_Renamed
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in OnExit: " & ex.Message)
+End Try
+End Sub
 
     Private Sub TickKillLog()
-        On Error Resume Next
+        Try
         If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
             Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
         If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
@@ -555,10 +583,14 @@ Module GameLoop
             If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in TickKillLog: " & ex.Message)
+End Try
+End Sub
 
     Private Sub TickAI()
-        On Error GoTo ErrorHandler
+        Try
         Dim NpcIndex As Integer
         Dim X As Short
         Dim Y As Short
@@ -616,12 +648,15 @@ Module GameLoop
             Next NpcIndex
         End If
 
-        Exit Sub
+        
 
-        ErrorHandler:
-        Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TickNpcAtaca: " & ex.Message)
+    Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
         Call MuereNpc(NpcIndex, 0)
-    End Sub
+End Try
+End Sub
 
     Private Sub TickConnection()
         ProcessNetworkMessages()
@@ -663,7 +698,7 @@ Module GameLoop
     End Sub
 
     Public Sub CloseServer()
-        On Error Resume Next
+        Try
 
         'Save stats!!!
         Call Statistics.DumpStatistics()
@@ -687,5 +722,9 @@ Module GameLoop
 
         'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         SonidosMapas = Nothing
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in TickAI: " & ex.Message)
+End Try
+End Sub
 End Module

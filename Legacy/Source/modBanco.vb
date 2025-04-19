@@ -8,7 +8,7 @@ Module modBanco
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         'Hacemos un Update del inventario del usuario
         Call UpdateBanUserInv(True, UserIndex, 0)
@@ -18,8 +18,12 @@ Module modBanco
         Call WriteBankInit(UserIndex)
         UserList(UserIndex).flags.Comerciando = True
 
-        Errhandler:
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in IniciarDeposito: " & ex.Message)
+    
+End Try
+End Sub
 
     'UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Sub SendBanObj(ByRef UserIndex As Short, ByRef Slot As Byte, ByRef Object_Renamed As UserOBJ)
@@ -75,7 +79,7 @@ Module modBanco
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
 
         If Cantidad < 1 Then Exit Sub
@@ -96,8 +100,12 @@ Module modBanco
         'Actualizamos la ventana de comercio
         Call UpdateVentanaBanco(UserIndex)
 
-        Errhandler:
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in SendBanObj: " & ex.Message)
+    
+End Try
+End Sub
 
     Sub UserReciveObj(ByVal UserIndex As Short, ByVal ObjIndex As Short, ByVal Cantidad As Short)
         '***************************************************
@@ -199,7 +207,7 @@ Module modBanco
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
         If UserList(UserIndex).Invent.Object_Renamed(Item).Amount > 0 And Cantidad > 0 Then
             If Cantidad > UserList(UserIndex).Invent.Object_Renamed(Item).Amount Then _
                 Cantidad = UserList(UserIndex).Invent.Object_Renamed(Item).Amount
@@ -216,8 +224,12 @@ Module modBanco
 
         'Actualizamos la ventana del banco
         Call UpdateVentanaBanco(UserIndex)
-        Errhandler:
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in UserReciveObj: " & ex.Message)
+    
+End Try
+End Sub
 
     Sub UserDejaObj(ByVal UserIndex As Short, ByVal ObjIndex As Short, ByVal Cantidad As Short)
         '***************************************************
@@ -289,7 +301,7 @@ Module modBanco
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
         Dim j As Short
 
         Call WriteConsoleMsg(sendIndex, UserList(UserIndex).name, Protocol.FontTypeNames.FONTTYPE_INFO)
@@ -307,7 +319,11 @@ Module modBanco
                                     Protocol.FontTypeNames.FONTTYPE_INFO)
             End If
         Next
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in IniciarDeposito: " & ex.Message)
+End Try
+End Sub
 
     Sub SendUserBovedaTxtFromChar(ByVal sendIndex As Short, ByVal charName As String)
         '***************************************************
@@ -316,7 +332,7 @@ Module modBanco
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
         Dim j As Short
         Dim CharFile, Tmp As String
         Dim ObjInd, ObjCant As Integer
@@ -342,5 +358,9 @@ Module modBanco
         Else
             Call WriteConsoleMsg(sendIndex, "Usuario inexistente: " & charName, Protocol.FontTypeNames.FONTTYPE_INFO)
         End If
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in SendUserBovedaTxtFromChar: " & ex.Message)
+End Try
+End Sub
 End Module

@@ -206,7 +206,7 @@ Module ES
         '
         '###################################################
 
-        On Error GoTo Errhandler
+        Try
 
         Dim Hechizo As Short
         Dim Leer As New clsIniReader
@@ -315,11 +315,14 @@ Module ES
         'UPGRADE_NOTE: El objeto Leer no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         Leer = Nothing
 
-        Exit Sub
+        
 
-        Errhandler:
-        MsgBox("Error cargando hechizos.dat " & Err.Number & ": " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CargarSpawnList: " & ex.Message)
+    MsgBox("Error cargando hechizos.dat " & Err.Number & ": " & Err.Description)
+End Try
+End Sub
 
     Sub LoadMotd()
         '***************************************************
@@ -379,13 +382,17 @@ Module ES
         haciendoBK = False
 
         'Log
-        On Error Resume Next
+        Try
         Dim nfile As Short
         nfile = FreeFile ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/BackUps.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay)
         FileClose(nfile)
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in CargarSpawnList: " & ex.Message)
+End Try
+End Sub
 
     Public Sub GrabarMapa(ByVal Map As Integer, ByVal MAPFILE As String)
         '***************************************************
@@ -394,7 +401,7 @@ Module ES
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
         Dim FreeFileMap As Integer
         Dim FreeFileInf As Integer
         Dim Y As Integer
@@ -542,7 +549,11 @@ Module ES
                 Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "Pk", "1")
             End If
         End With
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in GrabarMapa: " & ex.Message)
+End Try
+End Sub
 
     Sub LoadArmasHerreria()
         '***************************************************
@@ -684,7 +695,7 @@ Module ES
 
         'Call LogTarea("Sub LoadOBJData")
 
-        On Error GoTo Errhandler
+        Try
 
         '*****************************************************************
         'Carga la lista de objetos
@@ -913,11 +924,14 @@ Module ES
         Call AddForum(FORO_CAOS_ID)
         Call AddForum(FORO_REAL_ID)
 
-        Exit Sub
+        
 
-        Errhandler:
-        MsgBox("error cargando objetos " & Err.Number & ": " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadMotd: " & ex.Message)
+    MsgBox("error cargando objetos " & Err.Number & ": " & Err.Description)
+End Try
+End Sub
 
     Sub LoadUserStats(ByVal UserIndex As Short, ByRef UserFile As clsIniReader)
         '*************************************************
@@ -1200,7 +1214,7 @@ Module ES
             Exit Function
         End If
 
-        On Error GoTo CleanExit ' Basic error handling
+        Try ' Basic error handling
 
         fileNumber = FreeFile()
         FileOpen(fileNumber, filePath, OpenMode.Input)
@@ -1227,9 +1241,12 @@ Module ES
             End If
         End While
 
-        CleanExit:
-        FileClose(fileNumber)
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadUserStats: " & ex.Message)
+    FileClose(fileNumber)
+End Try
+End Function
 
     Sub CargarBackUp()
         '***************************************************
@@ -1243,7 +1260,7 @@ Module ES
         Dim tFileName As String
         Dim npcfile As String
 
-        On Error GoTo man
+        Try
 
         NumMaps = Val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas()
@@ -1275,12 +1292,15 @@ Module ES
             Call CargarMapa(Map, tFileName)
         Next Map
 
-        Exit Sub
+        
 
-        man:
-        MsgBox("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CargarBackUp: " & ex.Message)
+    MsgBox("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
         Call LogError(Today & " " & Err.Description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
-    End Sub
+End Try
+End Sub
 
     Sub LoadMapData()
         '***************************************************
@@ -1294,7 +1314,7 @@ Module ES
         Dim tFileName As String
         Dim npcfile As String
 
-        On Error GoTo man
+        Try
 
         NumMaps = Val(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
         Call InitAreas()
@@ -1315,12 +1335,15 @@ Module ES
             Call CargarMapa(Map, tFileName)
         Next Map
 
-        Exit Sub
+        
 
-        man:
-        MsgBox("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadMapData: " & ex.Message)
+    MsgBox("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
         Call LogError(Today & " " & Err.Description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
-    End Sub
+End Try
+End Sub
 
     Public Sub CargarMapa(ByVal Map As Integer, ByVal MAPFl As String)
         '***************************************************
@@ -1329,7 +1352,7 @@ Module ES
         '
         '***************************************************
 
-        On Error GoTo errh
+        Try
         Dim FreeFileMap As Integer
         Dim FreeFileInf As Integer
         Dim Y As Integer
@@ -1488,11 +1511,14 @@ Module ES
             .Restringir = GetVar(MAPFl & ".dat", "Mapa" & Map, "Restringir")
             .BackUp = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "BACKUP"))
         End With
-        Exit Sub
+        
 
-        errh:
-        Call LogError("Error cargando mapa: " & Map & " - Pos: " & X & "," & Y & "." & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CargarMapa: " & ex.Message)
+    Call LogError("Error cargando mapa: " & Map & " - Pos: " & X & "," & Y & "." & Err.Description)
+End Try
+End Sub
 
     Sub LoadSini()
         '***************************************************
@@ -1785,7 +1811,7 @@ Module ES
         '12/01/2010: ZaMa - Los druidas pierden la inmunidad de ser atacados cuando pierden el efecto del mimetismo.
         '*************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim OldUserHead As Integer
 
@@ -2045,11 +2071,14 @@ Module ES
             End If
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en SaveUser")
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in LoadSini: " & ex.Message)
+    Call LogError("Error en SaveUser")
+End Try
+End Sub
 
     Function criminal(ByVal UserIndex As Short) As Boolean
         '***************************************************

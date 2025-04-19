@@ -459,7 +459,7 @@ Module TCP
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If UserIndex = LastUser Then
             Do Until UserList(LastUser).flags.UserLogged
@@ -507,10 +507,12 @@ Module TCP
         UserList(UserIndex).ConnID = - 1
         UserList(UserIndex).ConnIDValida = False
 
-        Exit Sub
+        
 
-        Errhandler:
-        UserList(UserIndex).ConnID = - 1
+        
+Catch ex As Exception
+    Console.WriteLine("Error in DarCuerpo: " & ex.Message)
+    UserList(UserIndex).ConnID = - 1
         UserList(UserIndex).ConnIDValida = False
         Call ResetUserSlot(UserIndex)
 
@@ -518,7 +520,8 @@ Module TCP
             LogError(
                 "CloseSocket - Error = " & Err.Number & " - Descripción = " & Err.Description & " - UserIndex = " &
                 UserIndex)
-    End Sub
+End Try
+End Sub
 
     '[Alejo-21-5]: Cierra un socket sin limpiar el slot
     Sub CloseSocketSL(ByVal UserIndex As Short)
@@ -547,7 +550,7 @@ Module TCP
         'Last Modified By: Lucas Tavolaro Ortiz (Tavo)
         'Now it uses the clsByteQueue class and don`t make a FIFO Queue of String
         '***************************************************
-        On Error GoTo Err_Renamed
+        Try
 
         Dim Ret As Integer
 
@@ -558,10 +561,14 @@ Module TCP
             Call CloseSocketSL(UserIndex)
             Call Cerrar_Usuario(UserIndex)
         End If
-        Exit Function
+        
 
-        Err_Renamed:
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CloseSocketSL: " & ex.Message)
+    
+End Try
+End Function
 
     Function EstaPCarea(ByRef Index As Short, ByRef Index2 As Short) As Boolean
         '***************************************************
@@ -1468,7 +1475,7 @@ Module TCP
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim N As Short
         Dim LoopC As Short
@@ -1566,11 +1573,14 @@ Module TCP
         PrintLine(N, name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & TimeOfDay & " " & Today)
         FileClose(N)
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en CloseUser. Número " & Err.Number & " Descripción: " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in EstaPCarea: " & ex.Message)
+    Call LogError("Error en CloseUser. Número " & Err.Number & " Descripción: " & Err.Description)
+End Try
+End Sub
 
     Sub ReloadSokcet()
         '***************************************************
@@ -1579,16 +1589,19 @@ Module TCP
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If NumUsers <= 0 Then
             Call WSApiReiniciarSockets()
         End If
 
-        Exit Sub
-        Errhandler:
-        Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.Description)
-    End Sub
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in ReloadSokcet: " & ex.Message)
+    Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.Description)
+End Try
+End Sub
 
     Public Sub EnviarNoche(ByVal UserIndex As Short)
         '***************************************************

@@ -160,7 +160,7 @@ Module wskapiAO
     ''' Sends data through a user's socket connection
     ''' </summary>
     Public Function WsApiEnviar(ByVal userIndex As Integer, ByRef message As String) As Integer
-        On Error GoTo ErrorHandler
+        Try
 
         Dim returnCode As Integer = 0
 
@@ -183,12 +183,15 @@ Module wskapiAO
 
         WsApiEnviar = returnCode
 
-        Exit Function
+        
 
-        ErrorHandler:
-        Call UserList(userIndex).outgoingData.WriteASCIIStringFixed(message)
+        
+Catch ex As Exception
+    Console.WriteLine("Error in GetAscIP: " & ex.Message)
+    Call UserList(userIndex).outgoingData.WriteASCIIStringFixed(message)
         Resume Next
-    End Function
+End Try
+End Function
 
     ''' <summary>
     ''' Process any pending messages in the queue (can be called from main game loop)

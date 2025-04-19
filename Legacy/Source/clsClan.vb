@@ -576,7 +576,7 @@ Friend Class clsClan
         Dim d As diccionario
         Dim voteCount As Object
 
-        On Error GoTo errh
+        Try
         ContarVotos = vbNullString
         CantGanadores = 0
         Temps = GetVar(MEMBERSFILE, "INIT", "NroMembers")
@@ -613,13 +613,16 @@ Friend Class clsClan
             d = Nothing
         End If
 
-        Exit Function
-        errh:
-        LogError(("clsClan.Contarvotos: " & Err.Description))
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CambiarAlineacion: " & ex.Message)
+    LogError(("clsClan.Contarvotos: " & Err.Description))
         'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         If Not d Is Nothing Then d = Nothing
         ContarVotos = vbNullString
-    End Function
+End Try
+End Function
 
     Public Function RevisarElecciones() As Boolean
         Dim FechaSufragio As Date

@@ -55,7 +55,7 @@ Module modSendData
         'Last Modify Date: 01/08/2007
         'Last modified by: (liquid)
         '**************************************************************
-        On Error Resume Next
+        Try
         Dim LoopC As Integer
         Dim Map As Short
 
@@ -299,7 +299,11 @@ Module modSendData
                 Call SendToUsersAndRmsAndCounselorsAreaButGMs(sndIndex, sndData)
                 Exit Sub
         End Select
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in SendData: " & ex.Message)
+End Try
+End Sub
 
     Private Sub SendToUserArea(ByVal UserIndex As Short, ByVal sdData As String)
         '**************************************************************

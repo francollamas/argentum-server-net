@@ -121,7 +121,7 @@ Public Module General
         '01/14/2008: Marcos Martinez (ByVal) - La funcion FOR estaba mal. En ves de i habia un 1.
         '04/15/2008: (NicoNZ) - La funcion FOR estaba mal, de la forma que se hacia tiraba error.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim i As Short
         Dim d As New WorldPos
@@ -136,11 +136,14 @@ Public Module General
 
         Call SecurityIp.IpSecurityMantenimientoLista()
 
-        Exit Sub
+        
 
-Errhandler:
-        Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
-    End Sub
+
+Catch ex As Exception
+    Console.WriteLine("Error in DarCuerpoDesnudo: " & ex.Message)
+    Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
+End Try
+End Sub
 
     Sub EnviarSpawnList(ByVal UserIndex As Short)
         '***************************************************
@@ -169,7 +172,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
         Dim f As Date
 
         ChDir(AppDomain.CurrentDomain.BaseDirectory)
@@ -372,18 +375,26 @@ Errhandler:
 
         Call GameLoop.CloseServer()
         Console.WriteLine("Server finalizado!")
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in DarCuerpoDesnudo: " & ex.Message)
+End Try
+End Sub
 
     Function FileExist(ByVal file As String) As Boolean
         '*****************************************************************
         'Se fija si existe el archivo
         '*****************************************************************
 
-        On Error Resume Next
+        Try
         'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
         FileExist = (Dir(file) <> "")
-        On Error GoTo 0
-    End Function
+        Try
+    
+Catch ex As Exception
+    Console.WriteLine("Error in FileExist: " & ex.Message)
+End Try
+End Function
 
     Function ReadField(ByVal Pos As Short, ByRef Text As String, ByVal SepASCII As Byte) As String
         '*****************************************************************
@@ -439,17 +450,13 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Eventos.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogEjercitoReal(ByRef desc As String)
@@ -459,7 +466,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -467,10 +474,6 @@ Errhandler:
                  OpenShare.Shared)
         PrintLine(nfile, desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogEjercitoCaos(ByRef desc As String)
@@ -480,7 +483,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -488,10 +491,6 @@ Errhandler:
                  OpenShare.Shared)
         PrintLine(nfile, desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
 
@@ -502,7 +501,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -510,10 +509,6 @@ Errhandler:
                  OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
 
@@ -524,17 +519,13 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/errores.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogStatic(ByRef desc As String)
@@ -544,17 +535,13 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Stats.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogTarea(ByRef desc As String)
@@ -564,17 +551,13 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
 
@@ -632,7 +615,7 @@ Errhandler:
         '
         '***************************************************ç
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -641,10 +624,6 @@ Errhandler:
                  OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogAsesinato(ByRef texto As String)
@@ -654,7 +633,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
         Dim nfile As Short
 
         nfile = FreeFile() ' obtenemos un canal
@@ -663,10 +642,6 @@ Errhandler:
                  OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub logVentaCasa(ByVal texto As String)
@@ -676,7 +651,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -687,10 +662,6 @@ Errhandler:
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         PrintLine(nfile, "----------------------------------------------------------")
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogHackAttemp(ByRef texto As String)
@@ -700,7 +671,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -710,10 +681,6 @@ Errhandler:
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         PrintLine(nfile, "----------------------------------------------------------")
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogCheating(ByRef texto As String)
@@ -723,17 +690,13 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
         FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CH.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
 
@@ -744,7 +707,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -754,10 +717,6 @@ Errhandler:
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         PrintLine(nfile, "----------------------------------------------------------")
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Public Sub LogAntiCheat(ByRef texto As String)
@@ -767,7 +726,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim nfile As Short
         nfile = FreeFile() ' obtenemos un canal
@@ -776,10 +735,6 @@ Errhandler:
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         PrintLine(nfile, "")
         FileClose(nfile)
-
-        Exit Sub
-
-Errhandler:
     End Sub
 
     Function ValidInputNP(ByVal cad As String) As Boolean
@@ -813,7 +768,7 @@ Errhandler:
         '***************************************************
 
         'Se asegura de que los sockets estan cerrados e ignora cualquier err
-        On Error Resume Next
+        Try
 
         Dim LoopC As Integer
 
@@ -863,7 +818,11 @@ Errhandler:
         FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
         PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
         FileClose(N)
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in ReadField: " & ex.Message)
+End Try
+End Sub
 
 
     Public Function Intemperie(ByVal UserIndex As Short) As Boolean
@@ -895,7 +854,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        On Error Resume Next
 
         Dim modifi As Integer
         If UserList(UserIndex).flags.UserLogged Then
@@ -905,10 +864,6 @@ Errhandler:
                 Call FlushBuffer(UserIndex)
             End If
         End If
-
-        Exit Sub
-Errhandler:
-        LogError(("Error en EfectoLluvia"))
     End Sub
 
     Public Sub TiempoInvocacion(ByVal UserIndex As Short)
@@ -1090,7 +1045,7 @@ Errhandler:
                 .flags.Ignorado = False
             End If
         End With
-    End Sub
+End Sub
 
     Public Sub EfectoInvisibilidad(ByVal UserIndex As Short)
         '***************************************************
@@ -1353,7 +1308,7 @@ Errhandler:
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
         Dim i As Integer
 
         For i = 1 To LastUser
@@ -1372,12 +1327,15 @@ Errhandler:
                 End If
             End If
         Next i
-        Exit Sub
+        
 
-Errhandler:
-        Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
+
+Catch ex As Exception
+    Console.WriteLine("Error in EfectoInvisibilidad: " & ex.Message)
+    Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
         Resume Next
-    End Sub
+End Try
+End Sub
 
     Public Function ReiniciarAutoUpdate() As Double
         '***************************************************

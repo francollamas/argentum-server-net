@@ -98,7 +98,7 @@ Module modCentinela
         'Al finalizar el tiempo, se retira y realiza la acción
         'pertinente dependiendo del caso
         '############################################################
-        On Error GoTo Error_Handler
+        Try
         Dim name As String
         Dim numPenas As Short
 
@@ -144,10 +144,12 @@ Module modCentinela
             Call QuitarNPC(CentinelaNPCIndex)
             CentinelaNPCIndex = 0
         End If
-        Exit Sub
+        
 
-        Error_Handler:
-        Centinela.clave = 0
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CallUserAttention: " & ex.Message)
+    Centinela.clave = 0
         Centinela.TiempoRestante = 0
         Centinela.RevisandoUserIndex = 0
 
@@ -157,7 +159,8 @@ Module modCentinela
         End If
 
         Call LogError("Error en el checkeo del centinela: " & Err.Description)
-    End Sub
+End Try
+End Sub
 
     Public Sub CentinelaCheckClave(ByVal UserIndex As Short, ByVal clave As Short)
         '############################################################
@@ -324,7 +327,7 @@ Module modCentinela
         'Last modified: 03/15/2006
         'Loguea un evento del centinela
         '*************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim nfile As Short
         nfile = FreeFile ' obtenemos un canal
@@ -333,8 +336,12 @@ Module modCentinela
                  OpenShare.Shared)
         PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
         FileClose(nfile)
-        Exit Sub
+        
 
-        Errhandler:
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in CentinelaCheckClave: " & ex.Message)
+    
+End Try
+End Sub
 End Module

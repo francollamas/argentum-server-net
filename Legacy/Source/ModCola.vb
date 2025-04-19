@@ -25,13 +25,17 @@ Friend Class cCola
 
     'UPGRADE_NOTE: Reset se actualizó a Reset_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Public Sub Reset_Renamed()
-        On Error Resume Next
+        Try
 
         Dim i As Short
         For i = 0 To Me.Longitud - 1
             Cola.RemoveAt(FRENTE)
         Next i
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in Push: " & ex.Message)
+End Try
+End Sub
 
     Public ReadOnly Property Longitud() As Short
         Get
@@ -54,7 +58,7 @@ Friend Class cCola
     End Sub
 
     Public Function VerElemento(ByVal index As Short) As String
-        On Error Resume Next
+        Try
         If IndexValido(index) Then
             'Pablo
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -64,11 +68,15 @@ Friend Class cCola
         Else
             VerElemento = CStr(0)
         End If
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in IndexValido: " & ex.Message)
+End Try
+End Function
 
 
     Public Sub Push(ByVal Nombre As String)
-        On Error Resume Next
+        Try
         'Mete elemento en la cola
         'Pablo
         Dim aux As String
@@ -77,10 +85,14 @@ Friend Class cCola
         '/Pablo
 
         'Call Cola.Add(UCase$(Nombre))
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in Push: " & ex.Message)
+End Try
+End Sub
 
     Public Function Pop() As String
-        On Error Resume Next
+        Try
         'Quita elemento de la cola
         If Cola.Count() > 0 Then
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -89,10 +101,14 @@ Friend Class cCola
         Else
             Pop = CStr(0)
         End If
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in Pop: " & ex.Message)
+End Try
+End Function
 
     Public Function PopByVal() As String
-        On Error Resume Next
+        Try
         'Call LogTarea("PopByVal SOS")
 
         'Quita elemento de la cola
@@ -102,10 +118,14 @@ Friend Class cCola
         Else
             PopByVal = CStr(0)
         End If
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in PopByVal: " & ex.Message)
+End Try
+End Function
 
     Public Function Existe(ByVal Nombre As String) As Boolean
-        On Error Resume Next
+        Try
 
         Dim V As String
         Dim i As Short
@@ -123,10 +143,14 @@ Friend Class cCola
             End If
         Next
         Existe = False
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in Existe: " & ex.Message)
+End Try
+End Function
 
     Public Sub Quitar(ByVal Nombre As String)
-        On Error Resume Next
+        Try
         Dim V As String
         Dim i As Short
         Dim NombreEnMayusculas As String
@@ -143,12 +167,20 @@ Friend Class cCola
                 Exit Sub
             End If
         Next i
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in Quitar: " & ex.Message)
+End Try
+End Sub
 
     Public Sub QuitarIndex(ByVal index As Short)
-        On Error Resume Next
+        Try
         If IndexValido(index) Then Call Cola.Remove(index)
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in QuitarIndex: " & ex.Message)
+End Try
+End Sub
 
 
     'UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'

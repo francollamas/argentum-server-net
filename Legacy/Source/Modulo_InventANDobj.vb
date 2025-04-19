@@ -11,7 +11,7 @@ Module InvNpc
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim NuevaPos As WorldPos
         NuevaPos.X = 0
@@ -24,9 +24,13 @@ Module InvNpc
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto TirarItemAlPiso. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         TirarItemAlPiso = NuevaPos
 
-        Exit Function
-        Errhandler:
-    End Function
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in TirarItemAlPiso: " & ex.Message)
+    
+End Try
+End Function
 
     Public Sub NPC_TIRAR_ITEMS(ByRef npc As npc, ByVal IsPretoriano As Boolean)
         '***************************************************
@@ -36,7 +40,7 @@ Module InvNpc
         '28/11/2009: ZaMa - Implementado drops complejos
         '02/04/2010: ZaMa - Los pretos vuelven a tirar oro.
         '***************************************************
-        On Error Resume Next
+        Try
 
         Dim i As Byte
         Dim MiObj As Obj
@@ -99,7 +103,11 @@ Module InvNpc
             End If
 
         End With
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in TirarItemAlPiso: " & ex.Message)
+End Try
+End Sub
 
     Function QuedanItems(ByVal NpcIndex As Short, ByVal ObjIndex As Short) As Boolean
         '***************************************************
@@ -108,7 +116,7 @@ Module InvNpc
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim i As Short
         If Npclist(NpcIndex).Invent.NroItems > 0 Then
@@ -120,7 +128,11 @@ Module InvNpc
             Next
         End If
         QuedanItems = False
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in QuedanItems: " & ex.Message)
+End Try
+End Function
 
     ''
     ' Gets the amount of a certain item that an npc has.
@@ -136,7 +148,7 @@ Module InvNpc
         'Last Modification By: Marco Vanotti (Marco)
         ' - 03/09/08 EncontrarCant now returns 0 if the npc doesn't have it (Marco)
         '***************************************************
-        On Error Resume Next
+        Try
         'Devuelve la cantidad original del obj de un npc
 
         Dim ln, npcfile As String
@@ -153,7 +165,11 @@ Module InvNpc
         Next
 
         EncontrarCant = 0
-    End Function
+    
+Catch ex As Exception
+    Console.WriteLine("Error in reads: " & ex.Message)
+End Try
+End Function
 
     Sub ResetNpcInv(ByVal NpcIndex As Short)
         '***************************************************
@@ -162,7 +178,7 @@ Module InvNpc
         '
         '***************************************************
 
-        On Error Resume Next
+        Try
 
         Dim i As Short
 
@@ -176,7 +192,11 @@ Module InvNpc
 
             .InvReSpawn = 0
         End With
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in ResetNpcInv: " & ex.Message)
+End Try
+End Sub
 
     ''
     ' Removes a certain amount of items from a slot of an npc's inventory
@@ -268,7 +288,7 @@ Module InvNpc
         'Autor: ZaMa
         'Last Modification: 13/02/2010
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         Dim i As Byte
         Dim MiObj As Obj
@@ -296,9 +316,12 @@ Module InvNpc
             End While
         End If
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call LogError("Error en TirarOro. Error " & Err.Number & " : " & Err.Description)
-    End Sub
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NPC_TIRAR_ITEMS: " & ex.Message)
+    Call LogError("Error en TirarOro. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Sub
 End Module

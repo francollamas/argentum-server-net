@@ -809,7 +809,7 @@ Module SistemaCombate
         '14/01/2010: ZaMa - Lo transformo en función, para que no se pierdan municiones al atacar targets inválidos.
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If Not PuedeAtacarNPC(UserIndex, NpcIndex) Then Exit Function
 
@@ -840,11 +840,14 @@ Module SistemaCombate
 
         UsuarioAtacaNpc = True
 
-        Exit Function
+        
 
-        Errhandler:
-        Call LogError("Error en UsuarioAtacaNpc. Error " & Err.Number & " : " & Err.Description)
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in MinimoInt: " & ex.Message)
+    Call LogError("Error en UsuarioAtacaNpc. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Function
 
     Public Sub UsuarioAtaca(ByVal UserIndex As Short)
         '***************************************************
@@ -947,7 +950,7 @@ Module SistemaCombate
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim ProbRechazo As Integer
         Dim Rechazo As Boolean
@@ -1031,10 +1034,12 @@ Module SistemaCombate
 
         Call FlushBuffer(VictimaIndex)
 
-        Exit Function
+        
 
-        Errhandler:
-        Dim AtacanteNick As String
+        
+Catch ex As Exception
+    Console.WriteLine("Error in UsuarioAtaca: " & ex.Message)
+    Dim AtacanteNick As String
         Dim VictimaNick As String
 
         If AtacanteIndex > 0 Then AtacanteNick = UserList(AtacanteIndex).name
@@ -1044,7 +1049,8 @@ Module SistemaCombate
             LogError(
                 "Error en UsuarioImpacto. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " &
                 AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " & VictimaNick)
-    End Function
+End Try
+End Function
 
     Public Function UsuarioAtacaUsuario(ByVal AtacanteIndex As Short, ByVal VictimaIndex As Short) As Boolean
         '***************************************************
@@ -1054,7 +1060,7 @@ Module SistemaCombate
         '                    inválidos, y evitar un doble chequeo innecesario
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         If Not PuedeAtacar(AtacanteIndex, VictimaIndex) Then Exit Function
 
@@ -1110,11 +1116,14 @@ Module SistemaCombate
 
         UsuarioAtacaUsuario = True
 
-        Exit Function
+        
 
-        Errhandler:
-        Call LogError("Error en UsuarioAtacaUsuario. Error " & Err.Number & " : " & Err.Description)
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in UsuarioAtacaUsuario: " & ex.Message)
+    Call LogError("Error en UsuarioAtacaUsuario. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Function
 
     Public Sub UserDañoUser(ByVal AtacanteIndex As Short, ByVal VictimaIndex As Short)
         '***************************************************
@@ -1124,7 +1133,7 @@ Module SistemaCombate
         '11/03/2010: ZaMa - Ahora no cuenta la muerte si estaba en estado atacable, y no se vuelve criminal
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim daño As Integer
         Dim Lugar As Byte
@@ -1265,10 +1274,12 @@ Module SistemaCombate
 
         Call FlushBuffer(VictimaIndex)
 
-        Exit Sub
+        
 
-        Errhandler:
-        Dim AtacanteNick As String
+        
+Catch ex As Exception
+    Console.WriteLine("Error in UserDañoUser: " & ex.Message)
+    Dim AtacanteNick As String
         Dim VictimaNick As String
 
         If AtacanteIndex > 0 Then AtacanteNick = UserList(AtacanteIndex).name
@@ -1278,7 +1289,8 @@ Module SistemaCombate
             LogError(
                 "Error en UserDañoUser. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " &
                 AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " & VictimaNick)
-    End Sub
+End Try
+End Sub
 
     Sub UsuarioAtacadoPorUsuario(ByVal AttackerIndex As Short, ByVal VictimIndex As Short)
         '***************************************************
@@ -1376,7 +1388,7 @@ Module SistemaCombate
         '24/02/2009: ZaMa - Los usuarios pueden atacarse entre si.
         '02/04/2010: ZaMa - Los armadas no pueden atacar nunca a los ciudas, salvo que esten atacables.
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         'MUY importante el orden de estos "IF"...
 
@@ -1545,11 +1557,14 @@ Module SistemaCombate
         End If
 
         PuedeAtacar = True
-        Exit Function
+        
 
-        Errhandler:
-        Call LogError("Error en PuedeAtacar. Error " & Err.Number & " : " & Err.Description)
-    End Function
+        
+Catch ex As Exception
+    Console.WriteLine("Error in UsuarioAtacadoPorUsuario: " & ex.Message)
+    Call LogError("Error en PuedeAtacar. Error " & Err.Number & " : " & Err.Description)
+End Try
+End Function
 
     Public Function PuedeAtacarNPC(ByVal AttackerIndex As Short, ByVal NpcIndex As Short,
                                    Optional ByVal Paraliza As Boolean = False, Optional ByVal IsPet As Boolean = False) _
@@ -2070,7 +2085,7 @@ Module SistemaCombate
 
         'TODO: Pero que rebuscado!!
         'Nigo:  Te lo rediseñe, pero no te borro el TODO para que lo revises.
-        On Error GoTo Errhandler
+        Try
         Dim tOrg As Declaraciones.eTrigger
         Dim tDst As Declaraciones.eTrigger
 
@@ -2087,11 +2102,14 @@ Module SistemaCombate
             TriggerZonaPelea = Declaraciones.eTrigger6.TRIGGER6_AUSENTE
         End If
 
-        Exit Function
-        Errhandler:
-        TriggerZonaPelea = Declaraciones.eTrigger6.TRIGGER6_AUSENTE
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in PuedeAtacarNPC: " & ex.Message)
+    TriggerZonaPelea = Declaraciones.eTrigger6.TRIGGER6_AUSENTE
         LogError(("Error en TriggerZonaPelea - " & Err.Description))
-    End Function
+End Try
+End Function
 
     Sub UserEnvenena(ByVal AtacanteIndex As Short, ByVal VictimaIndex As Short)
         '***************************************************

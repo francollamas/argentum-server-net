@@ -200,7 +200,7 @@ Module modHechizos
         '
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         Dim j As Short
         For j = 1 To MAXUSERHECHIZOS
@@ -210,9 +210,13 @@ Module modHechizos
             End If
         Next
 
-        Exit Function
-        Errhandler:
-    End Function
+        
+        
+Catch ex As Exception
+    Console.WriteLine("Error in NpcLanzaSpellSobreUser: " & ex.Message)
+    
+End Try
+End Function
 
     Sub AgregarHechizo(ByVal UserIndex As Short, ByVal Slot As Short)
         '***************************************************
@@ -256,7 +260,7 @@ Module modHechizos
         '25/07/2009: ZaMa - Invisible admins don't say any word when casting a spell
         '17/11/2009: ZaMa - Now the user become visible when casting a spell, if it is hidden
         '***************************************************
-        On Error Resume Next
+        Try
         With UserList(UserIndex)
             If .flags.AdminInvisible <> 1 Then
                 Call _
@@ -278,7 +282,11 @@ Module modHechizos
             End If
         End With
         Exit Sub
-    End Sub
+    
+Catch ex As Exception
+    Console.WriteLine("Error in NpcLanzaSpellSobreUser: " & ex.Message)
+End Try
+End Sub
 
     ''
     ' Check if an user can cast a certain spell
@@ -451,7 +459,7 @@ Module modHechizos
         '18/11/2009: Optimizacion de codigo.
         '***************************************************
 
-        On Error GoTo error_Renamed
+        Try
 
         Dim NpcIndex, SpellIndex, NroNpcs, PetIndex As Short
         Dim TargetPos As WorldPos
@@ -519,17 +527,20 @@ Module modHechizos
         Call InfoHechizo(UserIndex)
         HechizoCasteado = True
 
-        Exit Sub
+        
 
-        error_Renamed:
-        With UserList(UserIndex)
+        
+Catch ex As Exception
+    Console.WriteLine("Error in AgregarHechizo: " & ex.Message)
+    With UserList(UserIndex)
             LogError(
                 ("[" & Err.Number & "] " & Err.Description & " por el usuario " & .name & "(" & UserIndex & ") en (" &
                  .Pos.Map & ", " & .Pos.X & ", " & .Pos.Y & "). Tratando de tirar el hechizo " &
                  Hechizos(SpellIndex).Nombre & "(" & SpellIndex & ") en la posicion ( " & .flags.TargetX & ", " &
                  .flags.TargetY & ")"))
         End With
-    End Sub
+End Try
+End Sub
 
     Sub HandleHechizoTerreno(ByVal UserIndex As Short, ByVal SpellIndex As Short)
         '***************************************************
@@ -714,7 +725,7 @@ Module modHechizos
         '24/01/2007 ZaMa - Optimizacion de codigo.
         '02/16/2010: Marco - Now .flags.hechizo makes reference to global spell index instead of user's spell index
         '***************************************************
-        On Error GoTo Errhandler
+        Try
 
         With UserList(UserIndex)
 
@@ -790,15 +801,18 @@ Module modHechizos
 
         End With
 
-        Exit Sub
+        
 
-        Errhandler:
-        Call _
+        
+Catch ex As Exception
+    Console.WriteLine("Error in HandleHechizoTerreno: " & ex.Message)
+    Call _
             LogError(
                 "Error en LanzarHechizo. Error " & Err.Number & " : " & Err.Description & " Hechizo: " &
                 Hechizos(SpellIndex).Nombre & "(" & SpellIndex & "). Casteado por: " & UserList(UserIndex).name & "(" &
                 UserIndex & ").")
-    End Sub
+End Try
+End Sub
 
     Sub HechizoEstadoUsuario(ByVal UserIndex As Short, ByRef HechizoCasteado As Boolean)
         '***************************************************
@@ -2110,7 +2124,7 @@ Module modHechizos
         'Checks if caster can cast support magic on target user.
         '***************************************************
 
-        On Error GoTo Errhandler
+        Try
 
         With UserList(CasterIndex)
 
@@ -2213,14 +2227,17 @@ Module modHechizos
 
         CanSupportUser = True
 
-        Exit Function
+        
 
-        Errhandler:
-        Call _
+        
+Catch ex As Exception
+    Console.WriteLine("Error in HechizoEstadoUsuario: " & ex.Message)
+    Call _
             LogError(
                 "Error en CanSupportUser, Error: " & Err.Number & " - " & Err.Description & " CasterIndex: " &
                 CasterIndex & ", TargetIndex: " & TargetIndex)
-    End Function
+End Try
+End Function
 
     Sub UpdateUserHechizos(ByVal UpdateAll As Boolean, ByVal UserIndex As Short, ByVal Slot As Byte)
         '***************************************************
