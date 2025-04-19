@@ -168,14 +168,24 @@ namespace ArgentumServer.Script
                     if (labelMatch.Success)
                     {
                         var errorHandlingCode = labelMatch.Groups[2].Value;
-                        // Remove the On Error GoTo statement and the label section
-                        methodBody = methodBody.Replace(gotoMatch.Value, "");
-                        methodBody = methodBody.Replace(labelMatch.Value, "");
                         
-                        // Remove Exit Sub/Function
-                        methodBody = Regex.Replace(methodBody, @"Exit\s+(Sub|Function)", "");
+                        // Split the method body at the label point
+                        int labelIndex = methodBody.IndexOf(labelMatch.Value);
+                        string beforeLabel = methodBody.Substring(0, labelIndex);
                         
-                        return $"{methodDeclaration}Try\r\n{methodBody}\r\nCatch ex As Exception\r\n    ' Error handling (previously {errorLabel})\r\n    Console.WriteLine(\"Error in {methodName}: \" & ex.Message){errorHandlingCode}\r\nEnd Try\r\n{endStatement}";
+                        // Remove the On Error GoTo statement
+                        beforeLabel = beforeLabel.Replace(gotoMatch.Value, "");
+                        
+                        // Only remove Exit Sub/Function statements that appear at the end of code blocks
+                        // before the error handling label - these are likely used to skip error handling in normal flow
+                        beforeLabel = Regex.Replace(beforeLabel, 
+                            @"((?:\r?\n)\s*)Exit\s+(Sub|Function)(\s*)(?=\r?\n)", 
+                            "$1$3",  // Keep the newlines and spacing, just remove the Exit statement
+                            RegexOptions.IgnoreCase);
+                        
+                        // Do not modify conditional Exit statements like "If condition Then Exit Sub"
+                        
+                        return $"{methodDeclaration}Try\r\n{beforeLabel}\r\nCatch ex As Exception\r\n    ' Error handling (previously {errorLabel})\r\n    Console.WriteLine(\"Error in {methodName}: \" & ex.Message){errorHandlingCode}\r\nEnd Try\r\n{endStatement}";
                     }
                 }
                 
@@ -261,8 +271,14 @@ namespace ArgentumServer.Script
                     string errorHandlingCode = match.Groups[8].Value;
                     string endStatement = match.Groups[9].Value;
                     
-                    // Remove Exit Sub/Function if present in the method body
-                    methodBody = Regex.Replace(methodBody, @"Exit\s+(Sub|Function)", "", RegexOptions.IgnoreCase);
+                    // Only remove Exit Sub/Function statements that appear at the end of code blocks
+                    // before the error handling label - these are likely used to skip error handling
+                    methodBody = Regex.Replace(methodBody, 
+                        @"((?:\r?\n)\s*)Exit\s+(Sub|Function)(\s*)(?=\r?\n)", 
+                        "$1$3",  // Keep the newlines and spacing, just remove the Exit statement
+                        RegexOptions.IgnoreCase);
+                    
+                    // Do not modify conditional Exit statements like "If condition Then Exit Sub"
                     
                     // Create new method with Try-Catch
                     string newMethod = $"{methodDeclaration}{beforeError}Try{methodBody}\r\nCatch ex As Exception\r\n    ' Error handling (previously {errorLabel})\r\n    Console.WriteLine(\"Error in {methodName}: \" & ex.Message){errorHandlingCode}\r\nEnd Try\r\n{endStatement}";
