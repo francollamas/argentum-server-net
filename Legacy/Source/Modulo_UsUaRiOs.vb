@@ -400,7 +400,6 @@ End Sub
 Catch ex As Exception
     Console.WriteLine("Error in RefreshCharStatus: " & ex.Message)
     LogError(("MakeUserChar: num: " & Err.Number & " desc: " & Err.Description))
-        'Resume Next
         Call CloseSocket(UserIndex)
 End Try
 End Sub

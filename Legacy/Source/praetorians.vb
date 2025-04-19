@@ -2209,12 +2209,8 @@ End Function
         
 Catch ex As Exception
     Console.WriteLine("Error in EsAlcanzable: " & ex.Message)
-    LogError(("Error en NPCAI.EsAlcanzable"))
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LoadSIni: " & ex.Message)
-End Try
-End Try
+            LogError(("Error en NPCAI.EsAlcanzable"))
+        End Try
 End Function
 
 

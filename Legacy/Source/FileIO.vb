@@ -1235,8 +1235,8 @@ End Sub
                     If StrComp(Trim(Left(currentLine, equalPos - 1)), keyName, CompareMethod.Text) = 0 Then
                         ' Return the value (right side of '='), trimmed, ignoring any trailing line breaks
                         GetVar = Trim(Mid(currentLine, equalPos + 1))
-                        GoTo CleanExit
-                    End If
+                            FileClose(fileNumber)
+                        End If
                 End If
             End If
         End While
@@ -1352,7 +1352,6 @@ End Sub
         '
         '***************************************************
 
-        Try
         Dim FreeFileMap As Integer
         Dim FreeFileInf As Integer
         Dim Y As Integer
@@ -1361,161 +1360,163 @@ End Sub
         Dim npcfile As String
         Dim TempInt As Short
 
-        FreeFileMap = FreeFile
+        Try
 
-        FileOpen(FreeFileMap, MAPFl & ".map", OpenMode.Binary)
-        Seek(FreeFileMap, 1)
+            FreeFileMap = FreeFile()
 
-        FreeFileInf = FreeFile
+            FileOpen(FreeFileMap, MAPFl & ".map", OpenMode.Binary)
+            Seek(FreeFileMap, 1)
 
-        'inf
-        FileOpen(FreeFileInf, MAPFl & ".inf", OpenMode.Binary)
-        Seek(FreeFileInf, 1)
+            FreeFileInf = FreeFile()
 
-        'map Header
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileMap, MapInfo_Renamed(Map).MapVersion)
-        Seek(FreeFileMap, Seek(FreeFileMap) + 263)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileMap, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileMap, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileMap, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileMap, TempInt)
+            'inf
+            FileOpen(FreeFileInf, MAPFl & ".inf", OpenMode.Binary)
+            Seek(FreeFileInf, 1)
 
-        'inf Header
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileInf, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileInf, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileInf, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileInf, TempInt)
-        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        FileGet(FreeFileInf, TempInt)
+            'map Header
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileMap, MapInfo_Renamed(Map).MapVersion)
+            Seek(FreeFileMap, Seek(FreeFileMap) + 263)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileMap, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileMap, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileMap, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileMap, TempInt)
 
-        For Y = YMinMapSize To YMaxMapSize
-            For X = XMinMapSize To XMaxMapSize
-                With MapData(Map, X, Y)
+            'inf Header
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileInf, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileInf, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileInf, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileInf, TempInt)
+            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileGet(FreeFileInf, TempInt)
 
-                    '.dat file
-                    'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                    FileGet(FreeFileMap, ByFlags)
+            For Y = YMinMapSize To YMaxMapSize
+                For X = XMinMapSize To XMaxMapSize
+                    With MapData(Map, X, Y)
 
-                    If ByFlags And 1 Then
-                        .Blocked = 1
-                    End If
-
-                    'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                    FileGet(FreeFileMap, .Graphic(1))
-
-                    'Layer 2 used?
-                    'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                    If ByFlags And 2 Then FileGet(FreeFileMap, .Graphic(2))
-
-                    'Layer 3 used?
-                    'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                    If ByFlags And 4 Then FileGet(FreeFileMap, .Graphic(3))
-
-                    'Layer 4 used?
-                    'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                    If ByFlags And 8 Then FileGet(FreeFileMap, .Graphic(4))
-
-                    'Trigger used?
-                    If ByFlags And 16 Then
-                        'Enums are 4 byte long in VB, so we make sure we only read 2
+                        '.dat file
                         'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileMap, TempInt)
-                        .trigger = TempInt
-                    End If
+                        FileGet(FreeFileMap, ByFlags)
 
-                    'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                    FileGet(FreeFileInf, ByFlags)
-
-                    If ByFlags And 1 Then
-                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileInf, .TileExit.Map)
-                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileInf, .TileExit.X)
-                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileInf, .TileExit.Y)
-                    End If
-
-                    If ByFlags And 2 Then
-                        'Get and make NPC
-                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileInf, .NpcIndex)
-
-                        If .NpcIndex > 0 Then
-                            npcfile = DatPath & "NPCs.dat"
-
-                            'Si el npc debe hacer respawn en la pos
-                            'original la guardamos
-                            If Val(GetVar(npcfile, "NPC" & .NpcIndex, "PosOrig")) = 1 Then
-                                .NpcIndex = OpenNPC(.NpcIndex)
-                                Npclist(.NpcIndex).Orig.Map = Map
-                                Npclist(.NpcIndex).Orig.X = X
-                                Npclist(.NpcIndex).Orig.Y = Y
-                            Else
-                                .NpcIndex = OpenNPC(.NpcIndex)
-                            End If
-
-                            Npclist(.NpcIndex).Pos.Map = Map
-                            Npclist(.NpcIndex).Pos.X = X
-                            Npclist(.NpcIndex).Pos.Y = Y
-
-                            Call MakeNPCChar(True, 0, .NpcIndex, Map, X, Y)
+                        If ByFlags And 1 Then
+                            .Blocked = 1
                         End If
-                    End If
 
-                    If ByFlags And 4 Then
-                        'Get and make Object
                         'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileInf, .ObjInfo.ObjIndex)
+                        FileGet(FreeFileMap, .Graphic(1))
+
+                        'Layer 2 used?
                         'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FileGet(FreeFileInf, .ObjInfo.Amount)
-                    End If
-                End With
-            Next X
-        Next Y
+                        If ByFlags And 2 Then FileGet(FreeFileMap, .Graphic(2))
+
+                        'Layer 3 used?
+                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                        If ByFlags And 4 Then FileGet(FreeFileMap, .Graphic(3))
+
+                        'Layer 4 used?
+                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                        If ByFlags And 8 Then FileGet(FreeFileMap, .Graphic(4))
+
+                        'Trigger used?
+                        If ByFlags And 16 Then
+                            'Enums are 4 byte long in VB, so we make sure we only read 2
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileMap, TempInt)
+                            .trigger = TempInt
+                        End If
+
+                        'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                        FileGet(FreeFileInf, ByFlags)
+
+                        If ByFlags And 1 Then
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileInf, .TileExit.Map)
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileInf, .TileExit.X)
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileInf, .TileExit.Y)
+                        End If
+
+                        If ByFlags And 2 Then
+                            'Get and make NPC
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileInf, .NpcIndex)
+
+                            If .NpcIndex > 0 Then
+                                npcfile = DatPath & "NPCs.dat"
+
+                                'Si el npc debe hacer respawn en la pos
+                                'original la guardamos
+                                If Val(GetVar(npcfile, "NPC" & .NpcIndex, "PosOrig")) = 1 Then
+                                    .NpcIndex = OpenNPC(.NpcIndex)
+                                    Npclist(.NpcIndex).Orig.Map = Map
+                                    Npclist(.NpcIndex).Orig.X = X
+                                    Npclist(.NpcIndex).Orig.Y = Y
+                                Else
+                                    .NpcIndex = OpenNPC(.NpcIndex)
+                                End If
+
+                                Npclist(.NpcIndex).Pos.Map = Map
+                                Npclist(.NpcIndex).Pos.X = X
+                                Npclist(.NpcIndex).Pos.Y = Y
+
+                                Call MakeNPCChar(True, 0, .NpcIndex, Map, X, Y)
+                            End If
+                        End If
+
+                        If ByFlags And 4 Then
+                            'Get and make Object
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileInf, .ObjInfo.ObjIndex)
+                            'UPGRADE_WARNING: Get se actualizó a FileGet y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                            FileGet(FreeFileInf, .ObjInfo.Amount)
+                        End If
+                    End With
+                Next X
+            Next Y
 
 
-        FileClose(FreeFileMap)
-        FileClose(FreeFileInf)
+            FileClose(FreeFileMap)
+            FileClose(FreeFileInf)
 
-        With MapInfo_Renamed(Map)
-            .name = GetVar(MAPFl & ".dat", "Mapa" & Map, "Name")
-            .Music = GetVar(MAPFl & ".dat", "Mapa" & Map, "MusicNum")
-            .startPos.Map = Val(ReadField(1, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
-            .startPos.X = Val(ReadField(2, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
-            .startPos.Y = Val(ReadField(3, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
-            .MagiaSinEfecto = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "MagiaSinEfecto"))
-            .InviSinEfecto = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "InviSinEfecto"))
-            .ResuSinEfecto = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "ResuSinEfecto"))
-            .NoEncriptarMP = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "NoEncriptarMP"))
+            With MapInfo_Renamed(Map)
+                .name = GetVar(MAPFl & ".dat", "Mapa" & Map, "Name")
+                .Music = GetVar(MAPFl & ".dat", "Mapa" & Map, "MusicNum")
+                .startPos.Map = Val(ReadField(1, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
+                .startPos.X = Val(ReadField(2, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
+                .startPos.Y = Val(ReadField(3, GetVar(MAPFl & ".dat", "Mapa" & Map, "StartPos"), Asc("-")))
+                .MagiaSinEfecto = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "MagiaSinEfecto"))
+                .InviSinEfecto = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "InviSinEfecto"))
+                .ResuSinEfecto = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "ResuSinEfecto"))
+                .NoEncriptarMP = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "NoEncriptarMP"))
 
-            .RoboNpcsPermitido = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "RoboNpcsPermitido"))
+                .RoboNpcsPermitido = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "RoboNpcsPermitido"))
 
-            If Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "Pk")) = 0 Then
-                .Pk = True
-            Else
-                .Pk = False
-            End If
+                If Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "Pk")) = 0 Then
+                    .Pk = True
+                Else
+                    .Pk = False
+                End If
 
 
-            .Terreno = GetVar(MAPFl & ".dat", "Mapa" & Map, "Terreno")
-            .Zona = GetVar(MAPFl & ".dat", "Mapa" & Map, "Zona")
-            .Restringir = GetVar(MAPFl & ".dat", "Mapa" & Map, "Restringir")
-            .BackUp = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "BACKUP"))
-        End With
-        
+                .Terreno = GetVar(MAPFl & ".dat", "Mapa" & Map, "Terreno")
+                .Zona = GetVar(MAPFl & ".dat", "Mapa" & Map, "Zona")
+                .Restringir = GetVar(MAPFl & ".dat", "Mapa" & Map, "Restringir")
+                .BackUp = Val(GetVar(MAPFl & ".dat", "Mapa" & Map, "BACKUP"))
+            End With
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in CargarMapa: " & ex.Message)
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in CargarMapa: " & ex.Message)
     Call LogError("Error cargando mapa: " & Map & " - Pos: " & X & "," & Y & "." & Err.Description)
 End Try
 End Sub

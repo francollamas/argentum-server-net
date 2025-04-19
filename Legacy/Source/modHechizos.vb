@@ -459,79 +459,79 @@ End Sub
         '18/11/2009: Optimizacion de codigo.
         '***************************************************
 
-        Try
-
         Dim NpcIndex, SpellIndex, NroNpcs, PetIndex As Short
         Dim TargetPos As WorldPos
-        With UserList(UserIndex)
-            'No permitimos se invoquen criaturas en zonas seguras
-            If _
+
+        Try
+            With UserList(UserIndex)
+                'No permitimos se invoquen criaturas en zonas seguras
+                If _
                 MapInfo_Renamed(.Pos.Map).Pk = False Or
                 MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ZONASEGURA Then
-                Call _
+                    Call _
                     WriteConsoleMsg(UserIndex, "No puedes invocar criaturas en zona segura.",
                                     Protocol.FontTypeNames.FONTTYPE_INFO)
-                Exit Sub
-            End If
-
-
-            TargetPos.Map = .flags.TargetMap
-            TargetPos.X = .flags.TargetX
-            TargetPos.Y = .flags.TargetY
-
-            SpellIndex = .flags.Hechizo
-
-            ' Warp de mascotas
-            If Hechizos(SpellIndex).Warp = 1 Then
-                PetIndex = FarthestPet(UserIndex)
-
-                ' La invoco cerca mio
-                If PetIndex > 0 Then
-                    Call WarpMascota(UserIndex, PetIndex)
+                    Exit Sub
                 End If
 
-                ' Invocacion normal
-            Else
-                If .NroMascotas >= MAXMASCOTAS Then Exit Sub
 
-                For NroNpcs = 1 To Hechizos(SpellIndex).cant
+                TargetPos.Map = .flags.TargetMap
+                TargetPos.X = .flags.TargetX
+                TargetPos.Y = .flags.TargetY
 
-                    If .NroMascotas < MAXMASCOTAS Then
-                        NpcIndex = SpawnNpc(Hechizos(SpellIndex).NumNpc, TargetPos, True, False)
-                        If NpcIndex > 0 Then
-                            .NroMascotas = .NroMascotas + 1
+                SpellIndex = .flags.Hechizo
 
-                            PetIndex = FreeMascotaIndex(UserIndex)
+                ' Warp de mascotas
+                If Hechizos(SpellIndex).Warp = 1 Then
+                    PetIndex = FarthestPet(UserIndex)
 
-                            .MascotasIndex(PetIndex) = NpcIndex
-                            .MascotasType(PetIndex) = Npclist(NpcIndex).Numero
-
-                            With Npclist(NpcIndex)
-                                .MaestroUser = UserIndex
-                                .Contadores.TiempoExistencia = IntervaloInvocacion
-                                .GiveGLD = 0
-                            End With
-
-                            Call FollowAmo(NpcIndex)
-                        Else
-                            Exit Sub
-                        End If
-                    Else
-                        Exit For
+                    ' La invoco cerca mio
+                    If PetIndex > 0 Then
+                        Call WarpMascota(UserIndex, PetIndex)
                     End If
 
-                Next NroNpcs
-            End If
-        End With
+                    ' Invocacion normal
+                Else
+                    If .NroMascotas >= MAXMASCOTAS Then Exit Sub
 
-        Call InfoHechizo(UserIndex)
-        HechizoCasteado = True
+                    For NroNpcs = 1 To Hechizos(SpellIndex).cant
 
-        
+                        If .NroMascotas < MAXMASCOTAS Then
+                            NpcIndex = SpawnNpc(Hechizos(SpellIndex).NumNpc, TargetPos, True, False)
+                            If NpcIndex > 0 Then
+                                .NroMascotas = .NroMascotas + 1
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in AgregarHechizo: " & ex.Message)
+                                PetIndex = FreeMascotaIndex(UserIndex)
+
+                                .MascotasIndex(PetIndex) = NpcIndex
+                                .MascotasType(PetIndex) = Npclist(NpcIndex).Numero
+
+                                With Npclist(NpcIndex)
+                                    .MaestroUser = UserIndex
+                                    .Contadores.TiempoExistencia = IntervaloInvocacion
+                                    .GiveGLD = 0
+                                End With
+
+                                Call FollowAmo(NpcIndex)
+                            Else
+                                Exit Sub
+                            End If
+                        Else
+                            Exit For
+                        End If
+
+                    Next NroNpcs
+                End If
+            End With
+
+            Call InfoHechizo(UserIndex)
+            HechizoCasteado = True
+
+
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in AgregarHechizo: " & ex.Message)
     With UserList(UserIndex)
             LogError(
                 ("[" & Err.Number & "] " & Err.Description & " por el usuario " & .name & "(" & UserIndex & ") en (" &

@@ -407,35 +407,34 @@ End Sub
         'Last Modification: 18/11/2009
         'Kills a pet
         '***************************************************
-        Try
-
         Dim i As Short
         Dim PetIndex As Short
 
-        With UserList(UserIndex)
+        Try
+            With UserList(UserIndex)
 
-            ' Busco el indice de la mascota
-            For i = 1 To MAXMASCOTAS
-                If .MascotasIndex(i) = NpcIndex Then PetIndex = i
-            Next i
+                ' Busco el indice de la mascota
+                For i = 1 To MAXMASCOTAS
+                    If .MascotasIndex(i) = NpcIndex Then PetIndex = i
+                Next i
 
-            ' Poco probable que pase, pero por las dudas..
-            If PetIndex = 0 Then Exit Sub
+                ' Poco probable que pase, pero por las dudas..
+                If PetIndex = 0 Then Exit Sub
 
-            ' Limpio el slot de la mascota
-            .NroMascotas = .NroMascotas - 1
-            .MascotasIndex(PetIndex) = 0
-            .MascotasType(PetIndex) = 0
+                ' Limpio el slot de la mascota
+                .NroMascotas = .NroMascotas - 1
+                .MascotasIndex(PetIndex) = 0
+                .MascotasType(PetIndex) = 0
 
-            ' Elimino la mascota
-            Call QuitarNPC(NpcIndex)
-        End With
+                ' Elimino la mascota
+                Call QuitarNPC(NpcIndex)
+            End With
 
-        
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in QuitarPet: " & ex.Message)
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in QuitarPet: " & ex.Message)
     Call _
             LogError(
                 "Error en QuitarPet. Error: " & Err.Number & " Desc: " & Err.Description & " NpcIndex: " & NpcIndex &

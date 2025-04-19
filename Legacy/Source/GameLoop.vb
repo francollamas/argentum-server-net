@@ -590,7 +590,6 @@ End Try
 End Sub
 
     Private Sub TickAI()
-        Try
         Dim NpcIndex As Integer
         Dim X As Short
         Dim Y As Short
@@ -598,65 +597,67 @@ End Sub
         Dim mapa As Short
         Dim e_p As Short
 
-        'Barrin 29/9/03
-        If Not haciendoBK And Not EnPausa Then
-            'Update NPCs
-            For NpcIndex = 1 To LastNPC
+        Try
 
-                With Npclist(NpcIndex)
-                    If .flags.NPCActive Then 'Nos aseguramos que sea INTELIGENTE!
+            'Barrin 29/9/03
+            If Not haciendoBK And Not EnPausa Then
+                'Update NPCs
+                For NpcIndex = 1 To LastNPC
 
-                        ' Chequea si contiua teniendo dueño
-                        If .Owner > 0 Then Call ValidarPermanenciaNpc(NpcIndex)
+                    With Npclist(NpcIndex)
+                        If .flags.NPCActive Then 'Nos aseguramos que sea INTELIGENTE!
 
-                        If .flags.Paralizado = 1 Then
-                            Call EfectoParalisisNpc(NpcIndex)
-                        Else
-                            e_p = esPretoriano(NpcIndex)
-                            If e_p > 0 Then
-                                Select Case e_p
-                                    Case 1 ''clerigo
-                                        Call PRCLER_AI(NpcIndex)
-                                    Case 2 ''mago
-                                        Call PRMAGO_AI(NpcIndex)
-                                    Case 3 ''cazador
-                                        Call PRCAZA_AI(NpcIndex)
-                                    Case 4 ''rey
-                                        Call PRREY_AI(NpcIndex)
-                                    Case 5 ''guerre
-                                        Call PRGUER_AI(NpcIndex)
-                                End Select
+                            ' Chequea si contiua teniendo dueño
+                            If .Owner > 0 Then Call ValidarPermanenciaNpc(NpcIndex)
+
+                            If .flags.Paralizado = 1 Then
+                                Call EfectoParalisisNpc(NpcIndex)
                             Else
-                                'Usamos AI si hay algun user en el mapa
-                                If .flags.Inmovilizado = 1 Then
-                                    Call EfectoParalisisNpc(NpcIndex)
-                                End If
+                                e_p = esPretoriano(NpcIndex)
+                                If e_p > 0 Then
+                                    Select Case e_p
+                                        Case 1 ''clerigo
+                                            Call PRCLER_AI(NpcIndex)
+                                        Case 2 ''mago
+                                            Call PRMAGO_AI(NpcIndex)
+                                        Case 3 ''cazador
+                                            Call PRCAZA_AI(NpcIndex)
+                                        Case 4 ''rey
+                                            Call PRREY_AI(NpcIndex)
+                                        Case 5 ''guerre
+                                            Call PRGUER_AI(NpcIndex)
+                                    End Select
+                                Else
+                                    'Usamos AI si hay algun user en el mapa
+                                    If .flags.Inmovilizado = 1 Then
+                                        Call EfectoParalisisNpc(NpcIndex)
+                                    End If
 
-                                mapa = .Pos.Map
+                                    mapa = .Pos.Map
 
-                                If mapa > 0 Then
-                                    If MapInfo_Renamed(mapa).NumUsers > 0 Then
-                                        If .Movement <> AI.TipoAI.ESTATICO Then
-                                            Call NPCAI(NpcIndex)
+                                    If mapa > 0 Then
+                                        If MapInfo_Renamed(mapa).NumUsers > 0 Then
+                                            If .Movement <> AI.TipoAI.ESTATICO Then
+                                                Call NPCAI(NpcIndex)
+                                            End If
                                         End If
                                     End If
                                 End If
                             End If
                         End If
-                    End If
-                End With
-            Next NpcIndex
-        End If
+                    End With
+                Next NpcIndex
+            End If
 
-        
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickNpcAtaca: " & ex.Message)
-    Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickNpcAtaca: " & ex.Message)
+        Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
         Call MuereNpc(NpcIndex, 0)
-End Try
-End Sub
+        End Try
+    End Sub
 
     Private Sub TickConnection()
         ProcessNetworkMessages()
