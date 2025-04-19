@@ -990,7 +990,6 @@ Module modGuilds
 Catch ex As Exception
     Console.WriteLine("Error in LoadGuildsDB: " & ex.Message)
     Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
-        Resume Next
 End Try
 End Sub
 

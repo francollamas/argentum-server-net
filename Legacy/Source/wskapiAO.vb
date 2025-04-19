@@ -189,7 +189,6 @@ Module wskapiAO
 Catch ex As Exception
     Console.WriteLine("Error in GetAscIP: " & ex.Message)
     Call UserList(userIndex).outgoingData.WriteASCIIStringFixed(message)
-        Resume Next
 End Try
 End Function
 

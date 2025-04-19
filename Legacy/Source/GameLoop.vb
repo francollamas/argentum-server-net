@@ -229,7 +229,6 @@ End Sub
 Catch ex As Exception
     Console.WriteLine("Error in TickPacketResend: " & ex.Message)
     LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
-        Resume Next
 End Try
 End Sub
 
@@ -269,7 +268,6 @@ End Sub
 Catch ex As Exception
     Console.WriteLine("Error in TickAuditoria: " & ex.Message)
     Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
-        Resume Next
 End Try
 End Sub
 
@@ -549,7 +547,6 @@ End Sub
 Catch ex As Exception
     Console.WriteLine("Error in TickAutoSave: " & ex.Message)
     Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
-        Resume Next
 End Try
 End Sub
 

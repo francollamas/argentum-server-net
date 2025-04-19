@@ -140,8 +140,8 @@ Public Module General
 
 
 Catch ex As Exception
-    Console.WriteLine("Error in DarCuerpoDesnudo: " & ex.Message)
-    Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
+            Console.WriteLine("Error in LimpiarMundo: " & ex.Message)
+            Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
 End Try
 End Sub
 
@@ -377,8 +377,8 @@ End Sub
         Console.WriteLine("Server finalizado!")
     
 Catch ex As Exception
-    Console.WriteLine("Error in DarCuerpoDesnudo: " & ex.Message)
-End Try
+            Console.WriteLine("Error in Main: " & ex.StackTrace)
+        End Try
 End Sub
 
     Function FileExist(ByVal file As String) As Boolean
@@ -458,8 +458,8 @@ End Function
         FileClose(nfile)
     
 Catch ex As Exception
-    Console.WriteLine("Error in DarCuerpoDesnudo: " & ex.Message)
-End Try
+            Console.WriteLine("Error in LogCriticEvent: " & ex.Message)
+        End Try
 End Sub
 
     Public Sub LogEjercitoReal(ByRef desc As String)
@@ -1391,7 +1391,6 @@ End Sub
         Catch ex As Exception
             Console.WriteLine("Error in EfectoInvisibilidad: " & ex.Message)
             Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
-            Resume Next
         End Try
 End Sub
 

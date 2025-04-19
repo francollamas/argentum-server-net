@@ -1201,7 +1201,7 @@ End Sub
 
     ' TODO MIGRA: funciona pero es lento e ineficiente
     Public Function GetVar(ByVal filePath As String, ByVal sectionName As String, ByVal keyName As String,
-                           Optional ByRef EmptySpaces As Integer = 1024) As String
+                       Optional ByRef EmptySpaces As Integer = 1024) As String
         Dim fileNumber As Short
         Dim currentLine As String
         Dim currentSection As String
@@ -1211,42 +1211,44 @@ End Sub
 
         ' Check if file exists
         If Not IO.File.Exists(filePath) Then
-            Exit Function
+            Return ""
         End If
 
-        Try ' Basic error handling
+        Try
+            fileNumber = FreeFile()
+            FileOpen(fileNumber, filePath, OpenMode.Input)
 
-        fileNumber = FreeFile()
-        FileOpen(fileNumber, filePath, OpenMode.Input)
+            currentSection = ""
+            While Not EOF(fileNumber)
+                currentLine = LineInput(fileNumber)
+                currentLine = Trim(currentLine)
 
-        currentSection = ""
-        While Not EOF(fileNumber)
-            currentLine = LineInput(fileNumber)
-            currentLine = Trim(currentLine)
-
-            ' Check if it's a section line, e.g. [SECTION]
-            If Left(currentLine, 1) = "[" And Right(currentLine, 1) = "]" Then
-                currentSection = Mid(currentLine, 2, Len(currentLine) - 2)
-            ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then
-                ' We are in the correct section, check if line contains the key
-                equalPos = InStr(1, currentLine, "=", CompareMethod.Text)
-                If equalPos > 1 Then
-                    ' Extract the key (left side of '=') and compare
-                    If StrComp(Trim(Left(currentLine, equalPos - 1)), keyName, CompareMethod.Text) = 0 Then
-                        ' Return the value (right side of '='), trimmed, ignoring any trailing line breaks
-                        GetVar = Trim(Mid(currentLine, equalPos + 1))
-                            FileClose(fileNumber)
+                ' Check if it's a section line, e.g. [SECTION]
+                If Left(currentLine, 1) = "[" And Right(currentLine, 1) = "]" Then
+                    currentSection = Mid(currentLine, 2, Len(currentLine) - 2)
+                ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then
+                    ' We are in the correct section, check if line contains the key
+                    equalPos = InStr(1, currentLine, "=", CompareMethod.Text)
+                    If equalPos > 1 Then
+                        ' Extract the key (left side of '=') and compare
+                        If StrComp(Trim(Left(currentLine, equalPos - 1)), keyName, CompareMethod.Text) = 0 Then
+                            ' Return the value (right side of '='), trimmed
+                            Return Trim(Mid(currentLine, equalPos + 1))
                         End If
+                    End If
                 End If
+            End While
+        Catch ex As Exception
+            ' Podés loguear el error si querés
+        Finally
+            If fileNumber <> 0 Then
+                FileClose(fileNumber)
             End If
-        End While
+        End Try
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in LoadUserStats: " & ex.Message)
-    FileClose(fileNumber)
-End Try
-End Function
+        Return GetVar
+    End Function
+
 
     Sub CargarBackUp()
         '***************************************************
@@ -1330,8 +1332,8 @@ End Sub
         ReDim MapInfo_Renamed(NumMaps)
 
         For Map = 1 To NumMaps
-
-            tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
+                Console.WriteLine("Cargando mapa:" & Map)
+                tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
             Call CargarMapa(Map, tFileName)
         Next Map
 
