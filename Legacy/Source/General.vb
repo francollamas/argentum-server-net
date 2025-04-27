@@ -3,7 +3,7 @@ Option Explicit On
 Public Module General
     Friend LeerNPCs As New clsIniReader
 
-    Sub DarCuerpoDesnudo(ByVal UserIndex As Short, Optional ByVal Mimetizado As Boolean = False)
+    Sub DarCuerpoDesnudo(UserIndex As Short, Optional ByVal Mimetizado As Boolean = False)
         '***************************************************
         'Autor: Nacho (Integer)
         'Last Modification: 03/14/07
@@ -15,30 +15,30 @@ Public Module General
 
         With UserList(UserIndex)
             Select Case .Genero
-                Case Declaraciones.eGenero.Hombre
+                Case eGenero.Hombre
                     Select Case .raza
-                        Case Declaraciones.eRaza.Humano
+                        Case eRaza.Humano
                             CuerpoDesnudo = 21
-                        Case Declaraciones.eRaza.Drow
+                        Case eRaza.Drow
                             CuerpoDesnudo = 32
-                        Case Declaraciones.eRaza.Elfo
+                        Case eRaza.Elfo
                             CuerpoDesnudo = 210
-                        Case Declaraciones.eRaza.Gnomo
+                        Case eRaza.Gnomo
                             CuerpoDesnudo = 222
-                        Case Declaraciones.eRaza.Enano
+                        Case eRaza.Enano
                             CuerpoDesnudo = 53
                     End Select
-                Case Declaraciones.eGenero.Mujer
+                Case eGenero.Mujer
                     Select Case .raza
-                        Case Declaraciones.eRaza.Humano
+                        Case eRaza.Humano
                             CuerpoDesnudo = 39
-                        Case Declaraciones.eRaza.Drow
+                        Case eRaza.Drow
                             CuerpoDesnudo = 40
-                        Case Declaraciones.eRaza.Elfo
+                        Case eRaza.Elfo
                             CuerpoDesnudo = 259
-                        Case Declaraciones.eRaza.Gnomo
+                        Case eRaza.Gnomo
                             CuerpoDesnudo = 260
-                        Case Declaraciones.eRaza.Enano
+                        Case eRaza.Enano
                             CuerpoDesnudo = 60
                     End Select
             End Select
@@ -54,7 +54,7 @@ Public Module General
     End Sub
 
 
-    Sub Bloquear(ByVal toMap As Boolean, ByVal sndIndex As Short, ByVal X As Short, ByVal Y As Short, ByVal b As Boolean)
+    Sub Bloquear(toMap As Boolean, sndIndex As Short, X As Short, Y As Short, b As Boolean)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -68,14 +68,14 @@ Public Module General
         '***************************************************
 
         If toMap Then
-            Call SendData(modSendData.SendTarget.toMap, sndIndex, PrepareMessageBlockPosition(X, Y, b))
+            Call SendData(SendTarget.toMap, sndIndex, PrepareMessageBlockPosition(X, Y, b))
         Else
             Call WriteBlockPosition(sndIndex, X, Y, b)
         End If
     End Sub
 
 
-    Function HayAgua(ByVal Map As Short, ByVal X As Short, ByVal Y As Short) As Boolean
+    Function HayAgua(Map As Short, X As Short, Y As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -97,7 +97,7 @@ Public Module General
         End If
     End Function
 
-    Private Function HayLava(ByVal Map As Short, ByVal X As Short, ByVal Y As Short) As Boolean
+    Private Function HayLava(Map As Short, X As Short, Y As Short) As Boolean
         '***************************************************
         'Autor: Nacho (Integer)
         'Last Modification: 03/12/07
@@ -123,29 +123,27 @@ Public Module General
         '***************************************************
         Try
 
-        Dim i As Short
-        Dim d As New WorldPos
+            Dim i As Short
+            Dim d As New WorldPos
 
-        For i = TrashCollector.Count() - 1 To 0 Step -1
-            d = TrashCollector.Item(i)
-            Call EraseObj(1, d.Map, d.X, d.Y)
-            Call TrashCollector.RemoveAt(i)
-            'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            d = Nothing
-        Next i
+            For i = TrashCollector.Count() - 1 To 0 Step - 1
+                d = TrashCollector.Item(i)
+                Call EraseObj(1, d.Map, d.X, d.Y)
+                Call TrashCollector.RemoveAt(i)
+                'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                d = Nothing
+            Next i
 
-        Call SecurityIp.IpSecurityMantenimientoLista()
-
-        
+            Call IpSecurityMantenimientoLista()
 
 
-Catch ex As Exception
+        Catch ex As Exception
             Console.WriteLine("Error in LimpiarMundo: " & ex.Message)
             Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
-End Try
-End Sub
+        End Try
+    End Sub
 
-    Sub EnviarSpawnList(ByVal UserIndex As Short)
+    Sub EnviarSpawnList(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -173,214 +171,212 @@ End Sub
         '***************************************************
 
         Try
-        Dim f As Date
-            
-            Console.WriteLine("Working directory:" + AppDomain.CurrentDomain.BaseDirectory)
+            Dim f As Date
 
-        Call LoadMotd()
-        Call BanIpCargar()
+            Call LoadMotd()
+            Call BanIpCargar()
 
-        ' TODO: reubicar estas inicializaciones!
-        ArrayInitializers.InitializeStruct(Npclist)
-        ArrayInitializers.InitializeStruct(ArmadurasFaccion)
-        ArrayInitializers.InitializeStruct(fragLvlRaceData)
-        ArrayInitializers.InitializeStruct(fragLvlLvlData)
+            ' TODO: reubicar estas inicializaciones!
+            InitializeStruct(Npclist)
+            InitializeStruct(ArmadurasFaccion)
+            InitializeStruct(fragLvlRaceData)
+            InitializeStruct(fragLvlLvlData)
 
 
-        Prision.Map = 66
-        Libertad.Map = 66
+            Prision.Map = 66
+            Libertad.Map = 66
 
-        Prision.X = 75
-        Prision.Y = 47
-        Libertad.X = 75
-        Libertad.Y = 65
-
-
-        LastBackup = DateTime.Now.ToString("HH:mm")
-        Minutos = DateTime.Now.ToString("HH:mm")
-
-        IniPath = AppDomain.CurrentDomain.BaseDirectory
-        DatPath = AppDomain.CurrentDomain.BaseDirectory & "Dat/"
+            Prision.X = 75
+            Prision.Y = 47
+            Libertad.X = 75
+            Libertad.Y = 65
 
 
-        LevelSkill_Renamed(1).LevelValue = 3
-        LevelSkill_Renamed(2).LevelValue = 5
-        LevelSkill_Renamed(3).LevelValue = 7
-        LevelSkill_Renamed(4).LevelValue = 10
-        LevelSkill_Renamed(5).LevelValue = 13
-        LevelSkill_Renamed(6).LevelValue = 15
-        LevelSkill_Renamed(7).LevelValue = 17
-        LevelSkill_Renamed(8).LevelValue = 20
-        LevelSkill_Renamed(9).LevelValue = 23
-        LevelSkill_Renamed(10).LevelValue = 25
-        LevelSkill_Renamed(11).LevelValue = 27
-        LevelSkill_Renamed(12).LevelValue = 30
-        LevelSkill_Renamed(13).LevelValue = 33
-        LevelSkill_Renamed(14).LevelValue = 35
-        LevelSkill_Renamed(15).LevelValue = 37
-        LevelSkill_Renamed(16).LevelValue = 40
-        LevelSkill_Renamed(17).LevelValue = 43
-        LevelSkill_Renamed(18).LevelValue = 45
-        LevelSkill_Renamed(19).LevelValue = 47
-        LevelSkill_Renamed(20).LevelValue = 50
-        LevelSkill_Renamed(21).LevelValue = 53
-        LevelSkill_Renamed(22).LevelValue = 55
-        LevelSkill_Renamed(23).LevelValue = 57
-        LevelSkill_Renamed(24).LevelValue = 60
-        LevelSkill_Renamed(25).LevelValue = 63
-        LevelSkill_Renamed(26).LevelValue = 65
-        LevelSkill_Renamed(27).LevelValue = 67
-        LevelSkill_Renamed(28).LevelValue = 70
-        LevelSkill_Renamed(29).LevelValue = 73
-        LevelSkill_Renamed(30).LevelValue = 75
-        LevelSkill_Renamed(31).LevelValue = 77
-        LevelSkill_Renamed(32).LevelValue = 80
-        LevelSkill_Renamed(33).LevelValue = 83
-        LevelSkill_Renamed(34).LevelValue = 85
-        LevelSkill_Renamed(35).LevelValue = 87
-        LevelSkill_Renamed(36).LevelValue = 90
-        LevelSkill_Renamed(37).LevelValue = 93
-        LevelSkill_Renamed(38).LevelValue = 95
-        LevelSkill_Renamed(39).LevelValue = 97
-        LevelSkill_Renamed(40).LevelValue = 100
-        LevelSkill_Renamed(41).LevelValue = 100
-        LevelSkill_Renamed(42).LevelValue = 100
-        LevelSkill_Renamed(43).LevelValue = 100
-        LevelSkill_Renamed(44).LevelValue = 100
-        LevelSkill_Renamed(45).LevelValue = 100
-        LevelSkill_Renamed(46).LevelValue = 100
-        LevelSkill_Renamed(47).LevelValue = 100
-        LevelSkill_Renamed(48).LevelValue = 100
-        LevelSkill_Renamed(49).LevelValue = 100
-        LevelSkill_Renamed(50).LevelValue = 100
+            LastBackup = DateTime.Now.ToString("HH:mm")
+            Minutos = DateTime.Now.ToString("HH:mm")
+
+            IniPath = AppDomain.CurrentDomain.BaseDirectory
+            DatPath = AppDomain.CurrentDomain.BaseDirectory & "Dat/"
 
 
-        ListaRazas(Declaraciones.eRaza.Humano) = "Humano"
-        ListaRazas(Declaraciones.eRaza.Elfo) = "Elfo"
-        ListaRazas(Declaraciones.eRaza.Drow) = "Drow"
-        ListaRazas(Declaraciones.eRaza.Gnomo) = "Gnomo"
-        ListaRazas(Declaraciones.eRaza.Enano) = "Enano"
-
-        ListaClases(Declaraciones.eClass.Mage) = "Mago"
-        ListaClases(Declaraciones.eClass.Cleric) = "Clerigo"
-        ListaClases(Declaraciones.eClass.Warrior) = "Guerrero"
-        ListaClases(Declaraciones.eClass.Assasin) = "Asesino"
-        ListaClases(Declaraciones.eClass.Thief) = "Ladron"
-        ListaClases(Declaraciones.eClass.Bard) = "Bardo"
-        ListaClases(Declaraciones.eClass.Druid) = "Druida"
-        ListaClases(Declaraciones.eClass.Bandit) = "Bandido"
-        ListaClases(Declaraciones.eClass.Paladin) = "Paladin"
-        ListaClases(Declaraciones.eClass.Hunter) = "Cazador"
-        ListaClases(Declaraciones.eClass.Worker) = "Trabajador"
-        ListaClases(Declaraciones.eClass.Pirat) = "Pirata"
-
-        SkillsNames(Declaraciones.eSkill.Magia) = "Magia"
-        SkillsNames(Declaraciones.eSkill.Robar) = "Robar"
-        SkillsNames(Declaraciones.eSkill.Tacticas) = "Evasión en combate"
-        SkillsNames(Declaraciones.eSkill.Armas) = "Combate con armas"
-        SkillsNames(Declaraciones.eSkill.Meditar) = "Meditar"
-        SkillsNames(Declaraciones.eSkill.Apuñalar) = "Apuñalar"
-        SkillsNames(Declaraciones.eSkill.Ocultarse) = "Ocultarse"
-        SkillsNames(Declaraciones.eSkill.Supervivencia) = "Supervivencia"
-        SkillsNames(Declaraciones.eSkill.Talar) = "Talar"
-        SkillsNames(Declaraciones.eSkill.Comerciar) = "Comercio"
-        SkillsNames(Declaraciones.eSkill.Defensa) = "Defensa con escudos"
-        SkillsNames(Declaraciones.eSkill.Pesca) = "Pesca"
-        SkillsNames(Declaraciones.eSkill.Mineria) = "Mineria"
-        SkillsNames(Declaraciones.eSkill.Carpinteria) = "Carpinteria"
-        SkillsNames(Declaraciones.eSkill.Herreria) = "Herreria"
-        SkillsNames(Declaraciones.eSkill.Liderazgo) = "Liderazgo"
-        SkillsNames(Declaraciones.eSkill.Domar) = "Domar animales"
-        SkillsNames(Declaraciones.eSkill.Proyectiles) = "Combate a distancia"
-        SkillsNames(Declaraciones.eSkill.Wrestling) = "Combate sin armas"
-        SkillsNames(Declaraciones.eSkill.Navegacion) = "Navegacion"
-
-        ListaAtributos(Declaraciones.eAtributos.Fuerza) = "Fuerza"
-        ListaAtributos(Declaraciones.eAtributos.Agilidad) = "Agilidad"
-        ListaAtributos(Declaraciones.eAtributos.Inteligencia) = "Inteligencia"
-        ListaAtributos(Declaraciones.eAtributos.Carisma) = "Carisma"
-        ListaAtributos(Declaraciones.eAtributos.Constitucion) = "Constitucion"
-
-        IniPath = AppDomain.CurrentDomain.BaseDirectory
-        CharPath = AppDomain.CurrentDomain.BaseDirectory & "Charfile/"
-
-        'Bordes del mapa
-        MinXBorder = XMinMapSize + (XWindow \ 2)
-        MaxXBorder = XMaxMapSize - (XWindow \ 2)
-        MinYBorder = YMinMapSize + (YWindow \ 2)
-        MaxYBorder = YMaxMapSize - (YWindow \ 2)
-
-        Call LoadGuildsDB()
+            LevelSkill_Renamed(1).LevelValue = 3
+            LevelSkill_Renamed(2).LevelValue = 5
+            LevelSkill_Renamed(3).LevelValue = 7
+            LevelSkill_Renamed(4).LevelValue = 10
+            LevelSkill_Renamed(5).LevelValue = 13
+            LevelSkill_Renamed(6).LevelValue = 15
+            LevelSkill_Renamed(7).LevelValue = 17
+            LevelSkill_Renamed(8).LevelValue = 20
+            LevelSkill_Renamed(9).LevelValue = 23
+            LevelSkill_Renamed(10).LevelValue = 25
+            LevelSkill_Renamed(11).LevelValue = 27
+            LevelSkill_Renamed(12).LevelValue = 30
+            LevelSkill_Renamed(13).LevelValue = 33
+            LevelSkill_Renamed(14).LevelValue = 35
+            LevelSkill_Renamed(15).LevelValue = 37
+            LevelSkill_Renamed(16).LevelValue = 40
+            LevelSkill_Renamed(17).LevelValue = 43
+            LevelSkill_Renamed(18).LevelValue = 45
+            LevelSkill_Renamed(19).LevelValue = 47
+            LevelSkill_Renamed(20).LevelValue = 50
+            LevelSkill_Renamed(21).LevelValue = 53
+            LevelSkill_Renamed(22).LevelValue = 55
+            LevelSkill_Renamed(23).LevelValue = 57
+            LevelSkill_Renamed(24).LevelValue = 60
+            LevelSkill_Renamed(25).LevelValue = 63
+            LevelSkill_Renamed(26).LevelValue = 65
+            LevelSkill_Renamed(27).LevelValue = 67
+            LevelSkill_Renamed(28).LevelValue = 70
+            LevelSkill_Renamed(29).LevelValue = 73
+            LevelSkill_Renamed(30).LevelValue = 75
+            LevelSkill_Renamed(31).LevelValue = 77
+            LevelSkill_Renamed(32).LevelValue = 80
+            LevelSkill_Renamed(33).LevelValue = 83
+            LevelSkill_Renamed(34).LevelValue = 85
+            LevelSkill_Renamed(35).LevelValue = 87
+            LevelSkill_Renamed(36).LevelValue = 90
+            LevelSkill_Renamed(37).LevelValue = 93
+            LevelSkill_Renamed(38).LevelValue = 95
+            LevelSkill_Renamed(39).LevelValue = 97
+            LevelSkill_Renamed(40).LevelValue = 100
+            LevelSkill_Renamed(41).LevelValue = 100
+            LevelSkill_Renamed(42).LevelValue = 100
+            LevelSkill_Renamed(43).LevelValue = 100
+            LevelSkill_Renamed(44).LevelValue = 100
+            LevelSkill_Renamed(45).LevelValue = 100
+            LevelSkill_Renamed(46).LevelValue = 100
+            LevelSkill_Renamed(47).LevelValue = 100
+            LevelSkill_Renamed(48).LevelValue = 100
+            LevelSkill_Renamed(49).LevelValue = 100
+            LevelSkill_Renamed(50).LevelValue = 100
 
 
-        Call CargarSpawnList()
-        Call CargarForbidenWords()
-        '¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
+            ListaRazas(eRaza.Humano) = "Humano"
+            ListaRazas(eRaza.Elfo) = "Elfo"
+            ListaRazas(eRaza.Drow) = "Drow"
+            ListaRazas(eRaza.Gnomo) = "Gnomo"
+            ListaRazas(eRaza.Enano) = "Enano"
 
-        MaxUsers = 0
-        Call LoadSini()
-        Call CargaApuestas()
-        Call CargaNpcsDat()
-        Call LoadOBJData()
-        Call CargarHechizos()
-        Call LoadArmasHerreria()
-        Call LoadArmadurasHerreria()
-        Call LoadObjCarpintero()
-        Call LoadBalance() '4/01/08 Pablo ToxicWaste
-        Call LoadArmadurasFaccion()
+            ListaClases(eClass.Mage) = "Mago"
+            ListaClases(eClass.Cleric) = "Clerigo"
+            ListaClases(eClass.Warrior) = "Guerrero"
+            ListaClases(eClass.Assasin) = "Asesino"
+            ListaClases(eClass.Thief) = "Ladron"
+            ListaClases(eClass.Bard) = "Bardo"
+            ListaClases(eClass.Druid) = "Druida"
+            ListaClases(eClass.Bandit) = "Bandido"
+            ListaClases(eClass.Paladin) = "Paladin"
+            ListaClases(eClass.Hunter) = "Cazador"
+            ListaClases(eClass.Worker) = "Trabajador"
+            ListaClases(eClass.Pirat) = "Pirata"
 
-        If BootDelBackUp Then
-            Call CargarBackUp()
-        Else
-            Call LoadMapData()
-        End If
+            SkillsNames(eSkill.Magia) = "Magia"
+            SkillsNames(eSkill.Robar) = "Robar"
+            SkillsNames(eSkill.Tacticas) = "Evasión en combate"
+            SkillsNames(eSkill.Armas) = "Combate con armas"
+            SkillsNames(eSkill.Meditar) = "Meditar"
+            SkillsNames(eSkill.Apuñalar) = "Apuñalar"
+            SkillsNames(eSkill.Ocultarse) = "Ocultarse"
+            SkillsNames(eSkill.Supervivencia) = "Supervivencia"
+            SkillsNames(eSkill.Talar) = "Talar"
+            SkillsNames(eSkill.Comerciar) = "Comercio"
+            SkillsNames(eSkill.Defensa) = "Defensa con escudos"
+            SkillsNames(eSkill.Pesca) = "Pesca"
+            SkillsNames(eSkill.Mineria) = "Mineria"
+            SkillsNames(eSkill.Carpinteria) = "Carpinteria"
+            SkillsNames(eSkill.Herreria) = "Herreria"
+            SkillsNames(eSkill.Liderazgo) = "Liderazgo"
+            SkillsNames(eSkill.Domar) = "Domar animales"
+            SkillsNames(eSkill.Proyectiles) = "Combate a distancia"
+            SkillsNames(eSkill.Wrestling) = "Combate sin armas"
+            SkillsNames(eSkill.Navegacion) = "Navegacion"
+
+            ListaAtributos(eAtributos.Fuerza) = "Fuerza"
+            ListaAtributos(eAtributos.Agilidad) = "Agilidad"
+            ListaAtributos(eAtributos.Inteligencia) = "Inteligencia"
+            ListaAtributos(eAtributos.Carisma) = "Carisma"
+            ListaAtributos(eAtributos.Constitucion) = "Constitucion"
+
+            IniPath = AppDomain.CurrentDomain.BaseDirectory
+            CharPath = AppDomain.CurrentDomain.BaseDirectory & "Charfile/"
+
+            'Bordes del mapa
+            MinXBorder = XMinMapSize + (XWindow\2)
+            MaxXBorder = XMaxMapSize - (XWindow\2)
+            MinYBorder = YMinMapSize + (YWindow\2)
+            MaxYBorder = YMaxMapSize - (YWindow\2)
+
+            Call LoadGuildsDB()
 
 
-        Call SonidosMapas.LoadSoundMapInfo()
+            Call CargarSpawnList()
+            Call CargarForbidenWords()
+            '¿?¿?¿?¿?¿?¿?¿?¿ CARGAMOS DATOS DESDE ARCHIVOS ¿??¿?¿?¿?¿?¿?¿?¿
 
-        Call generateMatrix(MATRIX_INITIAL_MAP)
+            MaxUsers = 0
+            Call LoadSini()
+            Call CargaApuestas()
+            Call CargaNpcsDat()
+            Call LoadOBJData()
+            Call CargarHechizos()
+            Call LoadArmasHerreria()
+            Call LoadArmadurasHerreria()
+            Call LoadObjCarpintero()
+            Call LoadBalance() '4/01/08 Pablo ToxicWaste
+            Call LoadArmadurasFaccion()
 
-        'Comentado porque hay worldsave en ese mapa!
-        'Call CrearClanPretoriano(MAPA_PRETORIANO, ALCOBA2_X, ALCOBA2_Y)
-        '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+            If BootDelBackUp Then
+                Call CargarBackUp()
+            Else
+                Call LoadMapData()
+            End If
 
-        Dim LoopC As Short
 
-        'Resetea las conexiones de los usuarios
-        For LoopC = 1 To MaxUsers
-            UserList(LoopC).ConnID = -1
-            UserList(LoopC).ConnIDValida = False
-            UserList(LoopC).incomingData = New clsByteQueue
-            UserList(LoopC).outgoingData = New clsByteQueue
-        Next LoopC
+            Call SonidosMapas.LoadSoundMapInfo()
 
-        'Configuracion de los sockets
+            Call generateMatrix(MATRIX_INITIAL_MAP)
 
-        Call SecurityIp.InitIpTables(1000)
-        Call IniciaWsApi(Puerto)
+            'Comentado porque hay worldsave en ese mapa!
+            'Call CrearClanPretoriano(MAPA_PRETORIANO, ALCOBA2_X, ALCOBA2_Y)
+            '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 
-        'Log
-        Dim N As Short
-        N = FreeFile()
-        FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-        FileClose(N)
+            Dim LoopC As Short
 
-        tInicioServer = GetTickCount()
-        Call InicializaEstadisticas()
+            'Resetea las conexiones de los usuarios
+            For LoopC = 1 To MaxUsers
+                UserList(LoopC).ConnID = - 1
+                UserList(LoopC).ConnIDValida = False
+                UserList(LoopC).incomingData = New clsByteQueue
+                UserList(LoopC).outgoingData = New clsByteQueue
+            Next LoopC
 
-        Console.WriteLine("Server started!")
+            'Configuracion de los sockets
 
-        Call GameLoop.DoGameLoop()
+            Call InitIpTables(1000)
+            Call IniciaWsApi(Puerto)
 
-        Call GameLoop.CloseServer()
-        Console.WriteLine("Server finalizado!")
-    
-Catch ex As Exception
+            'Log
+            Dim N As Short
+            N = FreeFile()
+            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
+            FileClose(N)
+
+            tInicioServer = GetTickCount()
+            Call InicializaEstadisticas()
+
+            Console.WriteLine("Server started!")
+
+            Call DoGameLoop()
+
+            Call CloseServer()
+            Console.WriteLine("Server finalizado!")
+
+        Catch ex As Exception
             Console.WriteLine("Error in Main: " & ex.StackTrace)
         End Try
-End Sub
+    End Sub
 
-    Function FileExist(ByVal file As String) As Boolean
+    Function FileExist(file As String) As Boolean
         '*****************************************************************
         'Se fija si existe el archivo
         '*****************************************************************
@@ -390,11 +386,11 @@ End Sub
             FileExist = (Dir(file) <> "")
 
         Catch ex As Exception
-    Console.WriteLine("Error in FileExist: " & ex.Message)
-End Try
-End Function
+            Console.WriteLine("Error in FileExist: " & ex.Message)
+        End Try
+    End Function
 
-    Function ReadField(ByVal Pos As Short, ByRef Text As String, ByVal SepASCII As Byte) As String
+    Function ReadField(Pos As Short, ByRef Text As String, SepASCII As Byte) As String
         '*****************************************************************
         'Gets a field from a string
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -421,7 +417,7 @@ End Function
         End If
     End Function
 
-    Function MapaValido(ByVal Map As Short) As Boolean
+    Function MapaValido(Map As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -450,16 +446,17 @@ End Function
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Eventos.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Eventos.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
             Console.WriteLine("Error in LogCriticEvent: " & ex.Message)
         End Try
-End Sub
+    End Sub
 
     Public Sub LogEjercitoReal(ByRef desc As String)
         '***************************************************
@@ -470,17 +467,17 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoReal.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogEjercitoReal: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoReal.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogEjercitoReal: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogEjercitoCaos(ByRef desc As String)
         '***************************************************
@@ -491,20 +488,20 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoCaos.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogEjercitoCaos: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoCaos.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogEjercitoCaos: " & ex.Message)
+        End Try
+    End Sub
 
 
-    Public Sub LogIndex(ByVal Index As Short, ByVal desc As String)
+    Public Sub LogIndex(Index As Short, desc As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -513,17 +510,17 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Index & ".log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogIndex: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Index & ".log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogIndex: " & ex.Message)
+        End Try
+    End Sub
 
 
     Public Sub LogError(ByRef desc As String)
@@ -535,16 +532,17 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/errores.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogError: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/errores.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogError: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogStatic(ByRef desc As String)
         '***************************************************
@@ -555,16 +553,17 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Stats.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogStatic: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Stats.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogStatic: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogTarea(ByRef desc As String)
         '***************************************************
@@ -575,20 +574,21 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogTarea: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogTarea: " & ex.Message)
+        End Try
+    End Sub
 
 
     'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub LogClanes(ByVal str_Renamed As String)
+    Public Sub LogClanes(str_Renamed As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -603,7 +603,7 @@ End Sub
     End Sub
 
     'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub LogIP(ByVal str_Renamed As String)
+    Public Sub LogIP(str_Renamed As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -619,7 +619,7 @@ End Sub
 
 
     'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub LogDesarrollo(ByVal str_Renamed As String)
+    Public Sub LogDesarrollo(str_Renamed As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -643,18 +643,18 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Nombre & ".log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogClanes: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Nombre & ".log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogClanes: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogAsesinato(ByRef texto As String)
         '***************************************************
@@ -664,21 +664,21 @@ End Sub
         '***************************************************
 
         Try
-        Dim nfile As Short
+            Dim nfile As Short
 
-        nfile = FreeFile() ' obtenemos un canal
+            nfile = FreeFile() ' obtenemos un canal
 
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/asesinatos.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogAsesinato: " & ex.Message)
-End Try
-End Sub
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/asesinatos.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            FileClose(nfile)
 
-    Public Sub logVentaCasa(ByVal texto As String)
+        Catch ex As Exception
+            Console.WriteLine("Error in LogAsesinato: " & ex.Message)
+        End Try
+    End Sub
+
+    Public Sub logVentaCasa(texto As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -687,20 +687,20 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
 
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/propiedades.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, "----------------------------------------------------------")
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        PrintLine(nfile, "----------------------------------------------------------")
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in logVentaCasa: " & ex.Message)
-End Try
-End Sub
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/propiedades.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, "----------------------------------------------------------")
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            PrintLine(nfile, "----------------------------------------------------------")
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in logVentaCasa: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogHackAttemp(ByRef texto As String)
         '***************************************************
@@ -711,19 +711,19 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, "----------------------------------------------------------")
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        PrintLine(nfile, "----------------------------------------------------------")
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogHackAttemp: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, "----------------------------------------------------------")
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            PrintLine(nfile, "----------------------------------------------------------")
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogHackAttemp: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogCheating(ByRef texto As String)
         '***************************************************
@@ -734,16 +734,16 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CH.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogCheating: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CH.log", OpenMode.Append, , OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogCheating: " & ex.Message)
+        End Try
+    End Sub
 
 
     Public Sub LogCriticalHackAttemp(ByRef texto As String)
@@ -755,19 +755,19 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CriticalHackAttemps.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, "----------------------------------------------------------")
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        PrintLine(nfile, "----------------------------------------------------------")
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogCriticalHackAttemp: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CriticalHackAttemps.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, "----------------------------------------------------------")
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            PrintLine(nfile, "----------------------------------------------------------")
+            FileClose(nfile)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LogCriticalHackAttemp: " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub LogAntiCheat(ByRef texto As String)
         '***************************************************
@@ -778,20 +778,20 @@ End Sub
 
         Try
 
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/AntiCheat.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-        PrintLine(nfile, "")
-        FileClose(nfile)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in LogAntiCheat: " & ex.Message)
-End Try
-End Sub
+            Dim nfile As Short
+            nfile = FreeFile() ' obtenemos un canal
+            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/AntiCheat.log", OpenMode.Append, ,
+                     OpenShare.Shared)
+            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
+            PrintLine(nfile, "")
+            FileClose(nfile)
 
-    Function ValidInputNP(ByVal cad As String) As Boolean
+        Catch ex As Exception
+            Console.WriteLine("Error in LogAntiCheat: " & ex.Message)
+        End Try
+    End Sub
+
+    Function ValidInputNP(cad As String) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -824,62 +824,62 @@ End Sub
         'Se asegura de que los sockets estan cerrados e ignora cualquier err
         Try
 
-        Dim LoopC As Integer
+            Dim LoopC As Integer
 
-        'Inicia el socket de escucha
-        Call IniciaWsApi(Puerto)
+            'Inicia el socket de escucha
+            Call IniciaWsApi(Puerto)
 
-        'Initialize statistics!!
-        Call Statistics.Initialize()
+            'Initialize statistics!!
+            Call Initialize()
 
-        For LoopC = 1 To UBound(UserList)
-            'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            UserList(LoopC).incomingData = Nothing
-            'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            UserList(LoopC).outgoingData = Nothing
-        Next LoopC
+            For LoopC = 1 To UBound(UserList)
+                'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                UserList(LoopC).incomingData = Nothing
+                'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                UserList(LoopC).outgoingData = Nothing
+            Next LoopC
 
-        'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-        'UPGRADE_WARNING: El límite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-        ReDim UserList(MaxUsers)
-        ArrayInitializers.InitializeStruct(UserList)
+            'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
+            'UPGRADE_WARNING: El límite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+            ReDim UserList(MaxUsers)
+            InitializeStruct(UserList)
 
-        For LoopC = 1 To MaxUsers
-            UserList(LoopC).ConnID = -1
-            UserList(LoopC).ConnIDValida = False
-            UserList(LoopC).incomingData = New clsByteQueue
-            UserList(LoopC).outgoingData = New clsByteQueue
-        Next LoopC
+            For LoopC = 1 To MaxUsers
+                UserList(LoopC).ConnID = - 1
+                UserList(LoopC).ConnIDValida = False
+                UserList(LoopC).incomingData = New clsByteQueue
+                UserList(LoopC).outgoingData = New clsByteQueue
+            Next LoopC
 
-        LastUser = 0
-        NumUsers = 0
+            LastUser = 0
+            NumUsers = 0
 
-        Call FreeNPCs()
-        Call FreeCharIndexes()
+            Call FreeNPCs()
+            Call FreeCharIndexes()
 
-        Call LoadSini()
+            Call LoadSini()
 
-        Call ResetForums()
-        Call LoadOBJData()
+            Call ResetForums()
+            Call LoadOBJData()
 
-        Call LoadMapData()
+            Call LoadMapData()
 
-        Call CargarHechizos()
+            Call CargarHechizos()
 
-        'Log it
-        Dim N As Short
-        N = FreeFile()
-        FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
-        FileClose(N)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in ReadField: " & ex.Message)
-End Try
-End Sub
+            'Log it
+            Dim N As Short
+            N = FreeFile()
+            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
+            PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
+            FileClose(N)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in ReadField: " & ex.Message)
+        End Try
+    End Sub
 
 
-    Public Function Intemperie(ByVal UserIndex As Short) As Boolean
+    Public Function Intemperie(UserIndex As Short) As Boolean
         '**************************************************************
         'Author: Unknown
         'Last Modify Date: 15/11/2009
@@ -901,7 +901,7 @@ End Sub
         If IsArena(UserIndex) Then Intemperie = False
     End Function
 
-    Public Sub EfectoLluvia(ByVal UserIndex As Short)
+    Public Sub EfectoLluvia(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -910,21 +910,21 @@ End Sub
 
         Try
 
-        Dim modifi As Integer
-        If UserList(UserIndex).flags.UserLogged Then
-            If Intemperie(UserIndex) Then
-                modifi = Porcentaje(UserList(UserIndex).Stats.MaxSta, 3)
-                Call QuitarSta(UserIndex, modifi)
-                Call FlushBuffer(UserIndex)
+            Dim modifi As Integer
+            If UserList(UserIndex).flags.UserLogged Then
+                If Intemperie(UserIndex) Then
+                    modifi = Porcentaje(UserList(UserIndex).Stats.MaxSta, 3)
+                    Call QuitarSta(UserIndex, modifi)
+                    Call FlushBuffer(UserIndex)
+                End If
             End If
-        End If
-    
-Catch ex As Exception
-    Console.WriteLine("Error in ValidInputNP: " & ex.Message)
-End Try
-End Sub
 
-    Public Sub TiempoInvocacion(ByVal UserIndex As Short)
+        Catch ex As Exception
+            Console.WriteLine("Error in ValidInputNP: " & ex.Message)
+        End Try
+    End Sub
+
+    Public Sub TiempoInvocacion(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -946,7 +946,7 @@ End Sub
         Next i
     End Sub
 
-    Public Sub EfectoFrio(ByVal UserIndex As Short)
+    Public Sub EfectoFrio(UserIndex As Short)
         '***************************************************
         'Autor: Unkonwn
         'Last Modification: 23/11/2009
@@ -962,12 +962,12 @@ End Sub
                 If MapInfo_Renamed(.Pos.Map).Terreno = Nieve Then
                     Call _
                         WriteConsoleMsg(UserIndex, "¡¡Estás muriendo de frío, abrigate o morirás!!",
-                                        Protocol.FontTypeNames.FONTTYPE_INFO)
+                                        FontTypeNames.FONTTYPE_INFO)
                     modifi = Porcentaje(.Stats.MaxHp, 5)
                     .Stats.MinHp = .Stats.MinHp - modifi
 
                     If .Stats.MinHp < 1 Then
-                        Call WriteConsoleMsg(UserIndex, "¡¡Has muerto de frío!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "¡¡Has muerto de frío!!", FontTypeNames.FONTTYPE_INFO)
                         .Stats.MinHp = 0
                         Call UserDie(UserIndex)
                     End If
@@ -984,7 +984,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub EfectoLava(ByVal UserIndex As Short)
+    Public Sub EfectoLava(UserIndex As Short)
         '***************************************************
         'Autor: Nacho (Integer)
         'Last Modification: 23/11/2009
@@ -998,11 +998,11 @@ End Sub
                 If HayLava(.Pos.Map, .Pos.X, .Pos.Y) Then
                     Call _
                         WriteConsoleMsg(UserIndex, "¡¡Quitate de la lava, te estás quemando!!",
-                                        Protocol.FontTypeNames.FONTTYPE_INFO)
+                                        FontTypeNames.FONTTYPE_INFO)
                     .Stats.MinHp = .Stats.MinHp - Porcentaje(.Stats.MaxHp, 5)
 
                     If .Stats.MinHp < 1 Then
-                        Call WriteConsoleMsg(UserIndex, "¡¡Has muerto quemado!!", Protocol.FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "¡¡Has muerto quemado!!", FontTypeNames.FONTTYPE_INFO)
                         .Stats.MinHp = 0
                         Call UserDie(UserIndex)
                     End If
@@ -1022,7 +1022,7 @@ End Sub
     ' @param UserIndex  El index del usuario a ser afectado por el estado atacable
     '
 
-    Public Sub EfectoEstadoAtacable(ByVal UserIndex As Short)
+    Public Sub EfectoEstadoAtacable(UserIndex As Short)
         '******************************************************
         'Author: ZaMa
         'Last Update: 13/01/2010 (ZaMa)
@@ -1043,7 +1043,7 @@ End Sub
     ' @param UserIndex  El index del usuario a ser afectado por el mimetismo
     '
 
-    Public Sub EfectoMimetismo(ByVal UserIndex As Short)
+    Public Sub EfectoMimetismo(UserIndex As Short)
         '******************************************************
         'Author: Unknown
         'Last Update: 12/01/2010 (ZaMa)
@@ -1057,7 +1057,7 @@ End Sub
                 .Counters.Mimetismo = .Counters.Mimetismo + 1
             Else
                 'restore old char
-                Call WriteConsoleMsg(UserIndex, "Recuperas tu apariencia normal.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(UserIndex, "Recuperas tu apariencia normal.", FontTypeNames.FONTTYPE_INFO)
 
                 If .flags.Navegando Then
                     If .flags.Muerto = 0 Then
@@ -1103,9 +1103,9 @@ End Sub
                 .flags.Ignorado = False
             End If
         End With
-End Sub
+    End Sub
 
-    Public Sub EfectoInvisibilidad(ByVal UserIndex As Short)
+    Public Sub EfectoInvisibilidad(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1116,10 +1116,10 @@ End Sub
             If .Counters.Invisibilidad < IntervaloInvisible Then
                 .Counters.Invisibilidad = .Counters.Invisibilidad + 1
             Else
-                .Counters.Invisibilidad = RandomNumber(-100, 100) ' Invi variable :D
+                .Counters.Invisibilidad = RandomNumber(- 100, 100) ' Invi variable :D
                 .flags.invisible = 0
                 If .flags.Oculto = 0 Then
-                    Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.", FontTypeNames.FONTTYPE_INFO)
                     Call SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
                     'Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageSetInvisible(.Char.CharIndex, False))
                 End If
@@ -1128,7 +1128,7 @@ End Sub
     End Sub
 
 
-    Public Sub EfectoParalisisNpc(ByVal NpcIndex As Short)
+    Public Sub EfectoParalisisNpc(NpcIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1145,7 +1145,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub EfectoCegueEstu(ByVal UserIndex As Short)
+    Public Sub EfectoCegueEstu(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1170,7 +1170,7 @@ End Sub
     End Sub
 
 
-    Public Sub EfectoParalisisUser(ByVal UserIndex As Short)
+    Public Sub EfectoParalisisUser(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1189,7 +1189,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub RecStamina(ByVal UserIndex As Short, ByRef EnviarStats As Boolean, ByVal Intervalo As Short)
+    Public Sub RecStamina(UserIndex As Short, ByRef EnviarStats As Boolean, Intervalo As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1221,7 +1221,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub EfectoVeneno(ByVal UserIndex As Short)
+    Public Sub EfectoVeneno(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1236,7 +1236,7 @@ End Sub
             Else
                 Call _
                     WriteConsoleMsg(UserIndex, "Estás envenenado, si no te curas morirás.",
-                                    Protocol.FontTypeNames.FONTTYPE_VENENO)
+                                    FontTypeNames.FONTTYPE_VENENO)
                 .Counters.Veneno = 0
                 N = RandomNumber(1, 5)
                 .Stats.MinHp = .Stats.MinHp - N
@@ -1246,7 +1246,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub DuracionPociones(ByVal UserIndex As Short)
+    Public Sub DuracionPociones(UserIndex As Short)
         '***************************************************
         'Author: ??????
         'Last Modification: 11/27/09 (Budi)
@@ -1272,7 +1272,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub HambreYSed(ByVal UserIndex As Short, ByRef fenviarAyS As Boolean)
+    Public Sub HambreYSed(UserIndex As Short, ByRef fenviarAyS As Boolean)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1280,7 +1280,7 @@ End Sub
         '***************************************************
 
         With UserList(UserIndex)
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If Not .flags.Privilegios And PlayerType.User Then Exit Sub
 
             'Sed
             If .Stats.MinAGU > 0 Then
@@ -1316,7 +1316,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub Sanar(ByVal UserIndex As Short, ByRef EnviarStats As Boolean, ByVal Intervalo As Short)
+    Public Sub Sanar(UserIndex As Short, ByRef EnviarStats As Boolean, Intervalo As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1339,7 +1339,7 @@ End Sub
                     .Counters.HPCounter = 0
                     .Stats.MinHp = .Stats.MinHp + mashit
                     If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
-                    Call WriteConsoleMsg(UserIndex, "Has sanado.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "Has sanado.", FontTypeNames.FONTTYPE_INFO)
                     EnviarStats = True
                 End If
             End If
@@ -1375,7 +1375,7 @@ End Sub
                         UserList(i).Counters.salir = UserList(i).Counters.salir - 1
                         If UserList(i).Counters.salir <= 0 Then
                             Call _
-                            WriteConsoleMsg(i, "Gracias por jugar Argentum Online", Protocol.FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(i, "Gracias por jugar Argentum Online", FontTypeNames.FONTTYPE_INFO)
                             Call WriteDisconnect(i)
                             Call FlushBuffer(i)
 
@@ -1386,12 +1386,11 @@ End Sub
             Next i
 
 
-
         Catch ex As Exception
             Console.WriteLine("Error in EfectoInvisibilidad: " & ex.Message)
             Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
         End Try
-End Sub
+    End Sub
 
     Public Function ReiniciarAutoUpdate() As Double
         '***************************************************
@@ -1412,10 +1411,10 @@ End Sub
         '***************************************************
 
         'WorldSave
-        Call ES.DoBackUp()
+        Call DoBackUp()
 
         'commit experiencias
-        Call mdParty.ActualizaExperiencias()
+        Call ActualizaExperiencias()
 
         'Guardar Pjs
         Call GuardarUsuarios()
@@ -1433,10 +1432,10 @@ End Sub
 
         haciendoBK = True
 
-        Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePauseToggle())
+        Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
         Call _
-            SendData(modSendData.SendTarget.ToAll, 0,
-                     PrepareMessageConsoleMsg("Servidor> Grabando Personajes", Protocol.FontTypeNames.FONTTYPE_SERVER))
+            SendData(SendTarget.ToAll, 0,
+                     PrepareMessageConsoleMsg("Servidor> Grabando Personajes", FontTypeNames.FONTTYPE_SERVER))
 
         Dim i As Short
         For i = 1 To LastUser
@@ -1446,9 +1445,9 @@ End Sub
         Next i
 
         Call _
-            SendData(modSendData.SendTarget.ToAll, 0,
-                     PrepareMessageConsoleMsg("Servidor> Personajes Grabados", Protocol.FontTypeNames.FONTTYPE_SERVER))
-        Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePauseToggle())
+            SendData(SendTarget.ToAll, 0,
+                     PrepareMessageConsoleMsg("Servidor> Personajes Grabados", FontTypeNames.FONTTYPE_SERVER))
+        Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
 
         haciendoBK = False
     End Sub
@@ -1467,7 +1466,7 @@ End Sub
         Call EstadisticasWeb.Inicializa()
         Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_MAPAS, NumMaps)
         Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)
-        Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.UPTIME_SERVER, (Ta - tInicioServer) / 1000)
+        Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.UPTIME_SERVER, (Ta - tInicioServer)/1000)
         Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.RECORD_USUARIOS, recordusuarios)
     End Sub
 

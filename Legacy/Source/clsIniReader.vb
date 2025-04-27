@@ -129,7 +129,7 @@ Friend Class clsIniReader
     ' @param    file Complete path of the INI file to be loaded.
     ' @see      GetValue
 
-    Public Sub Initialize(ByVal file As String)
+    Public Sub Initialize(file As String)
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 27/07/2006
@@ -207,7 +207,7 @@ Friend Class clsIniReader
     ' @param    first The first index to consider when sorting.
     ' @param    last The last index to be considered when sorting.
 
-    Private Sub SortChildNodes(ByRef Node As MainNode, ByVal First As Short, ByVal Last As Short)
+    Private Sub SortChildNodes(ByRef Node As MainNode, First As Short, Last As Short)
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 5/01/2006
@@ -255,7 +255,7 @@ Friend Class clsIniReader
     ' @param    first The first index to consider when sorting.
     ' @param    last The last index to be considered when sorting.
 
-    Private Sub SortMainNodes(ByVal First As Short, ByVal Last As Short)
+    Private Sub SortMainNodes(First As Short, Last As Short)
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 5/01/2006
@@ -303,7 +303,7 @@ Friend Class clsIniReader
     ' @param    key The key of the value we are looking for.
     ' @returns  The value asociated with the given key under the requeted main section of the INI file or a null string if it's not found.
 
-    Public Function GetValue(ByVal Main As String, ByVal Key As String) As String
+    Public Function GetValue(Main As String, Key As String) As String
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 5/01/2006
@@ -331,7 +331,7 @@ Friend Class clsIniReader
     ' @param    key The key of the value we are looking for.
     ' @returns  The value asociated with the given key under the requeted main section of the INI file or a null string if it's not found.
 
-    Public Sub ChangeValue(ByVal Main As String, ByVal Key As String, ByVal Value As Integer)
+    Public Sub ChangeValue(Main As String, Key As String, Value As Integer)
         '**************************************************************
         'Author: ZaMa
         'Last Modify Date: 27/05/2009
@@ -359,7 +359,7 @@ Friend Class clsIniReader
     ' @param    key The key of the value we are looking for.
     ' @returns  The index in which the value with the key we are looking for is stored or the negation of the index in which it should be if not found.
 
-    Private Function FindKey(ByRef Node As MainNode, ByVal Key As String) As Integer
+    Private Function FindKey(ByRef Node As MainNode, Key As String) As Integer
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 5/01/2006
@@ -399,7 +399,7 @@ Friend Class clsIniReader
     ' @param    name The name of the MainNode we are looking for.
     ' @returns  The index in which the main section we are looking for is stored or the negation of the index in which it should be if not found.
 
-    Private Function FindMain(ByVal name As String) As Integer
+    Private Function FindMain(name As String) As Integer
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 5/01/2006
@@ -439,7 +439,7 @@ Friend Class clsIniReader
     ' @param    name    The name of the element whose existance is being checked.
     ' @returns  True if the key exists, false otherwise.
 
-    Public Function KeyExists(ByVal name As String) As Boolean
+    Public Function KeyExists(name As String) As Boolean
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 04/01/2008

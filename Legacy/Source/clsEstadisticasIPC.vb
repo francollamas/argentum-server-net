@@ -21,7 +21,7 @@ Friend Class clsEstadisticasIPC
         BuscaVentana = 0
     End Function
 
-    Public Function Informar(ByVal QueCosa As EstaNotificaciones, ByVal Parametro As Integer) As Integer
+    Public Function Informar(QueCosa As EstaNotificaciones, Parametro As Integer) As Integer
 
         Informar = 0
     End Function

@@ -33,7 +33,7 @@ Module modForum
     Private Foros() As tForo
 
 
-    Public Sub AddForum(ByVal sForoID As String)
+    Public Sub AddForum(sForoID As String)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 22/02/2010
@@ -48,7 +48,7 @@ Module modForum
         'UPGRADE_WARNING: Es posible que la matriz Foros necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
         'UPGRADE_WARNING: El límite inferior de la matriz Foros ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve Foros(NumForos)
-        ArrayInitializers.InitializeStruct(Foros)
+        InitializeStruct(Foros)
 
         ForumPath = AppDomain.CurrentDomain.BaseDirectory & "foros/" & sForoID & ".for"
 
@@ -115,8 +115,8 @@ Module modForum
         Next ForumIndex
     End Function
 
-    Public Sub AddPost(ByVal ForumIndex As Short, ByRef Post As String, ByRef Autor As String, ByRef Titulo As String,
-                       ByVal bAnuncio As Boolean)
+    Public Sub AddPost(ForumIndex As Short, ByRef Post As String, ByRef Autor As String, ByRef Titulo As String,
+                       bAnuncio As Boolean)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 22/02/2010
@@ -167,7 +167,7 @@ Module modForum
     End Sub
 
 
-    Private Sub SaveForum(ByVal ForumIndex As Short)
+    Private Sub SaveForum(ForumIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 22/02/2010
@@ -227,7 +227,7 @@ Module modForum
         End With
     End Sub
 
-    Public Sub CleanForum(ByVal ForumIndex As Short)
+    Public Sub CleanForum(ForumIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 22/02/2010
@@ -266,7 +266,7 @@ Module modForum
         End With
     End Sub
 
-    Public Function SendPosts(ByVal UserIndex As Short, ByRef ForoID As String) As Boolean
+    Public Function SendPosts(UserIndex As Short, ByRef ForoID As String) As Boolean
         '***************************************************
         'Author: ZaMa
         'Last Modification: 22/02/2010
@@ -287,7 +287,7 @@ Module modForum
                 For PostIndex = 1 To .CantPosts
                     With .vsPost(PostIndex)
                         Call _
-                            WriteAddForumMsg(UserIndex, Declaraciones.eForumMsgType.ieGeneral, .sTitulo, .Autor, .sPost)
+                            WriteAddForumMsg(UserIndex, eForumMsgType.ieGeneral, .sTitulo, .Autor, .sPost)
                     End With
                 Next PostIndex
 
@@ -295,7 +295,7 @@ Module modForum
                 For PostIndex = 1 To .CantAnuncios
                     With .vsAnuncio(PostIndex)
                         Call _
-                            WriteAddForumMsg(UserIndex, Declaraciones.eForumMsgType.ieGENERAL_STICKY, .sTitulo, .Autor,
+                            WriteAddForumMsg(UserIndex, eForumMsgType.ieGENERAL_STICKY, .sTitulo, .Autor,
                                              .sPost)
                     End With
                 Next PostIndex
@@ -316,7 +316,7 @@ Module modForum
 
                         With .vsPost(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, Declaraciones.eForumMsgType.ieCAOS, .sTitulo, .Autor, .sPost)
+                                WriteAddForumMsg(UserIndex, eForumMsgType.ieCAOS, .sTitulo, .Autor, .sPost)
                         End With
 
                     Next PostIndex
@@ -325,7 +325,7 @@ Module modForum
                     For PostIndex = 1 To .CantAnuncios
                         With .vsAnuncio(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, Declaraciones.eForumMsgType.ieCAOS_STICKY, .sTitulo, .Autor,
+                                WriteAddForumMsg(UserIndex, eForumMsgType.ieCAOS_STICKY, .sTitulo, .Autor,
                                                  .sPost)
                         End With
                     Next PostIndex
@@ -345,7 +345,7 @@ Module modForum
 
                         With .vsPost(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, Declaraciones.eForumMsgType.ieREAL, .sTitulo, .Autor, .sPost)
+                                WriteAddForumMsg(UserIndex, eForumMsgType.ieREAL, .sTitulo, .Autor, .sPost)
                         End With
 
                     Next PostIndex
@@ -354,7 +354,7 @@ Module modForum
                     For PostIndex = 1 To .CantAnuncios
                         With .vsAnuncio(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, Declaraciones.eForumMsgType.ieREAL_STICKY, .sTitulo, .Autor,
+                                WriteAddForumMsg(UserIndex, eForumMsgType.ieREAL_STICKY, .sTitulo, .Autor,
                                                  .sPost)
                         End With
                     Next PostIndex
@@ -366,40 +366,40 @@ Module modForum
         End If
     End Function
 
-    Public Function EsAnuncio(ByVal ForumType As Byte) As Boolean
+    Public Function EsAnuncio(ForumType As Byte) As Boolean
         '***************************************************
         'Author: ZaMa
         'Last Modification: 22/02/2010
         'Returns true if the post is sticky.
         '***************************************************
         Select Case ForumType
-            Case Declaraciones.eForumMsgType.ieCAOS_STICKY
+            Case eForumMsgType.ieCAOS_STICKY
                 EsAnuncio = True
 
-            Case Declaraciones.eForumMsgType.ieGENERAL_STICKY
+            Case eForumMsgType.ieGENERAL_STICKY
                 EsAnuncio = True
 
-            Case Declaraciones.eForumMsgType.ieREAL_STICKY
+            Case eForumMsgType.ieREAL_STICKY
                 EsAnuncio = True
 
         End Select
     End Function
 
-    Public Function ForumAlignment(ByVal yForumType As Byte) As Byte
+    Public Function ForumAlignment(yForumType As Byte) As Byte
         '***************************************************
         'Author: ZaMa
         'Last Modification: 01/03/2010
         'Returns the forum alignment.
         '***************************************************
         Select Case yForumType
-            Case Declaraciones.eForumMsgType.ieCAOS, Declaraciones.eForumMsgType.ieCAOS_STICKY
-                ForumAlignment = Declaraciones.eForumType.ieCAOS
+            Case eForumMsgType.ieCAOS, eForumMsgType.ieCAOS_STICKY
+                ForumAlignment = eForumType.ieCAOS
 
-            Case Declaraciones.eForumMsgType.ieGeneral, Declaraciones.eForumMsgType.ieGENERAL_STICKY
-                ForumAlignment = Declaraciones.eForumType.ieGeneral
+            Case eForumMsgType.ieGeneral, eForumMsgType.ieGENERAL_STICKY
+                ForumAlignment = eForumType.ieGeneral
 
-            Case Declaraciones.eForumMsgType.ieREAL, Declaraciones.eForumMsgType.ieREAL_STICKY
-                ForumAlignment = Declaraciones.eForumType.ieREAL
+            Case eForumMsgType.ieREAL, eForumMsgType.ieREAL_STICKY
+                ForumAlignment = eForumType.ieREAL
 
         End Select
     End Function
@@ -413,11 +413,11 @@ Module modForum
         'UPGRADE_WARNING: Es posible que la matriz Foros necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
         'UPGRADE_WARNING: El límite inferior de la matriz Foros ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Foros(1)
-        ArrayInitializers.InitializeStruct(Foros)
+        InitializeStruct(Foros)
         NumForos = 0
     End Sub
 
-    Private Sub MoveArray(ByVal ForumIndex As Short, ByVal Sticky As Boolean)
+    Private Sub MoveArray(ForumIndex As Short, Sticky As Boolean)
         Dim i As Integer
 
         With Foros(ForumIndex)

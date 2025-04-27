@@ -27,7 +27,7 @@ Module mdlCOmercioConUsuario
 
     'origen: origen de la transaccion, originador del comando
     'destino: receptor de la transaccion
-    Public Sub IniciarComercioConUsuario(ByVal Origen As Short, ByVal Destino As Short)
+    Public Sub IniciarComercioConUsuario(Origen As Short, Destino As Short)
         '***************************************************
         'Autor: Unkown
         'Last Modification: 25/11/2009
@@ -35,42 +35,41 @@ Module mdlCOmercioConUsuario
         '***************************************************
         Try
 
-        'Si ambos pusieron /comerciar entonces
-        If UserList(Origen).ComUsu.DestUsu = Destino And UserList(Destino).ComUsu.DestUsu = Origen Then
-            'Actualiza el inventario del usuario
-            Call UpdateUserInv(True, Origen, 0)
-            'Decirle al origen que abra la ventanita.
-            Call WriteUserCommerceInit(Origen)
-            UserList(Origen).flags.Comerciando = True
+            'Si ambos pusieron /comerciar entonces
+            If UserList(Origen).ComUsu.DestUsu = Destino And UserList(Destino).ComUsu.DestUsu = Origen Then
+                'Actualiza el inventario del usuario
+                Call UpdateUserInv(True, Origen, 0)
+                'Decirle al origen que abra la ventanita.
+                Call WriteUserCommerceInit(Origen)
+                UserList(Origen).flags.Comerciando = True
 
-            'Actualiza el inventario del usuario
-            Call UpdateUserInv(True, Destino, 0)
-            'Decirle al origen que abra la ventanita.
-            Call WriteUserCommerceInit(Destino)
-            UserList(Destino).flags.Comerciando = True
+                'Actualiza el inventario del usuario
+                Call UpdateUserInv(True, Destino, 0)
+                'Decirle al origen que abra la ventanita.
+                Call WriteUserCommerceInit(Destino)
+                UserList(Destino).flags.Comerciando = True
 
-            'Call EnviarObjetoTransaccion(Origen)
-        Else
-            'Es el primero que comercia ?
-            Call _
-                WriteConsoleMsg(Destino,
-                                UserList(Origen).name & " desea comerciar. Si deseas aceptar, escribe /COMERCIAR.",
-                                Protocol.FontTypeNames.FONTTYPE_TALK)
-            UserList(Destino).flags.TargetUser = Origen
+                'Call EnviarObjetoTransaccion(Origen)
+            Else
+                'Es el primero que comercia ?
+                Call _
+                    WriteConsoleMsg(Destino,
+                                    UserList(Origen).name & " desea comerciar. Si deseas aceptar, escribe /COMERCIAR.",
+                                    FontTypeNames.FONTTYPE_TALK)
+                UserList(Destino).flags.TargetUser = Origen
 
-        End If
+            End If
 
-        Call FlushBuffer(Destino)
+            Call FlushBuffer(Destino)
 
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in Initialize: " & ex.Message)
-    Call LogError("Error en IniciarComercioConUsuario: " & Err.Description)
-End Try
-End Sub
 
-    Public Sub EnviarOferta(ByVal UserIndex As Short, ByVal OfferSlot As Byte)
+        Catch ex As Exception
+            Console.WriteLine("Error in Initialize: " & ex.Message)
+            Call LogError("Error en IniciarComercioConUsuario: " & Err.Description)
+        End Try
+    End Sub
+
+    Public Sub EnviarOferta(UserIndex As Short, OfferSlot As Byte)
         '***************************************************
         'Autor: Unkown
         'Last Modification: 25/11/2009
@@ -94,7 +93,7 @@ End Sub
         Call FlushBuffer(UserIndex)
     End Sub
 
-    Public Sub FinComerciarUsu(ByVal UserIndex As Short)
+    Public Sub FinComerciarUsu(UserIndex As Short)
         '***************************************************
         'Autor: Unkown
         'Last Modification: 25/11/2009
@@ -122,7 +121,7 @@ End Sub
         End With
     End Sub
 
-    Public Sub AceptarComercioUsu(ByVal UserIndex As Short)
+    Public Sub AceptarComercioUsu(UserIndex As Short)
         '***************************************************
         'Autor: Unkown
         'Last Modification: 25/11/2009
@@ -260,8 +259,8 @@ End Sub
         Call FinComerciarUsu(OtroUserIndex)
     End Sub
 
-    Public Sub AgregarOferta(ByVal UserIndex As Short, ByVal OfferSlot As Byte, ByVal ObjIndex As Short,
-                             ByVal Amount As Integer, ByVal IsGold As Boolean)
+    Public Sub AgregarOferta(UserIndex As Short, OfferSlot As Byte, ObjIndex As Short,
+                             Amount As Integer, IsGold As Boolean)
         '***************************************************
         'Autor: ZaMa
         'Last Modification: 24/11/2009
@@ -296,7 +295,7 @@ End Sub
         End If
     End Sub
 
-    Public Function PuedeSeguirComerciando(ByVal UserIndex As Short) As Boolean
+    Public Function PuedeSeguirComerciando(UserIndex As Short) As Boolean
         '***************************************************
         'Autor: ZaMa
         'Last Modification: 24/11/2009
@@ -354,7 +353,7 @@ End Sub
 
                 If OtroUserIndex <= 0 Or OtroUserIndex > MaxUsers Then
                     Call FinComerciarUsu(OtroUserIndex)
-                    Call Protocol.FlushBuffer(OtroUserIndex)
+                    Call FlushBuffer(OtroUserIndex)
                 End If
 
                 Exit Function

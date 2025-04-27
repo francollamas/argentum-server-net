@@ -7,18 +7,18 @@ Module GameLoop
     ' TODO: verificar si el servidor se esta cerrando correctamente!!
     Private running As Boolean = True
 
-    Private piqueteCInterval As Integer = 6000
-    Private packetResendInterval As Integer = 10
-    Private fxInterval As Integer = 4000
-    Private auditoriaInterval As Integer = 1000
-    Private gameTimerInterval As Integer = 40
-    Private lluviaEventInterval As Integer = 60000
+    Private ReadOnly piqueteCInterval As Integer = 6000
+    Private ReadOnly packetResendInterval As Integer = 10
+    Private ReadOnly fxInterval As Integer = 4000
+    Private ReadOnly auditoriaInterval As Integer = 1000
+    Private ReadOnly gameTimerInterval As Integer = 40
+    Private ReadOnly lluviaEventInterval As Integer = 60000
     Public lluviaInterval As Integer = 500
-    Private autoSaveInterval As Integer = 60000
+    Private ReadOnly autoSaveInterval As Integer = 60000
     Public npcAtacaInterval As Integer = 4000
-    Private killLogInterval As Integer = 60000
+    Private ReadOnly killLogInterval As Integer = 60000
     Public timerAIInterval As Integer = 100
-    Private connectionTimerInterval As Integer = 5
+    Private ReadOnly connectionTimerInterval As Integer = 5
 
     ' Últimos tiempos de ejecución
     Dim lastPiqueteC As Double = 0
@@ -132,77 +132,78 @@ Module GameLoop
         Dim i As Integer
 
         Try
-        For i = 1 To LastUser
-            With UserList(i)
-                If .flags.UserLogged Then
-                    If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ANTIPIQUETE Then
-                        .Counters.PiqueteC = .Counters.PiqueteC + 1
-                        Call _
-                            WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!",
-                                            Protocol.FontTypeNames.FONTTYPE_INFO)
+            For i = 1 To LastUser
+                With UserList(i)
+                    If .flags.UserLogged Then
+                        If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = eTrigger.ANTIPIQUETE Then
+                            .Counters.PiqueteC = .Counters.PiqueteC + 1
+                            Call _
+                                WriteConsoleMsg(i, "¡¡¡Estás obstruyendo la vía pública, muévete o serás encarcelado!!!",
+                                                FontTypeNames.FONTTYPE_INFO)
 
-                        If .Counters.PiqueteC > 23 Then
+                            If .Counters.PiqueteC > 23 Then
+                                .Counters.PiqueteC = 0
+                                Call Encarcelar(i, TIEMPO_CARCEL_PIQUETE)
+                            End If
+                        Else
                             .Counters.PiqueteC = 0
-                            Call Encarcelar(i, TIEMPO_CARCEL_PIQUETE)
                         End If
-                    Else
-                        .Counters.PiqueteC = 0
-                    End If
 
-                    If .flags.Muerto = 1 Then
-                        If .flags.Traveling = 1 Then
-                            If .Counters.goHome <= 0 Then
-                                Call FindLegalPos(i, Ciudades(.Hogar).Map, Ciudades(.Hogar).X, Ciudades(.Hogar).Y)
-                                Call WarpUserChar(i, Ciudades(.Hogar).Map, Ciudades(.Hogar).X, Ciudades(.Hogar).Y, True)
-                                Call WriteMultiMessage(i, Declaraciones.eMessages.FinishHome)
-                                .flags.Traveling = 0
-                            Else
-                                .Counters.goHome = .Counters.goHome - 1
+                        If .flags.Muerto = 1 Then
+                            If .flags.Traveling = 1 Then
+                                If .Counters.goHome <= 0 Then
+                                    Call FindLegalPos(i, Ciudades(.Hogar).Map, Ciudades(.Hogar).X, Ciudades(.Hogar).Y)
+                                    Call _
+                                        WarpUserChar(i, Ciudades(.Hogar).Map, Ciudades(.Hogar).X, Ciudades(.Hogar).Y,
+                                                     True)
+                                    Call WriteMultiMessage(i, eMessages.FinishHome)
+                                    .flags.Traveling = 0
+                                Else
+                                    .Counters.goHome = .Counters.goHome - 1
+                                End If
                             End If
                         End If
-                    End If
 
-                    'ustedes se preguntaran que hace esto aca?
-                    'bueno la respuesta es simple: el codigo de AO es una mierda y encontrar
-                    'todos los puntos en los cuales la alineacion puede cambiar es un dolor de
-                    'huevos, asi que lo controlo aca, cada 6 segundos, lo cual es razonable
+                        'ustedes se preguntaran que hace esto aca?
+                        'bueno la respuesta es simple: el codigo de AO es una mierda y encontrar
+                        'todos los puntos en los cuales la alineacion puede cambiar es un dolor de
+                        'huevos, asi que lo controlo aca, cada 6 segundos, lo cual es razonable
 
-                    GI = .GuildIndex
-                    If GI > 0 Then
-                        NuevaA = False
-                        ' NuevoL = False
-                        If Not modGuilds.m_ValidarPermanencia(i, True, NuevaA) Then
-                            Call _
-                                WriteConsoleMsg(i,
-                                                "Has sido expulsado del clan. ¡El clan ha sumado un punto de antifacción!",
-                                                Protocol.FontTypeNames.FONTTYPE_GUILD)
+                        GI = .GuildIndex
+                        If GI > 0 Then
+                            NuevaA = False
+                            ' NuevoL = False
+                            If Not m_ValidarPermanencia(i, True, NuevaA) Then
+                                Call _
+                                    WriteConsoleMsg(i,
+                                                    "Has sido expulsado del clan. ¡El clan ha sumado un punto de antifacción!",
+                                                    FontTypeNames.FONTTYPE_GUILD)
+                            End If
+                            If NuevaA Then
+                                Call _
+                                    SendData(SendTarget.ToGuildMembers, GI,
+                                             PrepareMessageConsoleMsg(
+                                                 "¡El clan ha pasado a tener alineación " & GuildAlignment(GI) & "!",
+                                                 FontTypeNames.FONTTYPE_GUILD))
+                                Call LogClanes("¡El clan cambio de alineación!")
+                            End If
+                            '                    If NuevoL Then
+                            '                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan tiene un nuevo líder!", FontTypeNames.FONTTYPE_GUILD))
+                            '                        Call LogClanes("¡El clan tiene nuevo lider!")
+                            '                    End If
                         End If
-                        If NuevaA Then
-                            Call _
-                                SendData(modSendData.SendTarget.ToGuildMembers, GI,
-                                         PrepareMessageConsoleMsg(
-                                             "¡El clan ha pasado a tener alineación " & GuildAlignment(GI) & "!",
-                                             Protocol.FontTypeNames.FONTTYPE_GUILD))
-                            Call LogClanes("¡El clan cambio de alineación!")
-                        End If
-                        '                    If NuevoL Then
-                        '                        Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg("¡El clan tiene un nuevo líder!", FontTypeNames.FONTTYPE_GUILD))
-                        '                        Call LogClanes("¡El clan tiene nuevo lider!")
-                        '                    End If
+
+                        Call FlushBuffer(i)
                     End If
+                End With
+            Next i
 
-                    Call FlushBuffer(i)
-                End If
-            End With
-        Next i
-        
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in OnExit: " & ex.Message)
-    Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
-End Try
-End Sub
+        Catch ex As Exception
+            Console.WriteLine("Error in OnExit: " & ex.Message)
+            Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
+        End Try
+    End Sub
 
     Private Sub TickPacketResend()
         '***************************************************
@@ -211,65 +212,61 @@ End Sub
         'Attempts to resend to the user all data that may be enqueued.
         '***************************************************
         Try
-        Dim i As Integer
+            Dim i As Integer
 
-        For i = 1 To MaxUsers
-            If UserList(i).ConnIDValida Then
-                If UserList(i).outgoingData.length > 0 Then
-                    Call _
-                        EnviarDatosASlot(i,
-                                         UserList(i).outgoingData.ReadASCIIStringFixed(UserList(i).outgoingData.length))
+            For i = 1 To MaxUsers
+                If UserList(i).ConnIDValida Then
+                    If UserList(i).outgoingData.length > 0 Then
+                        Call _
+                            EnviarDatosASlot(i,
+                                             UserList(i).outgoingData.ReadASCIIStringFixed(
+                                                 UserList(i).outgoingData.length))
+                    End If
                 End If
-            End If
-        Next i
+            Next i
 
-        
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickPacketResend: " & ex.Message)
-    LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
-End Try
-End Sub
+        Catch ex As Exception
+            Console.WriteLine("Error in TickPacketResend: " & ex.Message)
+            LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
+        End Try
+    End Sub
 
     Private Sub TickFx()
         Try
 
-        Call SonidosMapas.ReproducirSonidosDeMapas()
+            Call SonidosMapas.ReproducirSonidosDeMapas()
 
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickFx: " & ex.Message)
-    
-End Try
-End Sub
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickFx: " & ex.Message)
+
+        End Try
+    End Sub
 
     Private Sub TickAuditoria()
         Try
-        Static centinelSecs As Byte
+            Static centinelSecs As Byte
 
-        centinelSecs = centinelSecs + 1
+            centinelSecs = centinelSecs + 1
 
-        If centinelSecs = 5 Then
-            'Every 5 seconds, we try to call the player's attention so it will report the code.
-            Call modCentinela.CallUserAttention()
+            If centinelSecs = 5 Then
+                'Every 5 seconds, we try to call the player's attention so it will report the code.
+                Call CallUserAttention()
 
-            centinelSecs = 0
-        End If
+                centinelSecs = 0
+            End If
 
-        Call PasarSegundo() 'sistema de desconexion de 10 segs
+            Call PasarSegundo() 'sistema de desconexion de 10 segs
 
-        Call ActualizaEstadisticasWeb()
+            Call ActualizaEstadisticasWeb()
 
-        
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickAuditoria: " & ex.Message)
-    Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
-End Try
-End Sub
+        Catch ex As Exception
+            Console.WriteLine("Error in TickAuditoria: " & ex.Message)
+            Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
+        End Try
+    End Sub
 
     Private Sub TickGameTimer()
         '********************************************************
@@ -282,57 +279,94 @@ End Sub
 
         Try
 
-        '<<<<<< Procesa eventos de los usuarios >>>>>>
-        For iUserIndex = 1 To MaxUsers 'LastUser
-            With UserList(iUserIndex)
-                'Conexion activa?
-                If .ConnID <> - 1 Then
-                    '¿User valido?
+            '<<<<<< Procesa eventos de los usuarios >>>>>>
+            For iUserIndex = 1 To MaxUsers 'LastUser
+                With UserList(iUserIndex)
+                    'Conexion activa?
+                    If .ConnID <> - 1 Then
+                        '¿User valido?
 
-                    If .ConnIDValida And .flags.UserLogged Then
+                        If .ConnIDValida And .flags.UserLogged Then
 
-                        '[Alejo-18-5]
-                        bEnviarStats = False
-                        bEnviarAyS = False
+                            '[Alejo-18-5]
+                            bEnviarStats = False
+                            bEnviarAyS = False
 
-                        Call DoTileEvents(iUserIndex, .Pos.Map, .Pos.X, .Pos.Y)
-
-
-                        If .flags.Paralizado = 1 Then Call EfectoParalisisUser(iUserIndex)
-                        If .flags.Ceguera = 1 Or .flags.Estupidez Then Call EfectoCegueEstu(iUserIndex)
+                            Call DoTileEvents(iUserIndex, .Pos.Map, .Pos.X, .Pos.Y)
 
 
-                        If .flags.Muerto = 0 Then
+                            If .flags.Paralizado = 1 Then Call EfectoParalisisUser(iUserIndex)
+                            If .flags.Ceguera = 1 Or .flags.Estupidez Then Call EfectoCegueEstu(iUserIndex)
 
-                            '[Consejeros]
-                            If (.flags.Privilegios And Declaraciones.PlayerType.User) Then Call EfectoLava(iUserIndex)
 
-                            If .flags.Desnudo <> 0 And (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then _
-                                Call EfectoFrio(iUserIndex)
+                            If .flags.Muerto = 0 Then
 
-                            If .flags.Meditando Then Call DoMeditar(iUserIndex)
+                                '[Consejeros]
+                                If (.flags.Privilegios And PlayerType.User) Then Call EfectoLava(iUserIndex)
 
-                            If .flags.Envenenado <> 0 And (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 _
-                                Then Call EfectoVeneno(iUserIndex)
+                                If .flags.Desnudo <> 0 And (.flags.Privilegios And PlayerType.User) <> 0 Then _
+                                    Call EfectoFrio(iUserIndex)
 
-                            If .flags.AdminInvisible <> 1 Then
-                                If .flags.invisible = 1 Then Call EfectoInvisibilidad(iUserIndex)
-                                If .flags.Oculto = 1 Then Call DoPermanecerOculto(iUserIndex)
-                            End If
+                                If .flags.Meditando Then Call DoMeditar(iUserIndex)
 
-                            If .flags.Mimetizado = 1 Then Call EfectoMimetismo(iUserIndex)
+                                If .flags.Envenenado <> 0 And (.flags.Privilegios And PlayerType.User) <> 0 _
+                                    Then Call EfectoVeneno(iUserIndex)
 
-                            If .flags.AtacablePor > 0 Then Call EfectoEstadoAtacable(iUserIndex)
+                                If .flags.AdminInvisible <> 1 Then
+                                    If .flags.invisible = 1 Then Call EfectoInvisibilidad(iUserIndex)
+                                    If .flags.Oculto = 1 Then Call DoPermanecerOculto(iUserIndex)
+                                End If
 
-                            Call DuracionPociones(iUserIndex)
+                                If .flags.Mimetizado = 1 Then Call EfectoMimetismo(iUserIndex)
 
-                            Call HambreYSed(iUserIndex, bEnviarAyS)
+                                If .flags.AtacablePor > 0 Then Call EfectoEstadoAtacable(iUserIndex)
 
-                            If .flags.Hambre = 0 And .flags.Sed = 0 Then
-                                If Lloviendo Then
-                                    If Not Intemperie(iUserIndex) Then
+                                Call DuracionPociones(iUserIndex)
+
+                                Call HambreYSed(iUserIndex, bEnviarAyS)
+
+                                If .flags.Hambre = 0 And .flags.Sed = 0 Then
+                                    If Lloviendo Then
+                                        If Not Intemperie(iUserIndex) Then
+                                            If Not .flags.Descansar Then
+                                                'No esta descansando
+                                                Call Sanar(iUserIndex, bEnviarStats, SanaIntervaloSinDescansar)
+                                                If bEnviarStats Then
+                                                    Call WriteUpdateHP(iUserIndex)
+                                                    bEnviarStats = False
+                                                End If
+                                                Call RecStamina(iUserIndex, bEnviarStats, StaminaIntervaloSinDescansar)
+                                                If bEnviarStats Then
+                                                    Call WriteUpdateSta(iUserIndex)
+                                                    bEnviarStats = False
+                                                End If
+                                            Else
+                                                'esta descansando
+                                                Call Sanar(iUserIndex, bEnviarStats, SanaIntervaloDescansar)
+                                                If bEnviarStats Then
+                                                    Call WriteUpdateHP(iUserIndex)
+                                                    bEnviarStats = False
+                                                End If
+                                                Call RecStamina(iUserIndex, bEnviarStats, StaminaIntervaloDescansar)
+                                                If bEnviarStats Then
+                                                    Call WriteUpdateSta(iUserIndex)
+                                                    bEnviarStats = False
+                                                End If
+                                                'termina de descansar automaticamente
+                                                If .Stats.MaxHp = .Stats.MinHp And .Stats.MaxSta = .Stats.MinSta Then
+                                                    Call WriteRestOK(iUserIndex)
+                                                    Call _
+                                                        WriteConsoleMsg(iUserIndex, "Has terminado de descansar.",
+                                                                        FontTypeNames.FONTTYPE_INFO)
+                                                    .flags.Descansar = False
+                                                End If
+
+                                            End If
+                                        End If
+                                    Else
                                         If Not .flags.Descansar Then
                                             'No esta descansando
+
                                             Call Sanar(iUserIndex, bEnviarStats, SanaIntervaloSinDescansar)
                                             If bEnviarStats Then
                                                 Call WriteUpdateHP(iUserIndex)
@@ -343,8 +377,10 @@ End Sub
                                                 Call WriteUpdateSta(iUserIndex)
                                                 bEnviarStats = False
                                             End If
+
                                         Else
                                             'esta descansando
+
                                             Call Sanar(iUserIndex, bEnviarStats, SanaIntervaloDescansar)
                                             If bEnviarStats Then
                                                 Call WriteUpdateHP(iUserIndex)
@@ -360,231 +396,188 @@ End Sub
                                                 Call WriteRestOK(iUserIndex)
                                                 Call _
                                                     WriteConsoleMsg(iUserIndex, "Has terminado de descansar.",
-                                                                    Protocol.FontTypeNames.FONTTYPE_INFO)
+                                                                    FontTypeNames.FONTTYPE_INFO)
                                                 .flags.Descansar = False
                                             End If
 
                                         End If
                                     End If
-                                Else
-                                    If Not .flags.Descansar Then
-                                        'No esta descansando
-
-                                        Call Sanar(iUserIndex, bEnviarStats, SanaIntervaloSinDescansar)
-                                        If bEnviarStats Then
-                                            Call WriteUpdateHP(iUserIndex)
-                                            bEnviarStats = False
-                                        End If
-                                        Call RecStamina(iUserIndex, bEnviarStats, StaminaIntervaloSinDescansar)
-                                        If bEnviarStats Then
-                                            Call WriteUpdateSta(iUserIndex)
-                                            bEnviarStats = False
-                                        End If
-
-                                    Else
-                                        'esta descansando
-
-                                        Call Sanar(iUserIndex, bEnviarStats, SanaIntervaloDescansar)
-                                        If bEnviarStats Then
-                                            Call WriteUpdateHP(iUserIndex)
-                                            bEnviarStats = False
-                                        End If
-                                        Call RecStamina(iUserIndex, bEnviarStats, StaminaIntervaloDescansar)
-                                        If bEnviarStats Then
-                                            Call WriteUpdateSta(iUserIndex)
-                                            bEnviarStats = False
-                                        End If
-                                        'termina de descansar automaticamente
-                                        If .Stats.MaxHp = .Stats.MinHp And .Stats.MaxSta = .Stats.MinSta Then
-                                            Call WriteRestOK(iUserIndex)
-                                            Call _
-                                                WriteConsoleMsg(iUserIndex, "Has terminado de descansar.",
-                                                                Protocol.FontTypeNames.FONTTYPE_INFO)
-                                            .flags.Descansar = False
-                                        End If
-
-                                    End If
                                 End If
+
+                                If bEnviarAyS Then Call WriteUpdateHungerAndThirst(iUserIndex)
+
+                                If .NroMascotas > 0 Then Call TiempoInvocacion(iUserIndex)
+                            End If 'Muerto
+                        Else 'no esta logeado?
+                            'Inactive players will be removed!
+                            .Counters.IdleCount = .Counters.IdleCount + 1
+                            If .Counters.IdleCount > IntervaloParaConexion Then
+                                .Counters.IdleCount = 0
+                                Call CloseSocket(iUserIndex)
                             End If
+                        End If 'UserLogged
 
-                            If bEnviarAyS Then Call WriteUpdateHungerAndThirst(iUserIndex)
+                        'If there is anything to be sent, we send it
+                        Call FlushBuffer(iUserIndex)
+                    End If
+                End With
+            Next iUserIndex
 
-                            If .NroMascotas > 0 Then Call TiempoInvocacion(iUserIndex)
-                        End If 'Muerto
-                    Else 'no esta logeado?
-                        'Inactive players will be removed!
-                        .Counters.IdleCount = .Counters.IdleCount + 1
-                        If .Counters.IdleCount > IntervaloParaConexion Then
-                            .Counters.IdleCount = 0
-                            Call CloseSocket(iUserIndex)
-                        End If
-                    End If 'UserLogged
 
-                    'If there is anything to be sent, we send it
-                    Call FlushBuffer(iUserIndex)
-                End If
-            End With
-        Next iUserIndex
-        
-
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickGameTimer: " & ex.Message)
-    LogError(("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex))
-End Try
-End Sub
+        Catch ex As Exception
+            Console.WriteLine("Error in TickGameTimer: " & ex.Message)
+            LogError(("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex))
+        End Try
+    End Sub
 
     Private Sub TickLluviaEvent()
         Try
-        Static MinutosLloviendo As Integer
-        Static MinutosSinLluvia As Integer
+            Static MinutosLloviendo As Integer
+            Static MinutosSinLluvia As Integer
 
-        If Not Lloviendo Then
-            MinutosSinLluvia = MinutosSinLluvia + 1
-            If MinutosSinLluvia >= 15 And MinutosSinLluvia < 1440 Then
-                If RandomNumber(1, 100) <= 2 Then
+            If Not Lloviendo Then
+                MinutosSinLluvia = MinutosSinLluvia + 1
+                If MinutosSinLluvia >= 15 And MinutosSinLluvia < 1440 Then
+                    If RandomNumber(1, 100) <= 2 Then
+                        Lloviendo = True
+                        MinutosSinLluvia = 0
+                        Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
+                    End If
+                ElseIf MinutosSinLluvia >= 1440 Then
                     Lloviendo = True
                     MinutosSinLluvia = 0
-                    Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageRainToggle())
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
                 End If
-            ElseIf MinutosSinLluvia >= 1440 Then
-                Lloviendo = True
-                MinutosSinLluvia = 0
-                Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageRainToggle())
-            End If
-        Else
-            MinutosLloviendo = MinutosLloviendo + 1
-            If MinutosLloviendo >= 5 Then
-                Lloviendo = False
-                Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageRainToggle())
-                MinutosLloviendo = 0
             Else
-                If RandomNumber(1, 100) <= 2 Then
+                MinutosLloviendo = MinutosLloviendo + 1
+                If MinutosLloviendo >= 5 Then
                     Lloviendo = False
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
                     MinutosLloviendo = 0
-                    Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageRainToggle())
+                Else
+                    If RandomNumber(1, 100) <= 2 Then
+                        Lloviendo = False
+                        MinutosLloviendo = 0
+                        Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
+                    End If
                 End If
             End If
-        End If
 
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickLluviaEvent: " & ex.Message)
-    Call LogError("Error tLluviaTimer")
-End Try
-End Sub
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickLluviaEvent: " & ex.Message)
+            Call LogError("Error tLluviaTimer")
+        End Try
+    End Sub
 
     Private Sub TickLluvia()
         Try
 
-        Dim iCount As Integer
-        If Lloviendo Then
-            For iCount = 1 To LastUser
-                Call EfectoLluvia(iCount)
-            Next iCount
-        End If
+            Dim iCount As Integer
+            If Lloviendo Then
+                For iCount = 1 To LastUser
+                    Call EfectoLluvia(iCount)
+                Next iCount
+            End If
 
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickLluvia: " & ex.Message)
-    Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
-End Try
-End Sub
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickLluvia: " & ex.Message)
+            Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
+        End Try
+    End Sub
 
     Private Sub TickAutoSave()
         Try
-        'fired every minute
-        Static Minutos As Integer
-        Static MinutosLatsClean As Integer
-        Static MinsPjesSave As Integer
+            'fired every minute
+            Static Minutos As Integer
+            Static MinutosLatsClean As Integer
+            Static MinsPjesSave As Integer
 
-        Dim i As Short
-        Dim num As Integer
+            Dim i As Short
+            Dim num As Integer
 
-        Minutos = Minutos + 1
+            Minutos = Minutos + 1
 
-        '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
-        Call ModAreas.AreasOptimizacion()
-        '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+            '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
+            Call AreasOptimizacion()
+            '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 
-        'Actualizamos el centinela
-        Call modCentinela.PasarMinutoCentinela()
+            'Actualizamos el centinela
+            Call PasarMinutoCentinela()
 
-        If Minutos = MinutosWs - 1 Then
-            Call _
-                SendData(modSendData.SendTarget.ToAll, 0,
-                         PrepareMessageConsoleMsg("Worldsave en 1 minuto ...", Protocol.FontTypeNames.FONTTYPE_VENENO))
-        End If
+            If Minutos = MinutosWs - 1 Then
+                Call _
+                    SendData(SendTarget.ToAll, 0,
+                             PrepareMessageConsoleMsg("Worldsave en 1 minuto ...", FontTypeNames.FONTTYPE_VENENO))
+            End If
 
-        If Minutos >= MinutosWs Then
-            Call ES.DoBackUp()
-            Minutos = 0
-        End If
+            If Minutos >= MinutosWs Then
+                Call DoBackUp()
+                Minutos = 0
+            End If
 
-        If MinutosLatsClean >= 15 Then
-            MinutosLatsClean = 0
-            Call ReSpawnOrigPosNpcs() 'respawn de los guardias en las pos originales
-            Call LimpiarMundo()
-        Else
-            MinutosLatsClean = MinutosLatsClean + 1
-        End If
+            If MinutosLatsClean >= 15 Then
+                MinutosLatsClean = 0
+                Call ReSpawnOrigPosNpcs() 'respawn de los guardias en las pos originales
+                Call LimpiarMundo()
+            Else
+                MinutosLatsClean = MinutosLatsClean + 1
+            End If
 
-        Call PurgarPenas()
-        Call CheckIdleUser()
+            Call PurgarPenas()
+            Call CheckIdleUser()
 
-        '<<<<<-------- Log the number of users online ------>>>
-        Dim N As Short
-        N = FreeFile()
-        FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output, , OpenShare.Shared)
-        PrintLine(N, NumUsers)
-        FileClose(N)
-        '<<<<<-------- Log the number of users online ------>>>
+            '<<<<<-------- Log the number of users online ------>>>
+            Dim N As Short
+            N = FreeFile()
+            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output, , OpenShare.Shared)
+            PrintLine(N, NumUsers)
+            FileClose(N)
+            '<<<<<-------- Log the number of users online ------>>>
 
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in TickAutoSave: " & ex.Message)
-    Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
-End Try
-End Sub
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickAutoSave: " & ex.Message)
+            Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
+        End Try
+    End Sub
 
     Private Sub TickNpcAtaca()
         Try
-        'UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim npc_Renamed As Integer
+            'UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim npc_Renamed As Integer
 
-        For npc_Renamed = 1 To LastNPC
-            Npclist(npc_Renamed).CanAttack = 1
-        Next npc_Renamed
-    
-Catch ex As Exception
-    Console.WriteLine("Error in OnExit: " & ex.Message)
-End Try
-End Sub
+            For npc_Renamed = 1 To LastNPC
+                Npclist(npc_Renamed).CanAttack = 1
+            Next npc_Renamed
+
+        Catch ex As Exception
+            Console.WriteLine("Error in OnExit: " & ex.Message)
+        End Try
+    End Sub
 
     Private Sub TickKillLog()
         Try
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
-            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
-            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
-            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
-            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log")
-        If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
-            Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log")
-        If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
-                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
-        End If
-    
-Catch ex As Exception
-    Console.WriteLine("Error in TickKillLog: " & ex.Message)
-End Try
-End Sub
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
+                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
+                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log")
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
+                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log")
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
+                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log")
+            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
+                Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log")
+            If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
+                If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
+                    Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
+            End If
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickKillLog: " & ex.Message)
+        End Try
+    End Sub
 
     Private Sub TickAI()
         Dim NpcIndex As Integer
@@ -634,7 +627,7 @@ End Sub
 
                                     If mapa > 0 Then
                                         If MapInfo_Renamed(mapa).NumUsers > 0 Then
-                                            If .Movement <> AI.TipoAI.ESTATICO Then
+                                            If .Movement <> TipoAI.ESTATICO Then
                                                 Call NPCAI(NpcIndex)
                                             End If
                                         End If
@@ -647,12 +640,10 @@ End Sub
             End If
 
 
-
-
         Catch ex As Exception
             Console.WriteLine("Error in TickNpcAtaca: " & ex.Message)
-        Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
-        Call MuereNpc(NpcIndex, 0)
+            Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
+            Call MuereNpc(NpcIndex, 0)
         End Try
     End Sub
 
@@ -681,7 +672,7 @@ End Sub
                                 If UserList(.ComUsu.DestUsu).ComUsu.DestUsu = iUserIndex Then
                                     Call _
                                         WriteConsoleMsg(.ComUsu.DestUsu, "Comercio cancelado por el otro usuario.",
-                                                        Protocol.FontTypeNames.FONTTYPE_TALK)
+                                                        FontTypeNames.FONTTYPE_TALK)
                                     Call FinComerciarUsu(.ComUsu.DestUsu)
                                     Call FlushBuffer(.ComUsu.DestUsu) 'flush the buffer to send the message right away
                                 End If
@@ -698,31 +689,31 @@ End Sub
     Public Sub CloseServer()
         Try
 
-        'Save stats!!!
-        Call Statistics.DumpStatistics()
+            'Save stats!!!
+            Call DumpStatistics()
 
-        Call LimpiaWsApi()
+            Call LimpiaWsApi()
 
-        Dim LoopC As Short
+            Dim LoopC As Short
 
-        For LoopC = 1 To MaxUsers
-            If UserList(LoopC).ConnID <> - 1 Then Call CloseSocket(LoopC)
-        Next
+            For LoopC = 1 To MaxUsers
+                If UserList(LoopC).ConnID <> - 1 Then Call CloseSocket(LoopC)
+            Next
 
-        'Log
-        Dim N As Short
-        N = FreeFile()
-        FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
-        FileClose(N)
+            'Log
+            Dim N As Short
+            N = FreeFile()
+            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
+            PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
+            FileClose(N)
 
-        running = False
+            running = False
 
-        'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        SonidosMapas = Nothing
-    
-Catch ex As Exception
-    Console.WriteLine("Error in TickAI: " & ex.Message)
-End Try
-End Sub
+            'UPGRADE_NOTE: El objeto SonidosMapas no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+            SonidosMapas = Nothing
+
+        Catch ex As Exception
+            Console.WriteLine("Error in TickAI: " & ex.Message)
+        End Try
+    End Sub
 End Module

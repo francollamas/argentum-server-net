@@ -1,7 +1,7 @@
 Option Strict Off
 Option Explicit On
 Module modHexaStrings
-    Public Function hexMd52Asc(ByVal MD5 As String) As String
+    Public Function hexMd52Asc(MD5 As String) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -20,7 +20,7 @@ Module modHexaStrings
     End Function
 
     'UPGRADE_NOTE: hex se actualizó a hex_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Function hexHex2Dec(ByVal hex_Renamed As String) As Integer
+    Public Function hexHex2Dec(hex_Renamed As String) As Integer
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -30,7 +30,7 @@ Module modHexaStrings
         hexHex2Dec = Val("&H" & hex_Renamed)
     End Function
 
-    Public Function txtOffset(ByVal Text As String, ByVal off As Short) As String
+    Public Function txtOffset(Text As String, off As Short) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -

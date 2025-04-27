@@ -16,8 +16,8 @@ Module modSistemaComercio
     ' @param NpcIndex specifies the index of the npc
     ' @param Slot Specifies which slot are you trying to sell / buy
     ' @param Cantidad Specifies how many items in that slot are you trying to sell / buy
-    Public Sub Comercio(ByVal Modo As eModoComercio, ByVal UserIndex As Short, ByVal NpcIndex As Short,
-                        ByVal Slot As Short, ByVal Cantidad As Short)
+    Public Sub Comercio(Modo As eModoComercio, UserIndex As Short, NpcIndex As Short,
+                        Slot As Short, Cantidad As Short)
         '*************************************************
         'Author: Nacho (Integer)
         'Last modified: 27/07/08 (MarKoxX) | New changes in the way of trading (now when you buy it rounds to ceil and when you sell it rounds to floor)
@@ -34,10 +34,10 @@ Module modSistemaComercio
                 Exit Sub
             ElseIf Cantidad > MAX_INVENTORY_OBJS Then
                 Call _
-                    SendData(modSendData.SendTarget.ToAll, 0,
+                    SendData(SendTarget.ToAll, 0,
                              PrepareMessageConsoleMsg(
                                  UserList(UserIndex).name & " ha sido baneado por el sistema anti-cheats.",
-                                 Protocol.FontTypeNames.FONTTYPE_FIGHT))
+                                 FontTypeNames.FONTTYPE_FIGHT))
                 Call _
                     Ban(UserList(UserIndex).name, "Sistema Anti Cheats",
                         "Intentar hackear el sistema de comercio. Quiso comprar demasiados ítems:" & Cantidad)
@@ -65,7 +65,7 @@ Module modSistemaComercio
                      Cantidad) + 0.5)
 
             If UserList(UserIndex).Stats.GLD < Precio Then
-                Call WriteConsoleMsg(UserIndex, "No tienes suficiente dinero.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(UserIndex, "No tienes suficiente dinero.", FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
             End If
 
@@ -99,7 +99,7 @@ Module modSistemaComercio
             End If
 
             'Agregado para que no se vuelvan a vender las llaves si se recargan los .dat.
-            If ObjData_Renamed(Objeto.ObjIndex).OBJType = Declaraciones.eOBJType.otLlaves Then
+            If ObjData_Renamed(Objeto.ObjIndex).OBJType = eOBJType.otLlaves Then
                 Call _
                     WriteVar(DatPath & "NPCs.dat", "NPC" & Npclist(NpcIndex).Numero, "obj" & Slot,
                              Objeto.ObjIndex & "-0")
@@ -118,10 +118,10 @@ Module modSistemaComercio
                 Exit Sub
             ElseIf _
                 (Npclist(NpcIndex).TipoItems <> ObjData_Renamed(Objeto.ObjIndex).OBJType And
-                 Npclist(NpcIndex).TipoItems <> Declaraciones.eOBJType.otCualquiera) Or Objeto.ObjIndex = iORO Then
+                 Npclist(NpcIndex).TipoItems <> eOBJType.otCualquiera) Or Objeto.ObjIndex = iORO Then
                 Call _
                     WriteConsoleMsg(UserIndex, "Lo siento, no estoy interesado en este tipo de objetos.",
-                                    Protocol.FontTypeNames.FONTTYPE_INFO)
+                                    FontTypeNames.FONTTYPE_INFO)
                 Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                 Call WriteTradeOK(UserIndex)
                 Exit Sub
@@ -130,7 +130,7 @@ Module modSistemaComercio
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Las armaduras del ejército real sólo pueden ser vendidas a los sastres reales.",
-                                        Protocol.FontTypeNames.FONTTYPE_INFO)
+                                        FontTypeNames.FONTTYPE_INFO)
                     Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                     Call WriteTradeOK(UserIndex)
                     Exit Sub
@@ -140,7 +140,7 @@ Module modSistemaComercio
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Las armaduras de la legión oscura sólo pueden ser vendidas a los sastres del demonio.",
-                                        Protocol.FontTypeNames.FONTTYPE_INFO)
+                                        FontTypeNames.FONTTYPE_INFO)
                     Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                     Call WriteTradeOK(UserIndex)
                     Exit Sub
@@ -152,8 +152,8 @@ Module modSistemaComercio
                 Slot > UBound(UserList(UserIndex).Invent.Object_Renamed) Then
                 Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                 Exit Sub
-            ElseIf UserList(UserIndex).flags.Privilegios And Declaraciones.PlayerType.Consejero Then
-                Call WriteConsoleMsg(UserIndex, "No puedes vender ítems.", Protocol.FontTypeNames.FONTTYPE_WARNING)
+            ElseIf UserList(UserIndex).flags.Privilegios And PlayerType.Consejero Then
+                Call WriteConsoleMsg(UserIndex, "No puedes vender ítems.", FontTypeNames.FONTTYPE_WARNING)
                 Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                 Call WriteTradeOK(UserIndex)
                 Exit Sub
@@ -203,10 +203,10 @@ Module modSistemaComercio
         Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
         Call WriteTradeOK(UserIndex)
 
-        Call SubirSkill(UserIndex, Declaraciones.eSkill.Comerciar, True)
+        Call SubirSkill(UserIndex, eSkill.Comerciar, True)
     End Sub
 
-    Public Sub IniciarComercioNPC(ByVal UserIndex As Short)
+    Public Sub IniciarComercioNPC(UserIndex As Short)
         '*************************************************
         'Author: Nacho (Integer)
         'Last modified: 2/8/06
@@ -216,7 +216,7 @@ Module modSistemaComercio
         Call WriteCommerceInit(UserIndex)
     End Sub
 
-    Private Function SlotEnNPCInv(ByVal NpcIndex As Short, ByVal Objeto As Short, ByVal Cantidad As Short) As Short
+    Private Function SlotEnNPCInv(NpcIndex As Short, Objeto As Short, Cantidad As Short) As Short
         '*************************************************
         'Author: Nacho (Integer)
         'Last modified: 2/8/06
@@ -249,12 +249,12 @@ Module modSistemaComercio
         End If
     End Function
 
-    Private Function Descuento(ByVal UserIndex As Short) As Single
+    Private Function Descuento(UserIndex As Short) As Single
         '*************************************************
         'Author: Nacho (Integer)
         'Last modified: 2/8/06
         '*************************************************
-        Descuento = 1 + UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Comerciar)/100
+        Descuento = 1 + UserList(UserIndex).Stats.UserSkills(eSkill.Comerciar)/100
     End Function
 
     ''
@@ -263,7 +263,7 @@ Module modSistemaComercio
     ' @param userIndex The index of the User
     ' @param npcIndex The index of the NPC
 
-    Private Sub EnviarNpcInv(ByVal UserIndex As Short, ByVal NpcIndex As Short)
+    Private Sub EnviarNpcInv(UserIndex As Short, NpcIndex As Short)
         '*************************************************
         'Author: Nacho (Integer)
         'Last Modified: 06/14/08
@@ -295,7 +295,7 @@ Module modSistemaComercio
     '
     ' @param ObjIndex  El número de objeto al cual le calculamos el precio de venta
 
-    Public Function SalePrice(ByVal ObjIndex As Short) As Single
+    Public Function SalePrice(ObjIndex As Short) As Single
         '*************************************************
         'Author: Nicolás (NicoNZ)
         '

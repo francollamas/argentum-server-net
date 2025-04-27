@@ -1,5 +1,8 @@
 Option Strict Off
 Option Explicit On
+
+Imports System.Drawing
+
 Module Protocol
     '**************************************************************
     ' Protocol.bas - Handles all incoming / outgoing messages for client-server communications.
@@ -23,12 +26,12 @@ Module Protocol
     'When we have a list of strings, we use this to separate them and prevent
     'having too many string lengths in the queue. Yes, each string is NULL-terminated :P
     'UPGRADE_NOTE: SEPARATOR ha cambiado de Constant a Variable. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="C54B49D7-5804-4D48-834B-B3D81E4C2F13"'
-    Private SEPARATOR As Char = Chr(0)
+    Private ReadOnly SEPARATOR As Char = Chr(0)
 
     ''
     'Auxiliar ByteQueue used as buffer to generate messages not intended to be sent right away.
     'Specially usefull to create a message once and send it over to several clients.
-    Private auxiliarBuffer As New clsByteQueue
+    Private ReadOnly auxiliarBuffer As New clsByteQueue
 
 
     Private Enum ServerPacketID
@@ -323,7 +326,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleIncomingData(ByVal UserIndex As Short)
+    Public Sub HandleIncomingData(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/09/07
@@ -336,9 +339,9 @@ Module Protocol
 
             'Does the packet requires a logged user??
             If _
-            Not _
-            (packetID = ClientPacketID.ThrowDices Or packetID = ClientPacketID.LoginExistingChar Or
-             packetID = ClientPacketID.LoginNewChar) Then
+                Not _
+                (packetID = ClientPacketID.ThrowDices Or packetID = ClientPacketID.LoginExistingChar Or
+                 packetID = ClientPacketID.LoginNewChar) Then
 
                 'Is the user actually logged?
                 If Not UserList(UserIndex).flags.UserLogged Then
@@ -763,11 +766,11 @@ Module Protocol
             ElseIf Err.Number <> 0 And Not Err.Number = UserList(UserIndex).incomingData.NotEnoughDataErrCode Then
                 'An error ocurred, log it and kick player.
                 Call _
-                LogError(
-                    "Error: " & Err.Number & " [" & Err.Description & "] " & " Source: " & Err.Source & vbTab &
-                    " HelpFile: " & Err.HelpFile & vbTab & " HelpContext: " & Err.HelpContext & vbTab &
-                    " LastDllError: " & Err.LastDllError & vbTab & " - UserIndex: " & UserIndex &
-                    " - producido al manejar el paquete: " & CStr(packetID))
+                    LogError(
+                        "Error: " & Err.Number & " [" & Err.Description & "] " & " Source: " & Err.Source & vbTab &
+                        " HelpFile: " & Err.HelpFile & vbTab & " HelpContext: " & Err.HelpContext & vbTab &
+                        " LastDllError: " & Err.LastDllError & vbTab & " - UserIndex: " & UserIndex &
+                        " - producido al manejar el paquete: " & CStr(packetID))
                 Call CloseSocket(UserIndex)
 
             Else
@@ -781,7 +784,7 @@ Module Protocol
     End Sub
 
 
-    Public Sub WriteMultiMessage(ByVal UserIndex As Short, ByVal MessageIndex As Short,
+    Public Sub WriteMultiMessage(UserIndex As Short, MessageIndex As Short,
                                  Optional ByVal Arg1 As Integer = 0, Optional ByVal Arg2 As Integer = 0,
                                  Optional ByVal Arg3 As Integer = 0, Optional ByVal StringArg1 As String = "")
         RetryOnceIfNotEnoughSpace(
@@ -791,48 +794,48 @@ Module Protocol
                     Call .WriteByte(MessageIndex)
 
                     Select Case MessageIndex
-                        Case Declaraciones.eMessages.DontSeeAnything, Declaraciones.eMessages.NPCSwing,
-                            Declaraciones.eMessages.NPCKillUser, Declaraciones.eMessages.BlockedWithShieldUser,
-                            Declaraciones.eMessages.BlockedWithShieldother, Declaraciones.eMessages.UserSwing,
-                            Declaraciones.eMessages.SafeModeOn, Declaraciones.eMessages.SafeModeOff,
-                            Declaraciones.eMessages.ResuscitationSafeOff, Declaraciones.eMessages.ResuscitationSafeOn,
-                            Declaraciones.eMessages.NobilityLost, Declaraciones.eMessages.CantUseWhileMeditating,
-                            Declaraciones.eMessages.CancelHome, Declaraciones.eMessages.FinishHome
+                        Case eMessages.DontSeeAnything, eMessages.NPCSwing,
+                                     eMessages.NPCKillUser, eMessages.BlockedWithShieldUser,
+                                     eMessages.BlockedWithShieldother, eMessages.UserSwing,
+                                     eMessages.SafeModeOn, eMessages.SafeModeOff,
+                                     eMessages.ResuscitationSafeOff, eMessages.ResuscitationSafeOn,
+                                     eMessages.NobilityLost, eMessages.CantUseWhileMeditating,
+                                     eMessages.CancelHome, eMessages.FinishHome
 
-                        Case Declaraciones.eMessages.NPCHitUser
+                        Case eMessages.NPCHitUser
                             Call .WriteByte(Arg1) 'Target
                             Call .WriteInteger(Arg2) 'damage
 
-                        Case Declaraciones.eMessages.UserHitNPC
+                        Case eMessages.UserHitNPC
                             Call .WriteLong(Arg1) 'damage
 
-                        Case Declaraciones.eMessages.UserAttackedSwing
+                        Case eMessages.UserAttackedSwing
                             Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex)
 
-                        Case Declaraciones.eMessages.UserHittedByUser
+                        Case eMessages.UserHittedByUser
                             Call .WriteInteger(Arg1) 'AttackerIndex
                             Call .WriteByte(Arg2) 'Target
                             Call .WriteInteger(Arg3) 'damage
 
-                        Case Declaraciones.eMessages.UserHittedUser
+                        Case eMessages.UserHittedUser
                             Call .WriteInteger(Arg1) 'AttackerIndex
                             Call .WriteByte(Arg2) 'Target
                             Call .WriteInteger(Arg3) 'damage
 
-                        Case Declaraciones.eMessages.WorkRequestTarget
+                        Case eMessages.WorkRequestTarget
                             Call .WriteByte(Arg1) 'skill
 
-                        Case Declaraciones.eMessages.HaveKilledUser _
-                            '"Has matado a " & UserList(VictimIndex).name & "!" "Has ganado " & DaExp & " puntos de experiencia."
+                        Case eMessages.HaveKilledUser _
+'"Has matado a " & UserList(VictimIndex).name & "!" "Has ganado " & DaExp & " puntos de experiencia."
                             Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'VictimIndex
                             Call .WriteLong(Arg2) 'Expe
 
-                        Case Declaraciones.eMessages.UserKill '"¡" & .name & " te ha matado!"
+                        Case eMessages.UserKill '"¡" & .name & " te ha matado!"
                             Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex) 'AttackerIndex
 
-                        Case Declaraciones.eMessages.EarnExp
+                        Case eMessages.EarnExp
 
-                        Case Declaraciones.eMessages.Home
+                        Case eMessages.Home
                             Call .WriteByte(CByte(Arg1))
                             Call .WriteInteger(CShort(Arg2))
                             'El cliente no conoce nada sobre nombre de mapas y hogares, por lo tanto _
@@ -845,11 +848,11 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
 
 
-    Private Sub HandleGMCommands(ByVal UserIndex As Short)
+    Private Sub HandleGMCommands(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -867,394 +870,394 @@ Module Protocol
                 Command_Renamed = .incomingData.PeekByte
 
                 Select Case Command_Renamed
-                    Case Declaraciones.eGMCommands.GMMessage '/GMSG
+                    Case eGMCommands.GMMessage '/GMSG
                         Call HandleGMMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.showName '/SHOWNAME
+                    Case eGMCommands.showName '/SHOWNAME
                         Call HandleShowName(UserIndex)
 
-                    Case Declaraciones.eGMCommands.OnlineRoyalArmy
+                    Case eGMCommands.OnlineRoyalArmy
                         Call HandleOnlineRoyalArmy(UserIndex)
 
-                    Case Declaraciones.eGMCommands.OnlineChaosLegion '/ONLINECAOS
+                    Case eGMCommands.OnlineChaosLegion '/ONLINECAOS
                         Call HandleOnlineChaosLegion(UserIndex)
 
-                    Case Declaraciones.eGMCommands.GoNearby '/IRCERCA
+                    Case eGMCommands.GoNearby '/IRCERCA
                         Call HandleGoNearby(UserIndex)
 
-                    Case Declaraciones.eGMCommands.comment '/REM
+                    Case eGMCommands.comment '/REM
                         Call HandleComment(UserIndex)
 
-                    Case Declaraciones.eGMCommands.serverTime '/HORA
+                    Case eGMCommands.serverTime '/HORA
                         Call HandleServerTime(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Where '/DONDE
+                    Case eGMCommands.Where '/DONDE
                         Call HandleWhere(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CreaturesInMap '/NENE
+                    Case eGMCommands.CreaturesInMap '/NENE
                         Call HandleCreaturesInMap(UserIndex)
 
-                    Case Declaraciones.eGMCommands.WarpMeToTarget '/TELEPLOC
+                    Case eGMCommands.WarpMeToTarget '/TELEPLOC
                         Call HandleWarpMeToTarget(UserIndex)
 
-                    Case Declaraciones.eGMCommands.WarpChar '/TELEP
+                    Case eGMCommands.WarpChar '/TELEP
                         Call HandleWarpChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Silence '/SILENCIAR
+                    Case eGMCommands.Silence '/SILENCIAR
                         Call HandleSilence(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SOSShowList '/SHOW SOS
+                    Case eGMCommands.SOSShowList '/SHOW SOS
                         Call HandleSOSShowList(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SOSRemove 'SOSDONE
+                    Case eGMCommands.SOSRemove 'SOSDONE
                         Call HandleSOSRemove(UserIndex)
 
-                    Case Declaraciones.eGMCommands.GoToChar '/IRA
+                    Case eGMCommands.GoToChar '/IRA
                         Call HandleGoToChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.invisible '/INVISIBLE
+                    Case eGMCommands.invisible '/INVISIBLE
                         Call HandleInvisible(UserIndex)
 
-                    Case Declaraciones.eGMCommands.GMPanel '/PANELGM
+                    Case eGMCommands.GMPanel '/PANELGM
                         Call HandleGMPanel(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestUserList 'LISTUSU
+                    Case eGMCommands.RequestUserList 'LISTUSU
                         Call HandleRequestUserList(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Working '/TRABAJANDO
+                    Case eGMCommands.Working '/TRABAJANDO
                         Call HandleWorking(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Hiding '/OCULTANDO
+                    Case eGMCommands.Hiding '/OCULTANDO
                         Call HandleHiding(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Jail '/CARCEL
+                    Case eGMCommands.Jail '/CARCEL
                         Call HandleJail(UserIndex)
 
-                    Case Declaraciones.eGMCommands.KillNPC '/RMATA
+                    Case eGMCommands.KillNPC '/RMATA
                         Call HandleKillNPC(UserIndex)
 
-                    Case Declaraciones.eGMCommands.WarnUser '/ADVERTENCIA
+                    Case eGMCommands.WarnUser '/ADVERTENCIA
                         Call HandleWarnUser(UserIndex)
 
-                    Case Declaraciones.eGMCommands.EditChar '/MOD
+                    Case eGMCommands.EditChar '/MOD
                         Call HandleEditChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharInfo '/INFO
+                    Case eGMCommands.RequestCharInfo '/INFO
                         Call HandleRequestCharInfo(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharStats '/STAT
+                    Case eGMCommands.RequestCharStats '/STAT
                         Call HandleRequestCharStats(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharGold '/BAL
+                    Case eGMCommands.RequestCharGold '/BAL
                         Call HandleRequestCharGold(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharInventory '/INV
+                    Case eGMCommands.RequestCharInventory '/INV
                         Call HandleRequestCharInventory(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharBank '/BOV
+                    Case eGMCommands.RequestCharBank '/BOV
                         Call HandleRequestCharBank(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharSkills '/SKILLS
+                    Case eGMCommands.RequestCharSkills '/SKILLS
                         Call HandleRequestCharSkills(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ReviveChar '/REVIVIR
+                    Case eGMCommands.ReviveChar '/REVIVIR
                         Call HandleReviveChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.OnlineGM '/ONLINEGM
+                    Case eGMCommands.OnlineGM '/ONLINEGM
                         Call HandleOnlineGM(UserIndex)
 
-                    Case Declaraciones.eGMCommands.OnlineMap '/ONLINEMAP
+                    Case eGMCommands.OnlineMap '/ONLINEMAP
                         Call HandleOnlineMap(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Forgive '/PERDON
+                    Case eGMCommands.Forgive '/PERDON
                         Call HandleForgive(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Kick '/ECHAR
+                    Case eGMCommands.Kick '/ECHAR
                         Call HandleKick(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Execute '/EJECUTAR
+                    Case eGMCommands.Execute '/EJECUTAR
                         Call HandleExecute(UserIndex)
 
-                    Case Declaraciones.eGMCommands.BanChar '/BAN
+                    Case eGMCommands.BanChar '/BAN
                         Call HandleBanChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.UnbanChar '/UNBAN
+                    Case eGMCommands.UnbanChar '/UNBAN
                         Call HandleUnbanChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.NPCFollow '/SEGUIR
+                    Case eGMCommands.NPCFollow '/SEGUIR
                         Call HandleNPCFollow(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SummonChar '/SUM
+                    Case eGMCommands.SummonChar '/SUM
                         Call HandleSummonChar(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SpawnListRequest '/CC
+                    Case eGMCommands.SpawnListRequest '/CC
                         Call HandleSpawnListRequest(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SpawnCreature 'SPA
+                    Case eGMCommands.SpawnCreature 'SPA
                         Call HandleSpawnCreature(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ResetNPCInventory '/RESETINV
+                    Case eGMCommands.ResetNPCInventory '/RESETINV
                         Call HandleResetNPCInventory(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CleanWorld '/LIMPIAR
+                    Case eGMCommands.CleanWorld '/LIMPIAR
                         Call HandleCleanWorld(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ServerMessage '/RMSG
+                    Case eGMCommands.ServerMessage '/RMSG
                         Call HandleServerMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.NickToIP '/NICK2IP
+                    Case eGMCommands.NickToIP '/NICK2IP
                         Call HandleNickToIP(UserIndex)
 
-                    Case Declaraciones.eGMCommands.IPToNick '/IP2NICK
+                    Case eGMCommands.IPToNick '/IP2NICK
                         Call HandleIPToNick(UserIndex)
 
-                    Case Declaraciones.eGMCommands.GuildOnlineMembers '/ONCLAN
+                    Case eGMCommands.GuildOnlineMembers '/ONCLAN
                         Call HandleGuildOnlineMembers(UserIndex)
 
-                    Case Declaraciones.eGMCommands.TeleportCreate '/CT
+                    Case eGMCommands.TeleportCreate '/CT
                         Call HandleTeleportCreate(UserIndex)
 
-                    Case Declaraciones.eGMCommands.TeleportDestroy '/DT
+                    Case eGMCommands.TeleportDestroy '/DT
                         Call HandleTeleportDestroy(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RainToggle '/LLUVIA
+                    Case eGMCommands.RainToggle '/LLUVIA
                         Call HandleRainToggle(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SetCharDescription '/SETDESC
+                    Case eGMCommands.SetCharDescription '/SETDESC
                         Call HandleSetCharDescription(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ForceMIDIToMap '/FORCEMIDIMAP
+                    Case eGMCommands.ForceMIDIToMap '/FORCEMIDIMAP
                         Call HanldeForceMIDIToMap(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ForceWAVEToMap '/FORCEWAVMAP
+                    Case eGMCommands.ForceWAVEToMap '/FORCEWAVMAP
                         Call HandleForceWAVEToMap(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RoyalArmyMessage '/REALMSG
+                    Case eGMCommands.RoyalArmyMessage '/REALMSG
                         Call HandleRoyalArmyMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChaosLegionMessage '/CAOSMSG
+                    Case eGMCommands.ChaosLegionMessage '/CAOSMSG
                         Call HandleChaosLegionMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CitizenMessage '/CIUMSG
+                    Case eGMCommands.CitizenMessage '/CIUMSG
                         Call HandleCitizenMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CriminalMessage '/CRIMSG
+                    Case eGMCommands.CriminalMessage '/CRIMSG
                         Call HandleCriminalMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.TalkAsNPC '/TALKAS
+                    Case eGMCommands.TalkAsNPC '/TALKAS
                         Call HandleTalkAsNPC(UserIndex)
 
-                    Case Declaraciones.eGMCommands.DestroyAllItemsInArea '/MASSDEST
+                    Case eGMCommands.DestroyAllItemsInArea '/MASSDEST
                         Call HandleDestroyAllItemsInArea(UserIndex)
 
-                    Case Declaraciones.eGMCommands.AcceptRoyalCouncilMember '/ACEPTCONSE
+                    Case eGMCommands.AcceptRoyalCouncilMember '/ACEPTCONSE
                         Call HandleAcceptRoyalCouncilMember(UserIndex)
 
-                    Case Declaraciones.eGMCommands.AcceptChaosCouncilMember '/ACEPTCONSECAOS
+                    Case eGMCommands.AcceptChaosCouncilMember '/ACEPTCONSECAOS
                         Call HandleAcceptChaosCouncilMember(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ItemsInTheFloor '/PISO
+                    Case eGMCommands.ItemsInTheFloor '/PISO
                         Call HandleItemsInTheFloor(UserIndex)
 
-                    Case Declaraciones.eGMCommands.MakeDumb '/ESTUPIDO
+                    Case eGMCommands.MakeDumb '/ESTUPIDO
                         Call HandleMakeDumb(UserIndex)
 
-                    Case Declaraciones.eGMCommands.MakeDumbNoMore '/NOESTUPIDO
+                    Case eGMCommands.MakeDumbNoMore '/NOESTUPIDO
                         Call HandleMakeDumbNoMore(UserIndex)
 
-                    Case Declaraciones.eGMCommands.DumpIPTables '/DUMPSECURITY
+                    Case eGMCommands.DumpIPTables '/DUMPSECURITY
                         Call HandleDumpIPTables(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CouncilKick '/KICKCONSE
+                    Case eGMCommands.CouncilKick '/KICKCONSE
                         Call HandleCouncilKick(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SetTrigger '/TRIGGER
+                    Case eGMCommands.SetTrigger '/TRIGGER
                         Call HandleSetTrigger(UserIndex)
 
-                    Case Declaraciones.eGMCommands.AskTrigger '/TRIGGER with no args
+                    Case eGMCommands.AskTrigger '/TRIGGER with no args
                         Call HandleAskTrigger(UserIndex)
 
-                    Case Declaraciones.eGMCommands.BannedIPList '/BANIPLIST
+                    Case eGMCommands.BannedIPList '/BANIPLIST
                         Call HandleBannedIPList(UserIndex)
 
-                    Case Declaraciones.eGMCommands.BannedIPReload '/BANIPRELOAD
+                    Case eGMCommands.BannedIPReload '/BANIPRELOAD
                         Call HandleBannedIPReload(UserIndex)
 
-                    Case Declaraciones.eGMCommands.GuildMemberList '/MIEMBROSCLAN
+                    Case eGMCommands.GuildMemberList '/MIEMBROSCLAN
                         Call HandleGuildMemberList(UserIndex)
 
-                    Case Declaraciones.eGMCommands.GuildBan '/BANCLAN
+                    Case eGMCommands.GuildBan '/BANCLAN
                         Call HandleGuildBan(UserIndex)
 
-                    Case Declaraciones.eGMCommands.BanIP '/BANIP
+                    Case eGMCommands.BanIP '/BANIP
                         Call HandleBanIP(UserIndex)
 
-                    Case Declaraciones.eGMCommands.UnbanIP '/UNBANIP
+                    Case eGMCommands.UnbanIP '/UNBANIP
                         Call HandleUnbanIP(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CreateItem '/CI
+                    Case eGMCommands.CreateItem '/CI
                         Call HandleCreateItem(UserIndex)
 
-                    Case Declaraciones.eGMCommands.DestroyItems '/DEST
+                    Case eGMCommands.DestroyItems '/DEST
                         Call HandleDestroyItems(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChaosLegionKick '/NOCAOS
+                    Case eGMCommands.ChaosLegionKick '/NOCAOS
                         Call HandleChaosLegionKick(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RoyalArmyKick '/NOREAL
+                    Case eGMCommands.RoyalArmyKick '/NOREAL
                         Call HandleRoyalArmyKick(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ForceMIDIAll '/FORCEMIDI
+                    Case eGMCommands.ForceMIDIAll '/FORCEMIDI
                         Call HandleForceMIDIAll(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ForceWAVEAll '/FORCEWAV
+                    Case eGMCommands.ForceWAVEAll '/FORCEWAV
                         Call HandleForceWAVEAll(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RemovePunishment '/BORRARPENA
+                    Case eGMCommands.RemovePunishment '/BORRARPENA
                         Call HandleRemovePunishment(UserIndex)
 
-                    Case Declaraciones.eGMCommands.TileBlockedToggle '/BLOQ
+                    Case eGMCommands.TileBlockedToggle '/BLOQ
                         Call HandleTileBlockedToggle(UserIndex)
 
-                    Case Declaraciones.eGMCommands.KillNPCNoRespawn '/MATA
+                    Case eGMCommands.KillNPCNoRespawn '/MATA
                         Call HandleKillNPCNoRespawn(UserIndex)
 
-                    Case Declaraciones.eGMCommands.KillAllNearbyNPCs '/MASSKILL
+                    Case eGMCommands.KillAllNearbyNPCs '/MASSKILL
                         Call HandleKillAllNearbyNPCs(UserIndex)
 
-                    Case Declaraciones.eGMCommands.LastIP '/LASTIP
+                    Case eGMCommands.LastIP '/LASTIP
                         Call HandleLastIP(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMOTD '/MOTDCAMBIA
+                    Case eGMCommands.ChangeMOTD '/MOTDCAMBIA
                         Call HandleChangeMOTD(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SetMOTD 'ZMOTD
+                    Case eGMCommands.SetMOTD 'ZMOTD
                         Call HandleSetMOTD(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SystemMessage '/SMSG
+                    Case eGMCommands.SystemMessage '/SMSG
                         Call HandleSystemMessage(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CreateNPC '/ACC
+                    Case eGMCommands.CreateNPC '/ACC
                         Call HandleCreateNPC(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CreateNPCWithRespawn '/RACC
+                    Case eGMCommands.CreateNPCWithRespawn '/RACC
                         Call HandleCreateNPCWithRespawn(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ImperialArmour '/AI1 - 4
+                    Case eGMCommands.ImperialArmour '/AI1 - 4
                         Call HandleImperialArmour(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChaosArmour '/AC1 - 4
+                    Case eGMCommands.ChaosArmour '/AC1 - 4
                         Call HandleChaosArmour(UserIndex)
 
-                    Case Declaraciones.eGMCommands.NavigateToggle '/NAVE
+                    Case eGMCommands.NavigateToggle '/NAVE
                         Call HandleNavigateToggle(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ServerOpenToUsersToggle '/HABILITAR
+                    Case eGMCommands.ServerOpenToUsersToggle '/HABILITAR
                         Call HandleServerOpenToUsersToggle(UserIndex)
 
-                    Case Declaraciones.eGMCommands.TurnOffServer '/APAGAR
+                    Case eGMCommands.TurnOffServer '/APAGAR
                         Call HandleTurnOffServer(UserIndex)
 
-                    Case Declaraciones.eGMCommands.TurnCriminal '/CONDEN
+                    Case eGMCommands.TurnCriminal '/CONDEN
                         Call HandleTurnCriminal(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ResetFactions '/RAJAR
+                    Case eGMCommands.ResetFactions '/RAJAR
                         Call HandleResetFactions(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RemoveCharFromGuild '/RAJARCLAN
+                    Case eGMCommands.RemoveCharFromGuild '/RAJARCLAN
                         Call HandleRemoveCharFromGuild(UserIndex)
 
-                    Case Declaraciones.eGMCommands.RequestCharMail '/LASTEMAIL
+                    Case eGMCommands.RequestCharMail '/LASTEMAIL
                         Call HandleRequestCharMail(UserIndex)
 
-                    Case Declaraciones.eGMCommands.AlterPassword '/APASS
+                    Case eGMCommands.AlterPassword '/APASS
                         Call HandleAlterPassword(UserIndex)
 
-                    Case Declaraciones.eGMCommands.AlterMail '/AEMAIL
+                    Case eGMCommands.AlterMail '/AEMAIL
                         Call HandleAlterMail(UserIndex)
 
-                    Case Declaraciones.eGMCommands.AlterName '/ANAME
+                    Case eGMCommands.AlterName '/ANAME
                         Call HandleAlterName(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ToggleCentinelActivated '/CENTINELAACTIVADO
+                    Case eGMCommands.ToggleCentinelActivated '/CENTINELAACTIVADO
                         Call HandleToggleCentinelActivated(UserIndex)
 
-                    Case Declaraciones.eGMCommands.DoBackUp '/DOBACKUP
+                    Case eGMCommands.DoBackUp '/DOBACKUP
                         Call HandleDoBackUp(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ShowGuildMessages '/SHOWCMSG
+                    Case eGMCommands.ShowGuildMessages '/SHOWCMSG
                         Call HandleShowGuildMessages(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SaveMap '/GUARDAMAPA
+                    Case eGMCommands.SaveMap '/GUARDAMAPA
                         Call HandleSaveMap(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoPK '/MODMAPINFO PK
+                    Case eGMCommands.ChangeMapInfoPK '/MODMAPINFO PK
                         Call HandleChangeMapInfoPK(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoBackup '/MODMAPINFO BACKUP
+                    Case eGMCommands.ChangeMapInfoBackup '/MODMAPINFO BACKUP
                         Call HandleChangeMapInfoBackup(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoRestricted '/MODMAPINFO RESTRINGIR
+                    Case eGMCommands.ChangeMapInfoRestricted '/MODMAPINFO RESTRINGIR
                         Call HandleChangeMapInfoRestricted(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoNoMagic '/MODMAPINFO MAGIASINEFECTO
+                    Case eGMCommands.ChangeMapInfoNoMagic '/MODMAPINFO MAGIASINEFECTO
                         Call HandleChangeMapInfoNoMagic(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoNoInvi '/MODMAPINFO INVISINEFECTO
+                    Case eGMCommands.ChangeMapInfoNoInvi '/MODMAPINFO INVISINEFECTO
                         Call HandleChangeMapInfoNoInvi(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoNoResu '/MODMAPINFO RESUSINEFECTO
+                    Case eGMCommands.ChangeMapInfoNoResu '/MODMAPINFO RESUSINEFECTO
                         Call HandleChangeMapInfoNoResu(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoLand '/MODMAPINFO TERRENO
+                    Case eGMCommands.ChangeMapInfoLand '/MODMAPINFO TERRENO
                         Call HandleChangeMapInfoLand(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChangeMapInfoZone '/MODMAPINFO ZONA
+                    Case eGMCommands.ChangeMapInfoZone '/MODMAPINFO ZONA
                         Call HandleChangeMapInfoZone(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SaveChars '/GRABAR
+                    Case eGMCommands.SaveChars '/GRABAR
                         Call HandleSaveChars(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CleanSOS '/BORRAR SOS
+                    Case eGMCommands.CleanSOS '/BORRAR SOS
                         Call HandleCleanSOS(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ShowServerForm '/SHOW INT
+                    Case eGMCommands.ShowServerForm '/SHOW INT
                         Call HandleShowServerForm(UserIndex)
 
-                    Case Declaraciones.eGMCommands.night '/NOCHE
+                    Case eGMCommands.night '/NOCHE
                         Call HandleNight(UserIndex)
 
-                    Case Declaraciones.eGMCommands.KickAllChars '/ECHARTODOSPJS
+                    Case eGMCommands.KickAllChars '/ECHARTODOSPJS
                         Call HandleKickAllChars(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ReloadNPCs '/RELOADNPCS
+                    Case eGMCommands.ReloadNPCs '/RELOADNPCS
                         Call HandleReloadNPCs(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ReloadServerIni '/RELOADSINI
+                    Case eGMCommands.ReloadServerIni '/RELOADSINI
                         Call HandleReloadServerIni(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ReloadSpells '/RELOADHECHIZOS
+                    Case eGMCommands.ReloadSpells '/RELOADHECHIZOS
                         Call HandleReloadSpells(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ReloadObjects '/RELOADOBJ
+                    Case eGMCommands.ReloadObjects '/RELOADOBJ
                         Call HandleReloadObjects(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Restart '/REINICIAR
+                    Case eGMCommands.Restart '/REINICIAR
                         Call HandleRestart(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ResetAutoUpdate '/AUTOUPDATE
+                    Case eGMCommands.ResetAutoUpdate '/AUTOUPDATE
                         Call HandleResetAutoUpdate(UserIndex)
 
-                    Case Declaraciones.eGMCommands.ChatColor '/CHATCOLOR
+                    Case eGMCommands.ChatColor '/CHATCOLOR
                         Call HandleChatColor(UserIndex)
 
-                    Case Declaraciones.eGMCommands.Ignored '/IGNORADO
+                    Case eGMCommands.Ignored '/IGNORADO
                         Call HandleIgnored(UserIndex)
 
-                    Case Declaraciones.eGMCommands.CheckSlot '/SLOT
+                    Case eGMCommands.CheckSlot '/SLOT
                         Call HandleCheckSlot(UserIndex)
 
-                    Case Declaraciones.eGMCommands.SetIniVar '/SETINIVAR LLAVE CLAVE VALOR
+                    Case eGMCommands.SetIniVar '/SETINIVAR LLAVE CLAVE VALOR
                         Call HandleSetIniVar(UserIndex)
                 End Select
             End With
@@ -1263,16 +1266,16 @@ Module Protocol
             Console.WriteLine("Error in HandleGMCommands: " & ex.Message)
             Call _
                 LogError(
-                    "Error en GmCommands. Error: " & Err.Number & " - " & Err.Description & ". Paquete: " & Command_Renamed)
+                    "Error en GmCommands. Error: " & Err.Number & " - " & Err.Description & ". Paquete: " &
+                    Command_Renamed)
         End Try
-
     End Sub
 
     ''
     ' Handles the "Home" message.
     '
     ' @param    userIndex The index of the user sending the message.
-    Private Sub HandleHome(ByVal UserIndex As Short)
+    Private Sub HandleHome(UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Creation Date: 06/01/2010
@@ -1281,7 +1284,7 @@ Module Protocol
         '***************************************************
         With UserList(UserIndex)
             Call .incomingData.ReadByte()
-            If .flags.TargetNpcTipo = Declaraciones.eNPCType.Gobernador Then
+            If .flags.TargetNpcTipo = eNPCType.Gobernador Then
                 Call setHome(UserIndex, Npclist(.flags.TargetNPC).Ciudad, .flags.TargetNPC)
             Else
                 If .flags.Muerto = 1 Then
@@ -1296,7 +1299,7 @@ Module Protocol
                                                     FontTypeNames.FONTTYPE_INFO)
                             End If
                         Else
-                            Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.CancelHome)
+                            Call WriteMultiMessage(UserIndex, eMessages.CancelHome)
                             .flags.Traveling = 0
                             .Counters.goHome = 0
                         End If
@@ -1318,7 +1321,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleLoginExistingChar(ByVal UserIndex As Short)
+    Private Sub HandleLoginExistingChar(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -1365,13 +1368,13 @@ Module Protocol
 
             If BANCheck(UserName) Then
                 Call _
-                WriteErrorMsg(UserIndex,
-                              "Se te ha prohibido la entrada a Argentum Online debido a tu mal comportamiento. Puedes consultar el reglamento y el sistema de soporte desde www.argentumonline.com.ar")
+                    WriteErrorMsg(UserIndex,
+                                  "Se te ha prohibido la entrada a Argentum Online debido a tu mal comportamiento. Puedes consultar el reglamento y el sistema de soporte desde www.argentumonline.com.ar")
             ElseIf Not VersionOK(version) Then
                 Call _
-                WriteErrorMsg(UserIndex,
-                              "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION &
-                              ". La misma se encuentra disponible en www.argentumonline.com.ar")
+                    WriteErrorMsg(UserIndex,
+                                  "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION &
+                                  ". La misma se encuentra disponible en www.argentumonline.com.ar")
             Else
                 Call ConnectUser(UserIndex, UserName, Password)
             End If
@@ -1390,7 +1393,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleThrowDices(ByVal UserIndex As Short)
+    Private Sub HandleThrowDices(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -1400,15 +1403,15 @@ Module Protocol
         Call UserList(UserIndex).incomingData.ReadByte()
 
         With UserList(UserIndex).Stats
-            .UserAtributos(Declaraciones.eAtributos.Fuerza) = MaximoInt(15, 13 + RandomNumber(0, 3) + RandomNumber(0, 2))
-            .UserAtributos(Declaraciones.eAtributos.Agilidad) = MaximoInt(15,
-                                                                          12 + RandomNumber(0, 3) + RandomNumber(0, 3))
-            .UserAtributos(Declaraciones.eAtributos.Inteligencia) = MaximoInt(16,
-                                                                              13 + RandomNumber(0, 3) +
-                                                                              RandomNumber(0, 2))
-            .UserAtributos(Declaraciones.eAtributos.Carisma) = MaximoInt(15,
-                                                                         12 + RandomNumber(0, 3) + RandomNumber(0, 3))
-            .UserAtributos(Declaraciones.eAtributos.Constitucion) = 16 + RandomNumber(0, 1) + RandomNumber(0, 1)
+            .UserAtributos(eAtributos.Fuerza) = MaximoInt(15, 13 + RandomNumber(0, 3) + RandomNumber(0, 2))
+            .UserAtributos(eAtributos.Agilidad) = MaximoInt(15,
+                                                            12 + RandomNumber(0, 3) + RandomNumber(0, 3))
+            .UserAtributos(eAtributos.Inteligencia) = MaximoInt(16,
+                                                                13 + RandomNumber(0, 3) +
+                                                                RandomNumber(0, 2))
+            .UserAtributos(eAtributos.Carisma) = MaximoInt(15,
+                                                           12 + RandomNumber(0, 3) + RandomNumber(0, 3))
+            .UserAtributos(eAtributos.Constitucion) = 16 + RandomNumber(0, 1) + RandomNumber(0, 1)
         End With
 
         Call WriteDiceRoll(UserIndex)
@@ -1419,7 +1422,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleLoginNewChar(ByVal UserIndex As Short)
+    Private Sub HandleLoginNewChar(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -1441,11 +1444,11 @@ Module Protocol
             Dim UserName As String
             Dim Password As String
             Dim version As String
-            Dim race As Declaraciones.eRaza
-            Dim gender As Declaraciones.eGenero
-            Dim homeland As Declaraciones.eCiudad
+            Dim race As eRaza
+            Dim gender As eGenero
+            Dim homeland As eCiudad
             'UPGRADE_NOTE: Class se actualizó a Class_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Dim Class_Renamed As Declaraciones.eClass
+            Dim Class_Renamed As eClass
             Dim Head As Short
             Dim mail As String
 
@@ -1459,8 +1462,8 @@ Module Protocol
 
             If ServerSoloGMs <> 0 Then
                 Call _
-                WriteErrorMsg(UserIndex,
-                              "Servidor restringido a administradores. Consulte la página oficial o el foro oficial para más información.")
+                    WriteErrorMsg(UserIndex,
+                                  "Servidor restringido a administradores. Consulte la página oficial o el foro oficial para más información.")
                 Call FlushBuffer(UserIndex)
                 Call CloseSocket(UserIndex)
 
@@ -1481,9 +1484,9 @@ Module Protocol
 
             If Not VersionOK(version) Then
                 Call _
-                WriteErrorMsg(UserIndex,
-                              "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION &
-                              ". La misma se encuentra disponible en www.argentumonline.com.ar")
+                    WriteErrorMsg(UserIndex,
+                                  "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION &
+                                  ". La misma se encuentra disponible en www.argentumonline.com.ar")
             Else
                 Call ConnectNewUser(UserIndex, UserName, Password, race, gender, Class_Renamed, mail, homeland, Head)
             End If
@@ -1502,7 +1505,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTalk(ByVal UserIndex As Short)
+    Private Sub HandleTalk(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 13/01/2010
@@ -1530,7 +1533,7 @@ Module Protocol
                 Chat = buffer.ReadASCIIString()
 
                 '[Consejeros & GMs]
-                If .flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
+                If .flags.Privilegios And (PlayerType.Consejero Or PlayerType.SemiDios) Then
                     Call LogGM(.name, "Dijo: " & Chat)
                 End If
 
@@ -1540,19 +1543,19 @@ Module Protocol
                     .Counters.TiempoOculto = 0
 
                     If .flags.Navegando = 1 Then
-                        If .clase = Declaraciones.eClass.Pirat Then
+                        If .clase = eClass.Pirat Then
                             ' Pierde la apariencia de fragata fantasmal
                             Call ToogleBoatBody(UserIndex)
                             Call _
-                            WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
+                                                FontTypeNames.FONTTYPE_INFO)
                             Call _
-                            ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
-                                           NingunArma, NingunEscudo, NingunCasco)
+                                ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
+                                               NingunArma, NingunEscudo, NingunCasco)
                         End If
                     Else
                         If .flags.invisible = 0 Then
-                            Call UsUaRiOs.SetInvisible(UserIndex, UserList(UserIndex).Char_Renamed.CharIndex, False)
+                            Call SetInvisible(UserIndex, UserList(UserIndex).Char_Renamed.CharIndex, False)
                             Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
@@ -1560,23 +1563,23 @@ Module Protocol
 
                 If migr_LenB(Chat) <> 0 Then
                     'Analize chat...
-                    Call Statistics.ParseChat(Chat)
+                    Call ParseChat(Chat)
 
                     If Not (.flags.AdminInvisible = 1) Then
                         If .flags.Muerto = 1 Then
                             Call _
-                            SendData(modSendData.SendTarget.ToDeadArea, UserIndex,
-                                     PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_DEAD_CHAR))
+                                SendData(SendTarget.ToDeadArea, UserIndex,
+                                         PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_DEAD_CHAR))
                         Else
                             Call _
-                            SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, .flags.ChatColor))
+                                SendData(SendTarget.ToPCArea, UserIndex,
+                                         PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, .flags.ChatColor))
                         End If
                     Else
                         If RTrim(Chat) <> "" Then
                             Call _
-                            SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
+                                SendData(SendTarget.ToPCArea, UserIndex,
+                                         PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
                         End If
                     End If
                 End If
@@ -1596,7 +1599,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleYell(ByVal UserIndex As Short)
+    Private Sub HandleYell(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 13/01/2010 (ZaMa)
@@ -1624,7 +1627,7 @@ Module Protocol
 
 
                 '[Consejeros & GMs]
-                If .flags.Privilegios And (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
+                If .flags.Privilegios And (PlayerType.Consejero Or PlayerType.SemiDios) Then
                     Call LogGM(.name, "Grito: " & Chat)
                 End If
 
@@ -1634,19 +1637,19 @@ Module Protocol
                     .Counters.TiempoOculto = 0
 
                     If .flags.Navegando = 1 Then
-                        If .clase = Declaraciones.eClass.Pirat Then
+                        If .clase = eClass.Pirat Then
                             ' Pierde la apariencia de fragata fantasmal
                             Call ToogleBoatBody(UserIndex)
                             Call _
-                            WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
+                                                FontTypeNames.FONTTYPE_INFO)
                             Call _
-                            ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
-                                           NingunArma, NingunEscudo, NingunCasco)
+                                ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
+                                               NingunArma, NingunEscudo, NingunCasco)
                         End If
                     Else
                         If .flags.invisible = 0 Then
-                            Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
+                            Call SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
                             Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
@@ -1654,29 +1657,29 @@ Module Protocol
 
                 If migr_LenB(Chat) <> 0 Then
                     'Analize chat...
-                    Call Statistics.ParseChat(Chat)
+                    Call ParseChat(Chat)
 
-                    If .flags.Privilegios And Declaraciones.PlayerType.User Then
+                    If .flags.Privilegios And PlayerType.User Then
                         If UserList(UserIndex).flags.Muerto = 1 Then
                             Call _
-                            SendData(modSendData.SendTarget.ToDeadArea, UserIndex,
-                                     PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_DEAD_CHAR))
+                                SendData(SendTarget.ToDeadArea, UserIndex,
+                                         PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_DEAD_CHAR))
                         Else
                             Call _
-                            SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex,
-                                                                System.Drawing.ColorTranslator.ToOle(
-                                                                    System.Drawing.Color.Red)))
+                                SendData(SendTarget.ToPCArea, UserIndex,
+                                         PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex,
+                                                                    ColorTranslator.ToOle(
+                                                                        Color.Red)))
                         End If
                     Else
                         If Not (.flags.AdminInvisible = 1) Then
                             Call _
-                            SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_GM_YELL))
+                                SendData(SendTarget.ToPCArea, UserIndex,
+                                         PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, CHAT_COLOR_GM_YELL))
                         Else
                             Call _
-                            SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
+                                SendData(SendTarget.ToPCArea, UserIndex,
+                                         PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
                         End If
                     End If
                 End If
@@ -1697,7 +1700,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWhisper(ByVal UserIndex As Short)
+    Private Sub HandleWhisper(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 15/07/2009
@@ -1714,7 +1717,7 @@ Module Protocol
             Dim Chat As String
             Dim targetCharIndex As Short
             Dim TargetUserIndex As Short
-            Dim targetPriv As Declaraciones.PlayerType
+            Dim targetPriv As PlayerType
             With UserList(UserIndex)
                 'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
                 Call buffer.CopyBuffer(.incomingData)
@@ -1730,9 +1733,9 @@ Module Protocol
 
                 If .flags.Muerto Then
                     Call _
-                    WriteConsoleMsg(UserIndex,
-                                    "¡¡Estás muerto!! Los muertos no pueden comunicarse con el mundo de los vivos. ",
-                                    FontTypeNames.FONTTYPE_INFO)
+                        WriteConsoleMsg(UserIndex,
+                                        "¡¡Estás muerto!! Los muertos no pueden comunicarse con el mundo de los vivos. ",
+                                        FontTypeNames.FONTTYPE_INFO)
                 Else
                     If TargetUserIndex = INVALID_INDEX Then
                         Call WriteConsoleMsg(UserIndex, "Usuario inexistente.", FontTypeNames.FONTTYPE_INFO)
@@ -1740,25 +1743,25 @@ Module Protocol
                         targetPriv = UserList(TargetUserIndex).flags.Privilegios
                         'A los dioses y admins no vale susurrarles si no sos uno vos mismo (así no pueden ver si están conectados o no)
                         If _
-                        (targetPriv And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 And
-                        (.flags.Privilegios And
-                         (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                          Declaraciones.PlayerType.SemiDios)) <> 0 Then
+                            (targetPriv And (PlayerType.Dios Or PlayerType.Admin)) <> 0 And
+                            (.flags.Privilegios And
+                             (PlayerType.User Or PlayerType.Consejero Or
+                              PlayerType.SemiDios)) <> 0 Then
                             ' Controlamos que no este invisible
                             If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
                                 Call _
-                                WriteConsoleMsg(UserIndex, "No puedes susurrarle a los Dioses y Admins.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "No puedes susurrarle a los Dioses y Admins.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             End If
                             'A los Consejeros y SemiDioses no vale susurrarles si sos un PJ común.
                         ElseIf _
-                        (.flags.Privilegios And Declaraciones.PlayerType.User) <> 0 And
-                        (Not targetPriv And Declaraciones.PlayerType.User) <> 0 Then
+                            (.flags.Privilegios And PlayerType.User) <> 0 And
+                            (Not targetPriv And PlayerType.User) <> 0 Then
                             ' Controlamos que no este invisible
                             If UserList(TargetUserIndex).flags.AdminInvisible <> 1 Then
                                 Call _
-                                WriteConsoleMsg(UserIndex, "No puedes susurrarle a los GMs.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "No puedes susurrarle a los GMs.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             End If
                         ElseIf Not EstaPCarea(UserIndex, TargetUserIndex) Then
                             Call WriteConsoleMsg(UserIndex, "Estás muy lejos del usuario.", FontTypeNames.FONTTYPE_INFO)
@@ -1766,50 +1769,50 @@ Module Protocol
                         Else
                             '[Consejeros & GMs]
                             If _
-                            .flags.Privilegios And
-                            (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios) Then
+                                .flags.Privilegios And
+                                (PlayerType.Consejero Or PlayerType.SemiDios) Then
                                 Call LogGM(.name, "Le dijo a '" & UserList(TargetUserIndex).name & "' " & Chat)
                             End If
 
                             If migr_LenB(Chat) <> 0 Then
                                 'Analize chat...
-                                Call Statistics.ParseChat(Chat)
+                                Call ParseChat(Chat)
 
                                 If Not (.flags.AdminInvisible = 1) Then
                                     Call _
-                                    WriteChatOverHead(UserIndex, Chat, .Char_Renamed.CharIndex,
-                                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue))
+                                        WriteChatOverHead(UserIndex, Chat, .Char_Renamed.CharIndex,
+                                                          ColorTranslator.ToOle(Color.Blue))
                                     Call _
-                                    WriteChatOverHead(TargetUserIndex, Chat, .Char_Renamed.CharIndex,
-                                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue))
+                                        WriteChatOverHead(TargetUserIndex, Chat, .Char_Renamed.CharIndex,
+                                                          ColorTranslator.ToOle(Color.Blue))
                                     Call FlushBuffer(TargetUserIndex)
 
                                     '[CDT 17-02-2004]
                                     If _
-                                    .flags.Privilegios And
-                                    (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then
+                                        .flags.Privilegios And
+                                        (PlayerType.User Or PlayerType.Consejero) Then
                                         Call _
-                                        SendData(modSendData.SendTarget.ToAdminsAreaButConsejeros, UserIndex,
-                                                 PrepareMessageChatOverHead(
-                                                     "A " & UserList(TargetUserIndex).name & "> " & Chat,
-                                                     .Char_Renamed.CharIndex,
-                                                     System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow)))
+                                            SendData(SendTarget.ToAdminsAreaButConsejeros, UserIndex,
+                                                     PrepareMessageChatOverHead(
+                                                         "A " & UserList(TargetUserIndex).name & "> " & Chat,
+                                                         .Char_Renamed.CharIndex,
+                                                         ColorTranslator.ToOle(Color.Yellow)))
                                     End If
                                 Else
                                     Call WriteConsoleMsg(UserIndex, "Susurraste> " & Chat, FontTypeNames.FONTTYPE_GM)
                                     If UserIndex <> TargetUserIndex Then _
-                                    Call _
-                                        WriteConsoleMsg(TargetUserIndex, "Gm susurra> " & Chat,
-                                                        FontTypeNames.FONTTYPE_GM)
+                                        Call _
+                                            WriteConsoleMsg(TargetUserIndex, "Gm susurra> " & Chat,
+                                                            FontTypeNames.FONTTYPE_GM)
 
                                     If _
-                                    .flags.Privilegios And
-                                    (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then
+                                        .flags.Privilegios And
+                                        (PlayerType.User Or PlayerType.Consejero) Then
                                         Call _
-                                        SendData(modSendData.SendTarget.ToAdminsAreaButConsejeros, UserIndex,
-                                                 PrepareMessageConsoleMsg(
-                                                     "Gm dijo a " & UserList(TargetUserIndex).name & "> " & Chat,
-                                                     FontTypeNames.FONTTYPE_GM))
+                                            SendData(SendTarget.ToAdminsAreaButConsejeros, UserIndex,
+                                                     PrepareMessageConsoleMsg(
+                                                         "Gm dijo a " & UserList(TargetUserIndex).name & "> " & Chat,
+                                                         FontTypeNames.FONTTYPE_GM))
                                     End If
                                 End If
                             End If
@@ -1832,7 +1835,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWalk(ByVal UserIndex As Short)
+    Private Sub HandleWalk(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 13/01/2010 (ZaMa)
@@ -1846,7 +1849,7 @@ Module Protocol
 
         Dim dummy As Integer
         Dim TempTick As Integer
-        Dim heading As Declaraciones.eHeading
+        Dim heading As eHeading
 
         With UserList(UserIndex)
             'Remove packet ID
@@ -1867,11 +1870,11 @@ Module Protocol
                     End If
 
                     If Not .flags.CountSH = 0 Then
-                        If dummy <> 0 Then dummy = 126000 \ dummy
+                        If dummy <> 0 Then dummy = 126000\dummy
 
                         Call LogHackAttemp("Tramposo SH: " & .name & " , " & dummy)
                         Call _
-                            SendData(modSendData.SendTarget.ToAdmins, 0,
+                            SendData(SendTarget.ToAdmins, 0,
                                      PrepareMessageConsoleMsg(
                                          "Servidor> " & .name & " ha sido echado por el servidor por posible uso de SH.",
                                          FontTypeNames.FONTTYPE_SERVER))
@@ -1906,7 +1909,7 @@ Module Protocol
                     Call WriteConsoleMsg(UserIndex, "Dejas de meditar.", FontTypeNames.FONTTYPE_INFO)
 
                     Call _
-                        SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                        SendData(SendTarget.ToPCArea, UserIndex,
                                  PrepareMessageCreateFX(.Char_Renamed.CharIndex, 0, 0))
                 Else
                     'Move user
@@ -1934,12 +1937,12 @@ Module Protocol
 
             'Can't move while hidden except he is a thief
             If .flags.Oculto = 1 And .flags.AdminInvisible = 0 Then
-                If .clase <> Declaraciones.eClass.Thief And .clase <> Declaraciones.eClass.Bandit Then
+                If .clase <> eClass.Thief And .clase <> eClass.Bandit Then
                     .flags.Oculto = 0
                     .Counters.TiempoOculto = 0
 
                     If .flags.Navegando = 1 Then
-                        If .clase = Declaraciones.eClass.Pirat Then
+                        If .clase = eClass.Pirat Then
                             ' Pierde la apariencia de fragata fantasmal
                             Call ToogleBoatBody(UserIndex)
                             Call _
@@ -1953,7 +1956,7 @@ Module Protocol
                         'If not under a spell effect, show char
                         If .flags.invisible = 0 Then
                             Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.", FontTypeNames.FONTTYPE_INFO)
-                            Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
+                            Call SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
                         End If
                     End If
                 End If
@@ -1966,7 +1969,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestPositionUpdate(ByVal UserIndex As Short)
+    Private Sub HandleRequestPositionUpdate(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -1983,7 +1986,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleAttack(ByVal UserIndex As Short)
+    Private Sub HandleAttack(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 13/01/2010
@@ -2030,7 +2033,7 @@ Module Protocol
                 .Counters.TiempoOculto = 0
 
                 If .flags.Navegando = 1 Then
-                    If .clase = Declaraciones.eClass.Pirat Then
+                    If .clase = eClass.Pirat Then
                         ' Pierde la apariencia de fragata fantasmal
                         Call ToogleBoatBody(UserIndex)
                         Call _
@@ -2042,7 +2045,7 @@ Module Protocol
                     End If
                 Else
                     If .flags.invisible = 0 Then
-                        Call UsUaRiOs.SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
+                        Call SetInvisible(UserIndex, .Char_Renamed.CharIndex, False)
                         Call WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
@@ -2055,7 +2058,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePickUp(ByVal UserIndex As Short)
+    Private Sub HandlePickUp(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 07/25/09
@@ -2072,8 +2075,8 @@ Module Protocol
             If .flags.Comerciando Then Exit Sub
 
             'Lower rank administrators can't pick up items
-            If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
-                If Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
+            If .flags.Privilegios And PlayerType.Consejero Then
+                If Not .flags.Privilegios And PlayerType.RoleMaster Then
                     Call WriteConsoleMsg(UserIndex, "No puedes tomar ningún objeto.", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
                 End If
@@ -2088,7 +2091,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSafeToggle(ByVal UserIndex As Short)
+    Private Sub HandleSafeToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2099,9 +2102,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If .flags.Seguro Then
-                Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.SafeModeOff) 'Call WriteSafeModeOff(UserIndex)
+                Call WriteMultiMessage(UserIndex, eMessages.SafeModeOff) 'Call WriteSafeModeOff(UserIndex)
             Else
-                Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.SafeModeOn) 'Call WriteSafeModeOn(UserIndex)
+                Call WriteMultiMessage(UserIndex, eMessages.SafeModeOn) 'Call WriteSafeModeOn(UserIndex)
             End If
 
             .flags.Seguro = Not .flags.Seguro
@@ -2113,7 +2116,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleResuscitationToggle(ByVal UserIndex As Short)
+    Private Sub HandleResuscitationToggle(UserIndex As Short)
         '***************************************************
         'Author: Rapsodius
         'Creation Date: 10/10/07
@@ -2124,10 +2127,10 @@ Module Protocol
             .flags.SeguroResu = Not .flags.SeguroResu
 
             If .flags.SeguroResu Then
-                Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.ResuscitationSafeOn) _
+                Call WriteMultiMessage(UserIndex, eMessages.ResuscitationSafeOn) _
                 'Call WriteResuscitationSafeOn(UserIndex)
             Else
-                Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.ResuscitationSafeOff) _
+                Call WriteMultiMessage(UserIndex, eMessages.ResuscitationSafeOff) _
                 'Call WriteResuscitationSafeOff(UserIndex)
             End If
         End With
@@ -2138,7 +2141,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestGuildLeaderInfo(ByVal UserIndex As Short)
+    Private Sub HandleRequestGuildLeaderInfo(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2147,7 +2150,7 @@ Module Protocol
         'Remove packet ID
         UserList(UserIndex).incomingData.ReadByte()
 
-        Call modGuilds.SendGuildLeaderInfo(UserIndex)
+        Call SendGuildLeaderInfo(UserIndex)
     End Sub
 
     ''
@@ -2155,7 +2158,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestAtributes(ByVal UserIndex As Short)
+    Private Sub HandleRequestAtributes(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2172,7 +2175,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestFame(ByVal UserIndex As Short)
+    Private Sub HandleRequestFame(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2189,7 +2192,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestSkills(ByVal UserIndex As Short)
+    Private Sub HandleRequestSkills(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2206,7 +2209,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestMiniStats(ByVal UserIndex As Short)
+    Private Sub HandleRequestMiniStats(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2223,7 +2226,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCommerceEnd(ByVal UserIndex As Short)
+    Private Sub HandleCommerceEnd(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2242,7 +2245,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUserCommerceEnd(ByVal UserIndex As Short)
+    Private Sub HandleUserCommerceEnd(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 11/03/2010
@@ -2274,7 +2277,7 @@ Module Protocol
     ' Handles the "UserCommerceConfirm" message.
     '
     ' @param    userIndex The index of the user sending the message.
-    Private Sub HandleUserCommerceConfirm(ByVal UserIndex As Short)
+    Private Sub HandleUserCommerceConfirm(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
@@ -2292,7 +2295,7 @@ Module Protocol
         End If
     End Sub
 
-    Private Sub HandleCommerceChat(ByVal UserIndex As Short)
+    Private Sub HandleCommerceChat(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 03/12/2009
@@ -2320,7 +2323,7 @@ Module Protocol
                 If migr_LenB(Chat) <> 0 Then
                     If PuedeSeguirComerciando(UserIndex) Then
                         'Analize chat...
-                        Call Statistics.ParseChat(Chat)
+                        Call ParseChat(Chat)
 
                         Chat = UserList(UserIndex).name & "> " & Chat
                         Call WriteCommerceChat(UserIndex, Chat, FontTypeNames.FONTTYPE_PARTY)
@@ -2344,7 +2347,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBankEnd(ByVal UserIndex As Short)
+    Private Sub HandleBankEnd(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2365,7 +2368,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUserCommerceOk(ByVal UserIndex As Short)
+    Private Sub HandleUserCommerceOk(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2383,7 +2386,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUserCommerceReject(ByVal UserIndex As Short)
+    Private Sub HandleUserCommerceReject(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2418,7 +2421,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleDrop(ByVal UserIndex As Short)
+    Private Sub HandleDrop(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 07/25/09
@@ -2443,8 +2446,8 @@ Module Protocol
             'low rank admins can't drop item. Neither can the dead nor those sailing.
             If _
                 .flags.Navegando = 1 Or .flags.Muerto = 1 Or
-                ((.flags.Privilegios And Declaraciones.PlayerType.Consejero) <> 0 And
-                 (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0) Then Exit Sub
+                ((.flags.Privilegios And PlayerType.Consejero) <> 0 And
+                 (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0) Then Exit Sub
 
             'If the user is trading, he can't drop items => He's cheating, we kick him.
             If .flags.Comerciando Then Exit Sub
@@ -2474,7 +2477,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCastSpell(ByVal UserIndex As Short)
+    Private Sub HandleCastSpell(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2518,7 +2521,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleLeftClick(ByVal UserIndex As Short)
+    Private Sub HandleLeftClick(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2548,7 +2551,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleDoubleClick(ByVal UserIndex As Short)
+    Private Sub HandleDoubleClick(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2578,7 +2581,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWork(ByVal UserIndex As Short)
+    Private Sub HandleWork(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 13/01/2010 (ZaMa)
@@ -2589,7 +2592,7 @@ Module Protocol
             Exit Sub
         End If
 
-        Dim Skill As Declaraciones.eSkill
+        Dim Skill As eSkill
         With UserList(UserIndex)
             'Remove packet ID
             Call .incomingData.ReadByte()
@@ -2603,10 +2606,10 @@ Module Protocol
             Call CancelExit(UserIndex)
 
             Select Case Skill
-                Case Declaraciones.eSkill.Robar, Declaraciones.eSkill.Magia, Declaraciones.eSkill.Domar
-                    Call WriteMultiMessage(UserIndex, Declaraciones.eMessages.WorkRequestTarget, Skill) _
+                Case eSkill.Robar, eSkill.Magia, eSkill.Domar
+                    Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, Skill) _
                     'Call WriteWorkRequestTarget(UserIndex, Skill)
-                Case Declaraciones.eSkill.Ocultarse
+                Case eSkill.Ocultarse
 
                     If .flags.EnConsulta Then
                         Call _
@@ -2616,7 +2619,7 @@ Module Protocol
                     End If
 
                     If .flags.Navegando = 1 Then
-                        If .clase <> Declaraciones.eClass.Pirat Then
+                        If .clase <> eClass.Pirat Then
                             '[CDT 17-02-2004]
                             If Not .flags.UltimoMensaje = 3 Then
                                 Call _
@@ -2649,7 +2652,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleInitCrafting(ByVal UserIndex As Short)
+    Private Sub HandleInitCrafting(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 29/01/2010
@@ -2679,7 +2682,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUseSpellMacro(ByVal UserIndex As Short)
+    Private Sub HandleUseSpellMacro(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2690,7 +2693,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             Call _
-                SendData(modSendData.SendTarget.ToAdmins, UserIndex,
+                SendData(SendTarget.ToAdmins, UserIndex,
                          PrepareMessageConsoleMsg(.name & " fue expulsado por Anti-macro de hechizos.",
                                                   FontTypeNames.FONTTYPE_VENENO))
             Call _
@@ -2706,7 +2709,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUseItem(ByVal UserIndex As Short)
+    Private Sub HandleUseItem(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2742,7 +2745,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCraftBlacksmith(ByVal UserIndex As Short)
+    Private Sub HandleCraftBlacksmith(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2774,7 +2777,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCraftCarpenter(ByVal UserIndex As Short)
+    Private Sub HandleCraftCarpenter(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -2806,7 +2809,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWorkLeftClick(ByVal UserIndex As Short)
+    Private Sub HandleWorkLeftClick(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 14/01/2010 (ZaMa)
@@ -2821,7 +2824,7 @@ Module Protocol
 
         Dim X As Byte
         Dim Y As Byte
-        Dim Skill As Declaraciones.eSkill
+        Dim Skill As eSkill
         Dim DummyInt As Short
         Dim tU As Short
         Dim tN As Short
@@ -2849,7 +2852,7 @@ Module Protocol
             Call CancelExit(UserIndex)
 
             Select Case Skill
-                Case Declaraciones.eSkill.Proyectiles
+                Case eSkill.Proyectiles
 
                     'Check attack interval
                     If Not IntervaloPermiteAtacar(UserIndex, False) Then Exit Sub
@@ -2877,7 +2880,7 @@ Module Protocol
                             ElseIf .MunicionEqpObjIndex = 0 Then
                                 DummyInt = 1
                                 ' Son flechas?
-                            ElseIf ObjData_Renamed(.MunicionEqpObjIndex).OBJType <> Declaraciones.eOBJType.otFlechas _
+                            ElseIf ObjData_Renamed(.MunicionEqpObjIndex).OBJType <> eOBJType.otFlechas _
                                 Then
                                 DummyInt = 1
                                 ' Tiene suficientes?
@@ -2905,7 +2908,7 @@ Module Protocol
                     If .Stats.MinSta >= 10 Then
                         Call QuitarSta(UserIndex, RandomNumber(1, 10))
                     Else
-                        If .Genero = Declaraciones.eGenero.Hombre Then
+                        If .Genero = eGenero.Hombre Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "Estás muy cansado para luchar.", FontTypeNames.FONTTYPE_INFO)
                         Else
@@ -2923,7 +2926,7 @@ Module Protocol
                     'Validate target
                     If tU > 0 Then
                         'Only allow to atack if the other one can retaliate (can see us)
-                        If System.Math.Abs(UserList(tU).Pos.Y - .Pos.Y) > RANGO_VISION_Y Then
+                        If Math.Abs(UserList(tU).Pos.Y - .Pos.Y) > RANGO_VISION_Y Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "Estás demasiado lejos para atacar.",
                                                 FontTypeNames.FONTTYPE_WARNING)
@@ -2944,8 +2947,8 @@ Module Protocol
                     ElseIf tN > 0 Then
                         'Only allow to atack if the other one can retaliate (can see us)
                         If _
-                            System.Math.Abs(Npclist(tN).Pos.Y - .Pos.Y) > RANGO_VISION_Y And
-                            System.Math.Abs(Npclist(tN).Pos.X - .Pos.X) > RANGO_VISION_X Then
+                            Math.Abs(Npclist(tN).Pos.Y - .Pos.Y) > RANGO_VISION_Y And
+                            Math.Abs(Npclist(tN).Pos.X - .Pos.X) > RANGO_VISION_X Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "Estás demasiado lejos para atacar.",
                                                 FontTypeNames.FONTTYPE_WARNING)
@@ -3003,7 +3006,7 @@ Module Protocol
                         End With
                     End If
 
-                Case Declaraciones.eSkill.Magia
+                Case eSkill.Magia
                     'Check the map allows spells to be casted.
                     If MapInfo_Renamed(.Pos.Map).MagiaSinEfecto > 0 Then
                         Call _
@@ -3016,7 +3019,7 @@ Module Protocol
                     Call LookatTile(UserIndex, .Pos.Map, X, Y)
 
                     'If it's outside range log it and exit
-                    If System.Math.Abs(.Pos.X - X) > RANGO_VISION_X Or System.Math.Abs(.Pos.Y - Y) > RANGO_VISION_Y Then
+                    If Math.Abs(.Pos.X - X) > RANGO_VISION_X Or Math.Abs(.Pos.Y - Y) > RANGO_VISION_Y Then
                         Call _
                             LogCheating(
                                 "Ataque fuera de rango de " & .name & "(" & .Pos.Map & "/" & .Pos.X & "/" & .Pos.Y &
@@ -3047,7 +3050,7 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case Declaraciones.eSkill.Pesca
+                Case eSkill.Pesca
                     DummyInt = .Invent.WeaponEqpObjIndex
                     If DummyInt = 0 Then Exit Sub
 
@@ -3069,7 +3072,7 @@ Module Protocol
                                 Call DoPescar(UserIndex)
 
                             Case RED_PESCA
-                                If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
+                                If Math.Abs(.Pos.X - X) + Math.Abs(.Pos.Y - Y) > 2 Then
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Estás demasiado lejos para pescar.",
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -3084,7 +3087,7 @@ Module Protocol
 
                         'Play sound!
                         Call _
-                            SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                            SendData(SendTarget.ToPCArea, UserIndex,
                                      PrepareMessagePlayWave(SND_PESCAR, .Pos.X, .Pos.Y))
                     Else
                         Call _
@@ -3092,7 +3095,7 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case Declaraciones.eSkill.Robar
+                Case eSkill.Robar
                     'Does the map allow us to steal here?
                     If MapInfo_Renamed(.Pos.Map).Pk Then
 
@@ -3106,9 +3109,9 @@ Module Protocol
 
                         If tU > 0 And tU <> UserIndex Then
                             'Can't steal administrative players
-                            If UserList(tU).flags.Privilegios And Declaraciones.PlayerType.User Then
+                            If UserList(tU).flags.Privilegios And PlayerType.User Then
                                 If UserList(tU).flags.Muerto = 0 Then
-                                    If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 1 Then
+                                    If Math.Abs(.Pos.X - X) + Math.Abs(.Pos.Y - Y) > 1 Then
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Estás demasiado lejos.",
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -3117,7 +3120,7 @@ Module Protocol
 
                                     '17/09/02
                                     'Check the trigger
-                                    If MapData(UserList(tU).Pos.Map, X, Y).trigger = Declaraciones.eTrigger.ZONASEGURA _
+                                    If MapData(UserList(tU).Pos.Map, X, Y).trigger = eTrigger.ZONASEGURA _
                                         Then
                                         Call _
                                             WriteConsoleMsg(UserIndex, "No puedes robar aquí.",
@@ -3125,7 +3128,7 @@ Module Protocol
                                         Exit Sub
                                     End If
 
-                                    If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = Declaraciones.eTrigger.ZONASEGURA _
+                                    If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = eTrigger.ZONASEGURA _
                                         Then
                                         Call _
                                             WriteConsoleMsg(UserIndex, "No puedes robar aquí.",
@@ -3144,7 +3147,7 @@ Module Protocol
                             WriteConsoleMsg(UserIndex, "¡No puedes robar en zonas seguras!", FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case Declaraciones.eSkill.Talar
+                Case eSkill.Talar
                     'Check interval
                     If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
 
@@ -3162,7 +3165,7 @@ Module Protocol
                     DummyInt = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
 
                     If DummyInt > 0 Then
-                        If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
+                        If Math.Abs(.Pos.X - X) + Math.Abs(.Pos.Y - Y) > 2 Then
                             Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
                             Exit Sub
                         End If
@@ -3175,18 +3178,18 @@ Module Protocol
 
                         '¿Hay un arbol donde clickeo?
                         If _
-                            ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArboles And
+                            ObjData_Renamed(DummyInt).OBJType = eOBJType.otArboles And
                             .Invent.WeaponEqpObjIndex = HACHA_LEÑADOR Then
                             Call _
-                                SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                                SendData(SendTarget.ToPCArea, UserIndex,
                                          PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
                             Call DoTalar(UserIndex)
                         ElseIf _
-                            ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otArbolElfico And
+                            ObjData_Renamed(DummyInt).OBJType = eOBJType.otArbolElfico And
                             .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then
                             If .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then
                                 Call _
-                                    SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                                    SendData(SendTarget.ToPCArea, UserIndex,
                                              PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
                                 Call DoTalar(UserIndex, True)
                             Else
@@ -3199,7 +3202,7 @@ Module Protocol
                         Call WriteConsoleMsg(UserIndex, "No hay ningún árbol ahí.", FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case Declaraciones.eSkill.Mineria
+                Case eSkill.Mineria
                     If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
 
                     If .Invent.WeaponEqpObjIndex = 0 Then Exit Sub
@@ -3216,14 +3219,14 @@ Module Protocol
 
                     If DummyInt > 0 Then
                         'Check distance
-                        If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
+                        If Math.Abs(.Pos.X - X) + Math.Abs(.Pos.Y - Y) > 2 Then
                             Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
                             Exit Sub
                         End If
 
                         DummyInt = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex 'CHECK
                         '¿Hay un yacimiento donde clickeo?
-                        If ObjData_Renamed(DummyInt).OBJType = Declaraciones.eOBJType.otYacimiento Then
+                        If ObjData_Renamed(DummyInt).OBJType = eOBJType.otYacimiento Then
                             Call DoMineria(UserIndex)
                         Else
                             Call _
@@ -3233,7 +3236,7 @@ Module Protocol
                         Call WriteConsoleMsg(UserIndex, "Ahí no hay ningún yacimiento.", FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case Declaraciones.eSkill.Domar
+                Case eSkill.Domar
                     'Modificado 25/11/02
                     'Optimizado y solucionado el bug de la doma de
                     'criaturas hostiles.
@@ -3244,7 +3247,7 @@ Module Protocol
 
                     If tN > 0 Then
                         If Npclist(tN).flags.Domable > 0 Then
-                            If System.Math.Abs(.Pos.X - X) + System.Math.Abs(.Pos.Y - Y) > 2 Then
+                            If Math.Abs(.Pos.X - X) + Math.Abs(.Pos.Y - Y) > 2 Then
                                 Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
                                 Exit Sub
                             End If
@@ -3273,7 +3276,7 @@ Module Protocol
 
                     'Check there is a proper item there
                     If .flags.TargetObj > 0 Then
-                        If ObjData_Renamed(.flags.TargetObj).OBJType = Declaraciones.eOBJType.otFragua Then
+                        If ObjData_Renamed(.flags.TargetObj).OBJType = eOBJType.otFragua Then
                             'Validate other items
                             If .flags.TargetObjInvSlot < 1 Or .flags.TargetObjInvSlot > .CurrentInventorySlots Then
                                 Exit Sub
@@ -3296,10 +3299,10 @@ Module Protocol
                                 Call CloseSocket(UserIndex)
                                 Exit Sub
                             End If
-                            If ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = Declaraciones.eOBJType.otMinerales _
+                            If ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = eOBJType.otMinerales _
                                 Then
                                 Call FundirMineral(UserIndex)
-                            ElseIf ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = Declaraciones.eOBJType.otWeapon _
+                            ElseIf ObjData_Renamed(.flags.TargetObjInvIndex).OBJType = eOBJType.otWeapon _
                                 Then
                                 Call FundirArmas(UserIndex)
                             End If
@@ -3310,12 +3313,12 @@ Module Protocol
                         Call WriteConsoleMsg(UserIndex, "Ahí no hay ninguna fragua.", FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case Declaraciones.eSkill.Herreria
+                Case eSkill.Herreria
                     'Target wehatever is in that tile
                     Call LookatTile(UserIndex, .Pos.Map, X, Y)
 
                     If .flags.TargetObj > 0 Then
-                        If ObjData_Renamed(.flags.TargetObj).OBJType = Declaraciones.eOBJType.otYunque Then
+                        If ObjData_Renamed(.flags.TargetObj).OBJType = eOBJType.otYunque Then
                             Call EnivarArmasConstruibles(UserIndex)
                             Call EnivarArmadurasConstruibles(UserIndex)
                             Call WriteShowBlacksmithForm(UserIndex)
@@ -3334,7 +3337,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCreateNewGuild(ByVal UserIndex As Short)
+    Private Sub HandleCreateNewGuild(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/11/09
@@ -3365,14 +3368,14 @@ Module Protocol
                 site = buffer.ReadASCIIString()
                 codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
-                If modGuilds.CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) _
-                Then
+                If CrearNuevoClan(UserIndex, desc, GuildName, site, codex, .FundandoGuildAlineacion, errorStr) _
+                    Then
                     Call _
-                    SendData(modSendData.SendTarget.ToAll, UserIndex,
-                             PrepareMessageConsoleMsg(
-                                 .name & " fundó el clan " & GuildName & " de alineación " &
-                                 modGuilds.GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
-                    Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayWave(44, NO_3D_SOUND, NO_3D_SOUND))
+                        SendData(SendTarget.ToAll, UserIndex,
+                                 PrepareMessageConsoleMsg(
+                                     .name & " fundó el clan " & GuildName & " de alineación " &
+                                     GuildAlignment(.GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessagePlayWave(44, NO_3D_SOUND, NO_3D_SOUND))
 
 
                     'Update tag
@@ -3396,7 +3399,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSpellInfo(ByVal UserIndex As Short)
+    Private Sub HandleSpellInfo(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3444,7 +3447,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleEquipItem(ByVal UserIndex As Short)
+    Private Sub HandleEquipItem(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3480,7 +3483,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleChangeHeading(ByVal UserIndex As Short)
+    Private Sub HandleChangeHeading(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 06/28/2008
@@ -3493,7 +3496,7 @@ Module Protocol
             Exit Sub
         End If
 
-        Dim heading As Declaraciones.eHeading
+        Dim heading As eHeading
         Dim posX As Short
         Dim posY As Short
         With UserList(UserIndex)
@@ -3505,14 +3508,14 @@ Module Protocol
 
             If .flags.Paralizado = 1 And .flags.Inmovilizado = 0 Then
                 Select Case heading
-                    Case Declaraciones.eHeading.NORTH
-                        posY = -1
-                    Case Declaraciones.eHeading.EAST
+                    Case eHeading.NORTH
+                        posY = - 1
+                    Case eHeading.EAST
                         posX = 1
-                    Case Declaraciones.eHeading.SOUTH
+                    Case eHeading.SOUTH
                         posY = 1
-                    Case Declaraciones.eHeading.WEST
-                        posX = -1
+                    Case eHeading.WEST
+                        posX = - 1
                 End Select
 
                 If _
@@ -3537,7 +3540,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleModifySkills(ByVal UserIndex As Short)
+    Private Sub HandleModifySkills(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 11/19/09
@@ -3605,7 +3608,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTrain(ByVal UserIndex As Short)
+    Private Sub HandleTrain(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3627,7 +3630,7 @@ Module Protocol
 
             If .flags.TargetNPC = 0 Then Exit Sub
 
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Entrenador Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Entrenador Then Exit Sub
 
             If Npclist(.flags.TargetNPC).Mascotas < MAXMASCOTASENTRENADOR Then
                 If PetIndex > 0 And PetIndex < Npclist(.flags.TargetNPC).NroCriaturas + 1 Then
@@ -3642,10 +3645,10 @@ Module Protocol
                 End If
             Else
                 Call _
-                    SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                    SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageChatOverHead("No puedo traer más criaturas, mata las existentes.",
                                                         Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                                        System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
+                                                        ColorTranslator.ToOle(Color.White)))
             End If
         End With
     End Sub
@@ -3655,7 +3658,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCommerceBuy(ByVal UserIndex As Short)
+    Private Sub HandleCommerceBuy(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3688,10 +3691,10 @@ Module Protocol
             '¿El NPC puede comerciar?
             If Npclist(.flags.TargetNPC).Comercia = 0 Then
                 Call _
-                    SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                    SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageChatOverHead("No tengo ningún interés en comerciar.",
                                                         Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                                        System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
+                                                        ColorTranslator.ToOle(Color.White)))
                 Exit Sub
             End If
 
@@ -3702,7 +3705,7 @@ Module Protocol
             End If
 
             'User compra el item
-            Call Comercio(modSistemaComercio.eModoComercio.Compra, UserIndex, .flags.TargetNPC, Slot, Amount)
+            Call Comercio(eModoComercio.Compra, UserIndex, .flags.TargetNPC, Slot, Amount)
         End With
     End Sub
 
@@ -3711,7 +3714,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBankExtractItem(ByVal UserIndex As Short)
+    Private Sub HandleBankExtractItem(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3742,7 +3745,7 @@ Module Protocol
             If .flags.TargetNPC < 1 Then Exit Sub
 
             '¿Es el banquero?
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Banquero Then
                 Exit Sub
             End If
 
@@ -3756,7 +3759,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCommerceSell(ByVal UserIndex As Short)
+    Private Sub HandleCommerceSell(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3789,15 +3792,15 @@ Module Protocol
             '¿El NPC puede comerciar?
             If Npclist(.flags.TargetNPC).Comercia = 0 Then
                 Call _
-                    SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                    SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageChatOverHead("No tengo ningún interés en comerciar.",
                                                         Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                                        System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White)))
+                                                        ColorTranslator.ToOle(Color.White)))
                 Exit Sub
             End If
 
             'User compra el item del slot
-            Call Comercio(modSistemaComercio.eModoComercio.Venta, UserIndex, .flags.TargetNPC, Slot, Amount)
+            Call Comercio(eModoComercio.Venta, UserIndex, .flags.TargetNPC, Slot, Amount)
         End With
     End Sub
 
@@ -3806,7 +3809,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBankDeposit(ByVal UserIndex As Short)
+    Private Sub HandleBankDeposit(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3837,7 +3840,7 @@ Module Protocol
             If .flags.TargetNPC < 1 Then Exit Sub
 
             '¿El NPC puede comerciar?
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Banquero Then
                 Exit Sub
             End If
 
@@ -3851,7 +3854,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleForumPost(ByVal UserIndex As Short)
+    Private Sub HandleForumPost(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 02/01/2010
@@ -3864,7 +3867,7 @@ Module Protocol
 
         Try
             Dim buffer As New clsByteQueue
-            Dim ForumMsgType As Declaraciones.eForumMsgType
+            Dim ForumMsgType As eForumMsgType
             Dim file As String
             Dim Title As String
             Dim Post As String
@@ -3889,13 +3892,13 @@ Module Protocol
 
                     Select Case ForumType
 
-                        Case Declaraciones.eForumType.ieGeneral
+                        Case eForumType.ieGeneral
                             ForumIndex = GetForumIndex(ObjData_Renamed(.flags.TargetObj).ForoID)
 
-                        Case Declaraciones.eForumType.ieREAL
+                        Case eForumType.ieREAL
                             ForumIndex = GetForumIndex(FORO_REAL_ID)
 
-                        Case Declaraciones.eForumType.ieCAOS
+                        Case eForumType.ieCAOS
                             ForumIndex = GetForumIndex(FORO_CAOS_ID)
 
                     End Select
@@ -3918,7 +3921,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleMoveSpell(ByVal UserIndex As Short)
+    Private Sub HandleMoveSpell(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -3939,7 +3942,7 @@ Module Protocol
             If .ReadBoolean() Then
                 dir_Renamed = 1
             Else
-                dir_Renamed = -1
+                dir_Renamed = - 1
             End If
 
             Call DesplazarHechizo(UserIndex, dir_Renamed, .ReadByte())
@@ -3951,7 +3954,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleMoveBank(ByVal UserIndex As Short)
+    Private Sub HandleMoveBank(UserIndex As Short)
         '***************************************************
         'Author: Torres Patricio (Pato)
         'Last Modification: 06/14/09
@@ -3974,7 +3977,7 @@ Module Protocol
             If .ReadBoolean() Then
                 dir_Renamed = 1
             Else
-                dir_Renamed = -1
+                dir_Renamed = - 1
             End If
 
             Slot = .ReadByte()
@@ -4006,7 +4009,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleClanCodexUpdate(ByVal UserIndex As Short)
+    Private Sub HandleClanCodexUpdate(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4032,7 +4035,7 @@ Module Protocol
                 desc = buffer.ReadASCIIString()
                 codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
-                Call modGuilds.ChangeCodexAndDesc(desc, codex, .GuildIndex)
+                Call ChangeCodexAndDesc(desc, codex, .GuildIndex)
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -4049,7 +4052,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUserCommerceOffer(ByVal UserIndex As Short)
+    Private Sub HandleUserCommerceOffer(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 24/11/2009
@@ -4085,7 +4088,7 @@ Module Protocol
 
                 If tUser <= 0 Or tUser > MaxUsers Then
                     Call FinComerciarUsu(tUser)
-                    Call Protocol.FlushBuffer(tUser)
+                    Call FlushBuffer(tUser)
                 End If
 
                 Exit Sub
@@ -4156,7 +4159,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildAcceptPeace(ByVal UserIndex As Short)
+    Private Sub HandleGuildAcceptPeace(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4182,20 +4185,20 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDePaz(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(r_AceptarPropuestaDePaz(UserIndex, guild, errorStr))
 
                 If CDbl(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & guild & ".",
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & guild & ".",
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
-                             PrepareMessageConsoleMsg(
-                                 "Tu clan ha firmado la paz con " & modGuilds.GuildName(.GuildIndex) & ".",
-                                 FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                                 PrepareMessageConsoleMsg(
+                                     "Tu clan ha firmado la paz con " & GuildName(.GuildIndex) & ".",
+                                     FontTypeNames.FONTTYPE_GUILD))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4213,7 +4216,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildRejectAlliance(ByVal UserIndex As Short)
+    Private Sub HandleGuildRejectAlliance(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4239,20 +4242,21 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr))
 
                 If CDbl(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de alianza de " & guild,
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de alianza de " & guild,
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
-                             PrepareMessageConsoleMsg(
-                                 modGuilds.GuildName(.GuildIndex) &
-                                 " ha rechazado nuestra propuesta de alianza con su clan.", FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                                 PrepareMessageConsoleMsg(
+                                     GuildName(.GuildIndex) &
+                                     " ha rechazado nuestra propuesta de alianza con su clan.",
+                                     FontTypeNames.FONTTYPE_GUILD))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4270,7 +4274,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildRejectPeace(ByVal UserIndex As Short)
+    Private Sub HandleGuildRejectPeace(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4296,20 +4300,20 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(modGuilds.r_RechazarPropuestaDePaz(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(r_RechazarPropuestaDePaz(UserIndex, guild, errorStr))
 
                 If CDbl(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de paz de " & guild & ".",
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de paz de " & guild & ".",
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
-                             PrepareMessageConsoleMsg(
-                                 modGuilds.GuildName(.GuildIndex) &
-                                 " ha rechazado nuestra propuesta de paz con su clan.", FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                                 PrepareMessageConsoleMsg(
+                                     GuildName(.GuildIndex) &
+                                     " ha rechazado nuestra propuesta de paz con su clan.", FontTypeNames.FONTTYPE_GUILD))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4327,7 +4331,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildAcceptAlliance(ByVal UserIndex As Short)
+    Private Sub HandleGuildAcceptAlliance(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4353,20 +4357,20 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(modGuilds.r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr))
+                otherClanIndex = CStr(r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr))
 
                 If CDbl(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessageConsoleMsg("Tu clan ha firmado la alianza con " & guild & ".",
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessageConsoleMsg("Tu clan ha firmado la alianza con " & guild & ".",
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, CShort(otherClanIndex),
-                             PrepareMessageConsoleMsg(
-                                 "Tu clan ha firmado la paz con " & modGuilds.GuildName(.GuildIndex) & ".",
-                                 FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                                 PrepareMessageConsoleMsg(
+                                     "Tu clan ha firmado la paz con " & GuildName(.GuildIndex) & ".",
+                                     FontTypeNames.FONTTYPE_GUILD))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4384,7 +4388,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildOfferPeace(ByVal UserIndex As Short)
+    Private Sub HandleGuildOfferPeace(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4411,8 +4415,8 @@ Module Protocol
                 guild = buffer.ReadASCIIString()
                 proposal = buffer.ReadASCIIString()
 
-                If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, proposal, errorStr) _
-                Then
+                If r_ClanGeneraPropuesta(UserIndex, guild, RELACIONES_GUILD.PAZ, proposal, errorStr) _
+                    Then
                     Call WriteConsoleMsg(UserIndex, "Propuesta de paz enviada.", FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
@@ -4433,7 +4437,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildOfferAlliance(ByVal UserIndex As Short)
+    Private Sub HandleGuildOfferAlliance(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4460,8 +4464,8 @@ Module Protocol
                 guild = buffer.ReadASCIIString()
                 proposal = buffer.ReadASCIIString()
 
-                If modGuilds.r_ClanGeneraPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, proposal, errorStr) _
-                Then
+                If r_ClanGeneraPropuesta(UserIndex, guild, RELACIONES_GUILD.ALIADOS, proposal, errorStr) _
+                    Then
                     Call WriteConsoleMsg(UserIndex, "Propuesta de alianza enviada.", FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
@@ -4482,7 +4486,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildAllianceDetails(ByVal UserIndex As Short)
+    Private Sub HandleGuildAllianceDetails(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4508,7 +4512,7 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.ALIADOS, errorStr)
+                details = r_VerPropuesta(UserIndex, guild, RELACIONES_GUILD.ALIADOS, errorStr)
 
                 If migr_LenB(details) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
@@ -4531,7 +4535,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildPeaceDetails(ByVal UserIndex As Short)
+    Private Sub HandleGuildPeaceDetails(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4557,7 +4561,7 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                details = modGuilds.r_VerPropuesta(UserIndex, guild, modGuilds.RELACIONES_GUILD.PAZ, errorStr)
+                details = r_VerPropuesta(UserIndex, guild, RELACIONES_GUILD.PAZ, errorStr)
 
                 If migr_LenB(details) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
@@ -4580,7 +4584,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildRequestJoinerInfo(ByVal UserIndex As Short)
+    Private Sub HandleGuildRequestJoinerInfo(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4606,12 +4610,13 @@ Module Protocol
 
                 User_Renamed = buffer.ReadASCIIString()
 
-                details = modGuilds.a_DetallesAspirante(UserIndex, User_Renamed)
+                details = a_DetallesAspirante(UserIndex, User_Renamed)
 
                 If migr_LenB(details) = 0 Then
                     Call _
-                    WriteConsoleMsg(UserIndex, "El personaje no ha mandado solicitud, o no estás habilitado para verla.",
-                                    FontTypeNames.FONTTYPE_GUILD)
+                        WriteConsoleMsg(UserIndex,
+                                        "El personaje no ha mandado solicitud, o no estás habilitado para verla.",
+                                        FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call WriteShowUserRequest(UserIndex, details)
                 End If
@@ -4631,7 +4636,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildAlliancePropList(ByVal UserIndex As Short)
+    Private Sub HandleGuildAlliancePropList(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4640,7 +4645,7 @@ Module Protocol
         'Remove packet ID
         Call UserList(UserIndex).incomingData.ReadByte()
 
-        Call WriteAlianceProposalsList(UserIndex, r_ListaDePropuestas(UserIndex, modGuilds.RELACIONES_GUILD.ALIADOS))
+        Call WriteAlianceProposalsList(UserIndex, r_ListaDePropuestas(UserIndex, RELACIONES_GUILD.ALIADOS))
     End Sub
 
     ''
@@ -4648,7 +4653,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildPeacePropList(ByVal UserIndex As Short)
+    Private Sub HandleGuildPeacePropList(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4657,7 +4662,7 @@ Module Protocol
         'Remove packet ID
         Call UserList(UserIndex).incomingData.ReadByte()
 
-        Call WritePeaceProposalsList(UserIndex, r_ListaDePropuestas(UserIndex, modGuilds.RELACIONES_GUILD.PAZ))
+        Call WritePeaceProposalsList(UserIndex, r_ListaDePropuestas(UserIndex, RELACIONES_GUILD.PAZ))
     End Sub
 
     ''
@@ -4665,7 +4670,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildDeclareWar(ByVal UserIndex As Short)
+    Private Sub HandleGuildDeclareWar(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4691,27 +4696,27 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherGuildIndex = modGuilds.r_DeclararGuerra(UserIndex, guild, errorStr)
+                otherGuildIndex = r_DeclararGuerra(UserIndex, guild, errorStr)
 
                 If otherGuildIndex = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     'WAR shall be!
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessageConsoleMsg("TU CLAN HA ENTRADO EN GUERRA CON " & guild & ".",
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessageConsoleMsg("TU CLAN HA ENTRADO EN GUERRA CON " & guild & ".",
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, otherGuildIndex,
-                             PrepareMessageConsoleMsg(
-                                 modGuilds.GuildName(.GuildIndex) & " LE DECLARA LA GUERRA A TU CLAN.",
-                                 FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, otherGuildIndex,
+                                 PrepareMessageConsoleMsg(
+                                     GuildName(.GuildIndex) & " LE DECLARA LA GUERRA A TU CLAN.",
+                                     FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, otherGuildIndex,
-                             PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
+                        SendData(SendTarget.ToGuildMembers, otherGuildIndex,
+                                 PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4729,7 +4734,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildNewWebsite(ByVal UserIndex As Short)
+    Private Sub HandleGuildNewWebsite(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4749,7 +4754,7 @@ Module Protocol
                 'Remove packet ID
                 Call buffer.ReadByte()
 
-                Call modGuilds.ActualizarWebSite(UserIndex, buffer.ReadASCIIString())
+                Call ActualizarWebSite(UserIndex, buffer.ReadASCIIString())
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -4766,7 +4771,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildAcceptNewMember(ByVal UserIndex As Short)
+    Private Sub HandleGuildAcceptNewMember(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4792,22 +4797,22 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not modGuilds.a_AceptarAspirante(UserIndex, UserName, errorStr) Then
+                If Not a_AceptarAspirante(UserIndex, UserName, errorStr) Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     tUser = NameIndex(UserName)
                     If tUser > 0 Then
-                        Call modGuilds.m_ConectarMiembroAClan(tUser, .GuildIndex)
+                        Call m_ConectarMiembroAClan(tUser, .GuildIndex)
                         Call RefreshCharStatus(tUser)
                     End If
 
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessageConsoleMsg(UserName & " ha sido aceptado como miembro del clan.",
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessageConsoleMsg(UserName & " ha sido aceptado como miembro del clan.",
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
-                             PrepareMessagePlayWave(43, NO_3D_SOUND, NO_3D_SOUND))
+                        SendData(SendTarget.ToGuildMembers, .GuildIndex,
+                                 PrepareMessagePlayWave(43, NO_3D_SOUND, NO_3D_SOUND))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4825,7 +4830,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildRejectNewMember(ByVal UserIndex As Short)
+    Private Sub HandleGuildRejectNewMember(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/08/07
@@ -4854,7 +4859,7 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
                 reason = buffer.ReadASCIIString()
 
-                If Not modGuilds.a_RechazarAspirante(UserIndex, UserName, errorStr) Then
+                If Not a_RechazarAspirante(UserIndex, UserName, errorStr) Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     tUser = NameIndex(UserName)
@@ -4863,7 +4868,7 @@ Module Protocol
                         Call WriteConsoleMsg(tUser, errorStr & " : " & reason, FontTypeNames.FONTTYPE_GUILD)
                     Else
                         'hay que grabar en el char su rechazo
-                        Call modGuilds.a_RechazarAspiranteChar(UserName, .GuildIndex, reason)
+                        Call a_RechazarAspiranteChar(UserName, .GuildIndex, reason)
                     End If
                 End If
 
@@ -4882,7 +4887,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildKickMember(ByVal UserIndex As Short)
+    Private Sub HandleGuildKickMember(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4907,20 +4912,20 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
+                GuildIndex = m_EcharMiembroDeClan(UserIndex, UserName)
 
                 If GuildIndex > 0 Then
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
-                             PrepareMessageConsoleMsg(UserName & " fue expulsado del clan.",
-                                                      FontTypeNames.FONTTYPE_GUILD))
+                        SendData(SendTarget.ToGuildMembers, GuildIndex,
+                                 PrepareMessageConsoleMsg(UserName & " fue expulsado del clan.",
+                                                          FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
-                             PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
+                        SendData(SendTarget.ToGuildMembers, GuildIndex,
+                                 PrepareMessagePlayWave(45, NO_3D_SOUND, NO_3D_SOUND))
                 Else
                     Call _
-                    WriteConsoleMsg(UserIndex, "No puedes expulsar ese personaje del clan.",
-                                    FontTypeNames.FONTTYPE_GUILD)
+                        WriteConsoleMsg(UserIndex, "No puedes expulsar ese personaje del clan.",
+                                        FontTypeNames.FONTTYPE_GUILD)
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -4938,7 +4943,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildUpdateNews(ByVal UserIndex As Short)
+    Private Sub HandleGuildUpdateNews(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4958,7 +4963,7 @@ Module Protocol
                 'Remove packet ID
                 Call buffer.ReadByte()
 
-                Call modGuilds.ActualizarNoticias(UserIndex, buffer.ReadASCIIString())
+                Call ActualizarNoticias(UserIndex, buffer.ReadASCIIString())
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -4975,7 +4980,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildMemberInfo(ByVal UserIndex As Short)
+    Private Sub HandleGuildMemberInfo(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -4995,7 +5000,7 @@ Module Protocol
                 'Remove packet ID
                 Call buffer.ReadByte()
 
-                Call modGuilds.SendDetallesPersonaje(UserIndex, buffer.ReadASCIIString())
+                Call SendDetallesPersonaje(UserIndex, buffer.ReadASCIIString())
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -5012,7 +5017,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildOpenElections(ByVal UserIndex As Short)
+    Private Sub HandleGuildOpenElections(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5025,11 +5030,11 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            If Not modGuilds.v_AbrirElecciones(UserIndex, error_Renamed) Then
+            If Not v_AbrirElecciones(UserIndex, error_Renamed) Then
                 Call WriteConsoleMsg(UserIndex, error_Renamed, FontTypeNames.FONTTYPE_GUILD)
             Else
                 Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, .GuildIndex,
+                    SendData(SendTarget.ToGuildMembers, .GuildIndex,
                              PrepareMessageConsoleMsg(
                                  "¡Han comenzado las elecciones del clan! Puedes votar escribiendo /VOTO seguido del nombre del personaje, por ejemplo: /VOTO " &
                                  .name, FontTypeNames.FONTTYPE_GUILD))
@@ -5042,7 +5047,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildRequestMembership(ByVal UserIndex As Short)
+    Private Sub HandleGuildRequestMembership(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5069,13 +5074,14 @@ Module Protocol
                 guild = buffer.ReadASCIIString()
                 application = buffer.ReadASCIIString()
 
-                If Not modGuilds.a_NuevoAspirante(UserIndex, guild, application, errorStr) Then
+                If Not a_NuevoAspirante(UserIndex, guild, application, errorStr) Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
-                    WriteConsoleMsg(UserIndex,
-                                    "Tu solicitud ha sido enviada. Espera prontas noticias del líder de " & guild & ".",
-                                    FontTypeNames.FONTTYPE_GUILD)
+                        WriteConsoleMsg(UserIndex,
+                                        "Tu solicitud ha sido enviada. Espera prontas noticias del líder de " & guild &
+                                        ".",
+                                        FontTypeNames.FONTTYPE_GUILD)
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -5093,7 +5099,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildRequestDetails(ByVal UserIndex As Short)
+    Private Sub HandleGuildRequestDetails(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5113,7 +5119,7 @@ Module Protocol
                 'Remove packet ID
                 Call buffer.ReadByte()
 
-                Call modGuilds.SendGuildDetails(UserIndex, buffer.ReadASCIIString())
+                Call SendGuildDetails(UserIndex, buffer.ReadASCIIString())
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -5130,7 +5136,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleOnline(ByVal UserIndex As Short)
+    Private Sub HandleOnline(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5147,7 +5153,7 @@ Module Protocol
                 If migr_LenB(UserList(i).name) <> 0 Then
                     If _
                         UserList(i).flags.Privilegios And
-                        (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then Count = Count + 1
+                        (PlayerType.User Or PlayerType.Consejero) Then Count = Count + 1
                 End If
             Next i
 
@@ -5160,7 +5166,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleQuit(ByVal UserIndex As Short)
+    Private Sub HandleQuit(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/15/2008 (NicoNZ)
@@ -5206,7 +5212,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildLeave(ByVal UserIndex As Short)
+    Private Sub HandleGuildLeave(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5224,7 +5230,7 @@ Module Protocol
             If GuildIndex > 0 Then
                 Call WriteConsoleMsg(UserIndex, "Dejas el clan.", FontTypeNames.FONTTYPE_GUILD)
                 Call _
-                    SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
+                    SendData(SendTarget.ToGuildMembers, GuildIndex,
                              PrepareMessageConsoleMsg(.name & " deja el clan.", FontTypeNames.FONTTYPE_GUILD))
             Else
                 Call WriteConsoleMsg(UserIndex, "Tú no puedes salir de este clan.", FontTypeNames.FONTTYPE_GUILD)
@@ -5237,7 +5243,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestAccountState(ByVal UserIndex As Short)
+    Private Sub HandleRequestAccountState(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5271,22 +5277,22 @@ Module Protocol
             End If
 
             Select Case Npclist(.flags.TargetNPC).NPCtype
-                Case Declaraciones.eNPCType.Banquero
+                Case eNPCType.Banquero
                     Call _
                         WriteChatOverHead(UserIndex, "Tienes " & .Stats.Banco & " monedas de oro en tu cuenta.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
 
-                Case Declaraciones.eNPCType.Timbero
-                    If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                Case eNPCType.Timbero
+                    If Not .flags.Privilegios And PlayerType.User Then
                         earnings = Apuestas.Ganancias - Apuestas.Perdidas
 
                         If earnings >= 0 And Apuestas.Ganancias <> 0 Then
-                            Percentage = Int(earnings * 100 / Apuestas.Ganancias)
+                            Percentage = Int(earnings*100/Apuestas.Ganancias)
                         End If
 
                         If earnings < 0 And Apuestas.Perdidas <> 0 Then
-                            Percentage = Int(earnings * 100 / Apuestas.Perdidas)
+                            Percentage = Int(earnings*100/Apuestas.Perdidas)
                         End If
 
                         Call _
@@ -5304,7 +5310,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePetStand(ByVal UserIndex As Short)
+    Private Sub HandlePetStand(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5339,7 +5345,7 @@ Module Protocol
             If Npclist(.flags.TargetNPC).MaestroUser <> UserIndex Then Exit Sub
 
             'Do it!
-            Npclist(.flags.TargetNPC).Movement = AI.TipoAI.ESTATICO
+            Npclist(.flags.TargetNPC).Movement = TipoAI.ESTATICO
 
             Call Expresar(.flags.TargetNPC, UserIndex)
         End With
@@ -5350,7 +5356,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePetFollow(ByVal UserIndex As Short)
+    Private Sub HandlePetFollow(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5397,7 +5403,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleReleasePet(ByVal UserIndex As Short)
+    Private Sub HandleReleasePet(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 18/11/2009
@@ -5442,7 +5448,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTrainList(ByVal UserIndex As Short)
+    Private Sub HandleTrainList(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5474,7 +5480,7 @@ Module Protocol
             End If
 
             'Make sure it's the trainer
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Entrenador Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Entrenador Then Exit Sub
 
             Call WriteTrainerCreatureList(UserIndex, .flags.TargetNPC)
         End With
@@ -5485,7 +5491,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRest(ByVal UserIndex As Short)
+    Private Sub HandleRest(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5536,7 +5542,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleMeditate(ByVal UserIndex As Short)
+    Private Sub HandleMeditate(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/15/08 (NicoNZ)
@@ -5564,7 +5570,7 @@ Module Protocol
             End If
 
             'Admins don't have to wait :D
-            If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+            If Not .flags.Privilegios And PlayerType.User Then
                 .Stats.MinMAN = .Stats.MaxMAN
                 Call WriteConsoleMsg(UserIndex, "Maná restaurado.", FontTypeNames.FONTTYPE_VENENO)
                 Call WriteUpdateMana(UserIndex)
@@ -5583,30 +5589,30 @@ Module Protocol
 
                 Call _
                     WriteConsoleMsg(UserIndex,
-                                    "Te estás concentrando. En " & Fix(TIEMPO_INICIOMEDITAR / 1000) &
+                                    "Te estás concentrando. En " & Fix(TIEMPO_INICIOMEDITAR/1000) &
                                     " segundos comenzarás a meditar.", FontTypeNames.FONTTYPE_INFO)
 
                 .Char_Renamed.loops = INFINITE_LOOPS
 
                 'Show proper FX according to level
                 If .Stats.ELV < 13 Then
-                    .Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARCHICO
+                    .Char_Renamed.FX = FXIDs.FXMEDITARCHICO
 
                 ElseIf .Stats.ELV < 25 Then
-                    .Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARMEDIANO
+                    .Char_Renamed.FX = FXIDs.FXMEDITARMEDIANO
 
                 ElseIf .Stats.ELV < 35 Then
-                    .Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARGRANDE
+                    .Char_Renamed.FX = FXIDs.FXMEDITARGRANDE
 
                 ElseIf .Stats.ELV < 42 Then
-                    .Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARXGRANDE
+                    .Char_Renamed.FX = FXIDs.FXMEDITARXGRANDE
 
                 Else
-                    .Char_Renamed.FX = Declaraciones.FXIDs.FXMEDITARXXGRANDE
+                    .Char_Renamed.FX = FXIDs.FXMEDITARXXGRANDE
                 End If
 
                 Call _
-                    SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                    SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageCreateFX(.Char_Renamed.CharIndex, .Char_Renamed.FX, INFINITE_LOOPS))
             Else
                 .Counters.bPuedeMeditar = False
@@ -5614,7 +5620,7 @@ Module Protocol
                 .Char_Renamed.FX = 0
                 .Char_Renamed.loops = 0
                 Call _
-                    SendData(modSendData.SendTarget.ToPCArea, UserIndex,
+                    SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageCreateFX(.Char_Renamed.CharIndex, 0, 0))
             End If
         End With
@@ -5625,7 +5631,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleResucitate(ByVal UserIndex As Short)
+    Private Sub HandleResucitate(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5646,8 +5652,8 @@ Module Protocol
 
             'Validate NPC and make sure player is dead
             If _
-                (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Revividor And
-                 (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.ResucitadorNewbie Or
+                (Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Revividor And
+                 (Npclist(.flags.TargetNPC).NPCtype <> eNPCType.ResucitadorNewbie Or
                   Not EsNewbie(UserIndex))) Or .flags.Muerto = 0 Then Exit Sub
 
             'Make sure it's close enough
@@ -5668,7 +5674,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleConsultation(ByVal UserIndex As String)
+    Private Sub HandleConsultation(UserIndex As String)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 01/05/2010
@@ -5738,12 +5744,12 @@ Module Protocol
                         .Counters.TiempoOculto = 0
                         .Counters.Invisibilidad = 0
 
-                        Call UsUaRiOs.SetInvisible(UserConsulta, UserList(UserConsulta).Char_Renamed.CharIndex, False)
+                        Call SetInvisible(UserConsulta, UserList(UserConsulta).Char_Renamed.CharIndex, False)
                     End If
                 End With
             End If
 
-            Call UsUaRiOs.SetConsulatMode(UserConsulta)
+            Call SetConsulatMode(UserConsulta)
         End With
     End Sub
 
@@ -5752,7 +5758,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleHeal(ByVal UserIndex As Short)
+    Private Sub HandleHeal(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5772,8 +5778,8 @@ Module Protocol
             End If
 
             If _
-                (Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Revividor And
-                 Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.ResucitadorNewbie) Or .flags.Muerto <> 0 _
+                (Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Revividor And
+                 Npclist(.flags.TargetNPC).NPCtype <> eNPCType.ResucitadorNewbie) Or .flags.Muerto <> 0 _
                 Then Exit Sub
 
             If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
@@ -5796,7 +5802,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestStats(ByVal UserIndex As Short)
+    Private Sub HandleRequestStats(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5813,7 +5819,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleHelp(ByVal UserIndex As Short)
+    Private Sub HandleHelp(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5830,7 +5836,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCommerceStart(ByVal UserIndex As Short)
+    Private Sub HandleCommerceStart(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5861,7 +5867,7 @@ Module Protocol
                         Call _
                             WriteChatOverHead(UserIndex, "No tengo ningún interés en comerciar.",
                                               Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                              System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                              ColorTranslator.ToOle(Color.White))
                     End If
 
                     Exit Sub
@@ -5878,7 +5884,7 @@ Module Protocol
             ElseIf .flags.TargetUser > 0 Then
                 'User commerce...
                 'Can he commerce??
-                If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
+                If .flags.Privilegios And PlayerType.Consejero Then
                     Call WriteConsoleMsg(UserIndex, "No puedes vender ítems.", FontTypeNames.FONTTYPE_WARNING)
                     Exit Sub
                 End If
@@ -5941,7 +5947,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBankStart(ByVal UserIndex As Short)
+    Private Sub HandleBankStart(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -5970,7 +5976,7 @@ Module Protocol
                 End If
 
                 'If it's the banker....
-                If Npclist(.flags.TargetNPC).NPCtype = Declaraciones.eNPCType.Banquero Then
+                If Npclist(.flags.TargetNPC).NPCtype = eNPCType.Banquero Then
                     Call IniciarDeposito(UserIndex)
                 End If
             Else
@@ -5986,7 +5992,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleEnlist(ByVal UserIndex As Short)
+    Private Sub HandleEnlist(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6005,7 +6011,7 @@ Module Protocol
                 Exit Sub
             End If
 
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
 
             If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
                 Call WriteConsoleMsg(UserIndex, "Debes acercarte más.", FontTypeNames.FONTTYPE_INFO)
@@ -6025,7 +6031,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleInformation(ByVal UserIndex As Short)
+    Private Sub HandleInformation(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6048,7 +6054,7 @@ Module Protocol
                 Exit Sub
             End If
 
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
 
             If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
                 Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
@@ -6063,7 +6069,7 @@ Module Protocol
                     Call _
                         WriteChatOverHead(UserIndex, "¡¡No perteneces a las tropas reales!!",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                     Exit Sub
                 End If
 
@@ -6076,20 +6082,20 @@ Module Protocol
                                           "Tu deber es combatir criminales, mata " & Diferencia &
                                           " criminales más y te daré una recompensa.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                 Else
                     Call _
                         WriteChatOverHead(UserIndex,
                                           "Tu deber es combatir criminales, y ya has matado los suficientes como para merecerte una recompensa.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                 End If
             Else
                 If .Faccion.FuerzasCaos = 0 Then
                     Call _
                         WriteChatOverHead(UserIndex, "¡¡No perteneces a la legión oscura!!",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                     Exit Sub
                 End If
 
@@ -6102,13 +6108,13 @@ Module Protocol
                                           "Tu deber es sembrar el caos y la desesperanza, mata " & Diferencia &
                                           " ciudadanos más y te daré una recompensa.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                 Else
                     Call _
                         WriteChatOverHead(UserIndex,
                                           "Tu deber es sembrar el caos y la desesperanza, y creo que estás en condiciones de merecer una recompensa.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                 End If
             End If
         End With
@@ -6119,7 +6125,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleReward(ByVal UserIndex As Short)
+    Private Sub HandleReward(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6138,7 +6144,7 @@ Module Protocol
                 Exit Sub
             End If
 
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Noble Or .flags.Muerto <> 0 Then Exit Sub
 
             If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 4 Then
                 Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
@@ -6150,7 +6156,7 @@ Module Protocol
                     Call _
                         WriteChatOverHead(UserIndex, "¡¡No perteneces a las tropas reales!!",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                     Exit Sub
                 End If
                 Call RecompensaArmadaReal(UserIndex)
@@ -6159,7 +6165,7 @@ Module Protocol
                     Call _
                         WriteChatOverHead(UserIndex, "¡¡No perteneces a la legión oscura!!",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                     Exit Sub
                 End If
                 Call RecompensaCaos(UserIndex)
@@ -6172,7 +6178,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestMOTD(ByVal UserIndex As Short)
+    Private Sub HandleRequestMOTD(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6189,7 +6195,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUpTime(ByVal UserIndex As Short)
+    Private Sub HandleUpTime(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/10/08
@@ -6202,17 +6208,17 @@ Module Protocol
         Dim UpTimeStr As String
 
         'Get total time in seconds
-        time = (GetTickCount() - tInicioServer) \ 1000
+        time = (GetTickCount() - tInicioServer)\1000
 
         'Get times in dd:hh:mm:ss format
         UpTimeStr = (time Mod 60) & " segundos."
-        time = time \ 60
+        time = time\60
 
         UpTimeStr = (time Mod 60) & " minutos, " & UpTimeStr
-        time = time \ 60
+        time = time\60
 
         UpTimeStr = (time Mod 24) & " horas, " & UpTimeStr
-        time = time \ 24
+        time = time\24
 
         If time = 1 Then
             UpTimeStr = time & " día, " & UpTimeStr
@@ -6228,7 +6234,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyLeave(ByVal UserIndex As Short)
+    Private Sub HandlePartyLeave(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6237,7 +6243,7 @@ Module Protocol
         'Remove packet ID
         Call UserList(UserIndex).incomingData.ReadByte()
 
-        Call mdParty.SalirDeParty(UserIndex)
+        Call SalirDeParty(UserIndex)
     End Sub
 
     ''
@@ -6245,7 +6251,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyCreate(ByVal UserIndex As Short)
+    Private Sub HandlePartyCreate(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6254,9 +6260,9 @@ Module Protocol
         'Remove packet ID
         Call UserList(UserIndex).incomingData.ReadByte()
 
-        If Not mdParty.PuedeCrearParty(UserIndex) Then Exit Sub
+        If Not PuedeCrearParty(UserIndex) Then Exit Sub
 
-        Call mdParty.CrearParty(UserIndex)
+        Call CrearParty(UserIndex)
     End Sub
 
     ''
@@ -6264,7 +6270,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyJoin(ByVal UserIndex As Short)
+    Private Sub HandlePartyJoin(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6273,7 +6279,7 @@ Module Protocol
         'Remove packet ID
         Call UserList(UserIndex).incomingData.ReadByte()
 
-        Call mdParty.SolicitarIngresoAParty(UserIndex)
+        Call SolicitarIngresoAParty(UserIndex)
     End Sub
 
     ''
@@ -6281,7 +6287,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleShareNpc(ByVal UserIndex As Short)
+    Private Sub HandleShareNpc(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 15/04/2010
@@ -6366,7 +6372,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleStopSharingNpc(ByVal UserIndex As Short)
+    Private Sub HandleStopSharingNpc(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 15/04/2010
@@ -6403,7 +6409,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleInquiry(ByVal UserIndex As Short)
+    Private Sub HandleInquiry(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6420,7 +6426,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildMessage(ByVal UserIndex As Short)
+    Private Sub HandleGuildMessage(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 15/07/2009
@@ -6447,19 +6453,19 @@ Module Protocol
 
                 If migr_LenB(Chat) <> 0 Then
                     'Analize chat...
-                    Call Statistics.ParseChat(Chat)
+                    Call ParseChat(Chat)
 
                     If .GuildIndex > 0 Then
                         Call _
-                        SendData(modSendData.SendTarget.ToDiosesYclan, .GuildIndex,
-                                 PrepareMessageGuildChat(.name & "> " & Chat))
+                            SendData(SendTarget.ToDiosesYclan, .GuildIndex,
+                                     PrepareMessageGuildChat(.name & "> " & Chat))
 
                         If Not (.flags.AdminInvisible = 1) Then _
-                        Call _
-                            SendData(modSendData.SendTarget.ToClanArea, UserIndex,
-                                     PrepareMessageChatOverHead("< " & Chat & " >", .Char_Renamed.CharIndex,
-                                                                System.Drawing.ColorTranslator.ToOle(
-                                                                    System.Drawing.Color.Yellow)))
+                            Call _
+                                SendData(SendTarget.ToClanArea, UserIndex,
+                                         PrepareMessageChatOverHead("< " & Chat & " >", .Char_Renamed.CharIndex,
+                                                                    ColorTranslator.ToOle(
+                                                                        Color.Yellow)))
                     End If
                 End If
 
@@ -6478,7 +6484,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyMessage(ByVal UserIndex As Short)
+    Private Sub HandlePartyMessage(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6504,9 +6510,9 @@ Module Protocol
 
                 If migr_LenB(Chat) <> 0 Then
                     'Analize chat...
-                    Call Statistics.ParseChat(Chat)
+                    Call ParseChat(Chat)
 
-                    Call mdParty.BroadCastParty(UserIndex, Chat)
+                    Call BroadCastParty(UserIndex, Chat)
                     'TODO : Con la 0.12.1 se debe definir si esto vuelve o se borra (/CMSG overhead)
                     'Call SendData(SendTarget.ToPartyArea, UserIndex, UserList(UserIndex).Pos.map, "||" & vbYellow & "°< " & mid$(rData, 7) & " >°" & CStr(UserList(UserIndex).Char.CharIndex))
                 End If
@@ -6526,7 +6532,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCentinelReport(ByVal UserIndex As Short)
+    Private Sub HandleCentinelReport(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6550,7 +6556,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildOnline(ByVal UserIndex As Short)
+    Private Sub HandleGuildOnline(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6562,7 +6568,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            onlineList = modGuilds.m_ListaDeMiembrosOnline(UserIndex, .GuildIndex)
+            onlineList = m_ListaDeMiembrosOnline(UserIndex, .GuildIndex)
 
             If .GuildIndex <> 0 Then
                 Call _
@@ -6579,7 +6585,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyOnline(ByVal UserIndex As Short)
+    Private Sub HandlePartyOnline(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6588,7 +6594,7 @@ Module Protocol
         'Remove packet ID
         Call UserList(UserIndex).incomingData.ReadByte()
 
-        Call mdParty.OnlineParty(UserIndex)
+        Call OnlineParty(UserIndex)
     End Sub
 
     ''
@@ -6596,7 +6602,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCouncilMessage(ByVal UserIndex As Short)
+    Private Sub HandleCouncilMessage(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6622,18 +6628,18 @@ Module Protocol
 
                 If migr_LenB(Chat) <> 0 Then
                     'Analize chat...
-                    Call Statistics.ParseChat(Chat)
+                    Call ParseChat(Chat)
 
-                    If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then
+                    If .flags.Privilegios And PlayerType.RoyalCouncil Then
                         Call _
-                        SendData(modSendData.SendTarget.ToConsejo, UserIndex,
-                                 PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
-                                                          FontTypeNames.FONTTYPE_CONSEJO))
-                    ElseIf .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then
+                            SendData(SendTarget.ToConsejo, UserIndex,
+                                     PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
+                                                              FontTypeNames.FONTTYPE_CONSEJO))
+                    ElseIf .flags.Privilegios And PlayerType.ChaosCouncil Then
                         Call _
-                        SendData(modSendData.SendTarget.ToConsejoCaos, UserIndex,
-                                 PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
-                                                          FontTypeNames.FONTTYPE_CONSEJOCAOS))
+                            SendData(SendTarget.ToConsejoCaos, UserIndex,
+                                     PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
+                                                              FontTypeNames.FONTTYPE_CONSEJOCAOS))
                     End If
                 End If
 
@@ -6652,7 +6658,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRoleMasterRequest(ByVal UserIndex As Short)
+    Private Sub HandleRoleMasterRequest(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6679,9 +6685,9 @@ Module Protocol
                 If migr_LenB(request) <> 0 Then
                     Call WriteConsoleMsg(UserIndex, "Su solicitud ha sido enviada.", FontTypeNames.FONTTYPE_INFO)
                     Call _
-                    SendData(modSendData.SendTarget.ToRolesMasters, 0,
-                             PrepareMessageConsoleMsg(.name & " PREGUNTA ROL: " & request,
-                                                      FontTypeNames.FONTTYPE_GUILDMSG))
+                        SendData(SendTarget.ToRolesMasters, 0,
+                                 PrepareMessageConsoleMsg(.name & " PREGUNTA ROL: " & request,
+                                                          FontTypeNames.FONTTYPE_GUILDMSG))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -6699,7 +6705,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGMRequest(ByVal UserIndex As Short)
+    Private Sub HandleGMRequest(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6731,7 +6737,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBugReport(ByVal UserIndex As Short)
+    Private Sub HandleBugReport(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6780,7 +6786,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleChangeDescription(ByVal UserIndex As Short)
+    Private Sub HandleChangeDescription(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6806,13 +6812,13 @@ Module Protocol
 
                 If .flags.Muerto = 1 Then
                     Call _
-                    WriteConsoleMsg(UserIndex, "No puedes cambiar la descripción estando muerto.",
-                                    FontTypeNames.FONTTYPE_INFO)
+                        WriteConsoleMsg(UserIndex, "No puedes cambiar la descripción estando muerto.",
+                                        FontTypeNames.FONTTYPE_INFO)
                 Else
                     If Not AsciiValidos(Description) Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "La descripción tiene caracteres inválidos.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "La descripción tiene caracteres inválidos.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         .desc = Trim(Description)
                         Call WriteConsoleMsg(UserIndex, "La descripción ha cambiado.", FontTypeNames.FONTTYPE_INFO)
@@ -6834,7 +6840,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildVote(ByVal UserIndex As Short)
+    Private Sub HandleGuildVote(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -6859,7 +6865,7 @@ Module Protocol
 
                 vote = buffer.ReadASCIIString()
 
-                If Not modGuilds.v_UsuarioVota(UserIndex, vote, errorStr) Then
+                If Not v_UsuarioVota(UserIndex, vote, errorStr) Then
                     Call WriteConsoleMsg(UserIndex, "Voto NO contabilizado: " & errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call WriteConsoleMsg(UserIndex, "Voto contabilizado.", FontTypeNames.FONTTYPE_GUILD)
@@ -6880,7 +6886,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleShowGuildNews(ByVal UserIndex As Short)
+    Private Sub HandleShowGuildNews(UserIndex As Short)
         '***************************************************
         'Author: ZaMA
         'Last Modification: 05/17/06
@@ -6892,7 +6898,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            Call modGuilds.SendGuildNews(UserIndex)
+            Call SendGuildNews(UserIndex)
         End With
     End Sub
 
@@ -6901,7 +6907,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePunishments(ByVal UserIndex As Short)
+    Private Sub HandlePunishments(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 25/08/2009
@@ -6941,11 +6947,11 @@ Module Protocol
                     End If
 
                     If _
-                    (EsAdmin(name) Or EsDios(name) Or EsSemiDios(name) Or EsConsejero(name) Or EsRolesMaster(name)) And
-                    (UserList(UserIndex).flags.Privilegios And Declaraciones.PlayerType.User) Then
+                        (EsAdmin(name) Or EsDios(name) Or EsSemiDios(name) Or EsConsejero(name) Or EsRolesMaster(name)) And
+                        (UserList(UserIndex).flags.Privilegios And PlayerType.User) Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "No puedes ver las penas de los administradores.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "No puedes ver las penas de los administradores.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         If FileExist(CharPath & name & ".chr") Then
                             Count = Val(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
@@ -6954,17 +6960,17 @@ Module Protocol
                             Else
                                 While Count > 0
                                     Call _
-                                    WriteConsoleMsg(UserIndex,
-                                                    Count & " - " &
-                                                    GetVar(CharPath & name & ".chr", "PENAS", "P" & Count),
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex,
+                                                        Count & " - " &
+                                                        GetVar(CharPath & name & ".chr", "PENAS", "P" & Count),
+                                                        FontTypeNames.FONTTYPE_INFO)
                                     Count = Count - 1
                                 End While
                             End If
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex, "Personaje """ & name & """ inexistente.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Personaje """ & name & """ inexistente.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -6984,7 +6990,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleChangePassword(ByVal UserIndex As Short)
+    Private Sub HandleChangePassword(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Creation Date: 10/10/07
@@ -7013,20 +7019,21 @@ Module Protocol
 
                 If migr_LenB(newPass) = 0 Then
                     Call _
-                    WriteConsoleMsg(UserIndex, "Debes especificar una contraseña nueva, inténtalo de nuevo.",
-                                    FontTypeNames.FONTTYPE_INFO)
+                        WriteConsoleMsg(UserIndex, "Debes especificar una contraseña nueva, inténtalo de nuevo.",
+                                        FontTypeNames.FONTTYPE_INFO)
                 Else
                     oldPass2 = UCase(GetVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password"))
 
                     If oldPass2 <> oldPass Then
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "La contraseña actual proporcionada no es correcta. La contraseña no ha sido cambiada, inténtalo de nuevo.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "La contraseña actual proporcionada no es correcta. La contraseña no ha sido cambiada, inténtalo de nuevo.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call WriteVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password", newPass)
                         Call _
-                        WriteConsoleMsg(UserIndex, "La contraseña fue cambiada con éxito.", FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "La contraseña fue cambiada con éxito.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -7046,7 +7053,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGamble(ByVal UserIndex As Short)
+    Private Sub HandleGamble(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7075,33 +7082,33 @@ Module Protocol
                                     FontTypeNames.FONTTYPE_INFO)
             ElseIf Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
                 Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
-            ElseIf Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Timbero Then
+            ElseIf Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Timbero Then
                 Call _
                     WriteChatOverHead(UserIndex, "No tengo ningún interés en apostar.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             ElseIf Amount < 1 Then
                 Call _
                     WriteChatOverHead(UserIndex, "El mínimo de apuesta es 1 moneda.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             ElseIf Amount > 5000 Then
                 Call _
                     WriteChatOverHead(UserIndex, "El máximo de apuesta es 5000 monedas.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             ElseIf .Stats.GLD < Amount Then
                 Call _
                     WriteChatOverHead(UserIndex, "No tienes esa cantidad.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             Else
                 If RandomNumber(1, 100) <= 47 Then
                     .Stats.GLD = .Stats.GLD + Amount
                     Call _
                         WriteChatOverHead(UserIndex, "¡Felicidades! Has ganado " & CStr(Amount) & " monedas de oro.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
 
                     Apuestas.Perdidas = Apuestas.Perdidas + Amount
                     Call WriteVar(DatPath & "apuestas.dat", "Main", "Perdidas", CStr(Apuestas.Perdidas))
@@ -7110,7 +7117,7 @@ Module Protocol
                     Call _
                         WriteChatOverHead(UserIndex, "Lo siento, has perdido " & CStr(Amount) & " monedas de oro.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
 
                     Apuestas.Ganancias = Apuestas.Ganancias + Amount
                     Call WriteVar(DatPath & "apuestas.dat", "Main", "Ganancias", CStr(Apuestas.Ganancias))
@@ -7130,7 +7137,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleInquiryVote(ByVal UserIndex As Short)
+    Private Sub HandleInquiryVote(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7158,7 +7165,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBankExtractGold(ByVal UserIndex As Short)
+    Private Sub HandleBankExtractGold(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7192,7 +7199,7 @@ Module Protocol
                 Exit Sub
             End If
 
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Banquero Then Exit Sub
 
             If Distancia(.Pos, Npclist(.flags.TargetNPC).Pos) > 10 Then
                 Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
@@ -7205,12 +7212,12 @@ Module Protocol
                 Call _
                     WriteChatOverHead(UserIndex, "Tenés " & .Stats.Banco & " monedas de oro en tu cuenta.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             Else
                 Call _
                     WriteChatOverHead(UserIndex, "No tienes esa cantidad.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             End If
 
             Call WriteUpdateGold(UserIndex)
@@ -7223,7 +7230,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleLeaveFaction(ByVal UserIndex As Short)
+    Private Sub HandleLeaveFaction(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7248,7 +7255,7 @@ Module Protocol
             NpcIndex = .flags.TargetNPC
             If NpcIndex <> 0 Then
                 ' Es rey o domonio?
-                If Npclist(NpcIndex).NPCtype = Declaraciones.eNPCType.Noble Then
+                If Npclist(NpcIndex).NPCtype = eNPCType.Noble Then
                     'Rey?
                     If Npclist(NpcIndex).flags.Faccion = 0 Then
                         TalkToKing = True
@@ -7265,7 +7272,7 @@ Module Protocol
                 If TalkToDemon Then
                     Call _
                         WriteChatOverHead(UserIndex, "¡¡¡Sal de aquí bufón!!!", Npclist(NpcIndex).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
 
                 Else
                     ' Si le pidio al rey salir de la armada, le responde.
@@ -7273,7 +7280,7 @@ Module Protocol
                         Call _
                             WriteChatOverHead(UserIndex, "Serás bienvenido a las fuerzas imperiales si deseas regresar.",
                                               Npclist(NpcIndex).Char_Renamed.CharIndex,
-                                              System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                              ColorTranslator.ToOle(Color.White))
                     End If
 
                     Call ExpulsarFaccionReal(UserIndex, False)
@@ -7287,14 +7294,14 @@ Module Protocol
                     Call _
                         WriteChatOverHead(UserIndex, "¡¡¡Sal de aquí maldito criminal!!!",
                                           Npclist(NpcIndex).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                 Else
                     ' Si le pidio al demonio salir del caos, este le responde.
                     If TalkToDemon Then
                         Call _
                             WriteChatOverHead(UserIndex, "Ya volverás arrastrandote.",
                                               Npclist(NpcIndex).Char_Renamed.CharIndex,
-                                              System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                              ColorTranslator.ToOle(Color.White))
                     End If
 
                     Call ExpulsarFaccionCaos(UserIndex, False)
@@ -7307,7 +7314,7 @@ Module Protocol
                     Call _
                         WriteChatOverHead(UserIndex, "¡No perteneces a ninguna facción!",
                                           Npclist(NpcIndex).Char_Renamed.CharIndex,
-                                          System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                          ColorTranslator.ToOle(Color.White))
                 Else
                     Call WriteConsoleMsg(UserIndex, "¡No perteneces a ninguna facción!", FontTypeNames.FONTTYPE_FIGHT)
                 End If
@@ -7322,7 +7329,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBankDepositGold(ByVal UserIndex As Short)
+    Private Sub HandleBankDepositGold(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7361,7 +7368,7 @@ Module Protocol
                 Exit Sub
             End If
 
-            If Npclist(.flags.TargetNPC).NPCtype <> Declaraciones.eNPCType.Banquero Then Exit Sub
+            If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Banquero Then Exit Sub
 
             If Amount > 0 And Amount <= .Stats.GLD Then
                 .Stats.Banco = .Stats.Banco + Amount
@@ -7369,7 +7376,7 @@ Module Protocol
                 Call _
                     WriteChatOverHead(UserIndex, "Tenés " & .Stats.Banco & " monedas de oro en tu cuenta.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
 
                 Call WriteUpdateGold(UserIndex)
                 Call WriteUpdateBankGold(UserIndex)
@@ -7377,7 +7384,7 @@ Module Protocol
                 Call _
                     WriteChatOverHead(UserIndex, "No tenés esa cantidad.",
                                       Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                      System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White))
+                                      ColorTranslator.ToOle(Color.White))
             End If
         End With
     End Sub
@@ -7387,7 +7394,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleDenounce(ByVal UserIndex As Short)
+    Private Sub HandleDenounce(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7413,12 +7420,12 @@ Module Protocol
 
                 If .flags.Silenciado = 0 Then
                     'Analize chat...
-                    Call Statistics.ParseChat(Text)
+                    Call ParseChat(Text)
 
                     Call _
-                    SendData(modSendData.SendTarget.ToAdmins, 0,
-                             PrepareMessageConsoleMsg(LCase(.name) & " DENUNCIA: " & Text,
-                                                      FontTypeNames.FONTTYPE_GUILDMSG))
+                        SendData(SendTarget.ToAdmins, 0,
+                                 PrepareMessageConsoleMsg(LCase(.name) & " DENUNCIA: " & Text,
+                                                          FontTypeNames.FONTTYPE_GUILDMSG))
                     Call WriteConsoleMsg(UserIndex, "Denuncia enviada, espere..", FontTypeNames.FONTTYPE_INFO)
                 End If
 
@@ -7437,7 +7444,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildFundate(ByVal UserIndex As Short)
+    Private Sub HandleGuildFundate(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
@@ -7467,7 +7474,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildFundation(ByVal UserIndex As Short)
+    Private Sub HandleGuildFundation(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
@@ -7478,7 +7485,7 @@ Module Protocol
             Exit Sub
         End If
 
-        Dim clanType As Declaraciones.eClanType
+        Dim clanType As eClanType
         'UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
         Dim error_Renamed As String
         With UserList(UserIndex)
@@ -7500,24 +7507,24 @@ Module Protocol
             End If
 
             Select Case UCase(Trim(CStr(clanType)))
-                Case CStr(Declaraciones.eClanType.ct_RoyalArmy)
-                    .FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_ARMADA
-                Case CStr(Declaraciones.eClanType.ct_Evil)
-                    .FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_LEGION
-                Case CStr(Declaraciones.eClanType.ct_Neutral)
-                    .FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_NEUTRO
-                Case CStr(Declaraciones.eClanType.ct_GM)
-                    .FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_MASTER
-                Case CStr(Declaraciones.eClanType.ct_Legal)
-                    .FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_CIUDA
-                Case CStr(Declaraciones.eClanType.ct_Criminal)
-                    .FundandoGuildAlineacion = modGuilds.ALINEACION_GUILD.ALINEACION_CRIMINAL
+                Case CStr(eClanType.ct_RoyalArmy)
+                    .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_ARMADA
+                Case CStr(eClanType.ct_Evil)
+                    .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_LEGION
+                Case CStr(eClanType.ct_Neutral)
+                    .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_NEUTRO
+                Case CStr(eClanType.ct_GM)
+                    .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_MASTER
+                Case CStr(eClanType.ct_Legal)
+                    .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_CIUDA
+                Case CStr(eClanType.ct_Criminal)
+                    .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_CRIMINAL
                 Case Else
                     Call WriteConsoleMsg(UserIndex, "Alineación inválida.", FontTypeNames.FONTTYPE_GUILD)
                     Exit Sub
             End Select
 
-            If modGuilds.PuedeFundarUnClan(UserIndex, .FundandoGuildAlineacion, error_Renamed) Then
+            If PuedeFundarUnClan(UserIndex, .FundandoGuildAlineacion, error_Renamed) Then
                 Call WriteShowGuildFundationForm(UserIndex)
             Else
                 .FundandoGuildAlineacion = 0
@@ -7531,7 +7538,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyKick(ByVal UserIndex As Short)
+    Private Sub HandlePartyKick(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/05/09
@@ -7561,15 +7568,15 @@ Module Protocol
                     tUser = NameIndex(UserName)
 
                     If tUser > 0 Then
-                        Call mdParty.ExpulsarDeParty(UserIndex, tUser)
+                        Call ExpulsarDeParty(UserIndex, tUser)
                     Else
                         If InStr(UserName, "+") Then
                             UserName = Replace(UserName, "+", " ")
                         End If
 
                         Call _
-                        WriteConsoleMsg(UserIndex, LCase(UserName) & " no pertenece a tu party.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, LCase(UserName) & " no pertenece a tu party.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -7588,7 +7595,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartySetLeader(ByVal UserIndex As Short)
+    Private Sub HandlePartySetLeader(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/05/09
@@ -7611,8 +7618,8 @@ Module Protocol
             'Remove packet ID
             Call buffer.ReadByte()
 
-            rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                   Declaraciones.PlayerType.Consejero
+            rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                   PlayerType.Consejero
 
             UserName = buffer.ReadASCIIString()
             If UserPuedeEjecutarComandos(UserIndex) Then
@@ -7620,7 +7627,7 @@ Module Protocol
                 If tUser > 0 Then
                     'Don't allow users to spoof online GMs
                     If (UserDarPrivilegioLevel(UserName) And rank) <= (.flags.Privilegios And rank) Then
-                        Call mdParty.TransformarEnLider(UserIndex, tUser)
+                        Call TransformarEnLider(UserIndex, tUser)
                     Else
                         Call _
                             WriteConsoleMsg(UserIndex, LCase(UserList(tUser).name) & " no pertenece a tu party.",
@@ -7647,7 +7654,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyAcceptMember(ByVal UserIndex As Short)
+    Private Sub HandlePartyAcceptMember(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/05/09
@@ -7673,8 +7680,8 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                   Declaraciones.PlayerType.Consejero
+                rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                       PlayerType.Consejero
 
                 UserName = buffer.ReadASCIIString()
                 If UserList(UserIndex).flags.Muerto Then
@@ -7683,17 +7690,17 @@ Module Protocol
                     bUserVivo = True
                 End If
 
-                If mdParty.UserPuedeEjecutarComandos(UserIndex) And bUserVivo Then
+                If UserPuedeEjecutarComandos(UserIndex) And bUserVivo Then
                     tUser = NameIndex(UserName)
                     If tUser > 0 Then
                         'Validate administrative ranks - don't allow users to spoof online GMs
                         If (UserList(tUser).flags.Privilegios And rank) <= (.flags.Privilegios And rank) Then
-                            Call mdParty.AprobarIngresoAParty(UserIndex, tUser)
+                            Call AprobarIngresoAParty(UserIndex, tUser)
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex,
-                                            "No puedes incorporar a tu party a personajes de mayor jerarquía.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                "No puedes incorporar a tu party a personajes de mayor jerarquía.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     Else
                         If InStr(UserName, "+") Then
@@ -7703,13 +7710,13 @@ Module Protocol
                         'Don't allow users to spoof online GMs
                         If (UserDarPrivilegioLevel(UserName) And rank) <= (.flags.Privilegios And rank) Then
                             Call _
-                            WriteConsoleMsg(UserIndex, LCase(UserName) & " no ha solicitado ingresar a tu party.",
-                                            FontTypeNames.FONTTYPE_PARTY)
+                                WriteConsoleMsg(UserIndex, LCase(UserName) & " no ha solicitado ingresar a tu party.",
+                                                FontTypeNames.FONTTYPE_PARTY)
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex,
-                                            "No puedes incorporar a tu party a personajes de mayor jerarquía.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                "No puedes incorporar a tu party a personajes de mayor jerarquía.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -7729,7 +7736,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildMemberList(ByVal UserIndex As Short)
+    Private Sub HandleGuildMemberList(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7756,7 +7763,7 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
+                If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
                     If (migr_InStrB(guild, "\") <> 0) Then
                         guild = Replace(guild, "\", "")
                     End If
@@ -7768,13 +7775,13 @@ Module Protocol
                         Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
                     Else
                         memberCount =
-                        Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
-                                   "INIT", "NroMembers"))
+                            Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
+                                       "INIT", "NroMembers"))
 
                         For i = 1 To memberCount
                             UserName =
-                            GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
-                                   "Members", "Member" & i)
+                                GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
+                                       "Members", "Member" & i)
 
                             Call WriteConsoleMsg(UserIndex, UserName & "<" & guild & ">", FontTypeNames.FONTTYPE_INFO)
                         Next i
@@ -7796,7 +7803,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGMMessage(ByVal UserIndex As Short)
+    Private Sub HandleGMMessage(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/08/07
@@ -7820,16 +7827,16 @@ Module Protocol
 
                 message = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                If Not .flags.Privilegios And PlayerType.User Then
                     Call LogGM(.name, "Mensaje a Gms:" & message)
 
                     If migr_LenB(message) <> 0 Then
                         'Analize chat...
-                        Call Statistics.ParseChat(message)
+                        Call ParseChat(message)
 
                         Call _
-                        SendData(modSendData.SendTarget.ToAdmins, 0,
-                                 PrepareMessageConsoleMsg(.name & "> " & message, FontTypeNames.FONTTYPE_GMMSG))
+                            SendData(SendTarget.ToAdmins, 0,
+                                     PrepareMessageConsoleMsg(.name & "> " & message, FontTypeNames.FONTTYPE_GMMSG))
                     End If
                 End If
 
@@ -7848,7 +7855,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleShowName(ByVal UserIndex As Short)
+    Private Sub HandleShowName(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7860,7 +7867,7 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
+                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
                 Then
                 .showName = Not .showName 'Show / Hide the name
 
@@ -7874,7 +7881,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleOnlineRoyalArmy(ByVal UserIndex As Short)
+    Private Sub HandleOnlineRoyalArmy(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7886,17 +7893,17 @@ Module Protocol
             'Remove packet ID
             .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
 
             For i = 1 To LastUser
-                If UserList(i).ConnID <> -1 Then
+                If UserList(i).ConnID <> - 1 Then
                     If UserList(i).Faccion.ArmadaReal = 1 Then
                         If _
                             UserList(i).flags.Privilegios And
-                            (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                             Declaraciones.PlayerType.SemiDios) Or
-                            .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) _
+                            (PlayerType.User Or PlayerType.Consejero Or
+                             PlayerType.SemiDios) Or
+                            .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) _
                             Then
                             list = list & UserList(i).name & ", "
                         End If
@@ -7919,7 +7926,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleOnlineChaosLegion(ByVal UserIndex As Short)
+    Private Sub HandleOnlineChaosLegion(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -7931,17 +7938,17 @@ Module Protocol
             'Remove packet ID
             .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
 
             For i = 1 To LastUser
-                If UserList(i).ConnID <> -1 Then
+                If UserList(i).ConnID <> - 1 Then
                     If UserList(i).Faccion.FuerzasCaos = 1 Then
                         If _
                             UserList(i).flags.Privilegios And
-                            (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                             Declaraciones.PlayerType.SemiDios) Or
-                            .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) _
+                            (PlayerType.User Or PlayerType.Consejero Or
+                             PlayerType.SemiDios) Or
+                            .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) _
                             Then
                             list = list & UserList(i).name & ", "
                         End If
@@ -7963,7 +7970,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGoNearby(ByVal UserIndex As Short)
+    Private Sub HandleGoNearby(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/10/07
@@ -7997,13 +8004,13 @@ Module Protocol
 
                 'Check the user has enough powers
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                 Declaraciones.PlayerType.Consejero) Then
+                    .flags.Privilegios And
+                    (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                     PlayerType.Consejero) Then
                     'Si es dios o Admins no podemos salvo que nosotros también lo seamos
                     If _
-                    Not (EsDios(UserName) Or EsAdmin(UserName)) Or
-                    (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) Then
+                        Not (EsDios(UserName) Or EsAdmin(UserName)) Or
+                        (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) Then
                         If tIndex <= 0 Then 'existe el usuario destino?
                             Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
                         Else
@@ -8014,9 +8021,10 @@ Module Protocol
                                             If LegalPos(UserList(tIndex).Pos.Map, X, Y, True, True) Then
                                                 Call WarpUserChar(UserIndex, UserList(tIndex).Pos.Map, X, Y, True)
                                                 Call _
-                                                LogGM(.name,
-                                                      "/IRCERCA " & UserName & " Mapa:" & UserList(tIndex).Pos.Map &
-                                                      " X:" & UserList(tIndex).Pos.X & " Y:" & UserList(tIndex).Pos.Y)
+                                                    LogGM(.name,
+                                                          "/IRCERCA " & UserName & " Mapa:" & UserList(tIndex).Pos.Map &
+                                                          " X:" & UserList(tIndex).Pos.X & " Y:" &
+                                                          UserList(tIndex).Pos.Y)
                                                 found = True
                                                 Exit For
                                             End If
@@ -8032,8 +8040,8 @@ Module Protocol
                             'No space found??
                             If Not found Then
                                 Call _
-                                WriteConsoleMsg(UserIndex, "Todos los lugares están ocupados.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "Todos los lugares están ocupados.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             End If
                         End If
                     End If
@@ -8054,7 +8062,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleComment(ByVal UserIndex As Short)
+    Private Sub HandleComment(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8077,7 +8085,7 @@ Module Protocol
 
                 comment = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                If Not .flags.Privilegios And PlayerType.User Then
                     Call LogGM(.name, "Comentario: " & comment)
                     Call WriteConsoleMsg(UserIndex, "Comentario salvado...", FontTypeNames.FONTTYPE_INFO)
                 End If
@@ -8097,7 +8105,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleServerTime(ByVal UserIndex As Short)
+    Private Sub HandleServerTime(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/08/07
@@ -8107,15 +8115,15 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
             Call LogGM(.name, "Hora.")
         End With
 
         Call _
-            modSendData.SendData(modSendData.SendTarget.ToAll, 0,
-                                 PrepareMessageConsoleMsg("Hora: " & TimeOfDay & " " & Today,
-                                                          FontTypeNames.FONTTYPE_INFO))
+            SendData(SendTarget.ToAll, 0,
+                     PrepareMessageConsoleMsg("Hora: " & TimeOfDay & " " & Today,
+                                              FontTypeNames.FONTTYPE_INFO))
     End Sub
 
     ''
@@ -8123,7 +8131,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWhere(ByVal UserIndex As Short)
+    Private Sub HandleWhere(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8148,24 +8156,24 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                If Not .flags.Privilegios And PlayerType.User Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
                     Else
                         If _
-                        (UserList(tUser).flags.Privilegios And
-                         (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                          Declaraciones.PlayerType.SemiDios)) <> 0 Or
-                        ((UserList(tUser).flags.Privilegios And
-                          (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) <> 0) And
-                         (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0) _
-                        Then
+                            (UserList(tUser).flags.Privilegios And
+                             (PlayerType.User Or PlayerType.Consejero Or
+                              PlayerType.SemiDios)) <> 0 Or
+                            ((UserList(tUser).flags.Privilegios And
+                              (PlayerType.Dios Or PlayerType.Admin) <> 0) And
+                             (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0) _
+                            Then
                             Call _
-                            WriteConsoleMsg(UserIndex,
-                                            "Ubicación  " & UserName & ": " & UserList(tUser).Pos.Map & ", " &
-                                            UserList(tUser).Pos.X & ", " & UserList(tUser).Pos.Y & ".",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                "Ubicación  " & UserName & ": " & UserList(tUser).Pos.Map & ", " &
+                                                UserList(tUser).Pos.X & ", " & UserList(tUser).Pos.Y & ".",
+                                                FontTypeNames.FONTTYPE_INFO)
                             Call LogGM(.name, "/Donde " & UserName)
                         End If
                     End If
@@ -8186,7 +8194,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCreaturesInMap(ByVal UserIndex As Short)
+    Private Sub HandleCreaturesInMap(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 30/07/06
@@ -8213,7 +8221,7 @@ Module Protocol
 
             Map = .incomingData.ReadInteger()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
             If MapaValido(Map) Then
                 For i = 1 To LastNPC
@@ -8316,7 +8324,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWarpMeToTarget(ByVal UserIndex As Short)
+    Private Sub HandleWarpMeToTarget(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 26/03/09
@@ -8329,7 +8337,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
             X = .flags.TargetX
             Y = .flags.TargetY
@@ -8345,7 +8353,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWarpChar(ByVal UserIndex As Short)
+    Private Sub HandleWarpChar(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 26/03/2009
@@ -8376,10 +8384,10 @@ Module Protocol
                 X = buffer.ReadByte()
                 Y = buffer.ReadByte()
 
-                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                If Not .flags.Privilegios And PlayerType.User Then
                     If MapaValido(Map) And migr_LenB(UserName) <> 0 Then
                         If UCase(UserName) <> "YO" Then
-                            If Not .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
+                            If Not .flags.Privilegios And PlayerType.Consejero Then
                                 tUser = NameIndex(UserName)
                             End If
                         Else
@@ -8392,12 +8400,13 @@ Module Protocol
                             Call FindLegalPos(tUser, Map, X, Y)
                             Call WarpUserChar(tUser, Map, X, Y, True, True)
                             Call _
-                            WriteConsoleMsg(UserIndex, UserList(tUser).name & " transportado.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, UserList(tUser).name & " transportado.",
+                                                FontTypeNames.FONTTYPE_INFO)
                             Call _
-                            LogGM(.name,
-                                  "Transportó a " & UserList(tUser).name & " hacia " & "Mapa" & Map & " X:" & X & " Y:" &
-                                  Y)
+                                LogGM(.name,
+                                      "Transportó a " & UserList(tUser).name & " hacia " & "Mapa" & Map & " X:" & X &
+                                      " Y:" &
+                                      Y)
                         End If
                     End If
                 End If
@@ -8417,7 +8426,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSilence(ByVal UserIndex As Short)
+    Private Sub HandleSilence(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8442,7 +8451,7 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then
+                If Not .flags.Privilegios And PlayerType.User Then
                     tUser = NameIndex(UserName)
 
                     If tUser <= 0 Then
@@ -8452,8 +8461,8 @@ Module Protocol
                             UserList(tUser).flags.Silenciado = 1
                             Call WriteConsoleMsg(UserIndex, "Usuario silenciado.", FontTypeNames.FONTTYPE_INFO)
                             Call _
-                            WriteShowMessageBox(tUser,
-                                                "Estimado usuario, ud. ha sido silenciado por los administradores. Sus denuncias serán ignoradas por el servidor de aquí en más. Utilice /GM para contactar un administrador.")
+                                WriteShowMessageBox(tUser,
+                                                    "Estimado usuario, ud. ha sido silenciado por los administradores. Sus denuncias serán ignoradas por el servidor de aquí en más. Utilice /GM para contactar un administrador.")
                             Call LogGM(.name, "/silenciar " & UserList(tUser).name)
 
                             'Flush the other user's buffer
@@ -8481,7 +8490,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSOSShowList(ByVal UserIndex As Short)
+    Private Sub HandleSOSShowList(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8491,7 +8500,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
             Call WriteShowSOSForm(UserIndex)
         End With
     End Sub
@@ -8501,7 +8510,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandlePartyForm(ByVal UserIndex As Short)
+    Private Sub HandlePartyForm(UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
@@ -8524,7 +8533,7 @@ Module Protocol
     '
     ' @param    UserIndex The index of the user sending the message.
 
-    Private Sub HandleItemUpgrade(ByVal UserIndex As Short)
+    Private Sub HandleItemUpgrade(UserIndex As Short)
         '***************************************************
         'Author: Torres Patricio
         'Last Modification: 12/09/09
@@ -8550,7 +8559,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSOSRemove(ByVal UserIndex As Short)
+    Private Sub HandleSOSRemove(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8573,7 +8582,7 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And Declaraciones.PlayerType.User Then Call Ayuda.Quitar(UserName)
+                If Not .flags.Privilegios And PlayerType.User Then Call Ayuda.Quitar(UserName)
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -8590,7 +8599,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGoToChar(ByVal UserIndex As Short)
+    Private Sub HandleGoToChar(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 26/03/2009
@@ -8619,13 +8628,13 @@ Module Protocol
                 tUser = NameIndex(UserName)
 
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.SemiDios Or
-                 Declaraciones.PlayerType.Consejero) Then
+                    .flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.SemiDios Or
+                     PlayerType.Consejero) Then
                     'Si es dios o Admins no podemos salvo que nosotros también lo seamos
                     If _
-                    Not (EsDios(UserName) Or EsAdmin(UserName)) Or
-                    (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Then
+                        Not (EsDios(UserName) Or EsAdmin(UserName)) Or
+                        (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Then
                         If tUser <= 0 Then
                             Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
                         Else
@@ -8637,15 +8646,15 @@ Module Protocol
 
                             If .flags.AdminInvisible = 0 Then
                                 Call _
-                                WriteConsoleMsg(tUser, .name & " se ha trasportado hacia donde te encuentras.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(tUser, .name & " se ha trasportado hacia donde te encuentras.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                                 Call FlushBuffer(tUser)
                             End If
 
                             Call _
-                            LogGM(.name,
-                                  "/IRA " & UserName & " Mapa:" & UserList(tUser).Pos.Map & " X:" &
-                                  UserList(tUser).Pos.X & " Y:" & UserList(tUser).Pos.Y)
+                                LogGM(.name,
+                                      "/IRA " & UserName & " Mapa:" & UserList(tUser).Pos.Map & " X:" &
+                                      UserList(tUser).Pos.X & " Y:" & UserList(tUser).Pos.Y)
                         End If
                     End If
                 End If
@@ -8665,7 +8674,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleInvisible(ByVal UserIndex As Short)
+    Private Sub HandleInvisible(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8675,7 +8684,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
             Call DoAdminInvisible(UserIndex)
             Call LogGM(.name, "/INVISIBLE")
@@ -8687,7 +8696,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGMPanel(ByVal UserIndex As Short)
+    Private Sub HandleGMPanel(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8697,7 +8706,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
             Call WriteShowGMPanelForm(UserIndex)
         End With
@@ -8708,7 +8717,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestUserList(ByVal UserIndex As Short)
+    Private Sub HandleRequestUserList(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/09/07
@@ -8723,7 +8732,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.RoleMaster) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster) Then _
                 Exit Sub
 
             'UPGRADE_WARNING: El límite inferior de la matriz names ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -8732,7 +8741,7 @@ Module Protocol
 
             For i = 1 To LastUser
                 If (migr_LenB(UserList(i).name) <> 0) Then
-                    If UserList(i).flags.Privilegios And Declaraciones.PlayerType.User Then
+                    If UserList(i).flags.Privilegios And PlayerType.User Then
                         names(Count) = UserList(i).name
                         Count = Count + 1
                     End If
@@ -8748,7 +8757,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWorking(ByVal UserIndex As Short)
+    Private Sub HandleWorking(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8761,7 +8770,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.RoleMaster) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster) Then _
                 Exit Sub
 
             For i = 1 To LastUser
@@ -8769,7 +8778,7 @@ Module Protocol
                     users = users & ", " & UserList(i).name
 
                     ' Display the user being checked by the centinel
-                    If modCentinela.Centinela.RevisandoUserIndex = i Then users = users & " (*)"
+                    If Centinela.RevisandoUserIndex = i Then users = users & " (*)"
                 End If
             Next i
 
@@ -8787,7 +8796,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleHiding(ByVal UserIndex As Short)
+    Private Sub HandleHiding(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8800,7 +8809,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.RoleMaster) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster) Then _
                 Exit Sub
 
             For i = 1 To LastUser
@@ -8823,7 +8832,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleJail(ByVal UserIndex As Short)
+    Private Sub HandleJail(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -8859,24 +8868,25 @@ Module Protocol
 
                 '/carcel nick@motivo@<tiempo>
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (Not .flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (Not .flags.Privilegios And PlayerType.User) <> 0 Then
                     If migr_LenB(UserName) = 0 Or migr_LenB(reason) = 0 Then
-                        Call WriteConsoleMsg(UserIndex, "Utilice /carcel nick@motivo@tiempo", FontTypeNames.FONTTYPE_INFO)
+                        Call _
+                            WriteConsoleMsg(UserIndex, "Utilice /carcel nick@motivo@tiempo", FontTypeNames.FONTTYPE_INFO)
                     Else
                         tUser = NameIndex(UserName)
 
                         If tUser <= 0 Then
                             Call WriteConsoleMsg(UserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_INFO)
                         Else
-                            If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
+                            If Not UserList(tUser).flags.Privilegios And PlayerType.User Then
                                 Call _
-                                WriteConsoleMsg(UserIndex, "No puedes encarcelar a administradores.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "No puedes encarcelar a administradores.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             ElseIf jailTime > 60 Then
                                 Call _
-                                WriteConsoleMsg(UserIndex, "No puedés encarcelar por más de 60 minutos.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "No puedés encarcelar por más de 60 minutos.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             Else
                                 If (migr_InStrB(UserName, "\") <> 0) Then
                                     UserName = Replace(UserName, "\", "")
@@ -8889,9 +8899,10 @@ Module Protocol
                                     Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                                     Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
                                     Call _
-                                    WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
-                                             LCase(.name) & ": CARCEL " & jailTime & "m, MOTIVO: " & LCase(reason) & " " &
-                                             Today & " " & TimeOfDay)
+                                        WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
+                                                 LCase(.name) & ": CARCEL " & jailTime & "m, MOTIVO: " & LCase(reason) &
+                                                 " " &
+                                                 Today & " " & TimeOfDay)
                                 End If
 
                                 Call Encarcelar(tUser, jailTime, .name)
@@ -8916,7 +8927,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleKillNPC(ByVal UserIndex As Short)
+    Private Sub HandleKillNPC(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/22/08 (NicoNZ)
@@ -8929,11 +8940,11 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And Declaraciones.PlayerType.User Then Exit Sub
+            If .flags.Privilegios And PlayerType.User Then Exit Sub
 
 
             'Los consejeros no pueden RMATAr a nada en el mapa pretoriano
-            If .flags.Privilegios And Declaraciones.PlayerType.Consejero Then
+            If .flags.Privilegios And PlayerType.Consejero Then
                 If .Pos.Map = MAPA_PRETORIANO Then
                     Call _
                         WriteConsoleMsg(UserIndex, "Los consejeros no pueden usar este comando en el mapa pretoriano.",
@@ -8966,7 +8977,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleWarnUser(ByVal UserIndex As Short)
+    Private Sub HandleWarnUser(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/26/06
@@ -8981,7 +8992,7 @@ Module Protocol
             Dim buffer As New clsByteQueue
             Dim UserName As String
             Dim reason As String
-            Dim privs As Declaraciones.PlayerType
+            Dim privs As PlayerType
             Dim Count As Byte
             With UserList(UserIndex)
                 'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -8995,17 +9006,17 @@ Module Protocol
                 reason = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (Not .flags.Privilegios And Declaraciones.PlayerType.User) <> 0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (Not .flags.Privilegios And PlayerType.User) <> 0 Then
                     If migr_LenB(UserName) = 0 Or migr_LenB(reason) = 0 Then
                         Call WriteConsoleMsg(UserIndex, "Utilice /advertencia nick@motivo", FontTypeNames.FONTTYPE_INFO)
                     Else
                         privs = UserDarPrivilegioLevel(UserName)
 
-                        If Not privs And Declaraciones.PlayerType.User Then
+                        If Not privs And PlayerType.User Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "No puedes advertir a administradores.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "No puedes advertir a administradores.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             If (migr_InStrB(UserName, "\") <> 0) Then
                                 UserName = Replace(UserName, "\", "")
@@ -9018,13 +9029,13 @@ Module Protocol
                                 Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
                                 Call _
-                                WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
-                                         LCase(.name) & ": ADVERTENCIA por: " & LCase(reason) & " " & Today & " " &
-                                         TimeOfDay)
+                                    WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
+                                             LCase(.name) & ": ADVERTENCIA por: " & LCase(reason) & " " & Today & " " &
+                                             TimeOfDay)
 
                                 Call _
-                                WriteConsoleMsg(UserIndex, "Has advertido a " & UCase(UserName) & ".",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "Has advertido a " & UCase(UserName) & ".",
+                                                    FontTypeNames.FONTTYPE_INFO)
                                 Call LogGM(.name, " advirtio a " & UserName)
                             End If
                         End If
@@ -9046,7 +9057,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleEditChar(ByVal UserIndex As Short)
+    Private Sub HandleEditChar(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 11/06/2009
@@ -9095,33 +9106,35 @@ Module Protocol
                 Arg1 = buffer.ReadASCIIString()
                 Arg2 = buffer.ReadASCIIString()
 
-                If .flags.Privilegios And Declaraciones.PlayerType.RoleMaster Then
+                If .flags.Privilegios And PlayerType.RoleMaster Then
                     Select Case _
-                    .flags.Privilegios And
-                    (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                     Declaraciones.PlayerType.Consejero)
-                        Case Declaraciones.PlayerType.Consejero
+                        .flags.Privilegios And
+                        (PlayerType.Dios Or PlayerType.SemiDios Or
+                         PlayerType.Consejero)
+                        Case PlayerType.Consejero
                             ' Los RMs consejeros sólo se pueden editar su head, body y level
                             valido = tUser = UserIndex And
-                                 (opcion = eEditOptions.eo_Body Or opcion = eEditOptions.eo_Head Or
-                                  opcion = eEditOptions.eo_Level)
+                                     (opcion = eEditOptions.eo_Body Or opcion = eEditOptions.eo_Head Or
+                                      opcion = eEditOptions.eo_Level)
 
-                        Case Declaraciones.PlayerType.SemiDios
+                        Case PlayerType.SemiDios
                             ' Los RMs sólo se pueden editar su level y el head y body de cualquiera
-                            valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or
-                                 opcion = eEditOptions.eo_Head
+                            valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or
+                                     opcion = eEditOptions.eo_Body Or
+                                     opcion = eEditOptions.eo_Head
 
-                        Case Declaraciones.PlayerType.Dios
+                        Case PlayerType.Dios
                             ' Los DRMs pueden aplicar los siguientes comandos sobre cualquiera
                             ' pero si quiere modificar el level sólo lo puede hacer sobre sí mismo
-                            valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or opcion = eEditOptions.eo_Body Or
-                                 opcion = eEditOptions.eo_Head Or opcion = eEditOptions.eo_CiticensKilled Or
-                                 opcion = eEditOptions.eo_CriminalsKilled Or opcion = eEditOptions.eo_Class Or
-                                 opcion = eEditOptions.eo_Skills Or opcion = eEditOptions.eo_addGold
+                            valido = (opcion = eEditOptions.eo_Level And tUser = UserIndex) Or
+                                     opcion = eEditOptions.eo_Body Or
+                                     opcion = eEditOptions.eo_Head Or opcion = eEditOptions.eo_CiticensKilled Or
+                                     opcion = eEditOptions.eo_CriminalsKilled Or opcion = eEditOptions.eo_Class Or
+                                     opcion = eEditOptions.eo_Skills Or opcion = eEditOptions.eo_addGold
                     End Select
 
-                ElseIf .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then _
-                    'Si no es RM debe ser dios para poder usar este comando
+                ElseIf .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then _
+'Si no es RM debe ser dios para poder usar este comando
                     valido = True
                 End If
 
@@ -9129,8 +9142,8 @@ Module Protocol
                     UserCharPath = CharPath & UserName & ".chr"
                     If tUser <= 0 And Not FileExist(UserCharPath) Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "Estás intentando editar un usuario inexistente.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "Estás intentando editar un usuario inexistente.",
+                                            FontTypeNames.FONTTYPE_INFO)
                         Call LogGM(.name, "Intentó editar un usuario inexistente.")
                     Else
                         'For making the Log
@@ -9142,18 +9155,18 @@ Module Protocol
                                     If tUser <= 0 Then ' Esta offline?
                                         Call WriteVar(UserCharPath, "STATS", "GLD", CStr(Val(Arg1)))
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                        FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                            FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
                                         UserList(tUser).Stats.GLD = Val(Arg1)
                                         Call WriteUpdateGold(tUser)
                                     End If
                                 Else
                                     Call _
-                                    WriteConsoleMsg(UserIndex,
-                                                    "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT &
-                                                    ". Su comando ha quedado en los logs del juego.",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex,
+                                                        "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT &
+                                                        ". Su comando ha quedado en los logs del juego.",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 End If
 
                                 ' Log it
@@ -9168,8 +9181,8 @@ Module Protocol
                                     Var = CInt(GetVar(UserCharPath, "STATS", "EXP"))
                                     Call WriteVar(UserCharPath, "STATS", "EXP", CStr(Var + Val(Arg1)))
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Stats.Exp = UserList(tUser).Stats.Exp + Val(Arg1)
                                     Call CheckUserLevel(tUser)
@@ -9183,15 +9196,15 @@ Module Protocol
                                 If tUser <= 0 Then
                                     Call WriteVar(UserCharPath, "INIT", "Body", Arg1)
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     Call _
-                                    ChangeUserChar(tUser, Val(Arg1), UserList(tUser).Char_Renamed.Head,
-                                                   UserList(tUser).Char_Renamed.heading,
-                                                   UserList(tUser).Char_Renamed.WeaponAnim,
-                                                   UserList(tUser).Char_Renamed.ShieldAnim,
-                                                   UserList(tUser).Char_Renamed.CascoAnim)
+                                        ChangeUserChar(tUser, Val(Arg1), UserList(tUser).Char_Renamed.Head,
+                                                       UserList(tUser).Char_Renamed.heading,
+                                                       UserList(tUser).Char_Renamed.WeaponAnim,
+                                                       UserList(tUser).Char_Renamed.ShieldAnim,
+                                                       UserList(tUser).Char_Renamed.CascoAnim)
                                 End If
 
                                 ' Log it
@@ -9201,15 +9214,15 @@ Module Protocol
                                 If tUser <= 0 Then
                                     Call WriteVar(UserCharPath, "INIT", "Head", Arg1)
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     Call _
-                                    ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, Val(Arg1),
-                                                   UserList(tUser).Char_Renamed.heading,
-                                                   UserList(tUser).Char_Renamed.WeaponAnim,
-                                                   UserList(tUser).Char_Renamed.ShieldAnim,
-                                                   UserList(tUser).Char_Renamed.CascoAnim)
+                                        ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, Val(Arg1),
+                                                       UserList(tUser).Char_Renamed.heading,
+                                                       UserList(tUser).Char_Renamed.WeaponAnim,
+                                                       UserList(tUser).Char_Renamed.ShieldAnim,
+                                                       UserList(tUser).Char_Renamed.CascoAnim)
                                 End If
 
                                 ' Log it
@@ -9221,8 +9234,8 @@ Module Protocol
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", CStr(Var))
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Faccion.CriminalesMatados = Var
                                 End If
@@ -9236,8 +9249,8 @@ Module Protocol
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", CStr(Var))
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Faccion.CiudadanosMatados = Var
                                 End If
@@ -9249,9 +9262,9 @@ Module Protocol
                                 If Val(Arg1) > STAT_MAXELV Then
                                     Arg1 = CStr(STAT_MAXELV)
                                     Call _
-                                    WriteConsoleMsg(UserIndex,
-                                                    "No puedes tener un nivel superior a " & STAT_MAXELV & ".",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex,
+                                                        "No puedes tener un nivel superior a " & STAT_MAXELV & ".",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 End If
 
                                 ' Chequeamos si puede permanecer en el clan
@@ -9264,21 +9277,21 @@ Module Protocol
                                     End If
 
                                     If GI > 0 Then
-                                        If modGuilds.GuildAlignment(GI) = "Del Mal" Or modGuilds.GuildAlignment(GI) = "Real" _
-                                        Then
+                                        If GuildAlignment(GI) = "Del Mal" Or GuildAlignment(GI) = "Real" _
+                                            Then
                                             'We get here, so guild has factionary alignment, we have to expulse the user
-                                            Call modGuilds.m_EcharMiembroDeClan(-1, UserName)
+                                            Call m_EcharMiembroDeClan(- 1, UserName)
 
                                             Call _
-                                            SendData(modSendData.SendTarget.ToGuildMembers, GI,
-                                                     PrepareMessageConsoleMsg(UserName & " deja el clan.",
-                                                                              FontTypeNames.FONTTYPE_GUILD))
+                                                SendData(SendTarget.ToGuildMembers, GI,
+                                                         PrepareMessageConsoleMsg(UserName & " deja el clan.",
+                                                                                  FontTypeNames.FONTTYPE_GUILD))
                                             ' Si esta online le avisamos
                                             If tUser > 0 Then _
-                                            Call _
-                                                WriteConsoleMsg(tUser,
-                                                                "¡Ya tienes la madurez suficiente como para decidir bajo que estandarte pelearás! Por esta razón, hasta tanto no te enlistes en la facción bajo la cual tu clan está alineado, estarás excluído del mismo.",
-                                                                FontTypeNames.FONTTYPE_GUILD)
+                                                Call _
+                                                    WriteConsoleMsg(tUser,
+                                                                    "¡Ya tienes la madurez suficiente como para decidir bajo que estandarte pelearás! Por esta razón, hasta tanto no te enlistes en la facción bajo la cual tu clan está alineado, estarás excluído del mismo.",
+                                                                    FontTypeNames.FONTTYPE_GUILD)
                                         End If
                                     End If
                                 End If
@@ -9286,8 +9299,8 @@ Module Protocol
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "STATS", "ELV", CStr(Val(Arg1)))
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Stats.ELV = Val(Arg1)
                                     Call WriteUpdateUserStats(tUser)
@@ -9303,14 +9316,14 @@ Module Protocol
 
                                 If LoopC > NUMCLASES Then
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Clase desconocida. Intente nuevamente.",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Clase desconocida. Intente nuevamente.",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then ' Offline
                                         Call WriteVar(UserCharPath, "INIT", "Clase", CStr(LoopC))
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                        FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                            FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
                                         UserList(tUser).clase = LoopC
                                     End If
@@ -9333,15 +9346,15 @@ Module Protocol
 
                                         If CDbl(Arg2) < MAXSKILLPOINTS Then
                                             Call _
-                                            WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC,
-                                                     CStr(ELU_SKILL_INICIAL * 1.05 ^ CDbl(Arg2)))
+                                                WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC,
+                                                         CStr(ELU_SKILL_INICIAL*1.05^CDbl(Arg2)))
                                         Else
                                             Call WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC, CStr(0))
                                         End If
 
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                        FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                            FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
                                         UserList(tUser).Stats.UserSkills(LoopC) = Val(Arg2)
                                         Call CheckEluSkill(tUser, LoopC, True)
@@ -9355,8 +9368,8 @@ Module Protocol
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "STATS", "SkillPtsLibres", Arg1)
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Stats.SkillPts = Val(Arg1)
                                 End If
@@ -9370,8 +9383,8 @@ Module Protocol
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Nobles", CStr(Var))
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Reputacion.NobleRep = Var
                                 End If
@@ -9385,8 +9398,8 @@ Module Protocol
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Asesino", CStr(Var))
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
                                     UserList(tUser).Reputacion.AsesinoRep = Var
                                 End If
@@ -9395,22 +9408,22 @@ Module Protocol
                                 CommandString = CommandString & "ASE "
 
                             Case eEditOptions.eo_Sex
-                                Sex = IIf(UCase(Arg1) = "MUJER", Declaraciones.eGenero.Mujer, 0) ' Mujer?
-                                Sex = IIf(UCase(Arg1) = "HOMBRE", Declaraciones.eGenero.Hombre, Sex) ' Hombre?
+                                Sex = IIf(UCase(Arg1) = "MUJER", eGenero.Mujer, 0) ' Mujer?
+                                Sex = IIf(UCase(Arg1) = "HOMBRE", eGenero.Hombre, Sex) ' Hombre?
 
                                 If Sex <> 0 Then ' Es Hombre o mujer?
                                     If tUser <= 0 Then ' OffLine
                                         Call WriteVar(UserCharPath, "INIT", "Genero", CStr(Sex))
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                        FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                            FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
                                         UserList(tUser).Genero = Sex
                                     End If
                                 Else
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Genero desconocido. Intente nuevamente.",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Genero desconocido. Intente nuevamente.",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 End If
 
                                 ' Log it
@@ -9421,15 +9434,15 @@ Module Protocol
                                 Arg1 = UCase(Arg1)
                                 Select Case Arg1
                                     Case "HUMANO"
-                                        raza = Declaraciones.eRaza.Humano
+                                        raza = eRaza.Humano
                                     Case "ELFO"
-                                        raza = Declaraciones.eRaza.Elfo
+                                        raza = eRaza.Elfo
                                     Case "DROW"
-                                        raza = Declaraciones.eRaza.Drow
+                                        raza = eRaza.Drow
                                     Case "ENANO"
-                                        raza = Declaraciones.eRaza.Enano
+                                        raza = eRaza.Enano
                                     Case "GNOMO"
-                                        raza = Declaraciones.eRaza.Gnomo
+                                        raza = eRaza.Gnomo
                                     Case Else
                                         raza = 0
                                 End Select
@@ -9437,14 +9450,14 @@ Module Protocol
 
                                 If raza = 0 Then
                                     Call _
-                                    WriteConsoleMsg(UserIndex, "Raza desconocida. Intente nuevamente.",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex, "Raza desconocida. Intente nuevamente.",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then
                                         Call WriteVar(UserCharPath, "INIT", "Raza", CStr(raza))
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
-                                                        FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
+                                                            FontTypeNames.FONTTYPE_INFO)
                                     Else
                                         UserList(tUser).raza = raza
                                     End If
@@ -9456,27 +9469,30 @@ Module Protocol
                             Case eEditOptions.eo_addGold
 
 
-                                If System.Math.Abs(CDbl(Arg1)) > MAX_ORO_EDIT Then
+                                If Math.Abs(CDbl(Arg1)) > MAX_ORO_EDIT Then
                                     Call _
-                                    WriteConsoleMsg(UserIndex,
-                                                    "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT & ".",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex,
+                                                        "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT &
+                                                        ".",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then
                                         bankGold = CInt(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
                                         Call _
-                                        WriteVar(UserCharPath, "STATS", "BANCO",
-                                                 IIf(bankGold + Val(Arg1) <= 0, 0, bankGold + Val(Arg1)))
+                                            WriteVar(UserCharPath, "STATS", "BANCO",
+                                                     IIf(bankGold + Val(Arg1) <= 0, 0, bankGold + Val(Arg1)))
                                         Call _
-                                        WriteConsoleMsg(UserIndex,
-                                                        "Se le ha agregado " & Arg1 & " monedas de oro a " & UserName &
-                                                        ".", FontTypeNames.FONTTYPE_TALK)
+                                            WriteConsoleMsg(UserIndex,
+                                                            "Se le ha agregado " & Arg1 & " monedas de oro a " &
+                                                            UserName &
+                                                            ".", FontTypeNames.FONTTYPE_TALK)
                                     Else
-                                        UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + Val(Arg1) <= 0, 0,
-                                                                      UserList(tUser).Stats.Banco + Val(Arg1))
+                                        UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + Val(Arg1) <= 0,
+                                                                          0,
+                                                                          UserList(tUser).Stats.Banco + Val(Arg1))
                                         Call _
-                                        WriteConsoleMsg(tUser, STANDARD_BOUNTY_HUNTER_MESSAGE,
-                                                        FontTypeNames.FONTTYPE_TALK)
+                                            WriteConsoleMsg(tUser, STANDARD_BOUNTY_HUNTER_MESSAGE,
+                                                            FontTypeNames.FONTTYPE_TALK)
                                     End If
                                 End If
 
@@ -9510,7 +9526,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestCharInfo(ByVal UserIndex As Short)
+    Private Sub HandleRequestCharInfo(UserIndex As Short)
         '***************************************************
         'Author: Fredy Horacio Treboux (liquid)
         'Last Modification: 01/08/07
@@ -9538,24 +9554,24 @@ Module Protocol
 
 
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios) _
+                    Then
                     'is the player offline?
                     If TargetIndex <= 0 Then
                         'don't allow to retrieve administrator's info
                         If Not (EsDios(targetName) Or EsAdmin(targetName)) Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "Usuario offline, buscando en charfile.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Usuario offline, buscando en charfile.",
+                                                FontTypeNames.FONTTYPE_INFO)
                             Call SendUserStatsTxtOFF(UserIndex, targetName)
                         End If
                     Else
                         'don't allow to retrieve administrator's info
                         If _
-                        UserList(TargetIndex).flags.Privilegios And
-                        (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                         Declaraciones.PlayerType.SemiDios) Then
+                            UserList(TargetIndex).flags.Privilegios And
+                            (PlayerType.User Or PlayerType.Consejero Or
+                             PlayerType.SemiDios) Then
                             Call SendUserStatsTxt(UserIndex, TargetIndex)
                         End If
                     End If
@@ -9576,7 +9592,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestCharStats(ByVal UserIndex As Short)
+    Private Sub HandleRequestCharStats(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -9601,17 +9617,18 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     Call LogGM(.name, "/STAT " & UserName)
 
                     tUser = NameIndex(UserName)
 
                     If tUser <= 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ", FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ",
+                                            FontTypeNames.FONTTYPE_INFO)
 
                         Call SendUserMiniStatsTxtFromChar(UserIndex, UserName)
                     Else
@@ -9634,7 +9651,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestCharGold(ByVal UserIndex As Short)
+    Private Sub HandleRequestCharGold(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -9661,21 +9678,22 @@ Module Protocol
                 tUser = NameIndex(UserName)
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     Call LogGM(.name, "/BAL " & UserName)
 
                     If tUser <= 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ", FontTypeNames.FONTTYPE_TALK)
+                            WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ",
+                                            FontTypeNames.FONTTYPE_TALK)
 
                         Call SendUserOROTxtFromChar(UserIndex, UserName)
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "El usuario " & UserName & " tiene " & UserList(tUser).Stats.Banco &
-                                        " en el banco.", FontTypeNames.FONTTYPE_TALK)
+                            WriteConsoleMsg(UserIndex,
+                                            "El usuario " & UserName & " tiene " & UserList(tUser).Stats.Banco &
+                                            " en el banco.", FontTypeNames.FONTTYPE_TALK)
                     End If
                 End If
 
@@ -9694,7 +9712,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestCharInventory(ByVal UserIndex As Short)
+    Private Sub HandleRequestCharInventory(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -9722,15 +9740,15 @@ Module Protocol
 
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     Call LogGM(.name, "/INV " & UserName)
 
                     If tUser <= 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo del charfile...",
-                                        FontTypeNames.FONTTYPE_TALK)
+                            WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo del charfile...",
+                                            FontTypeNames.FONTTYPE_TALK)
 
                         Call SendUserInvTxtFromChar(UserIndex, UserName)
                     Else
@@ -9753,7 +9771,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestCharBank(ByVal UserIndex As Short)
+    Private Sub HandleRequestCharBank(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -9781,14 +9799,15 @@ Module Protocol
 
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     Call LogGM(.name, "/BOV " & UserName)
 
                     If tUser <= 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ", FontTypeNames.FONTTYPE_TALK)
+                            WriteConsoleMsg(UserIndex, "Usuario offline. Leyendo charfile... ",
+                                            FontTypeNames.FONTTYPE_TALK)
 
                         Call SendUserBovedaTxtFromChar(UserIndex, UserName)
                     Else
@@ -9811,7 +9830,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRequestCharSkills(ByVal UserIndex As Short)
+    Private Sub HandleRequestCharSkills(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -9841,9 +9860,9 @@ Module Protocol
 
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     Call LogGM(.name, "/STATS " & UserName)
 
                     If tUser <= 0 Then
@@ -9856,14 +9875,14 @@ Module Protocol
 
                         For LoopC = 1 To NUMSKILLS
                             message = message & "CHAR>" & SkillsNames(LoopC) & " = " &
-                                  GetVar(CharPath & UserName & ".chr", "SKILLS", "SK" & LoopC) & vbCrLf
+                                      GetVar(CharPath & UserName & ".chr", "SKILLS", "SK" & LoopC) & vbCrLf
                         Next LoopC
 
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        message & "CHAR> Libres:" &
-                                        GetVar(CharPath & UserName & ".chr", "STATS", "SKILLPTSLIBRES"),
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            message & "CHAR> Libres:" &
+                                            GetVar(CharPath & UserName & ".chr", "STATS", "SKILLPTSLIBRES"),
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call SendUserSkillsTxt(UserIndex, tUser)
                     End If
@@ -9884,7 +9903,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleReviveChar(ByVal UserIndex As Short)
+    Private Sub HandleReviveChar(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 11/03/2010
@@ -9912,9 +9931,9 @@ Module Protocol
 
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     If UCase(UserName) <> "YO" Then
                         tUser = NameIndex(UserName)
                     Else
@@ -9938,21 +9957,21 @@ Module Protocol
                                 If .flags.Traveling = 1 Then
                                     .flags.Traveling = 0
                                     .Counters.goHome = 0
-                                    Call WriteMultiMessage(tUser, Declaraciones.eMessages.CancelHome)
+                                    Call WriteMultiMessage(tUser, eMessages.CancelHome)
                                 End If
 
                                 Call _
-                                ChangeUserChar(tUser, .Char_Renamed.body, .OrigChar.Head, .Char_Renamed.heading,
-                                               .Char_Renamed.WeaponAnim, .Char_Renamed.ShieldAnim,
-                                               .Char_Renamed.CascoAnim)
+                                    ChangeUserChar(tUser, .Char_Renamed.body, .OrigChar.Head, .Char_Renamed.heading,
+                                                   .Char_Renamed.WeaponAnim, .Char_Renamed.ShieldAnim,
+                                                   .Char_Renamed.CascoAnim)
 
                                 Call _
-                                WriteConsoleMsg(tUser, UserList(UserIndex).name & " te ha resucitado.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(tUser, UserList(UserIndex).name & " te ha resucitado.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             Else
                                 Call _
-                                WriteConsoleMsg(tUser, UserList(UserIndex).name & " te ha curado.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(tUser, UserList(UserIndex).name & " te ha curado.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             End If
 
                             .Stats.MinHp = .Stats.MaxHp
@@ -9960,7 +9979,7 @@ Module Protocol
                             If .flags.Traveling = 1 Then
                                 .Counters.goHome = 0
                                 .flags.Traveling = 0
-                                Call WriteMultiMessage(tUser, Declaraciones.eMessages.CancelHome)
+                                Call WriteMultiMessage(tUser, eMessages.CancelHome)
                             End If
 
                         End With
@@ -9988,7 +10007,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleOnlineGM(ByVal UserIndex As Short)
+    Private Sub HandleOnlineGM(UserIndex As Short)
         '***************************************************
         'Author: Fredy Horacio Treboux (liquid)
         'Last Modification: 12/28/06
@@ -9996,18 +10015,18 @@ Module Protocol
         '***************************************************
         Dim i As Integer
         Dim list As String
-        Dim priv As Declaraciones.PlayerType
+        Dim priv As PlayerType
 
         With UserList(UserIndex)
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
                 Exit Sub
 
-            priv = Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios
-            If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) Then _
-                priv = priv Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin
+            priv = PlayerType.Consejero Or PlayerType.SemiDios
+            If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then _
+                priv = priv Or PlayerType.Dios Or PlayerType.Admin
 
             For i = 1 To LastUser
                 If UserList(i).flags.UserLogged Then
@@ -10029,7 +10048,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleOnlineMap(ByVal UserIndex As Short)
+    Private Sub HandleOnlineMap(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 23/03/2009
@@ -10038,21 +10057,21 @@ Module Protocol
         Dim Map As Short
         Dim LoopC As Integer
         Dim list As String
-        Dim priv As Declaraciones.PlayerType
+        Dim priv As PlayerType
         With UserList(UserIndex)
             'Remove packet ID
             Call .incomingData.ReadByte()
 
             Map = .incomingData.ReadInteger
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
                 Exit Sub
 
 
-            priv = Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                   Declaraciones.PlayerType.SemiDios
-            If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) Then _
-                priv = priv + CShort(Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)
+            priv = PlayerType.User Or PlayerType.Consejero Or
+                   PlayerType.SemiDios
+            If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then _
+                priv = priv + CShort(PlayerType.Dios Or PlayerType.Admin)
 
             For LoopC = 1 To LastUser
                 If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).Pos.Map = Map Then
@@ -10071,7 +10090,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleForgive(ByVal UserIndex As Short)
+    Private Sub HandleForgive(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10097,10 +10116,10 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     tUser = NameIndex(UserName)
 
                     If tUser > 0 Then
@@ -10109,7 +10128,8 @@ Module Protocol
                         Else
                             Call LogGM(.name, "Intento perdonar un personaje de nivel avanzado.")
                             Call _
-                            WriteConsoleMsg(UserIndex, "Sólo se permite perdonar newbies.", FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Sólo se permite perdonar newbies.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -10129,7 +10149,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleKick(ByVal UserIndex As Short)
+    Private Sub HandleKick(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10153,15 +10173,15 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                rank = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                   Declaraciones.PlayerType.Consejero
+                rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                       PlayerType.Consejero
 
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     tUser = NameIndex(UserName)
 
                     If tUser <= 0 Then
@@ -10169,13 +10189,13 @@ Module Protocol
                     Else
                         If (UserList(tUser).flags.Privilegios And rank) > (.flags.Privilegios And rank) Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "No puedes echar a alguien con jerarquía mayor a la tuya.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "No puedes echar a alguien con jerarquía mayor a la tuya.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call _
-                            SendData(modSendData.SendTarget.ToAll, 0,
-                                     PrepareMessageConsoleMsg(.name & " echó a " & UserName & ".",
-                                                              FontTypeNames.FONTTYPE_INFO))
+                                SendData(SendTarget.ToAll, 0,
+                                         PrepareMessageConsoleMsg(.name & " echó a " & UserName & ".",
+                                                                  FontTypeNames.FONTTYPE_INFO))
                             Call CloseSocket(tUser)
                             Call LogGM(.name, "Echó a " & UserName)
                         End If
@@ -10197,7 +10217,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleExecute(ByVal UserIndex As Short)
+    Private Sub HandleExecute(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10223,23 +10243,23 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     tUser = NameIndex(UserName)
 
                     If tUser > 0 Then
-                        If Not UserList(tUser).flags.Privilegios And Declaraciones.PlayerType.User Then
+                        If Not UserList(tUser).flags.Privilegios And PlayerType.User Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "¿¿Estás loco?? ¿¿Cómo vas a piñatear un gm?? :@",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "¿¿Estás loco?? ¿¿Cómo vas a piñatear un gm?? :@",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call UserDie(tUser)
                             Call _
-                            SendData(modSendData.SendTarget.ToAll, 0,
-                                     PrepareMessageConsoleMsg(.name & " ha ejecutado a " & UserName & ".",
-                                                              FontTypeNames.FONTTYPE_EJECUCION))
+                                SendData(SendTarget.ToAll, 0,
+                                         PrepareMessageConsoleMsg(.name & " ha ejecutado a " & UserName & ".",
+                                                                  FontTypeNames.FONTTYPE_EJECUCION))
                             Call LogGM(.name, " ejecuto a " & UserName)
                         End If
                     Else
@@ -10262,7 +10282,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBanChar(ByVal UserIndex As Short)
+    Private Sub HandleBanChar(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10289,10 +10309,10 @@ Module Protocol
                 reason = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     Call BanCharacter(UserIndex, UserName, reason)
                 End If
 
@@ -10311,7 +10331,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUnbanChar(ByVal UserIndex As Short)
+    Private Sub HandleUnbanChar(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10337,10 +10357,10 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     If (migr_InStrB(UserName, "\") <> 0) Then
                         UserName = Replace(UserName, "\", "")
                     End If
@@ -10358,15 +10378,15 @@ Module Protocol
                             cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                             Call _
-                            WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                                     LCase(.name) & ": UNBAN. " & Today & " " & TimeOfDay)
+                                WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
+                                         LCase(.name) & ": UNBAN. " & Today & " " & TimeOfDay)
 
                             Call LogGM(.name, "/UNBAN a " & UserName)
                             Call WriteConsoleMsg(UserIndex, UserName & " unbanned.", FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex, UserName & " no está baneado. Imposible unbanear.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, UserName & " no está baneado. Imposible unbanear.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -10386,7 +10406,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleNPCFollow(ByVal UserIndex As Short)
+    Private Sub HandleNPCFollow(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10396,7 +10416,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
                 Exit Sub
 
             If .flags.TargetNPC > 0 Then
@@ -10413,7 +10433,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSummonChar(ByVal UserIndex As Short)
+    Private Sub HandleSummonChar(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 26/03/2009
@@ -10441,18 +10461,18 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     tUser = NameIndex(UserName)
 
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "El jugador no está online.", FontTypeNames.FONTTYPE_INFO)
                     Else
                         If _
-                        (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Or
-                        (UserList(tUser).flags.Privilegios And
-                         (Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.User)) <> 0 Then
+                            (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Or
+                            (UserList(tUser).flags.Privilegios And
+                             (PlayerType.Consejero Or PlayerType.User)) <> 0 Then
                             Call WriteConsoleMsg(tUser, .name & " te ha trasportado.", FontTypeNames.FONTTYPE_INFO)
                             X = .Pos.X
                             Y = .Pos.Y + 1
@@ -10461,8 +10481,8 @@ Module Protocol
                             Call LogGM(.name, "/SUM " & UserName & " Map:" & .Pos.Map & " X:" & .Pos.X & " Y:" & .Pos.Y)
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex, "No puedes invocar a dioses y admins.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "No puedes invocar a dioses y admins.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -10482,7 +10502,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSpawnListRequest(ByVal UserIndex As Short)
+    Private Sub HandleSpawnListRequest(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10492,7 +10512,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
                 Exit Sub
 
             Call EnviarSpawnList(UserIndex)
@@ -10504,7 +10524,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSpawnCreature(ByVal UserIndex As Short)
+    Private Sub HandleSpawnCreature(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10525,12 +10545,12 @@ Module Protocol
 
             If _
                 (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
+                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
                 Then
-                If npc_Renamed > 0 And npc_Renamed <= UBound(Declaraciones.SpawnList) Then _
-                    Call SpawnNpc(Declaraciones.SpawnList(npc_Renamed).NpcIndex, .Pos, True, False)
+                If npc_Renamed > 0 And npc_Renamed <= UBound(SpawnList) Then _
+                    Call SpawnNpc(SpawnList(npc_Renamed).NpcIndex, .Pos, True, False)
 
-                Call LogGM(.name, "Sumoneo " & Declaraciones.SpawnList(npc_Renamed).NpcName)
+                Call LogGM(.name, "Sumoneo " & SpawnList(npc_Renamed).NpcName)
             End If
         End With
     End Sub
@@ -10540,7 +10560,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleResetNPCInventory(ByVal UserIndex As Short)
+    Private Sub HandleResetNPCInventory(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10552,8 +10572,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.RoleMaster) Then Exit Sub
             If .flags.TargetNPC = 0 Then Exit Sub
 
             Call ResetNpcInv(.flags.TargetNPC)
@@ -10566,7 +10586,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCleanWorld(ByVal UserIndex As Short)
+    Private Sub HandleCleanWorld(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10578,8 +10598,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.RoleMaster) Then Exit Sub
 
             Call LimpiarMundo()
         End With
@@ -10590,7 +10610,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleServerMessage(ByVal UserIndex As Short)
+    Private Sub HandleServerMessage(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10614,15 +10634,15 @@ Module Protocol
                 message = buffer.ReadASCIIString()
 
                 If _
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) _
-                Then
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                    Then
                     If migr_LenB(message) <> 0 Then
                         Call LogGM(.name, "Mensaje Broadcast:" & message)
                         Call _
-                        SendData(modSendData.SendTarget.ToAll, 0,
-                                 PrepareMessageConsoleMsg(UserList(UserIndex).name & "> " & message,
-                                                          FontTypeNames.FONTTYPE_TALK))
+                            SendData(SendTarget.ToAll, 0,
+                                     PrepareMessageConsoleMsg(UserList(UserIndex).name & "> " & message,
+                                                              FontTypeNames.FONTTYPE_TALK))
                         ''''''''''''''''SOLO PARA EL TESTEO'''''''
                         ''''''''''SE USA PARA COMUNICARSE CON EL SERVER'''''''''''
                     End If
@@ -10643,7 +10663,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleNickToIP(ByVal UserIndex As Short)
+    Private Sub HandleNickToIP(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 24/07/07
@@ -10658,7 +10678,7 @@ Module Protocol
             Dim buffer As New clsByteQueue
             Dim UserName As String
             Dim tUser As Short
-            Dim priv As Declaraciones.PlayerType
+            Dim priv As PlayerType
             Dim ip As String
             Dim lista As String
             Dim LoopC As Integer
@@ -10673,26 +10693,26 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     tUser = NameIndex(UserName)
                     Call LogGM(.name, "NICK2IP Solicito la IP de " & UserName)
 
-                    If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) Then
-                        priv = Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                           Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Dios Or
-                           Declaraciones.PlayerType.Admin
+                    If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then
+                        priv = PlayerType.User Or PlayerType.Consejero Or
+                               PlayerType.SemiDios Or PlayerType.Dios Or
+                               PlayerType.Admin
                     Else
-                        priv = Declaraciones.PlayerType.User
+                        priv = PlayerType.User
                     End If
 
                     If tUser > 0 Then
                         If UserList(tUser).flags.Privilegios And priv Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "El ip de " & UserName & " es " & UserList(tUser).ip,
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "El ip de " & UserName & " es " & UserList(tUser).ip,
+                                                FontTypeNames.FONTTYPE_INFO)
                             ip = UserList(tUser).ip
                             For LoopC = 1 To LastUser
                                 If UserList(LoopC).ip = ip Then
@@ -10705,12 +10725,13 @@ Module Protocol
                             Next LoopC
                             If migr_LenB(lista) <> 0 Then lista = Left(lista, Len(lista) - 2)
                             Call _
-                            WriteConsoleMsg(UserIndex, "Los personajes con ip " & ip & " son: " & lista,
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Los personajes con ip " & ip & " son: " & lista,
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex, "No hay ningún personaje con ese nick.", FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "No hay ningún personaje con ese nick.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -10729,7 +10750,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleIPToNick(ByVal UserIndex As Short)
+    Private Sub HandleIPToNick(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10743,7 +10764,7 @@ Module Protocol
         Dim ip As String
         Dim LoopC As Integer
         Dim lista As String
-        Dim priv As Declaraciones.PlayerType
+        Dim priv As PlayerType
         With UserList(UserIndex)
             'Remove packet ID
             Call .incomingData.ReadByte()
@@ -10756,17 +10777,17 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, "IP2NICK Solicito los Nicks de IP " & ip)
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) Then
-                priv = Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                       Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Dios Or
-                       Declaraciones.PlayerType.Admin
+            If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then
+                priv = PlayerType.User Or PlayerType.Consejero Or
+                       PlayerType.SemiDios Or PlayerType.Dios Or
+                       PlayerType.Admin
             Else
-                priv = Declaraciones.PlayerType.User
+                priv = PlayerType.User
             End If
 
             For LoopC = 1 To LastUser
@@ -10790,7 +10811,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildOnlineMembers(ByVal UserIndex As Short)
+    Private Sub HandleGuildOnlineMembers(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10820,18 +10841,18 @@ Module Protocol
                 End If
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     tGuild = GuildIndex(GuildName)
 
                     If tGuild > 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Clan " & UCase(GuildName) & ": " &
-                                        modGuilds.m_ListaDeMiembrosOnline(UserIndex, tGuild),
-                                        FontTypeNames.FONTTYPE_GUILDMSG)
+                            WriteConsoleMsg(UserIndex,
+                                            "Clan " & UCase(GuildName) & ": " &
+                                            m_ListaDeMiembrosOnline(UserIndex, tGuild),
+                                            FontTypeNames.FONTTYPE_GUILDMSG)
                     End If
                 End If
 
@@ -10850,7 +10871,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTeleportCreate(ByVal UserIndex As Short)
+    Private Sub HandleTeleportCreate(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 22/03/2010
@@ -10881,8 +10902,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             Call LogGM(.name, "/CT " & mapa & "," & X & "," & Y & "," & Radio)
 
@@ -10923,7 +10944,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTeleportDestroy(ByVal UserIndex As Short)
+    Private Sub HandleTeleportDestroy(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10940,8 +10961,8 @@ Module Protocol
             '/dt
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             mapa = .flags.TargetMap
             X = .flags.TargetX
@@ -10952,7 +10973,7 @@ Module Protocol
             With MapData(mapa, X, Y)
                 If .ObjInfo.ObjIndex = 0 Then Exit Sub
 
-                If ObjData_Renamed(.ObjInfo.ObjIndex).OBJType = Declaraciones.eOBJType.otTeleport And .TileExit.Map > 0 _
+                If ObjData_Renamed(.ObjInfo.ObjIndex).OBJType = eOBJType.otTeleport And .TileExit.Map > 0 _
                     Then
                     Call LogGM(UserList(UserIndex).name, "/DT: " & mapa & "," & X & "," & Y)
 
@@ -10975,7 +10996,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRainToggle(ByVal UserIndex As Short)
+    Private Sub HandleRainToggle(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -10985,13 +11006,13 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
                 Exit Sub
 
             Call LogGM(.name, "/LLUVIA")
             Lloviendo = Not Lloviendo
 
-            Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageRainToggle())
+            Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
         End With
     End Sub
 
@@ -11000,7 +11021,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSetCharDescription(ByVal UserIndex As Short)
+    Private Sub HandleSetCharDescription(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11026,13 +11047,15 @@ Module Protocol
                 desc = buffer.ReadASCIIString()
 
                 If _
-                (.flags.Privilegios And (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin)) <> 0 Or
-                (.flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 Then
+                    (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Or
+                    (.flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
                     tUser = .flags.TargetUser
                     If tUser > 0 Then
                         UserList(tUser).DescRM = desc
                     Else
-                        Call WriteConsoleMsg(UserIndex, "Haz click sobre un personaje antes.", FontTypeNames.FONTTYPE_INFO)
+                        Call _
+                            WriteConsoleMsg(UserIndex, "Haz click sobre un personaje antes.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -11051,7 +11074,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HanldeForceMIDIToMap(ByVal UserIndex As Short)
+    Private Sub HanldeForceMIDIToMap(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11075,7 +11098,7 @@ Module Protocol
             'Solo dioses, admins y RMS
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
+                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
                 Then
                 'Si el mapa no fue enviado tomo el actual
                 If Not InMapBounds(mapa, 50, 50) Then
@@ -11085,11 +11108,11 @@ Module Protocol
                 If midiID = 0 Then
                     'Ponemos el default del mapa
                     Call _
-                        SendData(modSendData.SendTarget.toMap, mapa,
+                        SendData(SendTarget.toMap, mapa,
                                  PrepareMessagePlayMidi(CByte(MapInfo_Renamed(.Pos.Map).Music)))
                 Else
                     'Ponemos el pedido por el GM
-                    Call SendData(modSendData.SendTarget.toMap, mapa, PrepareMessagePlayMidi(midiID))
+                    Call SendData(SendTarget.toMap, mapa, PrepareMessagePlayMidi(midiID))
                 End If
             End If
         End With
@@ -11100,7 +11123,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleForceWAVEToMap(ByVal UserIndex As Short)
+    Private Sub HandleForceWAVEToMap(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11128,7 +11151,7 @@ Module Protocol
             'Solo dioses, admins y RMS
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
+                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
                 Then
                 'Si el mapa no fue enviado tomo el actual
                 If Not InMapBounds(mapa, X, Y) Then
@@ -11138,7 +11161,7 @@ Module Protocol
                 End If
 
                 'Ponemos el pedido por el GM
-                Call SendData(modSendData.SendTarget.toMap, mapa, PrepareMessagePlayWave(waveID, X, Y))
+                Call SendData(SendTarget.toMap, mapa, PrepareMessagePlayWave(waveID, X, Y))
             End If
         End With
     End Sub
@@ -11148,7 +11171,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRoyalArmyMessage(ByVal UserIndex As Short)
+    Private Sub HandleRoyalArmyMessage(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11173,12 +11196,12 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    Then
                     Call _
-                    SendData(modSendData.SendTarget.ToRealYRMs, 0,
-                             PrepareMessageConsoleMsg("EJÉRCITO REAL> " & message, FontTypeNames.FONTTYPE_TALK))
+                        SendData(SendTarget.ToRealYRMs, 0,
+                                 PrepareMessageConsoleMsg("EJÉRCITO REAL> " & message, FontTypeNames.FONTTYPE_TALK))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -11196,7 +11219,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleChaosLegionMessage(ByVal UserIndex As Short)
+    Private Sub HandleChaosLegionMessage(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11221,12 +11244,12 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    Then
                     Call _
-                    SendData(modSendData.SendTarget.ToCaosYRMs, 0,
-                             PrepareMessageConsoleMsg("FUERZAS DEL CAOS> " & message, FontTypeNames.FONTTYPE_TALK))
+                        SendData(SendTarget.ToCaosYRMs, 0,
+                                 PrepareMessageConsoleMsg("FUERZAS DEL CAOS> " & message, FontTypeNames.FONTTYPE_TALK))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -11244,7 +11267,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCitizenMessage(ByVal UserIndex As Short)
+    Private Sub HandleCitizenMessage(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11269,12 +11292,12 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    Then
                     Call _
-                    SendData(modSendData.SendTarget.ToCiudadanosYRMs, 0,
-                             PrepareMessageConsoleMsg("CIUDADANOS> " & message, FontTypeNames.FONTTYPE_TALK))
+                        SendData(SendTarget.ToCiudadanosYRMs, 0,
+                                 PrepareMessageConsoleMsg("CIUDADANOS> " & message, FontTypeNames.FONTTYPE_TALK))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -11292,7 +11315,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCriminalMessage(ByVal UserIndex As Short)
+    Private Sub HandleCriminalMessage(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11317,12 +11340,12 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    Then
                     Call _
-                    SendData(modSendData.SendTarget.ToCriminalesYRMs, 0,
-                             PrepareMessageConsoleMsg("CRIMINALES> " & message, FontTypeNames.FONTTYPE_TALK))
+                        SendData(SendTarget.ToCriminalesYRMs, 0,
+                                 PrepareMessageConsoleMsg("CRIMINALES> " & message, FontTypeNames.FONTTYPE_TALK))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -11340,7 +11363,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTalkAsNPC(ByVal UserIndex As Short)
+    Private Sub HandleTalkAsNPC(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/29/06
@@ -11365,21 +11388,22 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.RoleMaster) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    Then
                     'Asegurarse haya un NPC seleccionado
                     If .flags.TargetNPC > 0 Then
                         Call _
-                        SendData(modSendData.SendTarget.ToNPCArea, .flags.TargetNPC,
-                                 PrepareMessageChatOverHead(message, Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
-                                                            System.Drawing.ColorTranslator.ToOle(
-                                                                System.Drawing.Color.White)))
+                            SendData(SendTarget.ToNPCArea, .flags.TargetNPC,
+                                     PrepareMessageChatOverHead(message,
+                                                                Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
+                                                                ColorTranslator.ToOle(
+                                                                    Color.White)))
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Debes seleccionar el NPC por el que quieres hablar antes de usar este comando.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Debes seleccionar el NPC por el que quieres hablar antes de usar este comando.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -11398,7 +11422,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleDestroyAllItemsInArea(ByVal UserIndex As Short)
+    Private Sub HandleDestroyAllItemsInArea(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11413,8 +11437,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
 
             For Y = .Pos.Y - MinYBorder + 1 To .Pos.Y + MinYBorder - 1
@@ -11439,7 +11463,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleAcceptRoyalCouncilMember(ByVal UserIndex As Short)
+    Private Sub HandleAcceptRoyalCouncilMember(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11466,22 +11490,22 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
-                        SendData(modSendData.SendTarget.ToAll, 0,
-                                 PrepareMessageConsoleMsg(
-                                     UserName & " fue aceptado en el honorable Consejo Real de Banderbill.",
-                                     FontTypeNames.FONTTYPE_CONSEJO))
+                            SendData(SendTarget.ToAll, 0,
+                                     PrepareMessageConsoleMsg(
+                                         UserName & " fue aceptado en el honorable Consejo Real de Banderbill.",
+                                         FontTypeNames.FONTTYPE_CONSEJO))
                         With UserList(tUser)
-                            If .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then _
-                            .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.ChaosCouncil
-                            If Not .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then _
-                            .flags.Privilegios = .flags.Privilegios + Declaraciones.PlayerType.RoyalCouncil
+                            If .flags.Privilegios And PlayerType.ChaosCouncil Then _
+                                .flags.Privilegios = .flags.Privilegios - PlayerType.ChaosCouncil
+                            If Not .flags.Privilegios And PlayerType.RoyalCouncil Then _
+                                .flags.Privilegios = .flags.Privilegios + PlayerType.RoyalCouncil
 
                             Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                         End With
@@ -11503,7 +11527,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleAcceptChaosCouncilMember(ByVal UserIndex As Short)
+    Private Sub HandleAcceptChaosCouncilMember(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11530,22 +11554,22 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
-                        SendData(modSendData.SendTarget.ToAll, 0,
-                                 PrepareMessageConsoleMsg(UserName & " fue aceptado en el Concilio de las Sombras.",
-                                                          FontTypeNames.FONTTYPE_CONSEJO))
+                            SendData(SendTarget.ToAll, 0,
+                                     PrepareMessageConsoleMsg(UserName & " fue aceptado en el Concilio de las Sombras.",
+                                                              FontTypeNames.FONTTYPE_CONSEJO))
 
                         With UserList(tUser)
-                            If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then _
-                            .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.RoyalCouncil
-                            If Not .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then _
-                            .flags.Privilegios = .flags.Privilegios + Declaraciones.PlayerType.ChaosCouncil
+                            If .flags.Privilegios And PlayerType.RoyalCouncil Then _
+                                .flags.Privilegios = .flags.Privilegios - PlayerType.RoyalCouncil
+                            If Not .flags.Privilegios And PlayerType.ChaosCouncil Then _
+                                .flags.Privilegios = .flags.Privilegios + PlayerType.ChaosCouncil
 
                             Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                         End With
@@ -11567,7 +11591,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleItemsInTheFloor(ByVal UserIndex As Short)
+    Private Sub HandleItemsInTheFloor(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11583,15 +11607,15 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
 
             For X = 5 To 95
                 For Y = 5 To 95
                     tObj = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
                     If tObj > 0 Then
-                        If ObjData_Renamed(tObj).OBJType <> Declaraciones.eOBJType.otArboles Then
+                        If ObjData_Renamed(tObj).OBJType <> eOBJType.otArboles Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "(" & X & "," & Y & ") " & ObjData_Renamed(tObj).name,
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -11607,7 +11631,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleMakeDumb(ByVal UserIndex As Short)
+    Private Sub HandleMakeDumb(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11633,9 +11657,9 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                ((.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Or
-                 ((.flags.Privilegios And (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster)) =
-                  (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster))) Then
+                    ((.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Or
+                     ((.flags.Privilegios And (PlayerType.SemiDios Or PlayerType.RoleMaster)) =
+                      (PlayerType.SemiDios Or PlayerType.RoleMaster))) Then
                     tUser = NameIndex(UserName)
                     'para deteccion de aoice
                     If tUser <= 0 Then
@@ -11660,7 +11684,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleMakeDumbNoMore(ByVal UserIndex As Short)
+    Private Sub HandleMakeDumbNoMore(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11686,9 +11710,9 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                ((.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Or
-                 ((.flags.Privilegios And (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster)) =
-                  (Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster))) Then
+                    ((.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Or
+                     ((.flags.Privilegios And (PlayerType.SemiDios Or PlayerType.RoleMaster)) =
+                      (PlayerType.SemiDios Or PlayerType.RoleMaster))) Then
                     tUser = NameIndex(UserName)
                     'para deteccion de aoice
                     If tUser <= 0 Then
@@ -11714,7 +11738,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleDumpIPTables(ByVal UserIndex As Short)
+    Private Sub HandleDumpIPTables(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11726,10 +11750,10 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
-            Call SecurityIp.DumpTables()
+            Call DumpTables()
         End With
     End Sub
 
@@ -11738,7 +11762,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCouncilKick(ByVal UserIndex As Short)
+    Private Sub HandleCouncilKick(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11764,48 +11788,49 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         If FileExist(CharPath & UserName & ".chr") Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "Usuario offline, echando de los consejos.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Usuario offline, echando de los consejos.",
+                                                FontTypeNames.FONTTYPE_INFO)
                             Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECE", CStr(0))
                             Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECECAOS", CStr(0))
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex, "No se encuentra el charfile " & CharPath & UserName & ".chr",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "No se encuentra el charfile " & CharPath & UserName & ".chr",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     Else
                         With UserList(tUser)
-                            If .flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil Then
+                            If .flags.Privilegios And PlayerType.RoyalCouncil Then
                                 Call _
-                                WriteConsoleMsg(tUser, "Has sido echado del consejo de Banderbill.",
-                                                FontTypeNames.FONTTYPE_TALK)
-                                .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.RoyalCouncil
+                                    WriteConsoleMsg(tUser, "Has sido echado del consejo de Banderbill.",
+                                                    FontTypeNames.FONTTYPE_TALK)
+                                .flags.Privilegios = .flags.Privilegios - PlayerType.RoyalCouncil
 
                                 Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                                 Call _
-                                SendData(modSendData.SendTarget.ToAll, 0,
-                                         PrepareMessageConsoleMsg(UserName & " fue expulsado del consejo de Banderbill.",
-                                                                  FontTypeNames.FONTTYPE_CONSEJO))
+                                    SendData(SendTarget.ToAll, 0,
+                                             PrepareMessageConsoleMsg(
+                                                 UserName & " fue expulsado del consejo de Banderbill.",
+                                                 FontTypeNames.FONTTYPE_CONSEJO))
                             End If
 
-                            If .flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil Then
+                            If .flags.Privilegios And PlayerType.ChaosCouncil Then
                                 Call _
-                                WriteConsoleMsg(tUser, "Has sido echado del Concilio de las Sombras.",
-                                                FontTypeNames.FONTTYPE_TALK)
-                                .flags.Privilegios = .flags.Privilegios - Declaraciones.PlayerType.ChaosCouncil
+                                    WriteConsoleMsg(tUser, "Has sido echado del Concilio de las Sombras.",
+                                                    FontTypeNames.FONTTYPE_TALK)
+                                .flags.Privilegios = .flags.Privilegios - PlayerType.ChaosCouncil
 
                                 Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                                 Call _
-                                SendData(modSendData.SendTarget.ToAll, 0,
-                                         PrepareMessageConsoleMsg(
-                                             UserName & " fue expulsado del Concilio de las Sombras.",
-                                             FontTypeNames.FONTTYPE_CONSEJO))
+                                    SendData(SendTarget.ToAll, 0,
+                                             PrepareMessageConsoleMsg(
+                                                 UserName & " fue expulsado del Concilio de las Sombras.",
+                                                 FontTypeNames.FONTTYPE_CONSEJO))
                             End If
                         End With
                     End If
@@ -11826,7 +11851,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleSetTrigger(ByVal UserIndex As Short)
+    Private Sub HandleSetTrigger(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11848,8 +11873,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             If tTrigger >= 0 Then
                 MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = tTrigger
@@ -11866,7 +11891,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleAskTrigger(ByVal UserIndex As Short)
+    Private Sub HandleAskTrigger(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 04/13/07
@@ -11880,8 +11905,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             tTrigger = MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger
 
@@ -11898,7 +11923,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBannedIPList(ByVal UserIndex As Short)
+    Private Sub HandleBannedIPList(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11912,8 +11937,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
 
             Call LogGM(.name, "/BANIPLIST")
@@ -11934,7 +11959,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBannedIPReload(ByVal UserIndex As Short)
+    Private Sub HandleBannedIPReload(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11946,8 +11971,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call BanIpGuardar()
             Call BanIpCargar()
@@ -11959,7 +11984,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleGuildBan(ByVal UserIndex As Short)
+    Private Sub HandleGuildBan(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -11990,17 +12015,17 @@ Module Protocol
                 GuildName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     tFile = AppDomain.CurrentDomain.BaseDirectory & "guilds/" & GuildName & "-members.mem"
 
                     If Not FileExist(tFile) Then
                         Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
-                        SendData(modSendData.SendTarget.ToAll, 0,
-                                 PrepareMessageConsoleMsg(.name & " baneó al clan " & UCase(GuildName),
-                                                          FontTypeNames.FONTTYPE_FIGHT))
+                            SendData(SendTarget.ToAll, 0,
+                                     PrepareMessageConsoleMsg(.name & " baneó al clan " & UCase(GuildName),
+                                                              FontTypeNames.FONTTYPE_FIGHT))
 
                         'baneamos a los miembros
                         Call LogGM(.name, "BANCLAN a " & UCase(GuildName))
@@ -12013,10 +12038,10 @@ Module Protocol
                             Call Ban(member, "Administracion del servidor", "Clan Banned")
 
                             Call _
-                            SendData(modSendData.SendTarget.ToAll, 0,
-                                     PrepareMessageConsoleMsg(
-                                         "   " & member & "<" & GuildName & "> ha sido expulsado del servidor.",
-                                         FontTypeNames.FONTTYPE_FIGHT))
+                                SendData(SendTarget.ToAll, 0,
+                                         PrepareMessageConsoleMsg(
+                                             "   " & member & "<" & GuildName & "> ha sido expulsado del servidor.",
+                                             FontTypeNames.FONTTYPE_FIGHT))
 
                             tIndex = NameIndex(member)
                             If tIndex > 0 Then
@@ -12031,8 +12056,8 @@ Module Protocol
                             Count = Val(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
                             Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", CStr(Count + 1))
                             Call _
-                            WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
-                                     LCase(.name) & ": BAN AL CLAN: " & GuildName & " " & Today & " " & TimeOfDay)
+                                WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
+                                         LCase(.name) & ": BAN AL CLAN: " & GuildName & " " & Today & " " & TimeOfDay)
                         Next LoopC
                     End If
                 End If
@@ -12052,7 +12077,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleBanIP(ByVal UserIndex As Short)
+    Private Sub HandleBanIP(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 07/02/09
@@ -12094,20 +12119,20 @@ Module Protocol
                 reason = buffer.ReadASCIIString()
 
 
-                If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
+                If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
                     If migr_LenB(bannedIP) > 0 Then
                         Call LogGM(.name, "/BanIP " & bannedIP & " por " & reason)
 
                         If BanIpBuscar(bannedIP) > 0 Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "La IP " & bannedIP & " ya se encuentra en la lista de bans.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "La IP " & bannedIP & " ya se encuentra en la lista de bans.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call BanIpAgrega(bannedIP)
                             Call _
-                            SendData(modSendData.SendTarget.ToAdmins, 0,
-                                     PrepareMessageConsoleMsg(.name & " baneó la IP " & bannedIP & " por " & reason,
-                                                              FontTypeNames.FONTTYPE_FIGHT))
+                                SendData(SendTarget.ToAdmins, 0,
+                                         PrepareMessageConsoleMsg(.name & " baneó la IP " & bannedIP & " por " & reason,
+                                                                  FontTypeNames.FONTTYPE_FIGHT))
 
                             'Find every player with that ip and ban him!
                             For i = 1 To LastUser
@@ -12138,7 +12163,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleUnbanIP(ByVal UserIndex As Short)
+    Private Sub HandleUnbanIP(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/30/06
@@ -12162,8 +12187,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             If BanIpQuita(bannedIP) Then
                 Call _
@@ -12182,7 +12207,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleCreateItem(ByVal UserIndex As Short)
+    Private Sub HandleCreateItem(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12204,8 +12229,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             Call LogGM(.name, "/CI: " & tObj)
 
@@ -12234,7 +12259,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleDestroyItems(ByVal UserIndex As Short)
+    Private Sub HandleDestroyItems(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12246,8 +12271,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             If MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex = 0 Then Exit Sub
 
@@ -12255,7 +12280,7 @@ Module Protocol
 
             If _
                 ObjData_Renamed(MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex).OBJType =
-                Declaraciones.eOBJType.otTeleport And MapData(.Pos.Map, .Pos.X, .Pos.Y).TileExit.Map > 0 Then
+                eOBJType.otTeleport And MapData(.Pos.Map, .Pos.X, .Pos.Y).TileExit.Map > 0 Then
 
                 Call _
                     WriteConsoleMsg(UserIndex, "No puede destruir teleports así. Utilice /DT.",
@@ -12272,7 +12297,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleChaosLegionKick(ByVal UserIndex As Short)
+    Private Sub HandleChaosLegionKick(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12298,8 +12323,8 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If (migr_InStrB(UserName, "\") <> 0) Then
                         UserName = Replace(UserName, "\", "")
                     End If
@@ -12314,12 +12339,13 @@ Module Protocol
                         Call ExpulsarFaccionCaos(tUser, True)
                         UserList(tUser).Faccion.Reenlistadas = 200
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        UserName & " expulsado de las fuerzas del caos y prohibida la reenlistada.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            UserName & " expulsado de las fuerzas del caos y prohibida la reenlistada.",
+                                            FontTypeNames.FONTTYPE_INFO)
                         Call _
-                        WriteConsoleMsg(tUser, .name & " te ha expulsado en forma definitiva de las fuerzas del caos.",
-                                        FontTypeNames.FONTTYPE_FIGHT)
+                            WriteConsoleMsg(tUser,
+                                            .name & " te ha expulsado en forma definitiva de las fuerzas del caos.",
+                                            FontTypeNames.FONTTYPE_FIGHT)
                         Call FlushBuffer(tUser)
                     Else
                         If FileExist(CharPath & UserName & ".chr") Then
@@ -12327,9 +12353,10 @@ Module Protocol
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
                             Call _
-                            WriteConsoleMsg(UserIndex,
-                                            UserName & " expulsado de las fuerzas del caos y prohibida la reenlistada.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                UserName &
+                                                " expulsado de las fuerzas del caos y prohibida la reenlistada.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call WriteConsoleMsg(UserIndex, UserName & ".chr inexistente.", FontTypeNames.FONTTYPE_INFO)
                         End If
@@ -12351,7 +12378,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRoyalArmyKick(ByVal UserIndex As Short)
+    Private Sub HandleRoyalArmyKick(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12377,8 +12404,8 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If (migr_InStrB(UserName, "\") <> 0) Then
                         UserName = Replace(UserName, "\", "")
                     End If
@@ -12393,12 +12420,12 @@ Module Protocol
                         Call ExpulsarFaccionReal(tUser, True)
                         UserList(tUser).Faccion.Reenlistadas = 200
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        UserName & " expulsado de las fuerzas reales y prohibida la reenlistada.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            UserName & " expulsado de las fuerzas reales y prohibida la reenlistada.",
+                                            FontTypeNames.FONTTYPE_INFO)
                         Call _
-                        WriteConsoleMsg(tUser, .name & " te ha expulsado en forma definitiva de las fuerzas reales.",
-                                        FontTypeNames.FONTTYPE_FIGHT)
+                            WriteConsoleMsg(tUser, .name & " te ha expulsado en forma definitiva de las fuerzas reales.",
+                                            FontTypeNames.FONTTYPE_FIGHT)
                         Call FlushBuffer(tUser)
                     Else
                         If FileExist(CharPath & UserName & ".chr") Then
@@ -12406,9 +12433,10 @@ Module Protocol
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
                             Call _
-                            WriteConsoleMsg(UserIndex,
-                                            UserName & " expulsado de las fuerzas reales y prohibida la reenlistada.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                UserName &
+                                                " expulsado de las fuerzas reales y prohibida la reenlistada.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call WriteConsoleMsg(UserIndex, UserName & ".chr inexistente.", FontTypeNames.FONTTYPE_INFO)
                         End If
@@ -12430,7 +12458,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleForceMIDIAll(ByVal UserIndex As Short)
+    Private Sub HandleForceMIDIAll(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12450,14 +12478,14 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             Call _
-                SendData(modSendData.SendTarget.ToAll, 0,
+                SendData(SendTarget.ToAll, 0,
                          PrepareMessageConsoleMsg(.name & " broadcast música: " & midiID, FontTypeNames.FONTTYPE_SERVER))
 
-            Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayMidi(midiID))
+            Call SendData(SendTarget.ToAll, 0, PrepareMessagePlayMidi(midiID))
         End With
     End Sub
 
@@ -12466,7 +12494,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleForceWAVEAll(ByVal UserIndex As Short)
+    Private Sub HandleForceWAVEAll(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12486,10 +12514,10 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
-            Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessagePlayWave(waveID, NO_3D_SOUND, NO_3D_SOUND))
+            Call SendData(SendTarget.ToAll, 0, PrepareMessagePlayWave(waveID, NO_3D_SOUND, NO_3D_SOUND))
         End With
     End Sub
 
@@ -12498,7 +12526,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleRemovePunishment(ByVal UserIndex As Short)
+    Private Sub HandleRemovePunishment(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 1/05/07
@@ -12527,12 +12555,12 @@ Module Protocol
                 NewText = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     If migr_LenB(UserName) = 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "Utilice /borrarpena Nick@NumeroDePena@NuevaPena",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "Utilice /borrarpena Nick@NumeroDePena@NuevaPena",
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         If (migr_InStrB(UserName, "\") <> 0) Then
                             UserName = Replace(UserName, "\", "")
@@ -12543,14 +12571,15 @@ Module Protocol
 
                         If FileExist(CharPath & UserName & ".chr") Then
                             Call _
-                            LogGM(.name,
-                                  " borro la pena: " & punishment & "-" &
-                                  GetVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment) & " de " & UserName &
-                                  " y la cambió por: " & NewText)
+                                LogGM(.name,
+                                      " borro la pena: " & punishment & "-" &
+                                      GetVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment) & " de " &
+                                      UserName &
+                                      " y la cambió por: " & NewText)
 
                             Call _
-                            WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment,
-                                     LCase(.name) & ": <" & NewText & "> " & Today & " " & TimeOfDay)
+                                WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment,
+                                         LCase(.name) & ": <" & NewText & "> " & Today & " " & TimeOfDay)
 
                             Call WriteConsoleMsg(UserIndex, "Pena modificada.", FontTypeNames.FONTTYPE_INFO)
                         End If
@@ -12572,7 +12601,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleTileBlockedToggle(ByVal UserIndex As Short)
+    Private Sub HandleTileBlockedToggle(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12584,8 +12613,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             Call LogGM(.name, "/BLOQ")
 
@@ -12604,7 +12633,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleKillNPCNoRespawn(ByVal UserIndex As Short)
+    Private Sub HandleKillNPCNoRespawn(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12616,8 +12645,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             If .flags.TargetNPC = 0 Then Exit Sub
 
@@ -12631,7 +12660,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleKillAllNearbyNPCs(ByVal UserIndex As Short)
+    Private Sub HandleKillAllNearbyNPCs(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12645,8 +12674,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
 
             For Y = .Pos.Y - MinYBorder + 1 To .Pos.Y + MinYBorder - 1
@@ -12665,7 +12694,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Private Sub HandleLastIP(ByVal UserIndex As Short)
+    Private Sub HandleLastIP(UserIndex As Short)
         '***************************************************
         'Author: Nicolas Matias Gonzalez (NIGO)
         'Last Modification: 12/30/06
@@ -12691,15 +12720,15 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                priv = Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                   Declaraciones.PlayerType.Consejero
+                priv = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                       PlayerType.Consejero
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios)) <>
-                0 Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
+                    0 Then
                     'Handle special chars
                     If (migr_InStrB(UserName, "\") <> 0) Then
                         UserName = Replace(UserName, "\", "")
@@ -12714,12 +12743,12 @@ Module Protocol
                     'Only Gods and Admins can see the ips of adminsitrative characters. All others can be seen by every adminsitrative char.
                     If NameIndex(UserName) > 0 Then
                         validCheck = (UserList(NameIndex(UserName)).flags.Privilegios And priv) = 0 Or
-                                 (.flags.Privilegios And
-                                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0
+                                     (.flags.Privilegios And
+                                      (PlayerType.Admin Or PlayerType.Dios)) <> 0
                     Else
                         validCheck = (UserDarPrivilegioLevel(UserName) And priv) = 0 Or
-                                 (.flags.Privilegios And
-                                  (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0
+                                     (.flags.Privilegios And
+                                      (PlayerType.Admin Or PlayerType.Dios)) <> 0
                     End If
 
                     If validCheck Then
@@ -12729,18 +12758,18 @@ Module Protocol
                             lista = "Las ultimas IPs con las que " & UserName & " se conectó son:"
                             For LoopC = 1 To 5
                                 lista = lista & vbCrLf & LoopC & " - " &
-                                    GetVar(CharPath & UserName & ".chr", "INIT", "LastIP" & LoopC)
+                                        GetVar(CharPath & UserName & ".chr", "INIT", "LastIP" & LoopC)
                             Next LoopC
                             Call WriteConsoleMsg(UserIndex, lista, FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex, "Charfile """ & UserName & """ inexistente.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Charfile """ & UserName & """ inexistente.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex, UserName & " es de mayor jerarquía que vos.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, UserName & " es de mayor jerarquía que vos.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -12759,7 +12788,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleChatColor(ByVal UserIndex As Short)
+    Public Sub HandleChatColor(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -12781,7 +12810,7 @@ Module Protocol
 
             If _
                 (.flags.Privilegios And
-                 (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.RoleMaster)) _
+                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.RoleMaster)) _
                 Then
                 .flags.ChatColor = color
             End If
@@ -12793,7 +12822,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleIgnored(ByVal UserIndex As Short)
+    Public Sub HandleIgnored(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -12805,8 +12834,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.SemiDios Or
-                 Declaraciones.PlayerType.Consejero) Then
+                (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                 PlayerType.Consejero) Then
                 .flags.AdminPerseguible = Not .flags.AdminPerseguible
             End If
         End With
@@ -12817,7 +12846,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleCheckSlot(ByVal UserIndex As Short)
+    Public Sub HandleCheckSlot(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 09/09/2008 (NicoNZ)
@@ -12846,9 +12875,9 @@ Module Protocol
                 Slot = buffer.ReadByte() 'Que Slot?
 
                 If _
-                .flags.Privilegios And
-                (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.Dios) _
-                Then
+                    .flags.Privilegios And
+                    (PlayerType.Admin Or PlayerType.SemiDios Or PlayerType.Dios) _
+                    Then
                     tIndex = NameIndex(UserName) 'Que user index?
 
                     Call LogGM(.name, .name & " Checkeó el slot " & Slot & " de " & UserName)
@@ -12857,16 +12886,17 @@ Module Protocol
                         If Slot > 0 And Slot <= UserList(tIndex).CurrentInventorySlots Then
                             If UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex > 0 Then
                                 Call _
-                                WriteConsoleMsg(UserIndex,
-                                                " Objeto " & Slot & ") " &
-                                                ObjData_Renamed(UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex).
-                                                    name & " Cantidad:" &
-                                                UserList(tIndex).Invent.Object_Renamed(Slot).Amount,
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex,
+                                                    " Objeto " & Slot & ") " &
+                                                    ObjData_Renamed(
+                                                        UserList(tIndex).Invent.Object_Renamed(Slot).ObjIndex).
+                                                        name & " Cantidad:" &
+                                                    UserList(tIndex).Invent.Object_Renamed(Slot).Amount,
+                                                    FontTypeNames.FONTTYPE_INFO)
                             Else
                                 Call _
-                                WriteConsoleMsg(UserIndex, "No hay ningún objeto en slot seleccionado.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "No hay ningún objeto en slot seleccionado.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             End If
                         Else
                             Call WriteConsoleMsg(UserIndex, "Slot Inválido.", FontTypeNames.FONTTYPE_TALK)
@@ -12891,7 +12921,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleResetAutoUpdate(ByVal UserIndex As Short)
+    Public Sub HandleResetAutoUpdate(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -12903,8 +12933,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
             If UCase(.name) <> "MARAXUS" Then Exit Sub
 
             Call WriteConsoleMsg(UserIndex, "TID: " & CStr(ReiniciarAutoUpdate()), FontTypeNames.FONTTYPE_INFO)
@@ -12916,7 +12946,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleRestart(ByVal UserIndex As Short)
+    Public Sub HandleRestart(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -12928,8 +12958,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
             If UCase(.name) <> "MARAXUS" Then Exit Sub
 
             'time and Time BUG!
@@ -12944,7 +12974,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleReloadObjects(ByVal UserIndex As Short)
+    Public Sub HandleReloadObjects(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -12956,8 +12986,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los objetos.")
 
@@ -12970,7 +13000,7 @@ Module Protocol
     '
     ' @param    userIndex The index of the user sending the message.
 
-    Public Sub HandleReloadSpells(ByVal UserIndex As Short)
+    Public Sub HandleReloadSpells(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -12982,8 +13012,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los hechizos.")
 
@@ -12996,7 +13026,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleReloadServerIni(ByVal UserIndex As Short)
+    Public Sub HandleReloadServerIni(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13008,8 +13038,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los INITs.")
 
@@ -13022,7 +13052,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleReloadNPCs(ByVal UserIndex As Short)
+    Public Sub HandleReloadNPCs(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13034,8 +13064,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los NPCs.")
 
@@ -13050,7 +13080,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleKickAllChars(ByVal UserIndex As Short)
+    Public Sub HandleKickAllChars(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13062,8 +13092,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha echado a todos los personajes.")
 
@@ -13076,7 +13106,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleNight(ByVal UserIndex As Short)
+    Public Sub HandleNight(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13090,15 +13120,15 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
             If UCase(.name) <> "MARAXUS" Then Exit Sub
 
             DeNoche = Not DeNoche
 
 
             For i = 1 To NumUsers
-                If UserList(i).flags.UserLogged And UserList(i).ConnID > -1 Then
+                If UserList(i).flags.UserLogged And UserList(i).ConnID > - 1 Then
                     Call EnviarNoche(i)
                 End If
             Next i
@@ -13110,7 +13140,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleShowServerForm(ByVal UserIndex As Short)
+    Public Sub HandleShowServerForm(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13122,8 +13152,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha solicitado mostrar el formulario del servidor.")
             ' TODO FIX: no funciona como se espera, de todas formas no es algo funcional
@@ -13135,7 +13165,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleCleanSOS(ByVal UserIndex As Short)
+    Public Sub HandleCleanSOS(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13147,8 +13177,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha borrado los SOS.")
 
@@ -13161,7 +13191,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleSaveChars(ByVal UserIndex As Short)
+    Public Sub HandleSaveChars(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/23/06
@@ -13173,12 +13203,12 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha guardado todos los chars.")
 
-            Call mdParty.ActualizaExperiencias()
+            Call ActualizaExperiencias()
             Call GuardarUsuarios()
         End With
     End Sub
@@ -13188,7 +13218,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoBackup(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoBackup(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/24/06
@@ -13208,7 +13238,7 @@ Module Protocol
 
             doTheBackUp = .incomingData.ReadBoolean()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) = 0 Then _
+            If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) = 0 Then _
                 Exit Sub
 
             Call LogGM(.name, .name & " ha cambiado la información sobre el BackUp.")
@@ -13236,7 +13266,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoPK(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoPK(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/24/06
@@ -13256,7 +13286,7 @@ Module Protocol
 
             isMapPk = .incomingData.ReadBoolean()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) = 0 Then _
+            If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) = 0 Then _
                 Exit Sub
 
             Call LogGM(.name, .name & " ha cambiado la información sobre si es PK el mapa.")
@@ -13279,7 +13309,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoRestricted(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoRestricted(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 26/01/2007
@@ -13303,23 +13333,23 @@ Module Protocol
 
                 tStr = buffer.ReadASCIIString()
 
-                If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If tStr = "NEWBIE" Or tStr = "NO" Or tStr = "ARMADA" Or tStr = "CAOS" Or tStr = "FACCION" Then
                         Call LogGM(.name, .name & " ha cambiado la información sobre si es restringido el mapa.")
                         MapInfo_Renamed(UserList(UserIndex).Pos.Map).Restringir = tStr
                         Call _
-                        WriteVar(
-                            AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
-                            ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Restringir", tStr)
+                            WriteVar(
+                                AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
+                                ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Restringir", tStr)
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Mapa " & .Pos.Map & " Restringido: " & MapInfo_Renamed(.Pos.Map).Restringir,
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Mapa " & .Pos.Map & " Restringido: " & MapInfo_Renamed(.Pos.Map).Restringir,
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Opciones para restringir: 'NEWBIE', 'NO', 'ARMADA', 'CAOS', 'FACCION'",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Opciones para restringir: 'NEWBIE', 'NO', 'ARMADA', 'CAOS', 'FACCION'",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -13338,7 +13368,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoNoMagic(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoNoMagic(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 26/01/2007
@@ -13357,7 +13387,7 @@ Module Protocol
 
             nomagic = .incomingData.ReadBoolean
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+            If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                 Call LogGM(.name, .name & " ha cambiado la información sobre si está permitido usar la magia el mapa.")
                 MapInfo_Renamed(UserList(UserIndex).Pos.Map).MagiaSinEfecto = nomagic
                 Call _
@@ -13377,7 +13407,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoNoInvi(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoNoInvi(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 26/01/2007
@@ -13396,7 +13426,7 @@ Module Protocol
 
             noinvi = .incomingData.ReadBoolean()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+            If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                 Call _
                     LogGM(.name,
                           .name &
@@ -13419,7 +13449,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoNoResu(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoNoResu(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 26/01/2007
@@ -13438,7 +13468,7 @@ Module Protocol
 
             noresu = .incomingData.ReadBoolean()
 
-            If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+            If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                 Call _
                     LogGM(.name,
                           .name & " ha cambiado la información sobre si está permitido usar el resucitar en el mapa.")
@@ -13460,7 +13490,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoLand(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoLand(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 26/01/2007
@@ -13484,28 +13514,29 @@ Module Protocol
 
                 tStr = buffer.ReadASCIIString()
 
-                If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If _
-                    tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or
-                    tStr = "DUNGEON" Then
+                        tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or
+                        tStr = "DUNGEON" Then
                         Call LogGM(.name, .name & " ha cambiado la información del terreno del mapa.")
                         MapInfo_Renamed(UserList(UserIndex).Pos.Map).Terreno = tStr
                         Call _
-                        WriteVar(
-                            AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
-                            ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Terreno", tStr)
+                            WriteVar(
+                                AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
+                                ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Terreno", tStr)
                         Call _
-                        WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Terreno: " & MapInfo_Renamed(.Pos.Map).Terreno,
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Mapa " & .Pos.Map & " Terreno: " & MapInfo_Renamed(.Pos.Map).Terreno,
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'",
+                                            FontTypeNames.FONTTYPE_INFO)
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Igualmente, el único útil es 'NIEVE' ya que al ingresarlo, la gente muere de frío en el mapa.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Igualmente, el único útil es 'NIEVE' ya que al ingresarlo, la gente muere de frío en el mapa.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -13524,7 +13555,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMapInfoZone(ByVal UserIndex As Short)
+    Public Sub HandleChangeMapInfoZone(UserIndex As Short)
         '***************************************************
         'Author: Pablo (ToxicWaste)
         'Last Modification: 26/01/2007
@@ -13548,28 +13579,28 @@ Module Protocol
 
                 tStr = buffer.ReadASCIIString()
 
-                If (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) <> 0 Then
+                If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If _
-                    tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or
-                    tStr = "DUNGEON" Then
+                        tStr = "BOSQUE" Or tStr = "NIEVE" Or tStr = "DESIERTO" Or tStr = "CIUDAD" Or tStr = "CAMPO" Or
+                        tStr = "DUNGEON" Then
                         Call LogGM(.name, .name & " ha cambiado la información de la zona del mapa.")
                         MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = tStr
                         Call _
-                        WriteVar(
-                            AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
-                            ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Zona", tStr)
+                            WriteVar(
+                                AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map &
+                                ".dat", "Mapa" & UserList(UserIndex).Pos.Map, "Zona", tStr)
                         Call _
-                        WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Zona: " & MapInfo_Renamed(.Pos.Map).Zona,
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Zona: " & MapInfo_Renamed(.Pos.Map).Zona,
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Opciones para terreno: 'BOSQUE', 'NIEVE', 'DESIERTO', 'CIUDAD', 'CAMPO', 'DUNGEON'",
+                                            FontTypeNames.FONTTYPE_INFO)
                         Call _
-                        WriteConsoleMsg(UserIndex,
-                                        "Igualmente, el único útil es 'DUNGEON' ya que al ingresarlo, NO se sentirá el efecto de la lluvia en este mapa.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex,
+                                            "Igualmente, el único útil es 'DUNGEON' ya que al ingresarlo, NO se sentirá el efecto de la lluvia en este mapa.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -13588,7 +13619,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleSaveMap(ByVal UserIndex As Short)
+    Public Sub HandleSaveMap(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/24/06
@@ -13600,8 +13631,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha guardado el mapa " & CStr(.Pos.Map))
 
@@ -13616,7 +13647,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleShowGuildMessages(ByVal UserIndex As Short)
+    Public Sub HandleShowGuildMessages(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/24/06
@@ -13642,9 +13673,9 @@ Module Protocol
                 guild = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
-                    Call modGuilds.GMEscuchaClan(UserIndex, guild)
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    Call GMEscuchaClan(UserIndex, guild)
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -13662,7 +13693,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleDoBackUp(ByVal UserIndex As Short)
+    Public Sub HandleDoBackUp(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/24/06
@@ -13674,12 +13705,12 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, .name & " ha hecho un backup.")
 
-            Call ES.DoBackUp() 'Sino lo confunde con la id del paquete
+            Call DoBackUp() 'Sino lo confunde con la id del paquete
         End With
     End Sub
 
@@ -13688,7 +13719,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleToggleCentinelActivated(ByVal UserIndex As Short)
+    Public Sub HandleToggleCentinelActivated(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/26/06
@@ -13701,8 +13732,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             centinelaActivado = Not centinelaActivado
 
@@ -13719,11 +13750,11 @@ Module Protocol
 
             If centinelaActivado Then
                 Call _
-                    SendData(modSendData.SendTarget.ToAdmins, 0,
+                    SendData(SendTarget.ToAdmins, 0,
                              PrepareMessageConsoleMsg("El centinela ha sido activado.", FontTypeNames.FONTTYPE_SERVER))
             Else
                 Call _
-                    SendData(modSendData.SendTarget.ToAdmins, 0,
+                    SendData(SendTarget.ToAdmins, 0,
                              PrepareMessageConsoleMsg("El centinela ha sido desactivado.", FontTypeNames.FONTTYPE_SERVER))
             End If
         End With
@@ -13734,7 +13765,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleAlterName(ByVal UserIndex As Short)
+    Public Sub HandleAlterName(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/26/06
@@ -13765,8 +13796,8 @@ Module Protocol
                 newName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     If migr_LenB(UserName) = 0 Or migr_LenB(newName) = 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usar: /ANAME origen@destino", FontTypeNames.FONTTYPE_INFO)
                     Else
@@ -13774,49 +13805,51 @@ Module Protocol
 
                         If changeNameUI > 0 Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "El Pj está online, debe salir para hacer el cambio.",
-                                            FontTypeNames.FONTTYPE_WARNING)
+                                WriteConsoleMsg(UserIndex, "El Pj está online, debe salir para hacer el cambio.",
+                                                FontTypeNames.FONTTYPE_WARNING)
                         Else
                             If Not FileExist(CharPath & UserName & ".chr") Then
                                 Call _
-                                WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.",
-                                                FontTypeNames.FONTTYPE_INFO)
+                                    WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.",
+                                                    FontTypeNames.FONTTYPE_INFO)
                             Else
                                 GuildIndex = Val(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX"))
 
                                 If GuildIndex > 0 Then
                                     Call _
-                                    WriteConsoleMsg(UserIndex,
-                                                    "El pj " & UserName &
-                                                    " pertenece a un clan, debe salir del mismo con /salirclan para ser transferido.",
-                                                    FontTypeNames.FONTTYPE_INFO)
+                                        WriteConsoleMsg(UserIndex,
+                                                        "El pj " & UserName &
+                                                        " pertenece a un clan, debe salir del mismo con /salirclan para ser transferido.",
+                                                        FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If Not FileExist(CharPath & newName & ".chr") Then
                                         Call FileCopy(CharPath & UserName & ".chr", CharPath & UCase(newName) & ".chr")
 
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "Transferencia exitosa.", FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "Transferencia exitosa.",
+                                                            FontTypeNames.FONTTYPE_INFO)
 
                                         Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
 
 
                                         cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
 
-                                        Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                                        Call _
+                                            WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
 
                                         Call _
-                                        WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & CStr(cantPenas + 1),
-                                                 LCase(.name) & ": BAN POR Cambio de nick a " & UCase(newName) & " " &
-                                                 Today & " " & TimeOfDay)
+                                            WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & CStr(cantPenas + 1),
+                                                     LCase(.name) & ": BAN POR Cambio de nick a " & UCase(newName) & " " &
+                                                     Today & " " & TimeOfDay)
 
                                         Call _
-                                        LogGM(.name,
-                                              "Ha cambiado de nombre al usuario " & UserName & ". Ahora se llama " &
-                                              newName)
+                                            LogGM(.name,
+                                                  "Ha cambiado de nombre al usuario " & UserName & ". Ahora se llama " &
+                                                  newName)
                                     Else
                                         Call _
-                                        WriteConsoleMsg(UserIndex, "El nick solicitado ya existe.",
-                                                        FontTypeNames.FONTTYPE_INFO)
+                                            WriteConsoleMsg(UserIndex, "El nick solicitado ya existe.",
+                                                            FontTypeNames.FONTTYPE_INFO)
                                     End If
                                 End If
                             End If
@@ -13839,7 +13872,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleAlterMail(ByVal UserIndex As Short)
+    Public Sub HandleAlterMail(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/26/06
@@ -13866,20 +13899,20 @@ Module Protocol
                 newMail = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     If migr_LenB(UserName) = 0 Or migr_LenB(newMail) = 0 Then
                         Call WriteConsoleMsg(UserIndex, "usar /AEMAIL <pj>-<nuevomail>", FontTypeNames.FONTTYPE_INFO)
                     Else
                         If Not FileExist(CharPath & UserName & ".chr") Then
                             Call _
-                            WriteConsoleMsg(UserIndex, "No existe el charfile " & UserName & ".chr",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "No existe el charfile " & UserName & ".chr",
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call WriteVar(CharPath & UserName & ".chr", "CONTACTO", "Email", newMail)
                             Call _
-                            WriteConsoleMsg(UserIndex, "Email de " & UserName & " cambiado a: " & newMail,
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "Email de " & UserName & " cambiado a: " & newMail,
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
 
                         Call LogGM(.name, "Le ha cambiado el mail a " & UserName)
@@ -13901,7 +13934,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleAlterPassword(ByVal UserIndex As Short)
+    Public Sub HandleAlterPassword(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/26/06
@@ -13929,24 +13962,28 @@ Module Protocol
                 copyFrom = Replace(buffer.ReadASCIIString(), "+", " ")
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "Ha alterado la contraseña de " & UserName)
 
                     If migr_LenB(UserName) = 0 Or migr_LenB(copyFrom) = 0 Then
-                        Call WriteConsoleMsg(UserIndex, "usar /APASS <pjsinpass>@<pjconpass>", FontTypeNames.FONTTYPE_INFO)
-                    Else
-                        If Not FileExist(CharPath & UserName & ".chr") Or Not FileExist(CharPath & copyFrom & ".chr") Then
-                            Call _
-                            WriteConsoleMsg(UserIndex, "Alguno de los PJs no existe " & UserName & "@" & copyFrom,
+                        Call _
+                            WriteConsoleMsg(UserIndex, "usar /APASS <pjsinpass>@<pjconpass>",
                                             FontTypeNames.FONTTYPE_INFO)
+                    Else
+                        If Not FileExist(CharPath & UserName & ".chr") Or Not FileExist(CharPath & copyFrom & ".chr") _
+                            Then
+                            Call _
+                                WriteConsoleMsg(UserIndex, "Alguno de los PJs no existe " & UserName & "@" & copyFrom,
+                                                FontTypeNames.FONTTYPE_INFO)
                         Else
                             Password = GetVar(CharPath & copyFrom & ".chr", "INIT", "Password")
                             Call WriteVar(CharPath & UserName & ".chr", "INIT", "Password", Password)
 
                             Call _
-                            WriteConsoleMsg(UserIndex, "Password de " & UserName & " ha cambiado por la de " & copyFrom,
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                "Password de " & UserName & " ha cambiado por la de " & copyFrom,
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -13966,7 +14003,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleCreateNPC(ByVal UserIndex As Short)
+    Public Sub HandleCreateNPC(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/24/06
@@ -13987,8 +14024,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             NpcIndex = SpawnNpc(NpcIndex, .Pos, True, False)
 
@@ -14004,7 +14041,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleCreateNPCWithRespawn(ByVal UserIndex As Short)
+    Public Sub HandleCreateNPCWithRespawn(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/24/06
@@ -14025,8 +14062,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios) Then Exit Sub
 
             NpcIndex = SpawnNpc(NpcIndex, .Pos, True, True)
 
@@ -14041,7 +14078,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleImperialArmour(ByVal UserIndex As Short)
+    Public Sub HandleImperialArmour(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/24/06
@@ -14064,8 +14101,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Select Case Index
                 Case 1
@@ -14088,7 +14125,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChaosArmour(ByVal UserIndex As Short)
+    Public Sub HandleChaosArmour(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/24/06
@@ -14111,8 +14148,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Select Case Index
                 Case 1
@@ -14135,7 +14172,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleNavigateToggle(ByVal UserIndex As Short)
+    Public Sub HandleNavigateToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 01/12/07
@@ -14145,7 +14182,7 @@ Module Protocol
             'Remove Packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero) Then _
+            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
                 Exit Sub
 
             If .flags.Navegando = 1 Then
@@ -14164,7 +14201,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleServerOpenToUsersToggle(ByVal UserIndex As Short)
+    Public Sub HandleServerOpenToUsersToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/24/06
@@ -14176,8 +14213,8 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             If ServerSoloGMs > 0 Then
                 Call WriteConsoleMsg(UserIndex, "Servidor habilitado para todos.", FontTypeNames.FONTTYPE_INFO)
@@ -14194,7 +14231,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleTurnOffServer(ByVal UserIndex As Short)
+    Public Sub HandleTurnOffServer(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/24/06
@@ -14208,12 +14245,12 @@ Module Protocol
 
             If _
                 .flags.Privilegios And
-                (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                 Declaraciones.PlayerType.SemiDios Or Declaraciones.PlayerType.RoleMaster) Then Exit Sub
+                (PlayerType.User Or PlayerType.Consejero Or
+                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
             Call LogGM(.name, "/APAGAR")
             Call _
-                SendData(modSendData.SendTarget.ToAll, 0,
+                SendData(SendTarget.ToAll, 0,
                          PrepareMessageConsoleMsg("¡¡¡" & .name & " VA A APAGAR EL SERVIDOR!!!",
                                                   FontTypeNames.FONTTYPE_FIGHT))
 
@@ -14233,7 +14270,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleTurnCriminal(ByVal UserIndex As Short)
+    Public Sub HandleTurnCriminal(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/26/06
@@ -14259,8 +14296,8 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "/CONDEN " & UserName)
 
                     tUser = NameIndex(UserName)
@@ -14282,7 +14319,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleResetFactions(ByVal UserIndex As Short)
+    Public Sub HandleResetFactions(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 06/09/09
@@ -14310,8 +14347,8 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "/RAJAR " & UserName)
 
                     tUser = NameIndex(UserName)
@@ -14339,8 +14376,8 @@ Module Protocol
                             Call WriteVar(Char_Renamed, "FACCIONES", "NextRecompensa", CStr(0))
                         Else
                             Call _
-                            WriteConsoleMsg(UserIndex, "El personaje " & UserName & " no existe.",
-                                            FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex, "El personaje " & UserName & " no existe.",
+                                                FontTypeNames.FONTTYPE_INFO)
                         End If
                     End If
                 End If
@@ -14360,7 +14397,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleRemoveCharFromGuild(ByVal UserIndex As Short)
+    Public Sub HandleRemoveCharFromGuild(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/26/06
@@ -14386,23 +14423,23 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "/RAJARCLAN " & UserName)
 
-                    GuildIndex = modGuilds.m_EcharMiembroDeClan(UserIndex, UserName)
+                    GuildIndex = m_EcharMiembroDeClan(UserIndex, UserName)
 
                     If GuildIndex = 0 Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "No pertenece a ningún clan o es fundador.",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "No pertenece a ningún clan o es fundador.",
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call WriteConsoleMsg(UserIndex, "Expulsado.", FontTypeNames.FONTTYPE_INFO)
                         Call _
-                        SendData(modSendData.SendTarget.ToGuildMembers, GuildIndex,
-                                 PrepareMessageConsoleMsg(
-                                     UserName & " ha sido expulsado del clan por los administradores del servidor.",
-                                     FontTypeNames.FONTTYPE_GUILD))
+                            SendData(SendTarget.ToGuildMembers, GuildIndex,
+                                     PrepareMessageConsoleMsg(
+                                         UserName & " ha sido expulsado del clan por los administradores del servidor.",
+                                         FontTypeNames.FONTTYPE_GUILD))
                     End If
                 End If
 
@@ -14421,7 +14458,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleRequestCharMail(ByVal UserIndex As Short)
+    Public Sub HandleRequestCharMail(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/26/06
@@ -14447,13 +14484,14 @@ Module Protocol
                 UserName = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     If FileExist(CharPath & UserName & ".chr") Then
                         mail = GetVar(CharPath & UserName & ".chr", "CONTACTO", "email")
 
                         Call _
-                        WriteConsoleMsg(UserIndex, "Last email de " & UserName & ":" & mail, FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "Last email de " & UserName & ":" & mail,
+                                            FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
 
@@ -14472,7 +14510,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleSystemMessage(ByVal UserIndex As Short)
+    Public Sub HandleSystemMessage(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/29/06
@@ -14496,11 +14534,11 @@ Module Protocol
                 message = buffer.ReadASCIIString()
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "Mensaje de sistema:" & message)
 
-                    Call SendData(modSendData.SendTarget.ToAll, 0, PrepareMessageShowMessageBox(message))
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessageShowMessageBox(message))
                 End If
 
                 'If we got here then packet is complete, copy data back to original queue
@@ -14518,7 +14556,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleSetMOTD(ByVal UserIndex As Short)
+    Public Sub HandleSetMOTD(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 03/31/07
@@ -14549,8 +14587,8 @@ Module Protocol
                 auxiliaryString = Split(newMOTD, vbCrLf)
 
                 If _
-                (Not .flags.Privilegios And Declaraciones.PlayerType.RoleMaster) <> 0 And
-                (.flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios)) Then
+                    (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "Ha fijado un nuevo MOTD")
 
                     MaxLines = UBound(auxiliaryString) + 1
@@ -14559,12 +14597,14 @@ Module Protocol
                     ReDim MOTD(MaxLines)
 
                     Call _
-                    WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines", CStr(MaxLines))
+                        WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines",
+                                 CStr(MaxLines))
 
                     For LoopC = 1 To MaxLines
                         Call _
-                        WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "Motd", "Line" & CStr(LoopC),
-                                 auxiliaryString(LoopC - 1))
+                            WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "Motd",
+                                     "Line" & CStr(LoopC),
+                                     auxiliaryString(LoopC - 1))
 
                         MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
                     Next LoopC
@@ -14587,7 +14627,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleChangeMOTD(ByVal UserIndex As Short)
+    Public Sub HandleChangeMOTD(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín sotuyo Dodero (Maraxus)
         'Last Modification: 12/29/06
@@ -14601,8 +14641,8 @@ Module Protocol
 
             If _
                 (.flags.Privilegios And
-                 (Declaraciones.PlayerType.RoleMaster Or Declaraciones.PlayerType.User Or
-                  Declaraciones.PlayerType.Consejero Or Declaraciones.PlayerType.SemiDios)) Then
+                 (PlayerType.RoleMaster Or PlayerType.User Or
+                  PlayerType.Consejero Or PlayerType.SemiDios)) Then
                 Exit Sub
             End If
 
@@ -14626,7 +14666,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandlePing(ByVal UserIndex As Short)
+    Public Sub HandlePing(UserIndex As Short)
         '***************************************************
         'Author: Lucas Tavolaro Ortiz (Tavo)
         'Last Modification: 12/24/06
@@ -14645,7 +14685,7 @@ Module Protocol
     '
     ' @param userIndex The index of the user sending the message
 
-    Public Sub HandleSetIniVar(ByVal UserIndex As Short)
+    Public Sub HandleSetIniVar(UserIndex As Short)
         '***************************************************
         'Author: Brian Chaia (BrianPr)
         'Last Modification: 01/23/10 (Marco)
@@ -14677,13 +14717,13 @@ Module Protocol
                 sClave = buffer.ReadASCIIString()
                 sValor = buffer.ReadASCIIString()
 
-                If .flags.Privilegios And (Declaraciones.PlayerType.Admin Or Declaraciones.PlayerType.Dios) Then
+                If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
 
                     'No podemos modificar [INIT]Dioses ni [Dioses]*
                     If (UCase(sLlave) = "INIT" And UCase(sClave) = "DIOSES") Or UCase(sLlave) = "DIOSES" Then
                         Call _
-                        WriteConsoleMsg(UserIndex, "¡No puedes modificar esa información desde aquí!",
-                                        FontTypeNames.FONTTYPE_INFO)
+                            WriteConsoleMsg(UserIndex, "¡No puedes modificar esa información desde aquí!",
+                                            FontTypeNames.FONTTYPE_INFO)
                     Else
                         'Obtengo el valor según llave y clave
                         sTmp = GetVar(IniPath & "Server.ini", sLlave, sClave)
@@ -14692,13 +14732,15 @@ Module Protocol
                         If migr_LenB(sTmp) Then
                             Call WriteVar(IniPath & "Server.ini", sLlave, sClave, sValor)
                             Call _
-                            LogGM(.name,
-                                  "Modificó en server.ini (" & sLlave & " " & sClave & ") el valor " & sTmp & " por " &
-                                  sValor)
+                                LogGM(.name,
+                                      "Modificó en server.ini (" & sLlave & " " & sClave & ") el valor " & sTmp &
+                                      " por " &
+                                      sValor)
                             Call _
-                            WriteConsoleMsg(UserIndex,
-                                            "Modificó " & sLlave & " " & sClave & " a " & sValor & ". Valor anterior " &
-                                            sTmp, FontTypeNames.FONTTYPE_INFO)
+                                WriteConsoleMsg(UserIndex,
+                                                "Modificó " & sLlave & " " & sClave & " a " & sValor &
+                                                ". Valor anterior " &
+                                                sTmp, FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call WriteConsoleMsg(UserIndex, "No existe la llave y/o clave", FontTypeNames.FONTTYPE_INFO)
                         End If
@@ -14723,7 +14765,7 @@ Module Protocol
     ' @param    UserIndex User to which the message is intended.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Sub WriteLoggedMessage(ByVal UserIndex As Short)
+    Public Sub WriteLoggedMessage(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14736,9 +14778,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteRemoveAllDialogs(ByVal UserIndex As Short)
+
+    Public Sub WriteRemoveAllDialogs(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14751,9 +14794,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteRemoveCharDialog(ByVal UserIndex As Short, ByVal CharIndex As Short)
+
+    Public Sub WriteRemoveCharDialog(UserIndex As Short, CharIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14766,9 +14810,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteNavigateToggle(ByVal UserIndex As Short)
+
+    Public Sub WriteNavigateToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14781,9 +14826,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteDisconnect(ByVal UserIndex As Short)
+
+    Public Sub WriteDisconnect(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14796,9 +14842,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUserOfferConfirm(ByVal UserIndex As Short)
+
+    Public Sub WriteUserOfferConfirm(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
@@ -14811,9 +14858,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCommerceEnd(ByVal UserIndex As Short)
+
+    Public Sub WriteCommerceEnd(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14826,9 +14874,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBankEnd(ByVal UserIndex As Short)
+
+    Public Sub WriteBankEnd(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14841,9 +14890,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCommerceInit(ByVal UserIndex As Short)
+
+    Public Sub WriteCommerceInit(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14856,9 +14906,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBankInit(ByVal UserIndex As Short)
+
+    Public Sub WriteBankInit(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14872,9 +14923,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUserCommerceInit(ByVal UserIndex As Short)
+
+    Public Sub WriteUserCommerceInit(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14888,9 +14940,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUserCommerceEnd(ByVal UserIndex As Short)
+
+    Public Sub WriteUserCommerceEnd(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14903,9 +14956,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowBlacksmithForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowBlacksmithForm(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14918,9 +14972,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowCarpenterForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowCarpenterForm(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14933,9 +14988,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateSta(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateSta(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14951,9 +15007,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateMana(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateMana(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14969,9 +15026,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateHP(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateHP(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -14987,9 +15045,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateGold(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateGold(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15005,9 +15064,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateBankGold(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateBankGold(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
@@ -15023,9 +15083,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateExp(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateExp(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15041,9 +15102,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateStrenghtAndDexterity(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateStrenghtAndDexterity(UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
@@ -15053,16 +15115,17 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.UpdateStrenghtAndDexterity)
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Agilidad))
                 End With
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateDexterity(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateDexterity(UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
@@ -15072,15 +15135,16 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.UpdateDexterity)
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Agilidad))
                 End With
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateStrenght(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateStrenght(UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
@@ -15090,15 +15154,16 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.UpdateStrenght)
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Fuerza))
                 End With
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteChangeMap(ByVal UserIndex As Short, ByVal Map As Short, ByVal version As Short)
+
+    Public Sub WriteChangeMap(UserIndex As Short, Map As Short, version As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15115,9 +15180,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WritePosUpdate(ByVal UserIndex As Short)
+
+    Public Sub WritePosUpdate(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15134,19 +15200,23 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteChatOverHead(ByVal UserIndex As Short, ByVal Chat As String, ByVal CharIndex As Short, ByVal color As Integer)
+
+    Public Sub WriteChatOverHead(UserIndex As Short, Chat As String, CharIndex As Short, color As Integer)
         RetryOnceIfNotEnoughSpace(
             Sub()
-                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageChatOverHead(Chat, CharIndex, color))
+                Call _
+                                     UserList(UserIndex).outgoingData.WriteASCIIStringFixed(
+                                         PrepareMessageChatOverHead(Chat, CharIndex, color))
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteConsoleMsg(ByVal UserIndex As Short, ByVal Chat As String, ByVal FontIndex As FontTypeNames)
+
+    Public Sub WriteConsoleMsg(UserIndex As Short, Chat As String, FontIndex As FontTypeNames)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15159,9 +15229,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCommerceChat(ByVal UserIndex As Short, ByVal Chat As String, ByVal FontIndex As FontTypeNames)
+
+    Public Sub WriteCommerceChat(UserIndex As Short, Chat As String, FontIndex As FontTypeNames)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 05/17/06
@@ -15174,9 +15245,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteGuildChat(ByVal UserIndex As Short, ByVal Chat As String)
+
+    Public Sub WriteGuildChat(UserIndex As Short, Chat As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15189,9 +15261,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowMessageBox(ByVal UserIndex As Short, ByVal message As String)
+
+    Public Sub WriteShowMessageBox(UserIndex As Short, message As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15207,9 +15280,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUserIndexInServer(ByVal UserIndex As Short)
+
+    Public Sub WriteUserIndexInServer(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15225,9 +15299,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUserCharIndexInServer(ByVal UserIndex As Short)
+
+    Public Sub WriteUserCharIndexInServer(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15243,28 +15318,31 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCharacterCreate(ByVal UserIndex As Short, ByVal body As Short, ByVal Head As Short,
-                                            ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short, ByVal X As Byte,
-                                            ByVal Y As Byte, ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
-                                            ByVal FXLoops As Short, ByVal helmet As Short, ByVal name As String,
-                                            ByVal NickColor As Byte, ByVal Privileges As Byte)
+
+    Public Sub WriteCharacterCreate(UserIndex As Short, body As Short, Head As Short,
+                                    heading As eHeading, CharIndex As Short, X As Byte,
+                                    Y As Byte, weapon As Short, shield As Short, FX As Short,
+                                    FXLoops As Short, helmet As Short, name As String,
+                                    NickColor As Byte, Privileges As Byte)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Call _
-                    UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterCreate(body, Head, heading,
-                                                                                                         CharIndex, X, Y, weapon,
-                                                                                                         shield, FX, FXLoops,
-                                                                                                         helmet, name, NickColor,
-                                                                                                         Privileges))
+                                     UserList(UserIndex).outgoingData.WriteASCIIStringFixed(
+                                         PrepareMessageCharacterCreate(body, Head, heading,
+                                                                       CharIndex, X, Y, weapon,
+                                                                       shield, FX, FXLoops,
+                                                                       helmet, name, NickColor,
+                                                                       Privileges))
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCharacterRemove(ByVal UserIndex As Short, ByVal CharIndex As Short)
+
+    Public Sub WriteCharacterRemove(UserIndex As Short, CharIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15277,9 +15355,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCharacterMove(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte)
+
+    Public Sub WriteCharacterMove(UserIndex As Short, CharIndex As Short, X As Byte, Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15287,14 +15366,17 @@ Module Protocol
         '***************************************************
         RetryOnceIfNotEnoughSpace(
             Sub()
-                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterMove(CharIndex, X, Y))
+                Call _
+                                     UserList(UserIndex).outgoingData.WriteASCIIStringFixed(
+                                         PrepareMessageCharacterMove(CharIndex, X, Y))
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteForceCharMove(ByVal UserIndex As Object, ByVal Direccion As Declaraciones.eHeading)
+
+    Public Sub WriteForceCharMove(UserIndex As Object, Direccion As eHeading)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 26/03/2009
@@ -15307,26 +15389,29 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCharacterChange(ByVal UserIndex As Short, ByVal body As Short, ByVal Head As Short,
-                                                ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short,
-                                            ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
-                                            ByVal FXLoops As Short, ByVal helmet As Short)
+
+    Public Sub WriteCharacterChange(UserIndex As Short, body As Short, Head As Short,
+                                    heading As eHeading, CharIndex As Short,
+                                    weapon As Short, shield As Short, FX As Short,
+                                    FXLoops As Short, helmet As Short)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Call _
-                    UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCharacterChange(body, Head, heading,
-                                                                                                         CharIndex, weapon,
-                                                                                                         shield, FX, FXLoops,
-                                                                                                         helmet))
+                                     UserList(UserIndex).outgoingData.WriteASCIIStringFixed(
+                                         PrepareMessageCharacterChange(body, Head, heading,
+                                                                       CharIndex, weapon,
+                                                                       shield, FX, FXLoops,
+                                                                       helmet))
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteObjectCreate(ByVal UserIndex As Short, ByVal GrhIndex As Short, ByVal X As Byte, ByVal Y As Byte)
+
+    Public Sub WriteObjectCreate(UserIndex As Short, GrhIndex As Short, X As Byte, Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15339,9 +15424,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteObjectDelete(ByVal UserIndex As Short, ByVal X As Byte, ByVal Y As Byte)
+
+    Public Sub WriteObjectDelete(UserIndex As Short, X As Byte, Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15354,9 +15440,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBlockPosition(ByVal UserIndex As Short, ByVal X As Byte, ByVal Y As Byte, ByVal Blocked As Boolean)
+
+    Public Sub WriteBlockPosition(UserIndex As Short, X As Byte, Y As Byte, Blocked As Boolean)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15374,9 +15461,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WritePlayMidi(ByVal UserIndex As Short, ByVal midi As Byte, Optional ByVal loops As Short = -1)
+
+    Public Sub WritePlayMidi(UserIndex As Short, midi As Byte, Optional ByVal loops As Short = - 1)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15389,9 +15477,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WritePlayWave(ByVal UserIndex As Short, ByVal wave As Byte, ByVal X As Byte, ByVal Y As Byte)
+
+    Public Sub WritePlayWave(UserIndex As Short, wave As Byte, X As Byte, Y As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 08/08/07
@@ -15405,9 +15494,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteGuildList(ByVal UserIndex As Short, ByVal guildList() As String)
+
+    Public Sub WriteGuildList(UserIndex As Short, guildList() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15429,9 +15519,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteAreaChanged(ByVal UserIndex As Short)
+
+    Public Sub WriteAreaChanged(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15448,9 +15539,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WritePauseToggle(ByVal UserIndex As Short)
+
+    Public Sub WritePauseToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15463,9 +15555,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteRainToggle(ByVal UserIndex As Short)
+
+    Public Sub WriteRainToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15478,20 +15571,24 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCreateFX(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal FX As Short,
-                                         ByVal FXLoops As Short)
+
+    Public Sub WriteCreateFX(UserIndex As Short, CharIndex As Short, FX As Short,
+                             FXLoops As Short)
         RetryOnceIfNotEnoughSpace(
             Sub()
-                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageCreateFX(CharIndex, FX, FXLoops))
+                Call _
+                                     UserList(UserIndex).outgoingData.WriteASCIIStringFixed(
+                                         PrepareMessageCreateFX(CharIndex, FX, FXLoops))
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateUserStats(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateUserStats(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15516,9 +15613,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteWorkRequestTarget(ByVal UserIndex As Short, ByVal Skill As Declaraciones.eSkill)
+
+    Public Sub WriteWorkRequestTarget(UserIndex As Short, Skill As eSkill)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15534,9 +15632,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteChangeInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte)
+
+    Public Sub WriteChangeInventorySlot(UserIndex As Short, Slot As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 3/12/09
@@ -15570,9 +15669,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteAddSlots(ByVal UserIndex As Short, ByVal Mochila As Declaraciones.eMochilas)
+
+    Public Sub WriteAddSlots(UserIndex As Short, Mochila As eMochilas)
         '***************************************************
         'Author: Budi
         'Last Modification: 01/12/09
@@ -15592,7 +15692,7 @@ Module Protocol
     ' @param    slot Inventory slot which needs to be updated.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Sub WriteChangeBankSlot(ByVal UserIndex As Short, ByVal Slot As Byte)
+    Public Sub WriteChangeBankSlot(UserIndex As Short, Slot As Byte)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 12/03/09
@@ -15625,9 +15725,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteChangeSpellSlot(ByVal UserIndex As Short, ByVal Slot As Short)
+
+    Public Sub WriteChangeSpellSlot(UserIndex As Short, Slot As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15649,9 +15750,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteAttributes(ByVal UserIndex As Short)
+
+    Public Sub WriteAttributes(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15661,19 +15763,20 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.Atributes)
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Carisma))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Constitucion))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Agilidad))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Inteligencia))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Carisma))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Constitucion))
                 End With
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBlacksmithWeapons(ByVal UserIndex As Short)
+
+    Public Sub WriteBlacksmithWeapons(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
@@ -15690,10 +15793,10 @@ Module Protocol
                     Call .WriteByte(ServerPacketID.BlacksmithWeapons)
                     For i = 1 To UBound(ArmasHerrero)
                         If _
-                            ObjData_Renamed(ArmasHerrero(i)).SkHerreria <=
-                            System.Math.Round(
-                                UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Herreria) /
-                                ModHerreriA(UserList(UserIndex).clase), 0) Then
+                                     ObjData_Renamed(ArmasHerrero(i)).SkHerreria <=
+                                     Math.Round(
+                                         UserList(UserIndex).Stats.UserSkills(eSkill.Herreria)/
+                                         ModHerreriA(UserList(UserIndex).clase), 0) Then
                             Count = Count + 1
                             validIndexes(Count) = i
                         End If
@@ -15714,9 +15817,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBlacksmithArmors(ByVal UserIndex As Short)
+
+    Public Sub WriteBlacksmithArmors(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
@@ -15733,10 +15837,10 @@ Module Protocol
                     Call .WriteByte(ServerPacketID.BlacksmithArmors)
                     For i = 1 To UBound(ArmadurasHerrero)
                         If _
-                            ObjData_Renamed(ArmadurasHerrero(i)).SkHerreria <=
-                            System.Math.Round(
-                                UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Herreria) /
-                                ModHerreriA(UserList(UserIndex).clase), 0) Then
+                                     ObjData_Renamed(ArmadurasHerrero(i)).SkHerreria <=
+                                     Math.Round(
+                                         UserList(UserIndex).Stats.UserSkills(eSkill.Herreria)/
+                                         ModHerreriA(UserList(UserIndex).clase), 0) Then
                             Count = Count + 1
                             validIndexes(Count) = i
                         End If
@@ -15757,9 +15861,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCarpenterObjects(ByVal UserIndex As Short)
+
+    Public Sub WriteCarpenterObjects(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15776,9 +15881,9 @@ Module Protocol
                     Call .WriteByte(ServerPacketID.CarpenterObjects)
                     For i = 1 To UBound(ObjCarpintero)
                         If _
-                            ObjData_Renamed(ObjCarpintero(i)).SkCarpinteria <=
-                            UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Carpinteria) \
-                            ModCarpinteria(UserList(UserIndex).clase) Then
+                                     ObjData_Renamed(ObjCarpintero(i)).SkCarpinteria <=
+                                     UserList(UserIndex).Stats.UserSkills(eSkill.Carpinteria)\
+                                     ModCarpinteria(UserList(UserIndex).clase) Then
                             Count = Count + 1
                             validIndexes(Count) = i
                         End If
@@ -15798,9 +15903,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteRestOK(ByVal UserIndex As Short)
+
+    Public Sub WriteRestOK(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15813,9 +15919,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteErrorMsg(ByVal UserIndex As Short, ByVal message As String)
+
+    Public Sub WriteErrorMsg(UserIndex As Short, message As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15828,9 +15935,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBlind(ByVal UserIndex As Short)
+
+    Public Sub WriteBlind(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15843,9 +15951,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteDumb(ByVal UserIndex As Short)
+
+    Public Sub WriteDumb(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15858,9 +15967,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowSignal(ByVal UserIndex As Short, ByVal ObjIndex As Short)
+
+    Public Sub WriteShowSignal(UserIndex As Short, ObjIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15877,9 +15987,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteChangeNPCInventorySlot(ByVal UserIndex As Short, ByVal Slot As Byte, ByVal Obj As Obj, ByVal price As Single)
+
+    Public Sub WriteChangeNPCInventorySlot(UserIndex As Short, Slot As Byte, Obj As Obj, price As Single)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim ObjInfo As ObjData
@@ -15904,9 +16015,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUpdateHungerAndThirst(ByVal UserIndex As Short)
+
+    Public Sub WriteUpdateHungerAndThirst(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15925,9 +16037,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteFame(ByVal UserIndex As Short)
+
+    Public Sub WriteFame(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15949,9 +16062,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteMiniStats(ByVal UserIndex As Short)
+
+    Public Sub WriteMiniStats(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15972,9 +16086,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteLevelUp(ByVal UserIndex As Short, ByVal skillPoints As Short)
+
+    Public Sub WriteLevelUp(UserIndex As Short, skillPoints As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -15990,9 +16105,11 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteAddForumMsg(ByVal UserIndex As Short, ByVal ForumType As Declaraciones.eForumType, ByVal Title As String, ByVal Author As String, ByVal message As String)
+
+    Public Sub WriteAddForumMsg(UserIndex As Short, ForumType As eForumType, Title As String, Author As String,
+                                message As String)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 With UserList(UserIndex).outgoingData
@@ -16006,9 +16123,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowForumForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowForumForm(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16020,19 +16138,19 @@ Module Protocol
                 Dim CanMakeSticky As Byte
                 With UserList(UserIndex)
                     Call .outgoingData.WriteByte(ServerPacketID.ShowForumForm)
-                    Visibilidad = Declaraciones.eForumVisibility.ieGENERAL_MEMBER
+                    Visibilidad = eForumVisibility.ieGENERAL_MEMBER
                     If esCaos(UserIndex) Or EsGM(UserIndex) Then
-                        Visibilidad = Visibilidad Or Declaraciones.eForumVisibility.ieCAOS_MEMBER
+                        Visibilidad = Visibilidad Or eForumVisibility.ieCAOS_MEMBER
                     End If
                     If esArmada(UserIndex) Or EsGM(UserIndex) Then
-                        Visibilidad = Visibilidad Or Declaraciones.eForumVisibility.ieREAL_MEMBER
+                        Visibilidad = Visibilidad Or eForumVisibility.ieREAL_MEMBER
                     End If
                     Call .outgoingData.WriteByte(Visibilidad)
                     If EsGM(UserIndex) Then
                         CanMakeSticky = 2
-                    ElseIf (.flags.Privilegios And Declaraciones.PlayerType.ChaosCouncil) <> 0 Then
+                    ElseIf (.flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then
                         CanMakeSticky = 1
-                    ElseIf (.flags.Privilegios And Declaraciones.PlayerType.RoyalCouncil) <> 0 Then
+                    ElseIf (.flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then
                         CanMakeSticky = 1
                     End If
                     Call .outgoingData.WriteByte(CanMakeSticky)
@@ -16041,9 +16159,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteSetInvisible(ByVal UserIndex As Short, ByVal CharIndex As Short, ByVal invisible As Boolean)
+
+    Public Sub WriteSetInvisible(UserIndex As Short, CharIndex As Short, invisible As Boolean)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16051,14 +16170,17 @@ Module Protocol
         '***************************************************
         RetryOnceIfNotEnoughSpace(
             Sub()
-                Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessageSetInvisible(CharIndex, invisible))
+                Call _
+                                     UserList(UserIndex).outgoingData.WriteASCIIStringFixed(
+                                         PrepareMessageSetInvisible(CharIndex, invisible))
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteDiceRoll(ByVal UserIndex As Short)
+
+    Public Sub WriteDiceRoll(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16068,19 +16190,20 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.DiceRoll)
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Fuerza))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Agilidad))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Inteligencia))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Carisma))
-                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(Declaraciones.eAtributos.Constitucion))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Fuerza))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Agilidad))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Inteligencia))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Carisma))
+                    Call .WriteByte(UserList(UserIndex).Stats.UserAtributos(eAtributos.Constitucion))
                 End With
             End Sub,
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteMeditateToggle(ByVal UserIndex As Short)
+
+    Public Sub WriteMeditateToggle(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16093,9 +16216,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBlindNoMore(ByVal UserIndex As Short)
+
+    Public Sub WriteBlindNoMore(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16108,9 +16232,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteDumbNoMore(ByVal UserIndex As Short)
+
+    Public Sub WriteDumbNoMore(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16123,9 +16248,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteSendSkills(ByVal UserIndex As Short)
+
+    Public Sub WriteSendSkills(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 11/19/09
@@ -16141,7 +16267,7 @@ Module Protocol
                     For i = 1 To NUMSKILLS
                         Call .outgoingData.WriteByte(UserList(UserIndex).Stats.UserSkills(i))
                         If .Stats.UserSkills(i) < MAXSKILLPOINTS Then
-                            Call .outgoingData.WriteByte(Int(.Stats.ExpSkills(i) * 100 / .Stats.EluSkills(i)))
+                            Call .outgoingData.WriteByte(Int(.Stats.ExpSkills(i)*100/.Stats.EluSkills(i)))
                         Else
                             Call .outgoingData.WriteByte(0)
                         End If
@@ -16151,9 +16277,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteTrainerCreatureList(ByVal UserIndex As Short, ByVal NpcIndex As Short)
+
+    Public Sub WriteTrainerCreatureList(UserIndex As Short, NpcIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16175,9 +16302,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteGuildNews(ByVal UserIndex As Short, ByVal guildNews As String, ByVal enemies() As String, ByVal allies() As String)
+
+    Public Sub WriteGuildNews(UserIndex As Short, guildNews As String, enemies() As String, allies() As String)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim i As Integer
@@ -16201,9 +16329,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteOfferDetails(ByVal UserIndex As Short, ByVal details As String)
+
+    Public Sub WriteOfferDetails(UserIndex As Short, details As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16220,9 +16349,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteAlianceProposalsList(ByVal UserIndex As Short, ByVal guilds() As String)
+
+    Public Sub WriteAlianceProposalsList(UserIndex As Short, guilds() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16244,9 +16374,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WritePeaceProposalsList(ByVal UserIndex As Short, ByVal guilds() As String)
+
+    Public Sub WritePeaceProposalsList(UserIndex As Short, guilds() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16268,14 +16399,16 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCharacterInfo(ByVal UserIndex As Short, ByVal charName As String, ByVal race As Declaraciones.eRaza, ByVal Class_Renamed As Declaraciones.eClass, ByVal gender As Declaraciones.eGenero,
-                                          ByVal level As Byte, ByVal gold As Integer, ByVal bank As Integer,
-                                          ByVal reputation As Integer, ByVal previousPetitions As String,
-                                          ByVal currentGuild As String, ByVal previousGuilds As String,
-                                          ByVal RoyalArmy As Boolean, ByVal CaosLegion As Boolean,
-                                          ByVal citicensKilled As Integer, ByVal criminalsKilled As Integer)
+
+    Public Sub WriteCharacterInfo(UserIndex As Short, charName As String, race As eRaza, Class_Renamed As eClass,
+                                  gender As eGenero,
+                                  level As Byte, gold As Integer, bank As Integer,
+                                  reputation As Integer, previousPetitions As String,
+                                  currentGuild As String, previousGuilds As String,
+                                  RoyalArmy As Boolean, CaosLegion As Boolean,
+                                  citicensKilled As Integer, criminalsKilled As Integer)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 With UserList(UserIndex).outgoingData
@@ -16300,9 +16433,11 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteGuildLeaderInfo(ByVal UserIndex As Short, ByVal guildList() As String, ByVal MemberList() As String, ByVal guildNews As String, ByVal joinRequests() As String)
+
+    Public Sub WriteGuildLeaderInfo(UserIndex As Short, guildList() As String, MemberList() As String,
+                                    guildNews As String, joinRequests() As String)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim i As Integer
@@ -16332,9 +16467,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteGuildMemberInfo(ByVal UserIndex As Short, ByVal guildList() As String, ByVal MemberList() As String)
+
+    Public Sub WriteGuildMemberInfo(UserIndex As Short, guildList() As String, MemberList() As String)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 21/02/2010
@@ -16362,12 +16498,14 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteGuildDetails(ByVal UserIndex As Short, ByVal GuildName As String, ByVal founder As String, ByVal foundationDate As String, ByVal leader As String, ByVal URL As String,
-                                         ByVal memberCount As Short, ByVal electionsOpen As Boolean, ByVal alignment As String,
-                                         ByVal enemiesCount As Short, ByVal AlliesCount As Short,
-                                         ByVal antifactionPoints As String, ByVal codex() As String, ByVal guildDesc As String)
+
+    Public Sub WriteGuildDetails(UserIndex As Short, GuildName As String, founder As String, foundationDate As String,
+                                 leader As String, URL As String,
+                                 memberCount As Short, electionsOpen As Boolean, alignment As String,
+                                 enemiesCount As Short, AlliesCount As Short,
+                                 antifactionPoints As String, codex() As String, guildDesc As String)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim i As Integer
@@ -16396,9 +16534,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowGuildAlign(ByVal UserIndex As Short)
+
+    Public Sub WriteShowGuildAlign(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 14/12/2009
@@ -16411,9 +16550,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowGuildFundationForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowGuildFundationForm(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16426,9 +16566,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteParalizeOK(ByVal UserIndex As Short)
+
+    Public Sub WriteParalizeOK(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 08/12/07
@@ -16444,9 +16585,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowUserRequest(ByVal UserIndex As Short, ByVal details As String)
+
+    Public Sub WriteShowUserRequest(UserIndex As Short, details As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16462,9 +16604,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteTradeOK(ByVal UserIndex As Short)
+
+    Public Sub WriteTradeOK(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16477,9 +16620,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteBankOK(ByVal UserIndex As Short)
+
+    Public Sub WriteBankOK(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16492,9 +16636,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteChangeUserTradeSlot(ByVal UserIndex As Short, ByVal OfferSlot As Byte, ByVal ObjIndex As Short, ByVal Amount As Integer)
+
+    Public Sub WriteChangeUserTradeSlot(UserIndex As Short, OfferSlot As Byte, ObjIndex As Short, Amount As Integer)
         RetryOnceIfNotEnoughSpace(
             Sub()
                 With UserList(UserIndex).outgoingData
@@ -16526,9 +16671,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteSendNight(ByVal UserIndex As Short, ByVal night As Boolean)
+
+    Public Sub WriteSendNight(UserIndex As Short, night As Boolean)
         '***************************************************
         'Author: Fredy Horacio Treboux (liquid)
         'Last Modification: 01/08/07
@@ -16544,9 +16690,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteSpawnList(ByVal UserIndex As Short, ByVal npcNames() As String)
+
+    Public Sub WriteSpawnList(UserIndex As Short, npcNames() As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16568,9 +16715,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowSOSForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowSOSForm(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16592,9 +16740,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowPartyForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowPartyForm(UserIndex As Short)
         '***************************************************
         'Author: Budi
         'Last Modification: 11/26/09
@@ -16614,7 +16763,8 @@ Module Protocol
                         Call Parties(PI).ObtenerMiembrosOnline(members)
                         For i = 1 To PARTY_MAXMEMBERS
                             If members(i) > 0 Then
-                                Tmp = Tmp & UserList(members(i)).name & " (" & Fix(Parties(PI).MiExperiencia(members(i))) & ")" &
+                                Tmp = Tmp & UserList(members(i)).name & " (" &
+                                      Fix(Parties(PI).MiExperiencia(members(i))) & ")" &
                                       SEPARATOR
                             End If
                         Next i
@@ -16627,9 +16777,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowMOTDEditionForm(ByVal UserIndex As Short, ByVal currentMOTD As String)
+
+    Public Sub WriteShowMOTDEditionForm(UserIndex As Short, currentMOTD As String)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16645,9 +16796,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteShowGMPanelForm(ByVal UserIndex As Short)
+
+    Public Sub WriteShowGMPanelForm(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16660,9 +16812,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteUserNameList(ByVal UserIndex As Short, ByVal userNamesList() As String, ByVal cant As Short)
+
+    Public Sub WriteUserNameList(UserIndex As Short, userNamesList() As String, cant As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06 NIGO:
@@ -16684,7 +16837,7 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
 
 
@@ -16694,7 +16847,7 @@ Module Protocol
     ' @param    UserIndex User to which the message is intended.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Sub WritePong(ByVal UserIndex As Short)
+    Public Sub WritePong(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16707,7 +16860,7 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
 
     ''
@@ -16715,7 +16868,7 @@ Module Protocol
     '
     ' @param    UserIndex User whose outgoing data buffer will be flushed.
 
-    Public Sub FlushBuffer(ByVal UserIndex As Short)
+    Public Sub FlushBuffer(UserIndex As Short)
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16740,7 +16893,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The message is written to no outgoing buffer, but only prepared in a single string to be easily sent to several clients.
 
-    Public Function PrepareMessageSetInvisible(ByVal CharIndex As Short, ByVal invisible As Boolean) As String
+    Public Function PrepareMessageSetInvisible(CharIndex As Short, invisible As Boolean) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16756,7 +16909,7 @@ Module Protocol
         End With
     End Function
 
-    Public Function PrepareMessageCharacterChangeNick(ByVal CharIndex As Short, ByVal newNick As String) As String
+    Public Function PrepareMessageCharacterChangeNick(CharIndex As Short, newNick As String) As String
         '***************************************************
         'Author: Budi
         'Last Modification: 07/23/09
@@ -16781,7 +16934,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The message is written to no outgoing buffer, but only prepared in a single string to be easily sent to several clients.
 
-    Public Function PrepareMessageChatOverHead(ByVal Chat As String, ByVal CharIndex As Short, ByVal color As Integer) _
+    Public Function PrepareMessageChatOverHead(Chat As String, CharIndex As Short, color As Integer) _
         As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -16795,8 +16948,8 @@ Module Protocol
 
             ' Write rgb channels and save one byte from long :D
             Call .WriteByte(color And &HFF)
-            Call .WriteByte((color And &HFF00) \ &H100)
-            Call .WriteByte((color And &HFF0000) \ &H10000)
+            Call .WriteByte((color And &HFF00)\&H100)
+            Call .WriteByte((color And &HFF0000)\&H10000)
 
             PrepareMessageChatOverHead = .ReadASCIIStringFixed(.length)
         End With
@@ -16810,7 +16963,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageConsoleMsg(ByVal Chat As String, ByVal FontIndex As FontTypeNames) As String
+    Public Function PrepareMessageConsoleMsg(Chat As String, FontIndex As FontTypeNames) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16825,7 +16978,7 @@ Module Protocol
         End With
     End Function
 
-    Public Function PrepareCommerceConsoleMsg(ByRef Chat As String, ByVal FontIndex As FontTypeNames) As String
+    Public Function PrepareCommerceConsoleMsg(ByRef Chat As String, FontIndex As FontTypeNames) As String
         '***************************************************
         'Author: ZaMa
         'Last Modification: 03/12/2009
@@ -16850,7 +17003,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageCreateFX(ByVal CharIndex As Short, ByVal FX As Short, ByVal FXLoops As Short) _
+    Public Function PrepareMessageCreateFX(CharIndex As Short, FX As Short, FXLoops As Short) _
         As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -16876,7 +17029,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessagePlayWave(ByVal wave As Byte, ByVal X As Byte, ByVal Y As Byte) As String
+    Public Function PrepareMessagePlayWave(wave As Byte, X As Byte, Y As Byte) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 08/08/07
@@ -16900,7 +17053,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageGuildChat(ByVal Chat As String) As String
+    Public Function PrepareMessageGuildChat(Chat As String) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -16921,7 +17074,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageShowMessageBox(ByVal Chat As String) As String
+    Public Function PrepareMessageShowMessageBox(Chat As String) As String
         '***************************************************
         'Author: Fredy Horacio Treboux (liquid)
         'Last Modification: 01/08/07
@@ -16944,7 +17097,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessagePlayMidi(ByVal midi As Byte, Optional ByVal loops As Short = -1) As String
+    Public Function PrepareMessagePlayMidi(midi As Byte, Optional ByVal loops As Short = - 1) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17004,7 +17157,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageObjectDelete(ByVal X As Byte, ByVal Y As Byte) As String
+    Public Function PrepareMessageObjectDelete(X As Byte, Y As Byte) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17028,7 +17181,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageBlockPosition(ByVal X As Byte, ByVal Y As Byte, ByVal Blocked As Boolean) As String
+    Public Function PrepareMessageBlockPosition(X As Byte, Y As Byte, Blocked As Boolean) As String
         '***************************************************
         'Author: Fredy Horacio Treboux (liquid)
         'Last Modification: 01/08/07
@@ -17053,7 +17206,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageObjectCreate(ByVal GrhIndex As Short, ByVal X As Byte, ByVal Y As Byte) As String
+    Public Function PrepareMessageObjectCreate(GrhIndex As Short, X As Byte, Y As Byte) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17076,7 +17229,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageCharacterRemove(ByVal CharIndex As Short) As String
+    Public Function PrepareMessageCharacterRemove(CharIndex As Short) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17097,7 +17250,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageRemoveCharDialog(ByVal CharIndex As Short) As String
+    Public Function PrepareMessageRemoveCharDialog(CharIndex As Short) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17131,12 +17284,12 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageCharacterCreate(ByVal body As Short, ByVal Head As Short,
-                                                  ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short,
-                                                  ByVal X As Byte, ByVal Y As Byte, ByVal weapon As Short,
-                                                  ByVal shield As Short, ByVal FX As Short, ByVal FXLoops As Short,
-                                                  ByVal helmet As Short, ByVal name As String, ByVal NickColor As Byte,
-                                                  ByVal Privileges As Byte) As String
+    Public Function PrepareMessageCharacterCreate(body As Short, Head As Short,
+                                                  heading As eHeading, CharIndex As Short,
+                                                  X As Byte, Y As Byte, weapon As Short,
+                                                  shield As Short, FX As Short, FXLoops As Short,
+                                                  helmet As Short, name As String, NickColor As Byte,
+                                                  Privileges As Byte) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17179,10 +17332,10 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageCharacterChange(ByVal body As Short, ByVal Head As Short,
-                                                  ByVal heading As Declaraciones.eHeading, ByVal CharIndex As Short,
-                                                  ByVal weapon As Short, ByVal shield As Short, ByVal FX As Short,
-                                                  ByVal FXLoops As Short, ByVal helmet As Short) As String
+    Public Function PrepareMessageCharacterChange(body As Short, Head As Short,
+                                                  heading As eHeading, CharIndex As Short,
+                                                  weapon As Short, shield As Short, FX As Short,
+                                                  FXLoops As Short, helmet As Short) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17214,7 +17367,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageCharacterMove(ByVal CharIndex As Short, ByVal X As Byte, ByVal Y As Byte) As String
+    Public Function PrepareMessageCharacterMove(CharIndex As Short, X As Byte, Y As Byte) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17230,7 +17383,7 @@ Module Protocol
         End With
     End Function
 
-    Public Function PrepareMessageForceCharMove(ByVal Direccion As Declaraciones.eHeading) As String
+    Public Function PrepareMessageForceCharMove(Direccion As eHeading) As String
         '***************************************************
         'Author: ZaMa
         'Last Modification: 26/03/2009
@@ -17253,7 +17406,7 @@ Module Protocol
     ' @return   The formated message ready to be writen as is on outgoing buffers.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageUpdateTagAndStatus(ByVal UserIndex As Short, ByVal NickColor As Byte,
+    Public Function PrepareMessageUpdateTagAndStatus(UserIndex As Short, NickColor As Byte,
                                                      ByRef Tag As String) As String
         '***************************************************
         'Author: Alejandro Salvo (Salvito)
@@ -17279,7 +17432,7 @@ Module Protocol
     ' @param    message The error message to be displayed.
     ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-    Public Function PrepareMessageErrorMsg(ByVal message As String) As String
+    Public Function PrepareMessageErrorMsg(message As String) As String
         '***************************************************
         'Author: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06
@@ -17297,7 +17450,7 @@ Module Protocol
     ' Writes the "StopWorking" message to the given user's outgoing data buffer.
     '
     ' @param    UserIndex User to which the message is intended.
-    Public Sub WriteStopWorking(ByVal UserIndex As Short)
+    Public Sub WriteStopWorking(UserIndex As Short)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 21/02/2010
@@ -17310,9 +17463,10 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
-    Public Sub WriteCancelOfferItem(ByVal UserIndex As Short, ByVal Slot As Byte)
+
+    Public Sub WriteCancelOfferItem(UserIndex As Short, Slot As Byte)
         '***************************************************
         'Author: Torres Patricio (Pato)
         'Last Modification: 05/03/2010
@@ -17328,7 +17482,7 @@ Module Protocol
             Sub()
                 FlushBuffer(UserIndex)
             End Sub
-        )
+            )
     End Sub
 
     Private Sub RetryOnceIfNotEnoughSpace(tryAction As Action, onRetry As Action)
@@ -17339,5 +17493,4 @@ Module Protocol
             tryAction() ' Reintenta una sola vez
         End Try
     End Sub
-
 End Module

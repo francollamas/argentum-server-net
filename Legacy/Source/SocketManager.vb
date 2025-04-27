@@ -5,11 +5,10 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Text
 Imports System.Threading
-Imports System.Collections.Generic
 Imports System.Timers
 
 ''' <summary>
-''' Manages socket connections for the server.
+'''     Manages socket connections for the server.
 ''' </summary>
 Public Class SocketManager
     ' Simple message structure for the queue
@@ -50,18 +49,18 @@ Public Class SocketManager
     Public Shared SocketStates As New Dictionary(Of Integer, SocketState)
 
     ' Pending operations tracking
-    Private Shared _pendingReceives As New HashSet(Of Integer)
-    Private Shared _pendingSends As New HashSet(Of Integer)
+    Private Shared ReadOnly _pendingReceives As New HashSet(Of Integer)
+    Private Shared ReadOnly _pendingSends As New HashSet(Of Integer)
 
     ' Simple synchronized message queue
-    Private Shared _messageQueue As New Queue(Of QueuedMessage)
-    Private Shared _messageQueueLock As New Object()
-    Private Shared _messageTimer As System.Timers.Timer
+    Private Shared ReadOnly _messageQueue As New Queue(Of QueuedMessage)
+    Private Shared ReadOnly _messageQueueLock As New Object()
+    Private Shared _messageTimer As Timers.Timer
 
     ' Lock objects
-    Private Shared _socketStatesLock As New Object()
-    Private Shared _pendingReceivesLock As New Object()
-    Private Shared _pendingSendsLock As New Object()
+    Private Shared ReadOnly _socketStatesLock As New Object()
+    Private Shared ReadOnly _pendingReceivesLock As New Object()
+    Private Shared ReadOnly _pendingSendsLock As New Object()
 
     ' Events
     Public Shared Event ConnectionReceived(socketID As Integer, clientIP As String)
@@ -73,14 +72,14 @@ Public Class SocketManager
     Public Shared ProcessMessagesEnabled As Boolean = True
 
     ''' <summary>
-    ''' Initializes the socket server to listen on the specified port.
+    '''     Initializes the socket server to listen on the specified port.
     ''' </summary>
     Public Shared Sub Initialize(port As Integer)
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
         _listeningPort = port
 
         ' Initialize the message queue timer using System.Timers.Timer
-        _messageTimer = New System.Timers.Timer(10) ' Check queue every 10ms
+        _messageTimer = New Timers.Timer(10) ' Check queue every 10ms
         AddHandler _messageTimer.Elapsed, AddressOf ProcessMessageQueue
         _messageTimer.AutoReset = True
         _messageTimer.Start()
@@ -89,7 +88,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Process queued messages on the main thread
+    '''     Process queued messages on the main thread
     ''' </summary>
     Private Shared Sub ProcessMessageQueue(sender As Object, e As ElapsedEventArgs)
         ' Skip if processing is disabled
@@ -117,7 +116,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Starts listening for incoming connections.
+    '''     Starts listening for incoming connections.
     ''' </summary>
     Public Shared Sub StartListening()
         Try
@@ -139,12 +138,12 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Callback method executed when a connection request is received.
+    '''     Callback method executed when a connection request is received.
     ''' </summary>
     Private Shared Sub AcceptCallback(ar As IAsyncResult)
         Try
             ' Get the socket that handles the client request
-            Dim listener As Socket = CType(ar.AsyncState, Socket)
+            Dim listener = CType(ar.AsyncState, Socket)
 
             ' Check if the listener is still valid
             If listener Is Nothing OrElse Not listener.IsBound Then
@@ -195,7 +194,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Starts an asynchronous receive operation on a socket.
+    '''     Starts an asynchronous receive operation on a socket.
     ''' </summary>
     Private Shared Sub StartReceive(state As SocketState)
         ' Mark this socket as having a pending receive
@@ -239,7 +238,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Callback method executed when data is read from the client.
+    '''     Callback method executed when data is read from the client.
     ''' </summary>
     Private Shared Sub ReadCallback(ar As IAsyncResult)
         If ar Is Nothing Then Return
@@ -295,7 +294,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Adds a message to the queue for processing on the main thread
+    '''     Adds a message to the queue for processing on the main thread
     ''' </summary>
     Private Shared Sub EnqueueMessage(socketID As Integer, data() As Byte)
         SyncLock _messageQueueLock
@@ -304,7 +303,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Manually process any pending messages
+    '''     Manually process any pending messages
     ''' </summary>
     Public Shared Sub ProcessPendingMessages()
         ' Only call this from the main thread
@@ -312,7 +311,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Sends data to a client.
+    '''     Sends data to a client.
     ''' </summary>
     Public Shared Function SendData(socketID As Integer, data() As Byte) As Boolean
         If data Is Nothing OrElse data.Length = 0 Then
@@ -366,7 +365,7 @@ Public Class SocketManager
     End Function
 
     ''' <summary>
-    ''' Callback method executed when data send operation completes.
+    '''     Callback method executed when data send operation completes.
     ''' </summary>
     Private Shared Sub SendCallback(ar As IAsyncResult)
         If ar Is Nothing Then Return
@@ -404,14 +403,14 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Closes a client socket.
+    '''     Closes a client socket.
     ''' </summary>
     Public Shared Sub CloseSocket(socketID As Integer)
         CloseSocketInternal(socketID)
     End Sub
 
     ''' <summary>
-    ''' Internal implementation of closing a socket.
+    '''     Internal implementation of closing a socket.
     ''' </summary>
     Private Shared Sub CloseSocketInternal(socketID As Integer)
         Dim state As SocketState = Nothing
@@ -426,7 +425,7 @@ Public Class SocketManager
         End SyncLock
 
         ' Check if there are pending operations on this socket
-        Dim hasPendingOperations As Boolean = False
+        Dim hasPendingOperations = False
 
         SyncLock _pendingReceivesLock
             hasPendingOperations = hasPendingOperations OrElse _pendingReceives.Contains(socketID)
@@ -439,7 +438,7 @@ Public Class SocketManager
         ' If we have pending operations, we'll wait for them to complete
         If hasPendingOperations Then
             ' Schedule a check to see if pending operations have finished
-            Dim timer As New System.Timers.Timer(100) ' Check again after 100ms
+            Dim timer As New Timers.Timer(100) ' Check again after 100ms
             AddHandler timer.Elapsed, Sub(sender, e)
                 timer.Stop()
                 timer.Dispose()
@@ -454,7 +453,7 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Completes the socket closing process after any pending operations are done.
+    '''     Completes the socket closing process after any pending operations are done.
     ''' </summary>
     Private Shared Sub FinishCloseSocket(socketID As Integer)
         Dim state As SocketState = Nothing
@@ -468,7 +467,7 @@ Public Class SocketManager
         End SyncLock
 
         ' Check if there are still pending operations
-        Dim hasPendingOperations As Boolean = False
+        Dim hasPendingOperations = False
 
         SyncLock _pendingReceivesLock
             hasPendingOperations = hasPendingOperations OrElse _pendingReceives.Contains(socketID)
@@ -480,7 +479,7 @@ Public Class SocketManager
 
         ' If we still have pending operations, wait a bit longer
         If hasPendingOperations Then
-            Dim timer As New System.Timers.Timer(100) ' Check again after 100ms
+            Dim timer As New Timers.Timer(100) ' Check again after 100ms
             AddHandler timer.Elapsed, Sub(sender, e)
                 timer.Stop()
                 timer.Dispose()
@@ -511,21 +510,21 @@ Public Class SocketManager
     End Sub
 
     ''' <summary>
-    ''' Converts a string to a byte array using Windows-1252 encoding.
+    '''     Converts a string to a byte array using Windows-1252 encoding.
     ''' </summary>
     Public Shared Function StringToBytes(text As String) As Byte()
         Return Encoding.GetEncoding("Windows-1252").GetBytes(text)
     End Function
 
     ''' <summary>
-    ''' Converts a byte array to a string using Windows-1252 encoding.
+    '''     Converts a byte array to a string using Windows-1252 encoding.
     ''' </summary>
     Public Shared Function BytesToString(bytes() As Byte) As String
         Return Encoding.GetEncoding("Windows-1252").GetString(bytes)
     End Function
 
     ''' <summary>
-    ''' Shutdown the socket server.
+    '''     Shutdown the socket server.
     ''' </summary>
     Public Shared Sub Shutdown()
         ' Stop the message processing timer

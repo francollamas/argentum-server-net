@@ -37,11 +37,11 @@ Module ModAreas
     Private CurHour As Byte
 
     'UPGRADE_WARNING: El límite inferior de la matriz AreasInfo ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    Private AreasInfo(100, 100) As Byte
+    Private ReadOnly AreasInfo(100, 100) As Byte
     'UPGRADE_WARNING: El límite inferior de la matriz PosToArea ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    Private PosToArea(100) As Byte
+    Private ReadOnly PosToArea(100) As Byte
 
-    Private AreasRecive(12) As Short
+    Private ReadOnly AreasRecive(12) As Short
 
     Public ConnGroups() As ConnGroup
 
@@ -121,7 +121,7 @@ Module ModAreas
         End If
     End Sub
 
-    Public Sub CheckUpdateNeededUser(ByVal UserIndex As Short, ByVal Head As Byte,
+    Public Sub CheckUpdateNeededUser(UserIndex As Short, Head As Byte,
                                      Optional ByVal ButIndex As Boolean = False)
         '**************************************************************
         'Author: Lucio N. Tourrilhes (DuNga)
@@ -139,21 +139,21 @@ Module ModAreas
             MinX = .AreasInfo.MinX
             MinY = .AreasInfo.MinY
 
-            If Head = Declaraciones.eHeading.NORTH Then
+            If Head = eHeading.NORTH Then
                 MaxY = MinY - 1
                 MinY = MinY - 9
                 MaxX = MinX + 26
                 .AreasInfo.MinX = CShort(MinX)
                 .AreasInfo.MinY = CShort(MinY)
 
-            ElseIf Head = Declaraciones.eHeading.SOUTH Then
+            ElseIf Head = eHeading.SOUTH Then
                 MaxY = MinY + 35
                 MinY = MinY + 27
                 MaxX = MinX + 26
                 .AreasInfo.MinX = CShort(MinX)
                 .AreasInfo.MinY = CShort(MinY - 18)
 
-            ElseIf Head = Declaraciones.eHeading.WEST Then
+            ElseIf Head = eHeading.WEST Then
                 MaxX = MinX - 1
                 MinX = MinX - 9
                 MaxY = MinY + 26
@@ -161,7 +161,7 @@ Module ModAreas
                 .AreasInfo.MinY = CShort(MinY)
 
 
-            ElseIf Head = Declaraciones.eHeading.EAST Then
+            ElseIf Head = eHeading.EAST Then
                 MaxX = MinX + 35
                 MinX = MinX + 27
                 MaxY = MinY + 26
@@ -210,8 +210,8 @@ Module ModAreas
                                 If UserList(TempInt).flags.invisible Or UserList(TempInt).flags.Oculto Then
                                     If _
                                         .flags.Privilegios And
-                                        (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                                         Declaraciones.PlayerType.RoleMaster) Then
+                                        (PlayerType.User Or PlayerType.Consejero Or
+                                         PlayerType.RoleMaster) Then
                                         Call _
                                             WriteSetInvisible(UserIndex, UserList(TempInt).Char_Renamed.CharIndex, True)
                                     End If
@@ -223,7 +223,7 @@ Module ModAreas
                                 Call MakeUserChar(False, TempInt, UserIndex, .Pos.Map, .Pos.X, .Pos.Y)
 
                                 If .flags.invisible Or .flags.Oculto Then
-                                    If UserList(TempInt).flags.Privilegios And Declaraciones.PlayerType.User Then
+                                    If UserList(TempInt).flags.Privilegios And PlayerType.User Then
                                         Call WriteSetInvisible(TempInt, .Char_Renamed.CharIndex, True)
                                     End If
                                 End If
@@ -249,7 +249,7 @@ Module ModAreas
                         If Not EsObjetoFijo(ObjData_Renamed(TempInt).OBJType) Then
                             Call WriteObjectCreate(UserIndex, ObjData_Renamed(TempInt).GrhIndex, X, Y)
 
-                            If ObjData_Renamed(TempInt).OBJType = Declaraciones.eOBJType.otPuertas Then
+                            If ObjData_Renamed(TempInt).OBJType = eOBJType.otPuertas Then
                                 Call Bloquear(False, UserIndex, X, Y, MapData(Map, X, Y).Blocked)
                                 Call Bloquear(False, UserIndex, X - 1, Y, MapData(Map, X - 1, Y).Blocked)
                             End If
@@ -272,7 +272,7 @@ Module ModAreas
         End With
     End Sub
 
-    Public Sub CheckUpdateNeededNpc(ByVal NpcIndex As Short, ByVal Head As Byte)
+    Public Sub CheckUpdateNeededNpc(NpcIndex As Short, Head As Byte)
         '**************************************************************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: Unknow
@@ -288,21 +288,21 @@ Module ModAreas
             MinX = .AreasInfo.MinX
             MinY = .AreasInfo.MinY
 
-            If Head = Declaraciones.eHeading.NORTH Then
+            If Head = eHeading.NORTH Then
                 MaxY = MinY - 1
                 MinY = MinY - 9
                 MaxX = MinX + 26
                 .AreasInfo.MinX = CShort(MinX)
                 .AreasInfo.MinY = CShort(MinY)
 
-            ElseIf Head = Declaraciones.eHeading.SOUTH Then
+            ElseIf Head = eHeading.SOUTH Then
                 MaxY = MinY + 35
                 MinY = MinY + 27
                 MaxX = MinX + 26
                 .AreasInfo.MinX = CShort(MinX)
                 .AreasInfo.MinY = CShort(MinY - 18)
 
-            ElseIf Head = Declaraciones.eHeading.WEST Then
+            ElseIf Head = eHeading.WEST Then
                 MaxX = MinX - 1
                 MinX = MinX - 9
                 MaxY = MinY + 26
@@ -310,7 +310,7 @@ Module ModAreas
                 .AreasInfo.MinY = CShort(MinY)
 
 
-            ElseIf Head = Declaraciones.eHeading.EAST Then
+            ElseIf Head = eHeading.EAST Then
                 MaxX = MinX + 35
                 MinX = MinX + 27
                 MaxY = MinY + 26
@@ -360,7 +360,7 @@ Module ModAreas
         End With
     End Sub
 
-    Public Sub QuitarUser(ByVal UserIndex As Short, ByVal Map As Short)
+    Public Sub QuitarUser(UserIndex As Short, Map As Short)
         '**************************************************************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: Unknow
@@ -392,7 +392,7 @@ Module ModAreas
         End If
     End Sub
 
-    Public Sub AgregarUser(ByVal UserIndex As Short, ByVal Map As Short, Optional ByVal ButIndex As Boolean = False)
+    Public Sub AgregarUser(UserIndex As Short, Map As Short, Optional ByVal ButIndex As Boolean = False)
         '**************************************************************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: 04/01/2007
@@ -442,7 +442,7 @@ Module ModAreas
         Call CheckUpdateNeededUser(UserIndex, USER_NUEVO, ButIndex)
     End Sub
 
-    Public Sub AgregarNpc(ByVal NpcIndex As Short)
+    Public Sub AgregarNpc(NpcIndex As Short)
         '**************************************************************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: Unknow

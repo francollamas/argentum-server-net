@@ -1,7 +1,6 @@
 Option Strict Off
 Option Explicit On
 Friend Class cCola
-
     '                    Metodos publicos
     '
     ' Public sub Push(byval i as variant) mete el elemento i
@@ -27,23 +26,23 @@ Friend Class cCola
     Public Sub Reset_Renamed()
         Try
 
-        Dim i As Short
-        For i = 0 To Me.Longitud - 1
-            Cola.RemoveAt(FRENTE)
-        Next i
-    
-Catch ex As Exception
-    Console.WriteLine("Error in Push: " & ex.Message)
-End Try
-End Sub
+            Dim i As Short
+            For i = 0 To Me.Longitud - 1
+                Cola.RemoveAt(FRENTE)
+            Next i
 
-    Public ReadOnly Property Longitud() As Short
+        Catch ex As Exception
+            Console.WriteLine("Error in Push: " & ex.Message)
+        End Try
+    End Sub
+
+    Public ReadOnly Property Longitud As Short
         Get
             Longitud = Cola.Count()
         End Get
     End Property
 
-    Private Function IndexValido(ByVal i As Short) As Boolean
+    Private Function IndexValido(i As Short) As Boolean
         IndexValido = i >= 0 And i < Me.Longitud
     End Function
 
@@ -57,130 +56,130 @@ End Sub
         Class_Initialize_Renamed()
     End Sub
 
-    Public Function VerElemento(ByVal index As Short) As String
+    Public Function VerElemento(index As Short) As String
         Try
-        If IndexValido(index) Then
+            If IndexValido(index) Then
+                'Pablo
+                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                VerElemento = UCase(Cola.Item(index))
+                '/Pablo
+                'VerElemento = Cola(Index)
+            Else
+                VerElemento = CStr(0)
+            End If
+
+        Catch ex As Exception
+            Console.WriteLine("Error in IndexValido: " & ex.Message)
+        End Try
+    End Function
+
+
+    Public Sub Push(Nombre As String)
+        Try
+            'Mete elemento en la cola
             'Pablo
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            VerElemento = UCase(Cola.Item(index))
+            Dim aux As String
+            aux = TimeString & " " & UCase(Nombre)
+            Call Cola.Add(aux)
             '/Pablo
-            'VerElemento = Cola(Index)
-        Else
-            VerElemento = CStr(0)
-        End If
-    
-Catch ex As Exception
-    Console.WriteLine("Error in IndexValido: " & ex.Message)
-End Try
-End Function
 
+            'Call Cola.Add(UCase$(Nombre))
 
-    Public Sub Push(ByVal Nombre As String)
-        Try
-        'Mete elemento en la cola
-        'Pablo
-        Dim aux As String
-        aux = TimeString & " " & UCase(Nombre)
-        Call Cola.Add(aux)
-        '/Pablo
-
-        'Call Cola.Add(UCase$(Nombre))
-    
-Catch ex As Exception
-    Console.WriteLine("Error in Push: " & ex.Message)
-End Try
-End Sub
+        Catch ex As Exception
+            Console.WriteLine("Error in Push: " & ex.Message)
+        End Try
+    End Sub
 
     Public Function Pop() As String
         Try
-        'Quita elemento de la cola
-        If Cola.Count() > 0 Then
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            Pop = Cola.Item(FRENTE)
-            Call Cola.Remove(FRENTE)
-        Else
-            Pop = CStr(0)
-        End If
-    
-Catch ex As Exception
-    Console.WriteLine("Error in Pop: " & ex.Message)
-End Try
-End Function
+            'Quita elemento de la cola
+            If Cola.Count() > 0 Then
+                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                Pop = Cola.Item(FRENTE)
+                Call Cola.Remove(FRENTE)
+            Else
+                Pop = CStr(0)
+            End If
+
+        Catch ex As Exception
+            Console.WriteLine("Error in Pop: " & ex.Message)
+        End Try
+    End Function
 
     Public Function PopByVal() As String
         Try
-        'Call LogTarea("PopByVal SOS")
+            'Call LogTarea("PopByVal SOS")
 
-        'Quita elemento de la cola
-        If Cola.Count() > 0 Then
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            PopByVal = Cola.Item(1)
-        Else
-            PopByVal = CStr(0)
-        End If
-    
-Catch ex As Exception
-    Console.WriteLine("Error in PopByVal: " & ex.Message)
-End Try
-End Function
-
-    Public Function Existe(ByVal Nombre As String) As Boolean
-        Try
-
-        Dim V As String
-        Dim i As Short
-        Dim NombreEnMayusculas As String
-        NombreEnMayusculas = UCase(Nombre)
-
-        For i = 0 To Me.Longitud -1
-            'Pablo
-            V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
-            '/Pablo
-            'V = Me.VerElemento(i)
-            If V = NombreEnMayusculas Then
-                Existe = True
-                Exit Function
+            'Quita elemento de la cola
+            If Cola.Count() > 0 Then
+                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                PopByVal = Cola.Item(1)
+            Else
+                PopByVal = CStr(0)
             End If
-        Next
-        Existe = False
-    
-Catch ex As Exception
-    Console.WriteLine("Error in Existe: " & ex.Message)
-End Try
-End Function
 
-    Public Sub Quitar(ByVal Nombre As String)
+        Catch ex As Exception
+            Console.WriteLine("Error in PopByVal: " & ex.Message)
+        End Try
+    End Function
+
+    Public Function Existe(Nombre As String) As Boolean
         Try
-        Dim V As String
-        Dim i As Short
-        Dim NombreEnMayusculas As String
 
-        NombreEnMayusculas = UCase(Nombre)
+            Dim V As String
+            Dim i As Short
+            Dim NombreEnMayusculas As String
+            NombreEnMayusculas = UCase(Nombre)
 
-        For i = 0 To Me.Longitud - 1
-            'Pablo
-            V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
-            '/Pablo
-            'V = Me.VerElemento(i)
-            If V = NombreEnMayusculas Then
-                Call Cola.Remove(i)
-                Exit Sub
-            End If
-        Next i
-    
-Catch ex As Exception
-    Console.WriteLine("Error in Quitar: " & ex.Message)
-End Try
-End Sub
+            For i = 0 To Me.Longitud - 1
+                'Pablo
+                V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
+                '/Pablo
+                'V = Me.VerElemento(i)
+                If V = NombreEnMayusculas Then
+                    Existe = True
+                    Exit Function
+                End If
+            Next
+            Existe = False
 
-    Public Sub QuitarIndex(ByVal index As Short)
+        Catch ex As Exception
+            Console.WriteLine("Error in Existe: " & ex.Message)
+        End Try
+    End Function
+
+    Public Sub Quitar(Nombre As String)
         Try
-        If IndexValido(index) Then Call Cola.Remove(index)
-    
-Catch ex As Exception
-    Console.WriteLine("Error in QuitarIndex: " & ex.Message)
-End Try
-End Sub
+            Dim V As String
+            Dim i As Short
+            Dim NombreEnMayusculas As String
+
+            NombreEnMayusculas = UCase(Nombre)
+
+            For i = 0 To Me.Longitud - 1
+                'Pablo
+                V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
+                '/Pablo
+                'V = Me.VerElemento(i)
+                If V = NombreEnMayusculas Then
+                    Call Cola.Remove(i)
+                    Exit Sub
+                End If
+            Next i
+
+        Catch ex As Exception
+            Console.WriteLine("Error in Quitar: " & ex.Message)
+        End Try
+    End Sub
+
+    Public Sub QuitarIndex(index As Short)
+        Try
+            If IndexValido(index) Then Call Cola.Remove(index)
+
+        Catch ex As Exception
+            Console.WriteLine("Error in QuitarIndex: " & ex.Message)
+        End Try
+    End Sub
 
 
     'UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'

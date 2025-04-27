@@ -1,6 +1,8 @@
 Option Strict On
 Option Explicit On
 
+Imports System.Text
+
 Friend Class clsByteQueue
     ' Exception codes
     Private Const NOT_ENOUGH_DATA As Integer = vbObjectError + 9
@@ -41,7 +43,7 @@ Friend Class clsByteQueue
         MyBase.Finalize()
     End Sub
 
-    Private Function min(ByVal val1 As Integer, ByVal val2 As Integer) As Integer
+    Private Function min(val1 As Integer, val2 As Integer) As Integer
         If val1 < val2 Then
             Return val1
         Else
@@ -49,8 +51,8 @@ Friend Class clsByteQueue
         End If
     End Function
 
-    Private Sub ByteArrayToType(ByRef destVariable As Object, ByRef sourceArray() As Byte, ByVal startPos As Integer,
-                                ByVal length As Integer)
+    Private Sub ByteArrayToType(ByRef destVariable As Object, ByRef sourceArray() As Byte, startPos As Integer,
+                                length As Integer)
         Select Case length
             Case 1
                 destVariable = sourceArray(startPos)
@@ -67,7 +69,7 @@ Friend Class clsByteQueue
         End Select
     End Sub
 
-    Private Sub TypeToByteArray(ByRef destArray() As Byte, ByVal startPos As Integer, ByVal sourceVariable As Object)
+    Private Sub TypeToByteArray(ByRef destArray() As Byte, startPos As Integer, sourceVariable As Object)
         Dim valueType As Type = sourceVariable.GetType()
 
         If valueType Is GetType(Byte) Then
@@ -87,12 +89,12 @@ Friend Class clsByteQueue
         End If
     End Sub
 
-    Private Sub CopyArrayData(ByRef destArray() As Byte, ByVal destStart As Integer, ByRef sourceArray() As Byte,
-                              ByVal sourceStart As Integer, ByVal length As Integer)
+    Private Sub CopyArrayData(ByRef destArray() As Byte, destStart As Integer, ByRef sourceArray() As Byte,
+                              sourceStart As Integer, length As Integer)
         Array.Copy(sourceArray, sourceStart, destArray, destStart, length)
     End Sub
 
-    Private Function WriteData(ByRef buf() As Byte, ByVal dataLength As Integer) As Integer
+    Private Function WriteData(ByRef buf() As Byte, dataLength As Integer) As Integer
         If queueCapacity - queueLength - dataLength < 0 Then
             Throw New InvalidOperationException("Not enough space in the queue")
         End If
@@ -109,7 +111,7 @@ Friend Class clsByteQueue
         Return dataLength
     End Function
 
-    Private Function ReadData(ByRef buf() As Byte, ByVal dataLength As Integer) As Integer
+    Private Function ReadData(ByRef buf() As Byte, dataLength As Integer) As Integer
         If dataLength > queueLength Then
             Throw New InvalidOperationException("Not enough data in the queue")
         End If
@@ -118,7 +120,7 @@ Friend Class clsByteQueue
         Return dataLength
     End Function
 
-    Private Function ReadDataWithOffset(ByRef buf() As Byte, ByVal dataLength As Integer, ByVal startPos As Integer) _
+    Private Function ReadDataWithOffset(ByRef buf() As Byte, dataLength As Integer, startPos As Integer) _
         As Integer
         If dataLength > queueLength - startPos Then
             Throw New InvalidOperationException("Not enough data in the queue")
@@ -128,7 +130,7 @@ Friend Class clsByteQueue
         Return dataLength
     End Function
 
-    Private Function RemoveData(ByVal dataLength As Integer) As Integer
+    Private Function RemoveData(dataLength As Integer) As Integer
         RemoveData = min(dataLength, queueLength)
 
         If RemoveData <> queueCapacity Then
@@ -140,7 +142,7 @@ Friend Class clsByteQueue
     End Function
 
     ' Public methods - maintaining the same interface
-    Public Function WriteByte(ByVal Value As Byte) As Integer
+    Public Function WriteByte(Value As Byte) As Integer
         Dim buf(0) As Byte
 
         buf(0) = Value
@@ -148,7 +150,7 @@ Friend Class clsByteQueue
         Return WriteData(buf, 1)
     End Function
 
-    Public Function WriteInteger(ByVal Value As Short) As Integer
+    Public Function WriteInteger(Value As Short) As Integer
         Dim buf(1) As Byte
 
         TypeToByteArray(buf, 0, Value)
@@ -156,7 +158,7 @@ Friend Class clsByteQueue
         Return WriteData(buf, 2)
     End Function
 
-    Public Function WriteLong(ByVal Value As Integer) As Integer
+    Public Function WriteLong(Value As Integer) As Integer
         Dim buf(3) As Byte
 
         TypeToByteArray(buf, 0, Value)
@@ -164,7 +166,7 @@ Friend Class clsByteQueue
         Return WriteData(buf, 4)
     End Function
 
-    Public Function WriteSingle(ByVal Value As Single) As Integer
+    Public Function WriteSingle(Value As Single) As Integer
         Dim buf(3) As Byte
 
         TypeToByteArray(buf, 0, Value)
@@ -172,7 +174,7 @@ Friend Class clsByteQueue
         Return WriteData(buf, 4)
     End Function
 
-    Public Function WriteDouble(ByVal Value As Double) As Integer
+    Public Function WriteDouble(Value As Double) As Integer
         Dim buf(7) As Byte
 
         TypeToByteArray(buf, 0, Value)
@@ -180,7 +182,7 @@ Friend Class clsByteQueue
         Return WriteData(buf, 8)
     End Function
 
-    Public Function WriteBoolean(ByVal Value As Boolean) As Integer
+    Public Function WriteBoolean(Value As Boolean) As Integer
         Dim buf(0) As Byte
 
         If Value Then buf(0) = 1
@@ -188,29 +190,29 @@ Friend Class clsByteQueue
         Return WriteData(buf, 1)
     End Function
 
-    Public Function WriteASCIIStringFixed(ByVal Value As String) As Integer
+    Public Function WriteASCIIStringFixed(Value As String) As Integer
         ' Handle null value
         If Value Is Nothing Then Value = String.Empty
 
-        Dim bytes() As Byte = Text.Encoding.GetEncoding("Windows-1252").GetBytes(Value)
+        Dim bytes() As Byte = Encoding.GetEncoding("Windows-1252").GetBytes(Value)
         Return WriteData(bytes, bytes.Length)
     End Function
 
-    Public Function WriteUnicodeStringFixed(ByVal Value As String) As Integer
+    Public Function WriteUnicodeStringFixed(Value As String) As Integer
         ' Handle null value
         If Value Is Nothing Then Value = String.Empty
 
-        Dim bytes() As Byte = Text.Encoding.Unicode.GetBytes(Value)
+        Dim bytes() As Byte = Encoding.Unicode.GetBytes(Value)
         Return WriteData(bytes, bytes.Length)
     End Function
 
-    Public Function WriteASCIIString(ByVal Value As String) As Integer
+    Public Function WriteASCIIString(Value As String) As Integer
         ' Handle null value
         If Value Is Nothing Then Value = String.Empty
 
-        Dim length As Short = CShort(Value.Length)
+        Dim length = CShort(Value.Length)
         Dim lengthBytes As Byte() = BitConverter.GetBytes(length)
-        Dim valueBytes As Byte() = Text.Encoding.GetEncoding("Windows-1252").GetBytes(Value)
+        Dim valueBytes As Byte() = Encoding.GetEncoding("Windows-1252").GetBytes(Value)
 
         Dim combinedBytes(lengthBytes.Length + valueBytes.Length - 1) As Byte
         Array.Copy(lengthBytes, 0, combinedBytes, 0, lengthBytes.Length)
@@ -219,13 +221,13 @@ Friend Class clsByteQueue
         Return WriteData(combinedBytes, combinedBytes.Length)
     End Function
 
-    Public Function WriteUnicodeString(ByVal Value As String) As Integer
+    Public Function WriteUnicodeString(Value As String) As Integer
         ' Handle null value
         If Value Is Nothing Then Value = String.Empty
 
-        Dim length As Short = CShort(Value.Length)
+        Dim length = CShort(Value.Length)
         Dim lengthBytes As Byte() = BitConverter.GetBytes(length)
-        Dim valueBytes As Byte() = Text.Encoding.Unicode.GetBytes(Value)
+        Dim valueBytes As Byte() = Encoding.Unicode.GetBytes(Value)
 
         Dim combinedBytes(lengthBytes.Length + valueBytes.Length - 1) As Byte
         Array.Copy(lengthBytes, 0, combinedBytes, 0, lengthBytes.Length)
@@ -300,20 +302,20 @@ Friend Class clsByteQueue
         Return buf(0) = 1
     End Function
 
-    Public Function ReadASCIIStringFixed(ByVal length As Integer) As String
+    Public Function ReadASCIIStringFixed(length As Integer) As String
         If length <= 0 Then Return String.Empty
 
         Dim buf(length - 1) As Byte
 
         If queueLength >= length Then
             RemoveData(ReadData(buf, length))
-            Return Text.Encoding.GetEncoding("Windows-1252").GetString(buf)
+            Return Encoding.GetEncoding("Windows-1252").GetString(buf)
         Else
             Throw New InvalidOperationException("Not enough data in the queue")
         End If
     End Function
 
-    Public Function ReadUnicodeStringFixed(ByVal length As Integer) As String
+    Public Function ReadUnicodeStringFixed(length As Integer) As String
         If length <= 0 Then Return String.Empty
 
         Dim byteLength As Integer = length*2
@@ -321,7 +323,7 @@ Friend Class clsByteQueue
 
         If queueLength >= byteLength Then
             RemoveData(ReadData(buf, byteLength))
-            Return Text.Encoding.Unicode.GetString(buf)
+            Return Encoding.Unicode.GetString(buf)
         Else
             Throw New InvalidOperationException("Not enough data in the queue")
         End If
@@ -342,7 +344,7 @@ Friend Class clsByteQueue
             If length > 0 Then
                 Dim buf(length - 1) As Byte
                 RemoveData(ReadData(buf, length))
-                Return Text.Encoding.GetEncoding("Windows-1252").GetString(buf)
+                Return Encoding.GetEncoding("Windows-1252").GetString(buf)
             Else
                 Return String.Empty
             End If
@@ -367,7 +369,7 @@ Friend Class clsByteQueue
             If length > 0 Then
                 Dim buf(byteLength - 1) As Byte
                 RemoveData(ReadData(buf, byteLength))
-                Return Text.Encoding.Unicode.GetString(buf)
+                Return Encoding.Unicode.GetString(buf)
             Else
                 Return String.Empty
             End If
@@ -376,7 +378,7 @@ Friend Class clsByteQueue
         End If
     End Function
 
-    Public Function ReadBlock(ByRef block() As Byte, ByVal dataLength As Integer) As Integer
+    Public Function ReadBlock(ByRef block() As Byte, dataLength As Integer) As Integer
         ' Check if block array is null or not initialized
         If block Is Nothing OrElse block.Length = 0 Then
             Return 0
@@ -437,20 +439,20 @@ Friend Class clsByteQueue
         Return buf(0) = 1
     End Function
 
-    Public Function PeekASCIIStringFixed(ByVal length As Integer) As String
+    Public Function PeekASCIIStringFixed(length As Integer) As String
         If length <= 0 Then Return String.Empty
 
         Dim buf(length - 1) As Byte
 
         If queueLength >= length Then
             ReadData(buf, length)
-            Return Text.Encoding.GetEncoding("Windows-1252").GetString(buf)
+            Return Encoding.GetEncoding("Windows-1252").GetString(buf)
         Else
             Throw New InvalidOperationException("Not enough data in the queue")
         End If
     End Function
 
-    Public Function PeekUnicodeStringFixed(ByVal length As Integer) As String
+    Public Function PeekUnicodeStringFixed(length As Integer) As String
         If length <= 0 Then Return String.Empty
 
         Dim byteLength As Integer = length*2
@@ -458,7 +460,7 @@ Friend Class clsByteQueue
 
         If queueLength >= byteLength Then
             ReadData(buf, byteLength)
-            Return Text.Encoding.Unicode.GetString(buf)
+            Return Encoding.Unicode.GetString(buf)
         Else
             Throw New InvalidOperationException("Not enough data in the queue")
         End If
@@ -477,7 +479,7 @@ Friend Class clsByteQueue
             If length > 0 Then
                 Dim buf(length - 1) As Byte
                 ReadDataWithOffset(buf, length, 2)
-                Return Text.Encoding.GetEncoding("Windows-1252").GetString(buf)
+                Return Encoding.GetEncoding("Windows-1252").GetString(buf)
             Else
                 Return String.Empty
             End If
@@ -500,7 +502,7 @@ Friend Class clsByteQueue
             If length > 0 Then
                 Dim buf(byteLength - 1) As Byte
                 ReadDataWithOffset(buf, byteLength, 2)
-                Return Text.Encoding.Unicode.GetString(buf)
+                Return Encoding.Unicode.GetString(buf)
             Else
                 Return String.Empty
             End If
@@ -509,7 +511,7 @@ Friend Class clsByteQueue
         End If
     End Function
 
-    Public Function PeekBlock(ByRef block() As Byte, ByVal dataLength As Integer) As Integer
+    Public Function PeekBlock(ByRef block() As Byte, dataLength As Integer) As Integer
         ' Check if block array is null or not initialized
         If block Is Nothing OrElse block.Length = 0 Then
             Return 0
@@ -546,25 +548,25 @@ Friend Class clsByteQueue
         WriteBlock(buf, Source.length)
     End Sub
 
-    Public ReadOnly Property length() As Integer
+    Public ReadOnly Property length As Integer
         Get
             Return queueLength
         End Get
     End Property
 
-    Public ReadOnly Property Capacity() As Integer
+    Public ReadOnly Property Capacity As Integer
         Get
             Return queueCapacity
         End Get
     End Property
 
-    Public ReadOnly Property NotEnoughDataErrCode() As Integer
+    Public ReadOnly Property NotEnoughDataErrCode As Integer
         Get
             Return NOT_ENOUGH_DATA
         End Get
     End Property
 
-    Public ReadOnly Property NotEnoughSpaceErrCode() As Integer
+    Public ReadOnly Property NotEnoughSpaceErrCode As Integer
         Get
             Return NOT_ENOUGH_SPACE
         End Get

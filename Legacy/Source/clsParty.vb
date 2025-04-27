@@ -1,9 +1,8 @@
 Option Strict Off
 Option Explicit On
 Friend Class clsParty
-
     'UPGRADE_WARNING: El límite inferior de la matriz p_members ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    Private p_members(PARTY_MAXMEMBERS) As tPartyMember
+    Private ReadOnly p_members(PARTY_MAXMEMBERS) As tPartyMember
     'miembros
 
     Private p_expTotal As Integer
@@ -55,7 +54,7 @@ Friend Class clsParty
     '
     ' @param lvl Specifies reference to user level
     ' @remarks When a user level up and he is in a party, we update p_sumaNivelesElavados so the formula still works.
-    Public Sub UpdateSumaNivelesElevados(ByVal Lvl As Short)
+    Public Sub UpdateSumaNivelesElevados(Lvl As Short)
         '*************************************************
         'Author: Marco Vanotti (MarKoxX)
         'Last modified: 11/24/09
@@ -64,7 +63,7 @@ Friend Class clsParty
         p_SumaNivelesElevados = p_SumaNivelesElevados - ((Lvl - 1)^ExponenteNivelParty) + Lvl^ExponenteNivelParty
     End Sub
 
-    Public Function MiExperiencia(ByVal UserIndex As Short) As Integer
+    Public Function MiExperiencia(UserIndex As Short) As Integer
         '***************************************************
         'Author: Unknown
         'Last Modification: 11/27/09
@@ -88,7 +87,7 @@ Friend Class clsParty
         End If
     End Function
 
-    Public Sub ObtenerExito(ByVal ExpGanada As Integer, ByVal mapa As Short, ByRef X As Short, ByRef Y As Short)
+    Public Sub ObtenerExito(ExpGanada As Integer, mapa As Short, ByRef X As Short, ByRef Y As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: 07/04/08
@@ -132,7 +131,7 @@ Friend Class clsParty
         Next i
     End Sub
 
-    Public Sub MandarMensajeAConsola(ByVal texto As String, ByVal Sender As String)
+    Public Sub MandarMensajeAConsola(texto As String, Sender As String)
         'feo feo, muy feo acceder a senddata desde aca, pero BUEEEEEEEEEEE...
         Dim i As Short
 
@@ -140,16 +139,16 @@ Friend Class clsParty
             If p_members(i).UserIndex > 0 Then
                 Call _
                     WriteConsoleMsg(p_members(i).UserIndex, " [" & Sender & "] " & texto,
-                                    Protocol.FontTypeNames.FONTTYPE_PARTY)
+                                    FontTypeNames.FONTTYPE_PARTY)
             End If
         Next i
     End Sub
 
-    Public Function EsPartyLeader(ByVal UserIndex As Short) As Boolean
+    Public Function EsPartyLeader(UserIndex As Short) As Boolean
         EsPartyLeader = (UserIndex = p_Fundador)
     End Function
 
-    Public Function NuevoMiembro(ByVal UserIndex As Short) As Boolean
+    Public Function NuevoMiembro(UserIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: 07/04/08
@@ -175,7 +174,7 @@ Friend Class clsParty
         End If
     End Function
 
-    Public Function SaleMiembro(ByVal UserIndex As Short) As Boolean
+    Public Function SaleMiembro(UserIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: 07/04/08
@@ -213,13 +212,13 @@ Friend Class clsParty
                                 WriteConsoleMsg(.UserIndex,
                                                 "Abandonas la party liderada por " &
                                                 UserList(p_members(1).UserIndex).name & ".",
-                                                Protocol.FontTypeNames.FONTTYPE_PARTY)
+                                                FontTypeNames.FONTTYPE_PARTY)
                         End If
 
                         Call _
                             WriteConsoleMsg(.UserIndex,
                                             "Durante la misma has conseguido " & CStr(Fix(.Experiencia)) &
-                                            " puntos de experiencia.", Protocol.FontTypeNames.FONTTYPE_PARTY)
+                                            " puntos de experiencia.", FontTypeNames.FONTTYPE_PARTY)
 
                         If Not PARTY_EXPERIENCIAPORGOLPE Then
                             UserList(.UserIndex).Stats.Exp = UserList(.UserIndex).Stats.Exp + Fix(.Experiencia)
@@ -261,7 +260,7 @@ Friend Class clsParty
                     Call _
                         WriteConsoleMsg(MemberIndex,
                                         "Durante la misma has conseguido " & CStr(Fix(p_members(i).Experiencia)) &
-                                        " puntos de experiencia.", Protocol.FontTypeNames.FONTTYPE_PARTY)
+                                        " puntos de experiencia.", FontTypeNames.FONTTYPE_PARTY)
 
                     p_CantMiembros = p_CantMiembros - 1
                     p_SumaNivelesElevados = p_SumaNivelesElevados - (UserList(UserIndex).Stats.ELV^ExponenteNivelParty)
@@ -274,7 +273,7 @@ Friend Class clsParty
         End If
     End Function
 
-    Public Function HacerLeader(ByVal UserIndex As Short) As Boolean
+    Public Function HacerLeader(UserIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: 09/29/07
@@ -303,10 +302,10 @@ Friend Class clsParty
             'catastrofe! esto no deberia pasar nunca! pero como es AO.... :p
             Call LogError("INCONSISTENCIA DE PARTIES")
             Call _
-                SendData(modSendData.SendTarget.ToAdmins, 0,
+                SendData(SendTarget.ToAdmins, 0,
                          PrepareMessageConsoleMsg(
                              "¡¡¡Inconsistencia de parties en HACERLEADER (UII = 0), AVISE A UN PROGRAMADOR ESTO ES UNA CATASTROFE!!!!",
-                             Protocol.FontTypeNames.FONTTYPE_GUILD))
+                             FontTypeNames.FONTTYPE_GUILD))
             HacerLeader = False
             Exit Function
         End If
@@ -358,7 +357,7 @@ Friend Class clsParty
         ObtenerExperienciaTotal = p_expTotal
     End Function
 
-    Public Function PuedeEntrar(ByVal UserIndex As Short, ByRef razon As String) As Boolean
+    Public Function PuedeEntrar(UserIndex As Short, ByRef razon As String) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: 09/29/07
@@ -445,8 +444,8 @@ Friend Class clsParty
                         Call CheckUserLevel(p_members(i).UserIndex)
                     Else
                         If _
-                            System.Math.Abs(UserList(p_members(i).UserIndex).Stats.Exp) >
-                            System.Math.Abs(Fix(p_members(i).Experiencia)) Then
+                            Math.Abs(UserList(p_members(i).UserIndex).Stats.Exp) >
+                            Math.Abs(Fix(p_members(i).Experiencia)) Then
                             UserList(p_members(i).UserIndex).Stats.Exp = UserList(p_members(i).UserIndex).Stats.Exp +
                                                                          Fix(p_members(i).Experiencia)
                         Else

@@ -10,21 +10,21 @@ Friend Class ConsultasPopulares
     Private pOpciones() As Short
 
 
-    Public Property Numero() As Short
+    Public Property Numero As Short
         Get
             Numero = pEncuestaActualNum
         End Get
-        Set(ByVal Value As Short)
+        Set
             pEncuestaActualNum = Value
         End Set
     End Property
 
 
-    Public Property texto() As String
+    Public Property texto As String
         Get
             texto = pEncuestaActualTex
         End Get
-        Set(ByVal Value As String)
+        Set
             pEncuestaActualTex = Value
         End Set
     End Property
@@ -51,90 +51,88 @@ Friend Class ConsultasPopulares
         End If
     End Sub
 
-    Public Function doVotar(ByVal UserIndex As Short, ByVal opcion As Short) As String
+    Public Function doVotar(UserIndex As Short, opcion As Short) As String
         Try
-        Dim YaVoto As Boolean
-        Dim CharFile As String
-        Dim sufragio As Short
+            Dim YaVoto As Boolean
+            Dim CharFile As String
+            Dim sufragio As Short
 
-        'revisar q no haya votado
-        'grabar en el charfile el numero de encuesta
-        'actualizar resultados encuesta
-        If pEncuestaActualNum = 0 Then
-            doVotar = "No hay consultas populares abiertas"
-            Exit Function
-        End If
+            'revisar q no haya votado
+            'grabar en el charfile el numero de encuesta
+            'actualizar resultados encuesta
+            If pEncuestaActualNum = 0 Then
+                doVotar = "No hay consultas populares abiertas"
+                Exit Function
+            End If
 
-        CharFile = CharPath & UserList(UserIndex).name & ".chr"
+            CharFile = CharPath & UserList(UserIndex).name & ".chr"
 
 
-        If (UserList(UserIndex).Stats.ELV >= pNivelRequerido) Then
-            If (OpcionValida(opcion)) Then
-                YaVoto = Val(GetVar(CharFile, "CONSULTAS", "Voto")) >= pEncuestaActualNum
-                If Not YaVoto Then
-                    If Not MailYaVoto(UserList(UserIndex).email) Then
-                        'pj apto para votar
-                        sufragio = CInt(Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                                   "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
-                        sufragio = sufragio + 1
-                        Call _
-                            WriteVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                     "RESULTADOS" & pEncuestaActualNum, "V" & opcion, Str(sufragio))
-                        doVotar = "Tu voto ha sido computado. Opcion: " & opcion
-                        Call MarcarPjComoQueYaVoto(UserIndex)
-                        Call MarcarMailComoQueYaVoto(UserList(UserIndex).email)
+            If (UserList(UserIndex).Stats.ELV >= pNivelRequerido) Then
+                If (OpcionValida(opcion)) Then
+                    YaVoto = Val(GetVar(CharFile, "CONSULTAS", "Voto")) >= pEncuestaActualNum
+                    If Not YaVoto Then
+                        If Not MailYaVoto(UserList(UserIndex).email) Then
+                            'pj apto para votar
+                            sufragio = CInt(Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                                       "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
+                            sufragio = sufragio + 1
+                            Call _
+                                WriteVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                         "RESULTADOS" & pEncuestaActualNum, "V" & opcion, Str(sufragio))
+                            doVotar = "Tu voto ha sido computado. Opcion: " & opcion
+                            Call MarcarPjComoQueYaVoto(UserIndex)
+                            Call MarcarMailComoQueYaVoto(UserList(UserIndex).email)
+                        Else
+                            Call MarcarPjComoQueYaVoto(UserIndex)
+                            doVotar = "Este email ya voto en la consulta: " & pEncuestaActualTex
+                        End If
                     Else
-                        Call MarcarPjComoQueYaVoto(UserIndex)
-                        doVotar = "Este email ya voto en la consulta: " & pEncuestaActualTex
+                        doVotar = "Este personaje ya voto en la consulta: " & pEncuestaActualTex
                     End If
                 Else
-                    doVotar = "Este personaje ya voto en la consulta: " & pEncuestaActualTex
+                    doVotar = "Esa no es una opcion para votar"
                 End If
             Else
-                doVotar = "Esa no es una opcion para votar"
+                doVotar = "Para votar en esta consulta debes ser nivel " & pNivelRequerido & " o superior"
             End If
-        Else
-            doVotar = "Para votar en esta consulta debes ser nivel " & pNivelRequerido & " o superior"
-        End If
 
 
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in LoadData: " & ex.Message)
-    Call LogError("Error en ConsultasPopularse.doVotar: " & Err.Description)
-End Try
-End Function
+        Catch ex As Exception
+            Console.WriteLine("Error in LoadData: " & ex.Message)
+            Call LogError("Error en ConsultasPopularse.doVotar: " & Err.Description)
+        End Try
+    End Function
 
 
-    Public Function SendInfoEncuesta(ByVal UserIndex As Short) As String
+    Public Function SendInfoEncuesta(UserIndex As Short) As String
         Dim i As Short
         Call _
             WriteConsoleMsg(UserIndex, "CONSULTA POPULAR NUMERO " & pEncuestaActualNum,
-                            Protocol.FontTypeNames.FONTTYPE_GUILD)
-        Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, Protocol.FontTypeNames.FONTTYPE_GUILD)
-        Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", Protocol.FontTypeNames.FONTTYPE_GUILDMSG)
+                            FontTypeNames.FONTTYPE_GUILD)
+        Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, FontTypeNames.FONTTYPE_GUILD)
+        Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", FontTypeNames.FONTTYPE_GUILDMSG)
         For i = 1 To UBound(pOpciones)
             Call _
                 WriteConsoleMsg(UserIndex,
                                 "(Opcion " & i & "): " &
                                 GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                        "ENCUESTA" & pEncuestaActualNum, "OPCION" & i),
-                                Protocol.FontTypeNames.FONTTYPE_GUILDMSG)
+                                FontTypeNames.FONTTYPE_GUILDMSG)
         Next i
         Call _
             WriteConsoleMsg(UserIndex,
                             " Para votar una opcion, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opcion 1, escribe /encuesta 1. Tu voto no podra ser cambiado.",
-                            Protocol.FontTypeNames.FONTTYPE_VENENO)
+                            FontTypeNames.FONTTYPE_VENENO)
     End Function
 
 
-    Private Sub MarcarPjComoQueYaVoto(ByVal UserIndex As Short)
+    Private Sub MarcarPjComoQueYaVoto(UserIndex As Short)
         Call WriteVar(CharPath & UserList(UserIndex).name & ".chr", "CONSULTAS", "Voto", Str(pEncuestaActualNum))
     End Sub
 
 
-    Private Function MailYaVoto(ByVal email As String) As Boolean
+    Private Function MailYaVoto(email As String) As Boolean
         'abro el archivo, while not eof levnato 1 linea y comparo. Si da true, cierro
         Dim ArchN As Short
         Dim Tmp As String
@@ -158,7 +156,7 @@ End Function
     End Function
 
 
-    Private Sub MarcarMailComoQueYaVoto(ByVal email As String)
+    Private Sub MarcarMailComoQueYaVoto(email As String)
         Dim ArchN As Short
 
         ArchN = FreeFile
@@ -170,7 +168,7 @@ End Function
     End Sub
 
 
-    Private Function OpcionValida(ByVal opcion As Short) As Boolean
+    Private Function OpcionValida(opcion As Short) As Boolean
         OpcionValida = opcion > 0 And opcion <= UBound(pOpciones)
     End Function
 End Class

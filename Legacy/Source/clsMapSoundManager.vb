@@ -92,13 +92,13 @@ Friend Class SoundMapInfo
                     If Lloviendo Then
                         If p_Mapas(i).flags(SonidoMapa) Xor p_eSoundFlags.Lluvia Then
                             Call _
-                                SendData(modSendData.SendTarget.toMap, i,
+                                SendData(SendTarget.toMap, i,
                                          PrepareMessagePlayWave(p_Mapas(i).SoundIndex(SonidoMapa), posX, posY))
                         End If
                     Else
                         If p_Mapas(i).flags(SonidoMapa) Xor p_eSoundFlags.ninguna Then
                             Call _
-                                SendData(modSendData.SendTarget.toMap, i,
+                                SendData(SendTarget.toMap, i,
                                          PrepareMessagePlayWave(p_Mapas(i).SoundIndex(SonidoMapa), posX, posY))
                         End If
                     End If
@@ -107,7 +107,7 @@ Friend Class SoundMapInfo
         Next i
     End Sub
 
-    Public Sub ReproducirSonido(ByVal Destino As modSendData.SendTarget, ByVal index As Short, ByVal SoundIndex As Short)
+    Public Sub ReproducirSonido(Destino As SendTarget, index As Short, SoundIndex As Short)
         Call SendData(Destino, index, PrepareMessagePlayWave(SoundIndex, UserList(index).Pos.X, UserList(index).Pos.Y))
     End Sub
 End Class

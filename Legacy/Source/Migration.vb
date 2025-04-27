@@ -1,14 +1,14 @@
 Option Strict Off
 Option Explicit On
 Module Migration
-    Private StopWatch As Stopwatch = Stopwatch.StartNew()
+    Private ReadOnly StopWatch As Stopwatch = Stopwatch.StartNew()
 
     Public Function GetTickCount() As Long
         GetTickCount = StopWatch.ElapsedMilliseconds
     End Function
 
     'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Function migr_LenB(ByVal str_Renamed As String) As Integer
+    Function migr_LenB(str_Renamed As String) As Integer
         If str_Renamed = "" Then
             migr_LenB = 0
         Else
@@ -16,7 +16,7 @@ Module Migration
         End If
     End Function
 
-    Function migr_InStrB(ByVal s1 As String, ByVal s2 As String) As Integer
+    Function migr_InStrB(s1 As String, s2 As String) As Integer
         Dim i As Integer
         Dim maxPos As Integer
 

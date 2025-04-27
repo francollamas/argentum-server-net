@@ -16,7 +16,7 @@ Module PathFinding
 
     Dim TilePosY As Short
 
-    Private Function Limites(ByVal vfila As Short, ByVal vcolu As Short) As Object
+    Private Function Limites(vfila As Short, vcolu As Short) As Object
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -27,7 +27,7 @@ Module PathFinding
         Limites = vcolu >= 1 And vcolu <= COLUMS And vfila >= 1 And vfila <= ROWS
     End Function
 
-    Private Function IsWalkable(ByVal map As Short, ByVal row As Short, ByVal Col As Short, ByVal NpcIndex As Short) _
+    Private Function IsWalkable(map As Short, row As Short, Col As Short, NpcIndex As Short) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -42,8 +42,8 @@ Module PathFinding
         End If
     End Function
 
-    Private Sub ProcessAdjacents(ByVal MapIndex As Short, ByRef T(,) As tIntermidiateWork, ByRef vfila As Short,
-                                 ByRef vcolu As Short, ByVal NpcIndex As Short)
+    Private Sub ProcessAdjacents(MapIndex As Short, ByRef T(,) As tIntermidiateWork, ByRef vfila As Short,
+                                 ByRef vcolu As Short, NpcIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -125,7 +125,7 @@ Module PathFinding
     End Sub
 
 
-    Public Sub SeekPath(ByVal NpcIndex As Short, Optional ByVal MaxSteps As Short = 30)
+    Public Sub SeekPath(NpcIndex As Short, Optional ByVal MaxSteps As Short = 30)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -168,7 +168,7 @@ Module PathFinding
         Call MakePath(NpcIndex)
     End Sub
 
-    Private Sub MakePath(ByVal NpcIndex As Short)
+    Private Sub MakePath(NpcIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -

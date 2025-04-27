@@ -12,7 +12,7 @@ Module Characters
     ' @return   The index of the user with the char placed in CharIndex or INVALID_INDEX if it's not a user or valid char index.
     ' @see      INVALID_INDEX
 
-    Public Function CharIndexToUserIndex(ByVal CharIndex As Short) As Short
+    Public Function CharIndexToUserIndex(CharIndex As Short) As Short
         '***************************************************
         'Autor: Juan Martín Sotuyo Dodero (Maraxus)
         'Last Modification: 05/17/06

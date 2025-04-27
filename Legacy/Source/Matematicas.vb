@@ -1,7 +1,7 @@
 Option Strict Off
 Option Explicit On
 Module Matematicas
-    Public Function Porcentaje(ByVal Total As Integer, ByVal Porc As Integer) As Integer
+    Public Function Porcentaje(Total As Integer, Porc As Integer) As Integer
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -19,11 +19,11 @@ Module Matematicas
         '***************************************************
 
         'Encuentra la distancia entre dos WorldPos
-        Distancia = System.Math.Abs(wp1.X - wp2.X) + System.Math.Abs(wp1.Y - wp2.Y) +
-                    (System.Math.Abs(wp1.map - wp2.map)*100)
+        Distancia = Math.Abs(wp1.X - wp2.X) + Math.Abs(wp1.Y - wp2.Y) +
+                    (Math.Abs(wp1.map - wp2.map)*100)
     End Function
 
-    Function Distance(ByVal X1 As Short, ByVal Y1 As Short, ByVal X2 As Short, ByVal Y2 As Short) As Double
+    Function Distance(X1 As Short, Y1 As Short, X2 As Short, Y2 As Short) As Double
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -32,10 +32,10 @@ Module Matematicas
 
         'Encuentra la distancia entre dos puntos
 
-        Distance = System.Math.Sqrt((Y1 - Y2)^2 + (X1 - X2)^2)
+        Distance = Math.Sqrt((Y1 - Y2)^2 + (X1 - X2)^2)
     End Function
 
-    Public Function RandomNumber(ByVal LowerBound As Integer, ByVal UpperBound As Integer) As Integer
+    Public Function RandomNumber(LowerBound As Integer, UpperBound As Integer) As Integer
         '**************************************************************
         'Author: Juan Martín Sotuyo Dodero
         'Last Modify Date: 3/06/2006

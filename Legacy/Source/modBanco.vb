@@ -1,7 +1,7 @@
 Option Strict Off
 Option Explicit On
 Module modBanco
-    Sub IniciarDeposito(ByVal UserIndex As Short)
+    Sub IniciarDeposito(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -10,20 +10,20 @@ Module modBanco
 
         Try
 
-        'Hacemos un Update del inventario del usuario
-        Call UpdateBanUserInv(True, UserIndex, 0)
-        'Actualizamos el dinero
-        Call WriteUpdateUserStats(UserIndex)
-        'Mostramos la ventana pa' comerciar y ver ladear la osamenta. jajaja
-        Call WriteBankInit(UserIndex)
-        UserList(UserIndex).flags.Comerciando = True
+            'Hacemos un Update del inventario del usuario
+            Call UpdateBanUserInv(True, UserIndex, 0)
+            'Actualizamos el dinero
+            Call WriteUpdateUserStats(UserIndex)
+            'Mostramos la ventana pa' comerciar y ver ladear la osamenta. jajaja
+            Call WriteBankInit(UserIndex)
+            UserList(UserIndex).flags.Comerciando = True
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in IniciarDeposito: " & ex.Message)
-    
-End Try
-End Sub
+
+        Catch ex As Exception
+            Console.WriteLine("Error in IniciarDeposito: " & ex.Message)
+
+        End Try
+    End Sub
 
     'UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Sub SendBanObj(ByRef UserIndex As Short, ByRef Slot As Byte, ByRef Object_Renamed As UserOBJ)
@@ -39,7 +39,7 @@ End Sub
         Call WriteChangeBankSlot(UserIndex, Slot)
     End Sub
 
-    Sub UpdateBanUserInv(ByVal UpdateAll As Boolean, ByVal UserIndex As Short, ByVal Slot As Byte)
+    Sub UpdateBanUserInv(UpdateAll As Boolean, UserIndex As Short, Slot As Byte)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -72,7 +72,7 @@ End Sub
         End With
     End Sub
 
-    Sub UserRetiraItem(ByVal UserIndex As Short, ByVal i As Short, ByVal Cantidad As Short)
+    Sub UserRetiraItem(UserIndex As Short, i As Short, Cantidad As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -82,32 +82,32 @@ End Sub
         Try
 
 
-        If Cantidad < 1 Then Exit Sub
+            If Cantidad < 1 Then Exit Sub
 
-        Call WriteUpdateUserStats(UserIndex)
+            Call WriteUpdateUserStats(UserIndex)
 
-        If UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount > 0 Then
-            If Cantidad > UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount Then _
-                Cantidad = UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount
-            'Agregamos el obj que compro al inventario
-            Call UserReciveObj(UserIndex, CShort(i), Cantidad)
-            'Actualizamos el inventario del usuario
-            Call UpdateUserInv(True, UserIndex, 0)
-            'Actualizamos el banco
-            Call UpdateBanUserInv(True, UserIndex, 0)
-        End If
+            If UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount > 0 Then
+                If Cantidad > UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount Then _
+                    Cantidad = UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount
+                'Agregamos el obj que compro al inventario
+                Call UserReciveObj(UserIndex, CShort(i), Cantidad)
+                'Actualizamos el inventario del usuario
+                Call UpdateUserInv(True, UserIndex, 0)
+                'Actualizamos el banco
+                Call UpdateBanUserInv(True, UserIndex, 0)
+            End If
 
-        'Actualizamos la ventana de comercio
-        Call UpdateVentanaBanco(UserIndex)
+            'Actualizamos la ventana de comercio
+            Call UpdateVentanaBanco(UserIndex)
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in SendBanObj: " & ex.Message)
-    
-End Try
-End Sub
 
-    Sub UserReciveObj(ByVal UserIndex As Short, ByVal ObjIndex As Short, ByVal Cantidad As Short)
+        Catch ex As Exception
+            Console.WriteLine("Error in SendBanObj: " & ex.Message)
+
+        End Try
+    End Sub
+
+    Sub UserReciveObj(UserIndex As Short, ObjIndex As Short, Cantidad As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -145,7 +145,7 @@ End Sub
                     If Slot > .CurrentInventorySlots Then
                         Call _
                             WriteConsoleMsg(UserIndex, "No podés tener mas objetos.",
-                                            Protocol.FontTypeNames.FONTTYPE_INFO)
+                                            FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
                     End If
                 Loop
@@ -161,12 +161,12 @@ End Sub
 
                 Call QuitarBancoInvItem(UserIndex, CByte(ObjIndex), Cantidad)
             Else
-                Call WriteConsoleMsg(UserIndex, "No podés tener mas objetos.", Protocol.FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(UserIndex, "No podés tener mas objetos.", FontTypeNames.FONTTYPE_INFO)
             End If
         End With
     End Sub
 
-    Sub QuitarBancoInvItem(ByVal UserIndex As Short, ByVal Slot As Byte, ByVal Cantidad As Short)
+    Sub QuitarBancoInvItem(UserIndex As Short, Slot As Byte, Cantidad As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -190,7 +190,7 @@ End Sub
         End With
     End Sub
 
-    Sub UpdateVentanaBanco(ByVal UserIndex As Short)
+    Sub UpdateVentanaBanco(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -200,7 +200,7 @@ End Sub
         Call WriteBankOK(UserIndex)
     End Sub
 
-    Sub UserDepositaItem(ByVal UserIndex As Short, ByVal Item As Short, ByVal Cantidad As Short)
+    Sub UserDepositaItem(UserIndex As Short, Item As Short, Cantidad As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -208,30 +208,30 @@ End Sub
         '***************************************************
 
         Try
-        If UserList(UserIndex).Invent.Object_Renamed(Item).Amount > 0 And Cantidad > 0 Then
-            If Cantidad > UserList(UserIndex).Invent.Object_Renamed(Item).Amount Then _
-                Cantidad = UserList(UserIndex).Invent.Object_Renamed(Item).Amount
+            If UserList(UserIndex).Invent.Object_Renamed(Item).Amount > 0 And Cantidad > 0 Then
+                If Cantidad > UserList(UserIndex).Invent.Object_Renamed(Item).Amount Then _
+                    Cantidad = UserList(UserIndex).Invent.Object_Renamed(Item).Amount
 
-            'Agregamos el obj que deposita al banco
-            Call UserDejaObj(UserIndex, CShort(Item), Cantidad)
+                'Agregamos el obj que deposita al banco
+                Call UserDejaObj(UserIndex, CShort(Item), Cantidad)
 
-            'Actualizamos el inventario del usuario
-            Call UpdateUserInv(True, UserIndex, 0)
+                'Actualizamos el inventario del usuario
+                Call UpdateUserInv(True, UserIndex, 0)
 
-            'Actualizamos el inventario del banco
-            Call UpdateBanUserInv(True, UserIndex, 0)
-        End If
+                'Actualizamos el inventario del banco
+                Call UpdateBanUserInv(True, UserIndex, 0)
+            End If
 
-        'Actualizamos la ventana del banco
-        Call UpdateVentanaBanco(UserIndex)
-        
-Catch ex As Exception
-    Console.WriteLine("Error in UserReciveObj: " & ex.Message)
-    
-End Try
-End Sub
+            'Actualizamos la ventana del banco
+            Call UpdateVentanaBanco(UserIndex)
 
-    Sub UserDejaObj(ByVal UserIndex As Short, ByVal ObjIndex As Short, ByVal Cantidad As Short)
+        Catch ex As Exception
+            Console.WriteLine("Error in UserReciveObj: " & ex.Message)
+
+        End Try
+    End Sub
+
+    Sub UserDejaObj(UserIndex As Short, ObjIndex As Short, Cantidad As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -268,7 +268,7 @@ End Sub
                     If Slot > MAX_BANCOINVENTORY_SLOTS Then
                         Call _
                             WriteConsoleMsg(UserIndex, "No tienes mas espacio en el banco!!",
-                                            Protocol.FontTypeNames.FONTTYPE_INFO)
+                                            FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
                     End If
                 Loop
@@ -288,13 +288,13 @@ End Sub
                 Else
                     Call _
                         WriteConsoleMsg(UserIndex, "El banco no puede cargar tantos objetos.",
-                                        Protocol.FontTypeNames.FONTTYPE_INFO)
+                                        FontTypeNames.FONTTYPE_INFO)
                 End If
             End If
         End With
     End Sub
 
-    Sub SendUserBovedaTxt(ByVal sendIndex As Short, ByVal UserIndex As Short)
+    Sub SendUserBovedaTxt(sendIndex As Short, UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -302,65 +302,66 @@ End Sub
         '***************************************************
 
         Try
-        Dim j As Short
+            Dim j As Short
 
-        Call WriteConsoleMsg(sendIndex, UserList(UserIndex).name, Protocol.FontTypeNames.FONTTYPE_INFO)
-        Call _
-            WriteConsoleMsg(sendIndex, "Tiene " & UserList(UserIndex).BancoInvent.NroItems & " objetos.",
-                            Protocol.FontTypeNames.FONTTYPE_INFO)
-
-        For j = 1 To MAX_BANCOINVENTORY_SLOTS
-            If UserList(UserIndex).BancoInvent.Object_Renamed(j).ObjIndex > 0 Then
-                Call _
-                    WriteConsoleMsg(sendIndex,
-                                    "Objeto " & j & " " &
-                                    ObjData_Renamed(UserList(UserIndex).BancoInvent.Object_Renamed(j).ObjIndex).name &
-                                    " Cantidad:" & UserList(UserIndex).BancoInvent.Object_Renamed(j).Amount,
-                                    Protocol.FontTypeNames.FONTTYPE_INFO)
-            End If
-        Next
-    
-Catch ex As Exception
-    Console.WriteLine("Error in IniciarDeposito: " & ex.Message)
-End Try
-End Sub
-
-    Sub SendUserBovedaTxtFromChar(ByVal sendIndex As Short, ByVal charName As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-        Dim j As Short
-        Dim CharFile, Tmp As String
-        Dim ObjInd, ObjCant As Integer
-
-        CharFile = CharPath & charName & ".chr"
-
-        If FileExist(CharFile) Then
-            Call WriteConsoleMsg(sendIndex, charName, Protocol.FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(sendIndex, UserList(UserIndex).name, FontTypeNames.FONTTYPE_INFO)
             Call _
-                WriteConsoleMsg(sendIndex, "Tiene " & GetVar(CharFile, "BancoInventory", "CantidadItems") & " objetos.",
-                                Protocol.FontTypeNames.FONTTYPE_INFO)
+                WriteConsoleMsg(sendIndex, "Tiene " & UserList(UserIndex).BancoInvent.NroItems & " objetos.",
+                                FontTypeNames.FONTTYPE_INFO)
+
             For j = 1 To MAX_BANCOINVENTORY_SLOTS
-                Tmp = GetVar(CharFile, "BancoInventory", "Obj" & j)
-                ObjInd = CInt(ReadField(1, Tmp, Asc("-")))
-                ObjCant = CInt(ReadField(2, Tmp, Asc("-")))
-                If ObjInd > 0 Then
+                If UserList(UserIndex).BancoInvent.Object_Renamed(j).ObjIndex > 0 Then
                     Call _
                         WriteConsoleMsg(sendIndex,
-                                        "Objeto " & j & " " & ObjData_Renamed(ObjInd).name & " Cantidad:" & ObjCant,
-                                        Protocol.FontTypeNames.FONTTYPE_INFO)
+                                        "Objeto " & j & " " &
+                                        ObjData_Renamed(UserList(UserIndex).BancoInvent.Object_Renamed(j).ObjIndex).name &
+                                        " Cantidad:" & UserList(UserIndex).BancoInvent.Object_Renamed(j).Amount,
+                                        FontTypeNames.FONTTYPE_INFO)
                 End If
             Next
-        Else
-            Call WriteConsoleMsg(sendIndex, "Usuario inexistente: " & charName, Protocol.FontTypeNames.FONTTYPE_INFO)
-        End If
-    
-Catch ex As Exception
-    Console.WriteLine("Error in SendUserBovedaTxtFromChar: " & ex.Message)
-End Try
-End Sub
+
+        Catch ex As Exception
+            Console.WriteLine("Error in IniciarDeposito: " & ex.Message)
+        End Try
+    End Sub
+
+    Sub SendUserBovedaTxtFromChar(sendIndex As Short, charName As String)
+        '***************************************************
+        'Author: Unknown
+        'Last Modification: -
+        '
+        '***************************************************
+
+        Try
+            Dim j As Short
+            Dim CharFile, Tmp As String
+            Dim ObjInd, ObjCant As Integer
+
+            CharFile = CharPath & charName & ".chr"
+
+            If FileExist(CharFile) Then
+                Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
+                Call _
+                    WriteConsoleMsg(sendIndex,
+                                    "Tiene " & GetVar(CharFile, "BancoInventory", "CantidadItems") & " objetos.",
+                                    FontTypeNames.FONTTYPE_INFO)
+                For j = 1 To MAX_BANCOINVENTORY_SLOTS
+                    Tmp = GetVar(CharFile, "BancoInventory", "Obj" & j)
+                    ObjInd = CInt(ReadField(1, Tmp, Asc("-")))
+                    ObjCant = CInt(ReadField(2, Tmp, Asc("-")))
+                    If ObjInd > 0 Then
+                        Call _
+                            WriteConsoleMsg(sendIndex,
+                                            "Objeto " & j & " " & ObjData_Renamed(ObjInd).name & " Cantidad:" & ObjCant,
+                                            FontTypeNames.FONTTYPE_INFO)
+                    End If
+                Next
+            Else
+                Call WriteConsoleMsg(sendIndex, "Usuario inexistente: " & charName, FontTypeNames.FONTTYPE_INFO)
+            End If
+
+        Catch ex As Exception
+            Console.WriteLine("Error in SendUserBovedaTxtFromChar: " & ex.Message)
+        End Try
+    End Sub
 End Module

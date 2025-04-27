@@ -1134,7 +1134,7 @@ Module Declaraciones
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura ComUsu, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim ComUsu As tCOmercioUsuario
         Dim GuildIndex As Short 'puntero al array global de guilds
-        Dim FundandoGuildAlineacion As modGuilds.ALINEACION_GUILD _
+        Dim FundandoGuildAlineacion As ALINEACION_GUILD _
         'esto esta aca hasta que se parchee el cliente y se pongan cadenas de datos distintas para cada alineacion
         Dim EscucheClan As Short
         Dim PartyIndex As Short 'index a la party q es miembro
@@ -1195,7 +1195,7 @@ Module Declaraciones
         Dim AtacaDoble As Byte
         Dim LanzaSpells As Byte
         Dim ExpCount As Integer
-        Dim OldMovement As AI.TipoAI
+        Dim OldMovement As TipoAI
         Dim OldHostil As Byte
         Dim AguaValida As Byte
         Dim TierraInvalida As Byte
@@ -1260,7 +1260,7 @@ Module Declaraciones
         Dim Pos As WorldPos 'Posicion
         Dim Orig As WorldPos
         Dim SkillDomar As Short
-        Dim Movement As AI.TipoAI
+        Dim Movement As TipoAI
         Dim Attackable As Byte
         Dim Hostile As Byte
         Dim PoderAtaque As Integer

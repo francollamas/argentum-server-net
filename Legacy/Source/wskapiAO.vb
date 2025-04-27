@@ -1,18 +1,17 @@
 Option Strict Off
 Option Explicit On
 
-Imports System.Collections.Generic
 
 Module wskapiAO
     ''' <summary>
-    ''' Maps socket IDs to user indices
+    '''     Maps socket IDs to user indices
     ''' </summary>
-    Private SocketToUserMap As New Dictionary(Of Integer, Integer)
+    Private ReadOnly SocketToUserMap As New Dictionary(Of Integer, Integer)
 
     ''' <summary>
-    ''' Gets the IP address of a connected client
+    '''     Gets the IP address of a connected client
     ''' </summary>
-    Public Function GetAscIP(ByVal socketID As Integer) As String
+    Public Function GetAscIP(socketID As Integer) As String
         Try
             Dim userIdx As Integer = BuscaSlotSock(socketID)
             If userIdx > 0 Then
@@ -25,7 +24,7 @@ Module wskapiAO
     End Function
 
     ''' <summary>
-    ''' Handles a connection request from a client
+    '''     Handles a connection request from a client
     ''' </summary>
     Private Sub HandleConnectionReceived(socketID As Integer, clientIP As String)
         ' This runs on the main thread via the Windows.Forms event system
@@ -37,8 +36,8 @@ Module wskapiAO
 
             UserList(NewIndex).ip = clientIP
 
-            For i As Integer = 0 To BanIps.Count() - 1
-                Dim bannedIP As String = CStr(BanIps.Item(i))
+            For i = 0 To BanIps.Count() - 1
+                Dim bannedIP = CStr(BanIps.Item(i))
                 If bannedIP = clientIP Then
                     Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
                     Call FlushBuffer(NewIndex)
@@ -57,7 +56,7 @@ Module wskapiAO
             AgregaSlotSock(socketID, NewIndex)
         Else
             Dim errorMsg As String =
-                    Protocol.PrepareMessageErrorMsg(
+                    PrepareMessageErrorMsg(
                         "El servidor se encuentra lleno en este momento. Disculpe las molestias ocasionadas.")
             Dim data() As Byte = SocketManager.StringToBytes(errorMsg)
             SocketManager.SendData(socketID, data)
@@ -66,7 +65,7 @@ Module wskapiAO
     End Sub
 
     ''' <summary>
-    ''' Handles data received from a client
+    '''     Handles data received from a client
     ''' </summary>
     Private Sub HandleDataReceived(socketID As Integer, data() As Byte)
         ' This now runs on the main thread via the synchronized queue system
@@ -84,7 +83,7 @@ Module wskapiAO
     End Sub
 
     ''' <summary>
-    ''' Handles closure of a socket connection
+    '''     Handles closure of a socket connection
     ''' </summary>
     Private Sub HandleConnectionClosed(socketID As Integer)
         ' This runs on the main thread via the Windows.Forms event system
@@ -101,7 +100,7 @@ Module wskapiAO
     End Sub
 
     ''' <summary>
-    ''' Handles connection error
+    '''     Handles connection error
     ''' </summary>
     Private Sub HandleConnectionError(errorMessage As String)
         ' This runs on the main thread via the Windows.Forms event system
@@ -109,7 +108,7 @@ Module wskapiAO
     End Sub
 
     ''' <summary>
-    ''' Closes a socket connection
+    '''     Closes a socket connection
     ''' </summary>
     Public Function Winsock_Close(ByRef socketID As Integer) As Object
         ' This is called from the main thread
@@ -130,9 +129,9 @@ Module wskapiAO
     End Function
 
     ''' <summary>
-    ''' Initializes the socket API
+    '''     Initializes the socket API
     ''' </summary>
-    Public Sub IniciaWsApi(ByVal port As Integer)
+    Public Sub IniciaWsApi(port As Integer)
         ' Set up event handlers to process messages on the main thread
         AddHandler SocketManager.ConnectionReceived, AddressOf HandleConnectionReceived
         AddHandler SocketManager.DataReceived, AddressOf HandleDataReceived
@@ -143,7 +142,7 @@ Module wskapiAO
     End Sub
 
     ''' <summary>
-    ''' Cleans up the socket API
+    '''     Cleans up the socket API
     ''' </summary>
     Public Sub LimpiaWsApi()
         RemoveHandler SocketManager.ConnectionReceived, AddressOf HandleConnectionReceived
@@ -157,43 +156,41 @@ Module wskapiAO
     End Sub
 
     ''' <summary>
-    ''' Sends data through a user's socket connection
+    '''     Sends data through a user's socket connection
     ''' </summary>
-    Public Function WsApiEnviar(ByVal userIndex As Integer, ByRef message As String) As Integer
+    Public Function WsApiEnviar(userIndex As Integer, ByRef message As String) As Integer
         Try
 
-        Dim returnCode As Integer = 0
+            Dim returnCode = 0
 
-        Dim socketID As Integer = UserList(userIndex).ConnID
+            Dim socketID As Integer = UserList(userIndex).ConnID
 
-        If socketID <> - 1 AndAlso UserList(userIndex).ConnIDValida Then
-            Dim data() As Byte = SocketManager.StringToBytes(message)
+            If socketID <> - 1 AndAlso UserList(userIndex).ConnIDValida Then
+                Dim data() As Byte = SocketManager.StringToBytes(message)
 
-            If Not SocketManager.SendData(socketID, data) Then
-                returnCode = - 1
+                If Not SocketManager.SendData(socketID, data) Then
+                    returnCode = - 1
+                End If
+
+                ' Process any pending messages that may have arrived
+                SocketManager.ProcessPendingMessages()
+            ElseIf socketID <> - 1 AndAlso Not UserList(userIndex).ConnIDValida Then
+                If Not UserList(userIndex).Counters.Saliendo Then
+                    returnCode = - 1
+                End If
             End If
 
-            ' Process any pending messages that may have arrived
-            SocketManager.ProcessPendingMessages()
-        ElseIf socketID <> - 1 AndAlso Not UserList(userIndex).ConnIDValida Then
-            If Not UserList(userIndex).Counters.Saliendo Then
-                returnCode = - 1
-            End If
-        End If
+            WsApiEnviar = returnCode
 
-        WsApiEnviar = returnCode
 
-        
-
-        
-Catch ex As Exception
-    Console.WriteLine("Error in GetAscIP: " & ex.Message)
-    Call UserList(userIndex).outgoingData.WriteASCIIStringFixed(message)
-End Try
-End Function
+        Catch ex As Exception
+            Console.WriteLine("Error in GetAscIP: " & ex.Message)
+            Call UserList(userIndex).outgoingData.WriteASCIIStringFixed(message)
+        End Try
+    End Function
 
     ''' <summary>
-    ''' Process any pending messages in the queue (can be called from main game loop)
+    '''     Process any pending messages in the queue (can be called from main game loop)
     ''' </summary>
     Public Sub ProcessNetworkMessages()
         ' Call this from your main game loop or timer to ensure messages get processed
@@ -201,7 +198,7 @@ End Function
     End Sub
 
     ''' <summary>
-    ''' Reinitializes all sockets
+    '''     Reinitializes all sockets
     ''' </summary>
     Public Sub WSApiReiniciarSockets()
         Dim i As Integer
@@ -218,7 +215,7 @@ End Function
         Next i
 
         ReDim UserList(MaxUsers)
-        ArrayInitializers.InitializeStruct(UserList)
+        InitializeStruct(UserList)
         For i = 1 To MaxUsers
             UserList(i).ConnID = - 1
             UserList(i).ConnIDValida = False
@@ -236,9 +233,9 @@ End Function
     End Sub
 
     ''' <summary>
-    ''' Finds the user index associated with a socket ID
+    '''     Finds the user index associated with a socket ID
     ''' </summary>
-    Public Function BuscaSlotSock(ByVal socketID As Integer) As Integer
+    Public Function BuscaSlotSock(socketID As Integer) As Integer
         Dim userIndex As Integer = - 1
 
         If SocketToUserMap.TryGetValue(socketID, userIndex) Then
@@ -249,9 +246,9 @@ End Function
     End Function
 
     ''' <summary>
-    ''' Associates a socket ID with a user index
+    '''     Associates a socket ID with a user index
     ''' </summary>
-    Public Sub AgregaSlotSock(ByVal socketID As Integer, ByVal userIndex As Integer)
+    Public Sub AgregaSlotSock(socketID As Integer, userIndex As Integer)
         Console.WriteLine("AgregaSlotSock: Socket " & socketID & " -> User " & userIndex)
 
         If SocketToUserMap.Count > MaxUsers Then
@@ -263,9 +260,9 @@ End Function
     End Sub
 
     ''' <summary>
-    ''' Removes the association between a socket ID and a user index
+    '''     Removes the association between a socket ID and a user index
     ''' </summary>
-    Public Sub BorraSlotSock(ByVal socketID As Integer)
+    Public Sub BorraSlotSock(socketID As Integer)
         Dim count As Integer = SocketToUserMap.Count
 
         SocketToUserMap.Remove(socketID)
@@ -274,11 +271,11 @@ End Function
     End Sub
 
     ''' <summary>
-    ''' Handles the event of a socket being closed
+    '''     Handles the event of a socket being closed
     ''' </summary>
-    Public Sub EventoSockClose(ByVal userIndex As Integer)
+    Public Sub EventoSockClose(userIndex As Integer)
         If Centinela.RevisandoUserIndex = userIndex Then
-            Call modCentinela.CentinelaUserLogout()
+            Call CentinelaUserLogout()
         End If
 
         If UserList(userIndex).flags.UserLogged Then

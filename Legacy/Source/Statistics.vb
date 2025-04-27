@@ -42,17 +42,17 @@ Module Statistics
     'UPGRADE_WARNING: Es posible que la matriz fragLvlLvlData necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
     Public fragLvlLvlData(7) As fragLvlLvl
     'UPGRADE_WARNING: El límite inferior de la matriz fragAlignmentLvlData ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    Private fragAlignmentLvlData(50, 4) As Integer
+    Private ReadOnly fragAlignmentLvlData(50, 4) As Integer
 
     'Currency just in case.... chats are way TOO often...
-    Private keyOcurrencies(255) As Decimal
+    Private ReadOnly keyOcurrencies(255) As Decimal
 
     Public Sub Initialize()
         'UPGRADE_WARNING: El límite inferior de la matriz trainningInfo ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim trainningInfo(MaxUsers)
     End Sub
 
-    Public Sub UserConnected(ByVal UserIndex As Short)
+    Public Sub UserConnected(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -66,7 +66,7 @@ Module Statistics
         trainningInfo(UserIndex).startTick = GetTickCount()
     End Sub
 
-    Public Sub UserDisconnected(ByVal UserIndex As Short)
+    Public Sub UserDisconnected(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -86,7 +86,7 @@ Module Statistics
         End With
     End Sub
 
-    Public Sub UserLevelUp(ByVal UserIndex As Short)
+    Public Sub UserLevelUp(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -113,7 +113,7 @@ Module Statistics
         End With
     End Sub
 
-    Public Sub StoreFrag(ByVal killer As Short, ByVal victim As Short)
+    Public Sub StoreFrag(killer As Short, victim As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -127,25 +127,25 @@ Module Statistics
         If UserList(victim).Stats.ELV > 50 Or UserList(killer).Stats.ELV > 50 Then Exit Sub
 
         Select Case UserList(killer).clase
-            Case Declaraciones.eClass.Assasin
+            Case eClass.Assasin
                 clase = 1
 
-            Case Declaraciones.eClass.Bard
+            Case eClass.Bard
                 clase = 2
 
-            Case Declaraciones.eClass.Mage
+            Case eClass.Mage
                 clase = 3
 
-            Case Declaraciones.eClass.Paladin
+            Case eClass.Paladin
                 clase = 4
 
-            Case Declaraciones.eClass.Warrior
+            Case eClass.Warrior
                 clase = 5
 
-            Case Declaraciones.eClass.Cleric
+            Case eClass.Cleric
                 clase = 6
 
-            Case Declaraciones.eClass.Hunter
+            Case eClass.Hunter
                 clase = 7
 
             Case Else
@@ -153,19 +153,19 @@ Module Statistics
         End Select
 
         Select Case UserList(killer).raza
-            Case Declaraciones.eRaza.Elfo
+            Case eRaza.Elfo
                 raza = 1
 
-            Case Declaraciones.eRaza.Drow
+            Case eRaza.Drow
                 raza = 2
 
-            Case Declaraciones.eRaza.Enano
+            Case eRaza.Enano
                 raza = 3
 
-            Case Declaraciones.eRaza.Gnomo
+            Case eRaza.Gnomo
                 raza = 4
 
-            Case Declaraciones.eRaza.Humano
+            Case eRaza.Humano
                 raza = 5
 
             Case Else
@@ -517,7 +517,7 @@ Module Statistics
         'Show each character's ocurrencies
         If Total <> 0 Then
             For i = 0 To 255
-                PrintLine(handle, CStr(i) & "    " & CStr(System.Math.Round(keyOcurrencies(i)/Total, 8)))
+                PrintLine(handle, CStr(i) & "    " & CStr(Math.Round(keyOcurrencies(i)/Total, 8)))
             Next i
         End If
 

@@ -35,7 +35,7 @@ Module SecurityIp
         IP_LIMITECONEXIONES = 2
     End Enum
 
-    Public Sub InitIpTables(ByVal OptCountersValue As Integer)
+    Public Sub InitIpTables(OptCountersValue As Integer)
         '*************************************************  *************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: EL OSO 21/01/06. Soporte para MaxConTables
@@ -47,7 +47,7 @@ Module SecurityIp
         ReDim IpTables(EntrysCounter*2)
         MaxValue = 0
 
-        ReDim MaxConTables(Declaraciones.MaxUsers*2 - 1)
+        ReDim MaxConTables(MaxUsers*2 - 1)
         MaxConTablesEntry = 0
     End Sub
 
@@ -70,7 +70,7 @@ Module SecurityIp
         MaxValue = 0
     End Sub
 
-    Public Function IpSecurityAceptarNuevaConexion(ByVal ip As Integer) As Boolean
+    Public Function IpSecurityAceptarNuevaConexion(ip As Integer) As Boolean
         '*************************************************  *************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: Unknow
@@ -83,7 +83,7 @@ Module SecurityIp
 
         If IpTableIndex >= 0 Then
             If IpTables(IpTableIndex + 1) + IntervaloEntreConexiones <= GetTickCount Then _
-                'No está saturando de connects?
+'No está saturando de connects?
                 IpTables(IpTableIndex + 1) = GetTickCount
                 IpSecurityAceptarNuevaConexion = True
                 Console.WriteLine("CONEXION ACEPTADA")
@@ -104,7 +104,7 @@ Module SecurityIp
     End Function
 
 
-    Private Sub AddNewIpIntervalo(ByVal ip As Integer, ByVal index As Integer)
+    Private Sub AddNewIpIntervalo(ip As Integer, index As Integer)
         '*************************************************  *************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: Unknow
@@ -142,7 +142,7 @@ Module SecurityIp
     ' '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-    Public Function IPSecuritySuperaLimiteConexiones(ByVal ip As Integer) As Boolean
+    Public Function IPSecuritySuperaLimiteConexiones(ip As Integer) As Boolean
         Dim IpTableIndex As Integer
 
         IpTableIndex = FindTableIp(ip, e_SecurityIpTabla.IP_LIMITECONEXIONES)
@@ -165,7 +165,7 @@ Module SecurityIp
             End If
         Else
             IPSecuritySuperaLimiteConexiones = False
-            If MaxConTablesEntry < Declaraciones.MaxUsers Then 'si hay espacio..
+            If MaxConTablesEntry < MaxUsers Then 'si hay espacio..
                 IpTableIndex = Not IpTableIndex
                 AddNewIpLimiteConexiones(ip, IpTableIndex) 'iptableindex es donde lo agrego
                 MaxConTables(IpTableIndex + 1) = 1
@@ -176,7 +176,7 @@ Module SecurityIp
         End If
     End Function
 
-    Private Sub AddNewIpLimiteConexiones(ByVal ip As Integer, ByVal index As Integer)
+    Private Sub AddNewIpLimiteConexiones(ip As Integer, index As Integer)
         '*************************************************    *************
         'Author: (EL OSO)
         'Last Modify Date: 16/2/2006
@@ -184,7 +184,7 @@ Module SecurityIp
         'Modified to avoid using CopyMemory
         '*************************************************    *************
         Console.WriteLine("agrega conexion a " & ip)
-        Console.WriteLine("(Declaraciones.MaxUsers - index) = " & (Declaraciones.MaxUsers - index))
+        Console.WriteLine("(Declaraciones.MaxUsers - index) = " & (MaxUsers - index))
         Console.WriteLine("Agrega conexion a nueva IP " & ip)
 
         Dim i As Integer
@@ -207,7 +207,7 @@ Module SecurityIp
         MaxConTablesEntry = MaxConTablesEntry + 1
     End Sub
 
-    Public Sub IpRestarConexion(ByVal ip As Integer)
+    Public Sub IpRestarConexion(ip As Integer)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -247,7 +247,7 @@ Module SecurityIp
     ' '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
-    Private Function FindTableIp(ByVal ip As Integer, ByVal Tabla As e_SecurityIpTabla) As Integer
+    Private Function FindTableIp(ip As Integer, Tabla As e_SecurityIpTabla) As Integer
         '*************************************************  *************
         'Author: Lucio N. Tourrilhes (DuNga)
         'Last Modify Date: Unknow

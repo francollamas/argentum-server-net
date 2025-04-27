@@ -39,7 +39,7 @@ Module AI
     '?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
     '?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½?ï¿½
 
-    Private Sub GuardiasAI(ByVal NpcIndex As Short, ByVal DelCaos As Boolean)
+    Private Sub GuardiasAI(NpcIndex As Short, DelCaos As Boolean)
         '***************************************************
         'Autor: Unknown (orginal version)
         'Last Modification: 12/01/2010 (ZaMa)
@@ -52,7 +52,7 @@ Module AI
         Dim UserProtected As Boolean
 
         With Npclist(NpcIndex)
-            For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
+            For headingloop = eHeading.NORTH To eHeading.WEST
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = .Pos
                 If .flags.Inmovilizado = 0 Or headingloop = .Char_Renamed.heading Then
@@ -117,7 +117,7 @@ Module AI
     ' Handles the evil npcs' artificial intelligency.
     '
     ' @param NpcIndex Specifies reference to the npc
-    Private Sub HostilMalvadoAI(ByVal NpcIndex As Short)
+    Private Sub HostilMalvadoAI(NpcIndex As Short)
         '**************************************************************
         'Author: Unknown
         'Last Modify Date: 12/01/2010 (ZaMa)
@@ -135,7 +135,7 @@ Module AI
         atacoPJ = False
 
         With Npclist(NpcIndex)
-            For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
+            For headingloop = eHeading.NORTH To eHeading.WEST
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = .Pos
                 If .flags.Inmovilizado = 0 Or .Char_Renamed.heading = headingloop Then
@@ -185,7 +185,7 @@ Module AI
                         ElseIf NPCI > 0 Then
                             If Npclist(NPCI).MaestroUser > 0 And Npclist(NPCI).flags.Paralizado = 0 Then
                                 Call ChangeNPCChar(NpcIndex, .Char_Renamed.body, .Char_Renamed.Head, headingloop)
-                                Call SistemaCombate.NpcAtacaNpc(NpcIndex, NPCI, False)
+                                Call NpcAtacaNpc(NpcIndex, NPCI, False)
                                 Exit Sub
                             End If
                         End If
@@ -197,7 +197,7 @@ Module AI
         Call RestoreOldMovement(NpcIndex)
     End Sub
 
-    Private Sub HostilBuenoAI(ByVal NpcIndex As Short)
+    Private Sub HostilBuenoAI(NpcIndex As Short)
         '***************************************************
         'Autor: Unknown (orginal version)
         'Last Modification: 12/01/2010 (ZaMa)
@@ -205,12 +205,12 @@ Module AI
         '12/01/2010: ZaMa - Los npcs no atacan druidas mimetizados con npcs
         '***************************************************
         Dim nPos As WorldPos
-        Dim headingloop As Declaraciones.eHeading
+        Dim headingloop As eHeading
         Dim UI As Short
         Dim UserProtected As Boolean
 
         With Npclist(NpcIndex)
-            For headingloop = Declaraciones.eHeading.NORTH To Declaraciones.eHeading.WEST
+            For headingloop = eHeading.NORTH To eHeading.WEST
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = .Pos
                 If .flags.Inmovilizado = 0 Or .Char_Renamed.heading = headingloop Then
@@ -248,7 +248,7 @@ Module AI
         Call RestoreOldMovement(NpcIndex)
     End Sub
 
-    Private Sub IrUsuarioCercano(ByVal NpcIndex As Short)
+    Private Sub IrUsuarioCercano(NpcIndex As Short)
         '***************************************************
         'Autor: Unknown (orginal version)
         'Last Modification: 12/01/2010 (ZaMa)
@@ -266,33 +266,33 @@ Module AI
         With Npclist(NpcIndex)
             If .flags.Inmovilizado = 1 Then
                 Select Case .Char_Renamed.heading
-                    Case Declaraciones.eHeading.NORTH
+                    Case eHeading.NORTH
                         SignoNS = - 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.EAST
+                    Case eHeading.EAST
                         SignoNS = 0
                         SignoEO = 1
 
-                    Case Declaraciones.eHeading.SOUTH
+                    Case eHeading.SOUTH
                         SignoNS = 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.WEST
+                    Case eHeading.WEST
                         SignoEO = - 1
                         SignoNS = 0
                 End Select
 
-                For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+                For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
 
                     'Is it in it's range of vision??
                     If _
-                        System.Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X And
-                        System.Math.Sign(UserList(UserIndex).Pos.X - .Pos.X) = SignoEO Then
+                        Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X And
+                        Math.Sign(UserList(UserIndex).Pos.X - .Pos.X) = SignoEO Then
                         If _
-                            System.Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y And
-                            System.Math.Sign(UserList(UserIndex).Pos.Y - .Pos.Y) = SignoNS Then
+                            Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y And
+                            Math.Sign(UserList(UserIndex).Pos.Y - .Pos.Y) = SignoNS Then
 
                             UserProtected = Not IntervaloPermiteSerAtacado(UserIndex) And
                                             UserList(UserIndex).flags.NoPuedeSerAtacado
@@ -319,8 +319,8 @@ Module AI
                 If OwnerIndex > 0 Then
 
                     'Is it in it's range of vision??
-                    If System.Math.Abs(UserList(OwnerIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                        If System.Math.Abs(UserList(OwnerIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                    If Math.Abs(UserList(OwnerIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                        If Math.Abs(UserList(OwnerIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 
                             ' va hacia el si o esta invi ni oculto
                             If _
@@ -339,12 +339,12 @@ Module AI
                 End If
 
                 ' No le pertenece a nadie o el dueño no esta en el rango de vision, sigue a cualquiera
-                For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+                For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
 
                     'Is it in it's range of vision??
-                    If System.Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                        If System.Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                    If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                        If Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 
                             With UserList(UserIndex)
 
@@ -374,7 +374,7 @@ Module AI
                 If RandomNumber(0, 10) = 0 Then
                     Call _
                         MoveNPCChar(NpcIndex,
-                                    CByte(RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST)))
+                                    CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                 End If
 
             End If
@@ -387,7 +387,7 @@ Module AI
     ' Makes a Pet / Summoned Npc to Follow an enemy
     '
     ' @param NpcIndex Specifies reference to the npc
-    Private Sub SeguirAgresor(ByVal NpcIndex As Short)
+    Private Sub SeguirAgresor(NpcIndex As Short)
         '**************************************************************
         'Author: Unknown
         'Last Modify by: Marco Vanotti (MarKoxX)
@@ -405,33 +405,33 @@ Module AI
         With Npclist(NpcIndex)
             If .flags.Paralizado = 1 Or .flags.Inmovilizado = 1 Then
                 Select Case .Char_Renamed.heading
-                    Case Declaraciones.eHeading.NORTH
+                    Case eHeading.NORTH
                         SignoNS = - 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.EAST
+                    Case eHeading.EAST
                         SignoNS = 0
                         SignoEO = 1
 
-                    Case Declaraciones.eHeading.SOUTH
+                    Case eHeading.SOUTH
                         SignoNS = 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.WEST
+                    Case eHeading.WEST
                         SignoEO = - 1
                         SignoNS = 0
                 End Select
 
-                For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                    UI = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+                For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                    UI = ConnGroups(.Pos.Map).UserEntrys(i)
 
                     'Is it in it's range of vision??
                     If _
-                        System.Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X And
-                        System.Math.Sign(UserList(UI).Pos.X - .Pos.X) = SignoEO Then
+                        Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X And
+                        Math.Sign(UserList(UI).Pos.X - .Pos.X) = SignoEO Then
                         If _
-                            System.Math.Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_Y And
-                            System.Math.Sign(UserList(UI).Pos.Y - .Pos.Y) = SignoNS Then
+                            Math.Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_Y And
+                            Math.Sign(UserList(UI).Pos.Y - .Pos.Y) = SignoNS Then
 
                             If UserList(UI).name = .flags.AttackedBy Then
                                 If .MaestroUser > 0 Then
@@ -442,7 +442,7 @@ Module AI
                                         Call _
                                             WriteConsoleMsg(.MaestroUser,
                                                             "La mascota no atacará a ciudadanos si eres miembro del ejército real o tienes el seguro activado.",
-                                                            Protocol.FontTypeNames.FONTTYPE_INFO)
+                                                            FontTypeNames.FONTTYPE_INFO)
                                         Call FlushBuffer(.MaestroUser)
                                         .flags.AttackedBy = vbNullString
                                         Exit Sub
@@ -471,12 +471,12 @@ Module AI
 
                 Next i
             Else
-                For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                    UI = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+                For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                    UI = ConnGroups(.Pos.Map).UserEntrys(i)
 
                     'Is it in it's range of vision??
-                    If System.Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                        If System.Math.Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                    If Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                        If Math.Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 
                             If UserList(UI).name = .flags.AttackedBy Then
                                 If .MaestroUser > 0 Then
@@ -487,7 +487,7 @@ Module AI
                                         Call _
                                             WriteConsoleMsg(.MaestroUser,
                                                             "La mascota no atacará a ciudadanos si eres miembro del ejército real o tienes el seguro activado.",
-                                                            Protocol.FontTypeNames.FONTTYPE_INFO)
+                                                            FontTypeNames.FONTTYPE_INFO)
                                         Call FlushBuffer(.MaestroUser)
                                         .flags.AttackedBy = vbNullString
                                         Call FollowAmo(NpcIndex)
@@ -526,7 +526,7 @@ Module AI
         Call RestoreOldMovement(NpcIndex)
     End Sub
 
-    Private Sub RestoreOldMovement(ByVal NpcIndex As Short)
+    Private Sub RestoreOldMovement(NpcIndex As Short)
         With Npclist(NpcIndex)
             If .MaestroUser = 0 Then
                 .Movement = .flags.OldMovement
@@ -536,7 +536,7 @@ Module AI
         End With
     End Sub
 
-    Private Sub PersigueCiudadano(ByVal NpcIndex As Short)
+    Private Sub PersigueCiudadano(NpcIndex As Short)
         '***************************************************
         'Autor: Unknown (orginal version)
         'Last Modification: 12/01/2010 (ZaMa)
@@ -549,12 +549,12 @@ Module AI
         Dim UserProtected As Boolean
 
         With Npclist(NpcIndex)
-            For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+            For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
 
                 'Is it in it's range of vision??
-                If System.Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                    If System.Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                    If Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 
                         If Not criminal(UserIndex) Then
 
@@ -586,7 +586,7 @@ Module AI
         Call RestoreOldMovement(NpcIndex)
     End Sub
 
-    Private Sub PersigueCriminal(ByVal NpcIndex As Short)
+    Private Sub PersigueCriminal(NpcIndex As Short)
         '***************************************************
         'Autor: Unknown (orginal version)
         'Last Modification: 12/01/2010 (ZaMa)
@@ -603,33 +603,33 @@ Module AI
         With Npclist(NpcIndex)
             If .flags.Inmovilizado = 1 Then
                 Select Case .Char_Renamed.heading
-                    Case Declaraciones.eHeading.NORTH
+                    Case eHeading.NORTH
                         SignoNS = - 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.EAST
+                    Case eHeading.EAST
                         SignoNS = 0
                         SignoEO = 1
 
-                    Case Declaraciones.eHeading.SOUTH
+                    Case eHeading.SOUTH
                         SignoNS = 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.WEST
+                    Case eHeading.WEST
                         SignoEO = - 1
                         SignoNS = 0
                 End Select
 
-                For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+                For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
 
                     'Is it in it's range of vision??
                     If _
-                        System.Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X And
-                        System.Math.Sign(UserList(UserIndex).Pos.X - .Pos.X) = SignoEO Then
+                        Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X And
+                        Math.Sign(UserList(UserIndex).Pos.X - .Pos.X) = SignoEO Then
                         If _
-                            System.Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y And
-                            System.Math.Sign(UserList(UserIndex).Pos.Y - .Pos.Y) = SignoNS Then
+                            Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y And
+                            Math.Sign(UserList(UserIndex).Pos.Y - .Pos.Y) = SignoNS Then
 
                             If criminal(UserIndex) Then
                                 With UserList(UserIndex)
@@ -655,12 +655,12 @@ Module AI
                     End If
                 Next i
             Else
-                For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+                For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
 
                     'Is it in it's range of vision??
-                    If System.Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                        If System.Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                    If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                        If Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 
                             If criminal(UserIndex) Then
 
@@ -692,7 +692,7 @@ Module AI
         Call RestoreOldMovement(NpcIndex)
     End Sub
 
-    Private Sub SeguirAmo(ByVal NpcIndex As Short)
+    Private Sub SeguirAmo(NpcIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -708,8 +708,8 @@ Module AI
 
                 If UI > 0 Then
                     'Is it in it's range of vision??
-                    If System.Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                        If System.Math.Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                    If Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                        If Math.Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
                             If _
                                 UserList(UI).flags.Muerto = 0 And UserList(UI).flags.invisible = 0 And
                                 UserList(UI).flags.Oculto = 0 And Distancia(.Pos, UserList(UI).Pos) > 3 Then
@@ -726,7 +726,7 @@ Module AI
         Call RestoreOldMovement(NpcIndex)
     End Sub
 
-    Private Sub AiNpcAtacaNpc(ByVal NpcIndex As Short)
+    Private Sub AiNpcAtacaNpc(NpcIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -745,19 +745,19 @@ Module AI
         With Npclist(NpcIndex)
             If .flags.Inmovilizado = 1 Then
                 Select Case .Char_Renamed.heading
-                    Case Declaraciones.eHeading.NORTH
+                    Case eHeading.NORTH
                         SignoNS = - 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.EAST
+                    Case eHeading.EAST
                         SignoNS = 0
                         SignoEO = 1
 
-                    Case Declaraciones.eHeading.SOUTH
+                    Case eHeading.SOUTH
                         SignoNS = 1
                         SignoEO = 0
 
-                    Case Declaraciones.eHeading.WEST
+                    Case eHeading.WEST
                         SignoEO = - 1
                         SignoNS = 0
                 End Select
@@ -771,14 +771,14 @@ Module AI
                                     bNoEsta = True
                                     If .Numero = ELEMENTALFUEGO Then
                                         Call NpcLanzaUnSpellSobreNpc(NpcIndex, NI)
-                                        If Npclist(NI).NPCtype = Declaraciones.eNPCType.DRAGON Then
+                                        If Npclist(NI).NPCtype = eNPCType.DRAGON Then
                                             Npclist(NI).CanAttack = 1
                                             Call NpcLanzaUnSpellSobreNpc(NI, NpcIndex)
                                         End If
                                     Else
                                         'aca verificamosss la distancia de ataque
                                         If Distancia(.Pos, Npclist(NI).Pos) <= 1 Then
-                                            Call SistemaCombate.NpcAtacaNpc(NpcIndex, NI)
+                                            Call NpcAtacaNpc(NpcIndex, NI)
                                         End If
                                     End If
                                     Exit Sub
@@ -797,14 +797,14 @@ Module AI
                                     bNoEsta = True
                                     If .Numero = ELEMENTALFUEGO Then
                                         Call NpcLanzaUnSpellSobreNpc(NpcIndex, NI)
-                                        If Npclist(NI).NPCtype = Declaraciones.eNPCType.DRAGON Then
+                                        If Npclist(NI).NPCtype = eNPCType.DRAGON Then
                                             Npclist(NI).CanAttack = 1
                                             Call NpcLanzaUnSpellSobreNpc(NI, NpcIndex)
                                         End If
                                     Else
                                         'aca verificamosss la distancia de ataque
                                         If Distancia(.Pos, Npclist(NI).Pos) <= 1 Then
-                                            Call SistemaCombate.NpcAtacaNpc(NpcIndex, NI)
+                                            Call NpcAtacaNpc(NpcIndex, NI)
                                         End If
                                     End If
                                     If .flags.Inmovilizado = 1 Then Exit Sub
@@ -830,7 +830,7 @@ Module AI
         End With
     End Sub
 
-    Public Sub AiNpcObjeto(ByVal NpcIndex As Short)
+    Public Sub AiNpcObjeto(NpcIndex As Short)
         '***************************************************
         'Autor: ZaMa
         'Last Modification: 14/09/2009 (ZaMa)
@@ -844,12 +844,12 @@ Module AI
         Dim UserProtected As Boolean
 
         With Npclist(NpcIndex)
-            For i = 1 To ModAreas.ConnGroups(.Pos.Map).CountEntrys
-                UserIndex = ModAreas.ConnGroups(.Pos.Map).UserEntrys(i)
+            For i = 1 To ConnGroups(.Pos.Map).CountEntrys
+                UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
 
                 'Is it in it's range of vision??
-                If System.Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
-                    If System.Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
+                If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
+                    If Math.Abs(UserList(UserIndex).Pos.Y - .Pos.Y) <= RANGO_VISION_Y Then
 
                         With UserList(UserIndex)
                             UserProtected = Not IntervaloPermiteSerAtacado(UserIndex) And .flags.NoPuedeSerAtacado
@@ -875,7 +875,7 @@ Module AI
         End With
     End Sub
 
-    Sub NPCAI(ByVal NpcIndex As Short)
+    Sub NPCAI(NpcIndex As Short)
         '**************************************************************
         'Author: Unknown
         'Last Modify by: ZaMa
@@ -884,125 +884,125 @@ Module AI
         '15/11/2009: ZaMa - Implementacion de npc objetos ai.
         '**************************************************************
         Try
-        With Npclist(NpcIndex)
-            '<<<<<<<<<<< Ataques >>>>>>>>>>>>>>>>
-            If .MaestroUser = 0 Then
-                'Busca a alguien para atacar
-                'ï¿½Es un guardia?
-                If .NPCtype = Declaraciones.eNPCType.GuardiaReal Then
-                    Call GuardiasAI(NpcIndex, False)
-                ElseIf .NPCtype = Declaraciones.eNPCType.Guardiascaos Then
-                    Call GuardiasAI(NpcIndex, True)
-                ElseIf .Hostile And .Stats.Alineacion <> 0 Then
-                    Call HostilMalvadoAI(NpcIndex)
-                ElseIf .Hostile And .Stats.Alineacion = 0 Then
-                    Call HostilBuenoAI(NpcIndex)
+            With Npclist(NpcIndex)
+                '<<<<<<<<<<< Ataques >>>>>>>>>>>>>>>>
+                If .MaestroUser = 0 Then
+                    'Busca a alguien para atacar
+                    'ï¿½Es un guardia?
+                    If .NPCtype = eNPCType.GuardiaReal Then
+                        Call GuardiasAI(NpcIndex, False)
+                    ElseIf .NPCtype = eNPCType.Guardiascaos Then
+                        Call GuardiasAI(NpcIndex, True)
+                    ElseIf .Hostile And .Stats.Alineacion <> 0 Then
+                        Call HostilMalvadoAI(NpcIndex)
+                    ElseIf .Hostile And .Stats.Alineacion = 0 Then
+                        Call HostilBuenoAI(NpcIndex)
+                    End If
+                Else
+                    'Evitamos que ataque a su amo, a menos
+                    'que el amo lo ataque.
+                    'Call HostilBuenoAI(NpcIndex)
                 End If
-            Else
-                'Evitamos que ataque a su amo, a menos
-                'que el amo lo ataque.
-                'Call HostilBuenoAI(NpcIndex)
-            End If
 
 
-            '<<<<<<<<<<<Movimiento>>>>>>>>>>>>>>>>
-            Select Case .Movement
-                Case TipoAI.MueveAlAzar
-                    If .flags.Inmovilizado = 1 Then Exit Sub
-                    If .NPCtype = Declaraciones.eNPCType.GuardiaReal Then
-                        If RandomNumber(1, 12) = 3 Then
-                            Call _
-                                MoveNPCChar(NpcIndex,
-                                            CByte(RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST)))
+                '<<<<<<<<<<<Movimiento>>>>>>>>>>>>>>>>
+                Select Case .Movement
+                    Case TipoAI.MueveAlAzar
+                        If .flags.Inmovilizado = 1 Then Exit Sub
+                        If .NPCtype = eNPCType.GuardiaReal Then
+                            If RandomNumber(1, 12) = 3 Then
+                                Call _
+                                    MoveNPCChar(NpcIndex,
+                                                CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                            End If
+
+                            Call PersigueCriminal(NpcIndex)
+
+                        ElseIf .NPCtype = eNPCType.Guardiascaos Then
+                            If RandomNumber(1, 12) = 3 Then
+                                Call _
+                                    MoveNPCChar(NpcIndex,
+                                                CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                            End If
+
+                            Call PersigueCiudadano(NpcIndex)
+
+                        Else
+                            If RandomNumber(1, 12) = 3 Then
+                                Call _
+                                    MoveNPCChar(NpcIndex,
+                                                CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                            End If
                         End If
 
+                        'Va hacia el usuario cercano
+                    Case TipoAI.NpcMaloAtacaUsersBuenos
+                        Call IrUsuarioCercano(NpcIndex)
+
+                        'Va hacia el usuario que lo ataco(FOLLOW)
+                    Case TipoAI.NPCDEFENSA
+                        Call SeguirAgresor(NpcIndex)
+
+                        'Persigue criminales
+                    Case TipoAI.GuardiasAtacanCriminales
                         Call PersigueCriminal(NpcIndex)
 
-                    ElseIf .NPCtype = Declaraciones.eNPCType.Guardiascaos Then
+                    Case TipoAI.SigueAmo
+                        If .flags.Inmovilizado = 1 Then Exit Sub
+                        Call SeguirAmo(NpcIndex)
                         If RandomNumber(1, 12) = 3 Then
                             Call _
                                 MoveNPCChar(NpcIndex,
-                                            CByte(RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST)))
+                                            CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                         End If
 
-                        Call PersigueCiudadano(NpcIndex)
+                    Case TipoAI.NpcAtacaNpc
+                        Call AiNpcAtacaNpc(NpcIndex)
 
-                    Else
-                        If RandomNumber(1, 12) = 3 Then
-                            Call _
-                                MoveNPCChar(NpcIndex,
-                                            CByte(RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST)))
-                        End If
-                    End If
+                    Case TipoAI.NpcObjeto
+                        Call AiNpcObjeto(NpcIndex)
 
-                    'Va hacia el usuario cercano
-                Case TipoAI.NpcMaloAtacaUsersBuenos
-                    Call IrUsuarioCercano(NpcIndex)
-
-                    'Va hacia el usuario que lo ataco(FOLLOW)
-                Case TipoAI.NPCDEFENSA
-                    Call SeguirAgresor(NpcIndex)
-
-                    'Persigue criminales
-                Case TipoAI.GuardiasAtacanCriminales
-                    Call PersigueCriminal(NpcIndex)
-
-                Case TipoAI.SigueAmo
-                    If .flags.Inmovilizado = 1 Then Exit Sub
-                    Call SeguirAmo(NpcIndex)
-                    If RandomNumber(1, 12) = 3 Then
-                        Call _
-                            MoveNPCChar(NpcIndex,
-                                        CByte(RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST)))
-                    End If
-
-                Case TipoAI.NpcAtacaNpc
-                    Call AiNpcAtacaNpc(NpcIndex)
-
-                Case TipoAI.NpcObjeto
-                    Call AiNpcObjeto(NpcIndex)
-
-                Case TipoAI.NpcPathfinding
-                    If .flags.Inmovilizado = 1 Then Exit Sub
-                    If ReCalculatePath(NpcIndex) Then
-                        Call PathFindingAI(NpcIndex)
-                        'Existe el camino?
-                        If .PFINFO.NoPath Then 'Si no existe nos movemos al azar
-                            'Move randomly
-                            Call _
-                                MoveNPCChar(NpcIndex,
-                                            RandomNumber(Declaraciones.eHeading.NORTH, Declaraciones.eHeading.WEST))
-                        End If
-                    Else
-                        If Not PathEnd(NpcIndex) Then
-                            Call FollowPath(NpcIndex)
+                    Case TipoAI.NpcPathfinding
+                        If .flags.Inmovilizado = 1 Then Exit Sub
+                        If ReCalculatePath(NpcIndex) Then
+                            Call PathFindingAI(NpcIndex)
+                            'Existe el camino?
+                            If .PFINFO.NoPath Then 'Si no existe nos movemos al azar
+                                'Move randomly
+                                Call _
+                                    MoveNPCChar(NpcIndex,
+                                                RandomNumber(eHeading.NORTH, eHeading.WEST))
+                            End If
                         Else
-                            .PFINFO.PathLenght = 0
+                            If Not PathEnd(NpcIndex) Then
+                                Call FollowPath(NpcIndex)
+                            Else
+                                .PFINFO.PathLenght = 0
+                            End If
                         End If
-                    End If
-            End Select
-        End With
-        
+                End Select
+            End With
 
-        
-Catch ex As Exception
-    Console.WriteLine("Error in GuardiasAI: " & ex.Message)
-    Call _
-            LogError(
-                "NPCAI " & Npclist(NpcIndex).name & " " & Npclist(NpcIndex).MaestroUser & " " &
-                Npclist(NpcIndex).MaestroNpc & " mapa:" & Npclist(NpcIndex).Pos.Map & " x:" & Npclist(NpcIndex).Pos.X &
-                " y:" & Npclist(NpcIndex).Pos.Y & " Mov:" & Npclist(NpcIndex).Movement & " TargU:" &
-                Npclist(NpcIndex).Target & " TargN:" & Npclist(NpcIndex).TargetNPC)
-        'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Dim MiNPC As npc
-        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        MiNPC = Npclist(NpcIndex)
-        Call QuitarNPC(NpcIndex)
-        Call ReSpawnNpc(MiNPC)
-End Try
-End Sub
 
-    Function UserNear(ByVal NpcIndex As Short) As Boolean
+        Catch ex As Exception
+            Console.WriteLine("Error in GuardiasAI: " & ex.Message)
+            Call _
+                LogError(
+                    "NPCAI " & Npclist(NpcIndex).name & " " & Npclist(NpcIndex).MaestroUser & " " &
+                    Npclist(NpcIndex).MaestroNpc & " mapa:" & Npclist(NpcIndex).Pos.Map & " x:" &
+                    Npclist(NpcIndex).Pos.X &
+                    " y:" & Npclist(NpcIndex).Pos.Y & " Mov:" & Npclist(NpcIndex).Movement & " TargU:" &
+                    Npclist(NpcIndex).Target & " TargN:" & Npclist(NpcIndex).TargetNPC)
+            'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+            Dim MiNPC As npc
+            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            MiNPC = Npclist(NpcIndex)
+            Call QuitarNPC(NpcIndex)
+            Call ReSpawnNpc(MiNPC)
+        End Try
+    End Sub
+
+    Function UserNear(NpcIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1017,7 +1017,7 @@ End Sub
         End With
     End Function
 
-    Function ReCalculatePath(ByVal NpcIndex As Short) As Boolean
+    Function ReCalculatePath(NpcIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1031,7 +1031,7 @@ End Sub
         End If
     End Function
 
-    Function PathEnd(ByVal NpcIndex As Short) As Boolean
+    Function PathEnd(NpcIndex As Short) As Boolean
         '***************************************************
         'Author: Gulfas Morgolock
         'Last Modification: -
@@ -1040,7 +1040,7 @@ End Sub
         PathEnd = Npclist(NpcIndex).PFINFO.CurPos = Npclist(NpcIndex).PFINFO.PathLenght
     End Function
 
-    Function FollowPath(ByVal NpcIndex As Short) As Boolean
+    Function FollowPath(NpcIndex As Short) As Boolean
         '***************************************************
         'Author: Gulfas Morgolock
         'Last Modification: -
@@ -1062,7 +1062,7 @@ End Sub
         End With
     End Function
 
-    Function PathFindingAI(ByVal NpcIndex As Short) As Boolean
+    Function PathFindingAI(NpcIndex As Short) As Boolean
         '***************************************************
         'Author: Gulfas Morgolock
         'Last Modification: -
@@ -1105,7 +1105,7 @@ End Sub
         End With
     End Function
 
-    Sub NpcLanzaUnSpell(ByVal NpcIndex As Short, ByVal UserIndex As Short)
+    Sub NpcLanzaUnSpell(NpcIndex As Short, UserIndex As Short)
         '**************************************************************
         'Author: Unknown
         'Last Modify by: -
@@ -1120,7 +1120,7 @@ End Sub
         Call NpcLanzaSpellSobreUser(NpcIndex, UserIndex, Npclist(NpcIndex).Spells(k))
     End Sub
 
-    Sub NpcLanzaUnSpellSobreNpc(ByVal NpcIndex As Short, ByVal TargetNPC As Short)
+    Sub NpcLanzaUnSpellSobreNpc(NpcIndex As Short, TargetNPC As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -

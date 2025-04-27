@@ -23,7 +23,7 @@ Module modGuilds
     'cantidad actual de clanes en el servidor
 
     'UPGRADE_WARNING: El límite inferior de la matriz guilds ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    Private guilds(MAX_GUILDS) As clsClan
+    Private ReadOnly guilds(MAX_GUILDS) As clsClan
     'array global de guilds, se indexa por userlist().guildindex
 
     Private Const CANTIDADMAXIMACODEX As Byte = 8
@@ -92,7 +92,7 @@ Module modGuilds
         Next i
     End Sub
 
-    Public Function m_ConectarMiembroAClan(ByVal UserIndex As Short, ByVal GuildIndex As Short) As Boolean
+    Public Function m_ConectarMiembroAClan(UserIndex As Short, GuildIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -116,7 +116,7 @@ Module modGuilds
     End Function
 
 
-    Public Function m_ValidarPermanencia(ByVal UserIndex As Short, ByVal SumaAntifaccion As Boolean,
+    Public Function m_ValidarPermanencia(UserIndex As Short, SumaAntifaccion As Boolean,
                                          ByRef CambioAlineacion As Boolean) As Boolean
         '***************************************************
         'Autor: Unknown (orginal version)
@@ -175,7 +175,7 @@ Module modGuilds
         End If
     End Function
 
-    Private Sub UpdateGuildMembers(ByVal GuildIndex As Short)
+    Private Sub UpdateGuildMembers(GuildIndex As Short)
         '***************************************************
         'Autor: ZaMa
         'Last Modification: 14/01/2010 (ZaMa)
@@ -242,7 +242,7 @@ Module modGuilds
         End If
     End Sub
 
-    Private Function BajarGrado(ByVal GuildIndex As Short) As ALINEACION_GUILD
+    Private Function BajarGrado(GuildIndex As Short) As ALINEACION_GUILD
         '***************************************************
         'Autor: ZaMa
         'Last Modification: 27/11/2009
@@ -259,7 +259,7 @@ Module modGuilds
         End Select
     End Function
 
-    Public Sub m_DesconectarMiembroDelClan(ByVal UserIndex As Short, ByVal GuildIndex As Short)
+    Public Sub m_DesconectarMiembroDelClan(UserIndex As Short, GuildIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -270,7 +270,7 @@ Module modGuilds
         Call guilds(GuildIndex).DesConectarMiembro(UserIndex)
     End Sub
 
-    Private Function m_EsGuildLeader(ByRef PJ As String, ByVal GuildIndex As Short) As Boolean
+    Private Function m_EsGuildLeader(ByRef PJ As String, GuildIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -280,7 +280,7 @@ Module modGuilds
         m_EsGuildLeader = (UCase(PJ) = UCase(Trim(guilds(GuildIndex).GetLeader)))
     End Function
 
-    Private Function m_EsGuildFounder(ByRef PJ As String, ByVal GuildIndex As Short) As Boolean
+    Private Function m_EsGuildFounder(ByRef PJ As String, GuildIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -290,7 +290,7 @@ Module modGuilds
         m_EsGuildFounder = (UCase(PJ) = UCase(Trim(guilds(GuildIndex).Fundador)))
     End Function
 
-    Public Function m_EcharMiembroDeClan(ByVal Expulsador As Short, ByVal Expulsado As String) As Short
+    Public Function m_EcharMiembroDeClan(Expulsador As Short, Expulsado As String) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -342,7 +342,7 @@ Module modGuilds
         End If
     End Function
 
-    Public Sub ActualizarWebSite(ByVal UserIndex As Short, ByRef Web As String)
+    Public Sub ActualizarWebSite(UserIndex As Short, ByRef Web As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -360,7 +360,7 @@ Module modGuilds
     End Sub
 
 
-    Public Sub ChangeCodexAndDesc(ByRef desc As String, ByRef codex() As String, ByVal GuildIndex As Short)
+    Public Sub ChangeCodexAndDesc(ByRef desc As String, ByRef codex() As String, GuildIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -384,7 +384,7 @@ Module modGuilds
         End With
     End Sub
 
-    Public Sub ActualizarNoticias(ByVal UserIndex As Short, ByRef datos As String)
+    Public Sub ActualizarNoticias(UserIndex As Short, ByRef datos As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: 21/02/2010
@@ -403,13 +403,13 @@ Module modGuilds
             Call guilds(GI).SetGuildNews(datos)
 
             Call _
-                SendData(modSendData.SendTarget.ToDiosesYclan, .GuildIndex,
+                SendData(SendTarget.ToDiosesYclan, .GuildIndex,
                          PrepareMessageGuildChat(.name & " ha actualizado las noticias del clan!"))
         End With
     End Sub
 
-    Public Function CrearNuevoClan(ByVal FundadorIndex As Short, ByRef desc As String, ByRef GuildName As String,
-                                   ByRef URL As String, ByRef codex() As String, ByVal Alineacion As ALINEACION_GUILD,
+    Public Function CrearNuevoClan(FundadorIndex As Short, ByRef desc As String, ByRef GuildName As String,
+                                   ByRef URL As String, ByRef codex() As String, Alineacion As ALINEACION_GUILD,
                                    ByRef refError As String) As Boolean
         '***************************************************
         'Author: Unknown
@@ -481,7 +481,7 @@ Module modGuilds
         CrearNuevoClan = True
     End Function
 
-    Public Sub SendGuildNews(ByVal UserIndex As Short)
+    Public Sub SendGuildNews(UserIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -534,22 +534,22 @@ Module modGuilds
             If .EleccionesAbiertas Then
                 Call _
                     WriteConsoleMsg(UserIndex, "Hoy es la votación para elegir un nuevo líder para el clan.",
-                                    Protocol.FontTypeNames.FONTTYPE_GUILD)
+                                    FontTypeNames.FONTTYPE_GUILD)
                 Call _
                     WriteConsoleMsg(UserIndex,
                                     "La elección durará 24 horas, se puede votar a cualquier miembro del clan.",
-                                    Protocol.FontTypeNames.FONTTYPE_GUILD)
+                                    FontTypeNames.FONTTYPE_GUILD)
                 Call _
                     WriteConsoleMsg(UserIndex, "Para votar escribe /VOTO NICKNAME.",
-                                    Protocol.FontTypeNames.FONTTYPE_GUILD)
+                                    FontTypeNames.FONTTYPE_GUILD)
                 Call _
                     WriteConsoleMsg(UserIndex, "Sólo se computará un voto por miembro. Tu voto no puede ser cambiado.",
-                                    Protocol.FontTypeNames.FONTTYPE_GUILD)
+                                    FontTypeNames.FONTTYPE_GUILD)
             End If
         End With
     End Sub
 
-    Public Function m_PuedeSalirDeClan(ByRef Nombre As String, ByVal GuildIndex As Short, ByVal QuienLoEchaUI As Short) _
+    Public Function m_PuedeSalirDeClan(ByRef Nombre As String, GuildIndex As Short, QuienLoEchaUI As Short) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -570,7 +570,7 @@ Module modGuilds
 
         'cuando UI no puede echar a nombre?
         'si no es gm Y no es lider del clan del pj Y no es el mismo que se va voluntariamente
-        If UserList(QuienLoEchaUI).flags.Privilegios And Declaraciones.PlayerType.User Then
+        If UserList(QuienLoEchaUI).flags.Privilegios And PlayerType.User Then
             If Not m_EsGuildLeader(UCase(UserList(QuienLoEchaUI).name), GuildIndex) Then
                 If UCase(UserList(QuienLoEchaUI).name) <> UCase(Nombre) Then 'si no sale voluntariamente...
                     Exit Function
@@ -582,7 +582,7 @@ Module modGuilds
         m_PuedeSalirDeClan = UCase(guilds(GuildIndex).GetLeader) <> UCase(Nombre)
     End Function
 
-    Public Function PuedeFundarUnClan(ByVal UserIndex As Short, ByVal Alineacion As ALINEACION_GUILD,
+    Public Function PuedeFundarUnClan(UserIndex As Short, Alineacion As ALINEACION_GUILD,
                                       ByRef refError As String) As Boolean
         '***************************************************
         'Autor: Unknown
@@ -598,7 +598,7 @@ Module modGuilds
 
         If _
             UserList(UserIndex).Stats.ELV < 25 Or
-            UserList(UserIndex).Stats.UserSkills(Declaraciones.eSkill.Liderazgo) < 90 Then
+            UserList(UserIndex).Stats.UserSkills(eSkill.Liderazgo) < 90 Then
             refError = "Para fundar un clan debes ser nivel 25 y tener 90 skills en liderazgo."
             Exit Function
         End If
@@ -627,8 +627,8 @@ Module modGuilds
             Case ALINEACION_GUILD.ALINEACION_MASTER
                 If _
                     UserList(UserIndex).flags.Privilegios And
-                    (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                     Declaraciones.PlayerType.SemiDios) Then
+                    (PlayerType.User Or PlayerType.Consejero Or
+                     PlayerType.SemiDios) Then
                     refError = "Para fundar un clan sin alineación debes ser un dios."
                     Exit Function
                 End If
@@ -642,7 +642,7 @@ Module modGuilds
         PuedeFundarUnClan = True
     End Function
 
-    Private Function m_EstadoPermiteEntrarChar(ByRef Personaje As String, ByVal GuildIndex As Short) As Boolean
+    Private Function m_EstadoPermiteEntrarChar(ByRef Personaje As String, GuildIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -700,7 +700,7 @@ Module modGuilds
         End If
     End Function
 
-    Private Function m_EstadoPermiteEntrar(ByVal UserIndex As Short, ByVal GuildIndex As Short) As Boolean
+    Private Function m_EstadoPermiteEntrar(UserIndex As Short, GuildIndex As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -756,7 +756,7 @@ Module modGuilds
         End Select
     End Function
 
-    Public Function Alineacion2String(ByVal Alineacion As ALINEACION_GUILD) As String
+    Public Function Alineacion2String(Alineacion As ALINEACION_GUILD) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -779,7 +779,7 @@ Module modGuilds
         End Select
     End Function
 
-    Public Function Relacion2String(ByVal Relacion As RELACIONES_GUILD) As String
+    Public Function Relacion2String(Relacion As RELACIONES_GUILD) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -798,7 +798,7 @@ Module modGuilds
         End Select
     End Function
 
-    Public Function String2Relacion(ByVal S As String) As RELACIONES_GUILD
+    Public Function String2Relacion(S As String) As RELACIONES_GUILD
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -817,7 +817,7 @@ Module modGuilds
         End Select
     End Function
 
-    Private Function GuildNameValido(ByVal cad As String) As Boolean
+    Private Function GuildNameValido(cad As String) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -844,7 +844,7 @@ Module modGuilds
         GuildNameValido = True
     End Function
 
-    Private Function YaExiste(ByVal GuildName As String) As Boolean
+    Private Function YaExiste(GuildName As String) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -879,7 +879,7 @@ Module modGuilds
         Next i
     End Function
 
-    Public Function v_AbrirElecciones(ByVal UserIndex As Short, ByRef refError As String) As Boolean
+    Public Function v_AbrirElecciones(UserIndex As Short, ByRef refError As String) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -910,7 +910,7 @@ Module modGuilds
         Call guilds(GuildIndex).AbrirElecciones()
     End Function
 
-    Public Function v_UsuarioVota(ByVal UserIndex As Short, ByRef Votado As String, ByRef refError As String) As Boolean
+    Public Function v_UsuarioVota(UserIndex As Short, ByRef Votado As String, ByRef refError As String) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -967,31 +967,32 @@ Module modGuilds
         Dim i As Short
 
         Try
-        Call _
-            SendData(modSendData.SendTarget.ToAll, 0,
-                     PrepareMessageConsoleMsg("Servidor> Revisando elecciones", Protocol.FontTypeNames.FONTTYPE_SERVER))
-        For i = 1 To CANTIDADDECLANES
-            If Not guilds(i) Is Nothing Then
-                If guilds(i).RevisarElecciones Then
-                    Call _
-                        SendData(modSendData.SendTarget.ToAll, 0,
-                                 PrepareMessageConsoleMsg(
-                                     "Servidor> " & guilds(i).GetLeader & " es el nuevo líder de " & guilds(i).GuildName &
-                                     ".", Protocol.FontTypeNames.FONTTYPE_SERVER))
+            Call _
+                SendData(SendTarget.ToAll, 0,
+                         PrepareMessageConsoleMsg("Servidor> Revisando elecciones", FontTypeNames.FONTTYPE_SERVER))
+            For i = 1 To CANTIDADDECLANES
+                If Not guilds(i) Is Nothing Then
+                    If guilds(i).RevisarElecciones Then
+                        Call _
+                            SendData(SendTarget.ToAll, 0,
+                                     PrepareMessageConsoleMsg(
+                                         "Servidor> " & guilds(i).GetLeader & " es el nuevo líder de " &
+                                         guilds(i).GuildName &
+                                         ".", FontTypeNames.FONTTYPE_SERVER))
+                    End If
                 End If
-            End If
-            proximo:
-        Next i
-        Call _
-            SendData(modSendData.SendTarget.ToAll, 0,
-                     PrepareMessageConsoleMsg("Servidor> Elecciones revisadas.", Protocol.FontTypeNames.FONTTYPE_SERVER))
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in LoadGuildsDB: " & ex.Message)
-    Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
-End Try
-End Sub
+                proximo:
+            Next i
+            Call _
+                SendData(SendTarget.ToAll, 0,
+                         PrepareMessageConsoleMsg("Servidor> Elecciones revisadas.", FontTypeNames.FONTTYPE_SERVER))
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in LoadGuildsDB: " & ex.Message)
+            Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
+        End Try
+    End Sub
 
     Private Function GetGuildIndexFromChar(ByRef PlayerName As String) As Short
         '***************************************************
@@ -1040,7 +1041,7 @@ End Sub
         Next i
     End Function
 
-    Public Function m_ListaDeMiembrosOnline(ByVal UserIndex As Short, ByVal GuildIndex As Short) As String
+    Public Function m_ListaDeMiembrosOnline(UserIndex As Short, GuildIndex As Short) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1056,10 +1057,10 @@ End Sub
                 If _
                     i <> UserIndex And
                     ((UserList(i).flags.Privilegios And
-                      (Declaraciones.PlayerType.User Or Declaraciones.PlayerType.Consejero Or
-                       Declaraciones.PlayerType.SemiDios)) <> 0 Or
+                      (PlayerType.User Or PlayerType.Consejero Or
+                       PlayerType.SemiDios)) <> 0 Or
                      (UserList(UserIndex).flags.Privilegios And
-                      (Declaraciones.PlayerType.Dios Or Declaraciones.PlayerType.Admin) <> 0)) Then _
+                      (PlayerType.Dios Or PlayerType.Admin) <> 0)) Then _
                     m_ListaDeMiembrosOnline = m_ListaDeMiembrosOnline & UserList(i).name & ","
                 i = guilds(GuildIndex).m_Iterador_ProximoUserIndex
             End While
@@ -1092,7 +1093,7 @@ End Sub
         Return tStr
     End Function
 
-    Public Sub SendGuildDetails(ByVal UserIndex As Short, ByRef GuildName As String)
+    Public Sub SendGuildDetails(UserIndex As Short, ByRef GuildName As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1112,14 +1113,14 @@ End Sub
             Next i
 
             Call _
-                Protocol.WriteGuildDetails(UserIndex, GuildName, .Fundador, .GetFechaFundacion, .GetLeader, .GetURL,
-                                           .CantidadDeMiembros, .EleccionesAbiertas, Alineacion2String(.Alineacion),
-                                           .CantidadEnemys, .CantidadAllies,
-                                           .PuntosAntifaccion & "/" & CStr(MAXANTIFACCION), codex, .GetDesc)
+                WriteGuildDetails(UserIndex, GuildName, .Fundador, .GetFechaFundacion, .GetLeader, .GetURL,
+                                  .CantidadDeMiembros, .EleccionesAbiertas, Alineacion2String(.Alineacion),
+                                  .CantidadEnemys, .CantidadAllies,
+                                  .PuntosAntifaccion & "/" & CStr(MAXANTIFACCION), codex, .GetDesc)
         End With
     End Sub
 
-    Public Sub SendGuildLeaderInfo(ByVal UserIndex As Short)
+    Public Sub SendGuildLeaderInfo(UserIndex As Short)
         '***************************************************
         'Autor: Mariano Barrou (El Oso)
         'Last Modification: 12/10/06
@@ -1156,7 +1157,7 @@ End Sub
     End Sub
 
 
-    Public Function m_Iterador_ProximoUserIndex(ByVal GuildIndex As Short) As Short
+    Public Function m_Iterador_ProximoUserIndex(GuildIndex As Short) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1170,7 +1171,7 @@ End Sub
         End If
     End Function
 
-    Public Function Iterador_ProximoGM(ByVal GuildIndex As Short) As Short
+    Public Function Iterador_ProximoGM(GuildIndex As Short) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1184,7 +1185,7 @@ End Sub
         End If
     End Function
 
-    Public Function r_Iterador_ProximaPropuesta(ByVal GuildIndex As Short, ByVal Tipo As RELACIONES_GUILD) As Short
+    Public Function r_Iterador_ProximaPropuesta(GuildIndex As Short, Tipo As RELACIONES_GUILD) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1198,7 +1199,7 @@ End Sub
         End If
     End Function
 
-    Public Function GMEscuchaClan(ByVal UserIndex As Short, ByVal GuildName As String) As Short
+    Public Function GMEscuchaClan(UserIndex As Short, GuildName As String) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1212,7 +1213,7 @@ End Sub
             'Quit listening to previous guild!!
             Call _
                 WriteConsoleMsg(UserIndex, "Dejas de escuchar a : " & guilds(UserList(UserIndex).EscucheClan).GuildName,
-                                Protocol.FontTypeNames.FONTTYPE_GUILD)
+                                FontTypeNames.FONTTYPE_GUILD)
             guilds(UserList(UserIndex).EscucheClan).DesconectarGM((UserIndex))
             Exit Function
         End If
@@ -1223,7 +1224,7 @@ End Sub
             If UserList(UserIndex).EscucheClan <> 0 Then
                 If UserList(UserIndex).EscucheClan = GI Then
                     'Already listening to them...
-                    Call WriteConsoleMsg(UserIndex, "Conectado a : " & GuildName, Protocol.FontTypeNames.FONTTYPE_GUILD)
+                    Call WriteConsoleMsg(UserIndex, "Conectado a : " & GuildName, FontTypeNames.FONTTYPE_GUILD)
                     GMEscuchaClan = GI
                     Exit Function
                 Else
@@ -1231,22 +1232,22 @@ End Sub
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Dejas de escuchar a : " & guilds(UserList(UserIndex).EscucheClan).GuildName,
-                                        Protocol.FontTypeNames.FONTTYPE_GUILD)
+                                        FontTypeNames.FONTTYPE_GUILD)
                     guilds(UserList(UserIndex).EscucheClan).DesconectarGM((UserIndex))
                 End If
             End If
 
             Call guilds(GI).ConectarGM(UserIndex)
-            Call WriteConsoleMsg(UserIndex, "Conectado a : " & GuildName, Protocol.FontTypeNames.FONTTYPE_GUILD)
+            Call WriteConsoleMsg(UserIndex, "Conectado a : " & GuildName, FontTypeNames.FONTTYPE_GUILD)
             GMEscuchaClan = GI
             UserList(UserIndex).EscucheClan = GI
         Else
-            Call WriteConsoleMsg(UserIndex, "Error, el clan no existe.", Protocol.FontTypeNames.FONTTYPE_GUILD)
+            Call WriteConsoleMsg(UserIndex, "Error, el clan no existe.", FontTypeNames.FONTTYPE_GUILD)
             GMEscuchaClan = 0
         End If
     End Function
 
-    Public Sub GMDejaDeEscucharClan(ByVal UserIndex As Short, ByVal GuildIndex As Short)
+    Public Sub GMDejaDeEscucharClan(UserIndex As Short, GuildIndex As Short)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1258,7 +1259,7 @@ End Sub
         Call guilds(GuildIndex).DesconectarGM(UserIndex)
     End Sub
 
-    Public Function r_DeclararGuerra(ByVal UserIndex As Short, ByRef GuildGuerra As String, ByRef refError As String) _
+    Public Function r_DeclararGuerra(UserIndex As Short, ByRef GuildGuerra As String, ByRef refError As String) _
         As Short
         '***************************************************
         'Author: Unknown
@@ -1312,7 +1313,7 @@ End Sub
     End Function
 
 
-    Public Function r_AceptarPropuestaDePaz(ByVal UserIndex As Short, ByRef GuildPaz As String, ByRef refError As String) _
+    Public Function r_AceptarPropuestaDePaz(UserIndex As Short, ByRef GuildPaz As String, ByRef refError As String) _
         As Short
         '***************************************************
         'Author: Unknown
@@ -1366,7 +1367,7 @@ End Sub
         r_AceptarPropuestaDePaz = GIG
     End Function
 
-    Public Function r_RechazarPropuestaDeAlianza(ByVal UserIndex As Short, ByRef GuildPro As String,
+    Public Function r_RechazarPropuestaDeAlianza(UserIndex As Short, ByRef GuildPro As String,
                                                  ByRef refError As String) As Short
         '***************************************************
         'Author: Unknown
@@ -1418,7 +1419,7 @@ End Sub
     End Function
 
 
-    Public Function r_RechazarPropuestaDePaz(ByVal UserIndex As Short, ByRef GuildPro As String,
+    Public Function r_RechazarPropuestaDePaz(UserIndex As Short, ByRef GuildPro As String,
                                              ByRef refError As String) As Short
         '***************************************************
         'Author: Unknown
@@ -1469,7 +1470,7 @@ End Sub
         r_RechazarPropuestaDePaz = GIG
     End Function
 
-    Public Function r_AceptarPropuestaDeAlianza(ByVal UserIndex As Short, ByRef GuildAllie As String,
+    Public Function r_AceptarPropuestaDeAlianza(UserIndex As Short, ByRef GuildAllie As String,
                                                 ByRef refError As String) As Short
         '***************************************************
         'Author: Unknown
@@ -1526,8 +1527,8 @@ End Sub
     End Function
 
 
-    Public Function r_ClanGeneraPropuesta(ByVal UserIndex As Short, ByRef OtroClan As String,
-                                          ByVal Tipo As RELACIONES_GUILD, ByRef Detalle As String,
+    Public Function r_ClanGeneraPropuesta(UserIndex As Short, ByRef OtroClan As String,
+                                          Tipo As RELACIONES_GUILD, ByRef Detalle As String,
                                           ByRef refError As String) As Boolean
         '***************************************************
         'Author: Unknown
@@ -1587,7 +1588,7 @@ End Sub
         r_ClanGeneraPropuesta = True
     End Function
 
-    Public Function r_VerPropuesta(ByVal UserIndex As Short, ByRef OtroGuild As String, ByVal Tipo As RELACIONES_GUILD,
+    Public Function r_VerPropuesta(UserIndex As Short, ByRef OtroGuild As String, Tipo As RELACIONES_GUILD,
                                    ByRef refError As String) As String
         '***************************************************
         'Author: Unknown
@@ -1622,7 +1623,7 @@ End Sub
         r_VerPropuesta = guilds(GI).GetPropuesta(OtroClanGI, Tipo)
     End Function
 
-    Public Function r_ListaDePropuestas(ByVal UserIndex As Short, ByVal Tipo As RELACIONES_GUILD) As String()
+    Public Function r_ListaDePropuestas(UserIndex As Short, Tipo As RELACIONES_GUILD) As String()
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1657,7 +1658,7 @@ End Sub
         Return proposals
     End Function
 
-    Public Sub a_RechazarAspiranteChar(ByRef Aspirante As String, ByVal guild As Short, ByRef Detalles As String)
+    Public Sub a_RechazarAspiranteChar(ByRef Aspirante As String, guild As Short, ByRef Detalles As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1696,7 +1697,7 @@ End Sub
         Call WriteVar(CharPath & Aspirante & ".chr", "GUILD", "MotivoRechazo", vbNullString)
     End Function
 
-    Public Function a_RechazarAspirante(ByVal UserIndex As Short, ByRef Nombre As String, ByRef refError As String) _
+    Public Function a_RechazarAspirante(UserIndex As Short, ByRef Nombre As String, ByRef refError As String) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -1726,7 +1727,7 @@ End Sub
         a_RechazarAspirante = True
     End Function
 
-    Public Function a_DetallesAspirante(ByVal UserIndex As Short, ByRef Nombre As String) As String
+    Public Function a_DetallesAspirante(UserIndex As Short, ByRef Nombre As String) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1751,7 +1752,7 @@ End Sub
         End If
     End Function
 
-    Public Sub SendDetallesPersonaje(ByVal UserIndex As Short, ByVal Personaje As String)
+    Public Sub SendDetallesPersonaje(UserIndex As Short, Personaje As String)
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -1768,107 +1769,107 @@ End Sub
         Dim i As Integer
 
         Try
-        GI = UserList(UserIndex).GuildIndex
+            GI = UserList(UserIndex).GuildIndex
 
-        Personaje = UCase(Personaje)
+            Personaje = UCase(Personaje)
 
-        If GI <= 0 Or GI > CANTIDADDECLANES Then
-            Call _
-                Protocol.WriteConsoleMsg(UserIndex, "No perteneces a ningún clan.", Protocol.FontTypeNames.FONTTYPE_INFO)
-            Exit Sub
-        End If
-
-        If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
-            Call _
-                Protocol.WriteConsoleMsg(UserIndex, "No eres el líder de tu clan.", Protocol.FontTypeNames.FONTTYPE_INFO)
-            Exit Sub
-        End If
-
-        If migr_InStrB(Personaje, "\") <> 0 Then
-            Personaje = Replace(Personaje, "\", vbNullString)
-        End If
-        If migr_InStrB(Personaje, "/") <> 0 Then
-            Personaje = Replace(Personaje, "/", vbNullString)
-        End If
-        If migr_InStrB(Personaje, ".") <> 0 Then
-            Personaje = Replace(Personaje, ".", vbNullString)
-        End If
-
-        NroAsp = guilds(GI).NumeroDeAspirante(Personaje)
-
-        If NroAsp = 0 Then
-            list = guilds(GI).GetMemberList()
-
-            For i = 0 To UBound(list)
-                If Personaje = list(i) Then Exit For
-            Next i
-
-            If i > UBound(list) Then
+            If GI <= 0 Or GI > CANTIDADDECLANES Then
                 Call _
-                    Protocol.WriteConsoleMsg(UserIndex, "El personaje no es ni aspirante ni miembro del clan.",
-                                             Protocol.FontTypeNames.FONTTYPE_INFO)
+                    WriteConsoleMsg(UserIndex, "No perteneces a ningún clan.", FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
             End If
-        End If
 
-        'ahora traemos la info
+            If Not m_EsGuildLeader(UserList(UserIndex).name, GI) Then
+                Call _
+                    WriteConsoleMsg(UserIndex, "No eres el líder de tu clan.", FontTypeNames.FONTTYPE_INFO)
+                Exit Sub
+            End If
 
-        UserFile = New clsIniReader
+            If migr_InStrB(Personaje, "\") <> 0 Then
+                Personaje = Replace(Personaje, "\", vbNullString)
+            End If
+            If migr_InStrB(Personaje, "/") <> 0 Then
+                Personaje = Replace(Personaje, "/", vbNullString)
+            End If
+            If migr_InStrB(Personaje, ".") <> 0 Then
+                Personaje = Replace(Personaje, ".", vbNullString)
+            End If
 
-        With UserFile
-            .Initialize((CharPath & Personaje & ".chr"))
+            NroAsp = guilds(GI).NumeroDeAspirante(Personaje)
 
-            ' Get the character's current guild
-            GuildActual = Val(.GetValue("GUILD", "GuildIndex"))
-            If GuildActual > 0 And GuildActual <= CANTIDADDECLANES Then
-                GuildName = "<" & guilds(GuildActual).GuildName & ">"
+            If NroAsp = 0 Then
+                list = guilds(GI).GetMemberList()
+
+                For i = 0 To UBound(list)
+                    If Personaje = list(i) Then Exit For
+                Next i
+
+                If i > UBound(list) Then
+                    Call _
+                        WriteConsoleMsg(UserIndex, "El personaje no es ni aspirante ni miembro del clan.",
+                                        FontTypeNames.FONTTYPE_INFO)
+                    Exit Sub
+                End If
+            End If
+
+            'ahora traemos la info
+
+            UserFile = New clsIniReader
+
+            With UserFile
+                .Initialize((CharPath & Personaje & ".chr"))
+
+                ' Get the character's current guild
+                GuildActual = Val(.GetValue("GUILD", "GuildIndex"))
+                If GuildActual > 0 And GuildActual <= CANTIDADDECLANES Then
+                    GuildName = "<" & guilds(GuildActual).GuildName & ">"
+                Else
+                    GuildName = "Ninguno"
+                End If
+
+                'Get previous guilds
+                Miembro = .GetValue("GUILD", "Miembro")
+                If Len(Miembro) > 400 Then
+                    Miembro = ".." & Right(Miembro, 400)
+                End If
+
+                Call _
+                    WriteCharacterInfo(UserIndex, Personaje, CShort(.GetValue("INIT", "Raza")),
+                                       CShort(.GetValue("INIT", "Clase")), CShort(.GetValue("INIT", "Genero")),
+                                       CByte(.GetValue("STATS", "ELV")), CInt(.GetValue("STATS", "GLD")),
+                                       CInt(.GetValue("STATS", "Banco")), CInt(.GetValue("REP", "Promedio")),
+                                       .GetValue("GUILD", "Pedidos"), GuildName, Miembro,
+                                       CBool(.GetValue("FACCIONES", "EjercitoReal")),
+                                       CBool(.GetValue("FACCIONES", "EjercitoCaos")),
+                                       CInt(.GetValue("FACCIONES", "CiudMatados")),
+                                       CInt(.GetValue("FACCIONES", "CrimMatados")))
+            End With
+
+            'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+            UserFile = Nothing
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in GetGuildIndexFromChar: " & ex.Message)
+            'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+            UserFile = Nothing
+            If Not (FileExist(CharPath & Personaje & ".chr")) Then
+                Call _
+                    LogError(
+                        "El usuario " & UserList(UserIndex).name & " (" & UserIndex &
+                        " ) ha pedido los detalles del personaje " & Personaje & " que no se encuentra.")
             Else
-                GuildName = "Ninguno"
+                Call _
+                    LogError(
+                        "[" & Err.Number & "] " & Err.Description &
+                        " En la rutina SendDetallesPersonaje, por el usuario " &
+                        UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo información sobre el personaje " &
+                        Personaje)
             End If
+        End Try
+    End Sub
 
-            'Get previous guilds
-            Miembro = .GetValue("GUILD", "Miembro")
-            If Len(Miembro) > 400 Then
-                Miembro = ".." & Right(Miembro, 400)
-            End If
-
-            Call _
-                Protocol.WriteCharacterInfo(UserIndex, Personaje, CShort(.GetValue("INIT", "Raza")),
-                                            CShort(.GetValue("INIT", "Clase")), CShort(.GetValue("INIT", "Genero")),
-                                            CByte(.GetValue("STATS", "ELV")), CInt(.GetValue("STATS", "GLD")),
-                                            CInt(.GetValue("STATS", "Banco")), CInt(.GetValue("REP", "Promedio")),
-                                            .GetValue("GUILD", "Pedidos"), GuildName, Miembro,
-                                            CBool(.GetValue("FACCIONES", "EjercitoReal")),
-                                            CBool(.GetValue("FACCIONES", "EjercitoCaos")),
-                                            CInt(.GetValue("FACCIONES", "CiudMatados")),
-                                            CInt(.GetValue("FACCIONES", "CrimMatados")))
-        End With
-
-        'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        UserFile = Nothing
-
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in GetGuildIndexFromChar: " & ex.Message)
-    'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        UserFile = Nothing
-        If Not (FileExist(CharPath & Personaje & ".chr")) Then
-            Call _
-                LogError(
-                    "El usuario " & UserList(UserIndex).name & " (" & UserIndex &
-                    " ) ha pedido los detalles del personaje " & Personaje & " que no se encuentra.")
-        Else
-            Call _
-                LogError(
-                    "[" & Err.Number & "] " & Err.Description & " En la rutina SendDetallesPersonaje, por el usuario " &
-                    UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo información sobre el personaje " &
-                    Personaje)
-        End If
-End Try
-End Sub
-
-    Public Function a_NuevoAspirante(ByVal UserIndex As Short, ByRef clan As String, ByRef Solicitud As String,
+    Public Function a_NuevoAspirante(UserIndex As Short, ByRef clan As String, ByRef Solicitud As String,
                                      ByRef refError As String) As Boolean
         '***************************************************
         'Author: Unknown
@@ -1931,7 +1932,7 @@ End Sub
         a_NuevoAspirante = True
     End Function
 
-    Public Function a_AceptarAspirante(ByVal UserIndex As Short, ByRef Aspirante As String, ByRef refError As String) _
+    Public Function a_AceptarAspirante(UserIndex As Short, ByRef Aspirante As String, ByRef refError As String) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -2003,7 +2004,7 @@ End Sub
         a_AceptarAspirante = True
     End Function
 
-    Public Function GuildName(ByVal GuildIndex As Short) As String
+    Public Function GuildName(GuildIndex As Short) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -2015,7 +2016,7 @@ End Sub
         GuildName = guilds(GuildIndex).GuildName
     End Function
 
-    Public Function GuildLeader(ByVal GuildIndex As Short) As String
+    Public Function GuildLeader(GuildIndex As Short) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -2027,7 +2028,7 @@ End Sub
         GuildLeader = guilds(GuildIndex).GetLeader
     End Function
 
-    Public Function GuildAlignment(ByVal GuildIndex As Short) As String
+    Public Function GuildAlignment(GuildIndex As Short) As String
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -2039,7 +2040,7 @@ End Sub
         GuildAlignment = Alineacion2String(guilds(GuildIndex).Alineacion)
     End Function
 
-    Public Function GuildFounder(ByVal GuildIndex As Short) As String
+    Public Function GuildFounder(GuildIndex As Short) As String
         '***************************************************
         'Autor: ZaMa
         'Returns the guild founder's name

@@ -14,7 +14,8 @@ Friend Class diccionario
     End Structure
 
     'UPGRADE_WARNING: El límite inferior de la matriz p_elementos ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    Private p_elementos(MAX_ELEM) As diccElem 'visual basic es una mierda para usar memoria dinamica, asi que uso esto
+    Private ReadOnly p_elementos(MAX_ELEM) As diccElem _
+    'visual basic es una mierda para usar memoria dinamica, asi que uso esto
     Private p_cant As Short
 
     'UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -39,13 +40,13 @@ Friend Class diccionario
         MyBase.Finalize()
     End Sub
 
-    Public ReadOnly Property CantElem() As Short
+    Public ReadOnly Property CantElem As Short
         Get
             CantElem = p_cant
         End Get
     End Property
 
-    Public Function AtPut(ByVal clave As String, ByRef elem As Object) As Boolean
+    Public Function AtPut(clave As String, ByRef elem As Object) As Boolean
         Dim i As Short
 
         AtPut = False
@@ -78,7 +79,7 @@ Friend Class diccionario
         End If
     End Function
 
-    Public Function At(ByVal clave As String) As Object
+    Public Function At(clave As String) As Object
         Dim i As Short
 
         clave = UCase(clave)
@@ -95,7 +96,7 @@ Friend Class diccionario
         Next i
     End Function
 
-    Public Function AtIndex(ByVal i As Short) As String
+    Public Function AtIndex(i As Short) As String
         AtIndex = p_elementos(i).clave
     End Function
 

@@ -11,7 +11,7 @@ Friend Class clsClan
     ' by el oso :p
 
     Private p_GuildName As String
-    Private p_Alineacion As modGuilds.ALINEACION_GUILD
+    Private p_Alineacion As ALINEACION_GUILD
     Private p_OnlineMembers As List(Of String) 'Array de UserIndexes!
     Private p_GMsOnline As List(Of String)
     Private p_PropuestasDePaz As List(Of String)
@@ -21,7 +21,7 @@ Friend Class clsClan
     Private p_IteradorPropuesta As Short
     Private p_IteradorOnlineGMs As Short
     Private p_GuildNumber As Short 'Numero de guild en el mundo
-    Private p_Relaciones() As modGuilds.RELACIONES_GUILD 'array de relaciones con los otros clanes
+    Private p_Relaciones() As RELACIONES_GUILD 'array de relaciones con los otros clanes
     Private GUILDINFOFILE As String
     Private GUILDPATH As String 'aca pq me es mas comodo setearlo y pq en ningun disenio
     Private MEMBERSFILE As String 'decente la capa de arriba se entera donde estan
@@ -34,7 +34,7 @@ Friend Class clsClan
     Private Const DESCLENGTH As Short = 256
     Private Const CODEXLENGTH As Short = 256
 
-    Public ReadOnly Property GuildName() As String
+    Public ReadOnly Property GuildName As String
         Get
             GuildName = p_GuildName
         End Get
@@ -45,18 +45,18 @@ Friend Class clsClan
     'ALINEACION Y ANTIFACCION
     '
 
-    Public ReadOnly Property Alineacion() As modGuilds.ALINEACION_GUILD
+    Public ReadOnly Property Alineacion As ALINEACION_GUILD
         Get
             Alineacion = p_Alineacion
         End Get
     End Property
 
 
-    Public Property PuntosAntifaccion() As Short
+    Public Property PuntosAntifaccion As Short
         Get
             PuntosAntifaccion = Val(GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Antifaccion"))
         End Get
-        Set(ByVal Value As Short)
+        Set
             Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Antifaccion", CStr(Value))
         End Set
     End Property
@@ -66,7 +66,7 @@ Friend Class clsClan
     'MEMBRESIAS
     '
 
-    Public ReadOnly Property Fundador() As String
+    Public ReadOnly Property Fundador As String
         Get
             Fundador = GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Founder")
         End Get
@@ -80,7 +80,7 @@ Friend Class clsClan
     '    Next i
     'End Property
 
-    Public ReadOnly Property CantidadDeMiembros() As Short
+    Public ReadOnly Property CantidadDeMiembros As Short
         Get
             Dim OldQ As String
             OldQ = GetVar(MEMBERSFILE, "INIT", "NroMembers")
@@ -95,42 +95,42 @@ Friend Class clsClan
     'RELACIONES
     '
 
-    Public ReadOnly Property CantidadPropuestas(ByVal Tipo As modGuilds.RELACIONES_GUILD) As Short
+    Public ReadOnly Property CantidadPropuestas(Tipo As RELACIONES_GUILD) As Short
         Get
             Select Case Tipo
-                Case modGuilds.RELACIONES_GUILD.ALIADOS
+                Case RELACIONES_GUILD.ALIADOS
                     CantidadPropuestas = p_PropuestasDeAlianza.Count()
-                Case modGuilds.RELACIONES_GUILD.GUERRA
+                Case RELACIONES_GUILD.GUERRA
 
-                Case modGuilds.RELACIONES_GUILD.PAZ
+                Case RELACIONES_GUILD.PAZ
                     CantidadPropuestas = p_PropuestasDePaz.Count()
             End Select
         End Get
     End Property
 
-    Public ReadOnly Property CantidadEnemys() As Short
+    Public ReadOnly Property CantidadEnemys As Short
         Get
             Dim i As Short
             For i = 1 To CANTIDADDECLANES
-                CantidadEnemys = CantidadEnemys + IIf(p_Relaciones(i) = modGuilds.RELACIONES_GUILD.GUERRA, 1, 0)
+                CantidadEnemys = CantidadEnemys + IIf(p_Relaciones(i) = RELACIONES_GUILD.GUERRA, 1, 0)
             Next i
         End Get
     End Property
 
-    Public ReadOnly Property CantidadAllies() As Short
+    Public ReadOnly Property CantidadAllies As Short
         Get
             Dim i As Short
             For i = 1 To CANTIDADDECLANES
-                CantidadAllies = CantidadAllies + IIf(p_Relaciones(i) = modGuilds.RELACIONES_GUILD.ALIADOS, 1, 0)
+                CantidadAllies = CantidadAllies + IIf(p_Relaciones(i) = RELACIONES_GUILD.ALIADOS, 1, 0)
             Next i
         End Get
     End Property
 
-    Public Function CambiarAlineacion(ByVal NuevaAlineacion As modGuilds.ALINEACION_GUILD) As Boolean
+    Public Function CambiarAlineacion(NuevaAlineacion As ALINEACION_GUILD) As Boolean
         p_Alineacion = NuevaAlineacion
         Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Alineacion", Alineacion2String(p_Alineacion))
 
-        If p_Alineacion = modGuilds.ALINEACION_GUILD.ALINEACION_NEUTRO Then CambiarAlineacion = True
+        If p_Alineacion = ALINEACION_GUILD.ALINEACION_NEUTRO Then CambiarAlineacion = True
     End Function
 
     '
@@ -166,8 +166,8 @@ Friend Class clsClan
     End Sub
 
 
-    Public Sub Inicializar(ByVal GuildName As String, ByVal GuildNumber As Short,
-                           ByVal Alineacion As modGuilds.ALINEACION_GUILD)
+    Public Sub Inicializar(GuildName As String, GuildNumber As Short,
+                           Alineacion As ALINEACION_GUILD)
         Dim i As Short
 
         p_GuildName = GuildName
@@ -196,9 +196,9 @@ Friend Class clsClan
         For i = 1 To CANTIDADDECLANES
             If Trim(GetVar(PROPUESTASFILE, CStr(i), "Pendiente")) = "1" Then
                 Select Case String2Relacion(Trim(GetVar(PROPUESTASFILE, CStr(i), "Tipo")))
-                    Case modGuilds.RELACIONES_GUILD.ALIADOS
+                    Case RELACIONES_GUILD.ALIADOS
                         p_PropuestasDeAlianza.Add(i)
-                    Case modGuilds.RELACIONES_GUILD.PAZ
+                    Case RELACIONES_GUILD.PAZ
                         p_PropuestasDePaz.Add(i)
                 End Select
             End If
@@ -237,7 +237,7 @@ Friend Class clsClan
     Public Sub ProcesarFundacionDeOtroClan()
         'UPGRADE_WARNING: El límite inferior de la matriz p_Relaciones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve p_Relaciones(CANTIDADDECLANES)
-        p_Relaciones(CANTIDADDECLANES) = modGuilds.RELACIONES_GUILD.PAZ
+        p_Relaciones(CANTIDADDECLANES) = RELACIONES_GUILD.PAZ
     End Sub
 
     Public Sub SetLeader(ByRef leader As String)
@@ -264,17 +264,17 @@ Friend Class clsClan
         Return list
     End Function
 
-    Public Sub ConectarMiembro(ByVal UserIndex As Short)
+    Public Sub ConectarMiembro(UserIndex As Short)
         p_OnlineMembers.Add(UserIndex)
 
         With UserList(UserIndex)
             Call _
-                SendData(modSendData.SendTarget.ToDiosesYclan, .GuildIndex,
+                SendData(SendTarget.ToDiosesYclan, .GuildIndex,
                          PrepareMessageGuildChat(.name & " se ha conectado."))
         End With
     End Sub
 
-    Public Sub DesConectarMiembro(ByVal UserIndex As Short)
+    Public Sub DesConectarMiembro(UserIndex As Short)
         Dim i As Short
         For i = 0 To p_OnlineMembers.Count() - 1
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_OnlineMembers.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -283,7 +283,7 @@ Friend Class clsClan
 
                 With UserList(UserIndex)
                     Call _
-                        SendData(modSendData.SendTarget.ToDiosesYclan, .GuildIndex,
+                        SendData(SendTarget.ToDiosesYclan, .GuildIndex,
                                  PrepareMessageGuildChat(.name & " se ha desconectado."))
                 End With
 
@@ -395,7 +395,7 @@ Friend Class clsClan
         CantidadAspirantes = CShort(Temps)
     End Function
 
-    Public Function DetallesSolicitudAspirante(ByVal NroAspirante As Short) As String
+    Public Function DetallesSolicitudAspirante(NroAspirante As Short) As String
         DetallesSolicitudAspirante = GetVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Detalle")
     End Function
 
@@ -461,7 +461,7 @@ Friend Class clsClan
         End If
 
         Call WriteVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", CStr(CDbl(OldQI) - 1))
-        For i = NroAspirante To modGuilds.MAXASPIRANTES - 1
+        For i = NroAspirante To MAXASPIRANTES - 1
             Call _
                 WriteVar(SOLICITUDESFILE, "SOLICITUD" & i, "Nombre",
                          GetVar(SOLICITUDESFILE, "SOLICITUD" & (i + 1), "Nombre"))
@@ -470,8 +470,8 @@ Friend Class clsClan
                          GetVar(SOLICITUDESFILE, "SOLICITUD" & (i + 1), "Detalle"))
         Next i
 
-        Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & modGuilds.MAXASPIRANTES, "Nombre", vbNullString)
-        Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & modGuilds.MAXASPIRANTES, "Detalle", vbNullString)
+        Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & MAXASPIRANTES, "Nombre", vbNullString)
+        Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & MAXASPIRANTES, "Detalle", vbNullString)
     End Sub
 
     Public Sub InformarRechazoEnChar(ByRef Nombre As String, ByRef Detalles As String)
@@ -486,13 +486,13 @@ Friend Class clsClan
         GetFechaFundacion = GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Date")
     End Function
 
-    Public Sub SetCodex(ByVal CodexNumber As Short, ByRef codex As String)
+    Public Sub SetCodex(CodexNumber As Short, ByRef codex As String)
         Call ReplaceInvalidChars(codex)
         codex = Left(codex, CODEXLENGTH)
         Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Codex" & CodexNumber, codex)
     End Sub
 
-    Public Function GetCodex(ByVal CodexNumber As Short) As String
+    Public Function GetCodex(CodexNumber As Short) As String
         GetCodex = GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Codex" & CodexNumber)
     End Function
 
@@ -577,52 +577,51 @@ Friend Class clsClan
         Dim voteCount As Object
 
         Try
-        ContarVotos = vbNullString
-        CantGanadores = 0
-        Temps = GetVar(MEMBERSFILE, "INIT", "NroMembers")
-        q = IIf(IsNumeric(Temps), CShort(Temps), 0)
-        If q > 0 Then
-            'el diccionario tiene clave el elegido y valor la #votos
-            d = New diccionario
+            ContarVotos = vbNullString
+            CantGanadores = 0
+            Temps = GetVar(MEMBERSFILE, "INIT", "NroMembers")
+            q = IIf(IsNumeric(Temps), CShort(Temps), 0)
+            If q > 0 Then
+                'el diccionario tiene clave el elegido y valor la #votos
+                d = New diccionario
 
-            For i = 1 To q
-                'miembro del clan
-                Temps = GetVar(MEMBERSFILE, "MEMBERS", "Member" & i)
+                For i = 1 To q
+                    'miembro del clan
+                    Temps = GetVar(MEMBERSFILE, "MEMBERS", "Member" & i)
 
-                'a quienvoto
-                tempV = GetVar(VOTACIONESFILE, "VOTOS", Temps)
+                    'a quienvoto
+                    tempV = GetVar(VOTACIONESFILE, "VOTOS", Temps)
 
-                'si voto a alguien contabilizamos el voto
-                If migr_LenB(tempV) <> 0 Then
-                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto d.At(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    voteCount = d.At(tempV)
-                    If Not voteCount Is Nothing Then 'cuantos votos tiene?
+                    'si voto a alguien contabilizamos el voto
+                    If migr_LenB(tempV) <> 0 Then
+                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto d.At(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        Call d.AtPut(tempV, CShort(voteCount) + 1)
-                    Else
-                        Call d.AtPut(tempV, 1)
+                        voteCount = d.At(tempV)
+                        If Not voteCount Is Nothing Then 'cuantos votos tiene?
+                            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            Call d.AtPut(tempV, CShort(voteCount) + 1)
+                        Else
+                            Call d.AtPut(tempV, 1)
+                        End If
                     End If
-                End If
-            Next i
+                Next i
 
-            'quien quedo con mas votos, y cuantos tuvieron esos votos?
-            ContarVotos = d.MayorValor(CantGanadores)
+                'quien quedo con mas votos, y cuantos tuvieron esos votos?
+                ContarVotos = d.MayorValor(CantGanadores)
 
+                'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                d = Nothing
+            End If
+
+
+        Catch ex As Exception
+            Console.WriteLine("Error in CambiarAlineacion: " & ex.Message)
+            LogError(("clsClan.Contarvotos: " & Err.Description))
             'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            d = Nothing
-        End If
-
-        
-        
-Catch ex As Exception
-    Console.WriteLine("Error in CambiarAlineacion: " & ex.Message)
-    LogError(("clsClan.Contarvotos: " & Err.Description))
-        'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        If Not d Is Nothing Then d = Nothing
-        ContarVotos = vbNullString
-End Try
-End Function
+            If Not d Is Nothing Then d = Nothing
+            ContarVotos = vbNullString
+        End Try
+    End Function
 
     Public Function RevisarElecciones() As Boolean
         Dim FechaSufragio As Date
@@ -677,28 +676,28 @@ End Function
         End If
     End Function
 
-    Public Function GetRelacion(ByVal OtroGuild As Short) As modGuilds.RELACIONES_GUILD
+    Public Function GetRelacion(OtroGuild As Short) As RELACIONES_GUILD
         GetRelacion = p_Relaciones(OtroGuild)
     End Function
 
-    Public Sub SetRelacion(ByVal GuildIndex As Short, ByVal Relacion As modGuilds.RELACIONES_GUILD)
+    Public Sub SetRelacion(GuildIndex As Short, Relacion As RELACIONES_GUILD)
         p_Relaciones(GuildIndex) = Relacion
         Call WriteVar(RELACIONESFILE, "RELACIONES", CStr(GuildIndex), Relacion2String(Relacion))
     End Sub
 
-    Public Sub SetPropuesta(ByVal Tipo As modGuilds.RELACIONES_GUILD, ByVal OtroGuild As Short, ByRef Detalle As String)
+    Public Sub SetPropuesta(Tipo As RELACIONES_GUILD, OtroGuild As Short, ByRef Detalle As String)
         Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Detalle", Detalle)
         Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Tipo", Relacion2String(Tipo))
         Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Pendiente", "1")
         Select Case Tipo
-            Case modGuilds.RELACIONES_GUILD.ALIADOS
+            Case RELACIONES_GUILD.ALIADOS
                 p_PropuestasDeAlianza.Add(OtroGuild)
-            Case modGuilds.RELACIONES_GUILD.PAZ
+            Case RELACIONES_GUILD.PAZ
                 p_PropuestasDePaz.Add(OtroGuild)
         End Select
     End Sub
 
-    Public Sub AnularPropuestas(ByVal OtroGuild As Short)
+    Public Sub AnularPropuestas(OtroGuild As Short)
         Dim i As Short
 
         Call WriteVar(PROPUESTASFILE, CStr(OtroGuild), "Detalle", vbNullString)
@@ -715,32 +714,32 @@ End Function
         Next i
     End Sub
 
-    Public Function GetPropuesta(ByVal OtroGuild As Short, ByRef Tipo As modGuilds.RELACIONES_GUILD) As String
+    Public Function GetPropuesta(OtroGuild As Short, ByRef Tipo As RELACIONES_GUILD) As String
         'trae la solicitd que haya, no valida si es actual o de que tipo es
         GetPropuesta = GetVar(PROPUESTASFILE, CStr(OtroGuild), "Detalle")
         Tipo = String2Relacion(GetVar(PROPUESTASFILE, CStr(OtroGuild), "Tipo"))
     End Function
 
-    Public Function HayPropuesta(ByVal OtroGuild As Short, ByRef Tipo As modGuilds.RELACIONES_GUILD) As Boolean
+    Public Function HayPropuesta(OtroGuild As Short, ByRef Tipo As RELACIONES_GUILD) As Boolean
         Dim i As Short
 
         HayPropuesta = False
         Select Case Tipo
-            Case modGuilds.RELACIONES_GUILD.ALIADOS
+            Case RELACIONES_GUILD.ALIADOS
                 For i = 0 To p_PropuestasDeAlianza.Count() - 1
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If p_PropuestasDeAlianza.Item(i) = OtroGuild Then
                         HayPropuesta = True
                     End If
                 Next i
-            Case modGuilds.RELACIONES_GUILD.PAZ
+            Case RELACIONES_GUILD.PAZ
                 For i = 0 To p_PropuestasDePaz.Count() - 1
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If p_PropuestasDePaz.Item(i) = OtroGuild Then
                         HayPropuesta = True
                     End If
                 Next i
-            Case modGuilds.RELACIONES_GUILD.GUERRA
+            Case RELACIONES_GUILD.GUERRA
 
         End Select
     End Function
@@ -758,11 +757,11 @@ End Function
     'ITERADORES
     '
 
-    Public Function Iterador_ProximaPropuesta(ByVal Tipo As modGuilds.RELACIONES_GUILD) As Short
+    Public Function Iterador_ProximaPropuesta(Tipo As RELACIONES_GUILD) As Short
 
         Iterador_ProximaPropuesta = 0
         Select Case Tipo
-            Case modGuilds.RELACIONES_GUILD.ALIADOS
+            Case RELACIONES_GUILD.ALIADOS
                 If p_IteradorPropuesta < p_PropuestasDeAlianza.Count() Then
                     p_IteradorPropuesta = p_IteradorPropuesta + 1
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -772,7 +771,7 @@ End Function
                 If p_IteradorPropuesta >= p_PropuestasDeAlianza.Count() Then
                     p_IteradorPropuesta = 0
                 End If
-            Case modGuilds.RELACIONES_GUILD.PAZ
+            Case RELACIONES_GUILD.PAZ
                 If p_IteradorPropuesta < p_PropuestasDePaz.Count() Then
                     p_IteradorPropuesta = p_IteradorPropuesta + 1
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -809,7 +808,7 @@ End Function
         End If
     End Function
 
-    Public Function Iterador_ProximaRelacion(ByVal r As modGuilds.RELACIONES_GUILD) As Short
+    Public Function Iterador_ProximaRelacion(r As RELACIONES_GUILD) As Short
 
         While p_IteradorRelaciones < UBound(p_Relaciones)
 
@@ -833,11 +832,11 @@ End Function
     'ADMINISTRATIVAS
     '
 
-    Public Sub ConectarGM(ByVal UserIndex As Short)
+    Public Sub ConectarGM(UserIndex As Short)
         p_GMsOnline.Add(UserIndex)
     End Sub
 
-    Public Sub DesconectarGM(ByVal UserIndex As Short)
+    Public Sub DesconectarGM(UserIndex As Short)
         Dim i As Short
         For i = 0 To p_GMsOnline.Count() - 1
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_GMsOnline.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'

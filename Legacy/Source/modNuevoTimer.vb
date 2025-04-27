@@ -8,7 +8,7 @@ Module modNuevoTimer
     '
 
     ' CASTING DE HECHIZOS
-    Public Function IntervaloPermiteLanzarSpell(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteLanzarSpell(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -30,7 +30,7 @@ Module modNuevoTimer
         End If
     End Function
 
-    Public Function IntervaloPermiteAtacar(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteAtacar(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -53,7 +53,7 @@ Module modNuevoTimer
         End If
     End Function
 
-    Public Function IntervaloPermiteGolpeUsar(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteGolpeUsar(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: ZaMa
@@ -75,7 +75,7 @@ Module modNuevoTimer
         End If
     End Function
 
-    Public Function IntervaloPermiteMagiaGolpe(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteMagiaGolpe(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -104,7 +104,7 @@ Module modNuevoTimer
         End With
     End Function
 
-    Public Function IntervaloPermiteGolpeMagia(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteGolpeMagia(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -146,7 +146,7 @@ Module modNuevoTimer
     'End Function
 
     ' TRABAJO
-    Public Function IntervaloPermiteTrabajar(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteTrabajar(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -167,7 +167,7 @@ Module modNuevoTimer
     End Function
 
     ' USAR OBJETOS
-    Public Function IntervaloPermiteUsar(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteUsar(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -198,7 +198,7 @@ Module modNuevoTimer
         End If
     End Function
 
-    Public Function IntervaloPermiteUsarArcos(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
+    Public Function IntervaloPermiteUsarArcos(UserIndex As Short, Optional ByVal Actualizar As Boolean = True) _
         As Boolean
         '***************************************************
         'Author: Unknown
@@ -218,7 +218,7 @@ Module modNuevoTimer
         End If
     End Function
 
-    Public Function IntervaloPermiteSerAtacado(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = False) _
+    Public Function IntervaloPermiteSerAtacado(UserIndex As Short, Optional ByVal Actualizar As Boolean = False) _
         As Boolean
         '**************************************************************
         'Author: ZaMa
@@ -247,7 +247,7 @@ Module modNuevoTimer
         End With
     End Function
 
-    Public Function IntervaloPerdioNpc(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = False) _
+    Public Function IntervaloPerdioNpc(UserIndex As Short, Optional ByVal Actualizar As Boolean = False) _
         As Boolean
         '**************************************************************
         'Author: ZaMa
@@ -274,7 +274,7 @@ Module modNuevoTimer
         End With
     End Function
 
-    Public Function IntervaloEstadoAtacable(ByVal UserIndex As Short, Optional ByVal Actualizar As Boolean = False) _
+    Public Function IntervaloEstadoAtacable(UserIndex As Short, Optional ByVal Actualizar As Boolean = False) _
         As Boolean
         '**************************************************************
         'Author: ZaMa
