@@ -398,3 +398,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# IDEA Folder
+.idea/*
+
+# Specific platform files
+.DS_Store

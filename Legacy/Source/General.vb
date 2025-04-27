@@ -174,9 +174,8 @@ End Sub
 
         Try
         Dim f As Date
-
-        ChDir(AppDomain.CurrentDomain.BaseDirectory)
-        ChDrive(AppDomain.CurrentDomain.BaseDirectory)
+            
+            Console.WriteLine("Working directory:" + AppDomain.CurrentDomain.BaseDirectory)
 
         Call LoadMotd()
         Call BanIpCargar()
