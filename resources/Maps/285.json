@@ -1,0 +1,14 @@
+{
+    "name": "Cueva del Kraken Ruinas de Ëarost",
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "DUNGEON",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "musicnum": 97,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "sonidos": []
+}

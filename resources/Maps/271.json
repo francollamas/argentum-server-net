@@ -1,0 +1,14 @@
+{
+    "name": "Interior de la Montaña.",
+    "musicnum": 110,
+    "magiasinefecto": 1,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "terreno": "NIEVE",
+    "zona": "DUNGEON",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "noencriptarmp": 0,
+    "sonidos": []
+}

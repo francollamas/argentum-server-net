@@ -1,0 +1,12 @@
+{
+    "name": "Bosque al sur de la Cárcel de Banderbill.",
+    "musicnum": 11,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "CAMPO",
+    "restringir": "No",
+    "backup": 0,
+    "pk": 0,
+    "sonidos": []
+}

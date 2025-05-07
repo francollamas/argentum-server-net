@@ -1,0 +1,12 @@
+{
+    "name": "Bosque de Taurgul",
+    "musicnum": 56,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "DUNGEON",
+    "restringir": "NEWBIE",
+    "backup": 0,
+    "pk": 1,
+    "sonidos": []
+}

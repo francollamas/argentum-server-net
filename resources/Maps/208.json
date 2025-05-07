@@ -1,0 +1,13 @@
+{
+    "name": "Mapa para Casamientos. (Iglesia)",
+    "musicnum": 62,
+    "magiasinefecto": 0,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "terreno": "BOSQUE",
+    "zona": "CAMPO",
+    "restringir": "GM",
+    "backup": 0,
+    "pk": 0,
+    "sonidos": []
+}

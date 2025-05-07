@@ -1,0 +1,12 @@
+{
+    "name": "Desierto",
+    "musicnum": 10,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "DESIERTO",
+    "zona": "CAMPO",
+    "restringir": "No",
+    "backup": 0,
+    "pk": 0,
+    "sonidos": []
+}

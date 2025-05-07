@@ -1,0 +1,14 @@
+{
+    "name": "Dungeon Marabel.",
+    "musicnum": 15,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "DUNGEON",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "sonidos": []
+}

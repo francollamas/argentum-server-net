@@ -1,0 +1,12 @@
+{
+    "name": "Ciudad de Nix.",
+    "musicnum": 5,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "CIUDAD",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 1,
+    "sonidos": []
+}

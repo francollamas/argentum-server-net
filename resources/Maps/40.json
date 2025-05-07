@@ -1,0 +1,15 @@
+{
+    "name": "Catacumbas Ullathorpe-Nix.",
+    "musicnum": 9,
+    "magiasinefecto": 0,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "terreno": "BOSQUE",
+    "zona": "DUNGEON",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "noencriptarmp": 0,
+    "robonpcspermitido": 1,
+    "sonidos": []
+}

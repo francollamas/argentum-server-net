@@ -1,0 +1,12 @@
+{
+    "name": "Dungeon Newbie.",
+    "musicnum": 7,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "DUNGEON",
+    "restringir": "NEWBIE",
+    "backup": 1,
+    "pk": 1,
+    "sonidos": []
+}

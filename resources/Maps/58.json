@@ -1,0 +1,12 @@
+{
+    "name": "Suburbios de Banderbill.",
+    "musicnum": 11,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "CIUDAD",
+    "zona": "CAMPO",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 1,
+    "sonidos": []
+}

@@ -1327,7 +1327,6 @@ Module Declaraciones
         Dim NumUsers As Short
         Dim Music As String
         Dim name As String
-        Dim startPos As WorldPos
         Dim MapVersion As Short
         Dim Pk As Boolean
         Dim MagiaSinEfecto As Byte

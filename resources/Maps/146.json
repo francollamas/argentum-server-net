@@ -1,0 +1,14 @@
+{
+    "name": "Dungeon Veriil. (Fuerte)",
+    "musicnum": 18,
+    "magiasinefecto": 0,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "terreno": "NIEVE",
+    "zona": "DUNGEON",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "noencriptarmp": 0,
+    "sonidos": []
+}

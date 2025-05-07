@@ -1,0 +1,12 @@
+{
+    "name": "Isla Veleta.",
+    "musicnum": 10,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "CAMPO",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "sonidos": []
+}

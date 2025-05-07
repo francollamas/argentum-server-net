@@ -1,0 +1,12 @@
+{
+    "name": "Fuerte Pretoriano.",
+    "musicnum": 20,
+    "magiasinefecto": 0,
+    "noencriptarmp": 0,
+    "terreno": "BOSQUE",
+    "zona": "CIUDAD",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "sonidos": []
+}

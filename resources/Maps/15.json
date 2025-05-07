@@ -1,0 +1,30 @@
+{
+    "name": "Desierto",
+    "musicnum": 10,
+    "magiasinefecto": 0,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "terreno": "DESIERTO",
+    "zona": "CAMPO",
+    "restringir": "No",
+    "backup": 0,
+    "pk": 0,
+    "noencriptarmp": 0,
+    "sonidos": [
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 107
+        },
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 108
+        },
+        {
+            "flags": 0,
+            "probabilidad": 80,
+            "sonido": 105
+        }
+    ]
+}

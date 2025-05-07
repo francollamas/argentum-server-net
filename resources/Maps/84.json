@@ -1,0 +1,45 @@
+{
+    "name": "Bosque al noreste de Ullathorpe.",
+    "musicnum": 98,
+    "magiasinefecto": 0,
+    "invisinefecto": 0,
+    "resusinefecto": 0,
+    "terreno": "BOSQUE",
+    "zona": "CAMPO",
+    "restringir": "No",
+    "backup": 1,
+    "pk": 0,
+    "noencriptarmp": 0,
+    "sonidos": [
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 21
+        },
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 22
+        },
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 28
+        },
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 29
+        },
+        {
+            "flags": 1,
+            "probabilidad": 20,
+            "sonido": 34
+        },
+        {
+            "flags": 0,
+            "probabilidad": 80,
+            "sonido": 105
+        }
+    ]
+}
