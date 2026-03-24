@@ -53,7 +53,7 @@ Friend Class diccionario
 
         If migr_LenB(clave) = 0 Then Exit Function
 
-        clave = UCase(clave)
+        clave = clave.ToUpper()
 
         If p_cant = MAX_ELEM Then
             AtPut = False
@@ -82,7 +82,7 @@ Friend Class diccionario
     Public Function At(clave As String) As Object
         Dim i As Short
 
-        clave = UCase(clave)
+        clave = clave.ToUpper()
 
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto At. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         At = Nothing ' Using Empty instead of Null

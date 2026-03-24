@@ -13,7 +13,7 @@
 | Etapa | Descripción | Estado |
 |-------|-------------|--------|
 | ✅ 0 | Error handling: On Error → Try/Catch | **COMPLETADO** |
-| 🔲 1 | Reemplazar `Val()` | **COMPLETADO** (441 → 0) |
+| ✅ 1 | Reemplazar `Val()` | **COMPLETADO** (441 → 0) |
 | 🔲 2 | Reemplazar funciones string VB6 (`Left`, `Right`, `Mid`, `Len`, `InStr`, etc.) | Pendiente (requiere revisión manual por complejidad de patrones) |
 | 🔲 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | Pendiente |
 | 🔲 4 | Reemplazar `UBound()` / `LBound()` | Pendiente |
@@ -335,13 +335,24 @@ Para `With` anidados, trabajar de adentro hacia afuera.
 
 ## Verificación después de cada batch
 
+⚠️ **IMPORTANTE**: Después de cada cantidad **manejable** de cambios (ej: 1-3 archivos modificados, o completar una sub-etapa), ejecutar:
+
 ```bash
 cd /Users/franco/Documents/AO/argentum-server-net
 dotnet build
+dotnet run --project Server
 ```
 
-Debe compilar **sin errores**. Warnings son aceptables temporalmente.
-Luego correr el servidor y probar funcionalidades básicas.
+### Checklist de verificación:
+
+1. **Build**: Debe compilar **sin errores**. Warnings son aceptables temporalmente.
+2. **Run Server**: Levantar el servidor con `dotnet run --project Server`
+3. **Validar**: Verificar que:
+   - ✅ El servidor arranca correctamente (sin crashes)
+   - ✅ Las funcionalidades básicas responden sin problemas
+   - ✅ No hay exceptions en los logs relacionadas con los cambios
+
+**No continuar al siguiente batch hasta que la verificación sea exitosa.**
 
 ---
 

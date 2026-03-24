@@ -60,7 +60,7 @@ Module Statistics
         '***************************************************
 
         'A new user connected, load it's trainning time count
-        trainningInfo(UserIndex).trainningTime = CInt(ParseVal(GetVar(CharPath & UCase(UserList(UserIndex).name) & ".chr",
+        trainningInfo(UserIndex).trainningTime = CInt(ParseVal(GetVar(CharPath & UserList(UserIndex).name.ToUpper() & ".chr",
                                                             "RESEARCH", "TrainningTime", 30)))
 
         trainningInfo(UserIndex).startTick = GetTickCount()
@@ -81,7 +81,7 @@ Module Statistics
 
             'Store info in char file
             Call _
-                WriteVar(CharPath & UCase(UserList(UserIndex).name) & ".chr", "RESEARCH", "TrainningTime",
+                WriteVar(CharPath & UserList(UserIndex).name.ToUpper() & ".chr", "RESEARCH", "TrainningTime",
                          CStr(.trainningTime))
         End With
     End Sub
@@ -536,8 +536,8 @@ Module Statistics
         Dim i As Integer
         Dim key As Short
 
-        For i = 1 To Len(S)
-            key = Asc(Mid(S, i, 1))
+        For i = 1 To S.Length
+            key = Asc(S.Substring(i - 1, 1))
 
             keyOcurrencies(key) = keyOcurrencies(key) + 1
         Next i

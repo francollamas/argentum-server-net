@@ -12,7 +12,7 @@ Module Migration
         If str_Renamed = "" Then
             migr_LenB = 0
         Else
-            migr_LenB = Len(str_Renamed)*2
+            migr_LenB = str_Renamed.Length*2
         End If
     End Function
 
@@ -21,17 +21,17 @@ Module Migration
         Dim maxPos As Integer
 
         ' Verificar que la subcadena no sea vacía
-        If Len(s2) = 0 Then
+        If s2.Length = 0 Then
             migr_InStrB = 1 ' Si la subcadena está vacía, consideramos que se encuentra al principio
             Exit Function
         End If
 
         ' La búsqueda solo puede ir hasta la longitud de la cadena principal menos la longitud de la subcadena
-        maxPos = Len(s1) - Len(s2) + 1
+        maxPos = s1.Length - s2.Length + 1
 
         ' Buscar la subcadena dentro de la cadena principal
         For i = 1 To maxPos
-            If Mid(s1, i, Len(s2)) = s2 Then
+            If s1.Substring(i - 1, s2.Length) = s2 Then
                 migr_InStrB = i
                 Exit Function
             End If

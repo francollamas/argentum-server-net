@@ -282,7 +282,7 @@ Module Acciones
 
             If ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).OBJType = 8 Then
 
-                If Len(ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).texto) > 0 Then
+                If ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).texto.Length > 0 Then
                     Call WriteShowSignal(UserIndex, MapData(Map, X, Y).ObjInfo.ObjIndex)
                 End If
 

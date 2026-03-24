@@ -61,7 +61,7 @@ Friend Class cCola
             If IndexValido(index) Then
                 'Pablo
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                VerElemento = UCase(Cola.Item(index))
+                VerElemento = Cola.Item(index).ToString().ToUpper()
                 '/Pablo
                 'VerElemento = Cola(Index)
             Else
@@ -79,7 +79,7 @@ Friend Class cCola
             'Mete elemento en la cola
             'Pablo
             Dim aux As String
-            aux = TimeString & " " & UCase(Nombre)
+            aux = TimeString & " " & Nombre.ToUpper()
             Call Cola.Add(aux)
             '/Pablo
 
@@ -129,11 +129,11 @@ Friend Class cCola
             Dim V As String
             Dim i As Short
             Dim NombreEnMayusculas As String
-            NombreEnMayusculas = UCase(Nombre)
+            NombreEnMayusculas = Nombre.ToUpper()
 
             For i = 0 To Me.Longitud - 1
                 'Pablo
-                V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
+                V = Me.VerElemento(i).Substring(9)
                 '/Pablo
                 'V = Me.VerElemento(i)
                 If V = NombreEnMayusculas Then
@@ -154,11 +154,11 @@ Friend Class cCola
             Dim i As Short
             Dim NombreEnMayusculas As String
 
-            NombreEnMayusculas = UCase(Nombre)
+            NombreEnMayusculas = Nombre.ToUpper()
 
             For i = 0 To Me.Longitud - 1
                 'Pablo
-                V = Mid(Me.VerElemento(i), 10, Len(Me.VerElemento(i)))
+                V = Me.VerElemento(i).Substring(9)
                 '/Pablo
                 'V = Me.VerElemento(i)
                 If V = NombreEnMayusculas Then

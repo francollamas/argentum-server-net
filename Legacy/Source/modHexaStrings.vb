@@ -11,10 +11,10 @@ Module modHexaStrings
         Dim i As Integer
         Dim L As String
 
-        If Len(MD5) And &H1 Then MD5 = "0" & MD5
+        If MD5.Length And &H1 Then MD5 = "0" & MD5
 
-        For i = 1 To Len(MD5)\2
-            L = Mid(MD5, (2*i) - 1, 2)
+        For i = 1 To MD5.Length\2
+            L = MD5.Substring((2*i) - 2, 2)
             hexMd52Asc = hexMd52Asc & Chr(hexHex2Dec(L))
         Next i
     End Function
@@ -40,8 +40,8 @@ Module modHexaStrings
         Dim i As Integer
         Dim L As String
 
-        For i = 1 To Len(Text)
-            L = Mid(Text, i, 1)
+        For i = 1 To Text.Length
+            L = Text.Substring(i - 1, 1)
             txtOffset = txtOffset & Chr((Asc(L) + off) And &HFF)
         Next i
     End Function

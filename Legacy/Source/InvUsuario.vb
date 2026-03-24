@@ -92,7 +92,7 @@ Module InvUsuario
 
             '[Barrin 17-12-03] Si el usuario dejó de ser Newbie, y estaba en el Newbie Dungeon
             'es transportado a su hogar de origen ;)
-            If UCase(MapInfo_Renamed(.Pos.Map).Restringir) = "NEWBIE" Then
+            If MapInfo_Renamed(.Pos.Map).Restringir.ToUpper() = "NEWBIE" Then
 
 
                 Select Case .Hogar
