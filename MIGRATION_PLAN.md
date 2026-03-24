@@ -14,7 +14,7 @@
 |-------|-------------|--------|
 | ✅ 0 | Error handling: On Error → Try/Catch | **COMPLETADO** |
 | ✅ 1 | Reemplazar `Val()` | **COMPLETADO** (441 → 0) |
-| 🔲 2 | Reemplazar funciones string VB6 (`Left`, `Right`, `Mid`, `Len`, `InStr`, etc.) | Pendiente (requiere revisión manual por complejidad de patrones) |
+| 🔄 2 | Reemplazar funciones string VB6 (`Left`, `Right`, `Mid`, `Len`, `InStr`, etc.) | 20/20 archivos completados (131/135 inst). General.vb: 4 inst de InStr/Mid pendientes |
 | 🔲 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | Pendiente |
 | 🔲 4 | Reemplazar `UBound()` / `LBound()` | Pendiente |
 | 🔲 5 | Modernizar File I/O (`FileOpen`, `Line Input`, `Print #`) | Pendiente |
@@ -122,10 +122,10 @@ En los casos donde el tipo esperado es Integer o Long:
 - FileIO.vb ✅ (27 inst)
 - Protocol.vb ✅ (104 inst)
 
-**PENDIENTES (1 archivo, requiere atención especial)**:
+**EN REVISIÓN (1 archivo)**:
 | Archivo | Estado | Notas |
 |---------|--------|-------|
-| General.vb | 🔄 | 1/5 inst completadas. 4 inst de InStr/Mid pendientes (requieren conversión cuidadosa) |
+| General.vb | 🔄 | 1/5 inst completadas. 4 inst de InStr/Mid en función ReadField requieren conversión cuidadosa (1-based vs 0-based) |
 
 ---
 
