@@ -9226,7 +9226,7 @@ Module Protocol
                                 CommandString = CommandString & "HEAD "
 
                             Case eEditOptions.eo_CriminalsKilled
-                                Var = IIf(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", Var.ToString())
@@ -9241,7 +9241,7 @@ Module Protocol
                                 CommandString = CommandString & "CRI "
 
                             Case eEditOptions.eo_CiticensKilled
-                                Var = IIf(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", Var.ToString())
@@ -9375,7 +9375,7 @@ Module Protocol
                                 CommandString = CommandString & "SKILLSLIBRES "
 
                             Case eEditOptions.eo_Nobleza
-                                Var = IIf(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Nobles", Var.ToString())
@@ -9390,7 +9390,7 @@ Module Protocol
                                 CommandString = CommandString & "NOB "
 
                             Case eEditOptions.eo_Asesino
-                                Var = IIf(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Asesino", Var.ToString())
@@ -9405,8 +9405,8 @@ Module Protocol
                                 CommandString = CommandString & "ASE "
 
                             Case eEditOptions.eo_Sex
-                                Sex = IIf(Arg1.ToUpper() = "MUJER", eGenero.Mujer, 0) ' Mujer?
-                                Sex = IIf(Arg1.ToUpper() = "HOMBRE", eGenero.Hombre, Sex) ' Hombre?
+                                Sex = If(Arg1.ToUpper() = "MUJER", CByte(eGenero.Mujer), CByte(0)) ' Mujer?
+                                Sex = If(Arg1.ToUpper() = "HOMBRE", CByte(eGenero.Hombre), Sex) ' Hombre?
 
                                 If Sex <> 0 Then ' Es Hombre o mujer?
                                     If tUser <= 0 Then ' OffLine
@@ -9477,16 +9477,16 @@ Module Protocol
                                         bankGold = Convert.ToInt32(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
                                         Call _
                                             WriteVar(UserCharPath, "STATS", "BANCO",
-                                                     IIf(bankGold + ParseVal(Arg1) <= 0, 0, bankGold + ParseVal(Arg1)))
+                                                     If(bankGold + ParseVal(Arg1) <= 0, 0, bankGold + ParseVal(Arg1)).ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex,
                                                             "Se le ha agregado " & Arg1 & " monedas de oro a " &
                                                             UserName &
                                                             ".", FontTypeNames.FONTTYPE_TALK)
                                     Else
-                                        UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + ParseVal(Arg1) <= 0,
-                                                                          0,
-                                                                          UserList(tUser).Stats.Banco + ParseVal(Arg1))
+                                        UserList(tUser).Stats.Banco = If(UserList(tUser).Stats.Banco + ParseVal(Arg1) <= 0,
+                                                                         0,
+                                                                         UserList(tUser).Stats.Banco + ParseVal(Arg1))
                                         Call _
                                             WriteConsoleMsg(tUser, STANDARD_BOUNTY_HUNTER_MESSAGE,
                                                             FontTypeNames.FONTTYPE_TALK)
@@ -13293,7 +13293,7 @@ Module Protocol
             'Change the boolean to string in a fast way
             Call _
                 WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & .Pos.Map & ".dat", "Mapa" & .Pos.Map,
-                         "Pk", IIf(isMapPk, "1", "0"))
+                         "Pk", If(isMapPk, "1", "0"))
 
             Call _
                 WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " PK: " & MapInfo_Renamed(.Pos.Map).Pk,
