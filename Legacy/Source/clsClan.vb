@@ -572,8 +572,8 @@ Friend Class clsClan
         Dim i As Short
         Dim Temps As String
         Dim tempV As String
-        Dim d As diccionario
-        Dim voteCount As Object
+        Dim d As New Dictionary(Of String, Short)(StringComparer.OrdinalIgnoreCase)
+        Dim currentCount As Short
 
         Try
             ContarVotos = vbNullString
@@ -581,8 +581,6 @@ Friend Class clsClan
             Temps = GetVar(MEMBERSFILE, "INIT", "NroMembers")
             q = IIf(IsNumeric(Temps), Convert.ToInt16(Temps), 0)
             If q > 0 Then
-                'el diccionario tiene clave el elegido y valor la #votos
-                d = New diccionario
 
                 For i = 1 To q
                     'miembro del clan
@@ -593,31 +591,36 @@ Friend Class clsClan
 
                     'si voto a alguien contabilizamos el voto
                     If migr_LenB(tempV) <> 0 Then
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto d.At(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        voteCount = d.At(tempV)
-                        If Not voteCount Is Nothing Then 'cuantos votos tiene?
-                            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto voteCount. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Call d.AtPut(tempV, Convert.ToInt16(voteCount) + 1)
+                        If d.TryGetValue(tempV, currentCount) Then
+                            d(tempV) = currentCount + 1
                         Else
-                            Call d.AtPut(tempV, 1)
+                            d(tempV) = 1
                         End If
                     End If
                 Next i
 
                 'quien quedo con mas votos, y cuantos tuvieron esos votos?
-                ContarVotos = d.MayorValor(CantGanadores)
+                Dim maxVotes As Short = -1
+                Dim cantGan As Short = 0
+                Dim claveGanadora As String = vbNullString
 
-                'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-                d = Nothing
+                For Each kvp In d
+                    If kvp.Value > maxVotes Then
+                        maxVotes = kvp.Value
+                        cantGan = 1
+                        claveGanadora = kvp.Key
+                    ElseIf kvp.Value = maxVotes Then
+                        cantGan += 1
+                        claveGanadora = claveGanadora & "," & kvp.Key
+                    End If
+                Next
+                CantGanadores = cantGan
+                ContarVotos = claveGanadora
             End If
-
 
         Catch ex As Exception
             Console.WriteLine("Error in CambiarAlineacion: " & ex.Message)
             LogError(("clsClan.Contarvotos: " & Err.Description))
-            'UPGRADE_NOTE: El objeto d no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            If Not d Is Nothing Then d = Nothing
             ContarVotos = vbNullString
         End Try
     End Function

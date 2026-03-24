@@ -18,7 +18,7 @@
 | ✅ 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | **COMPLETADO** (0 instancias restantes) |
 | ✅ 4 | Reemplazar `UBound()` / `LBound()` | **COMPLETADO** (58 → 0) |
 | ✅ 5 | Modernizar File I/O (lectura texto/binario + logging + escritura) | **COMPLETADO** |
-| ✅ 6 | Resolver `As Object` (late binding) | **COMPLETADO** (25 → 9) |
+| ✅ 6 | Resolver `As Object` (late binding) | **COMPLETADO** (25 → 5, eliminada clase diccionario) |
 | 🔲 7 | Activar `Option Strict On` archivo por archivo | Pendiente |
 | 🔲 8 | Expandir `With` statements manualmente | Pendiente |
 
@@ -375,7 +375,7 @@ Revisar cada `Dim x As Object` y determinar el tipo real.
 
 ### Análisis de instancias
 
-**Corregidas (16):**
+**Corregidas (20):**
 
 | Archivo | Variable/Param | Antes | Después | Razón |
 |---------|---------------|-------|---------|-------|
@@ -395,16 +395,23 @@ Revisar cada `Dim x As Object` y determinar el tipo real.
 | wskapiAO.vb:113 | `Winsock_Close` (return) | Function As Object → Sub | — | Solo `Return Nothing` |
 | clsClan.vb:565 | `Votante` (param) | Object | String | Callers pasan UserList().Name |
 | PathFinding.vb:19 | `Limites` (return) | Object | Boolean | Retorna expresión booleana |
+| clsdicc.vb | `def`, `elem`, `At()` | Object | — | Archivo eliminado, reemplazado por `Dictionary(Of String, Short)` |
+| clsClan.vb:576 | `voteCount` | Object | Short | Eliminado junto con diccionario |
 
-**Mantenidas como `As Object` (7):**
+**Mantenidas como `As Object` (5):**
 - `GameLoop.vb:37,42` + `SocketManager.vb:93` — Event handlers (`sender As Object` es el patrón .NET)
-- `clsByteQueue.vb:54,72` — Serialización polimórfica con `TypeOf`/`GetType`
-- `clsdicc.vb:13,49,82` — Diccionario genérico que almacena cualquier tipo
+- `clsByteQueue.vb:54,72` — Serialización polimórfica con `TypeOf`/`GetType` (`ByteArrayToType` es dead code; `TypeToByteArray` usado por 4 Write methods)
+
+### Optimización adicional: Eliminación de `diccionario` (clsdicc.vb)
+
+La clase `diccionario` (138 líneas) era un wrapper VB6 con solo 1 caller (`clsClan.ContarVotos`). Reemplazada por `Dictionary(Of String, Short)` nativo de .NET con `StringComparer.OrdinalIgnoreCase` para preservar el comportamiento de keys case-insensitive.
 
 ### Progreso
 
 | Archivo | Estado |
 |---------|--------|
+| clsdicc.vb | ✅ **Eliminado** (reemplazado por Dictionary(Of String, Short)) |
+| clsClan.vb | ✅ (2 corr. + reescrito ContarVotos) |
 | Protocol.vb | ✅ (3 corr.) |
 | praetorians.vb | ✅ (4 corr.) |
 | MODULO_NPCs.vb | ✅ (1 corr.) |
@@ -413,11 +420,9 @@ Revisar cada `Dim x As Object` y determinar el tipo real.
 | FileIO.vb | ✅ (1 corr.) |
 | GameLogic.vb | ✅ (1 corr.) |
 | wskapiAO.vb | ✅ (1 corr.) |
-| clsClan.vb | ✅ (1 corr.) |
 | mdParty.vb | ✅ (1 corr.) |
 | PathFinding.vb | ✅ (1 corr.) |
-| clsByteQueue.vb | ✅ (mantiene Object, correcto) |
-| clsdicc.vb | ✅ (mantiene Object, correcto) |
+| clsByteQueue.vb | ✅ (mantiene Object, serialización polimórfica) |
 | GameLoop.vb | ✅ (mantiene Object, event handlers) |
 | SocketManager.vb | ✅ (mantiene Object, event handler) |
 
@@ -590,4 +595,4 @@ dotnet run --project Server
 
 ---
 
-*Última actualización: 2026-03-24 — Etapa 6 COMPLETADA (As Object: 25 → 9, 16 corregidas)*
+*Última actualización: 2026-03-24 — Etapa 6 COMPLETADA (As Object: 25 → 5, 20 corregidas, clase diccionario eliminada)*
