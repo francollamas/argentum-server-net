@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module AI
     Public Enum TipoAI
@@ -47,7 +47,7 @@ Module AI
         '12/01/2010: ZaMa - Los npcs no atacan druidas mimetizados con npcs
         '***************************************************
         Dim nPos As WorldPos
-        Dim headingloop As Byte
+        Dim headingloop As eHeading
         Dim UI As Short
         Dim UserProtected As Boolean
 
@@ -126,7 +126,7 @@ Module AI
         '12/01/2010: ZaMa - Los npcs no atacan druidas mimetizados con npcs
         '**************************************************************
         Dim nPos As WorldPos
-        Dim headingloop As Byte
+        Dim headingloop As eHeading
         Dim UI As Short
         Dim NPCI As Short
         Dim atacoPJ As Boolean
@@ -159,9 +159,9 @@ Module AI
                                 End If
 
                                 If atacoPJ Then
-                                    If .flags.LanzaSpells Then
-                                        If .flags.AtacaDoble Then
-                                            If (RandomNumber(0, 1)) Then
+                                    If .flags.LanzaSpells <> 0 Then
+                                        If .flags.AtacaDoble <> 0 Then
+                                            If (RandomNumber(0, 1)) <> 0 Then
                                                 If NpcAtacaUser(NpcIndex, UI) Then
                                                     Call _
                                                         ChangeNPCChar(NpcIndex, .Char_Renamed.body, .Char_Renamed.Head,
@@ -284,7 +284,7 @@ Module AI
                 End Select
 
                 For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
+                    UserIndex = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                     'Is it in it's range of vision??
                     If _
@@ -340,7 +340,7 @@ Module AI
 
                 ' No le pertenece a nadie o el dueño no esta en el rango de vision, sigue a cualquiera
                 For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
+                    UserIndex = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                     'Is it in it's range of vision??
                     If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
@@ -423,7 +423,7 @@ Module AI
                 End Select
 
                 For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                    UI = ConnGroups(.Pos.Map).UserEntrys(i)
+                    UI = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                     'Is it in it's range of vision??
                     If _
@@ -472,7 +472,7 @@ Module AI
                 Next i
             Else
                 For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                    UI = ConnGroups(.Pos.Map).UserEntrys(i)
+                    UI = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                     'Is it in it's range of vision??
                     If Math.Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_X Then
@@ -550,7 +550,7 @@ Module AI
 
         With Npclist(NpcIndex)
             For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
+                UserIndex = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                 'Is it in it's range of vision??
                 If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
@@ -621,7 +621,7 @@ Module AI
                 End Select
 
                 For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
+                    UserIndex = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                     'Is it in it's range of vision??
                     If _
@@ -656,7 +656,7 @@ Module AI
                 Next i
             Else
                 For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                    UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
+                    UserIndex = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                     'Is it in it's range of vision??
                     If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
@@ -762,8 +762,8 @@ Module AI
                         SignoNS = 0
                 End Select
 
-                For Y = .Pos.Y To .Pos.Y + SignoNS*RANGO_VISION_Y Step IIf(SignoNS = 0, 1, SignoNS)
-                    For X = .Pos.X To .Pos.X + SignoEO*RANGO_VISION_X Step IIf(SignoEO = 0, 1, SignoEO)
+                For Y = .Pos.Y To .Pos.Y + SignoNS*RANGO_VISION_Y Step If(SignoNS = 0, 1, SignoNS)
+                    For X = .Pos.X To .Pos.X + SignoEO*RANGO_VISION_X Step If(SignoEO = 0, 1, SignoEO)
                         If X >= MinXBorder And X <= MaxXBorder And Y >= MinYBorder And Y <= MaxYBorder Then
                             NI = MapData(.Pos.Map, X, Y).NpcIndex
                             If NI > 0 Then
@@ -845,7 +845,7 @@ Module AI
 
         With Npclist(NpcIndex)
             For i = 1 To ConnGroups(.Pos.Map).CountEntrys
-                UserIndex = ConnGroups(.Pos.Map).UserEntrys(i)
+                UserIndex = Convert.ToInt16(ConnGroups(.Pos.Map).UserEntrys(i))
 
                 'Is it in it's range of vision??
                 If Math.Abs(UserList(UserIndex).Pos.X - .Pos.X) <= RANGO_VISION_X Then
@@ -893,9 +893,9 @@ Module AI
                         Call GuardiasAI(NpcIndex, False)
                     ElseIf .NPCtype = eNPCType.Guardiascaos Then
                         Call GuardiasAI(NpcIndex, True)
-                    ElseIf .Hostile And .Stats.Alineacion <> 0 Then
+                    ElseIf .Hostile <> 0 AndAlso .Stats.Alineacion <> 0 Then
                         Call HostilMalvadoAI(NpcIndex)
-                    ElseIf .Hostile And .Stats.Alineacion = 0 Then
+                    ElseIf .Hostile <> 0 AndAlso .Stats.Alineacion = 0 Then
                         Call HostilBuenoAI(NpcIndex)
                     End If
                 Else
@@ -971,7 +971,7 @@ Module AI
                                 'Move randomly
                                 Call _
                                     MoveNPCChar(NpcIndex,
-                                                RandomNumber(eHeading.NORTH, eHeading.WEST))
+                                                Convert.ToByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                             End If
                         Else
                             If Not PathEnd(NpcIndex) Then
@@ -1058,7 +1058,7 @@ Module AI
 
             MoveNPCChar(NpcIndex, tHeading)
 
-            .PFINFO.CurPos = .PFINFO.CurPos + 1
+            .PFINFO.CurPos = Convert.ToInt16(.PFINFO.CurPos + 1)
         End With
     End Function
 
@@ -1116,7 +1116,7 @@ Module AI
         End With
 
         Dim k As Short
-        k = RandomNumber(1, Npclist(NpcIndex).flags.LanzaSpells)
+        k = Convert.ToInt16(RandomNumber(1, Npclist(NpcIndex).flags.LanzaSpells))
         Call NpcLanzaSpellSobreUser(NpcIndex, UserIndex, Npclist(NpcIndex).Spells(k))
     End Sub
 
@@ -1128,7 +1128,7 @@ Module AI
         '***************************************************
 
         Dim k As Short
-        k = RandomNumber(1, Npclist(NpcIndex).flags.LanzaSpells)
+        k = Convert.ToInt16(RandomNumber(1, Npclist(NpcIndex).flags.LanzaSpells))
         Call NpcLanzaSpellSobreNpc(NpcIndex, TargetNPC, Npclist(NpcIndex).Spells(k))
     End Sub
 End Module
