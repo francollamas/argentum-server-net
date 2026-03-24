@@ -68,9 +68,9 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If UserList(LoopC).ConnID <> - 1 Then
                             If _
-                                UserList(LoopC).flags.Privilegios And
+                                (UserList(LoopC).flags.Privilegios And
                                 (PlayerType.Admin Or PlayerType.Dios Or
-                                 PlayerType.SemiDios Or PlayerType.Consejero) Then
+                                 PlayerType.SemiDios Or PlayerType.Consejero)) <> 0 Then
                                 Call EnviarDatosASlot(LoopC, sndData)
                             End If
                         End If
@@ -161,7 +161,7 @@ Module modSendData
                 Case SendTarget.ToConsejo
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If UserList(LoopC).flags.Privilegios And PlayerType.RoyalCouncil Then
+                            If (UserList(LoopC).flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then
                                 Call EnviarDatosASlot(LoopC, sndData)
                             End If
                         End If
@@ -171,7 +171,7 @@ Module modSendData
                 Case SendTarget.ToConsejoCaos
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If UserList(LoopC).flags.Privilegios And PlayerType.ChaosCouncil Then
+                            If (UserList(LoopC).flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then
                                 Call EnviarDatosASlot(LoopC, sndData)
                             End If
                         End If
@@ -181,7 +181,7 @@ Module modSendData
                 Case SendTarget.ToRolesMasters
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster Then
+                            If (UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
                                 Call EnviarDatosASlot(LoopC, sndData)
                             End If
                         End If
@@ -280,8 +280,8 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If UserList(LoopC).ConnID <> - 1 Then
                             If _
-                                UserList(LoopC).flags.Privilegios And
-                                (PlayerType.Admin Or PlayerType.Dios) Then
+                                (UserList(LoopC).flags.Privilegios And
+                                (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                                 Call EnviarDatosASlot(LoopC, sndData)
                             End If
                         End If
@@ -402,9 +402,9 @@ Module modSendData
                     If _
                         UserList(tempIndex).ConnIDValida = True And
                         (UserList(tempIndex).flags.Muerto = 1 Or
-                         (UserList(tempIndex).flags.Privilegios And
+                         ((UserList(tempIndex).flags.Privilegios And
                           (PlayerType.Admin Or PlayerType.Dios Or
-                           PlayerType.SemiDios Or PlayerType.Consejero)) <> 0) Then
+                           PlayerType.SemiDios Or PlayerType.Consejero)) <> 0)) Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
                 End If
@@ -441,8 +441,8 @@ Module modSendData
                     If _
                         UserList(tempIndex).ConnIDValida And
                         (UserList(tempIndex).GuildIndex = UserList(UserIndex).GuildIndex Or
-                         ((UserList(tempIndex).flags.Privilegios And PlayerType.Dios) And
-                          (UserList(tempIndex).flags.Privilegios And PlayerType.RoleMaster) = 0)) Then
+                         (((UserList(tempIndex).flags.Privilegios And PlayerType.Dios) <> 0) And
+                          ((UserList(tempIndex).flags.Privilegios And PlayerType.RoleMaster) = 0))) Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
                 End If
@@ -512,9 +512,9 @@ Module modSendData
                 If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
                     If UserList(tempIndex).ConnIDValida Then
                         If _
-                            UserList(tempIndex).flags.Privilegios And
+                            (UserList(tempIndex).flags.Privilegios And
                             (PlayerType.SemiDios Or PlayerType.Dios Or
-                             PlayerType.Admin) Then Call EnviarDatosASlot(tempIndex, sdData)
+                             PlayerType.Admin)) <> 0 Then Call EnviarDatosASlot(tempIndex, sdData)
                     End If
                 End If
             End If
@@ -658,9 +658,9 @@ Module modSendData
                         If .ConnIDValida Then
                             ' Exclusivo para dioses, admins y gms
                             If _
-                                (.flags.Privilegios And Not PlayerType.User And
-                                 Not PlayerType.Consejero And Not PlayerType.RoleMaster) =
-                                .flags.Privilegios Then
+                                ((.flags.Privilegios And Not PlayerType.User And
+                                 Not PlayerType.Consejero And Not PlayerType.RoleMaster) <>
+                                0) And (.flags.Privilegios <> 0) Then
                                 Call EnviarDatosASlot(tempIndex, sdData)
                             End If
                         End If
@@ -695,7 +695,7 @@ Module modSendData
             If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
                 If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
                     If UserList(tempIndex).ConnIDValida Then
-                        If UserList(tempIndex).flags.Privilegios And PlayerType.User Then
+                        If (UserList(tempIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                             Call EnviarDatosASlot(tempIndex, sdData)
                         End If
                     End If
@@ -730,9 +730,9 @@ Module modSendData
                 If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
                     If UserList(tempIndex).ConnIDValida Then
                         If _
-                            UserList(tempIndex).flags.Privilegios And
+                            (UserList(tempIndex).flags.Privilegios And
                             (PlayerType.User Or PlayerType.Consejero Or
-                             PlayerType.RoleMaster) Then
+                             PlayerType.RoleMaster)) <> 0 Then
                             Call EnviarDatosASlot(tempIndex, sdData)
                         End If
                     End If
