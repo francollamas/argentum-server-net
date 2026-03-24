@@ -17,7 +17,7 @@
 | ✅ 2 | Reemplazar funciones string VB6 (`Left`, `Right`, `Mid`, `Len`, `InStr`, etc.) | **COMPLETADO** (0 instancias restantes) |
 | ✅ 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | **COMPLETADO** (0 instancias restantes) |
 | ✅ 4 | Reemplazar `UBound()` / `LBound()` | **COMPLETADO** (58 → 0) |
-| 🔲 5 | Modernizar File I/O (`FileOpen`, `Line Input`, `Print #`) | Pendiente |
+| ✅ 5 | Modernizar File I/O (lectura texto/binario + logging + escritura) | **COMPLETADO** |
 | 🔲 6 | Resolver `As Object` (late binding) | Pendiente |
 | 🔲 7 | Activar `Option Strict On` archivo por archivo | Pendiente |
 | 🔲 8 | Expandir `With` statements manualmente | Pendiente |
@@ -183,44 +183,189 @@ Para arrays de tipo List(Of T), usar `.Count - 1` en vez de `.Length - 1`.
 
 ---
 
-## Etapa 5: File I/O moderno — ~97 instancias
+## Etapa 5: File I/O moderno — 48 bloques
 
-### Archivos afectados principales
-- `FileIO.vb` — 2,374 líneas, marcado como "lento e ineficiente" en TODOs
-- `TCP.vb` — 3 usos FileOpen
-- `modForum.vb` — 4 usos
-- `Statistics.vb` — 3 usos
+### Reglas para GetVar / WriteVar
 
-### Reemplazos
+- **GetVar** (FileIO.vb:1202-1248): **NO cambiar la lógica de parseo INI**. Solo modernizar el I/O interno: `FreeFile`/`FileOpen`/`LineInput`/`EOF`/`FileClose` → `StreamReader` con `Using`. El algoritmo de escaneo línea por línea se preserva exactamente.
+- **WriteVar** (FileIO.vb:1503-1621): **Ya usa I/O moderno** (`File.ReadAllText` + `File.WriteAllText`). Nada que tocar.
+- Si `GetVar` y `WriteVar` son llamados desde otros archivos, la interfaz pública **no cambia** — los callers no necesitan modificar nada.
 
-| VB6/Legacy | .NET moderno |
-|-----------|-------------|
-| `FileOpen(n, path, OpenMode.Input)` | `Dim reader = New StreamReader(path)` |
-| `FileOpen(n, path, OpenMode.Output)` | `Dim writer = New StreamWriter(path)` |
-| `FileOpen(n, path, OpenMode.Append)` | `Dim writer = New StreamWriter(path, append:=True)` |
-| `Line Input #n, s` | `s = reader.ReadLine()` |
-| `Print #n, s` | `writer.WriteLine(s)` |
-| `FileClose(n)` | `reader.Close()` / `writer.Close()` (o `Using`) |
-| `EOF(n)` | `reader.EndOfStream` |
+### Sub-etapas
 
-**Preferir `Using` blocks** para garantizar dispose:
+#### 5A: Helper de logging + 34 bloques de Append
+
+Crear `AppendLog(relativePath, message)` en un módulo compartido. Reemplaza los 34 bloques idénticos de `FreeFile`→`FileOpen(Append)`→`PrintLine`→`FileClose` por una sola línea.
+
 ```vb
-Using reader As New StreamReader(path)
+' Helper:
+Public Sub AppendLog(relativePath As String, message As String)
+    Dim fullPath = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath)
+    IO.File.AppendAllText(fullPath, message & Environment.NewLine)
+End Sub
+
+' Uso:
+' ANTES (6 líneas por bloque):
+Dim nfile As Short
+nfile = FreeFile()
+FileOpen(nfile, path, OpenMode.Append, , OpenShare.Shared)
+PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
+FileClose(nfile)
+
+' DESPUÉS (1 línea):
+AppendLog("logs/Eventos.log", Today & " " & TimeOfDay & " " & desc)
+```
+
+**Archivos afectados:**
+
+| Archivo | Bloques | Funciones |
+|---------|---------|-----------|
+| General.vb | 18 | LogCriticEvent, LogEjercitoReal, LogEjercitoCaos, LogIndex, LogError, LogStatic, LogTarea, LogClanes, LogIP, LogDesarrollo, LogGM, LogAsesinato, logVentaCasa, LogHackAttemp, LogCheating, LogCriticalHackAttemp, LogAntiCheat, RecargarServidor |
+| FileIO.vb | 4 | CargarBackUp, LogBanFromIndex, LogBanFromName, Ban |
+| Protocol.vb | 2 | HandleBugReport, HandleShutdown |
+| TCP.vb | 2 | ConnectUser, CloseUser |
+| ConsultasPopulares.vb | 1 | MarcarMailComoQueYaVoto |
+| modCentinela.vb | 1 | LogCentinela |
+| GameLoop.vb | 2 | TickAutoSave, CloseServer |
+
+**Nota**: `logVentaCasa`, `LogHackAttemp` y `LogCriticalHackAttemp` escriben 3 líneas (separador + mensaje + separador). Se adaptan fácilmente a 3 llamadas a `AppendLog`.
+
+#### 5B: GetVar — modernizar I/O interno (sin cambiar lógica)
+
+Reemplazar solo las llamadas a I/O legacy dentro de GetVar, sin cambiar el algoritmo de parseo INI:
+
+```vb
+' ANTES:
+fileNumber = FreeFile()
+FileOpen(fileNumber, filePath, OpenMode.Input)
+While Not EOF(fileNumber)
+    currentLine = LineInput(fileNumber)
+    ' ... parseo ...
+End While
+FileClose(fileNumber)
+
+' DESPUÉS:
+Using reader As New IO.StreamReader(filePath)
     While Not reader.EndOfStream
-        Dim line = reader.ReadLine()
-        ' ...
+        currentLine = reader.ReadLine()
+        ' ... mismo parseo ...
     End While
 End Using
 ```
 
+Esto elimina `FreeFile`, `FileOpen`, `EOF`, `LineInput`, `FileClose`. Los 334+ callers no cambian.
+
+#### 5C: clsIniReader.Leer — modernizar I/O interno
+
+Mismo patrón que GetVar. El método `Initialize` (clsIniReader.vb:134-188) usa el mismo patrón legacy:
+
+```vb
+' ANTES:
+handle = FreeFile
+FileOpen(handle, file, OpenMode.Input)
+Do Until EOF(handle)
+    Text = LineInput(handle)
+    ' ... parseo ...
+Loop
+FileClose(handle)
+
+' DESPUÉS:
+Using reader As New IO.StreamReader(file)
+    Do Until reader.EndOfStream
+        Text = reader.ReadLine()
+        ' ... mismo parseo ...
+    Loop
+End Using
+```
+
+#### 5D: Lectura de texto — 6 bloques restantes
+
+| # | Archivo | Función | Líneas | Reemplazo |
+|---|---------|---------|--------|-----------|
+| 1 | FileIO.vb | `TxtDimension` | 152-171 | `IO.File.ReadAllLines(path).Length` |
+| 2 | FileIO.vb | `CargarForbidenWords` | 173-191 | `IO.File.ReadAllLines(path)` |
+| 3 | Admin.vb | `BanIpCargar` | 408-433 | `IO.File.ReadAllLines(path)` + loop |
+| 4 | ConsultasPopulares.vb | `MailYaVoto` | 135-155 | `IO.File.ReadLines(path)` + LINQ `.Any()` |
+| 5 | modForum.vb | `CargarForo` (posts) | 64-77 | `IO.StreamReader` + 3× `ReadLine()` (reemplaza `Input()`) |
+| 6 | modForum.vb | `CargarForo` (anuncios) | 80-94 | `IO.StreamReader` + 3× `ReadLine()` (reemplaza `Input()`) |
+
+**Nota sobre `Input()` en modForum.vb**: `Input(fileNum, var)` de VB6 lee campos en formato VB (delimitados por `"`). Los archivos `.for` tienen 3 líneas simples (título, autor, post). Se reemplaza con 3 `ReadLine()` directos.
+
+#### 5E: Escritura de texto — 6 bloques
+
+| # | Archivo | Función | Líneas | Reemplazo |
+|---|---------|---------|--------|-----------|
+| 1 | Admin.vb | `BanIpSave` | 386-405 | `IO.File.WriteAllLines(path, list)` |
+| 2 | Statistics.vb | `DumpStatistics` (frags) | 202-502 | `IO.StreamWriter` con `Using` |
+| 3 | Statistics.vb | `DumpStatistics` (huffman) | 505-526 | `IO.StreamWriter` con `Using` |
+| 4 | TCP.vb | `ConnectUser` (numusers) | 1099-1102 | `IO.File.WriteAllText(path, value)` |
+| 5 | modForum.vb | `SaveForum` (posts) | 194-206 | `IO.StreamWriter` con `Using` |
+| 6 | modForum.vb | `SaveForum` (anuncios) | 210-223 | `IO.StreamWriter` con `Using` |
+
+#### 5F: Escritura binaria — GrabarMapa (1 bloque)
+
+FileIO.vb:401-530. Convertir `FilePut` → `BinaryWriter`:
+
+```vb
+' ANTES:
+FreeFileMap = FreeFile
+FileOpen(FreeFileMap, MAPFILE & ".Map", OpenMode.Binary)
+Seek(FreeFileMap, 1)
+FilePut(FreeFileMap, MapInfo_Renamed(Map).MapVersion)
+' ...
+
+' DESPUÉS:
+Using fs As New IO.FileStream(MAPFILE & ".Map", IO.FileMode.Create)
+    Using writer As New IO.BinaryWriter(fs)
+        writer.Write(MapInfo_Renamed(Map).MapVersion)  ' Int16
+        writer.Seek(264, IO.SeekOrigin.Begin)           ' skip 263 bytes + 1
+        ' ...
+    End Using
+End Using
+```
+
+**Cuidado**: `Seek(FreeFileMap, 1)` en VB6 es **1-based** (posición byte 1 = offset 0 en .NET). `Seek(handle, Seek(handle) + 263)` salta 263 bytes desde la posición actual.
+
+### Tabla de reemplazos completa
+
+| VB6/Legacy | .NET moderno | Uso |
+|-----------|-------------|-----|
+| `FreeFile()` | *(eliminado, no necesario)* | Handle management |
+| `FileOpen(n, path, OpenMode.Input)` | `Using reader As New IO.StreamReader(path)` | Lectura texto |
+| `FileOpen(n, path, OpenMode.Output)` | `Using writer As New IO.StreamWriter(path)` | Escritura texto |
+| `FileOpen(n, path, OpenMode.Append)` | `IO.File.AppendAllText(path, line & vbCrLf)` | Logs |
+| `FileOpen(n, path, OpenMode.Binary)` | `Using fs As New IO.FileStream(...)` + `BinaryWriter` | Binario |
+| `LineInput(n)` | `reader.ReadLine()` | Lectura línea |
+| `Input(n, var)` | `reader.ReadLine()` (parseo manual) | Lectura VB6 format |
+| `PrintLine(n, s)` | `writer.WriteLine(s)` | Escritura línea |
+| `FileClose(n)` | `End Using` (dispose automático) | Cierre |
+| `EOF(n)` | `reader.EndOfStream` | Fin de archivo |
+| `FilePut(n, val)` | `writer.Write(val)` | Escritura binaria |
+| `Seek(n, pos)` | `fs.Seek(offset, SeekOrigin)` | Posición binaria |
+
+### Orden de ejecución
+
+1. **5A** — Helper logging + bloques Append (más fácil, mayor impacto en líneas eliminadas)
+2. **5B** — GetVar I/O interno
+3. **5C** — clsIniReader I/O interno
+4. **5D** — Bloques de lectura de texto restantes
+5. **5E** — Bloques de escritura de texto restantes
+6. **5F** — GrabarMapa binario
+
+### Verificación
+
+`dotnet build` después de cada sub-etapa. `dotnet run --project Server` después de 5A y 5F.
+
 ### Progreso
 
-| Archivo | Estado |
-|---------|--------|
-| modForum.vb | 🔲 |
-| Statistics.vb | 🔲 |
-| TCP.vb | 🔲 |
-| FileIO.vb | 🔲 |
+| Sub-etapa | Archivos | Bloques | Estado |
+|-----------|----------|---------|--------|
+| 5A | General.vb, FileIO.vb, Protocol.vb, TCP.vb, ConsultasPopulares.vb, modCentinela.vb, GameLoop.vb, Statistics.vb | 35 | ✅ |
+| 5B | FileIO.vb (GetVar) | 1 | ✅ |
+| 5C | clsIniReader.vb | 1 | ✅ |
+| 5D | FileIO.vb, Admin.vb, ConsultasPopulares.vb, modForum.vb | 6 | ✅ |
+| 5E | Admin.vb, Statistics.vb, TCP.vb, modForum.vb, GameLoop.vb | 6 | ✅ |
+| 5F | FileIO.vb (GrabarMapa) | 1 | ✅ |
 
 ---
 
@@ -401,8 +546,8 @@ dotnet run --project Server
 | Funciones string VB6 (`Left/Right/Mid/Len/InStr`) | ~137 usos |
 | `UBound/LBound` | 0 usos |
 | `As Object` (late binding) | 31 usos |
-| File I/O legacy | ~97 usos |
+| File I/O legacy | 48 bloques (FileOpen→FileClose): 34 append, 8 input, 6 output, 2 binary + 151 PrintLine + 6 LineInput + 6 Input + 15 Kill + 2 Dir |
 
 ---
 
-*Última actualización: 2026-03-24 — Etapa 4 completada (UBound/LBound → 0)*
+*Última actualización: 2026-03-24 — Etapa 5 COMPLETADA (File I/O: 48 bloques, 6 sub-etapas)*

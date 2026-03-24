@@ -529,11 +529,7 @@ Module GameLoop
             Call CheckIdleUser()
 
             '<<<<<-------- Log the number of users online ------>>>
-            Dim N As Short
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output, , OpenShare.Shared)
-            PrintLine(N, NumUsers)
-            FileClose(N)
+            IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", NumUsers.ToString() & Environment.NewLine)
             '<<<<<-------- Log the number of users online ------>>>
 
 
@@ -701,11 +697,7 @@ Module GameLoop
             Next
 
             'Log
-            Dim N As Short
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
-            FileClose(N)
+            AppendLog("logs/Main.log", Today & " " & TimeOfDay & " server cerrado.")
 
             running = False
 

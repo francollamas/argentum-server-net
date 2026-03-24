@@ -150,44 +150,15 @@ Module ES
 
 
     Public Function TxtDimension(name As String) As Integer
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Dim N As Short
-        Dim cad As String
-        Dim Tam As Integer
-        N = FreeFile()
-        FileOpen(N, name, OpenMode.Input)
-        Tam = 0
-        Do While Not EOF(N)
-            Tam = Tam + 1
-            cad = LineInput(N)
-        Loop
-        FileClose(N)
-        TxtDimension = Tam
+        Return IO.File.ReadAllLines(name).Length
     End Function
 
     Public Sub CargarForbidenWords()
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        'UPGRADE_WARNING: El límite inferior de la matriz ForbidenNames ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-        ReDim ForbidenNames(TxtDimension(DatPath & "NombresInvalidos.txt"))
-        Dim N, i As Short
-        N = FreeFile()
-        FileOpen(N, DatPath & "NombresInvalidos.txt", OpenMode.Input)
-
-        For i = 1 To ForbidenNames.Length - 1
-            ForbidenNames(i) = LineInput(N)
+        Dim lines = IO.File.ReadAllLines(DatPath & "NombresInvalidos.txt")
+        ReDim ForbidenNames(lines.Length)
+        For i As Short = 0 To lines.Length - 1
+            ForbidenNames(i + 1) = lines(i)
         Next i
-
-        FileClose(N)
     End Sub
 
     Public Sub CargarHechizos()
@@ -385,149 +356,92 @@ Module ES
         haciendoBK = False
 
         'Log
-        Try
-            Dim nfile As Short
-            nfile = FreeFile ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/BackUps.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in CargarSpawnList: " & ex.Message)
-        End Try
+        AppendLog("logs/BackUps.log", Today & " " & TimeOfDay)
     End Sub
 
     Public Sub GrabarMapa(Map As Integer, MAPFILE As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
         Try
-            Dim FreeFileMap As Integer
-            Dim FreeFileInf As Integer
             Dim Y As Integer
             Dim X As Integer
             Dim ByFlags As Byte
             Dim TempInt As Short
             Dim LoopC As Integer
 
-            If FileExist(MAPFILE & ".map") Then
-                Kill(MAPFILE & ".map")
-            End If
+            'Write .map and .inf files using BinaryWriter
+            Using fsMap As New IO.FileStream(MAPFILE & ".Map", IO.FileMode.Create),
+                  writerMap As New IO.BinaryWriter(fsMap),
+                  fsInf As New IO.FileStream(MAPFILE & ".Inf", IO.FileMode.Create),
+                  writerInf As New IO.BinaryWriter(fsInf)
 
-            If FileExist(MAPFILE & ".inf") Then
-                Kill(MAPFILE & ".inf")
-            End If
+                'map Header
+                writerMap.Write(MapInfo_Renamed(Map).MapVersion) ' Int16
+                ' Skip 263 bytes from current position (padding)
+                fsMap.Position = fsMap.Position + 263
+                writerMap.Write(TempInt)
+                writerMap.Write(TempInt)
+                writerMap.Write(TempInt)
+                writerMap.Write(TempInt)
 
-            'Open .map file
-            FreeFileMap = FreeFile
-            FileOpen(FreeFileMap, MAPFILE & ".Map", OpenMode.Binary)
-            Seek(FreeFileMap, 1)
+                'inf Header
+                writerInf.Write(TempInt)
+                writerInf.Write(TempInt)
+                writerInf.Write(TempInt)
+                writerInf.Write(TempInt)
+                writerInf.Write(TempInt)
 
-            'Open .inf file
-            FreeFileInf = FreeFile
-            FileOpen(FreeFileInf, MAPFILE & ".Inf", OpenMode.Binary)
-            Seek(FreeFileInf, 1)
-            'map Header
+                'Write tile data
+                For Y = YMinMapSize To YMaxMapSize
+                    For X = XMinMapSize To XMaxMapSize
+                        With MapData(Map, X, Y)
+                            ByFlags = 0
 
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileMap, MapInfo_Renamed(Map).MapVersion)
-            Seek(FreeFileMap, Seek(FreeFileMap) + 263)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileMap, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileMap, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileMap, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileMap, TempInt)
+                            If .Blocked Then ByFlags = ByFlags Or 1
+                            If .Graphic(2) Then ByFlags = ByFlags Or 2
+                            If .Graphic(3) Then ByFlags = ByFlags Or 4
+                            If .Graphic(4) Then ByFlags = ByFlags Or 8
+                            If .trigger Then ByFlags = ByFlags Or 16
 
-            'inf Header
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileInf, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileInf, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileInf, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileInf, TempInt)
-            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FilePut(FreeFileInf, TempInt)
+                            writerMap.Write(ByFlags)
+                            writerMap.Write(.Graphic(1))
 
-            'Write .map file
-            For Y = YMinMapSize To YMaxMapSize
-                For X = XMinMapSize To XMaxMapSize
-                    With MapData(Map, X, Y)
-                        ByFlags = 0
+                            For LoopC = 2 To 4
+                                If .Graphic(LoopC) Then writerMap.Write(.Graphic(LoopC))
+                            Next LoopC
 
-                        If .Blocked Then ByFlags = ByFlags Or 1
-                        If .Graphic(2) Then ByFlags = ByFlags Or 2
-                        If .Graphic(3) Then ByFlags = ByFlags Or 4
-                        If .Graphic(4) Then ByFlags = ByFlags Or 8
-                        If .trigger Then ByFlags = ByFlags Or 16
+                            If .trigger Then writerMap.Write(Convert.ToInt16(.trigger))
 
-                        'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FilePut(FreeFileMap, ByFlags)
+                            '.inf file
+                            ByFlags = 0
 
-                        'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FilePut(FreeFileMap, .Graphic(1))
-
-                        For LoopC = 2 To 4
-                            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                            If .Graphic(LoopC) Then FilePut(FreeFileMap, .Graphic(LoopC))
-                        Next LoopC
-
-                        'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        If .trigger Then FilePut(FreeFileMap, Convert.ToInt16(.trigger))
-
-                        '.inf file
-
-                        ByFlags = 0
-
-                        If .ObjInfo.ObjIndex > 0 Then
-                            If ObjData_Renamed(.ObjInfo.ObjIndex).OBJType = eOBJType.otFogata Then
-                                .ObjInfo.ObjIndex = 0
-                                .ObjInfo.Amount = 0
+                            If .ObjInfo.ObjIndex > 0 Then
+                                If ObjData_Renamed(.ObjInfo.ObjIndex).OBJType = eOBJType.otFogata Then
+                                    .ObjInfo.ObjIndex = 0
+                                    .ObjInfo.Amount = 0
+                                End If
                             End If
-                        End If
 
-                        If .TileExit.Map Then ByFlags = ByFlags Or 1
-                        If .NpcIndex Then ByFlags = ByFlags Or 2
-                        If .ObjInfo.ObjIndex Then ByFlags = ByFlags Or 4
+                            If .TileExit.Map Then ByFlags = ByFlags Or 1
+                            If .NpcIndex Then ByFlags = ByFlags Or 2
+                            If .ObjInfo.ObjIndex Then ByFlags = ByFlags Or 4
 
-                        'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        FilePut(FreeFileInf, ByFlags)
+                            writerInf.Write(ByFlags)
 
-                        If .TileExit.Map Then
-                            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                            FilePut(FreeFileInf, .TileExit.Map)
-                            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                            FilePut(FreeFileInf, .TileExit.X)
-                            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                            FilePut(FreeFileInf, .TileExit.Y)
-                        End If
+                            If .TileExit.Map Then
+                                writerInf.Write(.TileExit.Map)
+                                writerInf.Write(.TileExit.X)
+                                writerInf.Write(.TileExit.Y)
+                            End If
 
-                        'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        If .NpcIndex Then FilePut(FreeFileInf, Npclist(.NpcIndex).Numero)
+                            If .NpcIndex Then writerInf.Write(Npclist(.NpcIndex).Numero)
 
-                        If .ObjInfo.ObjIndex Then
-                            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                            FilePut(FreeFileInf, .ObjInfo.ObjIndex)
-                            'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                            FilePut(FreeFileInf, .ObjInfo.Amount)
-                        End If
-                    End With
-                Next X
-            Next Y
-
-            'Close .map file
-            FileClose(FreeFileMap)
-
-            'Close .inf file
-            FileClose(FreeFileInf)
+                            If .ObjInfo.ObjIndex Then
+                                writerInf.Write(.ObjInfo.ObjIndex)
+                                writerInf.Write(.ObjInfo.Amount)
+                            End If
+                        End With
+                    Next X
+                Next Y
+            End Using
 
             With MapInfo_Renamed(Map)
 
@@ -1201,7 +1115,6 @@ Module ES
     ' TODO MIGRA: funciona pero es lento e ineficiente
     Public Function GetVar(filePath As String, sectionName As String, keyName As String,
                            Optional ByRef EmptySpaces As Integer = 1024) As String
-        Dim fileNumber As Short
         Dim currentLine As String
         Dim currentSection As String
         Dim equalPos As Integer
@@ -1214,35 +1127,30 @@ Module ES
         End If
 
         Try
-            fileNumber = FreeFile()
-            FileOpen(fileNumber, filePath, OpenMode.Input)
+            Using reader As New IO.StreamReader(filePath)
+                currentSection = ""
+                While Not reader.EndOfStream
+                    currentLine = reader.ReadLine()
+                    currentLine = If(currentLine IsNot Nothing, currentLine.Trim(), "")
 
-            currentSection = ""
-            While Not EOF(fileNumber)
-                currentLine = LineInput(fileNumber)
-                currentLine = If(currentLine IsNot Nothing, currentLine.Trim(), "")
-
-                ' Check if it's a section line, e.g. [SECTION]
-                If currentLine.Length > 0 AndAlso currentLine.Substring(0, 1) = "[" And currentLine.Length > 0 AndAlso currentLine.Substring(currentLine.Length - 1, 1) = "]" Then
-                    currentSection = If(currentLine.Length > 2, currentLine.Substring(1, currentLine.Length - 2), "")
-                ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then
-                    ' We are in the correct section, check if line contains the key
-                    equalPos = If(currentLine IsNot Nothing, currentLine.IndexOf("=") + 1, 0)
-                    If equalPos > 1 Then
-                        ' Extract the key (left side of '=') and compare
-                        If StrComp(If(currentLine IsNot Nothing, currentLine.Substring(0, equalPos - 1).Trim(), ""), keyName, CompareMethod.Text) = 0 Then
-                            ' Return the value (right side of '='), trimmed
-                            Return If(currentLine IsNot Nothing, currentLine.Substring(equalPos).Trim(), "")
+                    ' Check if it's a section line, e.g. [SECTION]
+                    If currentLine.Length > 0 AndAlso currentLine.Substring(0, 1) = "[" And currentLine.Length > 0 AndAlso currentLine.Substring(currentLine.Length - 1, 1) = "]" Then
+                        currentSection = If(currentLine.Length > 2, currentLine.Substring(1, currentLine.Length - 2), "")
+                    ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then
+                        ' We are in the correct section, check if line contains the key
+                        equalPos = If(currentLine IsNot Nothing, currentLine.IndexOf("=") + 1, 0)
+                        If equalPos > 1 Then
+                            ' Extract the key (left side of '=') and compare
+                            If StrComp(If(currentLine IsNot Nothing, currentLine.Substring(0, equalPos - 1).Trim(), ""), keyName, CompareMethod.Text) = 0 Then
+                                ' Return the value (right side of '='), trimmed
+                                Return If(currentLine IsNot Nothing, currentLine.Substring(equalPos).Trim(), "")
+                            End If
                         End If
                     End If
-                End If
-            End While
+                End While
+            End Using
         Catch ex As Exception
             ' Podés loguear el error si querés
-        Finally
-            If fileNumber <> 0 Then
-                FileClose(fileNumber)
-            End If
         End Try
 
         Return GetVar
@@ -2082,12 +1990,7 @@ Module ES
                      "Reason", motivo)
 
         'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
-        Dim mifile As Short
-        mifile = FreeFile
-        FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "logs/GenteBanned.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(mifile, UserList(BannedIndex).name)
-        FileClose(mifile)
+        AppendLog("logs/GenteBanned.log", UserList(BannedIndex).name)
     End Sub
 
 
@@ -2104,12 +2007,7 @@ Module ES
         Call WriteVar(AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat", BannedName, "Reason", motivo)
 
         'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
-        Dim mifile As Short
-        mifile = FreeFile
-        FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "logs/GenteBanned.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(mifile, BannedName)
-        FileClose(mifile)
+        AppendLog("logs/GenteBanned.log", BannedName)
     End Sub
 
 
@@ -2126,12 +2024,7 @@ Module ES
 
 
         'Log interno del servidor, lo usa para hacer un UNBAN general de toda la gente banned
-        Dim mifile As Short
-        mifile = FreeFile
-        FileOpen(mifile, AppDomain.CurrentDomain.BaseDirectory & "logs/GenteBanned.log", OpenMode.Append, ,
-                 OpenShare.Shared)
-        PrintLine(mifile, BannedName)
-        FileClose(mifile)
+        AppendLog("logs/GenteBanned.log", BannedName)
     End Sub
 
     Public Sub CargaApuestas()

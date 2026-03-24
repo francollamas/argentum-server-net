@@ -383,54 +383,26 @@ Module Admin
     End Function
 
     Public Sub BanIpGuardar()
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
+        Dim ArchivoBanIp As String = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
+        Dim lines As New List(Of String)
 
-        Dim ArchivoBanIp As String
-        Dim ArchN As Integer
-        Dim LoopC As Integer
-
-        ArchivoBanIp = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
-
-        ArchN = FreeFile
-        FileOpen(ArchN, ArchivoBanIp, OpenMode.Output)
-
-        For LoopC = 1 To BanIps.Count()
-            PrintLine(ArchN, BanIps.Item(LoopC))
+        For LoopC As Integer = 1 To BanIps.Count()
+            lines.Add(BanIps.Item(LoopC))
         Next LoopC
 
-        FileClose(ArchN)
+        IO.File.WriteAllLines(ArchivoBanIp, lines)
     End Sub
 
     Public Sub BanIpCargar()
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Dim ArchN As Integer
-        Dim Tmp As String
-        Dim ArchivoBanIp As String
-
-        ArchivoBanIp = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
+        Dim ArchivoBanIp As String = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
 
         Do While BanIps.Count() > 0
             BanIps.Remove(1)
         Loop
 
-        ArchN = FreeFile
-        FileOpen(ArchN, ArchivoBanIp, OpenMode.Input)
-
-        Do While Not EOF(ArchN)
-            Tmp = LineInput(ArchN)
-            BanIps.Add(Tmp)
-        Loop
-
-        FileClose(ArchN)
+        For Each line As String In IO.File.ReadAllLines(ArchivoBanIp)
+            BanIps.Add(line)
+        Next
     End Sub
 
     Public Sub ActualizaEstadisticasWeb()

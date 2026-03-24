@@ -3,6 +3,18 @@ Option Explicit On
 Public Module General
     Friend LeerNPCs As New clsIniReader
 
+    ''' <summary>
+    ''' Appends a line to a log file. Creates the file if it doesn't exist.
+    ''' </summary>
+    Public Sub AppendLog(relativePath As String, message As String)
+        Try
+            Dim fullPath = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath)
+            IO.File.AppendAllText(fullPath, message & Environment.NewLine)
+        Catch ex As Exception
+            Console.WriteLine("Error in AppendLog (" & relativePath & "): " & ex.Message)
+        End Try
+    End Sub
+
     Sub DarCuerpoDesnudo(UserIndex As Short, Optional ByVal Mimetizado As Boolean = False)
         '***************************************************
         'Autor: Nacho (Integer)
@@ -355,11 +367,8 @@ Public Module General
             Call InitIpTables(1000)
             Call IniciaWsApi(Puerto)
 
-            'Log
-            Dim N As Short
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-            FileClose(N)
+            'Log - ensure log file exists
+            AppendLog("logs/Main.log", "")
 
             tInicioServer = GetTickCount()
             Call InicializaEstadisticas()
@@ -444,357 +453,83 @@ Public Module General
 
 
     Public Sub LogCriticEvent(ByRef desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Eventos.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogCriticEvent: " & ex.Message)
-        End Try
+        AppendLog("logs/Eventos.log", Today & " " & TimeOfDay & " " & desc)
     End Sub
 
     Public Sub LogEjercitoReal(ByRef desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoReal.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogEjercitoReal: " & ex.Message)
-        End Try
+        AppendLog("logs/EjercitoReal.log", desc)
     End Sub
 
     Public Sub LogEjercitoCaos(ByRef desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/EjercitoCaos.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogEjercitoCaos: " & ex.Message)
-        End Try
+        AppendLog("logs/EjercitoCaos.log", desc)
     End Sub
 
 
     Public Sub LogIndex(Index As Short, desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Index & ".log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogIndex: " & ex.Message)
-        End Try
+        AppendLog("logs/" & Index & ".log", Today & " " & TimeOfDay & " " & desc)
     End Sub
 
 
     Public Sub LogError(ByRef desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/errores.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogError: " & ex.Message)
-        End Try
+        AppendLog("logs/errores.log", Today & " " & TimeOfDay & " " & desc)
     End Sub
 
     Public Sub LogStatic(ByRef desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Stats.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogStatic: " & ex.Message)
-        End Try
+        AppendLog("logs/Stats.log", Today & " " & TimeOfDay & " " & desc)
     End Sub
 
     Public Sub LogTarea(ByRef desc As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & desc)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogTarea: " & ex.Message)
-        End Try
+        AppendLog("logs/haciendo.log", Today & " " & TimeOfDay & " " & desc)
     End Sub
 
 
-    'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Public Sub LogClanes(str_Renamed As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/clanes.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
-        FileClose(nfile)
+        AppendLog("logs/clanes.log", Today & " " & TimeOfDay & " " & str_Renamed)
     End Sub
 
-    'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Public Sub LogIP(str_Renamed As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/IP.log", OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
-        FileClose(nfile)
+        AppendLog("logs/IP.log", Today & " " & TimeOfDay & " " & str_Renamed)
     End Sub
 
 
-    'UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Public Sub LogDesarrollo(str_Renamed As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Dim nfile As Short
-        nfile = FreeFile() ' obtenemos un canal
-        FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/desarrollo" & Month(Today) & Year(Today) & ".log",
-                 OpenMode.Append, , OpenShare.Shared)
-        PrintLine(nfile, Today & " " & TimeOfDay & " " & str_Renamed)
-        FileClose(nfile)
+        AppendLog("logs/desarrollo" & Month(Today) & Year(Today) & ".log", Today & " " & TimeOfDay & " " & str_Renamed)
     End Sub
 
     Public Sub LogGM(ByRef Nombre As String, ByRef texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************ç
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/" & Nombre & ".log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogClanes: " & ex.Message)
-        End Try
+        AppendLog("logs/" & Nombre & ".log", Today & " " & TimeOfDay & " " & texto)
     End Sub
 
     Public Sub LogAsesinato(ByRef texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-            Dim nfile As Short
-
-            nfile = FreeFile() ' obtenemos un canal
-
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/asesinatos.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogAsesinato: " & ex.Message)
-        End Try
+        AppendLog("logs/asesinatos.log", Today & " " & TimeOfDay & " " & texto)
     End Sub
 
     Public Sub logVentaCasa(texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/propiedades.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, "----------------------------------------------------------")
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            PrintLine(nfile, "----------------------------------------------------------")
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in logVentaCasa: " & ex.Message)
-        End Try
+        AppendLog("logs/propiedades.log", "----------------------------------------------------------")
+        AppendLog("logs/propiedades.log", Today & " " & TimeOfDay & " " & texto)
+        AppendLog("logs/propiedades.log", "----------------------------------------------------------")
     End Sub
 
     Public Sub LogHackAttemp(ByRef texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, "----------------------------------------------------------")
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            PrintLine(nfile, "----------------------------------------------------------")
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogHackAttemp: " & ex.Message)
-        End Try
+        AppendLog("logs/HackAttemps.log", "----------------------------------------------------------")
+        AppendLog("logs/HackAttemps.log", Today & " " & TimeOfDay & " " & texto)
+        AppendLog("logs/HackAttemps.log", "----------------------------------------------------------")
     End Sub
 
     Public Sub LogCheating(ByRef texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CH.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogCheating: " & ex.Message)
-        End Try
+        AppendLog("logs/CH.log", Today & " " & TimeOfDay & " " & texto)
     End Sub
 
 
     Public Sub LogCriticalHackAttemp(ByRef texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/CriticalHackAttemps.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, "----------------------------------------------------------")
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            PrintLine(nfile, "----------------------------------------------------------")
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogCriticalHackAttemp: " & ex.Message)
-        End Try
+        AppendLog("logs/CriticalHackAttemps.log", "----------------------------------------------------------")
+        AppendLog("logs/CriticalHackAttemps.log", Today & " " & TimeOfDay & " " & texto)
+        AppendLog("logs/CriticalHackAttemps.log", "----------------------------------------------------------")
     End Sub
 
     Public Sub LogAntiCheat(ByRef texto As String)
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Try
-
-            Dim nfile As Short
-            nfile = FreeFile() ' obtenemos un canal
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/AntiCheat.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            PrintLine(nfile, "")
-            FileClose(nfile)
-
-        Catch ex As Exception
-            Console.WriteLine("Error in LogAntiCheat: " & ex.Message)
-        End Try
+        AppendLog("logs/AntiCheat.log", Today & " " & TimeOfDay & " " & texto)
+        AppendLog("logs/AntiCheat.log", "")
     End Sub
 
     Function ValidInputNP(cad As String) As Boolean
@@ -873,11 +608,7 @@ Public Module General
             Call CargarHechizos()
 
             'Log it
-            Dim N As Short
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, Today & " " & TimeOfDay & " servidor reiniciado.")
-            FileClose(N)
+            AppendLog("logs/Main.log", Today & " " & TimeOfDay & " servidor reiniciado.")
 
         Catch ex As Exception
             Console.WriteLine("Error in ReadField: " & ex.Message)

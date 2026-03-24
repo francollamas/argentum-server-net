@@ -133,38 +133,13 @@ Friend Class ConsultasPopulares
 
 
     Private Function MailYaVoto(email As String) As Boolean
-        'abro el archivo, while not eof levnato 1 linea y comparo. Si da true, cierro
-        Dim ArchN As Short
-        Dim Tmp As String
-
-        MailYaVoto = False
-
-        ArchN = FreeFile
-
-        FileOpen(ArchN, AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS, OpenMode.Input)
-
-        Do While Not EOF(ArchN)
-            Tmp = LineInput(ArchN)
-            If email = Tmp Then
-                MailYaVoto = True
-                FileClose(ArchN)
-                Exit Function
-            End If
-        Loop
-
-        FileClose(ArchN)
+        Dim filePath = AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS
+        Return IO.File.ReadAllLines(filePath).Any(Function(line) line = email)
     End Function
 
 
     Private Sub MarcarMailComoQueYaVoto(email As String)
-        Dim ArchN As Short
-
-        ArchN = FreeFile
-
-        FileOpen(ArchN, AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS, OpenMode.Append)
-        PrintLine(ArchN, email)
-
-        FileClose(ArchN)
+        AppendLog(ARCHIVOMAILS, email)
     End Sub
 
 

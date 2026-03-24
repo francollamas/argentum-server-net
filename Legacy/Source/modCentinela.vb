@@ -331,13 +331,7 @@ Module modCentinela
         '*************************************************
         Try
 
-            Dim nfile As Short
-            nfile = FreeFile ' obtenemos un canal
-
-            FileOpen(nfile, AppDomain.CurrentDomain.BaseDirectory & "logs/Centinela.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-            PrintLine(nfile, Today & " " & TimeOfDay & " " & texto)
-            FileClose(nfile)
+            AppendLog("logs/Centinela.log", Today & " " & TimeOfDay & " " & texto)
 
 
         Catch ex As Exception

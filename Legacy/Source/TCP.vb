@@ -1096,16 +1096,10 @@ Module TCP
 
             Call MostrarNumUsers()
 
-            N = FreeFile
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output)
-            PrintLine(N, NumUsers)
-            FileClose(N)
+            IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", NumUsers.ToString() & Environment.NewLine)
 
-            N = FreeFile
             'Log
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Connect.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, .name & " ha entrado al juego. UserIndex:" & UserIndex & " " & TimeOfDay & " " & Today)
-            FileClose(N)
+            AppendLog("logs/Connect.log", .name & " ha entrado al juego. UserIndex:" & UserIndex & " " & TimeOfDay & " " & Today)
 
         End With
     End Sub
@@ -1568,10 +1562,7 @@ Module TCP
 
             Call MostrarNumUsers()
 
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Connect.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & TimeOfDay & " " & Today)
-            FileClose(N)
+            AppendLog("logs/Connect.log", name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & TimeOfDay & " " & Today)
 
 
         Catch ex As Exception

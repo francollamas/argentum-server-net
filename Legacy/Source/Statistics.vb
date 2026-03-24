@@ -93,19 +93,11 @@ Module Statistics
         '
         '***************************************************
 
-        Dim handle As Short
-        handle = FreeFile
-
         With trainningInfo(UserIndex)
             'Log the data
-            FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "logs/statistics.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-
-            PrintLine(handle,
+            AppendLog("logs/statistics.log",
                       UserList(UserIndex).name.ToUpper() & " completó el nivel " & UserList(UserIndex).Stats.ELV.ToString() &
                       " en " & (.trainningTime + (GetTickCount() - .startTick)/1000).ToString() & " segundos.")
-
-            FileClose(handle)
 
             'Reset data
             .trainningTime = 0
@@ -199,331 +191,322 @@ Module Statistics
         '
         '***************************************************
 
-        Dim handle As Short
-        handle = FreeFile
-
         Dim line As String
         Dim i As Integer
         Dim j As Integer
 
-        FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "logs/frags.txt", OpenMode.Output)
-
-        'Save lvl vs lvl frag matrix for each class - we use GNU Octave's ASCII file format
-
-        PrintLine(handle, "# name: fragLvlLvl_Ase")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(1).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlLvl_Bar")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(2).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlLvl_Mag")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(3).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlLvl_Pal")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(4).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlLvl_Gue")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(5).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlLvl_Cle")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(6).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlLvl_Caz")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 50")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 50
-            For i = 1 To 50
-                line = line & " " & fragLvlLvlData(7).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-
-        'Save lvl vs race frag matrix for each class - we use GNU Octave's ASCII file format
-
-        PrintLine(handle, "# name: fragLvlRace_Ase")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(1).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlRace_Bar")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(2).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlRace_Mag")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(3).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlRace_Pal")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(4).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlRace_Gue")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(5).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlRace_Cle")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(6).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlRace_Caz")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 5")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 5
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(7).matrix(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-
-        'Save lvl vs class frag matrix for each race - we use GNU Octave's ASCII file format
-
-        PrintLine(handle, "# name: fragLvlClass_Elf")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 7")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 7
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(j).matrix(i, 1).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlClass_Dar")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 7")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 7
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(j).matrix(i, 2).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlClass_Dwa")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 7")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 7
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(j).matrix(i, 3).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlClass_Gno")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 7")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 7
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(j).matrix(i, 4).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        PrintLine(handle, "# name: fragLvlClass_Hum")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 7")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 7
-            For i = 1 To 50
-                line = line & " " & fragLvlRaceData(j).matrix(i, 5).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-
-        'Save lvl vs alignment frag matrix for each race - we use GNU Octave's ASCII file format
-
-        PrintLine(handle, "# name: fragAlignmentLvl")
-        PrintLine(handle, "# type: matrix")
-        PrintLine(handle, "# rows: 4")
-        PrintLine(handle, "# columns: 50")
-
-        For j = 1 To 4
-            For i = 1 To 50
-                line = line & " " & fragAlignmentLvlData(i, j).ToString()
-            Next i
-
-            PrintLine(handle, line)
-            line = vbNullString
-        Next j
-
-        FileClose(handle)
+        Using writer As New IO.StreamWriter(AppDomain.CurrentDomain.BaseDirectory & "logs/frags.txt")
+            'Save lvl vs lvl frag matrix for each class - we use GNU Octave's ASCII file format
+
+            writer.WriteLine("# name: fragLvlLvl_Ase")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(1).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlLvl_Bar")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(2).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlLvl_Mag")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(3).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlLvl_Pal")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(4).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlLvl_Gue")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(5).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlLvl_Cle")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(6).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlLvl_Caz")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 50")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 50
+                For i = 1 To 50
+                    line = line & " " & fragLvlLvlData(7).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+
+            'Save lvl vs race frag matrix for each class - we use GNU Octave's ASCII file format
+
+            writer.WriteLine("# name: fragLvlRace_Ase")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(1).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlRace_Bar")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(2).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlRace_Mag")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(3).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlRace_Pal")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(4).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlRace_Gue")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(5).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlRace_Cle")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(6).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlRace_Caz")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 5")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 5
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(7).matrix(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+
+            'Save lvl vs class frag matrix for each race - we use GNU Octave's ASCII file format
+
+            writer.WriteLine("# name: fragLvlClass_Elf")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 7")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 7
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(j).matrix(i, 1).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlClass_Dar")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 7")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 7
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(j).matrix(i, 2).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlClass_Dwa")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 7")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 7
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(j).matrix(i, 3).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlClass_Gno")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 7")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 7
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(j).matrix(i, 4).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+            writer.WriteLine("# name: fragLvlClass_Hum")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 7")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 7
+                For i = 1 To 50
+                    line = line & " " & fragLvlRaceData(j).matrix(i, 5).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+
+
+            'Save lvl vs alignment frag matrix for each race - we use GNU Octave's ASCII file format
+
+            writer.WriteLine("# name: fragAlignmentLvl")
+            writer.WriteLine("# type: matrix")
+            writer.WriteLine("# rows: 4")
+            writer.WriteLine("# columns: 50")
+
+            For j = 1 To 4
+                For i = 1 To 50
+                    line = line & " " & fragAlignmentLvlData(i, j).ToString()
+                Next i
+
+                writer.WriteLine(line)
+                line = vbNullString
+            Next j
+        End Using
 
 
         'Dump Chat statistics
-        handle = FreeFile
+        Using writer As New IO.StreamWriter(AppDomain.CurrentDomain.BaseDirectory & "logs/huffman.log")
+            Dim Total As Decimal
 
-        FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "logs/huffman.log", OpenMode.Output)
-
-        Dim Total As Decimal
-
-        'Compute total characters
-        For i = 0 To 255
-            Total = Total + keyOcurrencies(i)
-        Next i
-
-        'Show each character's ocurrencies
-        If Total <> 0 Then
+            'Compute total characters
             For i = 0 To 255
-                PrintLine(handle, i.ToString() & "    " & Math.Round(keyOcurrencies(i)/Total, 8).ToString())
+                Total = Total + keyOcurrencies(i)
             Next i
-        End If
 
-        PrintLine(handle, "TOTAL =    " & Total.ToString())
+            'Show each character's ocurrencies
+            If Total <> 0 Then
+                For i = 0 To 255
+                    writer.WriteLine(i.ToString() & "    " & Math.Round(keyOcurrencies(i)/Total, 8).ToString())
+                Next i
+            End If
 
-        FileClose(handle)
+            writer.WriteLine("TOTAL =    " & Total.ToString())
+        End Using
     End Sub
 
     Public Sub ParseChat(ByRef S As String)

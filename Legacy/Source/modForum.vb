@@ -62,36 +62,30 @@ Module modForum
 
                 ' Cargo posts
                 For PostIndex = 1 To .CantPosts
-                    FileIndex = FreeFile
                     PostPath = AppDomain.CurrentDomain.BaseDirectory & "foros/" & sForoID & PostIndex & ".for"
 
-                    FileOpen(FileIndex, PostPath, OpenMode.Input, , OpenShare.Shared)
-
-                    ' Titulo
-                    Input(FileIndex, .vsPost(PostIndex).sTitulo)
-                    ' Autor
-                    Input(FileIndex, .vsPost(PostIndex).Autor)
-                    ' Mensaje
-                    Input(FileIndex, .vsPost(PostIndex).sPost)
-
-                    FileClose(FileIndex)
+                    Using reader As New IO.StreamReader(PostPath)
+                        ' Titulo
+                        .vsPost(PostIndex).sTitulo = reader.ReadLine()
+                        ' Autor
+                        .vsPost(PostIndex).Autor = reader.ReadLine()
+                        ' Mensaje
+                        .vsPost(PostIndex).sPost = reader.ReadLine()
+                    End Using
                 Next PostIndex
 
                 ' Cargo anuncios
                 For PostIndex = 1 To .CantAnuncios
-                    FileIndex = FreeFile
                     PostPath = AppDomain.CurrentDomain.BaseDirectory & "foros/" & sForoID & PostIndex & "a.for"
 
-                    FileOpen(FileIndex, PostPath, OpenMode.Input, , OpenShare.Shared)
-
-                    ' Titulo
-                    Input(FileIndex, .vsAnuncio(PostIndex).sTitulo)
-                    ' Autor
-                    Input(FileIndex, .vsAnuncio(PostIndex).Autor)
-                    ' Mensaje
-                    Input(FileIndex, .vsAnuncio(PostIndex).sPost)
-
-                    FileClose(FileIndex)
+                    Using reader As New IO.StreamReader(PostPath)
+                        ' Titulo
+                        .vsAnuncio(PostIndex).sTitulo = reader.ReadLine()
+                        ' Autor
+                        .vsAnuncio(PostIndex).Autor = reader.ReadLine()
+                        ' Mensaje
+                        .vsAnuncio(PostIndex).sPost = reader.ReadLine()
+                    End Using
                 Next PostIndex
             End If
 
@@ -192,36 +186,22 @@ Module modForum
 
             ' Guardo posts
             For PostIndex = 1 To .CantPosts
-
                 PostPath = AppDomain.CurrentDomain.BaseDirectory & "Foros/" & .ID & PostIndex & ".for"
-                FileIndex = FreeFile
-                FileOpen(FileIndex, PostPath, OpenMode.Output)
-
-                With .vsPost(PostIndex)
-                    PrintLine(FileIndex, .sTitulo)
-                    PrintLine(FileIndex, .Autor)
-                    PrintLine(FileIndex, .sPost)
-                End With
-
-                FileClose(FileIndex)
-
+                Using writer As New IO.StreamWriter(PostPath)
+                    writer.WriteLine(.vsPost(PostIndex).sTitulo)
+                    writer.WriteLine(.vsPost(PostIndex).Autor)
+                    writer.WriteLine(.vsPost(PostIndex).sPost)
+                End Using
             Next PostIndex
 
             ' Guardo Anuncios
             For PostIndex = 1 To .CantAnuncios
-
                 PostPath = AppDomain.CurrentDomain.BaseDirectory & "Foros/" & .ID & PostIndex & "a.for"
-                FileIndex = FreeFile
-                FileOpen(FileIndex, PostPath, OpenMode.Output)
-
-                With .vsAnuncio(PostIndex)
-                    PrintLine(FileIndex, .sTitulo)
-                    PrintLine(FileIndex, .Autor)
-                    PrintLine(FileIndex, .sPost)
-                End With
-
-                FileClose(FileIndex)
-
+                Using writer As New IO.StreamWriter(PostPath)
+                    writer.WriteLine(.vsAnuncio(PostIndex).sTitulo)
+                    writer.WriteLine(.vsAnuncio(PostIndex).Autor)
+                    writer.WriteLine(.vsAnuncio(PostIndex).sPost)
+                End Using
             Next PostIndex
 
         End With

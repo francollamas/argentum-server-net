@@ -6763,13 +6763,10 @@ Module Protocol
 
                 bugReport = buffer.ReadASCIIString()
 
-                N = FreeFile
-                FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "LOGS/BUGs.log", OpenMode.Append, , OpenShare.Shared)
-                PrintLine(N, "Usuario:" & .name & "  Fecha:" & Today & "    Hora:" & TimeOfDay)
-                PrintLine(N, "BUG:")
-                PrintLine(N, bugReport)
-                PrintLine(N, "########################################################################")
-                FileClose(N)
+                AppendLog("LOGS/BUGs.log", "Usuario:" & .name & "  Fecha:" & Today & "    Hora:" & TimeOfDay)
+                AppendLog("LOGS/BUGs.log", "BUG:")
+                AppendLog("LOGS/BUGs.log", bugReport)
+                AppendLog("LOGS/BUGs.log", "########################################################################")
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -14255,13 +14252,7 @@ Module Protocol
                                                   FontTypeNames.FONTTYPE_FIGHT))
 
             'Log
-            handle = FreeFile
-            FileOpen(handle, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, ,
-                     OpenShare.Shared)
-
-            PrintLine(handle, Today & " " & TimeOfDay & " server apagado por " & .name & ". ")
-
-            FileClose(handle)
+            AppendLog("logs/Main.log", Today & " " & TimeOfDay & " server apagado por " & .name & ". ")
         End With
     End Sub
 

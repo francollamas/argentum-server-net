@@ -142,50 +142,46 @@ Friend Class clsIniReader
         'Prevent memory losses if we are attempting to reload a file....
         Call Class_Terminate_Renamed()
 
-        'Get a free handle and start reading line by line until the end
-        handle = FreeFile
+        'Read line by line until the end
+        Using reader As New IO.StreamReader(file)
+            Do Until reader.EndOfStream
+                Text = reader.ReadLine()
 
-        FileOpen(handle, file, OpenMode.Input)
+                'Is it null??
+                If Text.Length Then
+                    'If it starts with '[' it is a main node or nothing (GetPrivateProfileStringA works this way), otherwise it's a value
+                    If Text.Substring(0, 1) = "[" Then
+                        'If it has an ending ']' it's a main node, otherwise it's nothing
+                        Pos = Text.IndexOf("]", 1) + 1
+                        If Pos Then
+                            'Add a main node
+                            ReDim Preserve fileData(MainNodes)
 
-        Do Until EOF(handle)
-            Text = LineInput(handle)
+                            fileData(MainNodes).name = Text.Substring(1, Pos - 2).Trim().ToUpper()
 
-            'Is it null??
-            If Text.Length Then
-                'If it starts with '[' it is a main node or nothing (GetPrivateProfileStringA works this way), otherwise it's a value
-                If Text.Substring(0, 1) = "[" Then
-                    'If it has an ending ']' it's a main node, otherwise it's nothing
-                    Pos = Text.IndexOf("]", 1) + 1
-                    If Pos Then
-                        'Add a main node
-                        ReDim Preserve fileData(MainNodes)
+                            MainNodes = MainNodes + 1
+                        End If
+                    Else
+                        'So it's a value. Check if it has a '=', otherwise it's nothing
+                        Pos = Text.IndexOf("=", 1) + 1
+                        If Pos Then
+                            'Is it under any main node??
+                            If MainNodes Then
+                                With fileData(MainNodes - 1)
+                                    'Add it to the main node's value
+                                    ReDim Preserve .values(.numValues)
 
-                        fileData(MainNodes).name = Text.Substring(1, Pos - 2).Trim().ToUpper()
+                                    .values(.numValues).Value = Text.Substring(Pos)
+                                    .values(.numValues).Key = Text.Substring(0, Pos - 1).ToUpper()
 
-                        MainNodes = MainNodes + 1
-                    End If
-                Else
-                    'So it's a value. Check if it has a '=', otherwise it's nothing
-                    Pos = Text.IndexOf("=", 1) + 1
-                    If Pos Then
-                        'Is it under any main node??
-                        If MainNodes Then
-                            With fileData(MainNodes - 1)
-                                'Add it to the main node's value
-                                ReDim Preserve .values(.numValues)
-
-                                .values(.numValues).Value = Text.Substring(Pos)
-                                .values(.numValues).Key = Text.Substring(0, Pos - 1).ToUpper()
-
-                                .numValues = .numValues + 1
-                            End With
+                                    .numValues = .numValues + 1
+                                End With
+                            End If
                         End If
                     End If
                 End If
-            End If
-        Loop
-
-        FileClose(handle)
+            Loop
+        End Using
 
         Dim i As Integer
 
