@@ -45,7 +45,7 @@ Module modHechizos
 
             ElseIf Hechizos(Spell).SubeHP = 2 Then
 
-                If .flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) <> 0 Then
 
                     daño = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
 
@@ -875,8 +875,8 @@ Module modHechizos
                 If Not HechizoCasteado Then Exit Sub
 
                 'Si sos user, no uses este hechizo con GMS.
-                If .flags.Privilegios And PlayerType.User Then
-                    If Not UserList(TargetIndex).flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) <> 0 Then
+                    If (Not UserList(TargetIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                         HechizoCasteado = False
                         Exit Sub
                     End If
@@ -903,8 +903,8 @@ Module modHechizos
                 End If
 
                 'Si sos user, no uses este hechizo con GMS.
-                If .flags.Privilegios And PlayerType.User Then
-                    If Not UserList(TargetIndex).flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) <> 0 Then
+                    If (Not UserList(TargetIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                         Exit Sub
                     End If
                 End If
@@ -976,8 +976,8 @@ Module modHechizos
                 If Not HechizoCasteado Then Exit Sub
 
                 'Si sos user, no uses este hechizo con GMS.
-                If .flags.Privilegios And PlayerType.User Then
-                    If Not UserList(TargetIndex).flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) <> 0 Then
+                    If (Not UserList(TargetIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                         Exit Sub
                     End If
                 End If
@@ -1196,7 +1196,7 @@ Module modHechizos
                     'Agregado para quitar la penalización de vida en el ring y cambio de ecuacion. (NicoNZ)
                     If (TriggerZonaPelea(UserIndex, TargetIndex) <> eTrigger6.TRIGGER6_PERMITE) Then
                         'Solo saco vida si es User. no quiero que exploten GMs por ahi.
-                        If .flags.Privilegios And PlayerType.User Then
+                        If (.flags.Privilegios And PlayerType.User) <> 0 Then
                             .Stats.MinHp = .Stats.MinHp*(1 - UserList(TargetIndex).Stats.ELV*0.015)
                         End If
                     End If
