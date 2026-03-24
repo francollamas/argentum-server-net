@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Admin
     Public Structure tMotd
@@ -132,7 +132,7 @@ Module Admin
             Dim j, k As Short
 
             For j = 1 To NumMaps
-                If MapInfo_Renamed(j).BackUp = 1 Then k = k + 1
+                If MapInfo_Renamed(j).BackUp = 1 Then k = Convert.ToInt16(k + 1)
             Next j
 
             For loopX = 1 To NumMaps
@@ -182,10 +182,10 @@ Module Admin
 
                     If UserList(i).Counters.Pena < 1 Then
                         UserList(i).Counters.Pena = 0
-                        Call WarpUserChar(i, Libertad.Map, Libertad.X, Libertad.Y, True)
-                        Call WriteConsoleMsg(i, "¡Has sido liberado!", FontTypeNames.FONTTYPE_INFO)
+                        Call WarpUserChar(Convert.ToInt16(i), Libertad.Map, Libertad.X, Libertad.Y, True)
+                        Call WriteConsoleMsg(Convert.ToInt16(i), "¡Has sido liberado!", FontTypeNames.FONTTYPE_INFO)
 
-                        Call FlushBuffer(i)
+                        Call FlushBuffer(Convert.ToInt16(i))
                     End If
                 End If
             End If
@@ -288,7 +288,7 @@ Module Admin
         Dim i As Short
 
         If MD5ClientesActivado = 1 Then
-            For i = 0 To MD5s.Length - 1
+            For i = 0 To Convert.ToInt16(MD5s.Length - 1)
                 If (md5formateado = MD5s(i)) Then
                     MD5ok = True
                     Exit Function
@@ -309,11 +309,11 @@ Module Admin
 
         Dim LoopC As Short
 
-        MD5ClientesActivado = ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "Activado"))
+        MD5ClientesActivado = Convert.ToByte(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "Activado")))
 
         If MD5ClientesActivado = 1 Then
-            ReDim MD5s(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados")))
-            For LoopC = 0 To MD5s.Length - 1
+            ReDim MD5s(Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados"))))
+            For LoopC = 0 To Convert.ToInt16(MD5s.Length - 1)
                 MD5s(LoopC) = GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptado" & (LoopC + 1))
                 MD5s(LoopC) = txtOffset(hexMd52Asc(MD5s(LoopC)), 55)
             Next LoopC
@@ -370,7 +370,7 @@ Module Admin
 
             N = BanIpBuscar(ip)
             If N > 0 Then
-                BanIps.Remove(N)
+                BanIps.RemoveAt(N - 1)
                 BanIpGuardar()
                 BanIpQuita = True
             Else
@@ -397,7 +397,7 @@ Module Admin
         Dim ArchivoBanIp As String = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
 
         Do While BanIps.Count() > 0
-            BanIps.Remove(1)
+            BanIps.RemoveAt(0)
         Loop
 
         For Each line As String In IO.File.ReadAllLines(ArchivoBanIp)
@@ -462,14 +462,14 @@ Module Admin
         Dim cantPenas As Byte
         Dim rank As Short
 
-        If migr_InStrB(UserName, "+") Then
+        If migr_InStrB(UserName, "+") <> 0 Then
             UserName = UserName.Replace("+", " ")
         End If
 
         tUser = NameIndex(UserName)
 
-        rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-               PlayerType.Consejero
+        rank = Convert.ToInt16(PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+               PlayerType.Consejero)
 
         With UserList(bannerUserIndex)
             If tUser <= 0 Then
@@ -477,7 +477,7 @@ Module Admin
                     WriteConsoleMsg(bannerUserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_TALK)
 
                 If System.IO.File.Exists(CharPath & UserName & ".chr") Then
-                    userPriv = UserDarPrivilegioLevel(UserName)
+                    userPriv = Convert.ToByte(UserDarPrivilegioLevel(UserName))
 
                     If (userPriv And rank) > (.flags.Privilegios And rank) Then
                         Call _
@@ -499,7 +499,7 @@ Module Admin
                             'ponemos el flag de ban a 1
                             Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
-                            cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                            cantPenas = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
@@ -554,7 +554,7 @@ Module Admin
                 'ponemos el flag de ban a 1
                 Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
-                cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                cantPenas = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                 Call _
                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,

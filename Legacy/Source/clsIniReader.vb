@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class clsIniReader
     '**************************************************************
@@ -107,7 +107,7 @@ Friend Class clsIniReader
         Dim i As Integer
 
         'Clean up
-        If MainNodes Then
+        If MainNodes <> 0 Then
             For i = 1 To MainNodes - 1
                 Erase fileData(i).values
             Next i
@@ -148,12 +148,12 @@ Friend Class clsIniReader
                 Text = reader.ReadLine()
 
                 'Is it null??
-                If Text.Length Then
+                If Text.Length <> 0 Then
                     'If it starts with '[' it is a main node or nothing (GetPrivateProfileStringA works this way), otherwise it's a value
                     If Text.Substring(0, 1) = "[" Then
                         'If it has an ending ']' it's a main node, otherwise it's nothing
                         Pos = Text.IndexOf("]", 1) + 1
-                        If Pos Then
+                        If Pos <> 0 Then
                             'Add a main node
                             ReDim Preserve fileData(MainNodes)
 
@@ -164,9 +164,9 @@ Friend Class clsIniReader
                     Else
                         'So it's a value. Check if it has a '=', otherwise it's nothing
                         Pos = Text.IndexOf("=", 1) + 1
-                        If Pos Then
+                        If Pos <> 0 Then
                             'Is it under any main node??
-                            If MainNodes Then
+                            If MainNodes <> 0 Then
                                 With fileData(MainNodes - 1)
                                     'Add it to the main node's value
                                     ReDim Preserve .values(.numValues)
@@ -174,7 +174,7 @@ Friend Class clsIniReader
                                     .values(.numValues).Value = Text.Substring(Pos)
                                     .values(.numValues).Key = Text.Substring(0, Pos - 1).ToUpper()
 
-                                    .numValues = .numValues + 1
+                                    .numValues = Convert.ToInt16(.numValues + 1)
                                 End With
                             End If
                         End If
@@ -185,13 +185,13 @@ Friend Class clsIniReader
 
         Dim i As Integer
 
-        If MainNodes Then
+        If MainNodes <> 0 Then
             'Sort main nodes to allow binary search
-            Call SortMainNodes(0, MainNodes - 1)
+            Call SortMainNodes(0, Convert.ToInt16(MainNodes - 1))
 
             'Sort values of each node to allow binary search
             For i = 0 To MainNodes - 1
-                If fileData(i).numValues Then Call SortChildNodes(fileData(i), 0, fileData(i).numValues - 1)
+                If fileData(i).numValues <> 0 Then Call SortChildNodes(fileData(i), 0, Convert.ToInt16(fileData(i).numValues - 1))
             Next i
         End If
     End Sub
@@ -223,10 +223,10 @@ Friend Class clsIniReader
 
             Do While min <= max
                 Do While .values(min).Key < comp And min < Last
-                    min = min + 1
+                    min = Convert.ToInt16(min + 1)
                 Loop
                 Do While .values(max).Key > comp And max > First
-                    max = max - 1
+                    max = Convert.ToInt16(max - 1)
                 Loop
                 If min <= max Then
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -235,8 +235,8 @@ Friend Class clsIniReader
                     .values(min) = .values(max)
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Node.values(max). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     .values(max) = temp
-                    min = min + 1
-                    max = max - 1
+                    min = Convert.ToInt16(min + 1)
+                    max = Convert.ToInt16(max - 1)
                 End If
             Loop
         End With
@@ -271,10 +271,10 @@ Friend Class clsIniReader
 
         Do While min <= max
             Do While fileData(min).name < comp And min < Last
-                min = min + 1
+                min = Convert.ToInt16(min + 1)
             Loop
             Do While fileData(max).name > comp And max > First
-                max = max - 1
+                max = Convert.ToInt16(max - 1)
             Loop
             If min <= max Then
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -283,8 +283,8 @@ Friend Class clsIniReader
                 fileData(min) = fileData(max)
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto fileData(max). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 fileData(max) = temp
-                min = min + 1
-                max = max - 1
+                min = Convert.ToInt16(min + 1)
+                max = Convert.ToInt16(max - 1)
             End If
         Loop
 
