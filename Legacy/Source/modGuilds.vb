@@ -656,13 +656,13 @@ Module modGuilds
         m_EstadoPermiteEntrarChar = False
 
         If migr_InStrB(Personaje, "\") <> 0 Then
-            Personaje = Replace(Personaje, "\", vbNullString)
+            Personaje = Personaje.Replace("\", vbNullString)
         End If
         If migr_InStrB(Personaje, "/") <> 0 Then
-            Personaje = Replace(Personaje, "/", vbNullString)
+            Personaje = Personaje.Replace("/", vbNullString)
         End If
         If migr_InStrB(Personaje, ".") <> 0 Then
-            Personaje = Replace(Personaje, ".", vbNullString)
+            Personaje = Personaje.Replace(".", vbNullString)
         End If
 
         If FileExist(CharPath & Personaje & ".chr") Then
@@ -805,7 +805,7 @@ Module modGuilds
         '
         '***************************************************
 
-        Select Case UCase(Trim(S))
+        Select Case S.Trim().ToUpper()
             Case vbNullString, "P"
                 String2Relacion = RELACIONES_GUILD.PAZ
             Case "G"
@@ -829,10 +829,10 @@ Module modGuilds
 
         'old function by morgo
 
-        cad = LCase(cad)
+        cad = cad.ToLower()
 
-        For i = 1 To Len(cad)
-            car = Asc(Mid(cad, i, 1))
+        For i = 1 To cad.Length
+            car = AscW(cad(i - 1))
 
             If (car < 97 Or car > 122) And (car <> 255) And (car <> 32) Then
                 GuildNameValido = False
@@ -854,10 +854,10 @@ Module modGuilds
         Dim i As Short
 
         YaExiste = False
-        GuildName = UCase(GuildName)
+        GuildName = GuildName.ToUpper()
 
         For i = 1 To CANTIDADDECLANES
-            YaExiste = (UCase(guilds(i).GuildName) = GuildName)
+            YaExiste = (guilds(i).GuildName.ToUpper() = GuildName)
             If YaExiste Then Exit Function
         Next i
     End Function
@@ -871,10 +871,10 @@ Module modGuilds
         Dim i As Integer
         Dim name As String
 
-        name = UCase(UserName)
+        name = UserName.ToUpper()
 
         For i = 1 To CANTIDADDECLANES
-            HasFound = (UCase(guilds(i).Fundador) = name)
+            HasFound = (guilds(i).Fundador.ToUpper() = name)
             If HasFound Then Exit Function
         Next i
     End Function
@@ -938,7 +938,7 @@ Module modGuilds
 
             list = .GetMemberList()
             For i = 0 To UBound(list)
-                If UCase(Votado) = list(i) Then Exit For
+                If Votado.ToUpper() = list(i) Then Exit For
             Next i
 
             If i > UBound(list) Then
@@ -1005,13 +1005,13 @@ Module modGuilds
         'visual basic no permite declarar metodos de clase
         Dim Temps As String
         If migr_InStrB(PlayerName, "\") <> 0 Then
-            PlayerName = Replace(PlayerName, "\", vbNullString)
+            PlayerName = PlayerName.Replace("\", vbNullString)
         End If
         If migr_InStrB(PlayerName, "/") <> 0 Then
-            PlayerName = Replace(PlayerName, "/", vbNullString)
+            PlayerName = PlayerName.Replace("/", vbNullString)
         End If
         If migr_InStrB(PlayerName, ".") <> 0 Then
-            PlayerName = Replace(PlayerName, ".", vbNullString)
+            PlayerName = PlayerName.Replace(".", vbNullString)
         End If
         Temps = GetVar(CharPath & PlayerName & ".chr", "GUILD", "GUILDINDEX")
         If IsNumeric(Temps) Then
@@ -1032,9 +1032,9 @@ Module modGuilds
         Dim i As Short
 
         GuildIndex = 0
-        GuildName = UCase(GuildName)
+        GuildName = GuildName.ToUpper()
         For i = 1 To CANTIDADDECLANES
-            If UCase(guilds(i).GuildName) = GuildName Then
+            If guilds(i).GuildName.ToUpper() = GuildName Then
                 GuildIndex = i
                 Exit Function
             End If
@@ -1065,8 +1065,8 @@ Module modGuilds
                 i = guilds(GuildIndex).m_Iterador_ProximoUserIndex
             End While
         End If
-        If Len(m_ListaDeMiembrosOnline) > 0 Then
-            m_ListaDeMiembrosOnline = Left(m_ListaDeMiembrosOnline, Len(m_ListaDeMiembrosOnline) - 1)
+        If m_ListaDeMiembrosOnline.Length > 0 Then
+            m_ListaDeMiembrosOnline = m_ListaDeMiembrosOnline.Substring(0, m_ListaDeMiembrosOnline.Length - 1)
         End If
     End Function
 
@@ -1666,13 +1666,13 @@ Module modGuilds
         '***************************************************
 
         If migr_InStrB(Aspirante, "\") <> 0 Then
-            Aspirante = Replace(Aspirante, "\", "")
+            Aspirante = Aspirante.Replace("\", "")
         End If
         If migr_InStrB(Aspirante, "/") <> 0 Then
-            Aspirante = Replace(Aspirante, "/", "")
+            Aspirante = Aspirante.Replace("/", "")
         End If
         If migr_InStrB(Aspirante, ".") <> 0 Then
-            Aspirante = Replace(Aspirante, ".", "")
+            Aspirante = Aspirante.Replace(".", "")
         End If
         Call guilds(guild).InformarRechazoEnChar(Aspirante, Detalles)
     End Sub
@@ -1685,13 +1685,13 @@ Module modGuilds
         '***************************************************
 
         If migr_InStrB(Aspirante, "\") <> 0 Then
-            Aspirante = Replace(Aspirante, "\", "")
+            Aspirante = Aspirante.Replace("\", "")
         End If
         If migr_InStrB(Aspirante, "/") <> 0 Then
-            Aspirante = Replace(Aspirante, "/", "")
+            Aspirante = Aspirante.Replace("/", "")
         End If
         If migr_InStrB(Aspirante, ".") <> 0 Then
-            Aspirante = Replace(Aspirante, ".", "")
+            Aspirante = Aspirante.Replace(".", "")
         End If
         a_ObtenerRechazoDeChar = GetVar(CharPath & Aspirante & ".chr", "GUILD", "MotivoRechazo")
         Call WriteVar(CharPath & Aspirante & ".chr", "GUILD", "MotivoRechazo", vbNullString)
@@ -1771,7 +1771,7 @@ Module modGuilds
         Try
             GI = UserList(UserIndex).GuildIndex
 
-            Personaje = UCase(Personaje)
+            Personaje = Personaje.ToUpper()
 
             If GI <= 0 Or GI > CANTIDADDECLANES Then
                 Call _
@@ -1786,13 +1786,13 @@ Module modGuilds
             End If
 
             If migr_InStrB(Personaje, "\") <> 0 Then
-                Personaje = Replace(Personaje, "\", vbNullString)
+                Personaje = Personaje.Replace("\", vbNullString)
             End If
             If migr_InStrB(Personaje, "/") <> 0 Then
-                Personaje = Replace(Personaje, "/", vbNullString)
+                Personaje = Personaje.Replace("/", vbNullString)
             End If
             If migr_InStrB(Personaje, ".") <> 0 Then
-                Personaje = Replace(Personaje, ".", vbNullString)
+                Personaje = Personaje.Replace(".", vbNullString)
             End If
 
             NroAsp = guilds(GI).NumeroDeAspirante(Personaje)
@@ -1829,8 +1829,8 @@ Module modGuilds
 
                 'Get previous guilds
                 Miembro = .GetValue("GUILD", "Miembro")
-                If Len(Miembro) > 400 Then
-                    Miembro = ".." & Right(Miembro, 400)
+                If Miembro.Length > 400 Then
+                    Miembro = ".." & Miembro.Substring(Math.Max(0, Miembro.Length - 400))
                 End If
 
                 Call _

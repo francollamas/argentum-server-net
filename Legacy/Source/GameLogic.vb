@@ -376,11 +376,11 @@ Module Extra
         End If
 
         If migr_InStrB(name, "+") <> 0 Then
-            name = UCase(Replace(name, "+", " "))
+            name = name.Replace("+", " ").ToUpper()
         End If
 
         UserIndex = 1
-        Do Until UCase(UserList(UserIndex).name) = UCase(name)
+        Do Until UserList(UserIndex).name.ToUpper() = name.ToUpper()
 
             UserIndex = UserIndex + 1
 
@@ -433,7 +433,7 @@ Module Extra
                 'ESE EVENTO NO DISPARA UN SAVE USER, LO QUE PUEDE SER UTILIZADO PARA DUPLICAR ITEMS
                 'ESTE BUG EN ALKON PRODUJO QUE EL SERVIDOR ESTE CAIDO DURANTE 3 DIAS. ATENTOS.
 
-                If UCase(UserList(LoopC).name) = UCase(name) Then
+                If UserList(LoopC).name.ToUpper() = name.ToUpper() Then
                     CheckForSameName = True
                     Exit Function
                 End If
@@ -822,7 +822,7 @@ Module Extra
                                         Stat = Stat & " <" & GuildName(.GuildIndex) & ">"
                                     End If
 
-                                    If Len(.desc) > 0 Then
+                                    If .desc.Length > 0 Then
                                         Stat = "Ves a " & .name & Stat & " - " & .desc
                                     Else
                                         Stat = "Ves a " & .name & Stat
@@ -947,7 +947,7 @@ Module Extra
                                 End If
                             End If
 
-                            If Len(Npclist(TempCharIndex).desc) > 1 Then
+                            If Npclist(TempCharIndex).desc.Length > 1 Then
                                 Call _
                                     WriteChatOverHead(UserIndex, Npclist(TempCharIndex).desc,
                                                       Npclist(TempCharIndex).Char_Renamed.CharIndex,

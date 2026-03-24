@@ -435,7 +435,7 @@ Module mdParty
             End If
         Else
             Call _
-                WriteConsoleMsg(OldLeader, LCase(UserList(NewLeader).name) & " no pertenece a tu party.",
+                WriteConsoleMsg(OldLeader, UserList(NewLeader).name.ToLower() & " no pertenece a tu party.",
                                 FontTypeNames.FONTTYPE_INFO)
         End If
     End Sub

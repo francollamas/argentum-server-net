@@ -102,7 +102,7 @@ Module Statistics
                      OpenShare.Shared)
 
             PrintLine(handle,
-                      UCase(UserList(UserIndex).name) & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) &
+                      UserList(UserIndex).name.ToUpper() & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) &
                       " en " & CStr(.trainningTime + (GetTickCount() - .startTick)/1000) & " segundos.")
 
             FileClose(handle)

@@ -331,7 +331,7 @@ Friend Class clsClan
             OldQ = CShort(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
             i = 1
             Nombre = Nombre.ToUpper()
-            While i <= OldQ And UCase(Trim(GetVar(MEMBERSFILE, "Members", "Member" & i))) <> Nombre
+            While i <= OldQ And GetVar(MEMBERSFILE, "Members", "Member" & i).Trim().ToUpper() <> Nombre
                 i = i + 1
             End While
             EsMiembro = i <= OldQ
@@ -348,7 +348,7 @@ Friend Class clsClan
                 Call WriteVar(MEMBERSFILE, "INIT", "NroMembers", CStr(OldQ - 1))
                 'lo echo a el
                 MiembroDe = GetVar(CharPath & Nombre & ".chr", "GUILD", "Miembro")
-                If Not InStr(1, MiembroDe, p_GuildName, CompareMethod.Text) > 0 Then
+                If Not MiembroDe.IndexOf(p_GuildName, StringComparison.OrdinalIgnoreCase) + 1 > 0 Then
                     If migr_LenB(MiembroDe) <> 0 Then
                         MiembroDe = MiembroDe & ","
                     End If
@@ -405,7 +405,7 @@ Friend Class clsClan
         NumeroDeAspirante = 0
 
         For i = 1 To MAXASPIRANTES
-            If UCase(Trim(GetVar(SOLICITUDESFILE, "SOLICITUD" & i, "Nombre"))) = UCase(Nombre) Then
+            If GetVar(SOLICITUDESFILE, "SOLICITUD" & i, "Nombre").Trim().ToUpper() = Nombre.ToUpper() Then
                 NumeroDeAspirante = i
                 Exit Function
             End If
@@ -452,7 +452,7 @@ Friend Class clsClan
         'Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Detalle", vbNullString)
         Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ASPIRANTEA", "0")
         Pedidos = GetVar(CharPath & Nombre & ".chr", "GUILD", "Pedidos")
-        If Not InStr(1, Pedidos, p_GuildName, CompareMethod.Text) > 0 Then
+        If Not Pedidos.IndexOf(p_GuildName, StringComparison.OrdinalIgnoreCase) + 1 > 0 Then
             If migr_LenB(Pedidos) <> 0 Then
                 Pedidos = Pedidos & ","
             End If
@@ -488,7 +488,7 @@ Friend Class clsClan
 
     Public Sub SetCodex(CodexNumber As Short, ByRef codex As String)
         Call ReplaceInvalidChars(codex)
-        codex = Left(codex, CODEXLENGTH)
+        codex = codex.Substring(0, Math.Min(CODEXLENGTH, codex.Length))
         Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Codex" & CodexNumber, codex)
     End Sub
 
@@ -498,7 +498,7 @@ Friend Class clsClan
 
 
     Public Sub SetURL(ByRef URL As String)
-        Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "URL", Left(URL, 40))
+        Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "URL", URL.Substring(0, Math.Min(40, URL.Length)))
     End Sub
 
     Public Function GetURL() As String
@@ -508,7 +508,7 @@ Friend Class clsClan
     Public Sub SetGuildNews(ByRef News As String)
         Call ReplaceInvalidChars(News)
 
-        News = Left(News, NEWSLENGTH)
+        News = News.Substring(0, Math.Min(NEWSLENGTH, News.Length))
 
         Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "GuildNews", News)
     End Sub
@@ -519,7 +519,7 @@ Friend Class clsClan
 
     Public Sub SetDesc(ByRef desc As String)
         Call ReplaceInvalidChars(desc)
-        desc = Left(desc, DESCLENGTH)
+        desc = desc.Substring(0, Math.Min(DESCLENGTH, desc.Length))
 
         Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Desc", desc)
     End Sub
@@ -853,13 +853,13 @@ Friend Class clsClan
 
     Private Sub ReplaceInvalidChars(ByRef S As String)
         If migr_InStrB(S, Chr(13)) <> 0 Then
-            S = Replace(S, Chr(13), vbNullString)
+            S = S.Replace(Chr(13), vbNullString)
         End If
         If migr_InStrB(S, Chr(10)) <> 0 Then
-            S = Replace(S, Chr(10), vbNullString)
+            S = S.Replace(Chr(10), vbNullString)
         End If
         If migr_InStrB(S, "¬") <> 0 Then
-            S = Replace(S, "¬", vbNullString) 'morgo usaba esto como "separador"
+            S = S.Replace("¬", vbNullString) 'morgo usaba esto como "separador"
         End If
     End Sub
 End Class

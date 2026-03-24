@@ -491,7 +491,7 @@ Module Admin
         Dim rank As Short
 
         If migr_InStrB(UserName, "+") Then
-            UserName = Replace(UserName, "+", " ")
+            UserName = UserName.Replace("+", " ")
         End If
 
         tUser = NameIndex(UserName)
@@ -531,7 +531,7 @@ Module Admin
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                                         .name.ToLower() & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
+                                         .name.ToLower() & ": BAN POR " & reason.ToLower() & " " & Today & " " & TimeOfDay)
 
                             If (userPriv And rank) = (.flags.Privilegios And rank) Then
                                 .flags.Ban = 1
@@ -586,7 +586,7 @@ Module Admin
                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                 Call _
                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                             .name.ToLower() & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
+                             .name.ToLower() & ": BAN POR " & reason.ToLower() & " " & Today & " " & TimeOfDay)
 
                 Call CloseSocket(tUser)
             End If

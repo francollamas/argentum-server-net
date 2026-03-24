@@ -449,7 +449,7 @@ Module TCP
         Call WriteVar(CharPath & name.ToUpper() & ".chr", "INIT", "Password", Password) _
         'grabamos el password aqui afuera, para no mantenerlo cargado en memoria
 
-        Call SaveUser(UserIndex, CharPath & UCase(name) & ".chr")
+        Call SaveUser(UserIndex, CharPath & name.ToUpper() & ".chr")
 
         'Open User
         Call ConnectUser(UserIndex, name, Password)
@@ -711,7 +711,7 @@ Module TCP
             End If
 
             '¿Es el passwd valido?
-            If UCase(Password) <> UCase(GetVar(CharPath & UCase(name) & ".chr", "INIT", "Password")) Then
+            If Password.ToUpper() <> GetVar(CharPath & name.ToUpper() & ".chr", "INIT", "Password").ToUpper() Then
                 Call WriteErrorMsg(UserIndex, "Password incorrecto.")
                 Call FlushBuffer(UserIndex)
                 Call CloseSocket(UserIndex)
@@ -772,7 +772,7 @@ Module TCP
 
             'Cargamos el personaje
 
-            Call Leer.Initialize(CharPath & UCase(name) & ".chr")
+            Call Leer.Initialize(CharPath & name.ToUpper() & ".chr")
 
             'Cargamos los datos del personaje
             Call LoadUserInit(UserIndex, Leer)
@@ -1501,7 +1501,7 @@ Module TCP
             UserList(UserIndex).flags.NPCAtacado = 0
 
             Map = UserList(UserIndex).Pos.Map
-            name = UCase(UserList(UserIndex).name)
+            name = UserList(UserIndex).name.ToUpper()
 
             UserList(UserIndex).Char_Renamed.FX = 0
             UserList(UserIndex).Char_Renamed.loops = 0

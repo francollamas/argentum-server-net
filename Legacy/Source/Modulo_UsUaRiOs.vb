@@ -675,7 +675,7 @@ Module UsUaRiOs
                 'If it ceased to be a newbie, remove newbie items and get char away from newbie dungeon
                 If Not EsNewbie(UserIndex) And WasNewbie Then
                     Call QuitarNewbieObj(UserIndex)
-                    If UCase(MapInfo_Renamed(.Pos.Map).Restringir) = "NEWBIE" Then
+                    If MapInfo_Renamed(.Pos.Map).Restringir.ToUpper() = "NEWBIE" Then
                         Call WarpUserChar(UserIndex, 1, 50, 50, True)
                         Call _
                             WriteConsoleMsg(UserIndex, "Debes abandonar el Dungeon Newbie.",
@@ -971,7 +971,7 @@ Module UsUaRiOs
                 Call _
                     WriteConsoleMsg(sendIndex, "Clan: " & GuildName(GuildI),
                                     FontTypeNames.FONTTYPE_INFO)
-                If UCase(GuildLeader(GuildI)) = UCase(.name) Then
+                If GuildLeader(GuildI).ToUpper() = .name.ToUpper() Then
                     Call WriteConsoleMsg(sendIndex, "Status: Líder", FontTypeNames.FONTTYPE_INFO)
                 End If
                 'guildpts no tienen objeto

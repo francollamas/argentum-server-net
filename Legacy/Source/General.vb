@@ -405,15 +405,21 @@ Public Module General
 
         delimiter = Chr(SepASCII)
 
+        If String.IsNullOrEmpty(Text) Then
+            ReadField = ""
+            Exit Function
+        End If
+
         For i = 1 To Pos
             LastPos = CurrentPos
-            CurrentPos = InStr(LastPos + 1, Text, delimiter, CompareMethod.Binary)
+            Dim idx = Text.IndexOf(delimiter, LastPos, StringComparison.Ordinal)
+            CurrentPos = If(idx >= 0, idx + 1, 0)
         Next i
 
         If CurrentPos = 0 Then
-            ReadField = Mid(Text, LastPos + 1, Len(Text) - LastPos)
+            ReadField = Text.Substring(LastPos)
         Else
-            ReadField = Mid(Text, LastPos + 1, CurrentPos - LastPos - 1)
+            ReadField = Text.Substring(LastPos, CurrentPos - LastPos - 1)
         End If
     End Function
 
