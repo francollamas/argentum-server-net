@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 
@@ -39,18 +39,18 @@ Module wskapiAO
             For i = 0 To BanIps.Count() - 1
                 Dim bannedIP = BanIps.Item(i).ToString()
                 If bannedIP = clientIP Then
-                    Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
-                    Call FlushBuffer(NewIndex)
+                    Call WriteErrorMsg(Convert.ToInt16(NewIndex), "Su IP se encuentra bloqueada en este servidor.")
+                    Call FlushBuffer(Convert.ToInt16(NewIndex))
                     Call SocketManager.CloseSocket(socketID)
                     Return
                 End If
             Next
 
             If NewIndex > LastUser Then
-                LastUser = NewIndex
+                LastUser = Convert.ToInt16(NewIndex)
             End If
 
-            UserList(NewIndex).ConnID = socketID
+            UserList(NewIndex).ConnID = Convert.ToInt16(socketID)
             UserList(NewIndex).ConnIDValida = True
 
             AgregaSlotSock(socketID, NewIndex)
@@ -76,7 +76,7 @@ Module wskapiAO
                 Call .incomingData.WriteBlock(data)
 
                 If .ConnID <> - 1 Then
-                    Call HandleIncomingData(userIndex)
+                    Call HandleIncomingData(Convert.ToInt16(userIndex))
                 End If
             End With
         End If
@@ -203,7 +203,7 @@ Module wskapiAO
 
         For i = 1 To MaxUsers
             If UserList(i).ConnID <> - 1 AndAlso UserList(i).ConnIDValida Then
-                Call CloseSocket(i)
+                Call CloseSocket(Convert.ToInt16(i))
             End If
         Next i
 
@@ -250,7 +250,7 @@ Module wskapiAO
         Console.WriteLine("AgregaSlotSock: Socket " & socketID & " -> User " & userIndex)
 
         If SocketToUserMap.Count > MaxUsers Then
-            Call CloseSocket(userIndex)
+            Call CloseSocket(Convert.ToInt16(userIndex))
             Exit Sub
         End If
 
@@ -277,10 +277,10 @@ Module wskapiAO
         End If
 
         If UserList(userIndex).flags.UserLogged Then
-            Call CloseSocketSL(userIndex)
-            Call Cerrar_Usuario(userIndex)
+            Call CloseSocketSL(Convert.ToInt16(userIndex))
+            Call Cerrar_Usuario(Convert.ToInt16(userIndex))
         Else
-            Call CloseSocket(userIndex)
+            Call CloseSocket(Convert.ToInt16(userIndex))
         End If
     End Sub
 End Module
