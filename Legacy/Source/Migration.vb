@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Migration
     Private ReadOnly StopWatch As Stopwatch = Stopwatch.StartNew()

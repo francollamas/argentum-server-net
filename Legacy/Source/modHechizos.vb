@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -26,10 +26,10 @@ Module modHechizos
         With UserList(UserIndex)
             If Hechizos(Spell).SubeHP = 1 Then
 
-                daño = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+                daño = Convert.ToInt16(RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(Hechizos(Spell).WAV, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageCreateFX(.Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
@@ -47,25 +47,25 @@ Module modHechizos
 
                 If (.flags.Privilegios And PlayerType.User) <> 0 Then
 
-                    daño = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+                    daño = Convert.ToInt16(RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp))
 
                     If .Invent.CascoEqpObjIndex > 0 Then
-                        daño = daño -
+                        daño = Convert.ToInt16(daño -
                                RandomNumber(ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMin,
-                                            ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMax)
+                                           ObjData_Renamed(.Invent.CascoEqpObjIndex).DefensaMagicaMax))
                     End If
 
                     If .Invent.AnilloEqpObjIndex > 0 Then
-                        daño = daño -
+                        daño = Convert.ToInt16(daño -
                                RandomNumber(ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMin,
-                                            ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMax)
+                                           ObjData_Renamed(.Invent.AnilloEqpObjIndex).DefensaMagicaMax))
                     End If
 
                     If daño < 0 Then daño = 0
 
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
-                                 PrepareMessagePlayWave(Hechizos(Spell).WAV, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
                                  PrepareMessageCreateFX(.Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
@@ -105,7 +105,7 @@ Module modHechizos
                 If .flags.Paralizado = 0 Then
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
-                                 PrepareMessagePlayWave(Hechizos(Spell).WAV, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
                                  PrepareMessageCreateFX(.Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
@@ -133,7 +133,7 @@ Module modHechizos
                 If .flags.Estupidez = 0 Then
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
-                                 PrepareMessagePlayWave(Hechizos(Spell).WAV, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
                                  PrepareMessageCreateFX(.Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
@@ -171,10 +171,10 @@ Module modHechizos
 
         If Hechizos(Spell).SubeHP = 2 Then
 
-            daño = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+            daño = Convert.ToInt16(RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp))
             Call _
                 SendData(SendTarget.ToNPCArea, TargetNPC,
-                         PrepareMessagePlayWave(Hechizos(Spell).WAV, Npclist(TargetNPC).Pos.X, Npclist(TargetNPC).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(Npclist(TargetNPC).Pos.X), Convert.ToByte(Npclist(TargetNPC).Pos.Y)))
             Call _
                 SendData(SendTarget.ToNPCArea, TargetNPC,
                          PrepareMessageCreateFX(Npclist(TargetNPC).Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
@@ -307,7 +307,7 @@ Module modHechizos
         Dim DruidManaBonus As Single
 
         With UserList(UserIndex)
-            If .flags.Muerto Then
+            If .flags.Muerto <> 0 Then
                 Call _
                     WriteConsoleMsg(UserIndex, "No puedes lanzar hechizos estando muerto.",
                                     FontTypeNames.FONTTYPE_INFO)
@@ -420,8 +420,8 @@ Module modHechizos
 
             If Hechizos(H).RemueveInvisibilidadParcial = 1 Then
                 b = True
-                For TempX = PosCasteadaX - 8 To PosCasteadaX + 8
-                    For TempY = PosCasteadaY - 8 To PosCasteadaY + 8
+                For TempX = Convert.ToInt16(PosCasteadaX - 8) To Convert.ToInt16(PosCasteadaX + 8)
+                    For TempY = Convert.ToInt16(PosCasteadaY - 8) To Convert.ToInt16(PosCasteadaY + 8)
                         If InMapBounds(PosCasteadaM, TempX, TempY) Then
                             If MapData(PosCasteadaM, TempX, TempY).UserIndex > 0 Then
                                 'hay un user
@@ -500,7 +500,7 @@ Module modHechizos
                         If .NroMascotas < MAXMASCOTAS Then
                             NpcIndex = SpawnNpc(Hechizos(SpellIndex).NumNpc, TargetPos, True, False)
                             If NpcIndex > 0 Then
-                                .NroMascotas = .NroMascotas + 1
+                                .NroMascotas = Convert.ToInt16(.NroMascotas + 1)
 
                                 PetIndex = FreeMascotaIndex(UserIndex)
 
@@ -574,7 +574,7 @@ Module modHechizos
                         ' Solo con flauta equipada
                         If .Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
                             ' 30% menos de mana para invocaciones
-                            ManaRequerida = ManaRequerida*0.7
+                            ManaRequerida = Convert.ToInt16(ManaRequerida*0.7)
                         End If
                     End If
                 End If
@@ -626,11 +626,11 @@ Module modHechizos
                     If .Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
                         If Hechizos(SpellIndex).Mimetiza = 1 Then
                             ' 50% menos de mana para mimetismo
-                            ManaRequerida = ManaRequerida*0.5
+                            ManaRequerida = Convert.ToInt16(ManaRequerida*0.5)
 
                         ElseIf SpellIndex <> APOCALIPSIS_SPELL_INDEX Then
                             ' 10% menos de mana para todo menos apoca y descarga
-                            ManaRequerida = ManaRequerida*0.9
+                            ManaRequerida = Convert.ToInt16(ManaRequerida*0.9)
                         End If
                     End If
                 End If
@@ -689,20 +689,20 @@ Module modHechizos
                     If .Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
                         If Hechizos(HechizoIndex).Mimetiza = 1 Then
                             ' 50% menos de mana para mimetismo
-                            ManaRequerida = ManaRequerida*0.5
+                            ManaRequerida = Convert.ToInt32(ManaRequerida*0.5)
                             ' Será ignorado hasta que pierda el efecto del mimetismo o ataque un npc
                             .flags.Ignorado = True
                         Else
                             ' 10% menos de mana para hechizos
                             If HechizoIndex <> APOCALIPSIS_SPELL_INDEX Then
-                                ManaRequerida = ManaRequerida*0.9
+                                ManaRequerida = Convert.ToInt32(ManaRequerida*0.9)
                             End If
                         End If
                     End If
                 End If
 
                 ' Quito la mana requerida
-                .Stats.MinMAN = .Stats.MinMAN - ManaRequerida
+                .Stats.MinMAN = Convert.ToInt16(.Stats.MinMAN - ManaRequerida)
                 If .Stats.MinMAN < 0 Then .Stats.MinMAN = 0
 
                 ' Quito la estamina requerida
@@ -794,9 +794,9 @@ Module modHechizos
 
                 End If
 
-                If .Counters.Trabajando Then .Counters.Trabajando = .Counters.Trabajando - 1
+                If .Counters.Trabajando <> 0 Then .Counters.Trabajando = .Counters.Trabajando - 1
 
-                If .Counters.Ocultando Then .Counters.Ocultando = .Counters.Ocultando - 1
+                If .Counters.Ocultando <> 0 Then .Counters.Ocultando = .Counters.Ocultando - 1
 
             End With
 
@@ -1197,7 +1197,7 @@ Module modHechizos
                     If (TriggerZonaPelea(UserIndex, TargetIndex) <> eTrigger6.TRIGGER6_PERMITE) Then
                         'Solo saco vida si es User. no quiero que exploten GMs por ahi.
                         If (.flags.Privilegios And PlayerType.User) <> 0 Then
-                            .Stats.MinHp = .Stats.MinHp*(1 - UserList(TargetIndex).Stats.ELV*0.015)
+                            .Stats.MinHp = Convert.ToInt16(.Stats.MinHp*(1 - UserList(TargetIndex).Stats.ELV*0.015))
                         End If
                     End If
 
@@ -1242,7 +1242,7 @@ Module modHechizos
                     Call UsuarioAtacadoPorUsuario(UserIndex, TargetIndex)
                 End If
                 UserList(TargetIndex).flags.Ceguera = 1
-                UserList(TargetIndex).Counters.Ceguera = IntervaloParalizado/3
+                UserList(TargetIndex).Counters.Ceguera = Convert.ToInt16(IntervaloParalizado/3)
 
                 Call WriteBlind(TargetIndex)
                 Call FlushBuffer(TargetIndex)
@@ -1514,20 +1514,20 @@ Module modHechizos
                     If UserList(UserIndex).clase = eClass.Mage Then
                         If UserList(UserIndex).Invent.WeaponEqpObjIndex > 0 Then
                             daño =
-                                (daño*
+                                Convert.ToInt32((daño*
                                  (ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).StaffDamageBonus + 70))/
-                                100
+                                100)
                             'Aumenta daño segun el staff-
                             'Daño = (Daño* (70 + BonifBáculo)) / 100
                         Else
-                            daño = daño*0.7 'Baja daño a 70% del original
+                            daño = Convert.ToInt32(daño*0.7) 'Baja daño a 70% del original
                         End If
                     End If
                 End If
                 If _
                     UserList(UserIndex).Invent.AnilloEqpObjIndex = LAUDELFICO Or
                     UserList(UserIndex).Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
-                    daño = daño*1.04 'laud magico de los bardos
+                    daño = Convert.ToInt32(daño*1.04) 'laud magico de los bardos
                 End If
 
                 Call InfoHechizo(UserIndex)
@@ -1536,7 +1536,7 @@ Module modHechizos
                 If .flags.Snd2 > 0 Then
                     Call _
                         SendData(SendTarget.ToNPCArea, NpcIndex,
-                                 PrepareMessagePlayWave(.flags.Snd2, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(.flags.Snd2), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                 End If
 
                 'Quizas tenga defenza magica el NPC. Pablo (ToxicWaste)
@@ -1584,8 +1584,8 @@ Module modHechizos
                                                                 Hechizos(SpellIndex).FXgrh, Hechizos(SpellIndex).loops))
                     Call _
                         EnviarDatosASlot(UserIndex,
-                                         PrepareMessagePlayWave(Hechizos(SpellIndex).WAV, UserList(tUser).Pos.X,
-                                                                UserList(tUser).Pos.Y))
+                                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(SpellIndex).WAV), Convert.ToByte(UserList(tUser).Pos.X),
+                                                                Convert.ToByte(UserList(tUser).Pos.Y)))
                 Else
                     Call _
                         SendData(SendTarget.ToPCArea, tUser,
@@ -1593,8 +1593,8 @@ Module modHechizos
                                                         Hechizos(SpellIndex).FXgrh, Hechizos(SpellIndex).loops))
                     Call _
                         SendData(SendTarget.ToPCArea, tUser,
-                                 PrepareMessagePlayWave(Hechizos(SpellIndex).WAV, UserList(tUser).Pos.X,
-                                                        UserList(tUser).Pos.Y)) 'Esta linea faltaba. Pablo (ToxicWaste)
+                                 PrepareMessagePlayWave(Convert.ToByte(Hechizos(SpellIndex).WAV), Convert.ToByte(UserList(tUser).Pos.X),
+                                                        Convert.ToByte(UserList(tUser).Pos.Y))) 'Esta linea faltaba. Pablo (ToxicWaste)
                 End If
             ElseIf tNPC > 0 Then
                 Call _
@@ -1603,7 +1603,7 @@ Module modHechizos
                                                     Hechizos(SpellIndex).loops))
                 Call _
                     SendData(SendTarget.ToNPCArea, tNPC,
-                             PrepareMessagePlayWave(Hechizos(SpellIndex).WAV, Npclist(tNPC).Pos.X, Npclist(tNPC).Pos.Y))
+                             PrepareMessagePlayWave(Convert.ToByte(Hechizos(SpellIndex).WAV), Convert.ToByte(Npclist(tNPC).Pos.X), Convert.ToByte(Npclist(tNPC).Pos.Y)))
             End If
 
             If tUser > 0 Then
@@ -1648,7 +1648,7 @@ Module modHechizos
         TargetIndex = UserList(UserIndex).flags.TargetUser
 
         With UserList(TargetIndex)
-            If .flags.Muerto Then
+            If .flags.Muerto <> 0 Then
                 Call _
                     WriteConsoleMsg(UserIndex, "No puedes lanzar este hechizo a un muerto.",
                                     FontTypeNames.FONTTYPE_INFO)
@@ -1662,7 +1662,7 @@ Module modHechizos
 
                 daño = RandomNumber(Hechizos(SpellIndex).MinHam, Hechizos(SpellIndex).MaxHam)
 
-                .Stats.MinHam = .Stats.MinHam + daño
+                .Stats.MinHam = Convert.ToInt16(.Stats.MinHam + daño)
                 If .Stats.MinHam > .Stats.MaxHam Then .Stats.MinHam = .Stats.MaxHam
 
                 If UserIndex <> TargetIndex Then
@@ -1695,7 +1695,7 @@ Module modHechizos
 
                 daño = RandomNumber(Hechizos(SpellIndex).MinHam, Hechizos(SpellIndex).MaxHam)
 
-                .Stats.MinHam = .Stats.MinHam - daño
+                .Stats.MinHam = Convert.ToInt16(.Stats.MinHam - daño)
 
                 If UserIndex <> TargetIndex Then
                     Call _
@@ -1726,7 +1726,7 @@ Module modHechizos
 
                 daño = RandomNumber(Hechizos(SpellIndex).MinSed, Hechizos(SpellIndex).MaxSed)
 
-                .Stats.MinAGU = .Stats.MinAGU + daño
+                .Stats.MinAGU = Convert.ToInt16(.Stats.MinAGU + daño)
                 If .Stats.MinAGU > .Stats.MaxAGU Then .Stats.MinAGU = .Stats.MaxAGU
 
                 Call WriteUpdateHungerAndThirst(TargetIndex)
@@ -1759,7 +1759,7 @@ Module modHechizos
 
                 daño = RandomNumber(Hechizos(SpellIndex).MinSed, Hechizos(SpellIndex).MaxSed)
 
-                .Stats.MinAGU = .Stats.MinAGU - daño
+                .Stats.MinAGU = Convert.ToInt16(.Stats.MinAGU - daño)
 
                 If UserIndex <> TargetIndex Then
                     Call _
@@ -1795,15 +1795,15 @@ Module modHechizos
 
                 .flags.DuracionEfecto = 1200
                 .Stats.UserAtributos(eAtributos.Agilidad) =
-                    .Stats.UserAtributos(eAtributos.Agilidad) + daño
+                    .Stats.UserAtributos(eAtributos.Agilidad) + Convert.ToByte(daño)
                 If _
                     .Stats.UserAtributos(eAtributos.Agilidad) >
                     MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(eAtributos.Agilidad)*2) Then _
-                    .Stats.UserAtributos(eAtributos.Agilidad) = MinimoInt(MAXATRIBUTOS,
+                    .Stats.UserAtributos(eAtributos.Agilidad) = Convert.ToByte(MinimoInt(MAXATRIBUTOS,
                                                                           .Stats.UserAtributosBackUP(
                                                                               eAtributos.
                                                                                                         Agilidad)*
-                                                                          2)
+                                                                          2))
 
                 .flags.TomoPocion = True
                 Call WriteUpdateDexterity(TargetIndex)
@@ -1823,7 +1823,7 @@ Module modHechizos
                 daño = RandomNumber(Hechizos(SpellIndex).MinAgilidad, Hechizos(SpellIndex).MaxAgilidad)
                 .flags.DuracionEfecto = 700
                 .Stats.UserAtributos(eAtributos.Agilidad) =
-                    .Stats.UserAtributos(eAtributos.Agilidad) - daño
+                    .Stats.UserAtributos(eAtributos.Agilidad) - Convert.ToByte(daño)
                 If .Stats.UserAtributos(eAtributos.Agilidad) < MINATRIBUTOS Then _
                     .Stats.UserAtributos(eAtributos.Agilidad) = MINATRIBUTOS
 
@@ -1842,15 +1842,15 @@ Module modHechizos
                 .flags.DuracionEfecto = 1200
 
                 .Stats.UserAtributos(eAtributos.Fuerza) =
-                    .Stats.UserAtributos(eAtributos.Fuerza) + daño
+                    .Stats.UserAtributos(eAtributos.Fuerza) + Convert.ToByte(daño)
                 If _
                     .Stats.UserAtributos(eAtributos.Fuerza) >
                     MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(eAtributos.Fuerza)*2) Then _
-                    .Stats.UserAtributos(eAtributos.Fuerza) = MinimoInt(MAXATRIBUTOS,
+                    .Stats.UserAtributos(eAtributos.Fuerza) = Convert.ToByte(MinimoInt(MAXATRIBUTOS,
                                                                         .Stats.UserAtributosBackUP(
                                                                             eAtributos.
                                                                                                       Fuerza)*
-                                                                        2)
+                                                                        2))
 
                 .flags.TomoPocion = True
                 Call WriteUpdateStrenght(TargetIndex)
@@ -1871,7 +1871,7 @@ Module modHechizos
                 daño = RandomNumber(Hechizos(SpellIndex).MinFuerza, Hechizos(SpellIndex).MaxFuerza)
                 .flags.DuracionEfecto = 700
                 .Stats.UserAtributos(eAtributos.Fuerza) =
-                    .Stats.UserAtributos(eAtributos.Fuerza) - daño
+                    .Stats.UserAtributos(eAtributos.Fuerza) - Convert.ToByte(daño)
                 If .Stats.UserAtributos(eAtributos.Fuerza) < MINATRIBUTOS Then _
                     .Stats.UserAtributos(eAtributos.Fuerza) = MINATRIBUTOS
 
@@ -1895,7 +1895,7 @@ Module modHechizos
 
                 Call InfoHechizo(UserIndex)
 
-                .Stats.MinHp = .Stats.MinHp + daño
+                .Stats.MinHp = Convert.ToInt16(.Stats.MinHp + daño)
                 If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
 
                 Call WriteUpdateHP(TargetIndex)
@@ -1932,11 +1932,11 @@ Module modHechizos
                     If UserList(UserIndex).clase = eClass.Mage Then
                         If UserList(UserIndex).Invent.WeaponEqpObjIndex > 0 Then
                             daño =
-                                (daño*
+                                Convert.ToInt32((daño*
                                  (ObjData_Renamed(UserList(UserIndex).Invent.WeaponEqpObjIndex).StaffDamageBonus + 70))/
-                                100
+                                100)
                         Else
-                            daño = daño*0.7 'Baja daño a 70% del original
+                            daño = Convert.ToInt32(daño*0.7) 'Baja daño a 70% del original
                         End If
                     End If
                 End If
@@ -1944,7 +1944,7 @@ Module modHechizos
                 If _
                     UserList(UserIndex).Invent.AnilloEqpObjIndex = LAUDELFICO Or
                     UserList(UserIndex).Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
-                    daño = daño*1.04 'laud magico de los bardos
+                    daño = Convert.ToInt32(daño*1.04) 'laud magico de los bardos
                 End If
 
                 'cascos antimagia
@@ -1971,7 +1971,7 @@ Module modHechizos
 
                 Call InfoHechizo(UserIndex)
 
-                .Stats.MinHp = .Stats.MinHp - daño
+                .Stats.MinHp = Convert.ToInt16(.Stats.MinHp - daño)
 
                 Call WriteUpdateHP(TargetIndex)
 
@@ -2003,7 +2003,7 @@ Module modHechizos
             If Hechizos(SpellIndex).SubeMana = 1 Then
 
                 Call InfoHechizo(UserIndex)
-                .Stats.MinMAN = .Stats.MinMAN + daño
+                .Stats.MinMAN = Convert.ToInt16(.Stats.MinMAN + daño)
                 If .Stats.MinMAN > .Stats.MaxMAN Then .Stats.MinMAN = .Stats.MaxMAN
 
                 Call WriteUpdateMana(TargetIndex)
@@ -2047,7 +2047,7 @@ Module modHechizos
                                         FontTypeNames.FONTTYPE_FIGHT)
                 End If
 
-                .Stats.MinMAN = .Stats.MinMAN - daño
+                .Stats.MinMAN = Convert.ToInt16(.Stats.MinMAN - daño)
                 If .Stats.MinMAN < 1 Then .Stats.MinMAN = 0
 
                 Call WriteUpdateMana(TargetIndex)
@@ -2057,7 +2057,7 @@ Module modHechizos
             ' <-------- Aumenta Stamina ---------->
             If Hechizos(SpellIndex).SubeSta = 1 Then
                 Call InfoHechizo(UserIndex)
-                .Stats.MinSta = .Stats.MinSta + daño
+                .Stats.MinSta = Convert.ToInt16(.Stats.MinSta + daño)
                 If .Stats.MinSta > .Stats.MaxSta Then .Stats.MinSta = .Stats.MaxSta
 
                 Call WriteUpdateSta(TargetIndex)
@@ -2100,7 +2100,7 @@ Module modHechizos
                                         FontTypeNames.FONTTYPE_FIGHT)
                 End If
 
-                .Stats.MinSta = .Stats.MinSta - daño
+                .Stats.MinSta = Convert.ToInt16(.Stats.MinSta - daño)
 
                 If .Stats.MinSta < 1 Then .Stats.MinSta = 0
 
@@ -2173,7 +2173,7 @@ Module modHechizos
                             If DoCriminal Then
                                 Call VolverCriminal(CasterIndex)
                             Else
-                                Call DisNobAuBan(CasterIndex, .Reputacion.NobleRep*0.5, 10000)
+                                Call DisNobAuBan(CasterIndex, Convert.ToInt32(.Reputacion.NobleRep*0.5), 10000)
                             End If
                         End If
                     End If
@@ -2214,7 +2214,7 @@ Module modHechizos
                                                         FontTypeNames.FONTTYPE_INFO)
                                     Exit Function
                                 Else
-                                    Call DisNobAuBan(CasterIndex, .Reputacion.NobleRep*0.5, 10000)
+                                    Call DisNobAuBan(CasterIndex, Convert.ToInt32(.Reputacion.NobleRep*0.5), 10000)
                                 End If
                             End If
                         End If
@@ -2338,7 +2338,7 @@ Module modHechizos
             'Si estamos en la arena no hacemos nada
             If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 6 Then Exit Sub
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then
                 'pierdo nobleza...
                 .Reputacion.NobleRep = .Reputacion.NobleRep - NoblePts
                 If .Reputacion.NobleRep < 0 Then

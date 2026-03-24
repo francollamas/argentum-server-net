@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Trabajo
     Private Const GASTO_ENERGIA_TRABAJADOR As Byte = 2
@@ -17,11 +17,11 @@ Module Trabajo
         '********************************************************
         Try
             With UserList(UserIndex)
-                .Counters.TiempoOculto = .Counters.TiempoOculto - 1
+                .Counters.TiempoOculto = Convert.ToInt16(.Counters.TiempoOculto - 1)
                 If .Counters.TiempoOculto <= 0 Then
 
                     If .clase = eClass.Bandit Then
-                        .Counters.TiempoOculto = Int(IntervaloOculto/2)
+                        .Counters.TiempoOculto = Convert.ToInt16(Int(IntervaloOculto/2))
                     Else
                         .Counters.TiempoOculto = IntervaloOculto
                     End If
@@ -82,7 +82,7 @@ Module Trabajo
 
                 Suerte = (((0.000002*Skill - 0.0002)*Skill + 0.0064)*Skill + 0.1124)*100
 
-                res = RandomNumber(1, 100)
+                res = Convert.ToInt16(RandomNumber(1, 100))
 
                 If res <= Suerte Then
 
@@ -92,7 +92,7 @@ Module Trabajo
                     Suerte = Suerte + (- 0.0088*(100 - Skill))
                     Suerte = Suerte + (0.9571)
                     Suerte = Suerte*IntervaloOculto
-                    .Counters.TiempoOculto = Suerte
+                    .Counters.TiempoOculto = Convert.ToInt16(Suerte)
 
                     ' No es pirata o es uno sin barca
                     If .flags.Navegando = 0 Then
@@ -157,7 +157,7 @@ Module Trabajo
             End If
 
             .Invent.BarcoObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
-            .Invent.BarcoSlot = Slot
+            .Invent.BarcoSlot = Convert.ToByte(Slot)
 
             ' No estaba navegando
             If .flags.Navegando = 0 Then
@@ -340,19 +340,19 @@ Module Trabajo
         For i = 1 To UserList(UserIndex).CurrentInventorySlots
             With UserList(UserIndex).Invent.Object_Renamed(i)
                 If .ObjIndex = ItemIndex Then
-                    If .Amount <= cant And .Equipped = 1 Then Call Desequipar(UserIndex, i)
+                    If .Amount <= cant And .Equipped = 1 Then Call Desequipar(UserIndex, Convert.ToByte(i))
 
                     .Amount = .Amount - cant
                     If .Amount <= 0 Then
                         cant = Math.Abs(.Amount)
-                        UserList(UserIndex).Invent.NroItems = UserList(UserIndex).Invent.NroItems - 1
+                        UserList(UserIndex).Invent.NroItems = Convert.ToInt16(UserList(UserIndex).Invent.NroItems - 1)
                         .Amount = 0
                         .ObjIndex = 0
                     Else
                         cant = 0
                     End If
 
-                    Call UpdateUserInv(False, UserIndex, i)
+                    Call UpdateUserInv(False, UserIndex, Convert.ToByte(i))
 
                     If cant = 0 Then Exit Sub
                 End If
@@ -637,7 +637,7 @@ Module Trabajo
         With UserList(UserIndex)
             CantidadItems = .Construir.PorCiclo
 
-            If .Construir.Cantidad < CantidadItems Then CantidadItems = .Construir.Cantidad
+            If .Construir.Cantidad < CantidadItems Then CantidadItems = Convert.ToInt16(.Construir.Cantidad)
 
             If .Construir.Cantidad > 0 Then .Construir.Cantidad = .Construir.Cantidad - CantidadItems
 
@@ -652,7 +652,7 @@ Module Trabajo
                     If PuedeConstruir(UserIndex, ItemIndex, CantidadItems) Then
                         TieneMateriales = True
                     Else
-                        CantidadItems = CantidadItems - 1
+                        CantidadItems = Convert.ToInt16(CantidadItems - 1)
                     End If
                 End While
 
@@ -736,7 +736,7 @@ Module Trabajo
                 Call UpdateUserInv(True, UserIndex, 0)
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(MARTILLOHERRERO, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(MARTILLOHERRERO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
 
                 .Reputacion.PlebeRep = .Reputacion.PlebeRep + vlProleta
                 If .Reputacion.PlebeRep > MAXREP Then .Reputacion.PlebeRep = MAXREP
@@ -777,7 +777,7 @@ Module Trabajo
         With UserList(UserIndex)
             CantidadItems = .Construir.PorCiclo
 
-            If .Construir.Cantidad < CantidadItems Then CantidadItems = .Construir.Cantidad
+            If .Construir.Cantidad < CantidadItems Then CantidadItems = Convert.ToInt16(.Construir.Cantidad)
 
             If .Construir.Cantidad > 0 Then .Construir.Cantidad = .Construir.Cantidad - CantidadItems
 
@@ -796,7 +796,7 @@ Module Trabajo
                     If CarpinteroTieneMateriales(UserIndex, ItemIndex, CantidadItems) Then
                         TieneMateriales = True
                     Else
-                        CantidadItems = CantidadItems - 1
+                        CantidadItems = Convert.ToInt16(CantidadItems - 1)
                     End If
                 End While
 
@@ -856,7 +856,7 @@ Module Trabajo
                 Call UpdateUserInv(True, UserIndex, 0)
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(LABUROCARPINTERO, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(LABUROCARPINTERO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
 
 
                 .Reputacion.PlebeRep = .Reputacion.PlebeRep + vlProleta
@@ -905,16 +905,16 @@ Module Trabajo
 
         Dim MiObj As Obj
         With UserList(UserIndex)
-            CantidadItems = MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
+            CantidadItems = Convert.ToInt16(MaximoInt(1, Convert.ToInt32((.Stats.ELV - 4)/5)))
 
             Slot = .flags.TargetObjInvSlot
             obji = .Invent.Object_Renamed(Slot).ObjIndex
 
             While CantidadItems > 0 And Not TieneMinerales
-                If .Invent.Object_Renamed(Slot).Amount >= MineralesParaLingote(obji)*CantidadItems Then
+                If .Invent.Object_Renamed(Slot).Amount >= MineralesParaLingote(CType(obji, iMinerales))*CantidadItems Then
                     TieneMinerales = True
                 Else
-                    CantidadItems = CantidadItems - 1
+                    CantidadItems = Convert.ToInt16(CantidadItems - 1)
                 End If
             End While
 
@@ -926,7 +926,7 @@ Module Trabajo
             End If
 
             .Invent.Object_Renamed(Slot).Amount = .Invent.Object_Renamed(Slot).Amount -
-                                                  MineralesParaLingote(obji)*CantidadItems
+                                                  MineralesParaLingote(CType(obji, iMinerales))*CantidadItems
             If .Invent.Object_Renamed(Slot).Amount < 1 Then
                 .Invent.Object_Renamed(Slot).Amount = 0
                 .Invent.Object_Renamed(Slot).ObjIndex = 0
@@ -937,7 +937,7 @@ Module Trabajo
             If Not MeterItemEnInventario(UserIndex, MiObj) Then
                 Call TirarItemAlPiso(.Pos, MiObj)
             End If
-            Call UpdateUserInv(False, UserIndex, Slot)
+            Call UpdateUserInv(False, UserIndex, Convert.ToByte(Slot))
             Call _
                 WriteConsoleMsg(UserIndex,
                                 "¡Has obtenido " & CantidadItems & " lingote" & If(CantidadItems = 1, "", "s") & "!",
@@ -961,10 +961,10 @@ Module Trabajo
 
         Dim MiObj(2) As Obj
         With UserList(UserIndex)
-            Slot = .flags.TargetObjInvSlot
+            Slot = Convert.ToByte(.flags.TargetObjInvSlot)
 
             With .Invent.Object_Renamed(Slot)
-                .Amount = .Amount - 1
+                .Amount = Convert.ToInt16(.Amount - 1)
 
                 If .Amount < 1 Then
                     If .Equipped = 1 Then Call Desequipar(UserIndex, Slot)
@@ -974,11 +974,11 @@ Module Trabajo
                 End If
             End With
 
-            num = RandomNumber(10, 25)
+            num = Convert.ToInt16(RandomNumber(10, 25))
 
-            Lingotes(0) = (ObjData_Renamed(.flags.TargetObjInvIndex).LingH*num)*0.01
-            Lingotes(1) = (ObjData_Renamed(.flags.TargetObjInvIndex).LingP*num)*0.01
-            Lingotes(2) = (ObjData_Renamed(.flags.TargetObjInvIndex).LingO*num)*0.01
+            Lingotes(0) = Convert.ToInt16((ObjData_Renamed(.flags.TargetObjInvIndex).LingH*num)*0.01)
+            Lingotes(1) = Convert.ToInt16((ObjData_Renamed(.flags.TargetObjInvIndex).LingP*num)*0.01)
+            Lingotes(2) = Convert.ToInt16((ObjData_Renamed(.flags.TargetObjInvIndex).LingO*num)*0.01)
 
 
             For i = 0 To 2
@@ -1074,7 +1074,7 @@ Module Trabajo
                 Call SubirSkill(UserIndex, eSkill.Herreria, True)
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(MARTILLOHERRERO, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(MARTILLOHERRERO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
 
             ElseIf PuedeConstruirCarpintero(ItemUpgrade) Then
                 If .Invent.WeaponEqpObjIndex <> SERRUCHO_CARPINTERO Then
@@ -1104,7 +1104,7 @@ Module Trabajo
                 Call SubirSkill(UserIndex, eSkill.Carpinteria, True)
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(LABUROCARPINTERO, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(LABUROCARPINTERO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
             Else
                 Exit Sub
             End If
@@ -1276,18 +1276,18 @@ Module Trabajo
 
                     ' 20% de bonificacion
                     If .Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
-                        puntosRequeridos = Npclist(NpcIndex).flags.Domable*0.8
+                        puntosRequeridos = Convert.ToInt16(Npclist(NpcIndex).flags.Domable*0.8)
 
                         ' 11% de bonificacion
                     ElseIf .Invent.AnilloEqpObjIndex = FLAUTAMAGICA Then
-                        puntosRequeridos = Npclist(NpcIndex).flags.Domable*0.89
+                        puntosRequeridos = Convert.ToInt16(Npclist(NpcIndex).flags.Domable*0.89)
 
                     Else
                         puntosRequeridos = Npclist(NpcIndex).flags.Domable
                     End If
 
                     If puntosRequeridos <= puntosDomar And RandomNumber(1, 5) = 1 Then
-                        .NroMascotas = .NroMascotas + 1
+                        .NroMascotas = Convert.ToInt16(.NroMascotas + 1)
                         index = FreeMascotaIndex(UserIndex)
                         .MascotasIndex(index) = NpcIndex
                         .MascotasType(index) = Npclist(NpcIndex).Numero
@@ -1493,11 +1493,11 @@ Module Trabajo
             Suerte = 1
         End If
 
-        exito = RandomNumber(1, Suerte)
+        exito = Convert.ToByte(RandomNumber(1, Suerte))
 
         If exito = 1 Then
             Obj_Renamed.ObjIndex = FOGATA_APAG
-            Obj_Renamed.Amount = MapData(Map, X, Y).ObjInfo.Amount\3
+            Obj_Renamed.Amount = Convert.ToInt16(MapData(Map, X, Y).ObjInfo.Amount\3)
 
             Call _
                 WriteConsoleMsg(UserIndex, "Has hecho " & Obj_Renamed.Amount & " fogatas.",
@@ -1541,19 +1541,19 @@ Module Trabajo
 
             Dim Skill As Short
             Skill = UserList(UserIndex).Stats.UserSkills(eSkill.Pesca)
-            Suerte = Int(- 0.00125*Skill*Skill - 0.3*Skill + 49)
+            Suerte = Convert.ToInt16(Int(- 0.00125*Skill*Skill - 0.3*Skill + 49))
 
-            res = RandomNumber(1, Suerte)
+            res = Convert.ToInt16(RandomNumber(1, Suerte))
 
             Dim MiObj As Obj
             If res <= 6 Then
 
                 If UserList(UserIndex).clase = eClass.Worker Then
                     With UserList(UserIndex)
-                        CantidadItems = 1 + MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
+                        CantidadItems = Convert.ToInt16(1 + MaximoInt(1, Convert.ToInt32((.Stats.ELV - 4)/5)))
                     End With
 
-                    MiObj.Amount = RandomNumber(1, CantidadItems)
+                    MiObj.Amount = Convert.ToInt16(RandomNumber(1, CantidadItems))
                 Else
                     MiObj.Amount = 1
                 End If
@@ -1615,23 +1615,23 @@ Module Trabajo
             ' m = (60-11)/(1-10)
             ' y = mx - m*10 + 11
 
-            Suerte = Int(- 0.00125*iSkill*iSkill - 0.3*iSkill + 49)
+            Suerte = Convert.ToInt16(Int(- 0.00125*iSkill*iSkill - 0.3*iSkill + 49))
 
             Dim MiObj As Obj
             'UPGRADE_WARNING: El límite inferior de la matriz PecesPosibles ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             Dim PecesPosibles(4) As Short
             If Suerte > 0 Then
-                res = RandomNumber(1, Suerte)
+                res = Convert.ToInt16(RandomNumber(1, Suerte))
 
                 If res < 6 Then
 
-                    PecesPosibles(1) = PECES_POSIBLES.PESCADO1
-                    PecesPosibles(2) = PECES_POSIBLES.PESCADO2
-                    PecesPosibles(3) = PECES_POSIBLES.PESCADO3
-                    PecesPosibles(4) = PECES_POSIBLES.PESCADO4
+                    PecesPosibles(1) = Convert.ToInt16(PECES_POSIBLES.PESCADO1)
+                    PecesPosibles(2) = Convert.ToInt16(PECES_POSIBLES.PESCADO2)
+                    PecesPosibles(3) = Convert.ToInt16(PECES_POSIBLES.PESCADO3)
+                    PecesPosibles(4) = Convert.ToInt16(PECES_POSIBLES.PESCADO4)
 
                     If EsPescador = True Then
-                        MiObj.Amount = RandomNumber(1, 5)
+                        MiObj.Amount = Convert.ToInt16(RandomNumber(1, 5))
                     Else
                         MiObj.Amount = 1
                     End If
@@ -1740,7 +1740,7 @@ Module Trabajo
 
                 If .Invent.AnilloEqpObjIndex = GUANTE_HURTO Then GuantesHurto = True
 
-                If UserList(VictimaIndex).flags.Privilegios And PlayerType.User Then
+                If (UserList(VictimaIndex).flags.Privilegios And PlayerType.User) <> 0 Then
 
 
                     RobarSkill = .Stats.UserSkills(eSkill.Robar)
@@ -1769,7 +1769,7 @@ Module Trabajo
                         Suerte = 5
                     End If
 
-                    res = RandomNumber(1, Suerte)
+                    res = Convert.ToInt16(RandomNumber(1, Suerte))
 
                     If res < 3 Then 'Exito robo
 
@@ -1787,14 +1787,14 @@ Module Trabajo
                                 If .clase = eClass.Thief Then
                                     ' Si no tine puestos los guantes de hurto roba un 50% menos. Pablo (ToxicWaste)
                                     If GuantesHurto Then
-                                        N = RandomNumber(.Stats.ELV*50, .Stats.ELV*100)
+                                        N = Convert.ToInt16(RandomNumber(.Stats.ELV*50, .Stats.ELV*100))
                                     Else
-                                        N = RandomNumber(.Stats.ELV*25, .Stats.ELV*50)
+                                        N = Convert.ToInt16(RandomNumber(.Stats.ELV*25, .Stats.ELV*50))
                                     End If
                                 Else
-                                    N = RandomNumber(1, 100)
+                                    N = Convert.ToInt16(RandomNumber(1, 100))
                                 End If
-                                If N > UserList(VictimaIndex).Stats.GLD Then N = UserList(VictimaIndex).Stats.GLD
+                                If N > UserList(VictimaIndex).Stats.GLD Then N = Convert.ToInt16(UserList(VictimaIndex).Stats.GLD)
                                 UserList(VictimaIndex).Stats.GLD = UserList(VictimaIndex).Stats.GLD - N
 
                                 .Stats.GLD = .Stats.GLD + N
@@ -1899,7 +1899,7 @@ Module Trabajo
                         If RandomNumber(1, 10) < 4 Then flag = True
                     End If
                 End If
-                If Not flag Then i = i + 1
+                If Not flag Then i = Convert.ToInt16(i + 1)
             Loop
         Else
             i = 20
@@ -1910,7 +1910,7 @@ Module Trabajo
                         If RandomNumber(1, 10) < 4 Then flag = True
                     End If
                 End If
-                If Not flag Then i = i - 1
+                If Not flag Then i = Convert.ToInt16(i - 1)
             Loop
         End If
 
@@ -1922,7 +1922,7 @@ Module Trabajo
             ObjAmount = UserList(VictimaIndex).Invent.Object_Renamed(i).Amount
 
             'Cantidad al azar entre el 5% y el 10% del total, con minimo 1.
-            num = MaximoInt(1, RandomNumber(ObjAmount*0.05, ObjAmount*0.1))
+            num = Convert.ToByte(MaximoInt(1, RandomNumber(Convert.ToInt32(ObjAmount*0.05), Convert.ToInt32(ObjAmount*0.1))))
 
             MiObj.Amount = num
             MiObj.ObjIndex = UserList(VictimaIndex).Invent.Object_Renamed(i).ObjIndex
@@ -1974,25 +1974,25 @@ Module Trabajo
 
         Select Case UserList(UserIndex).clase
             Case eClass.Assasin
-                Suerte = Int(((0.00003*Skill - 0.002)*Skill + 0.098)*Skill + 4.25)
+                Suerte = Convert.ToInt16(Int(((0.00003*Skill - 0.002)*Skill + 0.098)*Skill + 4.25))
 
             Case eClass.Cleric, eClass.Paladin, eClass.Pirat
-                Suerte = Int(((0.000003*Skill + 0.0006)*Skill + 0.0107)*Skill + 4.93)
+                Suerte = Convert.ToInt16(Int(((0.000003*Skill + 0.0006)*Skill + 0.0107)*Skill + 4.93))
 
             Case eClass.Bard
-                Suerte = Int(((0.000002*Skill + 0.0002)*Skill + 0.032)*Skill + 4.81)
+                Suerte = Convert.ToInt16(Int(((0.000002*Skill + 0.0002)*Skill + 0.032)*Skill + 4.81))
 
             Case Else
-                Suerte = Int(0.0361*Skill + 4.39)
+                Suerte = Convert.ToInt16(Int(0.0361*Skill + 4.39))
         End Select
 
 
         If RandomNumber(0, 100) < Suerte Then
             If VictimUserIndex <> 0 Then
                 If UserList(UserIndex).clase = eClass.Assasin Then
-                    daño = Math.Round(daño*1.4, 0)
+                    daño = Convert.ToInt16(Math.Round(daño*1.4, 0))
                 Else
-                    daño = Math.Round(daño*1.5, 0)
+                    daño = Convert.ToInt16(Math.Round(daño*1.5, 0))
                 End If
 
                 UserList(VictimUserIndex).Stats.MinHp = UserList(VictimUserIndex).Stats.MinHp - daño
@@ -2033,7 +2033,7 @@ Module Trabajo
         If UserList(UserIndex).Invent.WeaponEqpSlot = 0 Then Exit Sub
 
         If RandomNumber(0, 100) < PROB_ACUCHILLAR Then
-            daño = Int(daño*DAÑO_ACUCHILLAR)
+            daño = Convert.ToInt16(Int(daño*DAÑO_ACUCHILLAR))
 
             If VictimUserIndex <> 0 Then
                 UserList(VictimUserIndex).Stats.MinHp = UserList(VictimUserIndex).Stats.MinHp - daño
@@ -2069,10 +2069,10 @@ Module Trabajo
 
         Skill = UserList(UserIndex).Stats.UserSkills(eSkill.Wrestling)
 
-        Suerte = Int((((0.00000003*Skill + 0.000006)*Skill + 0.000107)*Skill + 0.0893)*100)
+        Suerte = Convert.ToInt16(Int((((0.00000003*Skill + 0.000006)*Skill + 0.000107)*Skill + 0.0893)*100))
 
         If RandomNumber(0, 100) < Suerte Then
-            daño = Int(daño*0.75)
+            daño = Convert.ToInt16(Int(daño*0.75))
             If VictimUserIndex <> 0 Then
                 UserList(VictimUserIndex).Stats.MinHp = UserList(VictimUserIndex).Stats.MinHp - daño
                 Call _
@@ -2135,19 +2135,19 @@ Module Trabajo
 
             Dim Skill As Short
             Skill = UserList(UserIndex).Stats.UserSkills(eSkill.Talar)
-            Suerte = Int(- 0.00125*Skill*Skill - 0.3*Skill + 49)
+            Suerte = Convert.ToInt16(Int(- 0.00125*Skill*Skill - 0.3*Skill + 49))
 
-            res = RandomNumber(1, Suerte)
+            res = Convert.ToInt16(RandomNumber(1, Suerte))
 
             Dim MiObj As Obj
             If res <= 6 Then
 
                 If UserList(UserIndex).clase = eClass.Worker Then
                     With UserList(UserIndex)
-                        CantidadItems = 1 + MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
+                        CantidadItems = Convert.ToInt16(1 + MaximoInt(1, Convert.ToInt32((.Stats.ELV - 4)/5)))
                     End With
 
-                    MiObj.Amount = RandomNumber(1, CantidadItems)
+                        MiObj.Amount = Convert.ToInt16(RandomNumber(1, CantidadItems))
                 Else
                     MiObj.Amount = 1
                 End If
@@ -2208,9 +2208,9 @@ Module Trabajo
                 End If
 
                 Skill = .Stats.UserSkills(eSkill.Mineria)
-                Suerte = Int(- 0.00125*Skill*Skill - 0.3*Skill + 49)
+                Suerte = Convert.ToInt16(Int(- 0.00125*Skill*Skill - 0.3*Skill + 49))
 
-                res = RandomNumber(1, Suerte)
+                res = Convert.ToInt16(RandomNumber(1, Suerte))
 
                 If res <= 5 Then
 
@@ -2219,9 +2219,9 @@ Module Trabajo
                     MiObj.ObjIndex = ObjData_Renamed(.flags.TargetObj).MineralIndex
 
                     If UserList(UserIndex).clase = eClass.Worker Then
-                        CantidadItems = 1 + MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
+                        CantidadItems = Convert.ToInt16(1 + MaximoInt(1, Convert.ToInt32((.Stats.ELV - 4)/5)))
 
-                        MiObj.Amount = RandomNumber(1, CantidadItems)
+                        MiObj.Amount = Convert.ToInt16(RandomNumber(1, CantidadItems))
                     Else
                         MiObj.Amount = 1
                     End If
@@ -2273,7 +2273,7 @@ Module Trabajo
 
             'Barrin 3/10/03
             'Esperamos a que se termine de concentrar
-            TActual = GetTickCount()
+            TActual = Convert.ToInt32(GetTickCount())
             If TActual - .Counters.tInicioMeditar < TIEMPO_INICIOMEDITAR Then
                 Exit Sub
             End If
@@ -2319,11 +2319,11 @@ Module Trabajo
             ElseIf MeditarSkill = 100 Then
                 Suerte = 5
             End If
-            res = RandomNumber(1, Suerte)
+            res = Convert.ToInt16(RandomNumber(1, Suerte))
 
             If res = 1 Then
 
-                cant = Porcentaje(.Stats.MaxMAN, PorcentajeRecuperoMana)
+                cant = Convert.ToInt16(Porcentaje(.Stats.MaxMAN, PorcentajeRecuperoMana))
                 If cant <= 0 Then cant = 1
                 .Stats.MinMAN = .Stats.MinMAN + cant
                 If .Stats.MinMAN > .Stats.MaxMAN Then .Stats.MinMAN = .Stats.MaxMAN
@@ -2364,14 +2364,14 @@ Module Trabajo
 
             WrestlingSkill = .Stats.UserSkills(eSkill.Wrestling)
 
-            Probabilidad = WrestlingSkill*0.2 + .Stats.ELV*0.66
+            Probabilidad = Convert.ToInt16(WrestlingSkill*0.2 + .Stats.ELV*0.66)
         End With
 
         With UserList(VictimIndex)
             ' Si tiene escudo, intenta desequiparlo
             If .Invent.EscudoEqpObjIndex > 0 Then
 
-                Resultado = RandomNumber(1, 100)
+                Resultado = Convert.ToInt16(RandomNumber(1, 100))
 
                 If Resultado <= Probabilidad Then
                     ' Se lo desequipo
@@ -2398,7 +2398,7 @@ Module Trabajo
             ' No tiene escudo, o fallo desequiparlo, entonces trata de desequipar arma
             If .Invent.WeaponEqpObjIndex > 0 Then
 
-                Resultado = RandomNumber(1, 100)
+                Resultado = Convert.ToInt16(RandomNumber(1, 100))
 
                 If Resultado <= Probabilidad Then
                     ' Se lo desequipo
@@ -2425,7 +2425,7 @@ Module Trabajo
             ' No tiene arma, o fallo desequiparla, entonces trata de desequipar casco
             If .Invent.CascoEqpObjIndex > 0 Then
 
-                Resultado = RandomNumber(1, 100)
+                Resultado = Convert.ToInt16(RandomNumber(1, 100))
 
                 If Resultado <= Probabilidad Then
                     ' Se lo desequipo
@@ -2478,7 +2478,7 @@ Module Trabajo
         If UserList(UserIndex).Invent.AnilloEqpObjIndex <> GUANTE_HURTO Then Exit Sub
 
         Dim res As Short
-        res = RandomNumber(1, 100)
+        res = Convert.ToInt16(RandomNumber(1, 100))
         If (res < 20) Then
             If TieneObjetosRobables(VictimaIndex) Then
                 Call RobarObjeto(UserIndex, VictimaIndex)
@@ -2506,10 +2506,10 @@ Module Trabajo
         If UserList(UserIndex).Invent.AnilloEqpObjIndex <> GUANTE_HURTO Then Exit Sub
 
         Dim res As Short
-        res = RandomNumber(0, 100)
+        res = Convert.ToInt16(RandomNumber(0, 100))
         If res < (UserList(UserIndex).Stats.UserSkills(eSkill.Wrestling)/4) Then
             UserList(VictimaIndex).flags.Paralizado = 1
-            UserList(VictimaIndex).Counters.Paralisis = IntervaloParalizado/2
+            UserList(VictimaIndex).Counters.Paralisis = Convert.ToInt16(IntervaloParalizado/2)
             Call WriteParalizeOK(VictimaIndex)
             Call _
                 WriteConsoleMsg(UserIndex, "Tu golpe ha dejado inmóvil a tu oponente",
@@ -2532,9 +2532,9 @@ Module Trabajo
         With UserList(UserIndex)
             WrestlingSkill = .Stats.UserSkills(eSkill.Wrestling)
 
-            Probabilidad = WrestlingSkill*0.2 + .Stats.ELV*0.66
+            Probabilidad = Convert.ToInt16(WrestlingSkill*0.2 + .Stats.ELV*0.66)
 
-            Resultado = RandomNumber(1, 100)
+            Resultado = Convert.ToInt16(RandomNumber(1, 100))
 
             If Resultado <= Probabilidad Then
                 Call Desequipar(VictimIndex, UserList(VictimIndex).Invent.WeaponEqpSlot)
@@ -2558,6 +2558,6 @@ Module Trabajo
         'Last Modification: 29/01/2010
         '
         '***************************************************
-        MaxItemsConstruibles = MaximoInt(1, Convert.ToInt16((UserList(UserIndex).Stats.ELV - 4)/5))
+        MaxItemsConstruibles = Convert.ToInt16(MaximoInt(1, Convert.ToInt32((UserList(UserIndex).Stats.ELV - 4)/5)))
     End Function
 End Module
