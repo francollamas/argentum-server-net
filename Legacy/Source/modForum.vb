@@ -57,8 +57,8 @@ Module modForum
             .ID = sForoID
 
             If FileExist(ForumPath) Then
-                .CantPosts = Val(GetVar(ForumPath, "INFO", "CantMSG"))
-                .CantAnuncios = Val(GetVar(ForumPath, "INFO", "CantAnuncios"))
+                .CantPosts = CInt(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
+                .CantAnuncios = CInt(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
 
                 ' Cargo posts
                 For PostIndex = 1 To .CantPosts
@@ -243,7 +243,7 @@ Module modForum
             ForumPath = AppDomain.CurrentDomain.BaseDirectory & "Foros/" & .ID & ".for"
             If FileExist(ForumPath) Then
 
-                NumPost = Val(GetVar(ForumPath, "INFO", "CantMSG"))
+                NumPost = CInt(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
 
                 ' Elimino los post viejos
                 For PostIndex = 1 To NumPost
@@ -251,7 +251,7 @@ Module modForum
                 Next PostIndex
 
 
-                NumPost = Val(GetVar(ForumPath, "INFO", "CantAnuncios"))
+                NumPost = CInt(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
 
                 ' Elimino los post viejos
                 For PostIndex = 1 To NumPost

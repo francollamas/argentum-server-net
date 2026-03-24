@@ -40,4 +40,18 @@ Module Migration
         ' Si no se encuentra la subcadena, devolver 0
         migr_InStrB = 0
     End Function
+
+    ''' <summary>
+    ''' Reemplazo de Val() de VB6. Retorna 0 si el string no es numérico (mismo comportamiento que Val()).
+    ''' </summary>
+    Public Function ParseVal(s As String) As Double
+        If s Is Nothing Then Return 0
+        Dim result As Double
+        If Double.TryParse(s.Trim(), System.Globalization.NumberStyles.Any,
+                           System.Globalization.CultureInfo.InvariantCulture, result) Then
+            Return result
+        End If
+        Return 0
+    End Function
+
 End Module

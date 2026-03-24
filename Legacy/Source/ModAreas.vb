@@ -78,7 +78,7 @@ Module ModAreas
         ReDim ConnGroups(NumMaps)
 
         For LoopC = 1 To NumMaps
-            ConnGroups(LoopC).OptValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
+            ConnGroups(LoopC).OptValue = ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
 
             If ConnGroups(LoopC).OptValue = 0 Then ConnGroups(LoopC).OptValue = 1
             'UPGRADE_WARNING: El límite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -103,12 +103,12 @@ Module ModAreas
             tCurHour = Fix(Hour(TimeOfDay)\3) 'A ke parte de la hora pertenece
 
             For LoopC = 1 To NumMaps
-                EntryValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
+                EntryValue = ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
                 Call _
                     WriteVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour,
                              CStr(CShort((EntryValue + ConnGroups(LoopC).OptValue)\2)))
 
-                ConnGroups(LoopC).OptValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC,
+                ConnGroups(LoopC).OptValue = ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC,
                                                         tCurDay & "-" & tCurHour))
                 If ConnGroups(LoopC).OptValue = 0 Then ConnGroups(LoopC).OptValue = 1
                 'UPGRADE_WARNING: El límite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'

@@ -54,7 +54,7 @@ Friend Class clsClan
 
     Public Property PuntosAntifaccion As Short
         Get
-            PuntosAntifaccion = Val(GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Antifaccion"))
+            PuntosAntifaccion = CShort(ParseVal(GetVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Antifaccion")))
         End Get
         Set
             Call WriteVar(GUILDINFOFILE, "GUILD" & p_GuildNumber, "Antifaccion", CStr(Value))

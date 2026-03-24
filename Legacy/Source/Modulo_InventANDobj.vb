@@ -157,8 +157,8 @@ Module InvNpc
 
             For i = 1 To MAX_INVENTORY_SLOTS
                 ln = GetVar(npcfile, "NPC" & Npclist(NpcIndex).Numero, "Obj" & i)
-                If ObjIndex = Val(ReadField(1, ln, 45)) Then
-                    EncontrarCant = Val(ReadField(2, ln, 45))
+                If ObjIndex = ParseVal(ReadField(1, ln, 45)) Then
+                    EncontrarCant = ParseVal(ReadField(2, ln, 45))
                     Exit Function
                 End If
             Next
@@ -270,12 +270,12 @@ Module InvNpc
         npcfile = DatPath & "NPCs.dat"
 
         With Npclist(NpcIndex)
-            .Invent.NroItems = Val(GetVar(npcfile, "NPC" & .Numero, "NROITEMS"))
+            .Invent.NroItems = ParseVal(GetVar(npcfile, "NPC" & .Numero, "NROITEMS"))
 
             For LoopC = 1 To .Invent.NroItems
                 ln = GetVar(npcfile, "NPC" & .Numero, "Obj" & LoopC)
-                .Invent.Object_Renamed(LoopC).ObjIndex = Val(ReadField(1, ln, 45))
-                .Invent.Object_Renamed(LoopC).Amount = Val(ReadField(2, ln, 45))
+                .Invent.Object_Renamed(LoopC).ObjIndex = ParseVal(ReadField(1, ln, 45))
+                .Invent.Object_Renamed(LoopC).Amount = ParseVal(ReadField(2, ln, 45))
 
             Next LoopC
         End With

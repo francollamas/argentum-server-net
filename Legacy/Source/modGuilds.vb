@@ -1820,7 +1820,7 @@ Module modGuilds
                 .Initialize((CharPath & Personaje & ".chr"))
 
                 ' Get the character's current guild
-                GuildActual = Val(.GetValue("GUILD", "GuildIndex"))
+                GuildActual = ParseVal(.GetValue("GUILD", "GuildIndex"))
                 If GuildActual > 0 And GuildActual <= CANTIDADDECLANES Then
                     GuildName = "<" & guilds(GuildActual).GuildName & ">"
                 Else

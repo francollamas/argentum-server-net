@@ -34,18 +34,18 @@ Friend Class ConsultasPopulares
         Dim CantOpciones As Short
         Dim i As Short
 
-        pEncuestaActualNum = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
+        pEncuestaActualNum = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
         pEncuestaActualTex = GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActualTexto")
         pNivelRequerido = CShort(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
 
         If pEncuestaActualNum > 0 Then
             'cargo todas las opciones
-            CantOpciones = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+            CantOpciones = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                       "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES"))
             'UPGRADE_WARNING: El límite inferior de la matriz pOpciones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim pOpciones(CantOpciones)
             For i = 1 To CantOpciones
-                pOpciones(i) = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                pOpciones(i) = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                           "ENCUESTA" & pEncuestaActualNum, "OPCION" & i))
             Next i
         End If
@@ -70,11 +70,11 @@ Friend Class ConsultasPopulares
 
             If (UserList(UserIndex).Stats.ELV >= pNivelRequerido) Then
                 If (OpcionValida(opcion)) Then
-                    YaVoto = Val(GetVar(CharFile, "CONSULTAS", "Voto")) >= pEncuestaActualNum
+                    YaVoto = ParseVal(GetVar(CharFile, "CONSULTAS", "Voto")) >= pEncuestaActualNum
                     If Not YaVoto Then
                         If Not MailYaVoto(UserList(UserIndex).email) Then
                             'pj apto para votar
-                            sufragio = CInt(Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                            sufragio = CInt(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                                        "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
                             sufragio = sufragio + 1
                             Call _

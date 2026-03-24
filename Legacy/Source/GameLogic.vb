@@ -659,7 +659,7 @@ Module Extra
         Dim NumHelpLines As Short
         Dim LoopC As Short
 
-        NumHelpLines = Val(GetVar(DatPath & "Help.dat", "INIT", "NumLines"))
+        NumHelpLines = ParseVal(GetVar(DatPath & "Help.dat", "INIT", "NumLines"))
 
         For LoopC = 1 To NumHelpLines
             Call _

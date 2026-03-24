@@ -93,7 +93,7 @@ Module ModFacciones
 
         With UserList(UserIndex)
 
-            Rango = Val(IIf(IsCaos, .Faccion.RecompensasCaos, .Faccion.RecompensasReal)) + 1
+            Rango = ParseVal(IIf(IsCaos, .Faccion.RecompensasCaos, .Faccion.RecompensasReal)) + 1
 
 
             ' Entrego armaduras de defensa baja

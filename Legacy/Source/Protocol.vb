@@ -6954,7 +6954,7 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_INFO)
                     Else
                         If FileExist(CharPath & name & ".chr") Then
-                            Count = Val(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
+                            Count = ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
                             If Count = 0 Then
                                 Call WriteConsoleMsg(UserIndex, "Sin prontuario..", FontTypeNames.FONTTYPE_INFO)
                             Else
@@ -7775,7 +7775,7 @@ Module Protocol
                         Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
                     Else
                         memberCount =
-                            Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
+                            ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
                                        "INIT", "NroMembers"))
 
                         For i = 1 To memberCount
@@ -8896,7 +8896,7 @@ Module Protocol
                                 End If
 
                                 If FileExist(CharPath & UserName & ".chr") Then
-                                    Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                    Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                                     Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
                                     Call _
                                         WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
@@ -9026,7 +9026,7 @@ Module Protocol
                             End If
 
                             If FileExist(CharPath & UserName & ".chr") Then
-                                Count = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
                                 Call _
                                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
@@ -9151,14 +9151,14 @@ Module Protocol
 
                         Select Case opcion
                             Case eEditOptions.eo_Gold
-                                If Val(Arg1) <= MAX_ORO_EDIT Then
+                                If ParseVal(Arg1) <= MAX_ORO_EDIT Then
                                     If tUser <= 0 Then ' Esta offline?
-                                        Call WriteVar(UserCharPath, "STATS", "GLD", CStr(Val(Arg1)))
+                                        Call WriteVar(UserCharPath, "STATS", "GLD", CStr(ParseVal(Arg1)))
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
-                                        UserList(tUser).Stats.GLD = Val(Arg1)
+                                        UserList(tUser).Stats.GLD = ParseVal(Arg1)
                                         Call WriteUpdateGold(tUser)
                                     End If
                                 Else
@@ -9173,18 +9173,18 @@ Module Protocol
                                 CommandString = CommandString & "ORO "
 
                             Case eEditOptions.eo_Experience
-                                If Val(Arg1) > 20000000 Then
+                                If ParseVal(Arg1) > 20000000 Then
                                     Arg1 = CStr(20000000)
                                 End If
 
                                 If tUser <= 0 Then ' Offline
                                     Var = CInt(GetVar(UserCharPath, "STATS", "EXP"))
-                                    Call WriteVar(UserCharPath, "STATS", "EXP", CStr(Var + Val(Arg1)))
+                                    Call WriteVar(UserCharPath, "STATS", "EXP", CStr(Var + ParseVal(Arg1)))
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
-                                    UserList(tUser).Stats.Exp = UserList(tUser).Stats.Exp + Val(Arg1)
+                                    UserList(tUser).Stats.Exp = UserList(tUser).Stats.Exp + ParseVal(Arg1)
                                     Call CheckUserLevel(tUser)
                                     Call WriteUpdateExp(tUser)
                                 End If
@@ -9200,7 +9200,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     Call _
-                                        ChangeUserChar(tUser, Val(Arg1), UserList(tUser).Char_Renamed.Head,
+                                        ChangeUserChar(tUser, ParseVal(Arg1), UserList(tUser).Char_Renamed.Head,
                                                        UserList(tUser).Char_Renamed.heading,
                                                        UserList(tUser).Char_Renamed.WeaponAnim,
                                                        UserList(tUser).Char_Renamed.ShieldAnim,
@@ -9218,7 +9218,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     Call _
-                                        ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, Val(Arg1),
+                                        ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, ParseVal(Arg1),
                                                        UserList(tUser).Char_Renamed.heading,
                                                        UserList(tUser).Char_Renamed.WeaponAnim,
                                                        UserList(tUser).Char_Renamed.ShieldAnim,
@@ -9229,7 +9229,7 @@ Module Protocol
                                 CommandString = CommandString & "HEAD "
 
                             Case eEditOptions.eo_CriminalsKilled
-                                Var = IIf(Val(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Val(Arg1))
+                                Var = IIf(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", CStr(Var))
@@ -9244,7 +9244,7 @@ Module Protocol
                                 CommandString = CommandString & "CRI "
 
                             Case eEditOptions.eo_CiticensKilled
-                                Var = IIf(Val(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Val(Arg1))
+                                Var = IIf(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", CStr(Var))
@@ -9259,7 +9259,7 @@ Module Protocol
                                 CommandString = CommandString & "CIU "
 
                             Case eEditOptions.eo_Level
-                                If Val(Arg1) > STAT_MAXELV Then
+                                If ParseVal(Arg1) > STAT_MAXELV Then
                                     Arg1 = CStr(STAT_MAXELV)
                                     Call _
                                         WriteConsoleMsg(UserIndex,
@@ -9268,7 +9268,7 @@ Module Protocol
                                 End If
 
                                 ' Chequeamos si puede permanecer en el clan
-                                If Val(Arg1) >= 25 Then
+                                If ParseVal(Arg1) >= 25 Then
 
                                     If tUser <= 0 Then
                                         GI = CShort(GetVar(UserCharPath, "GUILD", "GUILDINDEX"))
@@ -9297,12 +9297,12 @@ Module Protocol
                                 End If
 
                                 If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "STATS", "ELV", CStr(Val(Arg1)))
+                                    Call WriteVar(UserCharPath, "STATS", "ELV", CStr(ParseVal(Arg1)))
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
-                                    UserList(tUser).Stats.ELV = Val(Arg1)
+                                    UserList(tUser).Stats.ELV = ParseVal(Arg1)
                                     Call WriteUpdateUserStats(tUser)
                                 End If
 
@@ -9356,7 +9356,7 @@ Module Protocol
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
-                                        UserList(tUser).Stats.UserSkills(LoopC) = Val(Arg2)
+                                        UserList(tUser).Stats.UserSkills(LoopC) = ParseVal(Arg2)
                                         Call CheckEluSkill(tUser, LoopC, True)
                                     End If
                                 End If
@@ -9371,14 +9371,14 @@ Module Protocol
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
-                                    UserList(tUser).Stats.SkillPts = Val(Arg1)
+                                    UserList(tUser).Stats.SkillPts = ParseVal(Arg1)
                                 End If
 
                                 ' Log it
                                 CommandString = CommandString & "SKILLSLIBRES "
 
                             Case eEditOptions.eo_Nobleza
-                                Var = IIf(Val(Arg1) > MAXREP, MAXREP, Val(Arg1))
+                                Var = IIf(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Nobles", CStr(Var))
@@ -9393,7 +9393,7 @@ Module Protocol
                                 CommandString = CommandString & "NOB "
 
                             Case eEditOptions.eo_Asesino
-                                Var = IIf(Val(Arg1) > MAXREP, MAXREP, Val(Arg1))
+                                Var = IIf(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Asesino", CStr(Var))
@@ -9480,16 +9480,16 @@ Module Protocol
                                         bankGold = CInt(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
                                         Call _
                                             WriteVar(UserCharPath, "STATS", "BANCO",
-                                                     IIf(bankGold + Val(Arg1) <= 0, 0, bankGold + Val(Arg1)))
+                                                     IIf(bankGold + ParseVal(Arg1) <= 0, 0, bankGold + ParseVal(Arg1)))
                                         Call _
                                             WriteConsoleMsg(UserIndex,
                                                             "Se le ha agregado " & Arg1 & " monedas de oro a " &
                                                             UserName &
                                                             ".", FontTypeNames.FONTTYPE_TALK)
                                     Else
-                                        UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + Val(Arg1) <= 0,
+                                        UserList(tUser).Stats.Banco = IIf(UserList(tUser).Stats.Banco + ParseVal(Arg1) <= 0,
                                                                           0,
-                                                                          UserList(tUser).Stats.Banco + Val(Arg1))
+                                                                          UserList(tUser).Stats.Banco + ParseVal(Arg1))
                                         Call _
                                             WriteConsoleMsg(tUser, STANDARD_BOUNTY_HUNTER_MESSAGE,
                                                             FontTypeNames.FONTTYPE_TALK)
@@ -10371,11 +10371,11 @@ Module Protocol
                     If Not FileExist(CharPath & UserName & ".chr") Then
                         Call WriteConsoleMsg(UserIndex, "Charfile inexistente (no use +).", FontTypeNames.FONTTYPE_INFO)
                     Else
-                        If (Val(GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban")) = 1) Then
+                        If (ParseVal(GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban")) = 1) Then
                             Call UnBan(UserName)
 
                             'penas
-                            cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                            cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
@@ -12030,7 +12030,7 @@ Module Protocol
                         'baneamos a los miembros
                         Call LogGM(.name, "BANCLAN a " & UCase(GuildName))
 
-                        cantMembers = Val(GetVar(tFile, "INIT", "NroMembers"))
+                        cantMembers = ParseVal(GetVar(tFile, "INIT", "NroMembers"))
 
                         For LoopC = 1 To cantMembers
                             member = GetVar(tFile, "Members", "Member" & LoopC)
@@ -12053,7 +12053,7 @@ Module Protocol
                             'ponemos el flag de ban a 1
                             Call WriteVar(CharPath & member & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
-                            Count = Val(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
+                            Count = ParseVal(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
                             Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", CStr(Count + 1))
                             Call _
                                 WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
@@ -13813,7 +13813,7 @@ Module Protocol
                                     WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.",
                                                     FontTypeNames.FONTTYPE_INFO)
                             Else
-                                GuildIndex = Val(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX"))
+                                GuildIndex = ParseVal(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX"))
 
                                 If GuildIndex > 0 Then
                                     Call _
@@ -13832,7 +13832,7 @@ Module Protocol
                                         Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
 
 
-                                        cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                        cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
 
                                         Call _
                                             WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))

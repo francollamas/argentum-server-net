@@ -1800,7 +1800,7 @@ Module UsUaRiOs
 
             If OldMap <> Map Then
                 Call WriteChangeMap(UserIndex, Map, MapInfo_Renamed(.Pos.Map).MapVersion)
-                Call WritePlayMidi(UserIndex, Val(ReadField(1, MapInfo_Renamed(Map).Music, 45)))
+                Call WritePlayMidi(UserIndex, ParseVal(ReadField(1, MapInfo_Renamed(Map).Music, 45)))
 
                 'Update new Map Users
                 MapInfo_Renamed(Map).NumUsers = MapInfo_Renamed(Map).NumUsers + 1

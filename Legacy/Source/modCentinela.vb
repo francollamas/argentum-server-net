@@ -126,7 +126,7 @@ Module modCentinela
                 'ponemos el flag de ban a 1
                 Call WriteVar(CharPath & name & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
-                numPenas = Val(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
+                numPenas = ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
                 Call WriteVar(CharPath & name & ".chr", "PENAS", "Cant", CStr(numPenas + 1))
                 Call _
                     WriteVar(CharPath & name & ".chr", "PENAS", "P" & numPenas + 1,

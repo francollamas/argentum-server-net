@@ -54,7 +54,7 @@ Friend Class SoundMapInfo
             Temps = GetVar(MAPFILE & i & ".dat", "SONIDOS", "Cantidad")
 
             If IsNumeric(Temps) Then
-                p_Mapas(i).Cantidad = Val(Temps)
+                p_Mapas(i).Cantidad = ParseVal(Temps)
 
                 'UPGRADE_WARNING: El límite inferior de la matriz p_Mapas(i).flags ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 ReDim p_Mapas(i).flags(p_Mapas(i).Cantidad)
@@ -64,9 +64,9 @@ Friend Class SoundMapInfo
                 ReDim p_Mapas(i).SoundIndex(p_Mapas(i).Cantidad)
 
                 For j = 1 To p_Mapas(i).Cantidad
-                    p_Mapas(i).flags(j) = Val(GetVar(MAPFILE & i & ".dat", "SONIDO" & j, "Flags"))
-                    p_Mapas(i).Probabilidad(j) = Val(GetVar(MAPFILE & i & ".dat", "SONIDO" & j, "Probabilidad"))
-                    p_Mapas(i).SoundIndex(j) = Val(GetVar(MAPFILE & i & ".dat", "SONIDO" & j, "Sonido"))
+                    p_Mapas(i).flags(j) = ParseVal(GetVar(MAPFILE & i & ".dat", "SONIDO" & j, "Flags"))
+                    p_Mapas(i).Probabilidad(j) = ParseVal(GetVar(MAPFILE & i & ".dat", "SONIDO" & j, "Probabilidad"))
+                    p_Mapas(i).SoundIndex(j) = ParseVal(GetVar(MAPFILE & i & ".dat", "SONIDO" & j, "Sonido"))
                 Next j
             Else
                 p_Mapas(i).Cantidad = 0

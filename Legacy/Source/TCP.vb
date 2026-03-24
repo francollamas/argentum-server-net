@@ -944,7 +944,7 @@ Module TCP
             'Info
             Call WriteUserIndexInServer(UserIndex) 'Enviamos el User index
             Call WriteChangeMap(UserIndex, .Pos.Map, MapInfo_Renamed(.Pos.Map).MapVersion) 'Carga el mapa
-            Call WritePlayMidi(UserIndex, Val(ReadField(1, MapInfo_Renamed(.Pos.Map).Music, 45)))
+            Call WritePlayMidi(UserIndex, ParseVal(ReadField(1, MapInfo_Renamed(.Pos.Map).Music, 45)))
 
             If .flags.Privilegios = PlayerType.Dios Then
                 .flags.ChatColor = RGB(250, 250, 150)

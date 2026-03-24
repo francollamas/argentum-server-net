@@ -250,7 +250,7 @@ Module Admin
         '***************************************************
 
         BANCheck =
-            (Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "charfile/" & name & ".chr", "FLAGS", "Ban")) = 1)
+            (ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "charfile/" & name & ".chr", "FLAGS", "Ban")) = 1)
     End Function
 
     Public Function PersonajeExiste(name As String) As Boolean
@@ -309,10 +309,10 @@ Module Admin
 
         Dim LoopC As Short
 
-        MD5ClientesActivado = Val(GetVar(IniPath & "Server.ini", "MD5Hush", "Activado"))
+        MD5ClientesActivado = ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "Activado"))
 
         If MD5ClientesActivado = 1 Then
-            ReDim MD5s(Val(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados")))
+            ReDim MD5s(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados")))
             For LoopC = 0 To UBound(MD5s)
                 MD5s(LoopC) = GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptado" & (LoopC + 1))
                 MD5s(LoopC) = txtOffset(hexMd52Asc(MD5s(LoopC)), 55)
@@ -527,7 +527,7 @@ Module Admin
                             'ponemos el flag de ban a 1
                             Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
-                            cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                            cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
@@ -582,7 +582,7 @@ Module Admin
                 'ponemos el flag de ban a 1
                 Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
-                cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                 Call _
                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,

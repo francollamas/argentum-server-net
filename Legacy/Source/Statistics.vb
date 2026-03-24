@@ -60,8 +60,8 @@ Module Statistics
         '***************************************************
 
         'A new user connected, load it's trainning time count
-        trainningInfo(UserIndex).trainningTime = Val(GetVar(CharPath & UCase(UserList(UserIndex).name) & ".chr",
-                                                            "RESEARCH", "TrainningTime", 30))
+        trainningInfo(UserIndex).trainningTime = CInt(ParseVal(GetVar(CharPath & UCase(UserList(UserIndex).name) & ".chr",
+                                                            "RESEARCH", "TrainningTime", 30)))
 
         trainningInfo(UserIndex).startTick = GetTickCount()
     End Sub

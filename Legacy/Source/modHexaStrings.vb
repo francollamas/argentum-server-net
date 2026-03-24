@@ -27,7 +27,7 @@ Module modHexaStrings
         '
         '***************************************************
 
-        hexHex2Dec = Val("&H" & hex_Renamed)
+        hexHex2Dec = Convert.ToInt64(hex_Renamed, 16)
     End Function
 
     Public Function txtOffset(Text As String, off As Short) As String

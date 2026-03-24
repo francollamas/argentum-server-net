@@ -1497,4 +1497,5 @@ Public Module General
             CharList(i) = 0
         Next i
     End Sub
+
 End Module
