@@ -1289,7 +1289,7 @@ Module Protocol
             Else
                 If .flags.Muerto = 1 Then
                     'Si es un mapa común y no está en cana
-                    If MapInfo_Renamed(.Pos.Map).Restringir.ToUpper() = "NO" And .Counters.Pena = 0 Then
+                    If UCase(MapInfo_Renamed(.Pos.Map).Restringir) = "NO" And .Counters.Pena = 0 Then
                         If .flags.Traveling = 0 Then
                             If Ciudades(.Hogar).Map <> .Pos.Map Then
                                 Call goHome(UserIndex)
@@ -1576,7 +1576,7 @@ Module Protocol
                                          PrepareMessageChatOverHead(Chat, .Char_Renamed.CharIndex, .flags.ChatColor))
                         End If
                     Else
-                        If Chat.TrimEnd() <> "" Then
+                        If RTrim(Chat) <> "" Then
                             Call _
                                 SendData(SendTarget.ToPCArea, UserIndex,
                                          PrepareMessageConsoleMsg("Gm> " & Chat, FontTypeNames.FONTTYPE_GM))
@@ -3364,7 +3364,7 @@ Module Protocol
 
 
                 desc = buffer.ReadASCIIString()
-                GuildName = buffer.ReadASCIIString().Trim()
+                GuildName = Trim(buffer.ReadASCIIString())
                 site = buffer.ReadASCIIString()
                 codex = Split(buffer.ReadASCIIString(), SEPARATOR)
 
@@ -6820,7 +6820,7 @@ Module Protocol
                             WriteConsoleMsg(UserIndex, "La descripción tiene caracteres inválidos.",
                                             FontTypeNames.FONTTYPE_INFO)
                     Else
-                        .desc = Description.Trim()
+                        .desc = Trim(Description)
                         Call WriteConsoleMsg(UserIndex, "La descripción ha cambiado.", FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
@@ -6934,16 +6934,16 @@ Module Protocol
 
                 If migr_LenB(name) <> 0 Then
                     If (migr_InStrB(name, "\") <> 0) Then
-                        name = name.Replace("\", "")
+                        name = Replace(name, "\", "")
                     End If
                     If (migr_InStrB(name, "/") <> 0) Then
-                        name = name.Replace("/", "")
+                        name = Replace(name, "/", "")
                     End If
                     If (migr_InStrB(name, ":") <> 0) Then
-                        name = name.Replace(":", "")
+                        name = Replace(name, ":", "")
                     End If
                     If (migr_InStrB(name, "|") <> 0) Then
-                        name = name.Replace("|", "")
+                        name = Replace(name, "|", "")
                     End If
 
                     If _
@@ -7014,15 +7014,15 @@ Module Protocol
                 'Remove packet ID
                 Call buffer.ReadByte()
 
-                oldPass = buffer.ReadASCIIString().ToUpper()
-                newPass = buffer.ReadASCIIString().ToUpper()
+                oldPass = UCase(buffer.ReadASCIIString())
+                newPass = UCase(buffer.ReadASCIIString())
 
                 If migr_LenB(newPass) = 0 Then
                     Call _
                         WriteConsoleMsg(UserIndex, "Debes especificar una contraseña nueva, inténtalo de nuevo.",
                                         FontTypeNames.FONTTYPE_INFO)
                 Else
-                    oldPass2 = GetVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password").ToUpper()
+                    oldPass2 = UCase(GetVar(CharPath & UserList(UserIndex).name & ".chr", "INIT", "Password"))
 
                     If oldPass2 <> oldPass Then
                         Call _
@@ -7424,7 +7424,7 @@ Module Protocol
 
                     Call _
                         SendData(SendTarget.ToAdmins, 0,
-                                 PrepareMessageConsoleMsg(.name.ToLower() & " DENUNCIA: " & Text,
+                                 PrepareMessageConsoleMsg(LCase(.name) & " DENUNCIA: " & Text,
                                                           FontTypeNames.FONTTYPE_GUILDMSG))
                     Call WriteConsoleMsg(UserIndex, "Denuncia enviada, espere..", FontTypeNames.FONTTYPE_INFO)
                 End If
@@ -7506,7 +7506,7 @@ Module Protocol
                 Exit Sub
             End If
 
-            Select Case CStr(clanType).Trim().ToUpper()
+            Select Case UCase(Trim(CStr(clanType)))
                 Case CStr(eClanType.ct_RoyalArmy)
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_ARMADA
                 Case CStr(eClanType.ct_Evil)
@@ -7570,12 +7570,12 @@ Module Protocol
                     If tUser > 0 Then
                         Call ExpulsarDeParty(UserIndex, tUser)
                     Else
-                        If UserName.IndexOf("+") + 1 Then
-                            UserName = UserName.Replace("+", " ")
+                        If InStr(UserName, "+") Then
+                            UserName = Replace(UserName, "+", " ")
                         End If
 
                         Call _
-                            WriteConsoleMsg(UserIndex, UserName.ToLower() & " no pertenece a tu party.",
+                            WriteConsoleMsg(UserIndex, LCase(UserName) & " no pertenece a tu party.",
                                             FontTypeNames.FONTTYPE_INFO)
                     End If
                 End If
@@ -7630,16 +7630,16 @@ Module Protocol
                         Call TransformarEnLider(UserIndex, tUser)
                     Else
                         Call _
-                            WriteConsoleMsg(UserIndex, UserList(tUser).name.ToLower() & " no pertenece a tu party.",
+                            WriteConsoleMsg(UserIndex, LCase(UserList(tUser).name) & " no pertenece a tu party.",
                                             FontTypeNames.FONTTYPE_INFO)
                     End If
 
                 Else
-                    If UserName.IndexOf("+") + 1 Then
-                        UserName = UserName.Replace("+", " ")
+                    If InStr(UserName, "+") Then
+                        UserName = Replace(UserName, "+", " ")
                     End If
                     Call _
-                        WriteConsoleMsg(UserIndex, UserName.ToLower() & " no pertenece a tu party.",
+                        WriteConsoleMsg(UserIndex, LCase(UserName) & " no pertenece a tu party.",
                                         FontTypeNames.FONTTYPE_INFO)
                 End If
             End If
@@ -7703,14 +7703,14 @@ Module Protocol
                                                 FontTypeNames.FONTTYPE_INFO)
                         End If
                     Else
-                        If UserName.IndexOf("+") + 1 Then
-                            UserName = UserName.Replace("+", " ")
+                        If InStr(UserName, "+") Then
+                            UserName = Replace(UserName, "+", " ")
                         End If
 
                         'Don't allow users to spoof online GMs
                         If (UserDarPrivilegioLevel(UserName) And rank) <= (.flags.Privilegios And rank) Then
                             Call _
-                                WriteConsoleMsg(UserIndex, UserName.ToLower() & " no ha solicitado ingresar a tu party.",
+                                WriteConsoleMsg(UserIndex, LCase(UserName) & " no ha solicitado ingresar a tu party.",
                                                 FontTypeNames.FONTTYPE_PARTY)
                         Else
                             Call _
@@ -7765,10 +7765,10 @@ Module Protocol
 
                 If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
                     If (migr_InStrB(guild, "\") <> 0) Then
-                        guild = guild.Replace("\", "")
+                        guild = Replace(guild, "\", "")
                     End If
                     If (migr_InStrB(guild, "/") <> 0) Then
-                        guild = guild.Replace("/", "")
+                        guild = Replace(guild, "/", "")
                     End If
 
                     If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
@@ -7912,9 +7912,9 @@ Module Protocol
             Next i
         End With
 
-        If list.Length > 0 Then
+        If Len(list) > 0 Then
             Call _
-                WriteConsoleMsg(UserIndex, "Reales conectados: " & list.Substring(0, Math.Min(list.Length - 2, list.Length)),
+                WriteConsoleMsg(UserIndex, "Reales conectados: " & Left(list, Len(list) - 2),
                                 FontTypeNames.FONTTYPE_INFO)
         Else
             Call WriteConsoleMsg(UserIndex, "No hay reales conectados.", FontTypeNames.FONTTYPE_INFO)
@@ -7957,9 +7957,9 @@ Module Protocol
             Next i
         End With
 
-        If list.Length > 0 Then
+        If Len(list) > 0 Then
             Call _
-                WriteConsoleMsg(UserIndex, "Caos conectados: " & list.Substring(0, Math.Min(list.Length - 2, list.Length)), FontTypeNames.FONTTYPE_INFO)
+                WriteConsoleMsg(UserIndex, "Caos conectados: " & Left(list, Len(list) - 2), FontTypeNames.FONTTYPE_INFO)
         Else
             Call WriteConsoleMsg(UserIndex, "No hay Caos conectados.", FontTypeNames.FONTTYPE_INFO)
         End If
@@ -8245,7 +8245,7 @@ Module Protocol
                                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto NPCcount1. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                 For j = 0 To NPCcount1 - 1
                                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                                    If List1(j).Substring(0, Math.Min(Npclist(i).name.Length, List1(j).Length)) = Npclist(i).name Then
+                                    If Left(List1(j), Len(Npclist(i).name)) = Npclist(i).name Then
                                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                         List1(j) = List1(j) & ", (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
                                         NPCcant1(j) = NPCcant1(j) + 1
@@ -8276,7 +8276,7 @@ Module Protocol
                             Else
                                 For j = 0 To NPCcount2 - 1
                                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                                    If List2(j).Substring(0, Math.Min(Npclist(i).name.Length, List2(j).Length)) = Npclist(i).name Then
+                                    If Left(List2(j), Len(Npclist(i).name)) = Npclist(i).name Then
                                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                         List2(j) = List2(j) & ", (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
                                         NPCcant2(j) = NPCcant2(j) + 1
@@ -8386,7 +8386,7 @@ Module Protocol
 
                 If Not .flags.Privilegios And PlayerType.User Then
                     If MapaValido(Map) And migr_LenB(UserName) <> 0 Then
-                        If UserName.ToUpper() <> "YO" Then
+                        If UCase(UserName) <> "YO" Then
                             If Not .flags.Privilegios And PlayerType.Consejero Then
                                 tUser = NameIndex(UserName)
                             End If
@@ -8783,7 +8783,7 @@ Module Protocol
             Next i
 
             If migr_LenB(users) <> 0 Then
-                users = users.Substring(Math.Max(0, users.Length - users.Length - 2))
+                users = Right(users, Len(users) - 2)
                 Call WriteConsoleMsg(UserIndex, "Usuarios trabajando: " & users, FontTypeNames.FONTTYPE_INFO)
             Else
                 Call WriteConsoleMsg(UserIndex, "No hay usuarios trabajando.", FontTypeNames.FONTTYPE_INFO)
@@ -8819,7 +8819,7 @@ Module Protocol
             Next i
 
             If migr_LenB(users) <> 0 Then
-                users = users.Substring(0, Math.Min(users.Length - 2, users.Length))
+                users = Left(users, Len(users) - 2)
                 Call WriteConsoleMsg(UserIndex, "Usuarios ocultandose: " & users, FontTypeNames.FONTTYPE_INFO)
             Else
                 Call WriteConsoleMsg(UserIndex, "No hay usuarios ocultandose.", FontTypeNames.FONTTYPE_INFO)
@@ -8862,8 +8862,8 @@ Module Protocol
                 reason = buffer.ReadASCIIString()
                 jailTime = buffer.ReadByte()
 
-                If UserName.IndexOf("+", 1 - 1) + 1 Then
-                    UserName = UserName.Replace("+", " ")
+                If InStr(1, UserName, "+") Then
+                    UserName = Replace(UserName, "+", " ")
                 End If
 
                 '/carcel nick@motivo@<tiempo>
@@ -8889,10 +8889,10 @@ Module Protocol
                                                     FontTypeNames.FONTTYPE_INFO)
                             Else
                                 If (migr_InStrB(UserName, "\") <> 0) Then
-                                    UserName = UserName.Replace("\", "")
+                                    UserName = Replace(UserName, "\", "")
                                 End If
                                 If (migr_InStrB(UserName, "/") <> 0) Then
-                                    UserName = UserName.Replace("/", "")
+                                    UserName = Replace(UserName, "/", "")
                                 End If
 
                                 If FileExist(CharPath & UserName & ".chr") Then
@@ -8900,7 +8900,7 @@ Module Protocol
                                     Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
                                     Call _
                                         WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
-                                                 .name.ToLower() & ": CARCEL " & jailTime & "m, MOTIVO: " & reason.ToLower() &
+                                                 LCase(.name) & ": CARCEL " & jailTime & "m, MOTIVO: " & LCase(reason) &
                                                  " " &
                                                  Today & " " & TimeOfDay)
                                 End If
@@ -9019,10 +9019,10 @@ Module Protocol
                                                 FontTypeNames.FONTTYPE_INFO)
                         Else
                             If (migr_InStrB(UserName, "\") <> 0) Then
-                                UserName = UserName.Replace("\", "")
+                                UserName = Replace(UserName, "\", "")
                             End If
                             If (migr_InStrB(UserName, "/") <> 0) Then
-                                UserName = UserName.Replace("/", "")
+                                UserName = Replace(UserName, "/", "")
                             End If
 
                             If FileExist(CharPath & UserName & ".chr") Then
@@ -9030,11 +9030,11 @@ Module Protocol
                                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
                                 Call _
                                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
-                                             .name.ToLower() & ": ADVERTENCIA por: " & reason.ToLower() & " " & Today & " " &
+                                             LCase(.name) & ": ADVERTENCIA por: " & LCase(reason) & " " & Today & " " &
                                              TimeOfDay)
 
                                 Call _
-                                    WriteConsoleMsg(UserIndex, "Has advertido a " & UserName.ToUpper() & ".",
+                                    WriteConsoleMsg(UserIndex, "Has advertido a " & UCase(UserName) & ".",
                                                     FontTypeNames.FONTTYPE_INFO)
                                 Call LogGM(.name, " advirtio a " & UserName)
                             End If
@@ -9094,9 +9094,9 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                UserName = buffer.ReadASCIIString().Replace("+", " ")
+                UserName = Replace(buffer.ReadASCIIString(), "+", " ")
 
-                If UserName.ToUpper() = "YO" Then
+                If UCase(UserName) = "YO" Then
                     tUser = UserIndex
                 Else
                     tUser = NameIndex(UserName)
@@ -9311,7 +9311,7 @@ Module Protocol
 
                             Case eEditOptions.eo_Class
                                 For LoopC = 1 To NUMCLASES
-                                    If ListaClases(LoopC).ToUpper() = Arg1.ToUpper() Then Exit For
+                                    If UCase(ListaClases(LoopC)) = UCase(Arg1) Then Exit For
                                 Next LoopC
 
                                 If LoopC > NUMCLASES Then
@@ -9334,7 +9334,7 @@ Module Protocol
 
                             Case eEditOptions.eo_Skills
                                 For LoopC = 1 To NUMSKILLS
-                                    If SkillsNames(LoopC).Replace(" ", "+").ToUpper() = Arg1.ToUpper() Then Exit For
+                                    If UCase(Replace(SkillsNames(LoopC), " ", "+")) = UCase(Arg1) Then Exit For
                                 Next LoopC
 
                                 If LoopC > NUMSKILLS Then
@@ -9408,8 +9408,8 @@ Module Protocol
                                 CommandString = CommandString & "ASE "
 
                             Case eEditOptions.eo_Sex
-                                Sex = IIf(Arg1.ToUpper() = "MUJER", eGenero.Mujer, 0) ' Mujer?
-                                Sex = IIf(Arg1.ToUpper() = "HOMBRE", eGenero.Hombre, Sex) ' Hombre?
+                                Sex = IIf(UCase(Arg1) = "MUJER", eGenero.Mujer, 0) ' Mujer?
+                                Sex = IIf(UCase(Arg1) = "HOMBRE", eGenero.Hombre, Sex) ' Hombre?
 
                                 If Sex <> 0 Then ' Es Hombre o mujer?
                                     If tUser <= 0 Then ' OffLine
@@ -9431,7 +9431,7 @@ Module Protocol
 
                             Case eEditOptions.eo_Raza
 
-                                Arg1 = Arg1.ToUpper()
+                                Arg1 = UCase(Arg1)
                                 Select Case Arg1
                                     Case "HUMANO"
                                         raza = eRaza.Humano
@@ -9549,7 +9549,7 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                targetName = buffer.ReadASCIIString().Replace("+", " ")
+                targetName = Replace(buffer.ReadASCIIString(), "+", " ")
                 TargetIndex = NameIndex(targetName)
 
 
@@ -9867,10 +9867,10 @@ Module Protocol
 
                     If tUser <= 0 Then
                         If (migr_InStrB(UserName, "\") <> 0) Then
-                            UserName = UserName.Replace("\", "")
+                            UserName = Replace(UserName, "\", "")
                         End If
                         If (migr_InStrB(UserName, "/") <> 0) Then
-                            UserName = UserName.Replace("/", "")
+                            UserName = Replace(UserName, "/", "")
                         End If
 
                         For LoopC = 1 To NUMSKILLS
@@ -9934,7 +9934,7 @@ Module Protocol
                     (.flags.Privilegios And
                      (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
                     Then
-                    If UserName.ToUpper() <> "YO" Then
+                    If UCase(UserName) <> "YO" Then
                         tUser = NameIndex(UserName)
                     Else
                         tUser = UserIndex
@@ -10035,7 +10035,7 @@ Module Protocol
             Next i
 
             If migr_LenB(list) <> 0 Then
-                list = list.Substring(0, Math.Min(list.Length - 2, list.Length))
+                list = Left(list, Len(list) - 2)
                 Call WriteConsoleMsg(UserIndex, list & ".", FontTypeNames.FONTTYPE_INFO)
             Else
                 Call WriteConsoleMsg(UserIndex, "No hay GMs Online.", FontTypeNames.FONTTYPE_INFO)
@@ -10079,7 +10079,7 @@ Module Protocol
                 End If
             Next LoopC
 
-            If list.Length > 2 Then list = list.Substring(0, Math.Min(list.Length - 2, list.Length))
+            If Len(list) > 2 Then list = Left(list, Len(list) - 2)
 
             Call WriteConsoleMsg(UserIndex, "Usuarios en el mapa: " & list, FontTypeNames.FONTTYPE_INFO)
         End With
@@ -10362,10 +10362,10 @@ Module Protocol
                      (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <>
                     0 Then
                     If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = UserName.Replace("\", "")
+                        UserName = Replace(UserName, "\", "")
                     End If
                     If (migr_InStrB(UserName, "/") <> 0) Then
-                        UserName = UserName.Replace("/", "")
+                        UserName = Replace(UserName, "/", "")
                     End If
 
                     If Not FileExist(CharPath & UserName & ".chr") Then
@@ -10379,7 +10379,7 @@ Module Protocol
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                                         .name.ToLower() & ": UNBAN. " & Today & " " & TimeOfDay)
+                                         LCase(.name) & ": UNBAN. " & Today & " " & TimeOfDay)
 
                             Call LogGM(.name, "/UNBAN a " & UserName)
                             Call WriteConsoleMsg(UserIndex, UserName & " unbanned.", FontTypeNames.FONTTYPE_INFO)
@@ -10723,7 +10723,7 @@ Module Protocol
                                     End If
                                 End If
                             Next LoopC
-                            If migr_LenB(lista) <> 0 Then lista = lista.Substring(0, Math.Min(lista.Length - 2, lista.Length))
+                            If migr_LenB(lista) <> 0 Then lista = Left(lista, Len(lista) - 2)
                             Call _
                                 WriteConsoleMsg(UserIndex, "Los personajes con ip " & ip & " son: " & lista,
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -10800,7 +10800,7 @@ Module Protocol
                 End If
             Next LoopC
 
-            If migr_LenB(lista) <> 0 Then lista = lista.Substring(0, Math.Min(lista.Length - 2, lista.Length))
+            If migr_LenB(lista) <> 0 Then lista = Left(lista, Len(lista) - 2)
             Call _
                 WriteConsoleMsg(UserIndex, "Los personajes con ip " & ip & " son: " & lista, FontTypeNames.FONTTYPE_INFO)
         End With
@@ -10837,7 +10837,7 @@ Module Protocol
                 GuildName = buffer.ReadASCIIString()
 
                 If (migr_InStrB(GuildName, "+") <> 0) Then
-                    GuildName = GuildName.Replace("+", " ")
+                    GuildName = Replace(GuildName, "+", " ")
                 End If
 
                 If _
@@ -10850,7 +10850,7 @@ Module Protocol
                     If tGuild > 0 Then
                         Call _
                             WriteConsoleMsg(UserIndex,
-                                            "Clan " & GuildName.ToUpper() & ": " &
+                                            "Clan " & UCase(GuildName) & ": " &
                                             m_ListaDeMiembrosOnline(UserIndex, tGuild),
                                             FontTypeNames.FONTTYPE_GUILDMSG)
                     End If
@@ -11948,7 +11948,7 @@ Module Protocol
                 lista = lista & BanIps.Item(LoopC) & ", "
             Next LoopC
 
-            If migr_LenB(lista) <> 0 Then lista = lista.Substring(0, Math.Min(lista.Length - 2, lista.Length))
+            If migr_LenB(lista) <> 0 Then lista = Left(lista, Len(lista) - 2)
 
             Call WriteConsoleMsg(UserIndex, lista, FontTypeNames.FONTTYPE_INFO)
         End With
@@ -12024,11 +12024,11 @@ Module Protocol
                     Else
                         Call _
                             SendData(SendTarget.ToAll, 0,
-                                     PrepareMessageConsoleMsg(.name & " baneó al clan " & GuildName.ToUpper(),
+                                     PrepareMessageConsoleMsg(.name & " baneó al clan " & UCase(GuildName),
                                                               FontTypeNames.FONTTYPE_FIGHT))
 
                         'baneamos a los miembros
-                        Call LogGM(.name, "BANCLAN a " & GuildName.ToUpper())
+                        Call LogGM(.name, "BANCLAN a " & UCase(GuildName))
 
                         cantMembers = ParseVal(GetVar(tFile, "INIT", "NroMembers"))
 
@@ -12057,7 +12057,7 @@ Module Protocol
                             Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", CStr(Count + 1))
                             Call _
                                 WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
-                                         .name.ToLower() & ": BAN AL CLAN: " & GuildName & " " & Today & " " & TimeOfDay)
+                                         LCase(.name) & ": BAN AL CLAN: " & GuildName & " " & Today & " " & TimeOfDay)
                         Next LoopC
                     End If
                 End If
@@ -12326,10 +12326,10 @@ Module Protocol
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
                     (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = UserName.Replace("\", "")
+                        UserName = Replace(UserName, "\", "")
                     End If
                     If (migr_InStrB(UserName, "/") <> 0) Then
-                        UserName = UserName.Replace("/", "")
+                        UserName = Replace(UserName, "/", "")
                     End If
                     tUser = NameIndex(UserName)
 
@@ -12407,10 +12407,10 @@ Module Protocol
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
                     (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = UserName.Replace("\", "")
+                        UserName = Replace(UserName, "\", "")
                     End If
                     If (migr_InStrB(UserName, "/") <> 0) Then
-                        UserName = UserName.Replace("/", "")
+                        UserName = Replace(UserName, "/", "")
                     End If
                     tUser = NameIndex(UserName)
 
@@ -12563,10 +12563,10 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_INFO)
                     Else
                         If (migr_InStrB(UserName, "\") <> 0) Then
-                            UserName = UserName.Replace("\", "")
+                            UserName = Replace(UserName, "\", "")
                         End If
                         If (migr_InStrB(UserName, "/") <> 0) Then
-                            UserName = UserName.Replace("/", "")
+                            UserName = Replace(UserName, "/", "")
                         End If
 
                         If FileExist(CharPath & UserName & ".chr") Then
@@ -12579,7 +12579,7 @@ Module Protocol
 
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & punishment,
-                                         .name.ToLower() & ": <" & NewText & "> " & Today & " " & TimeOfDay)
+                                         LCase(.name) & ": <" & NewText & "> " & Today & " " & TimeOfDay)
 
                             Call WriteConsoleMsg(UserIndex, "Pena modificada.", FontTypeNames.FONTTYPE_INFO)
                         End If
@@ -12731,13 +12731,13 @@ Module Protocol
                     0 Then
                     'Handle special chars
                     If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = UserName.Replace("\", "")
+                        UserName = Replace(UserName, "\", "")
                     End If
                     If (migr_InStrB(UserName, "\") <> 0) Then
-                        UserName = UserName.Replace("/", "")
+                        UserName = Replace(UserName, "/", "")
                     End If
                     If (migr_InStrB(UserName, "+") <> 0) Then
-                        UserName = UserName.Replace("+", " ")
+                        UserName = Replace(UserName, "+", " ")
                     End If
 
                     'Only Gods and Admins can see the ips of adminsitrative characters. All others can be seen by every adminsitrative char.
@@ -12935,7 +12935,7 @@ Module Protocol
                 .flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
                  PlayerType.SemiDios) Then Exit Sub
-            If .name.ToUpper() <> "MARAXUS" Then Exit Sub
+            If UCase(.name) <> "MARAXUS" Then Exit Sub
 
             Call WriteConsoleMsg(UserIndex, "TID: " & CStr(ReiniciarAutoUpdate()), FontTypeNames.FONTTYPE_INFO)
         End With
@@ -12960,7 +12960,7 @@ Module Protocol
                 .flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
                  PlayerType.SemiDios) Then Exit Sub
-            If .name.ToUpper() <> "MARAXUS" Then Exit Sub
+            If UCase(.name) <> "MARAXUS" Then Exit Sub
 
             'time and Time BUG!
             Call LogGM(.name, .name & " reinició el mundo.")
@@ -13122,7 +13122,7 @@ Module Protocol
                 .flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
                  PlayerType.SemiDios) Then Exit Sub
-            If .name.ToUpper() <> "MARAXUS" Then Exit Sub
+            If UCase(.name) <> "MARAXUS" Then Exit Sub
 
             DeNoche = Not DeNoche
 
@@ -13823,7 +13823,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If Not FileExist(CharPath & newName & ".chr") Then
-                                        Call FileCopy(CharPath & UserName & ".chr", CharPath & newName.ToUpper() & ".chr")
+                                        Call FileCopy(CharPath & UserName & ".chr", CharPath & UCase(newName) & ".chr")
 
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Transferencia exitosa.",
@@ -13839,7 +13839,7 @@ Module Protocol
 
                                         Call _
                                             WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & CStr(cantPenas + 1),
-                                                     .name.ToLower() & ": BAN POR Cambio de nick a " & newName.ToUpper() & " " &
+                                                     LCase(.name) & ": BAN POR Cambio de nick a " & UCase(newName) & " " &
                                                      Today & " " & TimeOfDay)
 
                                         Call _
@@ -13958,8 +13958,8 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                UserName = buffer.ReadASCIIString().Replace("+", " ")
-                copyFrom = buffer.ReadASCIIString().Replace("+", " ")
+                UserName = Replace(buffer.ReadASCIIString(), "+", " ")
+                copyFrom = Replace(buffer.ReadASCIIString(), "+", " ")
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
@@ -14651,9 +14651,9 @@ Module Protocol
                 auxiliaryString = auxiliaryString & MOTD(LoopC).texto & vbCrLf
             Next LoopC
 
-            If auxiliaryString.Length >= 2 Then
-                If auxiliaryString.Substring(Math.Max(0, auxiliaryString.Length - 2)) = vbCrLf Then
-                    auxiliaryString = auxiliaryString.Substring(0, Math.Min(auxiliaryString.Length - 2, auxiliaryString.Length))
+            If Len(auxiliaryString) >= 2 Then
+                If Right(auxiliaryString, 2) = vbCrLf Then
+                    auxiliaryString = Left(auxiliaryString, Len(auxiliaryString) - 2)
                 End If
             End If
 
@@ -14720,7 +14720,7 @@ Module Protocol
                 If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
 
                     'No podemos modificar [INIT]Dioses ni [Dioses]*
-                    If (sLlave.ToUpper() = "INIT" And sClave.ToUpper() = "DIOSES") Or sLlave.ToUpper() = "DIOSES" Then
+                    If (UCase(sLlave) = "INIT" And UCase(sClave) = "DIOSES") Or UCase(sLlave) = "DIOSES" Then
                         Call _
                             WriteConsoleMsg(UserIndex, "¡No puedes modificar esa información desde aquí!",
                                             FontTypeNames.FONTTYPE_INFO)
@@ -15512,7 +15512,7 @@ Module Protocol
                     For i = LBound(guildList) To UBound(guildList)
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16295,7 +16295,7 @@ Module Protocol
                     For i = 1 To Npclist(NpcIndex).NroCriaturas
                         str_Renamed = str_Renamed & Npclist(NpcIndex).Criaturas(i).NpcName & SEPARATOR
                     Next i
-                    If migr_LenB(str_Renamed) > 0 Then str_Renamed = str_Renamed.Substring(0, Math.Min(str_Renamed.Length - 1, str_Renamed.Length))
+                    If migr_LenB(str_Renamed) > 0 Then str_Renamed = Left(str_Renamed, Len(str_Renamed) - 1)
                     Call .WriteASCIIString(str_Renamed)
                 End With
             End Sub,
@@ -16316,13 +16316,13 @@ Module Protocol
                     For i = LBound(enemies) To UBound(enemies)
                         Tmp = Tmp & enemies(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
                     For i = LBound(allies) To UBound(allies)
                         Tmp = Tmp & allies(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16367,7 +16367,7 @@ Module Protocol
                     For i = LBound(guilds) To UBound(guilds)
                         Tmp = Tmp & guilds(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16392,7 +16392,7 @@ Module Protocol
                     For i = LBound(guilds) To UBound(guilds)
                         Tmp = Tmp & guilds(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16447,20 +16447,20 @@ Module Protocol
                     For i = LBound(guildList) To UBound(guildList)
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
                     For i = LBound(MemberList) To UBound(MemberList)
                         Tmp = Tmp & MemberList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                     Call .WriteASCIIString(guildNews)
                     Tmp = vbNullString
                     For i = LBound(joinRequests) To UBound(joinRequests)
                         Tmp = Tmp & joinRequests(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16485,13 +16485,13 @@ Module Protocol
                     For i = LBound(guildList) To UBound(guildList)
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
                     For i = LBound(MemberList) To UBound(MemberList)
                         Tmp = Tmp & MemberList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16526,7 +16526,7 @@ Module Protocol
                     For i = LBound(codex) To UBound(codex)
                         temp = temp & codex(i) & SEPARATOR
                     Next i
-                    If temp.Length > 1 Then temp = temp.Substring(0, Math.Min(temp.Length - 1, temp.Length))
+                    If Len(temp) > 1 Then temp = Left(temp, Len(temp) - 1)
                     Call .WriteASCIIString(temp)
                     Call .WriteASCIIString(guildDesc)
                 End With
@@ -16708,7 +16708,7 @@ Module Protocol
                     For i = LBound(npcNames) To UBound(npcNames)
                         Tmp = Tmp & npcNames(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16733,7 +16733,7 @@ Module Protocol
                     For i = 0 To Ayuda.Longitud - 1
                         Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR
                     Next i
-                    If migr_LenB(Tmp) <> 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16769,7 +16769,7 @@ Module Protocol
                             End If
                         Next i
                     End If
-                    If migr_LenB(Tmp) <> 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If migr_LenB(Tmp) <> 0 Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                     Call .WriteLong(Parties(PI).ObtenerExperienciaTotal)
                 End With
@@ -16830,7 +16830,7 @@ Module Protocol
                     For i = 1 To cant
                         Tmp = Tmp & userNamesList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Len(Tmp) Then Tmp = Left(Tmp, Len(Tmp) - 1)
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,

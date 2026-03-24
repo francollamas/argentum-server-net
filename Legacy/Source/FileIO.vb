@@ -36,10 +36,11 @@ Module ES
         NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Admines"))
 
         For WizNum = 1 To NumWizs
-            NomB = UCase(GetVar(IniPath & "Server.ini", "Admines", "Admin" & WizNum))
+            Dim tmpVal = GetVar(IniPath & "Server.ini", "Admines", "Admin" & WizNum)
+            NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
 
-            If Left(NomB, 1) = "*" Or Left(NomB, 1) = "+" Then NomB = Right(NomB, Len(NomB) - 1)
-            If UCase(name) = NomB Then
+            If NomB.Length > 0 AndAlso (NomB.Substring(0, 1) = "*" Or NomB.Substring(0, 1) = "+") Then NomB = If(NomB.Length > 1, NomB.Substring(1), "")
+            If name.ToUpper() = NomB Then
                 EsAdmin = True
                 Exit Function
             End If
@@ -60,10 +61,11 @@ Module ES
 
         NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Dioses"))
         For WizNum = 1 To NumWizs
-            NomB = UCase(GetVar(IniPath & "Server.ini", "Dioses", "Dios" & WizNum))
+            Dim tmpVal = GetVar(IniPath & "Server.ini", "Dioses", "Dios" & WizNum)
+            NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
 
-            If Left(NomB, 1) = "*" Or Left(NomB, 1) = "+" Then NomB = Right(NomB, Len(NomB) - 1)
-            If UCase(name) = NomB Then
+            If NomB.Length > 0 AndAlso (NomB.Substring(0, 1) = "*" Or NomB.Substring(0, 1) = "+") Then NomB = If(NomB.Length > 1, NomB.Substring(1), "")
+            If name.ToUpper() = NomB Then
                 EsDios = True
                 Exit Function
             End If
@@ -84,10 +86,11 @@ Module ES
 
         NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "SemiDioses"))
         For WizNum = 1 To NumWizs
-            NomB = UCase(GetVar(IniPath & "Server.ini", "SemiDioses", "SemiDios" & WizNum))
+            Dim tmpVal = GetVar(IniPath & "Server.ini", "SemiDioses", "SemiDios" & WizNum)
+            NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
 
-            If Left(NomB, 1) = "*" Or Left(NomB, 1) = "+" Then NomB = Right(NomB, Len(NomB) - 1)
-            If UCase(name) = NomB Then
+            If NomB.Length > 0 AndAlso (NomB.Substring(0, 1) = "*" Or NomB.Substring(0, 1) = "+") Then NomB = If(NomB.Length > 1, NomB.Substring(1), "")
+            If name.ToUpper() = NomB Then
                 EsSemiDios = True
                 Exit Function
             End If
@@ -108,10 +111,11 @@ Module ES
 
         NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Consejeros"))
         For WizNum = 1 To NumWizs
-            NomB = UCase(GetVar(IniPath & "Server.ini", "Consejeros", "Consejero" & WizNum))
+            Dim tmpVal = GetVar(IniPath & "Server.ini", "Consejeros", "Consejero" & WizNum)
+            NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
 
-            If Left(NomB, 1) = "*" Or Left(NomB, 1) = "+" Then NomB = Right(NomB, Len(NomB) - 1)
-            If UCase(name) = NomB Then
+            If NomB.Length > 0 AndAlso (NomB.Substring(0, 1) = "*" Or NomB.Substring(0, 1) = "+") Then NomB = If(NomB.Length > 1, NomB.Substring(1), "")
+            If name.ToUpper() = NomB Then
                 EsConsejero = True
                 Exit Function
             End If
@@ -132,10 +136,11 @@ Module ES
 
         NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "RolesMasters"))
         For WizNum = 1 To NumWizs
-            NomB = UCase(GetVar(IniPath & "Server.ini", "RolesMasters", "RM" & WizNum))
+            Dim tmpVal = GetVar(IniPath & "Server.ini", "RolesMasters", "RM" & WizNum)
+            NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
 
-            If Left(NomB, 1) = "*" Or Left(NomB, 1) = "+" Then NomB = Right(NomB, Len(NomB) - 1)
-            If UCase(name) = NomB Then
+            If NomB.Length > 0 AndAlso (NomB.Substring(0, 1) = "*" Or NomB.Substring(0, 1) = "+") Then NomB = If(NomB.Length > 1, NomB.Substring(1), "")
+            If name.ToUpper() = NomB Then
                 EsRolesMaster = True
                 Exit Function
             End If
@@ -885,9 +890,10 @@ Module ES
 
                     'CHECK: !!! Esto es provisorio hasta que los de Dateo cambien los valores de string a numerico
                     For i = 1 To NUMCLASES
-                        S = UCase(Leer.GetValue("OBJ" & Object_Renamed, "CP" & i))
+                        Dim tmpVal = Leer.GetValue("OBJ" & Object_Renamed, "CP" & i)
+                        S = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
                         N = 1
-                        Do While migr_LenB(S) > 0 And UCase(ListaClases(N)) <> S
+                        Do While S.Length > 0 And If(ListaClases(N) IsNot Nothing, ListaClases(N).ToUpper(), "") <> S
                             N = N + 1
                         Loop
                         .ClaseProhibida(i) = IIf(migr_LenB(S) > 0, N, 0)
@@ -1214,19 +1220,19 @@ Module ES
             currentSection = ""
             While Not EOF(fileNumber)
                 currentLine = LineInput(fileNumber)
-                currentLine = Trim(currentLine)
+                currentLine = If(currentLine IsNot Nothing, currentLine.Trim(), "")
 
                 ' Check if it's a section line, e.g. [SECTION]
-                If Left(currentLine, 1) = "[" And Right(currentLine, 1) = "]" Then
-                    currentSection = Mid(currentLine, 2, Len(currentLine) - 2)
+                If currentLine.Length > 0 AndAlso currentLine.Substring(0, 1) = "[" And currentLine.Length > 0 AndAlso currentLine.Substring(currentLine.Length - 1, 1) = "]" Then
+                    currentSection = If(currentLine.Length > 2, currentLine.Substring(1, currentLine.Length - 2), "")
                 ElseIf StrComp(currentSection, sectionName, CompareMethod.Text) = 0 Then
                     ' We are in the correct section, check if line contains the key
-                    equalPos = InStr(1, currentLine, "=", CompareMethod.Text)
+                    equalPos = If(currentLine IsNot Nothing, currentLine.IndexOf("=") + 1, 0)
                     If equalPos > 1 Then
                         ' Extract the key (left side of '=') and compare
-                        If StrComp(Trim(Left(currentLine, equalPos - 1)), keyName, CompareMethod.Text) = 0 Then
+                        If StrComp(If(currentLine IsNot Nothing, currentLine.Substring(0, equalPos - 1).Trim(), ""), keyName, CompareMethod.Text) = 0 Then
                             ' Return the value (right side of '='), trimmed
-                            Return Trim(Mid(currentLine, equalPos + 1))
+                            Return If(currentLine IsNot Nothing, currentLine.Substring(equalPos).Trim(), "")
                         End If
                     End If
                 End If
@@ -1759,7 +1765,14 @@ Module ES
                     'Is it a different ip from last time?
                 ElseIf _
                     .ip <>
-                    Left(GetVar(UserFile, "INIT", "LastIP1"), InStr(1, GetVar(UserFile, "INIT", "LastIP1"), " ") - 1) _
+                    (Function() As String
+                        Dim lastIP = GetVar(UserFile, "INIT", "LastIP1")
+                        If lastIP IsNot Nothing Then
+                            Dim spacePos = lastIP.IndexOf(" ")
+                            Return If(spacePos > 0, lastIP.Substring(0, spacePos), "")
+                        End If
+                        Return ""
+                    End Function)() _
                     Then
                     For i = 5 To 2 Step - 1
                         Call WriteVar(UserFile, "INIT", "LastIP" & i, GetVar(UserFile, "INIT", "LastIP" & CStr(i - 1)))

@@ -1440,7 +1440,7 @@ Public Module General
         Dim i As Short
         For i = 1 To LastUser
             If UserList(i).flags.UserLogged Then
-                Call SaveUser(i, CharPath & UCase(UserList(i).name) & ".chr")
+                Call SaveUser(i, CharPath & UserList(i).name.ToUpper() & ".chr")
             End If
         Next i
 

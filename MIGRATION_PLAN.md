@@ -104,7 +104,7 @@ En los casos donde el tipo esperado es Integer o Long:
 
 ### Progreso por archivo
 
-**COMPLETADOS (17 archivos)**:
+**COMPLETADOS (19 archivos)**:
 - Migration.vb ✅ (5 inst)
 - clsdicc.vb ✅ (2 inst)
 - Acciones.vb ✅ (1 inst)
@@ -119,13 +119,13 @@ En los casos donde el tipo esperado es Integer o Long:
 - GameLogic.vb ✅ (9 inst)
 - clsClan.vb ✅ (18 inst)
 - modGuilds.vb ✅ (28 inst)
+- FileIO.vb ✅ (27 inst)
+- Protocol.vb ✅ (104 inst)
 
-**PENDIENTES (3 archivos, requieren atención especial)**:
+**PENDIENTES (1 archivo, requiere atención especial)**:
 | Archivo | Estado | Notas |
 |---------|--------|-------|
-| General.vb | 🔲 | 5 inst, problemas con InStr → IndexOf (1-based vs 0-based) |
-| FileIO.vb | 🔲 | 27 inst, muy complejo, requiere validación adicional |
-| Protocol.vb | 🔲 | 72 inst, archivo más grande, estrategia de refactoring especial |
+| General.vb | 🔄 | 1/5 inst completadas. 4 inst de InStr/Mid pendientes (requieren conversión cuidadosa) |
 
 ---
 
