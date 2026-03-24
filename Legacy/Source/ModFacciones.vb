@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -70,13 +70,13 @@ Module ModFacciones
         Select Case TipoDef
 
             Case eTipoDefArmors.ieBaja
-                GetArmourAmount = 20/(Rango + 1)
+                GetArmourAmount = Convert.ToInt16(20 / (Rango + 1))
 
             Case eTipoDefArmors.ieMedia
-                GetArmourAmount = Rango*2/MaximoInt(Rango - 4, 1)
+                GetArmourAmount = Convert.ToInt16(Rango * 2 / MaximoInt(Convert.ToInt16(Rango - 4), 1))
 
             Case eTipoDefArmors.ieAlta
-                GetArmourAmount = Rango*1.35
+                GetArmourAmount = Convert.ToInt16(Rango * 1.35)
 
         End Select
     End Function
@@ -93,7 +93,7 @@ Module ModFacciones
 
         With UserList(UserIndex)
 
-            Rango = ParseVal(IIf(IsCaos, .Faccion.RecompensasCaos, .Faccion.RecompensasReal)) + 1
+            Rango = Convert.ToInt16(ParseVal(Convert.ToString(IIf(IsCaos, .Faccion.RecompensasCaos, .Faccion.RecompensasReal))) + 1)
 
 
             ' Entrego armaduras de defensa baja
@@ -258,7 +258,7 @@ Module ModFacciones
             End If
 
             .Faccion.ArmadaReal = 1
-            .Faccion.Reenlistadas = .Faccion.Reenlistadas + 1
+            .Faccion.Reenlistadas = Convert.ToByte(.Faccion.Reenlistadas + 1)
 
             Call _
                 WriteChatOverHead(UserIndex,
@@ -276,7 +276,7 @@ Module ModFacciones
                 .Faccion.NivelIngreso = .Stats.ELV
                 .Faccion.FechaIngreso = Today.ToString()
                 'Esto por ahora es inútil, siempre va a ser cero, pero bueno, despues va a servir.
-                .Faccion.MatadosIngreso = .Faccion.CiudadanosMatados
+                .Faccion.MatadosIngreso = Convert.ToInt16(.Faccion.CiudadanosMatados)
 
                 .Faccion.RecibioExpInicialReal = 1
                 .Faccion.RecompensasReal = 0
@@ -284,7 +284,7 @@ Module ModFacciones
 
             End If
 
-            If .flags.Navegando Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
+            If .flags.Navegando <> 0 Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
 
             Call LogEjercitoReal(.name & " ingresó el " & Today & " cuando era nivel " & .Stats.ELV)
         End With
@@ -519,10 +519,10 @@ Module ModFacciones
             If .Invent.EscudoEqpObjIndex <> 0 Then
                 'Desequipamos el escudo de caos si está equipado
                 If ObjData_Renamed(.Invent.EscudoEqpObjIndex).Real = 1 Then _
-                    Call Desequipar(UserIndex, .Invent.EscudoEqpObjIndex)
+                    Call Desequipar(UserIndex, Convert.ToByte(.Invent.EscudoEqpObjIndex))
             End If
 
-            If .flags.Navegando Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
+            If .flags.Navegando <> 0 Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
         End With
     End Sub
 
@@ -555,10 +555,10 @@ Module ModFacciones
             If .Invent.EscudoEqpObjIndex <> 0 Then
                 'Desequipamos el escudo de caos si está equipado
                 If ObjData_Renamed(.Invent.EscudoEqpObjIndex).Caos = 1 Then _
-                    Call Desequipar(UserIndex, .Invent.EscudoEqpObjIndex)
+                    Call Desequipar(UserIndex, Convert.ToByte(.Invent.EscudoEqpObjIndex))
             End If
 
-            If .flags.Navegando Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
+            If .flags.Navegando <> 0 Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
         End With
     End Sub
 
@@ -718,7 +718,7 @@ Module ModFacciones
                 Exit Sub
             End If
 
-            .Faccion.Reenlistadas = .Faccion.Reenlistadas + 1
+            .Faccion.Reenlistadas = Convert.ToByte(.Faccion.Reenlistadas + 1)
             .Faccion.FuerzasCaos = 1
 
             Call _
@@ -741,7 +741,7 @@ Module ModFacciones
                 .Faccion.NextRecompensa = 160
             End If
 
-            If .flags.Navegando Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
+            If .flags.Navegando <> 0 Then Call RefreshCharStatus(UserIndex) 'Actualizamos la barca si esta navegando (NicoNZ)
 
             Call LogEjercitoCaos(.name & " ingresó el " & Today & " cuando era nivel " & .Stats.ELV)
         End With
