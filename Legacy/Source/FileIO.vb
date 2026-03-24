@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.IO
@@ -12,11 +12,11 @@ Module ES
         '***************************************************
 
         Dim N, LoopC As Short
-        N = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "INIT", "NumNPCs"))
+        N = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "INIT", "NumNPCs")))
         ReDim SpawnList(N)
         For LoopC = 1 To N
-            SpawnList(LoopC).NpcIndex = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "LIST",
-                                                   "NI" & LoopC))
+            SpawnList(LoopC).NpcIndex = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "LIST",
+                                                   "NI" & LoopC)))
             SpawnList(LoopC).NpcName = GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Invokar.dat", "LIST",
                                               "NN" & LoopC)
         Next LoopC
@@ -33,7 +33,7 @@ Module ES
         Dim WizNum As Short
         Dim NomB As String
 
-        NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Admines"))
+        NumWizs = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Admines")))
 
         For WizNum = 1 To NumWizs
             Dim tmpVal = GetVar(IniPath & "Server.ini", "Admines", "Admin" & WizNum)
@@ -59,7 +59,7 @@ Module ES
         Dim WizNum As Short
         Dim NomB As String
 
-        NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Dioses"))
+        NumWizs = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Dioses")))
         For WizNum = 1 To NumWizs
             Dim tmpVal = GetVar(IniPath & "Server.ini", "Dioses", "Dios" & WizNum)
             NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
@@ -84,7 +84,7 @@ Module ES
         Dim WizNum As Short
         Dim NomB As String
 
-        NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "SemiDioses"))
+        NumWizs = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "SemiDioses")))
         For WizNum = 1 To NumWizs
             Dim tmpVal = GetVar(IniPath & "Server.ini", "SemiDioses", "SemiDios" & WizNum)
             NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
@@ -109,7 +109,7 @@ Module ES
         Dim WizNum As Short
         Dim NomB As String
 
-        NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Consejeros"))
+        NumWizs = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Consejeros")))
         For WizNum = 1 To NumWizs
             Dim tmpVal = GetVar(IniPath & "Server.ini", "Consejeros", "Consejero" & WizNum)
             NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
@@ -134,7 +134,7 @@ Module ES
         Dim WizNum As Short
         Dim NomB As String
 
-        NumWizs = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "RolesMasters"))
+        NumWizs = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "RolesMasters")))
         For WizNum = 1 To NumWizs
             Dim tmpVal = GetVar(IniPath & "Server.ini", "RolesMasters", "RM" & WizNum)
             NomB = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
@@ -156,7 +156,7 @@ Module ES
     Public Sub CargarForbidenWords()
         Dim lines = IO.File.ReadAllLines(DatPath & "NombresInvalidos.txt")
         ReDim ForbidenNames(lines.Length)
-        For i As Short = 0 To lines.Length - 1
+        For i As Integer = 0 To lines.Length - 1
             ForbidenNames(i + 1) = lines(i)
         Next i
     End Sub
@@ -190,7 +190,7 @@ Module ES
             Call Leer.Initialize(DatPath & "Hechizos.dat")
 
             'obtiene el numero de hechizos
-            NumeroHechizos = ParseVal(Leer.GetValue("INIT", "NumeroHechizos"))
+            NumeroHechizos = Convert.ToInt16(ParseVal(Leer.GetValue("INIT", "NumeroHechizos")))
 
             'UPGRADE_WARNING: El límite inferior de la matriz Hechizos ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim Hechizos(NumeroHechizos)
@@ -206,84 +206,84 @@ Module ES
                     .TargetMsg = Leer.GetValue("Hechizo" & Hechizo, "TargetMsg")
                     .PropioMsg = Leer.GetValue("Hechizo" & Hechizo, "PropioMsg")
 
-                    .Tipo = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Tipo"))
-                    .WAV = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "WAV"))
-                    .FXgrh = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Fxgrh"))
+                    .Tipo = DirectCast(Convert.ToInt32(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Tipo"))), TipoHechizo)
+                    .WAV = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "WAV")))
+                    .FXgrh = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Fxgrh")))
 
-                    .loops = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Loops"))
+                    .loops = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Loops")))
 
                     '    .Resis = val(Leer.GetValue("Hechizo" & Hechizo, "Resis"))
 
-                    .SubeHP = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeHP"))
-                    .MinHp = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinHP"))
-                    .MaxHp = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxHP"))
+                    .SubeHP = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeHP")))
+                    .MinHp = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinHP")))
+                    .MaxHp = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxHP")))
 
-                    .SubeMana = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeMana"))
-                    .MiMana = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinMana"))
-                    .MaMana = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxMana"))
+                    .SubeMana = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeMana")))
+                    .MiMana = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinMana")))
+                    .MaMana = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxMana")))
 
-                    .SubeSta = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeSta"))
-                    .MinSta = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinSta"))
-                    .MaxSta = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxSta"))
+                    .SubeSta = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeSta")))
+                    .MinSta = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinSta")))
+                    .MaxSta = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxSta")))
 
-                    .SubeHam = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeHam"))
-                    .MinHam = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinHam"))
-                    .MaxHam = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxHam"))
+                    .SubeHam = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeHam")))
+                    .MinHam = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinHam")))
+                    .MaxHam = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxHam")))
 
-                    .SubeSed = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeSed"))
-                    .MinSed = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinSed"))
-                    .MaxSed = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxSed"))
+                    .SubeSed = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeSed")))
+                    .MinSed = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinSed")))
+                    .MaxSed = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxSed")))
 
-                    .SubeAgilidad = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeAG"))
-                    .MinAgilidad = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinAG"))
-                    .MaxAgilidad = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxAG"))
+                    .SubeAgilidad = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeAG")))
+                    .MinAgilidad = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinAG")))
+                    .MaxAgilidad = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxAG")))
 
-                    .SubeFuerza = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeFU"))
-                    .MinFuerza = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinFU"))
-                    .MaxFuerza = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxFU"))
+                    .SubeFuerza = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeFU")))
+                    .MinFuerza = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinFU")))
+                    .MaxFuerza = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxFU")))
 
-                    .SubeCarisma = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeCA"))
-                    .MinCarisma = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinCA"))
-                    .MaxCarisma = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxCA"))
-
-
-                    .Invisibilidad = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Invisibilidad"))
-                    .Paraliza = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Paraliza"))
-                    .Inmoviliza = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Inmoviliza"))
-                    .RemoverParalisis = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemoverParalisis"))
-                    .RemoverEstupidez = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemoverEstupidez"))
-                    .RemueveInvisibilidadParcial = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemueveInvisibilidadParcial"))
+                    .SubeCarisma = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "SubeCA")))
+                    .MinCarisma = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinCA")))
+                    .MaxCarisma = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MaxCA")))
 
 
-                    .CuraVeneno = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "CuraVeneno"))
-                    .Envenena = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Envenena"))
-                    .Maldicion = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Maldicion"))
-                    .RemoverMaldicion = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemoverMaldicion"))
-                    .Bendicion = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Bendicion"))
-                    .Revivir = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Revivir"))
+                    .Invisibilidad = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Invisibilidad")))
+                    .Paraliza = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Paraliza")))
+                    .Inmoviliza = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Inmoviliza")))
+                    .RemoverParalisis = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemoverParalisis")))
+                    .RemoverEstupidez = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemoverEstupidez")))
+                    .RemueveInvisibilidadParcial = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemueveInvisibilidadParcial")))
 
-                    .Ceguera = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Ceguera"))
-                    .Estupidez = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Estupidez"))
 
-                    .Warp = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Warp"))
+                    .CuraVeneno = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "CuraVeneno")))
+                    .Envenena = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Envenena")))
+                    .Maldicion = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Maldicion")))
+                    .RemoverMaldicion = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "RemoverMaldicion")))
+                    .Bendicion = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Bendicion")))
+                    .Revivir = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Revivir")))
 
-                    .Invoca = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Invoca"))
-                    .NumNpc = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "NumNpc"))
-                    .cant = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Cant"))
-                    .Mimetiza = ParseVal(Leer.GetValue("hechizo" & Hechizo, "Mimetiza"))
+                    .Ceguera = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Ceguera")))
+                    .Estupidez = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Estupidez")))
+
+                    .Warp = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Warp")))
+
+                    .Invoca = Convert.ToByte(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Invoca")))
+                    .NumNpc = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "NumNpc")))
+                    .cant = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Cant")))
+                    .Mimetiza = Convert.ToByte(ParseVal(Leer.GetValue("hechizo" & Hechizo, "Mimetiza")))
 
                     '    .Materializa = val(Leer.GetValue("Hechizo" & Hechizo, "Materializa"))
                     '    .ItemIndex = val(Leer.GetValue("Hechizo" & Hechizo, "ItemIndex"))
 
-                    .MinSkill = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinSkill"))
-                    .ManaRequerido = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "ManaRequerido"))
+                    .MinSkill = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "MinSkill")))
+                    .ManaRequerido = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "ManaRequerido")))
 
                     'Barrin 30/9/03
-                    .StaRequerido = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido"))
+                    .StaRequerido = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "StaRequerido")))
 
-                    .Target = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Target"))
+                    .Target = DirectCast(Convert.ToInt32(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Target"))), TargetType)
 
-                    .NeedStaff = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
+                    .NeedStaff = Convert.ToInt16(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff")))
                     .StaffAffected = Convert.ToBoolean(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
                 End With
             Next Hechizo
@@ -307,7 +307,7 @@ Module ES
 
         Dim i As Short
 
-        MaxLines = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines"))
+        MaxLines = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines")))
 
         'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim MOTD(MaxLines)
@@ -395,20 +395,20 @@ Module ES
                         With MapData(Map, X, Y)
                             ByFlags = 0
 
-                            If .Blocked Then ByFlags = ByFlags Or 1
-                            If .Graphic(2) Then ByFlags = ByFlags Or 2
-                            If .Graphic(3) Then ByFlags = ByFlags Or 4
-                            If .Graphic(4) Then ByFlags = ByFlags Or 8
-                            If .trigger Then ByFlags = ByFlags Or 16
+                            If .Blocked <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 1)
+                            If .Graphic(2) <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 2)
+                            If .Graphic(3) <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 4)
+                            If .Graphic(4) <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 8)
+                            If .trigger <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 16)
 
                             writerMap.Write(ByFlags)
                             writerMap.Write(.Graphic(1))
 
                             For LoopC = 2 To 4
-                                If .Graphic(LoopC) Then writerMap.Write(.Graphic(LoopC))
+                                If .Graphic(LoopC) <> 0 Then writerMap.Write(.Graphic(LoopC))
                             Next LoopC
 
-                            If .trigger Then writerMap.Write(Convert.ToInt16(.trigger))
+                            If .trigger <> 0 Then writerMap.Write(Convert.ToInt16(.trigger))
 
                             '.inf file
                             ByFlags = 0
@@ -420,21 +420,21 @@ Module ES
                                 End If
                             End If
 
-                            If .TileExit.Map Then ByFlags = ByFlags Or 1
-                            If .NpcIndex Then ByFlags = ByFlags Or 2
-                            If .ObjInfo.ObjIndex Then ByFlags = ByFlags Or 4
+                            If .TileExit.Map <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 1)
+                            If .NpcIndex <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 2)
+                            If .ObjInfo.ObjIndex <> 0 Then ByFlags = Convert.ToByte(ByFlags Or 4)
 
                             writerInf.Write(ByFlags)
 
-                            If .TileExit.Map Then
+                            If .TileExit.Map <> 0 Then
                                 writerInf.Write(.TileExit.Map)
                                 writerInf.Write(.TileExit.X)
                                 writerInf.Write(.TileExit.Y)
                             End If
 
-                            If .NpcIndex Then writerInf.Write(Npclist(.NpcIndex).Numero)
+                            If .NpcIndex <> 0 Then writerInf.Write(Npclist(.NpcIndex).Numero)
 
-                            If .ObjInfo.ObjIndex Then
+                            If .ObjInfo.ObjIndex <> 0 Then
                                 writerInf.Write(.ObjInfo.ObjIndex)
                                 writerInf.Write(.ObjInfo.Amount)
                             End If
@@ -478,13 +478,13 @@ Module ES
 
         Dim N, lc As Short
 
-        N = ParseVal(GetVar(DatPath & "ArmasHerrero.dat", "INIT", "NumArmas"))
+        N = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmasHerrero.dat", "INIT", "NumArmas")))
 
         'UPGRADE_WARNING: El límite inferior de la matriz ArmasHerrero ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve ArmasHerrero(N)
 
         For lc = 1 To N
-            ArmasHerrero(lc) = ParseVal(GetVar(DatPath & "ArmasHerrero.dat", "Arma" & lc, "Index"))
+            ArmasHerrero(lc) = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmasHerrero.dat", "Arma" & lc, "Index")))
         Next lc
     End Sub
 
@@ -497,13 +497,13 @@ Module ES
 
         Dim N, lc As Short
 
-        N = ParseVal(GetVar(DatPath & "ArmadurasHerrero.dat", "INIT", "NumArmaduras"))
+        N = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasHerrero.dat", "INIT", "NumArmaduras")))
 
         'UPGRADE_WARNING: El límite inferior de la matriz ArmadurasHerrero ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve ArmadurasHerrero(N)
 
         For lc = 1 To N
-            ArmadurasHerrero(lc) = ParseVal(GetVar(DatPath & "ArmadurasHerrero.dat", "Armadura" & lc, "Index"))
+            ArmadurasHerrero(lc) = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasHerrero.dat", "Armadura" & lc, "Index")))
         Next lc
     End Sub
 
@@ -533,11 +533,11 @@ Module ES
         'Modificadores de Raza
         For i = 1 To NUMRAZAS
             With ModRaza_Renamed(i)
-                .Fuerza = ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Fuerza"))
-                .Agilidad = ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Agilidad"))
-                .Inteligencia = ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Inteligencia"))
-                .Carisma = ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Carisma"))
-                .Constitucion = ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Constitucion"))
+                .Fuerza = Convert.ToSingle(ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Fuerza")))
+                .Agilidad = Convert.ToSingle(ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Agilidad")))
+                .Inteligencia = Convert.ToSingle(ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Inteligencia")))
+                .Carisma = Convert.ToSingle(ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Carisma")))
+                .Constitucion = Convert.ToSingle(ParseVal(GetVar(DatPath & "Balance.dat", "MODRAZA", ListaRazas(i) & "Constitucion")))
             End With
         Next i
 
@@ -548,21 +548,21 @@ Module ES
 
         'Distribución de Vida
         For i = 1 To 5
-            DistribucionEnteraVida(i) = ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "E" & i.ToString()))
+            DistribucionEnteraVida(i) = Convert.ToInt16(ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "E" & i.ToString())))
         Next i
         For i = 1 To 4
-            DistribucionSemienteraVida(i) = ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "S" & i.ToString()))
+            DistribucionSemienteraVida(i) = Convert.ToInt16(ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "S" & i.ToString())))
         Next i
 
         'Extra
-        PorcentajeRecuperoMana = ParseVal(GetVar(DatPath & "Balance.dat", "EXTRA", "PorcentajeRecuperoMana"))
+        PorcentajeRecuperoMana = Convert.ToInt16(ParseVal(GetVar(DatPath & "Balance.dat", "EXTRA", "PorcentajeRecuperoMana")))
 
         'Party
-        ExponenteNivelParty = ParseVal(GetVar(DatPath & "Balance.dat", "PARTY", "ExponenteNivelParty"))
+        ExponenteNivelParty = Convert.ToSingle(ParseVal(GetVar(DatPath & "Balance.dat", "PARTY", "ExponenteNivelParty")))
 
         ' Recompensas faccionarias
         For i = 1 To NUM_RANGOS_FACCION
-            RecompensaFacciones(i - 1) = ParseVal(GetVar(DatPath & "Balance.dat", "RECOMPENSAFACCION", "Rango" & i))
+            RecompensaFacciones(i - 1) = Convert.ToInt32(ParseVal(GetVar(DatPath & "Balance.dat", "RECOMPENSAFACCION", "Rango" & i)))
         Next i
     End Sub
 
@@ -575,13 +575,13 @@ Module ES
 
         Dim N, lc As Short
 
-        N = ParseVal(GetVar(DatPath & "ObjCarpintero.dat", "INIT", "NumObjs"))
+        N = Convert.ToInt16(ParseVal(GetVar(DatPath & "ObjCarpintero.dat", "INIT", "NumObjs")))
 
         'UPGRADE_WARNING: El límite inferior de la matriz ObjCarpintero ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve ObjCarpintero(N)
 
         For lc = 1 To N
-            ObjCarpintero(lc) = ParseVal(GetVar(DatPath & "ObjCarpintero.dat", "Obj" & lc, "Index"))
+            ObjCarpintero(lc) = Convert.ToInt16(ParseVal(GetVar(DatPath & "ObjCarpintero.dat", "Obj" & lc, "Index")))
         Next lc
     End Sub
 
@@ -621,7 +621,7 @@ Module ES
             Call Leer.Initialize(DatPath & "Obj.dat")
 
             'obtiene el numero de obj
-            NumObjDatas = ParseVal(Leer.GetValue("INIT", "NumObjs"))
+            NumObjDatas = Convert.ToInt16(ParseVal(Leer.GetValue("INIT", "NumObjs")))
 
             'UPGRADE_WARNING: Es posible que la matriz ObjData_Renamed necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
             'UPGRADE_WARNING: El límite inferior de la matriz ObjData_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -639,168 +639,168 @@ Module ES
                     .name = Leer.GetValue("OBJ" & Object_Renamed, "Name")
 
                     'Pablo (ToxicWaste) Log de Objetos.
-                    .Log = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Log"))
-                    .NoLog = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "NoLog"))
+                    .Log = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Log")))
+                    .NoLog = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "NoLog")))
                     '07/09/07
 
-                    .GrhIndex = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "GrhIndex"))
+                    .GrhIndex = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "GrhIndex")))
                     If .GrhIndex = 0 Then
                         .GrhIndex = .GrhIndex
                     End If
 
-                    .OBJType = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "ObjType"))
+                    .OBJType = DirectCast(Convert.ToInt32(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "ObjType"))), eOBJType)
 
-                    .Newbie = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Newbie"))
+                    .Newbie = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Newbie")))
 
                     Select Case .OBJType
                         Case eOBJType.otArmadura
-                            .Real = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real"))
-                            .Caos = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos"))
-                            .LingH = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH"))
-                            .LingP = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP"))
-                            .LingO = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO"))
-                            .SkHerreria = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria"))
+                            .Real = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real")))
+                            .Caos = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos")))
+                            .LingH = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH")))
+                            .LingP = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP")))
+                            .LingO = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO")))
+                            .SkHerreria = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria")))
 
                         Case eOBJType.otESCUDO
-                            .ShieldAnim = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Anim"))
-                            .LingH = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH"))
-                            .LingP = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP"))
-                            .LingO = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO"))
-                            .SkHerreria = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria"))
-                            .Real = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real"))
-                            .Caos = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos"))
+                            .ShieldAnim = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Anim")))
+                            .LingH = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH")))
+                            .LingP = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP")))
+                            .LingO = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO")))
+                            .SkHerreria = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria")))
+                            .Real = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real")))
+                            .Caos = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos")))
 
                         Case eOBJType.otCASCO
-                            .CascoAnim = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Anim"))
-                            .LingH = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH"))
-                            .LingP = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP"))
-                            .LingO = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO"))
-                            .SkHerreria = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria"))
-                            .Real = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real"))
-                            .Caos = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos"))
+                            .CascoAnim = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Anim")))
+                            .LingH = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH")))
+                            .LingP = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP")))
+                            .LingO = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO")))
+                            .SkHerreria = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria")))
+                            .Real = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real")))
+                            .Caos = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos")))
 
                         Case eOBJType.otWeapon
-                            .WeaponAnim = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Anim"))
-                            .Apuñala = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Apuñala"))
-                            .Envenena = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Envenena"))
-                            .MaxHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT"))
-                            .MinHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT"))
-                            .proyectil = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Proyectil"))
-                            .Municion = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Municiones"))
-                            .StaffPower = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "StaffPower"))
-                            .StaffDamageBonus = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "StaffDamageBonus"))
-                            .Refuerzo = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Refuerzo"))
+                            .WeaponAnim = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Anim")))
+                            .Apuñala = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Apuñala")))
+                            .Envenena = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Envenena")))
+                            .MaxHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT")))
+                            .MinHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT")))
+                            .proyectil = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Proyectil")))
+                            .Municion = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Municiones")))
+                            .StaffPower = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "StaffPower")))
+                            .StaffDamageBonus = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "StaffDamageBonus")))
+                            .Refuerzo = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Refuerzo")))
 
-                            .LingH = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH"))
-                            .LingP = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP"))
-                            .LingO = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO"))
-                            .SkHerreria = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria"))
-                            .Real = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real"))
-                            .Caos = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos"))
+                            .LingH = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH")))
+                            .LingP = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP")))
+                            .LingO = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO")))
+                            .SkHerreria = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria")))
+                            .Real = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real")))
+                            .Caos = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos")))
 
-                            .WeaponRazaEnanaAnim = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaEnanaAnim"))
+                            .WeaponRazaEnanaAnim = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaEnanaAnim")))
 
                         Case eOBJType.otInstrumentos
-                            .Snd1 = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SND1"))
-                            .Snd2 = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SND2"))
-                            .Snd3 = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SND3"))
+                            .Snd1 = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SND1")))
+                            .Snd2 = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SND2")))
+                            .Snd3 = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SND3")))
                             'Pablo (ToxicWaste)
-                            .Real = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real"))
-                            .Caos = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos"))
+                            .Real = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Real")))
+                            .Caos = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Caos")))
 
                         Case eOBJType.otMinerales
-                            .MinSkill = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinSkill"))
+                            .MinSkill = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinSkill")))
 
                         Case eOBJType.otPuertas, eOBJType.otBotellaVacia,
                             eOBJType.otBotellaLlena
-                            .IndexAbierta = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "IndexAbierta"))
-                            .IndexCerrada = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "IndexCerrada"))
-                            .IndexCerradaLlave = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "IndexCerradaLlave"))
+                            .IndexAbierta = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "IndexAbierta")))
+                            .IndexCerrada = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "IndexCerrada")))
+                            .IndexCerradaLlave = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "IndexCerradaLlave")))
 
                         Case eOBJType.otPociones
-                            .TipoPocion = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "TipoPocion"))
-                            .MaxModificador = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxModificador"))
-                            .MinModificador = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinModificador"))
-                            .DuracionEfecto = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "DuracionEfecto"))
+                            .TipoPocion = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "TipoPocion")))
+                            .MaxModificador = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxModificador")))
+                            .MinModificador = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinModificador")))
+                            .DuracionEfecto = Convert.ToInt32(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "DuracionEfecto")))
 
                         Case eOBJType.otBarcos
-                            .MinSkill = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinSkill"))
-                            .MaxHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT"))
-                            .MinHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT"))
+                            .MinSkill = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinSkill")))
+                            .MaxHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT")))
+                            .MinHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT")))
 
                         Case eOBJType.otFlechas
-                            .MaxHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT"))
-                            .MinHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT"))
-                            .Envenena = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Envenena"))
-                            .Paraliza = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Paraliza"))
+                            .MaxHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT")))
+                            .MinHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT")))
+                            .Envenena = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Envenena")))
+                            .Paraliza = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Paraliza")))
 
                         Case eOBJType.otAnillo 'Pablo (ToxicWaste)
-                            .LingH = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH"))
-                            .LingP = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP"))
-                            .LingO = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO"))
-                            .SkHerreria = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria"))
-                            .MaxHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT"))
-                            .MinHIT = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT"))
+                            .LingH = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingH")))
+                            .LingP = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingP")))
+                            .LingO = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingO")))
+                            .SkHerreria = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkHerreria")))
+                            .MaxHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHIT")))
+                            .MinHIT = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHIT")))
 
                         Case eOBJType.otTeleport
-                            .Radio = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Radio"))
+                            .Radio = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Radio")))
 
                         Case eOBJType.otMochilas
-                            .MochilaType = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MochilaType"))
+                            .MochilaType = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MochilaType")))
 
                         Case eOBJType.otForos
                             Call AddForum(Leer.GetValue("OBJ" & Object_Renamed, "ID"))
 
                     End Select
 
-                    .Ropaje = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "NumRopaje"))
-                    .HechizoIndex = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "HechizoIndex"))
+                    .Ropaje = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "NumRopaje")))
+                    .HechizoIndex = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "HechizoIndex")))
 
-                    .LingoteIndex = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingoteIndex"))
+                    .LingoteIndex = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "LingoteIndex")))
 
-                    .MineralIndex = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MineralIndex"))
+                    .MineralIndex = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MineralIndex")))
 
-                    .MaxHp = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHP"))
-                    .MinHp = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHP"))
+                    .MaxHp = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaxHP")))
+                    .MinHp = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHP")))
 
-                    .Mujer = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Mujer"))
-                    .Hombre = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Hombre"))
+                    .Mujer = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Mujer")))
+                    .Hombre = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Hombre")))
 
-                    .MinHam = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHam"))
-                    .MinSed = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinAgu"))
+                    .MinHam = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinHam")))
+                    .MinSed = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinAgu")))
 
-                    .MinDef = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MINDEF"))
-                    .MaxDef = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MAXDEF"))
-                    .def = (.MinDef + .MaxDef)/2
+                    .MinDef = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MINDEF")))
+                    .MaxDef = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MAXDEF")))
+                    .def = Convert.ToInt16((.MinDef + .MaxDef) \ 2)
 
-                    .RazaEnana = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaEnana"))
-                    .RazaDrow = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaDrow"))
-                    .RazaElfa = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaElfa"))
-                    .RazaGnoma = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaGnoma"))
-                    .RazaHumana = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaHumana"))
+                    .RazaEnana = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaEnana")))
+                    .RazaDrow = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaDrow")))
+                    .RazaElfa = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaElfa")))
+                    .RazaGnoma = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaGnoma")))
+                    .RazaHumana = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "RazaHumana")))
 
-                    .Valor = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Valor"))
+                    .Valor = Convert.ToInt32(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Valor")))
 
-                    .Crucial = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Crucial"))
+                    .Crucial = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Crucial")))
 
-                    .Cerrada = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "abierta"))
+                    .Cerrada = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "abierta")))
                     If .Cerrada = 1 Then
-                        .Llave = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Llave"))
-                        .clave = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Clave"))
+                        .Llave = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Llave")))
+                        .clave = Convert.ToInt32(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Clave")))
                     End If
 
                     'Puertas y llaves
-                    .clave = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Clave"))
+                    .clave = Convert.ToInt32(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Clave")))
 
                     .texto = Leer.GetValue("OBJ" & Object_Renamed, "Texto")
-                    .GrhSecundario = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "VGrande"))
+                    .GrhSecundario = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "VGrande")))
 
-                    .Agarrable = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Agarrable"))
+                    .Agarrable = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Agarrable")))
                     .ForoID = Leer.GetValue("OBJ" & Object_Renamed, "ID")
 
-                    .Acuchilla = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Acuchilla"))
+                    .Acuchilla = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Acuchilla")))
 
-                    .Guante = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Guante"))
+                    .Guante = Convert.ToByte(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Guante")))
 
                     'CHECK: !!! Esto es provisorio hasta que los de Dateo cambien los valores de string a numerico
                     For i = 1 To NUMCLASES
@@ -808,25 +808,25 @@ Module ES
                         S = If(tmpVal IsNot Nothing, tmpVal.ToUpper(), "")
                         N = 1
                         Do While S.Length > 0 And If(ListaClases(N) IsNot Nothing, ListaClases(N).ToUpper(), "") <> S
-                            N = N + 1
+                            N = Convert.ToInt16(N + 1)
                         Loop
-                        .ClaseProhibida(i) = IIf(migr_LenB(S) > 0, N, 0)
+                        .ClaseProhibida(i) = DirectCast(Convert.ToInt32(If(migr_LenB(S) > 0, N, 0)), eClass)
                     Next i
 
-                    .DefensaMagicaMax = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "DefensaMagicaMax"))
-                    .DefensaMagicaMin = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "DefensaMagicaMin"))
+                    .DefensaMagicaMax = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "DefensaMagicaMax")))
+                    .DefensaMagicaMin = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "DefensaMagicaMin")))
 
-                    .SkCarpinteria = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkCarpinteria"))
+                    .SkCarpinteria = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "SkCarpinteria")))
 
-                    If .SkCarpinteria > 0 Then .Madera = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Madera"))
-                    .MaderaElfica = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaderaElfica"))
+                    If .SkCarpinteria > 0 Then .Madera = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Madera")))
+                    .MaderaElfica = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MaderaElfica")))
 
                     'Bebidas
-                    .MinSta = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinST"))
+                    .MinSta = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "MinST")))
 
-                    .NoSeCae = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "NoSeCae"))
+                    .NoSeCae = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "NoSeCae")))
 
-                    .Upgrade = ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Upgrade"))
+                    .Upgrade = Convert.ToInt16(ParseVal(Leer.GetValue("OBJ" & Object_Renamed, "Upgrade")))
 
                 End With
             Next Object_Renamed
@@ -857,12 +857,12 @@ Module ES
         With UserList(UserIndex)
             With .Stats
                 For LoopC = 1 To NUMATRIBUTOS
-                    .UserAtributos(LoopC) = Convert.ToInt16(UserFile.GetValue("ATRIBUTOS", "AT" & LoopC))
+                    .UserAtributos(LoopC) = Convert.ToByte(UserFile.GetValue("ATRIBUTOS", "AT" & LoopC))
                     .UserAtributosBackUP(LoopC) = .UserAtributos(LoopC)
                 Next LoopC
 
                 For LoopC = 1 To NUMSKILLS
-                    .UserSkills(LoopC) = Convert.ToInt16(UserFile.GetValue("SKILLS", "SK" & LoopC))
+                    .UserSkills(LoopC) = Convert.ToByte(UserFile.GetValue("SKILLS", "SK" & LoopC))
                     .EluSkills(LoopC) = Convert.ToInt16(UserFile.GetValue("SKILLS", "ELUSK" & LoopC))
                     .ExpSkills(LoopC) = Convert.ToInt16(UserFile.GetValue("SKILLS", "EXPSK" & LoopC))
                 Next LoopC
@@ -904,10 +904,10 @@ Module ES
             End With
 
             With .flags
-                If Convert.ToByte(UserFile.GetValue("CONSEJO", "PERTENECE")) Then _
+                If Convert.ToByte(UserFile.GetValue("CONSEJO", "PERTENECE")) <> 0 Then _
                     .Privilegios = .Privilegios Or PlayerType.RoyalCouncil
 
-                If Convert.ToByte(UserFile.GetValue("CONSEJO", "PERTENECECAOS")) Then _
+                If Convert.ToByte(UserFile.GetValue("CONSEJO", "PERTENECECAOS")) <> 0 Then _
                     .Privilegios = .Privilegios Or PlayerType.ChaosCouncil
             End With
         End With
@@ -921,13 +921,13 @@ Module ES
         '***************************************************
 
         With UserList(UserIndex).Reputacion
-            .AsesinoRep = ParseVal(UserFile.GetValue("REP", "Asesino"))
-            .BandidoRep = ParseVal(UserFile.GetValue("REP", "Bandido"))
-            .BurguesRep = ParseVal(UserFile.GetValue("REP", "Burguesia"))
-            .LadronesRep = ParseVal(UserFile.GetValue("REP", "Ladrones"))
-            .NobleRep = ParseVal(UserFile.GetValue("REP", "Nobles"))
-            .PlebeRep = ParseVal(UserFile.GetValue("REP", "Plebe"))
-            .Promedio = ParseVal(UserFile.GetValue("REP", "Promedio"))
+            .AsesinoRep = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Asesino")))
+            .BandidoRep = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Bandido")))
+            .BurguesRep = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Burguesia")))
+            .LadronesRep = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Ladrones")))
+            .NobleRep = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Nobles")))
+            .PlebeRep = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Plebe")))
+            .Promedio = Convert.ToInt32(ParseVal(UserFile.GetValue("REP", "Promedio")))
         End With
     End Sub
 
@@ -987,11 +987,11 @@ Module ES
 
             .email = UserFile.GetValue("CONTACTO", "Email")
 
-            .Genero = Convert.ToInt16(UserFile.GetValue("INIT", "Genero"))
-            .clase = Convert.ToInt16(UserFile.GetValue("INIT", "Clase"))
-            .raza = Convert.ToInt16(UserFile.GetValue("INIT", "Raza"))
-            .Hogar = Convert.ToInt16(UserFile.GetValue("INIT", "Hogar"))
-            .Char_Renamed.heading = Convert.ToInt16(UserFile.GetValue("INIT", "Heading"))
+            .Genero = DirectCast(Convert.ToByte(UserFile.GetValue("INIT", "Genero")), eGenero)
+            .clase = DirectCast(Convert.ToInt32(UserFile.GetValue("INIT", "Clase")), eClass)
+            .raza = DirectCast(Convert.ToByte(UserFile.GetValue("INIT", "Raza")), eRaza)
+            .Hogar = DirectCast(Convert.ToInt32(UserFile.GetValue("INIT", "Hogar")), eCiudad)
+            .Char_Renamed.heading = DirectCast(Convert.ToByte(UserFile.GetValue("INIT", "Heading")), eHeading)
 
 
             With .OrigChar
@@ -1100,7 +1100,7 @@ Module ES
 
             .NroMascotas = Convert.ToInt16(UserFile.GetValue("MASCOTAS", "NroMascotas"))
             For LoopC = 1 To MAXMASCOTAS
-                .MascotasType(LoopC) = ParseVal(UserFile.GetValue("MASCOTAS", "MAS" & LoopC))
+                .MascotasType(LoopC) = Convert.ToInt16(ParseVal(UserFile.GetValue("MASCOTAS", "MAS" & LoopC)))
             Next LoopC
 
             ln = UserFile.GetValue("Guild", "GUILDINDEX")
@@ -1171,7 +1171,7 @@ Module ES
 
         Try
 
-            NumMaps = ParseVal(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
+            NumMaps = Convert.ToInt16(ParseVal(GetVar(DatPath & "Map.dat", "INIT", "NumMaps")))
             Call InitAreas()
 
             MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
@@ -1221,7 +1221,7 @@ Module ES
 
         Try
 
-            NumMaps = ParseVal(GetVar(DatPath & "Map.dat", "INIT", "NumMaps"))
+            NumMaps = Convert.ToInt16(ParseVal(GetVar(DatPath & "Map.dat", "INIT", "NumMaps")))
             Call InitAreas()
 
             MapPath = GetVar(DatPath & "Map.dat", "INIT", "MapPath")
@@ -1256,64 +1256,64 @@ Module ES
 
         Dim Temporal As Integer
 
-        BootDelBackUp = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "IniciarDesdeBackUp"))
+        BootDelBackUp = Convert.ToByte(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "IniciarDesdeBackUp")))
 
-        Puerto = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "StartPort"))
-        HideMe = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Hide"))
-        AllowMultiLogins = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "AllowMultiLogins"))
-        IdleLimit = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "IdleLimit"))
+        Puerto = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "StartPort")))
+        HideMe = Convert.ToByte(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Hide")))
+        AllowMultiLogins = Convert.ToByte(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "AllowMultiLogins")))
+        IdleLimit = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "IdleLimit")))
         'Lee la version correcta del cliente
         ULTIMAVERSION = GetVar(IniPath & "Server.ini", "INIT", "Version")
 
-        PuedeCrearPersonajes = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "PuedeCrearPersonajes"))
-        ServerSoloGMs = ParseVal(GetVar(IniPath & "Server.ini", "init", "ServerSoloGMs"))
+        PuedeCrearPersonajes = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "PuedeCrearPersonajes")))
+        ServerSoloGMs = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "init", "ServerSoloGMs")))
 
-        ArmaduraImperial1 = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraImperial1"))
-        ArmaduraImperial2 = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraImperial2"))
-        ArmaduraImperial3 = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraImperial3"))
-        TunicaMagoImperial = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoImperial"))
-        TunicaMagoImperialEnanos = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoImperialEnanos"))
-        ArmaduraCaos1 = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraCaos1"))
-        ArmaduraCaos2 = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraCaos2"))
-        ArmaduraCaos3 = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraCaos3"))
-        TunicaMagoCaos = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoCaos"))
-        TunicaMagoCaosEnanos = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoCaosEnanos"))
+        ArmaduraImperial1 = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraImperial1")))
+        ArmaduraImperial2 = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraImperial2")))
+        ArmaduraImperial3 = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraImperial3")))
+        TunicaMagoImperial = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoImperial")))
+        TunicaMagoImperialEnanos = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoImperialEnanos")))
+        ArmaduraCaos1 = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraCaos1")))
+        ArmaduraCaos2 = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraCaos2")))
+        ArmaduraCaos3 = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraCaos3")))
+        TunicaMagoCaos = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoCaos")))
+        TunicaMagoCaosEnanos = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaMagoCaosEnanos")))
 
-        VestimentaImperialHumano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaImperialHumano"))
-        VestimentaImperialEnano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaImperialEnano"))
-        TunicaConspicuaHumano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaConspicuaHumano"))
-        TunicaConspicuaEnano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaConspicuaEnano"))
-        ArmaduraNobilisimaHumano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraNobilisimaHumano"))
-        ArmaduraNobilisimaEnano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraNobilisimaEnano"))
-        ArmaduraGranSacerdote = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraGranSacerdote"))
+        VestimentaImperialHumano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaImperialHumano")))
+        VestimentaImperialEnano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaImperialEnano")))
+        TunicaConspicuaHumano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaConspicuaHumano")))
+        TunicaConspicuaEnano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaConspicuaEnano")))
+        ArmaduraNobilisimaHumano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraNobilisimaHumano")))
+        ArmaduraNobilisimaEnano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraNobilisimaEnano")))
+        ArmaduraGranSacerdote = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "ArmaduraGranSacerdote")))
 
-        VestimentaLegionHumano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaLegionHumano"))
-        VestimentaLegionEnano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaLegionEnano"))
-        TunicaLobregaHumano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaLobregaHumano"))
-        TunicaLobregaEnano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaLobregaEnano"))
-        TunicaEgregiaHumano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaEgregiaHumano"))
-        TunicaEgregiaEnano = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaEgregiaEnano"))
-        SacerdoteDemoniaco = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "SacerdoteDemoniaco"))
+        VestimentaLegionHumano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaLegionHumano")))
+        VestimentaLegionEnano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "VestimentaLegionEnano")))
+        TunicaLobregaHumano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaLobregaHumano")))
+        TunicaLobregaEnano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaLobregaEnano")))
+        TunicaEgregiaHumano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaEgregiaHumano")))
+        TunicaEgregiaEnano = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "TunicaEgregiaEnano")))
+        SacerdoteDemoniaco = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "SacerdoteDemoniaco")))
 
-        MAPA_PRETORIANO = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "MapaPretoriano"))
+        MAPA_PRETORIANO = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "MapaPretoriano")))
 
-        EnTesting = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Testing"))
+        EnTesting = Convert.ToBoolean(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Testing")))
 
         'Intervalos
-        SanaIntervaloSinDescansar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloSinDescansar"))
-        StaminaIntervaloSinDescansar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloSinDescansar"))
-        SanaIntervaloDescansar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloDescansar"))
-        StaminaIntervaloDescansar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloDescansar"))
+        SanaIntervaloSinDescansar = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloSinDescansar")))
+        StaminaIntervaloSinDescansar = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloSinDescansar")))
+        SanaIntervaloDescansar = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "SanaIntervaloDescansar")))
+        StaminaIntervaloDescansar = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "StaminaIntervaloDescansar")))
 
-        IntervaloSed = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloSed"))
-        IntervaloHambre = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloHambre"))
-        IntervaloVeneno = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloVeneno"))
-        IntervaloParalizado = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParalizado"))
-        IntervaloInvisible = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvisible"))
-        IntervaloFrio = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloFrio"))
-        IntervaloWavFx = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWAVFX"))
-        IntervaloInvocacion = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvocacion"))
-        IntervaloParaConexion = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParaConexion"))
+        IntervaloSed = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloSed")))
+        IntervaloHambre = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloHambre")))
+        IntervaloVeneno = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloVeneno")))
+        IntervaloParalizado = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParalizado")))
+        IntervaloInvisible = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvisible")))
+        IntervaloFrio = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloFrio")))
+        IntervaloWavFx = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWAVFX")))
+        IntervaloInvocacion = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloInvocacion")))
+        IntervaloParaConexion = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloParaConexion")))
 
         '&&&&&&&&&&&&&&&&&&&&& TIMERS &&&&&&&&&&&&&&&&&&&&&&&
 
@@ -1321,43 +1321,43 @@ Module ES
         IntervaloAtacable = 60000 ' Cargar desde balance.dat
         IntervaloOwnedNpc = 18000 ' Cargar desde balance.dat
 
-        IntervaloUserPuedeCastear = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo"))
+        IntervaloUserPuedeCastear = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo")))
 
         'UPGRADE_WARNING: La propiedad Timer TIMER_AI.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-        timerAIInterval = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI"))
+        timerAIInterval = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcAI")))
 
         'UPGRADE_WARNING: La propiedad Timer npcataca.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-        npcAtacaInterval = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar"))
+        npcAtacaInterval = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloNpcPuedeAtacar")))
 
-        IntervaloUserPuedeTrabajar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo"))
+        IntervaloUserPuedeTrabajar = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo")))
 
-        IntervaloUserPuedeAtacar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar"))
+        IntervaloUserPuedeAtacar = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar")))
 
         'TODO : Agregar estos intervalos al form!!!
-        IntervaloMagiaGolpe = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloMagiaGolpe"))
-        IntervaloGolpeMagia = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeMagia"))
-        IntervaloGolpeUsar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeUsar"))
+        IntervaloMagiaGolpe = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloMagiaGolpe")))
+        IntervaloGolpeMagia = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeMagia")))
+        IntervaloGolpeUsar = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloGolpeUsar")))
 
         'UPGRADE_WARNING: La propiedad Timer tLluvia.Interval no puede tener un valor de 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="169ECF4A-1968-402D-B243-16603CC08604"'
-        lluviaInterval = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia"))
+        lluviaInterval = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloPerdidaStaminaLluvia")))
 
-        MinutosWs = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWS"))
+        MinutosWs = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloWS")))
         If MinutosWs < 60 Then MinutosWs = 180
 
-        IntervaloCerrarConexion = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloCerrarConexion"))
-        IntervaloUserPuedeUsar = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeUsar"))
-        IntervaloFlechasCazadores = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloFlechasCazadores"))
+        IntervaloCerrarConexion = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloCerrarConexion")))
+        IntervaloUserPuedeUsar = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeUsar")))
+        IntervaloFlechasCazadores = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloFlechasCazadores")))
 
-        IntervaloOculto = ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloOculto"))
+        IntervaloOculto = Convert.ToInt16(ParseVal(GetVar(IniPath & "Server.ini", "INTERVALOS", "IntervaloOculto")))
 
         '&&&&&&&&&&&&&&&&&&&&& FIN TIMERS &&&&&&&&&&&&&&&&&&&&&&&
 
-        recordusuarios = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Record"))
+        recordusuarios = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "Record")))
 
         'Max users
-        Temporal = ParseVal(GetVar(IniPath & "Server.ini", "INIT", "MaxUsers"))
+        Temporal = Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "INIT", "MaxUsers")))
         If MaxUsers = 0 Then
-            MaxUsers = Temporal
+            MaxUsers = Convert.ToInt16(Temporal)
             'UPGRADE_WARNING: Es posible que la matriz UserList necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
             'UPGRADE_WARNING: El límite inferior de la matriz UserList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim UserList(MaxUsers)
@@ -1542,10 +1542,10 @@ Module ES
 
             Dim OldUserHead As Integer
 
-            Dim LoopC As Short
+            Dim LoopC As Integer
             Dim TempDate As Date
-            Dim i As Short
-            Dim loopd As Short
+            Dim i As Integer
+            Dim loopd As Integer
             Dim L As Integer
             Dim cad As String
             Dim NroMascotas As Integer
@@ -1594,10 +1594,10 @@ Module ES
 
                 Call _
                     WriteVar(UserFile, "CONSEJO", "PERTENECE",
-                             IIf(.flags.Privilegios And PlayerType.RoyalCouncil, "1", "0"))
+                             If((.flags.Privilegios And PlayerType.RoyalCouncil) <> 0, "1", "0"))
                 Call _
                     WriteVar(UserFile, "CONSEJO", "PERTENECECAOS",
-                             IIf(.flags.Privilegios And PlayerType.ChaosCouncil, "1", "0"))
+                             If((.flags.Privilegios And PlayerType.ChaosCouncil) <> 0, "1", "0"))
 
 
                 Call WriteVar(UserFile, "COUNTERS", "Pena", .Counters.Pena.ToString())
@@ -1770,7 +1770,7 @@ Module ES
 
                 L = (- .Reputacion.AsesinoRep) + (- .Reputacion.BandidoRep) + .Reputacion.BurguesRep +
                     (- .Reputacion.LadronesRep) + .Reputacion.NobleRep + .Reputacion.PlebeRep
-                L = L/6
+                L = L \ 6
                 Call WriteVar(UserFile, "REP", "Promedio", L.ToString())
 
 
@@ -1825,7 +1825,7 @@ Module ES
 
         With UserList(UserIndex).Reputacion
             L = (- .AsesinoRep) + (- .BandidoRep) + .BurguesRep + (- .LadronesRep) + .NobleRep + .PlebeRep
-            L = L/6
+            L = L \ 6
             criminal = (L < 0)
         End With
     End Function
@@ -1917,37 +1917,37 @@ Module ES
             .Numero = NpcNumber
             .name = GetVar(npcfile, "NPC" & NpcNumber, "Name")
             .desc = GetVar(npcfile, "NPC" & NpcNumber, "Desc")
-            .Movement = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Movement"))
-            .NPCtype = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "NpcType"))
+            .Movement = DirectCast(Convert.ToInt32(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Movement"))), TipoAI)
+            .NPCtype = DirectCast(Convert.ToInt32(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "NpcType"))), eNPCType)
 
-            .Char_Renamed.body = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Body"))
-            .Char_Renamed.Head = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Head"))
-            .Char_Renamed.heading = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Heading"))
+            .Char_Renamed.body = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Body")))
+            .Char_Renamed.Head = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Head")))
+            .Char_Renamed.heading = DirectCast(Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Heading"))), eHeading)
 
-            .Attackable = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Attackable"))
-            .Comercia = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Comercia"))
-            .Hostile = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Hostile"))
-            .GiveEXP = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "GiveEXP"))
-
-
-            .GiveGLD = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "GiveGLD"))
-
-            .InvReSpawn = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "InvReSpawn"))
-
-            .Stats.MaxHp = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MaxHP"))
-            .Stats.MinHp = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MinHP"))
-            .Stats.MaxHIT = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MaxHIT"))
-            .Stats.MinHIT = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MinHIT"))
-            .Stats.def = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "DEF"))
-            .Stats.Alineacion = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Alineacion"))
+            .Attackable = Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Attackable")))
+            .Comercia = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Comercia")))
+            .Hostile = Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Hostile")))
+            .GiveEXP = Convert.ToInt32(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "GiveEXP")))
 
 
-            .Invent.NroItems = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "NROITEMS"))
+            .GiveGLD = Convert.ToInt32(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "GiveGLD")))
+
+            .InvReSpawn = Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "InvReSpawn")))
+
+            .Stats.MaxHp = Convert.ToInt32(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MaxHP")))
+            .Stats.MinHp = Convert.ToInt32(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MinHP")))
+            .Stats.MaxHIT = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MaxHIT")))
+            .Stats.MinHIT = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "MinHIT")))
+            .Stats.def = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "DEF")))
+            .Stats.Alineacion = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Alineacion")))
+
+
+            .Invent.NroItems = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "NROITEMS")))
             If .Invent.NroItems > 0 Then
                 For LoopC = 1 To MAX_INVENTORY_SLOTS
                     ln = GetVar(npcfile, "NPC" & NpcNumber, "Obj" & LoopC)
-                    .Invent.Object_Renamed(LoopC).ObjIndex = ParseVal(ReadField(1, ln, 45))
-                    .Invent.Object_Renamed(LoopC).Amount = ParseVal(ReadField(2, ln, 45))
+                    .Invent.Object_Renamed(LoopC).ObjIndex = Convert.ToInt16(ParseVal(ReadField(1, ln, 45)))
+                    .Invent.Object_Renamed(LoopC).Amount = Convert.ToInt16(ParseVal(ReadField(2, ln, 45)))
 
                 Next LoopC
             Else
@@ -1959,18 +1959,18 @@ Module ES
 
             For LoopC = 1 To MAX_NPC_DROPS
                 ln = GetVar(npcfile, "NPC" & NpcNumber, "Drop" & LoopC)
-                .Drop(LoopC).ObjIndex = ParseVal(ReadField(1, ln, 45))
-                .Drop(LoopC).Amount = ParseVal(ReadField(2, ln, 45))
+                .Drop(LoopC).ObjIndex = Convert.ToInt16(ParseVal(ReadField(1, ln, 45)))
+                .Drop(LoopC).Amount = Convert.ToInt32(ParseVal(ReadField(2, ln, 45)))
             Next LoopC
 
             .flags.NPCActive = True
-            .flags.Respawn = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "ReSpawn"))
-            .flags.BackUp = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "BackUp"))
-            .flags.Domable = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Domable"))
-            .flags.RespawnOrigPos = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "OrigPos"))
+            .flags.Respawn = Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "ReSpawn")))
+            .flags.BackUp = Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "BackUp")))
+            .flags.Domable = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "Domable")))
+            .flags.RespawnOrigPos = Convert.ToByte(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "OrigPos")))
 
             'Tipo de items con los que comercia
-            .TipoItems = ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "TipoItems"))
+            .TipoItems = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & NpcNumber, "TipoItems")))
         End With
     End Sub
 
@@ -2034,9 +2034,9 @@ Module ES
         '
         '***************************************************
 
-        Apuestas.Ganancias = ParseVal(GetVar(DatPath & "apuestas.dat", "Main", "Ganancias"))
-        Apuestas.Perdidas = ParseVal(GetVar(DatPath & "apuestas.dat", "Main", "Perdidas"))
-        Apuestas.Jugadas = ParseVal(GetVar(DatPath & "apuestas.dat", "Main", "Jugadas"))
+        Apuestas.Ganancias = Convert.ToInt32(ParseVal(GetVar(DatPath & "apuestas.dat", "Main", "Ganancias")))
+        Apuestas.Perdidas = Convert.ToInt32(ParseVal(GetVar(DatPath & "apuestas.dat", "Main", "Perdidas")))
+        Apuestas.Jugadas = Convert.ToInt32(ParseVal(GetVar(DatPath & "apuestas.dat", "Main", "Jugadas")))
     End Sub
 
     Public Sub generateMatrix(mapa As Short)
@@ -2066,13 +2066,13 @@ Module ES
             For i = 1 To 4
                 Select Case i
                     Case eHeading.NORTH
-                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.NORTH), j, i, 0, 1)
+                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.NORTH), Convert.ToByte(j), i, 0, 1)
                     Case eHeading.EAST
-                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.EAST), j, i, 1, 0)
+                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.EAST), Convert.ToByte(j), i, 1, 0)
                     Case eHeading.SOUTH
-                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.SOUTH), j, i, 0, 1)
+                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.SOUTH), Convert.ToByte(j), i, 0, 1)
                     Case eHeading.WEST
-                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.WEST), j, i, - 1, 0)
+                        Call setDistance(getLimit(Ciudades(j).Map, eHeading.WEST), Convert.ToByte(j), i, - 1, 0)
                 End Select
             Next i
         Next j
@@ -2100,17 +2100,17 @@ Module ES
         End If
 
         For i = 1 To 4
-            lim = getLimit(mapa, i)
+            lim = getLimit(mapa, Convert.ToByte(i))
             If lim > 0 Then
                 Select Case i
                     Case eHeading.NORTH
-                        Call setDistance(lim, city, i, X, Y + 1)
+                        Call setDistance(lim, city, i, X, Convert.ToInt16(Y + 1))
                     Case eHeading.EAST
-                        Call setDistance(lim, city, i, X + 1, Y)
+                        Call setDistance(lim, city, i, Convert.ToInt16(X + 1), Y)
                     Case eHeading.SOUTH
-                        Call setDistance(lim, city, i, X, Y - 1)
+                        Call setDistance(lim, city, i, X, Convert.ToInt16(Y - 1))
                     Case eHeading.WEST
-                        Call setDistance(lim, city, i, X - 1, Y)
+                        Call setDistance(lim, city, i, Convert.ToInt16(X - 1), Y)
                 End Select
             End If
         Next i
@@ -2165,7 +2165,7 @@ Module ES
         For ClassIndex = 1 To NUMCLASES
 
             ' Defensa minima para armadas altos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinArmyAlto"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinArmyAlto")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Drow).Armada(eTipoDefArmors.ieBaja) =
                 ArmaduraIndex
@@ -2175,7 +2175,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa minima para armadas bajos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinArmyBajo"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinArmyBajo")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Enano).Armada(eTipoDefArmors.ieBaja) =
                 ArmaduraIndex
@@ -2183,7 +2183,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa minima para caos altos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinCaosAlto"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinCaosAlto")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Drow).Caos(eTipoDefArmors.ieBaja) =
                 ArmaduraIndex
@@ -2193,7 +2193,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa minima para caos bajos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinCaosBajo"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMinCaosBajo")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Enano).Caos(eTipoDefArmors.ieBaja) =
                 ArmaduraIndex
@@ -2202,7 +2202,7 @@ Module ES
 
 
             ' Defensa media para armadas altos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedArmyAlto"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedArmyAlto")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Drow).Armada(eTipoDefArmors.ieMedia) =
                 ArmaduraIndex
@@ -2212,7 +2212,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa media para armadas bajos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedArmyBajo"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedArmyBajo")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Enano).Armada(eTipoDefArmors.ieMedia) =
                 ArmaduraIndex
@@ -2220,7 +2220,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa media para caos altos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedCaosAlto"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedCaosAlto")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Drow).Caos(eTipoDefArmors.ieMedia) =
                 ArmaduraIndex
@@ -2230,7 +2230,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa media para caos bajos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedCaosBajo"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefMedCaosBajo")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Enano).Caos(eTipoDefArmors.ieMedia) =
                 ArmaduraIndex
@@ -2239,7 +2239,7 @@ Module ES
 
 
             ' Defensa alta para armadas altos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaArmyAlto"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaArmyAlto")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Drow).Armada(eTipoDefArmors.ieAlta) =
                 ArmaduraIndex
@@ -2249,7 +2249,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa alta para armadas bajos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaArmyBajo"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaArmyBajo")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Enano).Armada(eTipoDefArmors.ieAlta) =
                 ArmaduraIndex
@@ -2257,7 +2257,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa alta para caos altos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaCaosAlto"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaCaosAlto")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Drow).Caos(eTipoDefArmors.ieAlta) =
                 ArmaduraIndex
@@ -2267,7 +2267,7 @@ Module ES
                 ArmaduraIndex
 
             ' Defensa alta para caos bajos
-            ArmaduraIndex = ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaCaosBajo"))
+            ArmaduraIndex = Convert.ToInt16(ParseVal(GetVar(DatPath & "ArmadurasFaccionarias.dat", "CLASE" & ClassIndex, "DefAltaCaosBajo")))
 
             ArmadurasFaccion(ClassIndex, eRaza.Enano).Caos(eTipoDefArmors.ieAlta) =
                 ArmaduraIndex
