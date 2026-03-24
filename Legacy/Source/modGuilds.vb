@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modGuilds
     '**************************************************************
@@ -155,14 +155,14 @@ Module modGuilds
                         " es expulsado en validar permanencia.")
 
                 m_ValidarPermanencia = False
-                If SumaAntifaccion Then guilds(GuildIndex).PuntosAntifaccion = guilds(GuildIndex).PuntosAntifaccion + 1
+                If SumaAntifaccion Then guilds(GuildIndex).PuntosAntifaccion = Convert.ToInt16(guilds(GuildIndex).PuntosAntifaccion + 1)
 
                 CambioAlineacion = guilds(GuildIndex).PuntosAntifaccion = MAXANTIFACCION
 
                 Call _
                     LogClanes(
                         UserList(UserIndex).name & " de " & guilds(GuildIndex).GuildName &
-                        IIf(CambioAlineacion, " SI ", " NO ") & "provoca cambio de alineación. MAXANT:" &
+                        If(CambioAlineacion, " SI ", " NO ") & "provoca cambio de alineación. MAXANT:" &
                         CambioAlineacion)
 
                 Call m_EcharMiembroDeClan(- 1, UserList(UserIndex).name)
@@ -195,7 +195,7 @@ Module modGuilds
             'uso GetMemberList y no los iteradores pq voy a rajar gente y puedo alterar
             'internamente al iterador en el proceso
             GuildMembers = guilds(GuildIndex).GetMemberList()
-            TotalMembers = GuildMembers.Length - 1
+            TotalMembers = Convert.ToInt16(GuildMembers.Length - 1)
 
             For MemberIndex = 0 To TotalMembers
                 MemberName = GuildMembers(MemberIndex)
@@ -215,11 +215,11 @@ Module modGuilds
                             If UserList(UserIndex).Faccion.ArmadaReal <> 0 Then
                                 Call ExpulsarFaccionReal(UserIndex)
                                 ' No cuenta como reenlistada :p.
-                                UserList(UserIndex).Faccion.Reenlistadas = UserList(UserIndex).Faccion.Reenlistadas - 1
+                                UserList(UserIndex).Faccion.Reenlistadas = Convert.ToByte(UserList(UserIndex).Faccion.Reenlistadas - 1)
                             ElseIf UserList(UserIndex).Faccion.FuerzasCaos <> 0 Then
                                 Call ExpulsarFaccionCaos(UserIndex)
                                 ' No cuenta como reenlistada :p.
-                                UserList(UserIndex).Faccion.Reenlistadas = UserList(UserIndex).Faccion.Reenlistadas - 1
+                                UserList(UserIndex).Faccion.Reenlistadas = Convert.ToByte(UserList(UserIndex).Faccion.Reenlistadas - 1)
                             End If
                         Else
                             If System.IO.File.Exists(CharPath & MemberName & ".chr") Then
@@ -228,7 +228,7 @@ Module modGuilds
                                 Reenlistadas = Convert.ToInt16(GetVar(CharPath & MemberName & ".chr", "FACCIONES", "Reenlistadas"))
                                 Call _
                                     WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "Reenlistadas",
-                                             IIf(Reenlistadas > 1, Reenlistadas - 1, Reenlistadas))
+                                             If(Reenlistadas > 1, Reenlistadas - 1, Reenlistadas).ToString())
                             End If
                         End If
                     Else 'sale si no es guildLeader
@@ -375,11 +375,11 @@ Module modGuilds
             Call .SetDesc(desc)
 
             For i = 0 To codex.Length - 1
-                Call .SetCodex(i, codex(i))
+                Call .SetCodex(Convert.ToByte(i), codex(i))
             Next i
 
-            For i = i To CANTIDADMAXIMACODEX
-                Call .SetCodex(i, vbNullString)
+            For i = i To Convert.ToInt32(CANTIDADMAXIMACODEX)
+                Call .SetCodex(Convert.ToByte(i), vbNullString)
             Next i
         End With
     End Sub
@@ -437,11 +437,11 @@ Module modGuilds
             Exit Function
         End If
 
-        CantCodex = codex.Length
+        CantCodex = Convert.ToInt16(codex.Length)
 
         'tenemos todo para fundar ya
         If CANTIDADDECLANES < guilds.Length - 1 Then
-            CANTIDADDECLANES = CANTIDADDECLANES + 1
+            CANTIDADDECLANES = Convert.ToInt16(CANTIDADDECLANES + 1)
             'ReDim Preserve Guilds(1 To CANTIDADDECLANES) As clsClan
 
             'constructor custom de la clase clan
@@ -455,7 +455,7 @@ Module modGuilds
 
                 'seteamos codex y descripcion
                 For i = 1 To CantCodex
-                    Call .SetCodex(i, codex(i - 1))
+                    Call .SetCodex(Convert.ToByte(i), codex(i - 1))
                 Next i
                 Call .SetDesc(desc)
                 Call .SetGuildNews("Clan creado con alineación: " & Alineacion2String(Alineacion))
@@ -470,7 +470,7 @@ Module modGuilds
             UserList(FundadorIndex).GuildIndex = CANTIDADDECLANES
             Call RefreshCharStatus(FundadorIndex)
 
-            For i = 1 To CANTIDADDECLANES - 1
+            For i = 1 To Convert.ToInt16(CANTIDADDECLANES - 1)
                 Call guilds(i).ProcesarFundacionDeOtroClan()
             Next i
         Else
@@ -499,14 +499,14 @@ Module modGuilds
 
         Dim allies() As String
         With guilds(GuildIndex)
-            If .CantidadEnemys Then
+            If .CantidadEnemys <> 0 Then
                 ReDim enemies(.CantidadEnemys - 1)
             Else
                 ReDim enemies(0)
             End If
 
 
-            If .CantidadAllies Then
+            If .CantidadAllies <> 0 Then
                 ReDim allies(.CantidadAllies - 1)
             Else
                 ReDim allies(0)
@@ -518,7 +518,7 @@ Module modGuilds
             While i > 0
                 enemies(go) = guilds(i).GuildName
                 i = .Iterador_ProximaRelacion(RELACIONES_GUILD.GUERRA)
-                go = go + 1
+                go = Convert.ToInt16(go + 1)
             End While
 
             i = .Iterador_ProximaRelacion(RELACIONES_GUILD.ALIADOS)
@@ -570,7 +570,7 @@ Module modGuilds
 
         'cuando UI no puede echar a nombre?
         'si no es gm Y no es lider del clan del pj Y no es el mismo que se va voluntariamente
-        If UserList(QuienLoEchaUI).flags.Privilegios And PlayerType.User Then
+        If (UserList(QuienLoEchaUI).flags.Privilegios And PlayerType.User) <> 0 Then
             If Not m_EsGuildLeader(UserList(QuienLoEchaUI).name.ToUpper(), GuildIndex) Then
                 If UserList(QuienLoEchaUI).name.ToUpper() <> Nombre.ToUpper() Then 'si no sale voluntariamente...
                     Exit Function
@@ -626,9 +626,9 @@ Module modGuilds
                 End If
             Case ALINEACION_GUILD.ALINEACION_MASTER
                 If _
-                    UserList(UserIndex).flags.Privilegios And
+                    (UserList(UserIndex).flags.Privilegios And
                     (PlayerType.User Or PlayerType.Consejero Or
-                     PlayerType.SemiDios) Then
+                     PlayerType.SemiDios)) <> 0 Then
                     refError = "Para fundar un clan sin alineación debes ser un dios."
                     Exit Function
                 End If
@@ -674,7 +674,7 @@ Module modGuilds
                         If ELV >= 25 Then
                             f = Convert.ToByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoReal"))
                         End If
-                        m_EstadoPermiteEntrarChar = IIf(ELV >= 25, f <> 0, True)
+                        m_EstadoPermiteEntrarChar = If(ELV >= 25, f <> 0, True)
                     End If
                 Case ALINEACION_GUILD.ALINEACION_CIUDA
                     m_EstadoPermiteEntrarChar = Promedio >= 0
@@ -692,7 +692,7 @@ Module modGuilds
                         If ELV >= 25 Then
                             f = Convert.ToByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoCaos"))
                         End If
-                        m_EstadoPermiteEntrarChar = IIf(ELV >= 25, f <> 0, True)
+                        m_EstadoPermiteEntrarChar = If(ELV >= 25, f <> 0, True)
                     End If
                 Case Else
                     m_EstadoPermiteEntrarChar = True
@@ -710,12 +710,12 @@ Module modGuilds
         Select Case guilds(GuildIndex).Alineacion
             Case ALINEACION_GUILD.ALINEACION_ARMADA
                 m_EstadoPermiteEntrar = Not criminal(UserIndex) And
-                                        IIf(UserList(UserIndex).Stats.ELV >= 25,
+                                        If(UserList(UserIndex).Stats.ELV >= 25,
                                             UserList(UserIndex).Faccion.ArmadaReal <> 0, True)
 
             Case ALINEACION_GUILD.ALINEACION_LEGION
                 m_EstadoPermiteEntrar = criminal(UserIndex) And
-                                        IIf(UserList(UserIndex).Stats.ELV >= 25,
+                                        If(UserList(UserIndex).Stats.ELV >= 25,
                                             UserList(UserIndex).Faccion.FuerzasCaos <> 0, True)
 
             Case ALINEACION_GUILD.ALINEACION_NEUTRO
@@ -753,6 +753,8 @@ Module modGuilds
                 String2Alineacion = ALINEACION_GUILD.ALINEACION_CIUDA
             Case "Criminal"
                 String2Alineacion = ALINEACION_GUILD.ALINEACION_CRIMINAL
+            Case Else
+                String2Alineacion = ALINEACION_GUILD.ALINEACION_NEUTRO
         End Select
     End Function
 
@@ -831,8 +833,8 @@ Module modGuilds
 
         cad = cad.ToLower()
 
-        For i = 1 To cad.Length
-            car = AscW(cad(i - 1))
+        For i = 1 To Convert.ToInt16(cad.Length)
+            car = Convert.ToByte(AscW(cad(i - 1)))
 
             If (car < 97 Or car > 122) And (car <> 255) And (car <> 32) Then
                 GuildNameValido = False
@@ -871,6 +873,7 @@ Module modGuilds
         Dim i As Integer
         Dim name As String
 
+        HasFound = False
         name = UserName.ToUpper()
 
         For i = 1 To CANTIDADDECLANES
@@ -1050,17 +1053,18 @@ Module modGuilds
 
         Dim i As Short
 
+        m_ListaDeMiembrosOnline = vbNullString
         If GuildIndex > 0 And GuildIndex <= CANTIDADDECLANES Then
             i = guilds(GuildIndex).m_Iterador_ProximoUserIndex
             While i > 0
                 'No mostramos dioses y admins
                 If _
                     i <> UserIndex And
-                    ((UserList(i).flags.Privilegios And
+                    (((UserList(i).flags.Privilegios And
                       (PlayerType.User Or PlayerType.Consejero Or
-                       PlayerType.SemiDios)) <> 0 Or
-                     (UserList(UserIndex).flags.Privilegios And
-                      (PlayerType.Dios Or PlayerType.Admin) <> 0)) Then _
+                       PlayerType.SemiDios)) <> 0) Or
+                     ((UserList(UserIndex).flags.Privilegios And
+                      (PlayerType.Dios Or PlayerType.Admin)) <> 0)) Then _
                     m_ListaDeMiembrosOnline = m_ListaDeMiembrosOnline & UserList(i).name & ","
                 i = guilds(GuildIndex).m_Iterador_ProximoUserIndex
             End While
@@ -1109,7 +1113,7 @@ Module modGuilds
 
         With guilds(GI)
             For i = 1 To CANTIDADMAXIMACODEX
-                codex(i - 1) = .GetCodex(i)
+                codex(i - 1) = .GetCodex(Convert.ToByte(i))
             Next i
 
             Call _
@@ -1325,6 +1329,7 @@ Module modGuilds
         Dim GI As Short
         Dim GIG As Short
 
+        r_AceptarPropuestaDePaz = 0
         GI = UserList(UserIndex).GuildIndex
         If GI <= 0 Or GI > CANTIDADDECLANES Then
             refError = "No eres miembro de ningún clan."
@@ -1649,10 +1654,12 @@ Module modGuilds
                 End If
 
                 'Store each guild name
-                For i = 0 To proposalCount - 1
+                For i = 0 To Convert.ToInt16(proposalCount - 1)
                     proposals(i) = guilds(.Iterador_ProximaPropuesta(Tipo)).GuildName
                 Next i
             End With
+        Else
+            ReDim proposals(0)
         End If
 
         Return proposals
@@ -1737,6 +1744,7 @@ Module modGuilds
         Dim GI As Short
         Dim NroAspirante As Short
 
+        a_DetallesAspirante = vbNullString
         GI = UserList(UserIndex).GuildIndex
         If GI <= 0 Or GI > CANTIDADDECLANES Then
             Exit Function
@@ -1820,7 +1828,7 @@ Module modGuilds
                 .Initialize((CharPath & Personaje & ".chr"))
 
                 ' Get the character's current guild
-                GuildActual = ParseVal(.GetValue("GUILD", "GuildIndex"))
+                GuildActual = Convert.ToInt16(ParseVal(.GetValue("GUILD", "GuildIndex")))
                 If GuildActual > 0 And GuildActual <= CANTIDADDECLANES Then
                     GuildName = "<" & guilds(GuildActual).GuildName & ">"
                 Else
@@ -1834,8 +1842,8 @@ Module modGuilds
                 End If
 
                 Call _
-                    WriteCharacterInfo(UserIndex, Personaje, Convert.ToInt16(.GetValue("INIT", "Raza")),
-                                       Convert.ToInt16(.GetValue("INIT", "Clase")), Convert.ToInt16(.GetValue("INIT", "Genero")),
+                    WriteCharacterInfo(UserIndex, Personaje, CType(Convert.ToInt16(.GetValue("INIT", "Raza")), eRaza),
+                                       CType(Convert.ToInt16(.GetValue("INIT", "Clase")), eClass), CType(Convert.ToInt16(.GetValue("INIT", "Genero")), eGenero),
                                        Convert.ToByte(.GetValue("STATS", "ELV")), Convert.ToInt32(.GetValue("STATS", "GLD")),
                                        Convert.ToInt32(.GetValue("STATS", "Banco")), Convert.ToInt32(.GetValue("REP", "Promedio")),
                                        .GetValue("GUILD", "Pedidos"), GuildName, Miembro,
@@ -1985,7 +1993,7 @@ Module modGuilds
                            Alineacion2String(guilds(GI).Alineacion)
                 Call guilds(GI).RetirarAspirante(Aspirante, NroAspirante)
                 Exit Function
-            ElseIf GetGuildIndexFromChar(Aspirante) Then
+            ElseIf GetGuildIndexFromChar(Aspirante) <> 0 Then
                 refError = Aspirante & " ya es parte de otro clan."
                 Call guilds(GI).RetirarAspirante(Aspirante, NroAspirante)
                 Exit Function
@@ -2011,6 +2019,7 @@ Module modGuilds
         '
         '***************************************************
 
+        GuildName = vbNullString
         If GuildIndex <= 0 Or GuildIndex > CANTIDADDECLANES Then Exit Function
 
         GuildName = guilds(GuildIndex).GuildName
@@ -2023,6 +2032,7 @@ Module modGuilds
         '
         '***************************************************
 
+        GuildLeader = vbNullString
         If GuildIndex <= 0 Or GuildIndex > CANTIDADDECLANES Then Exit Function
 
         GuildLeader = guilds(GuildIndex).GetLeader
@@ -2035,6 +2045,7 @@ Module modGuilds
         '
         '***************************************************
 
+        GuildAlignment = vbNullString
         If GuildIndex <= 0 Or GuildIndex > CANTIDADDECLANES Then Exit Function
 
         GuildAlignment = Alineacion2String(guilds(GuildIndex).Alineacion)
@@ -2046,6 +2057,7 @@ Module modGuilds
         'Returns the guild founder's name
         'Last Modification: 25/03/2009
         '***************************************************
+        GuildFounder = vbNullString
         If GuildIndex <= 0 Or GuildIndex > CANTIDADDECLANES Then Exit Function
 
         GuildFounder = guilds(GuildIndex).Fundador
