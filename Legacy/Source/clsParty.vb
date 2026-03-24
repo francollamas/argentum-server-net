@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class clsParty
     'UPGRADE_WARNING: El límite inferior de la matriz p_members ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -60,7 +60,7 @@ Friend Class clsParty
         'Last modified: 11/24/09
         '11/24/09: Pato - Change the exponent to a variable with the exponent
         '*************************************************
-        p_SumaNivelesElevados = p_SumaNivelesElevados - ((Lvl - 1)^ExponenteNivelParty) + Lvl^ExponenteNivelParty
+        p_SumaNivelesElevados = Convert.ToSingle(p_SumaNivelesElevados - ((Lvl - 1)^ExponenteNivelParty) + Lvl^ExponenteNivelParty)
     End Sub
 
     Public Function MiExperiencia(UserIndex As Short) As Integer
@@ -77,11 +77,11 @@ Friend Class clsParty
         i = 1
 
         While i <= PARTY_MAXMEMBERS And p_members(i).UserIndex <> UserIndex
-            i = i + 1
+            i = Convert.ToInt16(i + 1)
         End While
 
         If i <= PARTY_MAXMEMBERS Then
-            MiExperiencia = Fix(p_members(i).Experiencia)
+            MiExperiencia = Convert.ToInt32(Fix(p_members(i).Experiencia))
         Else 'esto no deberia pasar :p
             MiExperiencia = - 1
         End If
@@ -160,15 +160,15 @@ Friend Class clsParty
         Dim i As Short
         i = 1
         While i <= PARTY_MAXMEMBERS And p_members(i).UserIndex > 0
-            i = i + 1
+            i = Convert.ToInt16(i + 1)
         End While
 
         If i <= PARTY_MAXMEMBERS Then
             p_members(i).Experiencia = 0
             p_members(i).UserIndex = UserIndex
             NuevoMiembro = True
-            p_CantMiembros = p_CantMiembros + 1
-            p_SumaNivelesElevados = p_SumaNivelesElevados + (UserList(UserIndex).Stats.ELV^ExponenteNivelParty)
+            p_CantMiembros = Convert.ToInt16(p_CantMiembros + 1)
+            p_SumaNivelesElevados = Convert.ToSingle(p_SumaNivelesElevados + (UserList(UserIndex).Stats.ELV^ExponenteNivelParty))
         Else
             NuevoMiembro = False
         End If
@@ -192,7 +192,7 @@ Friend Class clsParty
         i = 1
         SaleMiembro = False
         While i <= PARTY_MAXMEMBERS And p_members(i).UserIndex <> UserIndex
-            i = i + 1
+            i = Convert.ToInt16(i + 1)
         End While
 
         If i = 1 Then
@@ -230,9 +230,9 @@ Friend Class clsParty
                         Call MandarMensajeAConsola(UserList(.UserIndex).name & " abandona la party.", "Servidor")
 
                         UserList(.UserIndex).PartyIndex = 0
-                        p_CantMiembros = p_CantMiembros - 1
-                        p_SumaNivelesElevados = p_SumaNivelesElevados -
-                                                (UserList(UserIndex).Stats.ELV^ExponenteNivelParty)
+                        p_CantMiembros = Convert.ToInt16(p_CantMiembros - 1)
+                        p_SumaNivelesElevados = Convert.ToSingle(p_SumaNivelesElevados -
+                                                (UserList(UserIndex).Stats.ELV^ExponenteNivelParty))
                         .UserIndex = 0
                         .Experiencia = 0
 
@@ -262,8 +262,8 @@ Friend Class clsParty
                                         "Durante la misma has conseguido " & Fix(p_members(i).Experiencia).ToString() &
                                         " puntos de experiencia.", FontTypeNames.FONTTYPE_PARTY)
 
-                    p_CantMiembros = p_CantMiembros - 1
-                    p_SumaNivelesElevados = p_SumaNivelesElevados - (UserList(UserIndex).Stats.ELV^ExponenteNivelParty)
+                    p_CantMiembros = Convert.ToInt16(p_CantMiembros - 1)
+                    p_SumaNivelesElevados = Convert.ToSingle(p_SumaNivelesElevados - (UserList(UserIndex).Stats.ELV^ExponenteNivelParty))
                     MemberIndex = 0
                     p_members(i).Experiencia = 0
                     p_members(i).UserIndex = 0
@@ -475,7 +475,7 @@ Friend Class clsParty
                 i = freeIndex
                 freeIndex = 0
             End If
-            i = i + 1
+            i = Convert.ToInt16(i + 1)
         End While
     End Sub
 

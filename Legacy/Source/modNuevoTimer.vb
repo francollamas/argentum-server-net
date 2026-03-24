@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modNuevoTimer
     '
@@ -18,7 +18,7 @@ Module modNuevoTimer
 
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerLanzarSpell >= IntervaloUserPuedeCastear Then
             If Actualizar Then
@@ -40,7 +40,7 @@ Module modNuevoTimer
 
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloUserPuedeAtacar Then
             If Actualizar Then
@@ -63,7 +63,7 @@ Module modNuevoTimer
 
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerGolpeUsar >= IntervaloGolpeUsar Then
             If Actualizar Then
@@ -89,7 +89,7 @@ Module modNuevoTimer
                 Exit Function
             End If
 
-            TActual = GetTickCount()
+            TActual = Convert.ToInt32(GetTickCount())
 
             If TActual - .Counters.TimerLanzarSpell >= IntervaloMagiaGolpe Then
                 If Actualizar Then
@@ -118,7 +118,7 @@ Module modNuevoTimer
             Exit Function
         End If
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloGolpeMagia Then
             If Actualizar Then
@@ -133,9 +133,9 @@ Module modNuevoTimer
 
     ' ATAQUE CUERPO A CUERPO
     'Public Function IntervaloPermiteAtacar(ByVal UserIndex As Integer, Optional ByVal Actualizar As Boolean = True) As Boolean
-    'Dim TActual As Long
+    'Dim TActual As Integer
     '
-    'TActual = GetTickCount()''
+    'TActual = Convert.ToInt32(GetTickCount())''
     '
     'If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloUserPuedeAtacar Then
     '    If Actualizar Then UserList(UserIndex).Counters.TimerPuedeAtacar = TActual
@@ -156,7 +156,7 @@ Module modNuevoTimer
 
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerPuedeTrabajar >= IntervaloUserPuedeTrabajar Then
             If Actualizar Then UserList(UserIndex).Counters.TimerPuedeTrabajar = TActual
@@ -177,7 +177,7 @@ Module modNuevoTimer
 
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerUsar >= IntervaloUserPuedeUsar Then
             If Actualizar Then
@@ -208,7 +208,7 @@ Module modNuevoTimer
 
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         If TActual - UserList(UserIndex).Counters.TimerPuedeUsarArco >= IntervaloFlechasCazadores Then
             If Actualizar Then UserList(UserIndex).Counters.TimerPuedeUsarArco = TActual
@@ -228,7 +228,7 @@ Module modNuevoTimer
         '**************************************************************
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         With UserList(UserIndex)
             ' Inicializa el timer
@@ -257,7 +257,7 @@ Module modNuevoTimer
         '**************************************************************
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         With UserList(UserIndex)
             ' Inicializa el timer
@@ -284,7 +284,7 @@ Module modNuevoTimer
         '**************************************************************
         Dim TActual As Integer
 
-        TActual = GetTickCount()
+        TActual = Convert.ToInt32(GetTickCount())
 
         With UserList(UserIndex)
             ' Inicializa el timer
