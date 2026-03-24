@@ -696,25 +696,25 @@ Module Trabajo
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Has construido " &
-                                        IIf(CantidadItems > 1, CantidadItems & " armas!", "el arma!"),
+                                        If(CantidadItems > 1, CantidadItems & " armas!", "el arma!"),
                                         FontTypeNames.FONTTYPE_INFO)
                 ElseIf ObjData_Renamed(ItemIndex).OBJType = eOBJType.otESCUDO Then
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Has construido " &
-                                        IIf(CantidadItems > 1, CantidadItems & " escudos!", "el escudo!"),
+                                        If(CantidadItems > 1, CantidadItems & " escudos!", "el escudo!"),
                                         FontTypeNames.FONTTYPE_INFO)
                 ElseIf ObjData_Renamed(ItemIndex).OBJType = eOBJType.otCASCO Then
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Has construido " &
-                                        IIf(CantidadItems > 1, CantidadItems & " cascos!", "el casco!"),
+                                        If(CantidadItems > 1, CantidadItems & " cascos!", "el casco!"),
                                         FontTypeNames.FONTTYPE_INFO)
                 ElseIf ObjData_Renamed(ItemIndex).OBJType = eOBJType.otArmadura Then
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "Has construido " &
-                                        IIf(CantidadItems > 1, CantidadItems & " armaduras", "la armadura!"),
+                                        If(CantidadItems > 1, CantidadItems & " armaduras", "la armadura!"),
                                         FontTypeNames.FONTTYPE_INFO)
                 End If
 
@@ -836,7 +836,7 @@ Module Trabajo
                 Call CarpinteroQuitarMateriales(UserIndex, ItemIndex, CantidadItems)
                 Call _
                     WriteConsoleMsg(UserIndex,
-                                    "Has construido " & CantidadItems & IIf(CantidadItems = 1, " objeto!", " objetos!"),
+                                    "Has construido " & CantidadItems & If(CantidadItems = 1, " objeto!", " objetos!"),
                                     FontTypeNames.FONTTYPE_INFO)
 
                 MiObj.Amount = CantidadItems
@@ -940,7 +940,7 @@ Module Trabajo
             Call UpdateUserInv(False, UserIndex, Slot)
             Call _
                 WriteConsoleMsg(UserIndex,
-                                "¡Has obtenido " & CantidadItems & " lingote" & IIf(CantidadItems = 1, "", "s") & "!",
+                                "¡Has obtenido " & CantidadItems & " lingote" & If(CantidadItems = 1, "", "s") & "!",
                                 FontTypeNames.FONTTYPE_INFO)
 
             .Counters.Trabajando = .Counters.Trabajando + 1
@@ -2152,7 +2152,7 @@ Module Trabajo
                     MiObj.Amount = 1
                 End If
 
-                MiObj.ObjIndex = IIf(DarMaderaElfica, LeñaElfica, Leña)
+                MiObj.ObjIndex = If(DarMaderaElfica, LeñaElfica, Leña)
 
 
                 If Not MeterItemEnInventario(UserIndex, MiObj) Then
