@@ -528,7 +528,7 @@ Module Admin
                             Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
                             cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
                                          .name.ToLower() & ": BAN POR " & reason.ToLower() & " " & Today & " " & TimeOfDay)
@@ -583,7 +583,7 @@ Module Admin
                 Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
                 cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                 Call _
                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
                              .name.ToLower() & ": BAN POR " & reason.ToLower() & " " & Today & " " & TimeOfDay)

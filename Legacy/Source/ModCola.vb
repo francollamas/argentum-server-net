@@ -65,7 +65,7 @@ Friend Class cCola
                 '/Pablo
                 'VerElemento = Cola(Index)
             Else
-                VerElemento = CStr(0)
+                VerElemento = "0"
             End If
 
         Catch ex As Exception
@@ -98,7 +98,7 @@ Friend Class cCola
                 Pop = Cola.Item(FRENTE)
                 Call Cola.Remove(FRENTE)
             Else
-                Pop = CStr(0)
+                Pop = "0"
             End If
 
         Catch ex As Exception
@@ -115,7 +115,7 @@ Friend Class cCola
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola.Item(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 PopByVal = Cola.Item(1)
             Else
-                PopByVal = CStr(0)
+                PopByVal = "0"
             End If
 
         Catch ex As Exception

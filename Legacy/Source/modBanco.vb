@@ -90,7 +90,7 @@ Module modBanco
                 If Cantidad > UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount Then _
                     Cantidad = UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount
                 'Agregamos el obj que compro al inventario
-                Call UserReciveObj(UserIndex, CShort(i), Cantidad)
+                Call UserReciveObj(UserIndex, Convert.ToInt16(i), Cantidad)
                 'Actualizamos el inventario del usuario
                 Call UpdateUserInv(True, UserIndex, 0)
                 'Actualizamos el banco
@@ -159,7 +159,7 @@ Module modBanco
                 .Invent.Object_Renamed(Slot).ObjIndex = obji
                 .Invent.Object_Renamed(Slot).Amount = .Invent.Object_Renamed(Slot).Amount + Cantidad
 
-                Call QuitarBancoInvItem(UserIndex, CByte(ObjIndex), Cantidad)
+                Call QuitarBancoInvItem(UserIndex, Convert.ToByte(ObjIndex), Cantidad)
             Else
                 Call WriteConsoleMsg(UserIndex, "No podés tener mas objetos.", FontTypeNames.FONTTYPE_INFO)
             End If
@@ -213,7 +213,7 @@ Module modBanco
                     Cantidad = UserList(UserIndex).Invent.Object_Renamed(Item).Amount
 
                 'Agregamos el obj que deposita al banco
-                Call UserDejaObj(UserIndex, CShort(Item), Cantidad)
+                Call UserDejaObj(UserIndex, Convert.ToInt16(Item), Cantidad)
 
                 'Actualizamos el inventario del usuario
                 Call UpdateUserInv(True, UserIndex, 0)
@@ -284,7 +284,7 @@ Module modBanco
                     .BancoInvent.Object_Renamed(Slot).ObjIndex = obji
                     .BancoInvent.Object_Renamed(Slot).Amount = .BancoInvent.Object_Renamed(Slot).Amount + Cantidad
 
-                    Call QuitarUserInvItem(UserIndex, CByte(ObjIndex), Cantidad)
+                    Call QuitarUserInvItem(UserIndex, Convert.ToByte(ObjIndex), Cantidad)
                 Else
                     Call _
                         WriteConsoleMsg(UserIndex, "El banco no puede cargar tantos objetos.",
@@ -347,8 +347,8 @@ Module modBanco
                                     FontTypeNames.FONTTYPE_INFO)
                 For j = 1 To MAX_BANCOINVENTORY_SLOTS
                     Tmp = GetVar(CharFile, "BancoInventory", "Obj" & j)
-                    ObjInd = CInt(ReadField(1, Tmp, Asc("-")))
-                    ObjCant = CInt(ReadField(2, Tmp, Asc("-")))
+                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Asc("-")))
+                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Asc("-")))
                     If ObjInd > 0 Then
                         Call _
                             WriteConsoleMsg(sendIndex,

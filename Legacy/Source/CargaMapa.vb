@@ -212,7 +212,7 @@ Module CargaMapa
             'Si el npc debe hacer respawn en la pos
             'original la guardamos
 
-            If CInt(LeerNPCs.GetValue("NPC" & MapData(ind, x, y).NpcIndex, "PosOrig")) = 1 Then
+            If Convert.ToInt32(LeerNPCs.GetValue("NPC" & MapData(ind, x, y).NpcIndex, "PosOrig")) = 1 Then
                 'If Val(GetVar(npcfile, "NPC" & MapData(ind, x, y).NpcIndex, "PosOrig")) = 1 Then
                 MapData(ind, x, y).NpcIndex = OpenNPC(MapData(ind, x, y).NpcIndex)
                 Npclist(MapData(ind, x, y).NpcIndex).Orig.Map = ind

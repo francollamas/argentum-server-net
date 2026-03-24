@@ -112,13 +112,13 @@ Friend Class diccionario
         clave = vbNullString
         For i = 1 To p_cant
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_elementos().def. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            If max <= CShort(p_elementos(i).def) Then
+            If max <= Convert.ToInt16(p_elementos(i).def) Then
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_elementos().def. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                cant = IIf(max = CShort(p_elementos(i).def), cant + 1, 1)
+                cant = IIf(max = Convert.ToInt16(p_elementos(i).def), cant + 1, 1)
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_elementos().def. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                clave = IIf(max = CShort(p_elementos(i).def), clave & "," & p_elementos(i).clave, p_elementos(i).clave)
+                clave = IIf(max = Convert.ToInt16(p_elementos(i).def), clave & "," & p_elementos(i).clave, p_elementos(i).clave)
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_elementos().def. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                max = CShort(p_elementos(i).def)
+                max = Convert.ToInt16(p_elementos(i).def)
             End If
         Next i
 

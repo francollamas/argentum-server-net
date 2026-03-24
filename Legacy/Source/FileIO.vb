@@ -313,7 +313,7 @@ Module ES
                     .Target = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "Target"))
 
                     .NeedStaff = ParseVal(Leer.GetValue("Hechizo" & Hechizo, "NeedStaff"))
-                    .StaffAffected = CBool(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
+                    .StaffAffected = Convert.ToBoolean(ParseVal(Leer.GetValue("Hechizo" & Hechizo, "StaffAffected")))
                 End With
             Next Hechizo
 
@@ -481,7 +481,7 @@ Module ES
                         Next LoopC
 
                         'UPGRADE_WARNING: Put se actualizó a FilePut y tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                        If .trigger Then FilePut(FreeFileMap, CShort(.trigger))
+                        If .trigger Then FilePut(FreeFileMap, Convert.ToInt16(.trigger))
 
                         '.inf file
 
@@ -534,9 +534,9 @@ Module ES
                 'write .dat file
                 Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "Name", .name)
                 Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "MusicNum", .Music)
-                Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "MagiaSinefecto", CStr(.MagiaSinEfecto))
-                Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "InviSinEfecto", CStr(.InviSinEfecto))
-                Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "ResuSinEfecto", CStr(.ResuSinEfecto))
+                Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "MagiaSinefecto", .MagiaSinEfecto.ToString())
+                Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "InviSinEfecto", .InviSinEfecto.ToString())
+                Call WriteVar(MAPFILE & ".dat", "mapa" & Map, "ResuSinEfecto", .ResuSinEfecto.ToString())
 
                 Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "Terreno", .Terreno)
                 Call WriteVar(MAPFILE & ".dat", "Mapa" & Map, "Zona", .Zona)
@@ -634,10 +634,10 @@ Module ES
 
         'Distribución de Vida
         For i = 1 To 5
-            DistribucionEnteraVida(i) = ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "E" & CStr(i)))
+            DistribucionEnteraVida(i) = ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "E" & i.ToString()))
         Next i
         For i = 1 To 4
-            DistribucionSemienteraVida(i) = ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "S" & CStr(i)))
+            DistribucionSemienteraVida(i) = ParseVal(GetVar(DatPath & "Balance.dat", "DISTRIBUCION", "S" & i.ToString()))
         Next i
 
         'Extra
@@ -943,57 +943,57 @@ Module ES
         With UserList(UserIndex)
             With .Stats
                 For LoopC = 1 To NUMATRIBUTOS
-                    .UserAtributos(LoopC) = CShort(UserFile.GetValue("ATRIBUTOS", "AT" & LoopC))
+                    .UserAtributos(LoopC) = Convert.ToInt16(UserFile.GetValue("ATRIBUTOS", "AT" & LoopC))
                     .UserAtributosBackUP(LoopC) = .UserAtributos(LoopC)
                 Next LoopC
 
                 For LoopC = 1 To NUMSKILLS
-                    .UserSkills(LoopC) = CShort(UserFile.GetValue("SKILLS", "SK" & LoopC))
-                    .EluSkills(LoopC) = CShort(UserFile.GetValue("SKILLS", "ELUSK" & LoopC))
-                    .ExpSkills(LoopC) = CShort(UserFile.GetValue("SKILLS", "EXPSK" & LoopC))
+                    .UserSkills(LoopC) = Convert.ToInt16(UserFile.GetValue("SKILLS", "SK" & LoopC))
+                    .EluSkills(LoopC) = Convert.ToInt16(UserFile.GetValue("SKILLS", "ELUSK" & LoopC))
+                    .ExpSkills(LoopC) = Convert.ToInt16(UserFile.GetValue("SKILLS", "EXPSK" & LoopC))
                 Next LoopC
 
                 For LoopC = 1 To MAXUSERHECHIZOS
-                    .UserHechizos(LoopC) = CShort(UserFile.GetValue("Hechizos", "H" & LoopC))
+                    .UserHechizos(LoopC) = Convert.ToInt16(UserFile.GetValue("Hechizos", "H" & LoopC))
                 Next LoopC
 
-                .GLD = CInt(UserFile.GetValue("STATS", "GLD"))
-                .Banco = CInt(UserFile.GetValue("STATS", "BANCO"))
+                .GLD = Convert.ToInt32(UserFile.GetValue("STATS", "GLD"))
+                .Banco = Convert.ToInt32(UserFile.GetValue("STATS", "BANCO"))
 
-                .MaxHp = CShort(UserFile.GetValue("STATS", "MaxHP"))
-                .MinHp = CShort(UserFile.GetValue("STATS", "MinHP"))
+                .MaxHp = Convert.ToInt16(UserFile.GetValue("STATS", "MaxHP"))
+                .MinHp = Convert.ToInt16(UserFile.GetValue("STATS", "MinHP"))
 
-                .MinSta = CShort(UserFile.GetValue("STATS", "MinSTA"))
-                .MaxSta = CShort(UserFile.GetValue("STATS", "MaxSTA"))
+                .MinSta = Convert.ToInt16(UserFile.GetValue("STATS", "MinSTA"))
+                .MaxSta = Convert.ToInt16(UserFile.GetValue("STATS", "MaxSTA"))
 
-                .MaxMAN = CShort(UserFile.GetValue("STATS", "MaxMAN"))
-                .MinMAN = CShort(UserFile.GetValue("STATS", "MinMAN"))
+                .MaxMAN = Convert.ToInt16(UserFile.GetValue("STATS", "MaxMAN"))
+                .MinMAN = Convert.ToInt16(UserFile.GetValue("STATS", "MinMAN"))
 
-                .MaxHIT = CShort(UserFile.GetValue("STATS", "MaxHIT"))
-                .MinHIT = CShort(UserFile.GetValue("STATS", "MinHIT"))
+                .MaxHIT = Convert.ToInt16(UserFile.GetValue("STATS", "MaxHIT"))
+                .MinHIT = Convert.ToInt16(UserFile.GetValue("STATS", "MinHIT"))
 
-                .MaxAGU = CByte(UserFile.GetValue("STATS", "MaxAGU"))
-                .MinAGU = CByte(UserFile.GetValue("STATS", "MinAGU"))
+                .MaxAGU = Convert.ToByte(UserFile.GetValue("STATS", "MaxAGU"))
+                .MinAGU = Convert.ToByte(UserFile.GetValue("STATS", "MinAGU"))
 
-                .MaxHam = CByte(UserFile.GetValue("STATS", "MaxHAM"))
-                .MinHam = CByte(UserFile.GetValue("STATS", "MinHAM"))
+                .MaxHam = Convert.ToByte(UserFile.GetValue("STATS", "MaxHAM"))
+                .MinHam = Convert.ToByte(UserFile.GetValue("STATS", "MinHAM"))
 
-                .SkillPts = CShort(UserFile.GetValue("STATS", "SkillPtsLibres"))
+                .SkillPts = Convert.ToInt16(UserFile.GetValue("STATS", "SkillPtsLibres"))
 
-                .Exp = CDbl(UserFile.GetValue("STATS", "EXP"))
-                .ELU = CInt(UserFile.GetValue("STATS", "ELU"))
-                .ELV = CByte(UserFile.GetValue("STATS", "ELV"))
+                .Exp = Convert.ToDouble(UserFile.GetValue("STATS", "EXP"))
+                .ELU = Convert.ToInt32(UserFile.GetValue("STATS", "ELU"))
+                .ELV = Convert.ToByte(UserFile.GetValue("STATS", "ELV"))
 
 
-                .UsuariosMatados = CInt(UserFile.GetValue("MUERTES", "UserMuertes"))
-                .NPCsMuertos = CShort(UserFile.GetValue("MUERTES", "NpcsMuertes"))
+                .UsuariosMatados = Convert.ToInt32(UserFile.GetValue("MUERTES", "UserMuertes"))
+                .NPCsMuertos = Convert.ToInt16(UserFile.GetValue("MUERTES", "NpcsMuertes"))
             End With
 
             With .flags
-                If CByte(UserFile.GetValue("CONSEJO", "PERTENECE")) Then _
+                If Convert.ToByte(UserFile.GetValue("CONSEJO", "PERTENECE")) Then _
                     .Privilegios = .Privilegios Or PlayerType.RoyalCouncil
 
-                If CByte(UserFile.GetValue("CONSEJO", "PERTENECECAOS")) Then _
+                If Convert.ToByte(UserFile.GetValue("CONSEJO", "PERTENECECAOS")) Then _
                     .Privilegios = .Privilegios Or PlayerType.ChaosCouncil
             End With
         End With
@@ -1031,36 +1031,36 @@ Module ES
         Dim NpcIndex As Short
         With UserList(UserIndex)
             With .Faccion
-                .ArmadaReal = CByte(UserFile.GetValue("FACCIONES", "EjercitoReal"))
-                .FuerzasCaos = CByte(UserFile.GetValue("FACCIONES", "EjercitoCaos"))
-                .CiudadanosMatados = CInt(UserFile.GetValue("FACCIONES", "CiudMatados"))
-                .CriminalesMatados = CInt(UserFile.GetValue("FACCIONES", "CrimMatados"))
-                .RecibioArmaduraCaos = CByte(UserFile.GetValue("FACCIONES", "rArCaos"))
-                .RecibioArmaduraReal = CByte(UserFile.GetValue("FACCIONES", "rArReal"))
-                .RecibioExpInicialCaos = CByte(UserFile.GetValue("FACCIONES", "rExCaos"))
-                .RecibioExpInicialReal = CByte(UserFile.GetValue("FACCIONES", "rExReal"))
-                .RecompensasCaos = CInt(UserFile.GetValue("FACCIONES", "recCaos"))
-                .RecompensasReal = CInt(UserFile.GetValue("FACCIONES", "recReal"))
-                .Reenlistadas = CByte(UserFile.GetValue("FACCIONES", "Reenlistadas"))
-                .NivelIngreso = CShort(UserFile.GetValue("FACCIONES", "NivelIngreso"))
+                .ArmadaReal = Convert.ToByte(UserFile.GetValue("FACCIONES", "EjercitoReal"))
+                .FuerzasCaos = Convert.ToByte(UserFile.GetValue("FACCIONES", "EjercitoCaos"))
+                .CiudadanosMatados = Convert.ToInt32(UserFile.GetValue("FACCIONES", "CiudMatados"))
+                .CriminalesMatados = Convert.ToInt32(UserFile.GetValue("FACCIONES", "CrimMatados"))
+                .RecibioArmaduraCaos = Convert.ToByte(UserFile.GetValue("FACCIONES", "rArCaos"))
+                .RecibioArmaduraReal = Convert.ToByte(UserFile.GetValue("FACCIONES", "rArReal"))
+                .RecibioExpInicialCaos = Convert.ToByte(UserFile.GetValue("FACCIONES", "rExCaos"))
+                .RecibioExpInicialReal = Convert.ToByte(UserFile.GetValue("FACCIONES", "rExReal"))
+                .RecompensasCaos = Convert.ToInt32(UserFile.GetValue("FACCIONES", "recCaos"))
+                .RecompensasReal = Convert.ToInt32(UserFile.GetValue("FACCIONES", "recReal"))
+                .Reenlistadas = Convert.ToByte(UserFile.GetValue("FACCIONES", "Reenlistadas"))
+                .NivelIngreso = Convert.ToInt16(UserFile.GetValue("FACCIONES", "NivelIngreso"))
                 .FechaIngreso = UserFile.GetValue("FACCIONES", "FechaIngreso")
-                .MatadosIngreso = CShort(UserFile.GetValue("FACCIONES", "MatadosIngreso"))
-                .NextRecompensa = CShort(UserFile.GetValue("FACCIONES", "NextRecompensa"))
+                .MatadosIngreso = Convert.ToInt16(UserFile.GetValue("FACCIONES", "MatadosIngreso"))
+                .NextRecompensa = Convert.ToInt16(UserFile.GetValue("FACCIONES", "NextRecompensa"))
             End With
 
             With .flags
-                .Muerto = CByte(UserFile.GetValue("FLAGS", "Muerto"))
-                .Escondido = CByte(UserFile.GetValue("FLAGS", "Escondido"))
+                .Muerto = Convert.ToByte(UserFile.GetValue("FLAGS", "Muerto"))
+                .Escondido = Convert.ToByte(UserFile.GetValue("FLAGS", "Escondido"))
 
-                .Hambre = CByte(UserFile.GetValue("FLAGS", "Hambre"))
-                .Sed = CByte(UserFile.GetValue("FLAGS", "Sed"))
-                .Desnudo = CByte(UserFile.GetValue("FLAGS", "Desnudo"))
-                .Navegando = CByte(UserFile.GetValue("FLAGS", "Navegando"))
-                .Envenenado = CByte(UserFile.GetValue("FLAGS", "Envenenado"))
-                .Paralizado = CByte(UserFile.GetValue("FLAGS", "Paralizado"))
+                .Hambre = Convert.ToByte(UserFile.GetValue("FLAGS", "Hambre"))
+                .Sed = Convert.ToByte(UserFile.GetValue("FLAGS", "Sed"))
+                .Desnudo = Convert.ToByte(UserFile.GetValue("FLAGS", "Desnudo"))
+                .Navegando = Convert.ToByte(UserFile.GetValue("FLAGS", "Navegando"))
+                .Envenenado = Convert.ToByte(UserFile.GetValue("FLAGS", "Envenenado"))
+                .Paralizado = Convert.ToByte(UserFile.GetValue("FLAGS", "Paralizado"))
 
                 'Matrix
-                .lastMap = CShort(UserFile.GetValue("FLAGS", "LastMap"))
+                .lastMap = Convert.ToInt16(UserFile.GetValue("FLAGS", "LastMap"))
             End With
 
             If .flags.Paralizado = 1 Then
@@ -1068,29 +1068,29 @@ Module ES
             End If
 
 
-            .Counters.Pena = CInt(UserFile.GetValue("COUNTERS", "Pena"))
-            .Counters.AsignedSkills = CByte(ParseVal(UserFile.GetValue("COUNTERS", "SkillsAsignados")))
+            .Counters.Pena = Convert.ToInt32(UserFile.GetValue("COUNTERS", "Pena"))
+            .Counters.AsignedSkills = Convert.ToByte(ParseVal(UserFile.GetValue("COUNTERS", "SkillsAsignados")))
 
             .email = UserFile.GetValue("CONTACTO", "Email")
 
-            .Genero = CShort(UserFile.GetValue("INIT", "Genero"))
-            .clase = CShort(UserFile.GetValue("INIT", "Clase"))
-            .raza = CShort(UserFile.GetValue("INIT", "Raza"))
-            .Hogar = CShort(UserFile.GetValue("INIT", "Hogar"))
-            .Char_Renamed.heading = CShort(UserFile.GetValue("INIT", "Heading"))
+            .Genero = Convert.ToInt16(UserFile.GetValue("INIT", "Genero"))
+            .clase = Convert.ToInt16(UserFile.GetValue("INIT", "Clase"))
+            .raza = Convert.ToInt16(UserFile.GetValue("INIT", "Raza"))
+            .Hogar = Convert.ToInt16(UserFile.GetValue("INIT", "Hogar"))
+            .Char_Renamed.heading = Convert.ToInt16(UserFile.GetValue("INIT", "Heading"))
 
 
             With .OrigChar
-                .Head = CShort(UserFile.GetValue("INIT", "Head"))
-                .body = CShort(UserFile.GetValue("INIT", "Body"))
-                .WeaponAnim = CShort(UserFile.GetValue("INIT", "Arma"))
-                .ShieldAnim = CShort(UserFile.GetValue("INIT", "Escudo"))
-                .CascoAnim = CShort(UserFile.GetValue("INIT", "Casco"))
+                .Head = Convert.ToInt16(UserFile.GetValue("INIT", "Head"))
+                .body = Convert.ToInt16(UserFile.GetValue("INIT", "Body"))
+                .WeaponAnim = Convert.ToInt16(UserFile.GetValue("INIT", "Arma"))
+                .ShieldAnim = Convert.ToInt16(UserFile.GetValue("INIT", "Escudo"))
+                .CascoAnim = Convert.ToInt16(UserFile.GetValue("INIT", "Casco"))
 
                 .heading = eHeading.SOUTH
             End With
 
-            .UpTime = CInt(UserFile.GetValue("INIT", "UpTime"))
+            .UpTime = Convert.ToInt32(UserFile.GetValue("INIT", "UpTime"))
 
             If .flags.Muerto = 0 Then
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Char. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -1106,20 +1106,20 @@ Module ES
 
             .desc = UserFile.GetValue("INIT", "Desc")
 
-            .Pos.Map = CShort(ReadField(1, UserFile.GetValue("INIT", "Position"), 45))
-            .Pos.X = CShort(ReadField(2, UserFile.GetValue("INIT", "Position"), 45))
-            .Pos.Y = CShort(ReadField(3, UserFile.GetValue("INIT", "Position"), 45))
+            .Pos.Map = Convert.ToInt16(ReadField(1, UserFile.GetValue("INIT", "Position"), 45))
+            .Pos.X = Convert.ToInt16(ReadField(2, UserFile.GetValue("INIT", "Position"), 45))
+            .Pos.Y = Convert.ToInt16(ReadField(3, UserFile.GetValue("INIT", "Position"), 45))
 
-            .Invent.NroItems = CShort(UserFile.GetValue("Inventory", "CantidadItems"))
+            .Invent.NroItems = Convert.ToInt16(UserFile.GetValue("Inventory", "CantidadItems"))
 
             '[KEVIN]--------------------------------------------------------------------
             '***********************************************************************************
-            .BancoInvent.NroItems = CShort(UserFile.GetValue("BancoInventory", "CantidadItems"))
+            .BancoInvent.NroItems = Convert.ToInt16(UserFile.GetValue("BancoInventory", "CantidadItems"))
             'Lista de objetos del banco
             For LoopC = 1 To MAX_BANCOINVENTORY_SLOTS
                 ln = UserFile.GetValue("BancoInventory", "Obj" & LoopC)
-                .BancoInvent.Object_Renamed(LoopC).ObjIndex = CShort(ReadField(1, ln, 45))
-                .BancoInvent.Object_Renamed(LoopC).Amount = CShort(ReadField(2, ln, 45))
+                .BancoInvent.Object_Renamed(LoopC).ObjIndex = Convert.ToInt16(ReadField(1, ln, 45))
+                .BancoInvent.Object_Renamed(LoopC).Amount = Convert.ToInt16(ReadField(2, ln, 45))
             Next LoopC
             '------------------------------------------------------------------------------------
             '[/KEVIN]*****************************************************************************
@@ -1128,19 +1128,19 @@ Module ES
             'Lista de objetos
             For LoopC = 1 To MAX_INVENTORY_SLOTS
                 ln = UserFile.GetValue("Inventory", "Obj" & LoopC)
-                .Invent.Object_Renamed(LoopC).ObjIndex = CShort(ReadField(1, ln, 45))
-                .Invent.Object_Renamed(LoopC).Amount = CShort(ReadField(2, ln, 45))
-                .Invent.Object_Renamed(LoopC).Equipped = CByte(ReadField(3, ln, 45))
+                .Invent.Object_Renamed(LoopC).ObjIndex = Convert.ToInt16(ReadField(1, ln, 45))
+                .Invent.Object_Renamed(LoopC).Amount = Convert.ToInt16(ReadField(2, ln, 45))
+                .Invent.Object_Renamed(LoopC).Equipped = Convert.ToByte(ReadField(3, ln, 45))
             Next LoopC
 
             'Obtiene el indice-objeto del arma
-            .Invent.WeaponEqpSlot = CByte(UserFile.GetValue("Inventory", "WeaponEqpSlot"))
+            .Invent.WeaponEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "WeaponEqpSlot"))
             If .Invent.WeaponEqpSlot > 0 Then
                 .Invent.WeaponEqpObjIndex = .Invent.Object_Renamed(.Invent.WeaponEqpSlot).ObjIndex
             End If
 
             'Obtiene el indice-objeto del armadura
-            .Invent.ArmourEqpSlot = CByte(UserFile.GetValue("Inventory", "ArmourEqpSlot"))
+            .Invent.ArmourEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "ArmourEqpSlot"))
             If .Invent.ArmourEqpSlot > 0 Then
                 .Invent.ArmourEqpObjIndex = .Invent.Object_Renamed(.Invent.ArmourEqpSlot).ObjIndex
                 .flags.Desnudo = 0
@@ -1149,49 +1149,49 @@ Module ES
             End If
 
             'Obtiene el indice-objeto del escudo
-            .Invent.EscudoEqpSlot = CByte(UserFile.GetValue("Inventory", "EscudoEqpSlot"))
+            .Invent.EscudoEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "EscudoEqpSlot"))
             If .Invent.EscudoEqpSlot > 0 Then
                 .Invent.EscudoEqpObjIndex = .Invent.Object_Renamed(.Invent.EscudoEqpSlot).ObjIndex
             End If
 
             'Obtiene el indice-objeto del casco
-            .Invent.CascoEqpSlot = CByte(UserFile.GetValue("Inventory", "CascoEqpSlot"))
+            .Invent.CascoEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "CascoEqpSlot"))
             If .Invent.CascoEqpSlot > 0 Then
                 .Invent.CascoEqpObjIndex = .Invent.Object_Renamed(.Invent.CascoEqpSlot).ObjIndex
             End If
 
             'Obtiene el indice-objeto barco
-            .Invent.BarcoSlot = CByte(UserFile.GetValue("Inventory", "BarcoSlot"))
+            .Invent.BarcoSlot = Convert.ToByte(UserFile.GetValue("Inventory", "BarcoSlot"))
             If .Invent.BarcoSlot > 0 Then
                 .Invent.BarcoObjIndex = .Invent.Object_Renamed(.Invent.BarcoSlot).ObjIndex
             End If
 
             'Obtiene el indice-objeto municion
-            .Invent.MunicionEqpSlot = CByte(UserFile.GetValue("Inventory", "MunicionSlot"))
+            .Invent.MunicionEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "MunicionSlot"))
             If .Invent.MunicionEqpSlot > 0 Then
                 .Invent.MunicionEqpObjIndex = .Invent.Object_Renamed(.Invent.MunicionEqpSlot).ObjIndex
             End If
 
             '[Alejo]
             'Obtiene el indice-objeto anilo
-            .Invent.AnilloEqpSlot = CByte(UserFile.GetValue("Inventory", "AnilloSlot"))
+            .Invent.AnilloEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "AnilloSlot"))
             If .Invent.AnilloEqpSlot > 0 Then
                 .Invent.AnilloEqpObjIndex = .Invent.Object_Renamed(.Invent.AnilloEqpSlot).ObjIndex
             End If
 
-            .Invent.MochilaEqpSlot = CByte(UserFile.GetValue("Inventory", "MochilaSlot"))
+            .Invent.MochilaEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "MochilaSlot"))
             If .Invent.MochilaEqpSlot > 0 Then
                 .Invent.MochilaEqpObjIndex = .Invent.Object_Renamed(.Invent.MochilaEqpSlot).ObjIndex
             End If
 
-            .NroMascotas = CShort(UserFile.GetValue("MASCOTAS", "NroMascotas"))
+            .NroMascotas = Convert.ToInt16(UserFile.GetValue("MASCOTAS", "NroMascotas"))
             For LoopC = 1 To MAXMASCOTAS
                 .MascotasType(LoopC) = ParseVal(UserFile.GetValue("MASCOTAS", "MAS" & LoopC))
             Next LoopC
 
             ln = UserFile.GetValue("Guild", "GUILDINDEX")
             If IsNumeric(ln) Then
-                .GuildIndex = CShort(ln)
+                .GuildIndex = Convert.ToInt16(ln)
             Else
                 .GuildIndex = 0
             End If
@@ -1464,25 +1464,25 @@ Module ES
         ''&&&&&&&&&&&&&&&&&&&&& FIN BALANCE &&&&&&&&&&&&&&&&&&&&&&&
         Call Initialize()
 
-        Ullathorpe.Map = CShort(GetVar(DatPath & "Ciudades.dat", "Ullathorpe", "Mapa"))
-        Ullathorpe.X = CShort(GetVar(DatPath & "Ciudades.dat", "Ullathorpe", "X"))
-        Ullathorpe.Y = CShort(GetVar(DatPath & "Ciudades.dat", "Ullathorpe", "Y"))
+        Ullathorpe.Map = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Ullathorpe", "Mapa"))
+        Ullathorpe.X = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Ullathorpe", "X"))
+        Ullathorpe.Y = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Ullathorpe", "Y"))
 
-        Nix.Map = CShort(GetVar(DatPath & "Ciudades.dat", "Nix", "Mapa"))
-        Nix.X = CShort(GetVar(DatPath & "Ciudades.dat", "Nix", "X"))
-        Nix.Y = CShort(GetVar(DatPath & "Ciudades.dat", "Nix", "Y"))
+        Nix.Map = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Nix", "Mapa"))
+        Nix.X = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Nix", "X"))
+        Nix.Y = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Nix", "Y"))
 
-        Banderbill.Map = CShort(GetVar(DatPath & "Ciudades.dat", "Banderbill", "Mapa"))
-        Banderbill.X = CShort(GetVar(DatPath & "Ciudades.dat", "Banderbill", "X"))
-        Banderbill.Y = CShort(GetVar(DatPath & "Ciudades.dat", "Banderbill", "Y"))
+        Banderbill.Map = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Banderbill", "Mapa"))
+        Banderbill.X = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Banderbill", "X"))
+        Banderbill.Y = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Banderbill", "Y"))
 
-        Lindos.Map = CShort(GetVar(DatPath & "Ciudades.dat", "Lindos", "Mapa"))
-        Lindos.X = CShort(GetVar(DatPath & "Ciudades.dat", "Lindos", "X"))
-        Lindos.Y = CShort(GetVar(DatPath & "Ciudades.dat", "Lindos", "Y"))
+        Lindos.Map = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Lindos", "Mapa"))
+        Lindos.X = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Lindos", "X"))
+        Lindos.Y = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Lindos", "Y"))
 
-        Arghal.Map = CShort(GetVar(DatPath & "Ciudades.dat", "Arghal", "Mapa"))
-        Arghal.X = CShort(GetVar(DatPath & "Ciudades.dat", "Arghal", "X"))
-        Arghal.Y = CShort(GetVar(DatPath & "Ciudades.dat", "Arghal", "Y"))
+        Arghal.Map = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Arghal", "Mapa"))
+        Arghal.X = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Arghal", "X"))
+        Arghal.Y = Convert.ToInt16(GetVar(DatPath & "Ciudades.dat", "Arghal", "Y"))
 
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Ciudades(eCiudad.cUllathorpe). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         Ciudades(eCiudad.cUllathorpe) = Ullathorpe
@@ -1667,23 +1667,23 @@ Module ES
                 If FileExist(UserFile) Then
                     If .flags.Muerto = 1 Then
                         OldUserHead = .Char_Renamed.Head
-                        .Char_Renamed.Head = CShort(GetVar(UserFile, "INIT", "Head"))
+                        .Char_Renamed.Head = Convert.ToInt16(GetVar(UserFile, "INIT", "Head"))
                     End If
                     '       Kill UserFile
                 End If
 
 
-                Call WriteVar(UserFile, "FLAGS", "Muerto", CStr(.flags.Muerto))
-                Call WriteVar(UserFile, "FLAGS", "Escondido", CStr(.flags.Escondido))
-                Call WriteVar(UserFile, "FLAGS", "Hambre", CStr(.flags.Hambre))
-                Call WriteVar(UserFile, "FLAGS", "Sed", CStr(.flags.Sed))
-                Call WriteVar(UserFile, "FLAGS", "Desnudo", CStr(.flags.Desnudo))
-                Call WriteVar(UserFile, "FLAGS", "Ban", CStr(.flags.Ban))
-                Call WriteVar(UserFile, "FLAGS", "Navegando", CStr(.flags.Navegando))
-                Call WriteVar(UserFile, "FLAGS", "Envenenado", CStr(.flags.Envenenado))
-                Call WriteVar(UserFile, "FLAGS", "Paralizado", CStr(.flags.Paralizado))
+                Call WriteVar(UserFile, "FLAGS", "Muerto", .flags.Muerto.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Escondido", .flags.Escondido.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Hambre", .flags.Hambre.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Sed", .flags.Sed.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Desnudo", .flags.Desnudo.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Ban", .flags.Ban.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Navegando", .flags.Navegando.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Envenenado", .flags.Envenenado.ToString())
+                Call WriteVar(UserFile, "FLAGS", "Paralizado", .flags.Paralizado.ToString())
                 'Matrix
-                Call WriteVar(UserFile, "FLAGS", "LastMap", CStr(.flags.lastMap))
+                Call WriteVar(UserFile, "FLAGS", "LastMap", .flags.lastMap.ToString())
 
                 Call _
                     WriteVar(UserFile, "CONSEJO", "PERTENECE",
@@ -1693,71 +1693,71 @@ Module ES
                              IIf(.flags.Privilegios And PlayerType.ChaosCouncil, "1", "0"))
 
 
-                Call WriteVar(UserFile, "COUNTERS", "Pena", CStr(.Counters.Pena))
-                Call WriteVar(UserFile, "COUNTERS", "SkillsAsignados", CStr(.Counters.AsignedSkills))
+                Call WriteVar(UserFile, "COUNTERS", "Pena", .Counters.Pena.ToString())
+                Call WriteVar(UserFile, "COUNTERS", "SkillsAsignados", .Counters.AsignedSkills.ToString())
 
-                Call WriteVar(UserFile, "FACCIONES", "EjercitoReal", CStr(.Faccion.ArmadaReal))
-                Call WriteVar(UserFile, "FACCIONES", "EjercitoCaos", CStr(.Faccion.FuerzasCaos))
-                Call WriteVar(UserFile, "FACCIONES", "CiudMatados", CStr(.Faccion.CiudadanosMatados))
-                Call WriteVar(UserFile, "FACCIONES", "CrimMatados", CStr(.Faccion.CriminalesMatados))
-                Call WriteVar(UserFile, "FACCIONES", "rArCaos", CStr(.Faccion.RecibioArmaduraCaos))
-                Call WriteVar(UserFile, "FACCIONES", "rArReal", CStr(.Faccion.RecibioArmaduraReal))
-                Call WriteVar(UserFile, "FACCIONES", "rExCaos", CStr(.Faccion.RecibioExpInicialCaos))
-                Call WriteVar(UserFile, "FACCIONES", "rExReal", CStr(.Faccion.RecibioExpInicialReal))
-                Call WriteVar(UserFile, "FACCIONES", "recCaos", CStr(.Faccion.RecompensasCaos))
-                Call WriteVar(UserFile, "FACCIONES", "recReal", CStr(.Faccion.RecompensasReal))
-                Call WriteVar(UserFile, "FACCIONES", "Reenlistadas", CStr(.Faccion.Reenlistadas))
-                Call WriteVar(UserFile, "FACCIONES", "NivelIngreso", CStr(.Faccion.NivelIngreso))
+                Call WriteVar(UserFile, "FACCIONES", "EjercitoReal", .Faccion.ArmadaReal.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "EjercitoCaos", .Faccion.FuerzasCaos.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "CiudMatados", .Faccion.CiudadanosMatados.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "CrimMatados", .Faccion.CriminalesMatados.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "rArCaos", .Faccion.RecibioArmaduraCaos.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "rArReal", .Faccion.RecibioArmaduraReal.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "rExCaos", .Faccion.RecibioExpInicialCaos.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "rExReal", .Faccion.RecibioExpInicialReal.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "recCaos", .Faccion.RecompensasCaos.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "recReal", .Faccion.RecompensasReal.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "Reenlistadas", .Faccion.Reenlistadas.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "NivelIngreso", .Faccion.NivelIngreso.ToString())
                 Call WriteVar(UserFile, "FACCIONES", "FechaIngreso", .Faccion.FechaIngreso)
-                Call WriteVar(UserFile, "FACCIONES", "MatadosIngreso", CStr(.Faccion.MatadosIngreso))
-                Call WriteVar(UserFile, "FACCIONES", "NextRecompensa", CStr(.Faccion.NextRecompensa))
+                Call WriteVar(UserFile, "FACCIONES", "MatadosIngreso", .Faccion.MatadosIngreso.ToString())
+                Call WriteVar(UserFile, "FACCIONES", "NextRecompensa", .Faccion.NextRecompensa.ToString())
 
 
                 '¿Fueron modificados los atributos del usuario?
                 If Not .flags.TomoPocion Then
                     For LoopC = 1 To UBound(.Stats.UserAtributos)
-                        Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, CStr(.Stats.UserAtributos(LoopC)))
+                        Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, (.Stats.UserAtributos(LoopC)).ToString())
                     Next LoopC
                 Else
                     For LoopC = 1 To UBound(.Stats.UserAtributos)
                         '.Stats.UserAtributos(LoopC) = .Stats.UserAtributosBackUP(LoopC)
-                        Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, CStr(.Stats.UserAtributosBackUP(LoopC)))
+                        Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, (.Stats.UserAtributosBackUP(LoopC)).ToString())
                     Next LoopC
                 End If
 
                 For LoopC = 1 To UBound(.Stats.UserSkills)
-                    Call WriteVar(UserFile, "SKILLS", "SK" & LoopC, CStr(.Stats.UserSkills(LoopC)))
-                    Call WriteVar(UserFile, "SKILLS", "ELUSK" & LoopC, CStr(.Stats.EluSkills(LoopC)))
-                    Call WriteVar(UserFile, "SKILLS", "EXPSK" & LoopC, CStr(.Stats.ExpSkills(LoopC)))
+                    Call WriteVar(UserFile, "SKILLS", "SK" & LoopC, (.Stats.UserSkills(LoopC)).ToString())
+                    Call WriteVar(UserFile, "SKILLS", "ELUSK" & LoopC, (.Stats.EluSkills(LoopC)).ToString())
+                    Call WriteVar(UserFile, "SKILLS", "EXPSK" & LoopC, (.Stats.ExpSkills(LoopC)).ToString())
                 Next LoopC
 
 
                 Call WriteVar(UserFile, "CONTACTO", "Email", .email)
 
-                Call WriteVar(UserFile, "INIT", "Genero", CStr(.Genero))
-                Call WriteVar(UserFile, "INIT", "Raza", CStr(.raza))
-                Call WriteVar(UserFile, "INIT", "Hogar", CStr(.Hogar))
-                Call WriteVar(UserFile, "INIT", "Clase", CStr(.clase))
+                Call WriteVar(UserFile, "INIT", "Genero", .Genero.ToString())
+                Call WriteVar(UserFile, "INIT", "Raza", .raza.ToString())
+                Call WriteVar(UserFile, "INIT", "Hogar", .Hogar.ToString())
+                Call WriteVar(UserFile, "INIT", "Clase", .clase.ToString())
                 Call WriteVar(UserFile, "INIT", "Desc", .desc)
 
-                Call WriteVar(UserFile, "INIT", "Heading", CStr(.Char_Renamed.heading))
+                Call WriteVar(UserFile, "INIT", "Heading", .Char_Renamed.heading.ToString())
 
-                Call WriteVar(UserFile, "INIT", "Head", CStr(.OrigChar.Head))
+                Call WriteVar(UserFile, "INIT", "Head", .OrigChar.Head.ToString())
 
                 If .flags.Muerto = 0 Then
-                    Call WriteVar(UserFile, "INIT", "Body", CStr(.Char_Renamed.body))
+                    Call WriteVar(UserFile, "INIT", "Body", .Char_Renamed.body.ToString())
                 End If
 
-                Call WriteVar(UserFile, "INIT", "Arma", CStr(.Char_Renamed.WeaponAnim))
-                Call WriteVar(UserFile, "INIT", "Escudo", CStr(.Char_Renamed.ShieldAnim))
-                Call WriteVar(UserFile, "INIT", "Casco", CStr(.Char_Renamed.CascoAnim))
+                Call WriteVar(UserFile, "INIT", "Arma", .Char_Renamed.WeaponAnim.ToString())
+                Call WriteVar(UserFile, "INIT", "Escudo", .Char_Renamed.ShieldAnim.ToString())
+                Call WriteVar(UserFile, "INIT", "Casco", .Char_Renamed.CascoAnim.ToString())
 
                 TempDate = DateTime.FromOADate(Now.ToOADate - .LogOnTime.ToOADate)
                 .LogOnTime = Now
                 .UpTime = .UpTime + (Math.Abs(TempDate.Day - 30)*24*3600) + Hour(TempDate)*3600 + Minute(TempDate)*60 +
                           Second(TempDate)
                 .UpTime = .UpTime
-                Call WriteVar(UserFile, "INIT", "UpTime", CStr(.UpTime))
+                Call WriteVar(UserFile, "INIT", "UpTime", .UpTime.ToString())
 
                 'First time around?
                 If GetVar(UserFile, "INIT", "LastIP1") = vbNullString Then
@@ -1775,7 +1775,7 @@ Module ES
                     End Function)() _
                     Then
                     For i = 5 To 2 Step - 1
-                        Call WriteVar(UserFile, "INIT", "LastIP" & i, GetVar(UserFile, "INIT", "LastIP" & CStr(i - 1)))
+                        Call WriteVar(UserFile, "INIT", "LastIP" & i, GetVar(UserFile, "INIT", "LastIP" & (i - 1).ToString()))
                     Next i
                     Call WriteVar(UserFile, "INIT", "LastIP1", .ip & " - " & Today & ":" & TimeOfDay)
                     'Same ip, just update the date
@@ -1786,41 +1786,41 @@ Module ES
                 Call WriteVar(UserFile, "INIT", "Position", .Pos.Map & "-" & .Pos.X & "-" & .Pos.Y)
 
 
-                Call WriteVar(UserFile, "STATS", "GLD", CStr(.Stats.GLD))
-                Call WriteVar(UserFile, "STATS", "BANCO", CStr(.Stats.Banco))
+                Call WriteVar(UserFile, "STATS", "GLD", .Stats.GLD.ToString())
+                Call WriteVar(UserFile, "STATS", "BANCO", .Stats.Banco.ToString())
 
-                Call WriteVar(UserFile, "STATS", "MaxHP", CStr(.Stats.MaxHp))
-                Call WriteVar(UserFile, "STATS", "MinHP", CStr(.Stats.MinHp))
+                Call WriteVar(UserFile, "STATS", "MaxHP", .Stats.MaxHp.ToString())
+                Call WriteVar(UserFile, "STATS", "MinHP", .Stats.MinHp.ToString())
 
-                Call WriteVar(UserFile, "STATS", "MaxSTA", CStr(.Stats.MaxSta))
-                Call WriteVar(UserFile, "STATS", "MinSTA", CStr(.Stats.MinSta))
+                Call WriteVar(UserFile, "STATS", "MaxSTA", .Stats.MaxSta.ToString())
+                Call WriteVar(UserFile, "STATS", "MinSTA", .Stats.MinSta.ToString())
 
-                Call WriteVar(UserFile, "STATS", "MaxMAN", CStr(.Stats.MaxMAN))
-                Call WriteVar(UserFile, "STATS", "MinMAN", CStr(.Stats.MinMAN))
+                Call WriteVar(UserFile, "STATS", "MaxMAN", .Stats.MaxMAN.ToString())
+                Call WriteVar(UserFile, "STATS", "MinMAN", .Stats.MinMAN.ToString())
 
-                Call WriteVar(UserFile, "STATS", "MaxHIT", CStr(.Stats.MaxHIT))
-                Call WriteVar(UserFile, "STATS", "MinHIT", CStr(.Stats.MinHIT))
+                Call WriteVar(UserFile, "STATS", "MaxHIT", .Stats.MaxHIT.ToString())
+                Call WriteVar(UserFile, "STATS", "MinHIT", .Stats.MinHIT.ToString())
 
-                Call WriteVar(UserFile, "STATS", "MaxAGU", CStr(.Stats.MaxAGU))
-                Call WriteVar(UserFile, "STATS", "MinAGU", CStr(.Stats.MinAGU))
+                Call WriteVar(UserFile, "STATS", "MaxAGU", .Stats.MaxAGU.ToString())
+                Call WriteVar(UserFile, "STATS", "MinAGU", .Stats.MinAGU.ToString())
 
-                Call WriteVar(UserFile, "STATS", "MaxHAM", CStr(.Stats.MaxHam))
-                Call WriteVar(UserFile, "STATS", "MinHAM", CStr(.Stats.MinHam))
+                Call WriteVar(UserFile, "STATS", "MaxHAM", .Stats.MaxHam.ToString())
+                Call WriteVar(UserFile, "STATS", "MinHAM", .Stats.MinHam.ToString())
 
-                Call WriteVar(UserFile, "STATS", "SkillPtsLibres", CStr(.Stats.SkillPts))
+                Call WriteVar(UserFile, "STATS", "SkillPtsLibres", .Stats.SkillPts.ToString())
 
-                Call WriteVar(UserFile, "STATS", "EXP", CStr(.Stats.Exp))
-                Call WriteVar(UserFile, "STATS", "ELV", CStr(.Stats.ELV))
+                Call WriteVar(UserFile, "STATS", "EXP", .Stats.Exp.ToString())
+                Call WriteVar(UserFile, "STATS", "ELV", .Stats.ELV.ToString())
 
 
-                Call WriteVar(UserFile, "STATS", "ELU", CStr(.Stats.ELU))
-                Call WriteVar(UserFile, "MUERTES", "UserMuertes", CStr(.Stats.UsuariosMatados))
-                'Call WriteVar(UserFile, "MUERTES", "CrimMuertes", CStr(.Stats.CriminalesMatados))
-                Call WriteVar(UserFile, "MUERTES", "NpcsMuertes", CStr(.Stats.NPCsMuertos))
+                Call WriteVar(UserFile, "STATS", "ELU", .Stats.ELU.ToString())
+                Call WriteVar(UserFile, "MUERTES", "UserMuertes", .Stats.UsuariosMatados.ToString())
+                'Call WriteVar(UserFile, "MUERTES", "CrimMuertes", .Stats.CriminalesMatados.ToString())
+                Call WriteVar(UserFile, "MUERTES", "NpcsMuertes", .Stats.NPCsMuertos.ToString())
 
                 '[KEVIN]----------------------------------------------------------------------------
                 '*******************************************************************************************
-                Call WriteVar(UserFile, "BancoInventory", "CantidadItems", CStr(ParseVal(CStr(.BancoInvent.NroItems))))
+                Call WriteVar(UserFile, "BancoInventory", "CantidadItems", (ParseVal(.BancoInvent.NroItems.ToString())).ToString())
                 For loopd = 1 To MAX_BANCOINVENTORY_SLOTS
                     Call _
                         WriteVar(UserFile, "BancoInventory", "Obj" & loopd,
@@ -1831,7 +1831,7 @@ Module ES
                 '[/KEVIN]-----------
 
                 'Save Inv
-                Call WriteVar(UserFile, "Inventory", "CantidadItems", CStr(ParseVal(CStr(.Invent.NroItems))))
+                Call WriteVar(UserFile, "Inventory", "CantidadItems", (ParseVal(.Invent.NroItems.ToString())).ToString())
 
                 For LoopC = 1 To MAX_INVENTORY_SLOTS
                     Call _
@@ -1841,34 +1841,34 @@ Module ES
                                  .Invent.Object_Renamed(LoopC).Equipped)
                 Next LoopC
 
-                Call WriteVar(UserFile, "Inventory", "WeaponEqpSlot", CStr(.Invent.WeaponEqpSlot))
-                Call WriteVar(UserFile, "Inventory", "ArmourEqpSlot", CStr(.Invent.ArmourEqpSlot))
-                Call WriteVar(UserFile, "Inventory", "CascoEqpSlot", CStr(.Invent.CascoEqpSlot))
-                Call WriteVar(UserFile, "Inventory", "EscudoEqpSlot", CStr(.Invent.EscudoEqpSlot))
-                Call WriteVar(UserFile, "Inventory", "BarcoSlot", CStr(.Invent.BarcoSlot))
-                Call WriteVar(UserFile, "Inventory", "MunicionSlot", CStr(.Invent.MunicionEqpSlot))
-                Call WriteVar(UserFile, "Inventory", "MochilaSlot", CStr(.Invent.MochilaEqpSlot))
+                Call WriteVar(UserFile, "Inventory", "WeaponEqpSlot", .Invent.WeaponEqpSlot.ToString())
+                Call WriteVar(UserFile, "Inventory", "ArmourEqpSlot", .Invent.ArmourEqpSlot.ToString())
+                Call WriteVar(UserFile, "Inventory", "CascoEqpSlot", .Invent.CascoEqpSlot.ToString())
+                Call WriteVar(UserFile, "Inventory", "EscudoEqpSlot", .Invent.EscudoEqpSlot.ToString())
+                Call WriteVar(UserFile, "Inventory", "BarcoSlot", .Invent.BarcoSlot.ToString())
+                Call WriteVar(UserFile, "Inventory", "MunicionSlot", .Invent.MunicionEqpSlot.ToString())
+                Call WriteVar(UserFile, "Inventory", "MochilaSlot", .Invent.MochilaEqpSlot.ToString())
                 '/Nacho
 
-                Call WriteVar(UserFile, "Inventory", "AnilloSlot", CStr(.Invent.AnilloEqpSlot))
+                Call WriteVar(UserFile, "Inventory", "AnilloSlot", .Invent.AnilloEqpSlot.ToString())
 
 
                 'Reputacion
-                Call WriteVar(UserFile, "REP", "Asesino", CStr(.Reputacion.AsesinoRep))
-                Call WriteVar(UserFile, "REP", "Bandido", CStr(.Reputacion.BandidoRep))
-                Call WriteVar(UserFile, "REP", "Burguesia", CStr(.Reputacion.BurguesRep))
-                Call WriteVar(UserFile, "REP", "Ladrones", CStr(.Reputacion.LadronesRep))
-                Call WriteVar(UserFile, "REP", "Nobles", CStr(.Reputacion.NobleRep))
-                Call WriteVar(UserFile, "REP", "Plebe", CStr(.Reputacion.PlebeRep))
+                Call WriteVar(UserFile, "REP", "Asesino", .Reputacion.AsesinoRep.ToString())
+                Call WriteVar(UserFile, "REP", "Bandido", .Reputacion.BandidoRep.ToString())
+                Call WriteVar(UserFile, "REP", "Burguesia", .Reputacion.BurguesRep.ToString())
+                Call WriteVar(UserFile, "REP", "Ladrones", .Reputacion.LadronesRep.ToString())
+                Call WriteVar(UserFile, "REP", "Nobles", .Reputacion.NobleRep.ToString())
+                Call WriteVar(UserFile, "REP", "Plebe", .Reputacion.PlebeRep.ToString())
 
                 L = (- .Reputacion.AsesinoRep) + (- .Reputacion.BandidoRep) + .Reputacion.BurguesRep +
                     (- .Reputacion.LadronesRep) + .Reputacion.NobleRep + .Reputacion.PlebeRep
                 L = L/6
-                Call WriteVar(UserFile, "REP", "Promedio", CStr(L))
+                Call WriteVar(UserFile, "REP", "Promedio", L.ToString())
 
 
                 For LoopC = 1 To MAXUSERHECHIZOS
-                    cad = CStr(.Stats.UserHechizos(LoopC))
+                    cad = (.Stats.UserHechizos(LoopC)).ToString()
                     Call WriteVar(UserFile, "HECHIZOS", "H" & LoopC, cad)
                 Next
 
@@ -1879,20 +1879,20 @@ Module ES
                     If .MascotasIndex(LoopC) > 0 Then
                         ' Nos aseguramos que la criatura no fue invocada
                         If Npclist(.MascotasIndex(LoopC)).Contadores.TiempoExistencia = 0 Then
-                            cad = CStr(.MascotasType(LoopC))
+                            cad = (.MascotasType(LoopC)).ToString()
                         Else 'Si fue invocada no la guardamos
                             cad = "0"
                             NroMascotas = NroMascotas - 1
                         End If
                         Call WriteVar(UserFile, "MASCOTAS", "MAS" & LoopC, cad)
                     Else
-                        cad = CStr(.MascotasType(LoopC))
+                        cad = (.MascotasType(LoopC)).ToString()
                         Call WriteVar(UserFile, "MASCOTAS", "MAS" & LoopC, cad)
                     End If
 
                 Next
 
-                Call WriteVar(UserFile, "MASCOTAS", "NroMascotas", CStr(NroMascotas))
+                Call WriteVar(UserFile, "MASCOTAS", "NroMascotas", NroMascotas.ToString())
 
                 'Devuelve el head de muerto
                 If .flags.Muerto = 1 Then
@@ -1947,37 +1947,37 @@ Module ES
             'General
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Name", .name)
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Desc", .desc)
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Head", CStr(ParseVal(CStr(.Char_Renamed.Head))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Body", CStr(ParseVal(CStr(.Char_Renamed.body))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Heading", CStr(ParseVal(CStr(.Char_Renamed.heading))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Movement", CStr(ParseVal(CStr(.Movement))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Attackable", CStr(ParseVal(CStr(.Attackable))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Comercia", CStr(ParseVal(CStr(.Comercia))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "TipoItems", CStr(ParseVal(CStr(.TipoItems))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Hostil", CStr(ParseVal(CStr(.Hostile))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "GiveEXP", CStr(ParseVal(CStr(.GiveEXP))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "GiveGLD", CStr(ParseVal(CStr(.GiveGLD))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Hostil", CStr(ParseVal(CStr(.Hostile))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "InvReSpawn", CStr(ParseVal(CStr(.InvReSpawn))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "NpcType", CStr(ParseVal(CStr(.NPCtype))))
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Head", (ParseVal(.Char_Renamed.Head.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Body", (ParseVal(.Char_Renamed.body.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Heading", (ParseVal(.Char_Renamed.heading.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Movement", (ParseVal(.Movement.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Attackable", (ParseVal(.Attackable.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Comercia", (ParseVal(.Comercia.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "TipoItems", (ParseVal(.TipoItems.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Hostil", (ParseVal(.Hostile.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "GiveEXP", (ParseVal(.GiveEXP.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "GiveGLD", (ParseVal(.GiveGLD.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Hostil", (ParseVal(.Hostile.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "InvReSpawn", (ParseVal(.InvReSpawn.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "NpcType", (ParseVal(.NPCtype.ToString())).ToString())
 
 
             'Stats
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Alineacion", CStr(ParseVal(CStr(.Stats.Alineacion))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "DEF", CStr(ParseVal(CStr(.Stats.def))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "MaxHit", CStr(ParseVal(CStr(.Stats.MaxHIT))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "MaxHp", CStr(ParseVal(CStr(.Stats.MaxHp))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "MinHit", CStr(ParseVal(CStr(.Stats.MinHIT))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "MinHp", CStr(ParseVal(CStr(.Stats.MinHp))))
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Alineacion", (ParseVal(.Stats.Alineacion.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "DEF", (ParseVal(.Stats.def.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "MaxHit", (ParseVal(.Stats.MaxHIT.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "MaxHp", (ParseVal(.Stats.MaxHp.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "MinHit", (ParseVal(.Stats.MinHIT.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "MinHp", (ParseVal(.Stats.MinHp.ToString())).ToString())
 
 
             'Flags
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "ReSpawn", CStr(ParseVal(CStr(.flags.Respawn))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "BackUp", CStr(ParseVal(CStr(.flags.BackUp))))
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Domable", CStr(ParseVal(CStr(.flags.Domable))))
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "ReSpawn", (ParseVal(.flags.Respawn.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "BackUp", (ParseVal(.flags.BackUp.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Domable", (ParseVal(.flags.Domable.ToString())).ToString())
 
             'Inventario
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "NroItems", CStr(ParseVal(CStr(.Invent.NroItems))))
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "NroItems", (ParseVal(.Invent.NroItems.ToString())).ToString())
             If .Invent.NroItems > 0 Then
                 For LoopC = 1 To MAX_INVENTORY_SLOTS
                     Call _

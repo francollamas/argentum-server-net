@@ -15,7 +15,7 @@
 | ✅ 0 | Error handling: On Error → Try/Catch | **COMPLETADO** |
 | ✅ 1 | Reemplazar `Val()` | **COMPLETADO** (441 → 0) |
 | ✅ 2 | Reemplazar funciones string VB6 (`Left`, `Right`, `Mid`, `Len`, `InStr`, etc.) | **COMPLETADO** (0 instancias restantes) |
-| 🔲 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | Pendiente |
+| ✅ 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | **COMPLETADO** (0 instancias restantes) |
 | 🔲 4 | Reemplazar `UBound()` / `LBound()` | Pendiente |
 | 🔲 5 | Modernizar File I/O (`FileOpen`, `Line Input`, `Print #`) | Pendiente |
 | 🔲 6 | Resolver `As Object` (late binding) | Pendiente |
@@ -142,11 +142,9 @@ En los casos donde el tipo esperado es Integer o Long:
 
 ### Progreso por archivo
 
-| Archivo | CStr aprox. | Estado |
-|---------|-------------|--------|
-| Protocol.vb | ~83 | 🔲 |
-| clsParty.vb | ~20 | 🔲 |
-| *(resto)* | ~153 | 🔲 |
+**COMPLETADO** — todos los archivos migrados. 0 instancias restantes.
+
+Incluyó también `CShort` → `Convert.ToInt16` en todos los archivos.
 
 ---
 

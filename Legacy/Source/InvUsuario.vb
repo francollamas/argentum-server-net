@@ -1800,7 +1800,7 @@ Module InvUsuario
 
                 Call TirarTodosLosItems(UserIndex)
 
-                Cantidad = .Stats.GLD - CInt(.Stats.ELV)*10000
+                Cantidad = .Stats.GLD - Convert.ToInt32(.Stats.ELV)*10000
 
                 If Cantidad > 0 Then Call TirarOro(Cantidad, UserIndex)
             End With

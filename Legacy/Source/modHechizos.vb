@@ -244,9 +244,9 @@ Module modHechizos
                                         FontTypeNames.FONTTYPE_INFO)
                 Else
                     .Stats.UserHechizos(j) = hIndex
-                    Call UpdateUserHechizos(False, UserIndex, CByte(j))
+                    Call UpdateUserHechizos(False, UserIndex, Convert.ToByte(j))
                     'Quitamos del inv el item
-                    Call QuitarUserInvItem(UserIndex, CByte(Slot), 1)
+                    Call QuitarUserInvItem(UserIndex, Convert.ToByte(Slot), 1)
                 End If
             Else
                 Call WriteConsoleMsg(UserIndex, "Ya tienes ese hechizo.", FontTypeNames.FONTTYPE_INFO)

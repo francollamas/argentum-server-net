@@ -73,18 +73,18 @@ Friend Class clsByteQueue
         Dim valueType As Type = sourceVariable.GetType()
 
         If valueType Is GetType(Byte) Then
-            destArray(startPos) = CByte(sourceVariable)
+            destArray(startPos) = Convert.ToByte(sourceVariable)
         ElseIf valueType Is GetType(Int16) Then
-            Dim bytes As Byte() = BitConverter.GetBytes(CShort(sourceVariable))
+            Dim bytes As Byte() = BitConverter.GetBytes(Convert.ToInt16(sourceVariable))
             Array.Copy(bytes, 0, destArray, startPos, bytes.Length)
         ElseIf valueType Is GetType(Int32) Then
-            Dim bytes As Byte() = BitConverter.GetBytes(CInt(sourceVariable))
+            Dim bytes As Byte() = BitConverter.GetBytes(Convert.ToInt32(sourceVariable))
             Array.Copy(bytes, 0, destArray, startPos, bytes.Length)
         ElseIf valueType Is GetType(Single) Then
-            Dim bytes As Byte() = BitConverter.GetBytes(CSng(sourceVariable))
+            Dim bytes As Byte() = BitConverter.GetBytes(Convert.ToSingle(sourceVariable))
             Array.Copy(bytes, 0, destArray, startPos, bytes.Length)
         ElseIf valueType Is GetType(Double) Then
-            Dim bytes As Byte() = BitConverter.GetBytes(CDbl(sourceVariable))
+            Dim bytes As Byte() = BitConverter.GetBytes(Convert.ToDouble(sourceVariable))
             Array.Copy(bytes, 0, destArray, startPos, bytes.Length)
         End If
     End Sub
@@ -210,7 +210,7 @@ Friend Class clsByteQueue
         ' Handle null value
         If Value Is Nothing Then Value = String.Empty
 
-        Dim length = CShort(Value.Length)
+        Dim length = Convert.ToInt16(Value.Length)
         Dim lengthBytes As Byte() = BitConverter.GetBytes(length)
         Dim valueBytes As Byte() = Encoding.GetEncoding("Windows-1252").GetBytes(Value)
 
@@ -225,7 +225,7 @@ Friend Class clsByteQueue
         ' Handle null value
         If Value Is Nothing Then Value = String.Empty
 
-        Dim length = CShort(Value.Length)
+        Dim length = Convert.ToInt16(Value.Length)
         Dim lengthBytes As Byte() = BitConverter.GetBytes(length)
         Dim valueBytes As Byte() = Encoding.Unicode.GetBytes(Value)
 

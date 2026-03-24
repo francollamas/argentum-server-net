@@ -110,7 +110,7 @@ Friend Class clsParty
             If UI > 0 Then
                 ' Formula: Exp* (Nivel ^ ExponenteNivelParty) / sumadeNivelesElevados
                 expThisUser =
-                    CDbl(
+                    Convert.ToDouble(
                         ExpGanada*(UserList(p_members(i).UserIndex).Stats.ELV^ExponenteNivelParty)/p_SumaNivelesElevados)
 
                 If mapa = UserList(UI).Pos.map And UserList(UI).flags.Muerto = 0 Then
@@ -217,7 +217,7 @@ Friend Class clsParty
 
                         Call _
                             WriteConsoleMsg(.UserIndex,
-                                            "Durante la misma has conseguido " & CStr(Fix(.Experiencia)) &
+                                            "Durante la misma has conseguido " & Fix(.Experiencia).ToString() &
                                             " puntos de experiencia.", FontTypeNames.FONTTYPE_PARTY)
 
                         If Not PARTY_EXPERIENCIAPORGOLPE Then
@@ -259,7 +259,7 @@ Friend Class clsParty
                     'TODO: Revisar que esto este bien, y no este faltando/sobrando un mensaje, ahora solo los estoy corrigiendo
                     Call _
                         WriteConsoleMsg(MemberIndex,
-                                        "Durante la misma has conseguido " & CStr(Fix(p_members(i).Experiencia)) &
+                                        "Durante la misma has conseguido " & Fix(p_members(i).Experiencia).ToString() &
                                         " puntos de experiencia.", FontTypeNames.FONTTYPE_PARTY)
 
                     p_CantMiembros = p_CantMiembros - 1

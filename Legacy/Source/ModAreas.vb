@@ -106,7 +106,7 @@ Module ModAreas
                 EntryValue = ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
                 Call _
                     WriteVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour,
-                             CStr(CShort((EntryValue + ConnGroups(LoopC).OptValue)\2)))
+                             Convert.ToInt16((EntryValue + ConnGroups(LoopC).OptValue)\2).ToString())
 
                 ConnGroups(LoopC).OptValue = ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC,
                                                         tCurDay & "-" & tCurHour))
@@ -143,30 +143,30 @@ Module ModAreas
                 MaxY = MinY - 1
                 MinY = MinY - 9
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
             ElseIf Head = eHeading.SOUTH Then
                 MaxY = MinY + 35
                 MinY = MinY + 27
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY - 18)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY - 18)
 
             ElseIf Head = eHeading.WEST Then
                 MaxX = MinX - 1
                 MinX = MinX - 9
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = eHeading.EAST Then
                 MaxX = MinX + 35
                 MinX = MinX + 27
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX - 18)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX - 18)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = USER_NUEVO Then
@@ -177,8 +177,8 @@ Module ModAreas
                 MinX = ((.Pos.X\9) - 1)*9
                 MaxX = MinX + 26
 
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
             End If
 
             If MinY < 1 Then MinY = 1
@@ -292,30 +292,30 @@ Module ModAreas
                 MaxY = MinY - 1
                 MinY = MinY - 9
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
             ElseIf Head = eHeading.SOUTH Then
                 MaxY = MinY + 35
                 MinY = MinY + 27
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY - 18)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY - 18)
 
             ElseIf Head = eHeading.WEST Then
                 MaxX = MinX - 1
                 MinX = MinX - 9
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = eHeading.EAST Then
                 MaxX = MinX + 35
                 MinX = MinX + 27
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX - 18)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX - 18)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = USER_NUEVO Then
@@ -326,8 +326,8 @@ Module ModAreas
                 MinX = ((.Pos.X\9) - 1)*9
                 MaxX = MinX + 26
 
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
             End If
 
             If MinY < 1 Then MinY = 1

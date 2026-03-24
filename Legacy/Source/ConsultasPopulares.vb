@@ -36,7 +36,7 @@ Friend Class ConsultasPopulares
 
         pEncuestaActualNum = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
         pEncuestaActualTex = GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActualTexto")
-        pNivelRequerido = CShort(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
+        pNivelRequerido = Convert.ToInt16(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
 
         If pEncuestaActualNum > 0 Then
             'cargo todas las opciones
@@ -74,7 +74,7 @@ Friend Class ConsultasPopulares
                     If Not YaVoto Then
                         If Not MailYaVoto(UserList(UserIndex).email) Then
                             'pj apto para votar
-                            sufragio = CInt(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                            sufragio = Convert.ToInt32(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                                        "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
                             sufragio = sufragio + 1
                             Call _

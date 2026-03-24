@@ -14,7 +14,7 @@ Module UsUaRiOs
         Dim DaExp As Short
         Dim EraCriminal As Boolean
 
-        DaExp = CShort(UserList(VictimIndex).Stats.ELV)*2
+        DaExp = Convert.ToInt16(UserList(VictimIndex).Stats.ELV)*2
 
         With UserList(AttackerIndex)
             .Stats.Exp = .Stats.Exp + DaExp
@@ -1094,66 +1094,66 @@ Module UsUaRiOs
                 WriteConsoleMsg(sendIndex, "NPCs muertos: " & GetVar(CharFile, "MUERTES", "NpcsMuertes"),
                                 FontTypeNames.FONTTYPE_INFO)
             Call _
-                WriteConsoleMsg(sendIndex, "Clase: " & ListaClases(CInt(GetVar(CharFile, "INIT", "Clase"))),
+                WriteConsoleMsg(sendIndex, "Clase: " & ListaClases(Convert.ToInt32(GetVar(CharFile, "INIT", "Clase"))),
                                 FontTypeNames.FONTTYPE_INFO)
             Call _
                 WriteConsoleMsg(sendIndex, "Pena: " & GetVar(CharFile, "COUNTERS", "PENA"),
                                 FontTypeNames.FONTTYPE_INFO)
 
-            If CByte(GetVar(CharFile, "FACCIONES", "EjercitoReal")) = 1 Then
+            If Convert.ToByte(GetVar(CharFile, "FACCIONES", "EjercitoReal")) = 1 Then
                 Call _
                     WriteConsoleMsg(sendIndex, "Ejército real desde: " & GetVar(CharFile, "FACCIONES", "FechaIngreso"),
                                     FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Ingresó en nivel: " & CShort(GetVar(CharFile, "FACCIONES", "NivelIngreso")) &
-                                    " con " & CShort(GetVar(CharFile, "FACCIONES", "MatadosIngreso")) &
+                                    "Ingresó en nivel: " & Convert.ToInt16(GetVar(CharFile, "FACCIONES", "NivelIngreso")) &
+                                    " con " & Convert.ToInt16(GetVar(CharFile, "FACCIONES", "MatadosIngreso")) &
                                     " ciudadanos matados.", FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
+                                    "Veces que ingresó: " & Convert.ToByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
                                     FontTypeNames.FONTTYPE_INFO)
 
-            ElseIf CByte(GetVar(CharFile, "FACCIONES", "EjercitoCaos")) = 1 Then
+            ElseIf Convert.ToByte(GetVar(CharFile, "FACCIONES", "EjercitoCaos")) = 1 Then
                 Call _
                     WriteConsoleMsg(sendIndex, "Legión oscura desde: " & GetVar(CharFile, "FACCIONES", "FechaIngreso"),
                                     FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Ingresó en nivel: " & CShort(GetVar(CharFile, "FACCIONES", "NivelIngreso")),
+                                    "Ingresó en nivel: " & Convert.ToInt16(GetVar(CharFile, "FACCIONES", "NivelIngreso")),
                                     FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
+                                    "Veces que ingresó: " & Convert.ToByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
                                     FontTypeNames.FONTTYPE_INFO)
 
-            ElseIf CByte(GetVar(CharFile, "FACCIONES", "rExReal")) = 1 Then
+            ElseIf Convert.ToByte(GetVar(CharFile, "FACCIONES", "rExReal")) = 1 Then
                 Call WriteConsoleMsg(sendIndex, "Fue ejército real", FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
+                                    "Veces que ingresó: " & Convert.ToByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
                                     FontTypeNames.FONTTYPE_INFO)
 
-            ElseIf CByte(GetVar(CharFile, "FACCIONES", "rExCaos")) = 1 Then
+            ElseIf Convert.ToByte(GetVar(CharFile, "FACCIONES", "rExCaos")) = 1 Then
                 Call WriteConsoleMsg(sendIndex, "Fue legión oscura", FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Veces que ingresó: " & CByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
+                                    "Veces que ingresó: " & Convert.ToByte(GetVar(CharFile, "FACCIONES", "Reenlistadas")),
                                     FontTypeNames.FONTTYPE_INFO)
             End If
 
 
             Call _
-                WriteConsoleMsg(sendIndex, "Asesino: " & CInt(GetVar(CharFile, "REP", "Asesino")),
+                WriteConsoleMsg(sendIndex, "Asesino: " & Convert.ToInt32(GetVar(CharFile, "REP", "Asesino")),
                                 FontTypeNames.FONTTYPE_INFO)
             Call _
-                WriteConsoleMsg(sendIndex, "Noble: " & CInt(GetVar(CharFile, "REP", "Nobles")),
+                WriteConsoleMsg(sendIndex, "Noble: " & Convert.ToInt32(GetVar(CharFile, "REP", "Nobles")),
                                 FontTypeNames.FONTTYPE_INFO)
 
             If IsNumeric(GetVar(CharFile, "Guild", "GUILDINDEX")) Then
                 Call _
                     WriteConsoleMsg(sendIndex,
-                                    "Clan: " & GuildName(CShort(GetVar(CharFile, "Guild", "GUILDINDEX"))),
+                                    "Clan: " & GuildName(Convert.ToInt16(GetVar(CharFile, "Guild", "GUILDINDEX"))),
                                     FontTypeNames.FONTTYPE_INFO)
             End If
 
@@ -1228,8 +1228,8 @@ Module UsUaRiOs
 
                 For j = 1 To MAX_INVENTORY_SLOTS
                     Tmp = GetVar(CharFile, "Inventory", "Obj" & j)
-                    ObjInd = CInt(ReadField(1, Tmp, Asc("-")))
-                    ObjCant = CInt(ReadField(2, Tmp, Asc("-")))
+                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Asc("-")))
+                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Asc("-")))
                     If ObjInd > 0 Then
                         Call _
                             WriteConsoleMsg(sendIndex,
@@ -2199,7 +2199,7 @@ Module UsUaRiOs
                 WriteConsoleMsg(sendIndex, "Oro: " & GetVar(CharPath & Nombre & ".chr", "stats", "GLD"),
                                 FontTypeNames.FONTTYPE_INFO)
 
-            TempSecs = CInt(GetVar(CharPath & Nombre & ".chr", "INIT", "UpTime"))
+            TempSecs = Convert.ToInt32(GetVar(CharPath & Nombre & ".chr", "INIT", "UpTime"))
             tempStr = (TempSecs\86400) & " Días, " & ((TempSecs Mod 86400)\3600) & " Horas, " &
                       ((TempSecs Mod 86400) Mod 3600)\60 & " Minutos, " & (((TempSecs Mod 86400) Mod 3600) Mod 60) &
                       " Segundos."

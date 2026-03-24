@@ -475,7 +475,7 @@ Module Trabajo
                 If _
                     Not _
                     TieneObjetos(LingoteHierro,
-                                 CShort(.LingH - ObjData_Renamed(ItemIndex).LingH*PORCENTAJE_MATERIALES_UPGRADE),
+                                 Convert.ToInt16(.LingH - ObjData_Renamed(ItemIndex).LingH*PORCENTAJE_MATERIALES_UPGRADE),
                                  UserIndex) Then
                     Call _
                         WriteConsoleMsg(UserIndex, "No tienes suficientes lingotes de hierro.",
@@ -489,7 +489,7 @@ Module Trabajo
                 If _
                     Not _
                     TieneObjetos(LingotePlata,
-                                 CShort(.LingP - ObjData_Renamed(ItemIndex).LingP*PORCENTAJE_MATERIALES_UPGRADE),
+                                 Convert.ToInt16(.LingP - ObjData_Renamed(ItemIndex).LingP*PORCENTAJE_MATERIALES_UPGRADE),
                                  UserIndex) Then
                     Call _
                         WriteConsoleMsg(UserIndex, "No tienes suficientes lingotes de plata.",
@@ -503,7 +503,7 @@ Module Trabajo
                 If _
                     Not _
                     TieneObjetos(LingoteOro,
-                                 CShort(.LingO - ObjData_Renamed(ItemIndex).LingO*PORCENTAJE_MATERIALES_UPGRADE),
+                                 Convert.ToInt16(.LingO - ObjData_Renamed(ItemIndex).LingO*PORCENTAJE_MATERIALES_UPGRADE),
                                  UserIndex) Then
                     Call _
                         WriteConsoleMsg(UserIndex, "No tienes suficientes lingotes de oro.",
@@ -516,7 +516,7 @@ Module Trabajo
             If .Madera > 0 Then
                 If _
                     Not _
-                    TieneObjetos(Leña, CShort(.Madera - ObjData_Renamed(ItemIndex).Madera*PORCENTAJE_MATERIALES_UPGRADE),
+                    TieneObjetos(Leña, Convert.ToInt16(.Madera - ObjData_Renamed(ItemIndex).Madera*PORCENTAJE_MATERIALES_UPGRADE),
                                  UserIndex) Then
                     Call _
                         WriteConsoleMsg(UserIndex, "No tienes suficiente madera.", FontTypeNames.FONTTYPE_INFO)
@@ -529,7 +529,7 @@ Module Trabajo
                 If _
                     Not _
                     TieneObjetos(LeñaElfica,
-                                 CShort(
+                                 Convert.ToInt16(
                                      .MaderaElfica -
                                      ObjData_Renamed(ItemIndex).MaderaElfica*PORCENTAJE_MATERIALES_UPGRADE), UserIndex) _
                     Then
@@ -559,27 +559,27 @@ Module Trabajo
             If .LingH > 0 Then _
                 Call _
                     QuitarObjetos(LingoteHierro,
-                                  CShort(.LingH - ObjData_Renamed(ItemIndex).LingH*PORCENTAJE_MATERIALES_UPGRADE),
+                                  Convert.ToInt16(.LingH - ObjData_Renamed(ItemIndex).LingH*PORCENTAJE_MATERIALES_UPGRADE),
                                   UserIndex)
             If .LingP > 0 Then _
                 Call _
                     QuitarObjetos(LingotePlata,
-                                  CShort(.LingP - ObjData_Renamed(ItemIndex).LingP*PORCENTAJE_MATERIALES_UPGRADE),
+                                  Convert.ToInt16(.LingP - ObjData_Renamed(ItemIndex).LingP*PORCENTAJE_MATERIALES_UPGRADE),
                                   UserIndex)
             If .LingO > 0 Then _
                 Call _
                     QuitarObjetos(LingoteOro,
-                                  CShort(.LingO - ObjData_Renamed(ItemIndex).LingO*PORCENTAJE_MATERIALES_UPGRADE),
+                                  Convert.ToInt16(.LingO - ObjData_Renamed(ItemIndex).LingO*PORCENTAJE_MATERIALES_UPGRADE),
                                   UserIndex)
             If .Madera > 0 Then _
                 Call _
                     QuitarObjetos(Leña,
-                                  CShort(.Madera - ObjData_Renamed(ItemIndex).Madera*PORCENTAJE_MATERIALES_UPGRADE),
+                                  Convert.ToInt16(.Madera - ObjData_Renamed(ItemIndex).Madera*PORCENTAJE_MATERIALES_UPGRADE),
                                   UserIndex)
             If .MaderaElfica > 0 Then _
                 Call _
                     QuitarObjetos(LeñaElfica,
-                                  CShort(
+                                  Convert.ToInt16(
                                       .MaderaElfica -
                                       ObjData_Renamed(ItemIndex).MaderaElfica*PORCENTAJE_MATERIALES_UPGRADE), UserIndex)
         End With
@@ -905,7 +905,7 @@ Module Trabajo
 
         Dim MiObj As Obj
         With UserList(UserIndex)
-            CantidadItems = MaximoInt(1, CShort((.Stats.ELV - 4)/5))
+            CantidadItems = MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
 
             Slot = .flags.TargetObjInvSlot
             obji = .Invent.Object_Renamed(Slot).ObjIndex
@@ -1271,8 +1271,8 @@ Module Trabajo
                         Exit Sub
                     End If
 
-                    puntosDomar = CShort(.Stats.UserAtributos(eAtributos.Carisma))*
-                                  CShort(.Stats.UserSkills(eSkill.Domar))
+                    puntosDomar = Convert.ToInt16(.Stats.UserAtributos(eAtributos.Carisma))*
+                                  Convert.ToInt16(.Stats.UserSkills(eSkill.Domar))
 
                     ' 20% de bonificacion
                     If .Invent.AnilloEqpObjIndex = FLAUTAELFICA Then
@@ -1550,7 +1550,7 @@ Module Trabajo
 
                 If UserList(UserIndex).clase = eClass.Worker Then
                     With UserList(UserIndex)
-                        CantidadItems = 1 + MaximoInt(1, CShort((.Stats.ELV - 4)/5))
+                        CantidadItems = 1 + MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
                     End With
 
                     MiObj.Amount = RandomNumber(1, CantidadItems)
@@ -1930,10 +1930,10 @@ Module Trabajo
             UserList(VictimaIndex).Invent.Object_Renamed(i).Amount = ObjAmount - num
 
             If UserList(VictimaIndex).Invent.Object_Renamed(i).Amount <= 0 Then
-                Call QuitarUserInvItem(VictimaIndex, CByte(i), 1)
+                Call QuitarUserInvItem(VictimaIndex, Convert.ToByte(i), 1)
             End If
 
-            Call UpdateUserInv(False, VictimaIndex, CByte(i))
+            Call UpdateUserInv(False, VictimaIndex, Convert.ToByte(i))
 
             If Not MeterItemEnInventario(LadrOnIndex, MiObj) Then
                 Call TirarItemAlPiso(UserList(LadrOnIndex).Pos, MiObj)
@@ -2144,7 +2144,7 @@ Module Trabajo
 
                 If UserList(UserIndex).clase = eClass.Worker Then
                     With UserList(UserIndex)
-                        CantidadItems = 1 + MaximoInt(1, CShort((.Stats.ELV - 4)/5))
+                        CantidadItems = 1 + MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
                     End With
 
                     MiObj.Amount = RandomNumber(1, CantidadItems)
@@ -2219,7 +2219,7 @@ Module Trabajo
                     MiObj.ObjIndex = ObjData_Renamed(.flags.TargetObj).MineralIndex
 
                     If UserList(UserIndex).clase = eClass.Worker Then
-                        CantidadItems = 1 + MaximoInt(1, CShort((.Stats.ELV - 4)/5))
+                        CantidadItems = 1 + MaximoInt(1, Convert.ToInt16((.Stats.ELV - 4)/5))
 
                         MiObj.Amount = RandomNumber(1, CantidadItems)
                     Else
@@ -2558,6 +2558,6 @@ Module Trabajo
         'Last Modification: 29/01/2010
         '
         '***************************************************
-        MaxItemsConstruibles = MaximoInt(1, CShort((UserList(UserIndex).Stats.ELV - 4)/5))
+        MaxItemsConstruibles = MaximoInt(1, Convert.ToInt16((UserList(UserIndex).Stats.ELV - 4)/5))
     End Function
 End Module

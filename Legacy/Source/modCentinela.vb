@@ -73,7 +73,7 @@ Module modCentinela
                                               "Saludos " & UserList(LoopC).name &
                                               ", soy el Centinela de estas tierras. Me gustaría que escribas /CENTINELA " &
                                               Centinela.clave & " en no más de dos minutos.",
-                                              CShort(CStr(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex)),
+                                              Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                               ColorTranslator.ToOle(Color.Lime))
                         Call _
                             WriteConsoleMsg(LoopC, "El centinela intenta llamar tu atención. ¡Respóndele rápido!",
@@ -127,7 +127,7 @@ Module modCentinela
                 Call WriteVar(CharPath & name & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
                 numPenas = ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
-                Call WriteVar(CharPath & name & ".chr", "PENAS", "Cant", CStr(numPenas + 1))
+                Call WriteVar(CharPath & name & ".chr", "PENAS", "Cant", (numPenas + 1).ToString())
                 Call _
                     WriteVar(CharPath & name & ".chr", "PENAS", "P" & numPenas + 1,
                              "CENTINELA : BAN POR MACRO INASISTIDO " & Today & " " & TimeOfDay)
@@ -174,7 +174,7 @@ Module modCentinela
                 WriteChatOverHead(UserIndex,
                                   "¡Muchas gracias " & UserList(Centinela.RevisandoUserIndex).name &
                                   "! Espero no haber sido una molestia.",
-                                  CShort(CStr(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex)),
+                                  Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                   ColorTranslator.ToOle(Color.White))
             Centinela.RevisandoUserIndex = 0
             Call FlushBuffer(UserIndex)
@@ -218,7 +218,7 @@ Module modCentinela
                     WriteChatOverHead(UserIndex,
                                       "¡La clave que te he dicho es /CENTINELA " & Centinela.clave &
                                       ", escríbelo rápido!",
-                                      CShort(CStr(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex)),
+                                      Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                       ColorTranslator.ToOle(Color.Lime))
                 Call _
                     WriteConsoleMsg(UserIndex, "El centinela intenta llamar tu atención. ¡Respondele rápido!",
@@ -231,13 +231,13 @@ Module modCentinela
                         " respondió más de una vez la contraseña correcta.")
                 Call _
                     WriteChatOverHead(UserIndex, "Te agradezco, pero ya me has respondido. Me retiraré pronto.",
-                                      CShort(CStr(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex)),
+                                      Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                       ColorTranslator.ToOle(Color.Lime))
             End If
         Else
             Call _
                 WriteChatOverHead(UserIndex, "No es a ti a quien estoy hablando, ¿No ves?",
-                                  CShort(CStr(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex)),
+                                  Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                   ColorTranslator.ToOle(Color.White))
         End If
     End Sub
@@ -269,7 +269,7 @@ Module modCentinela
                                       "¡" & UserList(Centinela.RevisandoUserIndex).name &
                                       ", tienes un minuto más para responder! Debes escribir /CENTINELA " &
                                       Centinela.clave & ".",
-                                      CShort(CStr(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex)),
+                                      Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                       ColorTranslator.ToOle(Color.Red))
                 Call _
                     WriteConsoleMsg(Centinela.RevisandoUserIndex,

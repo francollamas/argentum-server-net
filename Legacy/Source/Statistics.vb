@@ -60,7 +60,7 @@ Module Statistics
         '***************************************************
 
         'A new user connected, load it's trainning time count
-        trainningInfo(UserIndex).trainningTime = CInt(ParseVal(GetVar(CharPath & UserList(UserIndex).name.ToUpper() & ".chr",
+        trainningInfo(UserIndex).trainningTime = Convert.ToInt32(ParseVal(GetVar(CharPath & UserList(UserIndex).name.ToUpper() & ".chr",
                                                             "RESEARCH", "TrainningTime", 30)))
 
         trainningInfo(UserIndex).startTick = GetTickCount()
@@ -82,7 +82,7 @@ Module Statistics
             'Store info in char file
             Call _
                 WriteVar(CharPath & UserList(UserIndex).name.ToUpper() & ".chr", "RESEARCH", "TrainningTime",
-                         CStr(.trainningTime))
+                         .trainningTime.ToString())
         End With
     End Sub
 
@@ -102,8 +102,8 @@ Module Statistics
                      OpenShare.Shared)
 
             PrintLine(handle,
-                      UserList(UserIndex).name.ToUpper() & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) &
-                      " en " & CStr(.trainningTime + (GetTickCount() - .startTick)/1000) & " segundos.")
+                      UserList(UserIndex).name.ToUpper() & " completó el nivel " & UserList(UserIndex).Stats.ELV.ToString() &
+                      " en " & (.trainningTime + (GetTickCount() - .startTick)/1000).ToString() & " segundos.")
 
             FileClose(handle)
 
@@ -217,7 +217,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(1).matrix(i, j))
+                line = line & " " & fragLvlLvlData(1).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -231,7 +231,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(2).matrix(i, j))
+                line = line & " " & fragLvlLvlData(2).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -245,7 +245,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(3).matrix(i, j))
+                line = line & " " & fragLvlLvlData(3).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -259,7 +259,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(4).matrix(i, j))
+                line = line & " " & fragLvlLvlData(4).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -273,7 +273,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(5).matrix(i, j))
+                line = line & " " & fragLvlLvlData(5).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -287,7 +287,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(6).matrix(i, j))
+                line = line & " " & fragLvlLvlData(6).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -301,7 +301,7 @@ Module Statistics
 
         For j = 1 To 50
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlLvlData(7).matrix(i, j))
+                line = line & " " & fragLvlLvlData(7).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -318,7 +318,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(1).matrix(i, j))
+                line = line & " " & fragLvlRaceData(1).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -332,7 +332,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(2).matrix(i, j))
+                line = line & " " & fragLvlRaceData(2).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -346,7 +346,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(3).matrix(i, j))
+                line = line & " " & fragLvlRaceData(3).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -360,7 +360,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(4).matrix(i, j))
+                line = line & " " & fragLvlRaceData(4).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -374,7 +374,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(5).matrix(i, j))
+                line = line & " " & fragLvlRaceData(5).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -388,7 +388,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(6).matrix(i, j))
+                line = line & " " & fragLvlRaceData(6).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -402,7 +402,7 @@ Module Statistics
 
         For j = 1 To 5
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(7).matrix(i, j))
+                line = line & " " & fragLvlRaceData(7).matrix(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -419,7 +419,7 @@ Module Statistics
 
         For j = 1 To 7
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(j).matrix(i, 1))
+                line = line & " " & fragLvlRaceData(j).matrix(i, 1).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -433,7 +433,7 @@ Module Statistics
 
         For j = 1 To 7
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(j).matrix(i, 2))
+                line = line & " " & fragLvlRaceData(j).matrix(i, 2).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -447,7 +447,7 @@ Module Statistics
 
         For j = 1 To 7
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(j).matrix(i, 3))
+                line = line & " " & fragLvlRaceData(j).matrix(i, 3).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -461,7 +461,7 @@ Module Statistics
 
         For j = 1 To 7
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(j).matrix(i, 4))
+                line = line & " " & fragLvlRaceData(j).matrix(i, 4).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -475,7 +475,7 @@ Module Statistics
 
         For j = 1 To 7
             For i = 1 To 50
-                line = line & " " & CStr(fragLvlRaceData(j).matrix(i, 5))
+                line = line & " " & fragLvlRaceData(j).matrix(i, 5).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -492,7 +492,7 @@ Module Statistics
 
         For j = 1 To 4
             For i = 1 To 50
-                line = line & " " & CStr(fragAlignmentLvlData(i, j))
+                line = line & " " & fragAlignmentLvlData(i, j).ToString()
             Next i
 
             PrintLine(handle, line)
@@ -517,11 +517,11 @@ Module Statistics
         'Show each character's ocurrencies
         If Total <> 0 Then
             For i = 0 To 255
-                PrintLine(handle, CStr(i) & "    " & CStr(Math.Round(keyOcurrencies(i)/Total, 8)))
+                PrintLine(handle, i.ToString() & "    " & Math.Round(keyOcurrencies(i)/Total, 8).ToString())
             Next i
         End If
 
-        PrintLine(handle, "TOTAL =    " & CStr(Total))
+        PrintLine(handle, "TOTAL =    " & Total.ToString())
 
         FileClose(handle)
     End Sub

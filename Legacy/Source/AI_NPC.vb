@@ -374,7 +374,7 @@ Module AI
                 If RandomNumber(0, 10) = 0 Then
                     Call _
                         MoveNPCChar(NpcIndex,
-                                    CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                                    Convert.ToByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                 End If
 
             End If
@@ -913,7 +913,7 @@ Module AI
                             If RandomNumber(1, 12) = 3 Then
                                 Call _
                                     MoveNPCChar(NpcIndex,
-                                                CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                                                Convert.ToByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                             End If
 
                             Call PersigueCriminal(NpcIndex)
@@ -922,7 +922,7 @@ Module AI
                             If RandomNumber(1, 12) = 3 Then
                                 Call _
                                     MoveNPCChar(NpcIndex,
-                                                CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                                                Convert.ToByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                             End If
 
                             Call PersigueCiudadano(NpcIndex)
@@ -931,7 +931,7 @@ Module AI
                             If RandomNumber(1, 12) = 3 Then
                                 Call _
                                     MoveNPCChar(NpcIndex,
-                                                CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                                                Convert.ToByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                             End If
                         End If
 
@@ -953,7 +953,7 @@ Module AI
                         If RandomNumber(1, 12) = 3 Then
                             Call _
                                 MoveNPCChar(NpcIndex,
-                                            CByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
+                                            Convert.ToByte(RandomNumber(eHeading.NORTH, eHeading.WEST)))
                         End If
 
                     Case TipoAI.NpcAtacaNpc

@@ -2039,7 +2039,7 @@ Module SistemaCombate
         If ElDaño > Npclist(NpcIndex).Stats.MinHp Then ElDaño = Npclist(NpcIndex).Stats.MinHp
 
         '[Nacho] La experiencia a dar es la porcion de vida quitada * toda la experiencia
-        ExpaDar = CInt(ElDaño*(Npclist(NpcIndex).GiveEXP/Npclist(NpcIndex).Stats.MaxHp))
+        ExpaDar = Convert.ToInt32(ElDaño*(Npclist(NpcIndex).GiveEXP/Npclist(NpcIndex).Stats.MaxHp))
         If ExpaDar <= 0 Then Exit Sub
 
         '[Nacho] Vamos contando cuanta experiencia sacamos, porque se da toda la que no se dio al user que mata al NPC

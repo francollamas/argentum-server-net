@@ -85,7 +85,7 @@ Module mdParty
         '    If UserList(UserIndex).Stats.ELV < MINPARTYLEVEL Then
 
         If _
-            CShort(UserList(UserIndex).Stats.UserAtributos(eAtributos.Carisma))*
+            Convert.ToInt16(UserList(UserIndex).Stats.UserAtributos(eAtributos.Carisma))*
             UserList(UserIndex).Stats.UserSkills(eSkill.Liderazgo) < 100 Then
             Call _
                 WriteConsoleMsg(UserIndex, "Tu carisma y liderazgo no son suficientes para liderar una party.",

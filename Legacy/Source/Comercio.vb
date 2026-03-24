@@ -60,7 +60,7 @@ Module modSistemaComercio
             'Es decir, 1.1 = 2, por lo cual se hace de la siguiente forma Precio = Clng(PrecioFinal + 0.5) Siempre va a darte el proximo numero. O el "Techo" (MarKoxX)
 
             Precio =
-                CInt(
+                Convert.ToInt32(
                     (ObjData_Renamed(Npclist(NpcIndex).Invent.Object_Renamed(Slot).ObjIndex).Valor/Descuento(UserIndex)*
                      Cantidad) + 0.5)
 
@@ -79,7 +79,7 @@ Module modSistemaComercio
 
             UserList(UserIndex).Stats.GLD = UserList(UserIndex).Stats.GLD - Precio
 
-            Call QuitarNpcInvItem(UserList(UserIndex).flags.TargetNPC, CByte(Slot), Cantidad)
+            Call QuitarNpcInvItem(UserList(UserIndex).flags.TargetNPC, Convert.ToByte(Slot), Cantidad)
 
             'Bien, ahora logueo de ser necesario. Pablo (ToxicWaste) 07/09/07
             'Es un Objeto que tenemos que loguear?

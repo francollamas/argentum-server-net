@@ -751,7 +751,7 @@ Module Protocol
                     Call HandleStopSharingNpc(UserIndex)
 
                 Case ClientPacketID.Consultation
-                    Call HandleConsultation(CStr(UserIndex))
+                    Call HandleConsultation(UserIndex.ToString())
 
                 Case Else
                     'ERROR : Abort!
@@ -770,7 +770,7 @@ Module Protocol
                         "Error: " & Err.Number & " [" & Err.Description & "] " & " Source: " & Err.Source & vbTab &
                         " HelpFile: " & Err.HelpFile & vbTab & " HelpContext: " & Err.HelpContext & vbTab &
                         " LastDllError: " & Err.LastDllError & vbTab & " - UserIndex: " & UserIndex &
-                        " - producido al manejar el paquete: " & CStr(packetID))
+                        " - producido al manejar el paquete: " & packetID.ToString())
                 Call CloseSocket(UserIndex)
 
             Else
@@ -836,8 +836,8 @@ Module Protocol
                         Case eMessages.EarnExp
 
                         Case eMessages.Home
-                            Call .WriteByte(CByte(Arg1))
-                            Call .WriteInteger(CShort(Arg2))
+                            Call .WriteByte(Convert.ToByte(Arg1))
+                            Call .WriteInteger(Convert.ToInt16(Arg2))
                             'El cliente no conoce nada sobre nombre de mapas y hogares, por lo tanto _
                             'hasta que no se pasen los dats e .INFs al cliente, esto queda así.
                             Call .WriteASCIIString(StringArg1) 'Call .WriteByte(CByte(Arg2))
@@ -1348,7 +1348,7 @@ Module Protocol
             Password = buffer.ReadASCIIString()
 
             'Convert version number to string
-            version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
+            version = (buffer.ReadByte()).ToString() & "." & (buffer.ReadByte()).ToString() & "." & (buffer.ReadByte()).ToString()
 
             If Not AsciiValidos(UserName) Then
                 Call WriteErrorMsg(UserIndex, "Nombre inválido.")
@@ -1474,7 +1474,7 @@ Module Protocol
             Password = buffer.ReadASCIIString()
 
             'Convert version number to string
-            version = CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte()) & "." & CStr(buffer.ReadByte())
+            version = (buffer.ReadByte()).ToString() & "." & (buffer.ReadByte()).ToString() & "." & (buffer.ReadByte()).ToString()
             race = buffer.ReadByte()
             gender = buffer.ReadByte()
             Class_Renamed = buffer.ReadByte()
@@ -3519,8 +3519,8 @@ Module Protocol
                 End Select
 
                 If _
-                    LegalPos(.Pos.Map, .Pos.X + posX, .Pos.Y + posY, CBool(.flags.Navegando),
-                             Not CBool(.flags.Navegando)) Then
+                    LegalPos(.Pos.Map, .Pos.X + posX, .Pos.Y + posY, Convert.ToBoolean(.flags.Navegando),
+                             Not Convert.ToBoolean(.flags.Navegando)) Then
                     Exit Sub
                 End If
             End If
@@ -4185,9 +4185,9 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(r_AceptarPropuestaDePaz(UserIndex, guild, errorStr))
+                otherClanIndex = (r_AceptarPropuestaDePaz(UserIndex, guild, errorStr)).ToString()
 
-                If CDbl(otherClanIndex) = 0 Then
+                If Convert.ToDouble(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
@@ -4195,7 +4195,7 @@ Module Protocol
                                  PrepareMessageConsoleMsg("Tu clan ha firmado la paz con " & guild & ".",
                                                           FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                        SendData(SendTarget.ToGuildMembers, Convert.ToInt16(otherClanIndex),
                                  PrepareMessageConsoleMsg(
                                      "Tu clan ha firmado la paz con " & GuildName(.GuildIndex) & ".",
                                      FontTypeNames.FONTTYPE_GUILD))
@@ -4242,9 +4242,9 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr))
+                otherClanIndex = (r_RechazarPropuestaDeAlianza(UserIndex, guild, errorStr)).ToString()
 
-                If CDbl(otherClanIndex) = 0 Then
+                If Convert.ToDouble(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
@@ -4252,7 +4252,7 @@ Module Protocol
                                  PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de alianza de " & guild,
                                                           FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                        SendData(SendTarget.ToGuildMembers, Convert.ToInt16(otherClanIndex),
                                  PrepareMessageConsoleMsg(
                                      GuildName(.GuildIndex) &
                                      " ha rechazado nuestra propuesta de alianza con su clan.",
@@ -4300,9 +4300,9 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(r_RechazarPropuestaDePaz(UserIndex, guild, errorStr))
+                otherClanIndex = (r_RechazarPropuestaDePaz(UserIndex, guild, errorStr)).ToString()
 
-                If CDbl(otherClanIndex) = 0 Then
+                If Convert.ToDouble(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
@@ -4310,7 +4310,7 @@ Module Protocol
                                  PrepareMessageConsoleMsg("Tu clan rechazado la propuesta de paz de " & guild & ".",
                                                           FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                        SendData(SendTarget.ToGuildMembers, Convert.ToInt16(otherClanIndex),
                                  PrepareMessageConsoleMsg(
                                      GuildName(.GuildIndex) &
                                      " ha rechazado nuestra propuesta de paz con su clan.", FontTypeNames.FONTTYPE_GUILD))
@@ -4357,9 +4357,9 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                otherClanIndex = CStr(r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr))
+                otherClanIndex = (r_AceptarPropuestaDeAlianza(UserIndex, guild, errorStr)).ToString()
 
-                If CDbl(otherClanIndex) = 0 Then
+                If Convert.ToDouble(otherClanIndex) = 0 Then
                     Call WriteConsoleMsg(UserIndex, errorStr, FontTypeNames.FONTTYPE_GUILD)
                 Else
                     Call _
@@ -4367,7 +4367,7 @@ Module Protocol
                                  PrepareMessageConsoleMsg("Tu clan ha firmado la alianza con " & guild & ".",
                                                           FontTypeNames.FONTTYPE_GUILD))
                     Call _
-                        SendData(SendTarget.ToGuildMembers, CShort(otherClanIndex),
+                        SendData(SendTarget.ToGuildMembers, Convert.ToInt16(otherClanIndex),
                                  PrepareMessageConsoleMsg(
                                      "Tu clan ha firmado la paz con " & GuildName(.GuildIndex) & ".",
                                      FontTypeNames.FONTTYPE_GUILD))
@@ -5157,7 +5157,7 @@ Module Protocol
                 End If
             Next i
 
-            Call WriteConsoleMsg(UserIndex, "Número de usuarios: " & CStr(Count), FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(UserIndex, "Número de usuarios: " & Count.ToString(), FontTypeNames.FONTTYPE_INFO)
         End With
     End Sub
 
@@ -5685,31 +5685,31 @@ Module Protocol
         Dim UserConsulta As Short
 
         Dim UserName As String
-        With UserList(CInt(UserIndex))
+        With UserList(Convert.ToInt32(UserIndex))
             'Remove packet ID
             Call .incomingData.ReadByte()
 
             ' Comando exclusivo para gms
-            If Not EsGM(CShort(UserIndex)) Then Exit Sub
+            If Not EsGM(Convert.ToInt16(UserIndex)) Then Exit Sub
 
             UserConsulta = .flags.TargetUser
 
             'Se asegura que el target es un usuario
             If UserConsulta = 0 Then
                 Call _
-                    WriteConsoleMsg(CShort(UserIndex),
+                    WriteConsoleMsg(Convert.ToInt16(UserIndex),
                                     "Primero tienes que seleccionar un usuario, haz click izquierdo sobre él.",
                                     FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
             End If
 
             ' No podes ponerte a vos mismo en modo consulta.
-            If UserConsulta = CDbl(UserIndex) Then Exit Sub
+            If UserConsulta = Convert.ToDouble(UserIndex) Then Exit Sub
 
             ' No podes estra en consulta con otro gm
             If EsGM(UserConsulta) Then
                 Call _
-                    WriteConsoleMsg(CShort(UserIndex), "No puedes iniciar el modo consulta con otro administrador.",
+                    WriteConsoleMsg(Convert.ToInt16(UserIndex), "No puedes iniciar el modo consulta con otro administrador.",
                                     FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
             End If
@@ -5719,7 +5719,7 @@ Module Protocol
             ' Si ya estaba en consulta, termina la consulta
             If UserList(UserConsulta).flags.EnConsulta Then
                 Call _
-                    WriteConsoleMsg(CShort(UserIndex), "Has terminado el modo consulta con " & UserName & ".",
+                    WriteConsoleMsg(Convert.ToInt16(UserIndex), "Has terminado el modo consulta con " & UserName & ".",
                                     FontTypeNames.FONTTYPE_INFOBOLD)
                 Call WriteConsoleMsg(UserConsulta, "Has terminado el modo consulta.", FontTypeNames.FONTTYPE_INFOBOLD)
                 Call LogGM(.name, "Termino consulta con " & UserName)
@@ -5729,7 +5729,7 @@ Module Protocol
                 ' Sino la inicia
             Else
                 Call _
-                    WriteConsoleMsg(CShort(UserIndex), "Has iniciado el modo consulta con " & UserName & ".",
+                    WriteConsoleMsg(Convert.ToInt16(UserIndex), "Has iniciado el modo consulta con " & UserName & ".",
                                     FontTypeNames.FONTTYPE_INFOBOLD)
                 Call WriteConsoleMsg(UserConsulta, "Has iniciado el modo consulta.", FontTypeNames.FONTTYPE_INFOBOLD)
                 Call LogGM(.name, "Inicio consulta con " & UserName)
@@ -7106,26 +7106,26 @@ Module Protocol
                 If RandomNumber(1, 100) <= 47 Then
                     .Stats.GLD = .Stats.GLD + Amount
                     Call _
-                        WriteChatOverHead(UserIndex, "¡Felicidades! Has ganado " & CStr(Amount) & " monedas de oro.",
+                        WriteChatOverHead(UserIndex, "¡Felicidades! Has ganado " & Amount.ToString() & " monedas de oro.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
                                           ColorTranslator.ToOle(Color.White))
 
                     Apuestas.Perdidas = Apuestas.Perdidas + Amount
-                    Call WriteVar(DatPath & "apuestas.dat", "Main", "Perdidas", CStr(Apuestas.Perdidas))
+                    Call WriteVar(DatPath & "apuestas.dat", "Main", "Perdidas", Apuestas.Perdidas.ToString())
                 Else
                     .Stats.GLD = .Stats.GLD - Amount
                     Call _
-                        WriteChatOverHead(UserIndex, "Lo siento, has perdido " & CStr(Amount) & " monedas de oro.",
+                        WriteChatOverHead(UserIndex, "Lo siento, has perdido " & Amount.ToString() & " monedas de oro.",
                                           Npclist(.flags.TargetNPC).Char_Renamed.CharIndex,
                                           ColorTranslator.ToOle(Color.White))
 
                     Apuestas.Ganancias = Apuestas.Ganancias + Amount
-                    Call WriteVar(DatPath & "apuestas.dat", "Main", "Ganancias", CStr(Apuestas.Ganancias))
+                    Call WriteVar(DatPath & "apuestas.dat", "Main", "Ganancias", Apuestas.Ganancias.ToString())
                 End If
 
                 Apuestas.Jugadas = Apuestas.Jugadas + 1
 
-                Call WriteVar(DatPath & "apuestas.dat", "Main", "Jugadas", CStr(Apuestas.Jugadas))
+                Call WriteVar(DatPath & "apuestas.dat", "Main", "Jugadas", Apuestas.Jugadas.ToString())
 
                 Call WriteUpdateGold(UserIndex)
             End If
@@ -7506,18 +7506,18 @@ Module Protocol
                 Exit Sub
             End If
 
-            Select Case CStr(clanType).Trim().ToUpper()
-                Case CStr(eClanType.ct_RoyalArmy)
+            Select Case clanType.ToString().Trim().ToUpper()
+                Case (eClanType.ct_RoyalArmy).ToString()
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_ARMADA
-                Case CStr(eClanType.ct_Evil)
+                Case (eClanType.ct_Evil).ToString()
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_LEGION
-                Case CStr(eClanType.ct_Neutral)
+                Case (eClanType.ct_Neutral).ToString()
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_NEUTRO
-                Case CStr(eClanType.ct_GM)
+                Case (eClanType.ct_GM).ToString()
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_MASTER
-                Case CStr(eClanType.ct_Legal)
+                Case (eClanType.ct_Legal).ToString()
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_CIUDA
-                Case CStr(eClanType.ct_Criminal)
+                Case (eClanType.ct_Criminal).ToString()
                     .FundandoGuildAlineacion = ALINEACION_GUILD.ALINEACION_CRIMINAL
                 Case Else
                     Call WriteConsoleMsg(UserIndex, "Alineación inválida.", FontTypeNames.FONTTYPE_GUILD)
@@ -8897,7 +8897,7 @@ Module Protocol
 
                                 If FileExist(CharPath & UserName & ".chr") Then
                                     Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                                    Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
+                                    Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                                     Call _
                                         WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
                                                  .name.ToLower() & ": CARCEL " & jailTime & "m, MOTIVO: " & reason.ToLower() &
@@ -9027,7 +9027,7 @@ Module Protocol
 
                             If FileExist(CharPath & UserName & ".chr") Then
                                 Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(Count + 1))
+                                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                                 Call _
                                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
                                              .name.ToLower() & ": ADVERTENCIA por: " & reason.ToLower() & " " & Today & " " &
@@ -9153,7 +9153,7 @@ Module Protocol
                             Case eEditOptions.eo_Gold
                                 If ParseVal(Arg1) <= MAX_ORO_EDIT Then
                                     If tUser <= 0 Then ' Esta offline?
-                                        Call WriteVar(UserCharPath, "STATS", "GLD", CStr(ParseVal(Arg1)))
+                                        Call WriteVar(UserCharPath, "STATS", "GLD", (ParseVal(Arg1)).ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -9174,12 +9174,12 @@ Module Protocol
 
                             Case eEditOptions.eo_Experience
                                 If ParseVal(Arg1) > 20000000 Then
-                                    Arg1 = CStr(20000000)
+                                    Arg1 = (20000000).ToString()
                                 End If
 
                                 If tUser <= 0 Then ' Offline
-                                    Var = CInt(GetVar(UserCharPath, "STATS", "EXP"))
-                                    Call WriteVar(UserCharPath, "STATS", "EXP", CStr(Var + ParseVal(Arg1)))
+                                    Var = Convert.ToInt32(GetVar(UserCharPath, "STATS", "EXP"))
+                                    Call WriteVar(UserCharPath, "STATS", "EXP", (Var + ParseVal(Arg1)).ToString())
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -9232,7 +9232,7 @@ Module Protocol
                                 Var = IIf(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", CStr(Var))
+                                    Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", Var.ToString())
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -9247,7 +9247,7 @@ Module Protocol
                                 Var = IIf(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", CStr(Var))
+                                    Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", Var.ToString())
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -9260,7 +9260,7 @@ Module Protocol
 
                             Case eEditOptions.eo_Level
                                 If ParseVal(Arg1) > STAT_MAXELV Then
-                                    Arg1 = CStr(STAT_MAXELV)
+                                    Arg1 = STAT_MAXELV.ToString()
                                     Call _
                                         WriteConsoleMsg(UserIndex,
                                                         "No puedes tener un nivel superior a " & STAT_MAXELV & ".",
@@ -9271,7 +9271,7 @@ Module Protocol
                                 If ParseVal(Arg1) >= 25 Then
 
                                     If tUser <= 0 Then
-                                        GI = CShort(GetVar(UserCharPath, "GUILD", "GUILDINDEX"))
+                                        GI = Convert.ToInt16(GetVar(UserCharPath, "GUILD", "GUILDINDEX"))
                                     Else
                                         GI = UserList(tUser).GuildIndex
                                     End If
@@ -9297,7 +9297,7 @@ Module Protocol
                                 End If
 
                                 If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "STATS", "ELV", CStr(ParseVal(Arg1)))
+                                    Call WriteVar(UserCharPath, "STATS", "ELV", (ParseVal(Arg1)).ToString())
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -9320,7 +9320,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then ' Offline
-                                        Call WriteVar(UserCharPath, "INIT", "Clase", CStr(LoopC))
+                                        Call WriteVar(UserCharPath, "INIT", "Clase", LoopC.ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -9342,14 +9342,14 @@ Module Protocol
                                 Else
                                     If tUser <= 0 Then ' Offline
                                         Call WriteVar(UserCharPath, "Skills", "SK" & LoopC, Arg2)
-                                        Call WriteVar(UserCharPath, "Skills", "EXPSK" & LoopC, CStr(0))
+                                        Call WriteVar(UserCharPath, "Skills", "EXPSK" & LoopC, (0).ToString())
 
-                                        If CDbl(Arg2) < MAXSKILLPOINTS Then
+                                        If Convert.ToDouble(Arg2) < MAXSKILLPOINTS Then
                                             Call _
                                                 WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC,
-                                                         CStr(ELU_SKILL_INICIAL*1.05^CDbl(Arg2)))
+                                                         (ELU_SKILL_INICIAL*1.05^Convert.ToDouble(Arg2)).ToString())
                                         Else
-                                            Call WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC, CStr(0))
+                                            Call WriteVar(UserCharPath, "Skills", "ELUSK" & LoopC, (0).ToString())
                                         End If
 
                                         Call _
@@ -9381,7 +9381,7 @@ Module Protocol
                                 Var = IIf(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "REP", "Nobles", CStr(Var))
+                                    Call WriteVar(UserCharPath, "REP", "Nobles", Var.ToString())
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -9396,7 +9396,7 @@ Module Protocol
                                 Var = IIf(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
 
                                 If tUser <= 0 Then ' Offline
-                                    Call WriteVar(UserCharPath, "REP", "Asesino", CStr(Var))
+                                    Call WriteVar(UserCharPath, "REP", "Asesino", Var.ToString())
                                     Call _
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
@@ -9413,7 +9413,7 @@ Module Protocol
 
                                 If Sex <> 0 Then ' Es Hombre o mujer?
                                     If tUser <= 0 Then ' OffLine
-                                        Call WriteVar(UserCharPath, "INIT", "Genero", CStr(Sex))
+                                        Call WriteVar(UserCharPath, "INIT", "Genero", Sex.ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -9454,7 +9454,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then
-                                        Call WriteVar(UserCharPath, "INIT", "Raza", CStr(raza))
+                                        Call WriteVar(UserCharPath, "INIT", "Raza", raza.ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -9469,7 +9469,7 @@ Module Protocol
                             Case eEditOptions.eo_addGold
 
 
-                                If Math.Abs(CDbl(Arg1)) > MAX_ORO_EDIT Then
+                                If Math.Abs(Convert.ToDouble(Arg1)) > MAX_ORO_EDIT Then
                                     Call _
                                         WriteConsoleMsg(UserIndex,
                                                         "No está permitido utilizar valores mayores a " & MAX_ORO_EDIT &
@@ -9477,7 +9477,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then
-                                        bankGold = CInt(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
+                                        bankGold = Convert.ToInt32(GetVar(CharPath & UserName & ".chr", "STATS", "BANCO"))
                                         Call _
                                             WriteVar(UserCharPath, "STATS", "BANCO",
                                                      IIf(bankGold + ParseVal(Arg1) <= 0, 0, bankGold + ParseVal(Arg1)))
@@ -10071,7 +10071,7 @@ Module Protocol
             priv = PlayerType.User Or PlayerType.Consejero Or
                    PlayerType.SemiDios
             If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then _
-                priv = priv + CShort(PlayerType.Dios Or PlayerType.Admin)
+                priv = priv + Convert.ToInt16(PlayerType.Dios Or PlayerType.Admin)
 
             For LoopC = 1 To LastUser
                 If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).Pos.Map = Map Then
@@ -10376,7 +10376,7 @@ Module Protocol
 
                             'penas
                             cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
                                          .name.ToLower() & ": UNBAN. " & Today & " " & TimeOfDay)
@@ -11109,7 +11109,7 @@ Module Protocol
                     'Ponemos el default del mapa
                     Call _
                         SendData(SendTarget.toMap, mapa,
-                                 PrepareMessagePlayMidi(CByte(MapInfo_Renamed(.Pos.Map).Music)))
+                                 PrepareMessagePlayMidi(Convert.ToByte(MapInfo_Renamed(.Pos.Map).Music)))
                 Else
                     'Ponemos el pedido por el GM
                     Call SendData(SendTarget.toMap, mapa, PrepareMessagePlayMidi(midiID))
@@ -11796,8 +11796,8 @@ Module Protocol
                             Call _
                                 WriteConsoleMsg(UserIndex, "Usuario offline, echando de los consejos.",
                                                 FontTypeNames.FONTTYPE_INFO)
-                            Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECE", CStr(0))
-                            Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECECAOS", CStr(0))
+                            Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECE", (0).ToString())
+                            Call WriteVar(CharPath & UserName & ".chr", "CONSEJO", "PERTENECECAOS", (0).ToString())
                         Else
                             Call _
                                 WriteConsoleMsg(UserIndex, "No se encuentra el charfile " & CharPath & UserName & ".chr",
@@ -12054,7 +12054,7 @@ Module Protocol
                             Call WriteVar(CharPath & member & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
                             Count = ParseVal(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
-                            Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", CStr(Count + 1))
+                            Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                             Call _
                                 WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
                                          .name.ToLower() & ": BAN AL CLAN: " & GuildName & " " & Today & " " & TimeOfDay)
@@ -12349,8 +12349,8 @@ Module Protocol
                         Call FlushBuffer(tUser)
                     Else
                         If FileExist(CharPath & UserName & ".chr") Then
-                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoCaos", CStr(0))
-                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoCaos", (0).ToString())
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", (200).ToString())
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
                             Call _
                                 WriteConsoleMsg(UserIndex,
@@ -12429,8 +12429,8 @@ Module Protocol
                         Call FlushBuffer(tUser)
                     Else
                         If FileExist(CharPath & UserName & ".chr") Then
-                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoReal", CStr(0))
-                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", CStr(200))
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoReal", (0).ToString())
+                            Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", (200).ToString())
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
                             Call _
                                 WriteConsoleMsg(UserIndex,
@@ -12937,7 +12937,7 @@ Module Protocol
                  PlayerType.SemiDios) Then Exit Sub
             If .name.ToUpper() <> "MARAXUS" Then Exit Sub
 
-            Call WriteConsoleMsg(UserIndex, "TID: " & CStr(ReiniciarAutoUpdate()), FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(UserIndex, "TID: " & (ReiniciarAutoUpdate()).ToString(), FontTypeNames.FONTTYPE_INFO)
         End With
     End Sub
 
@@ -13253,7 +13253,7 @@ Module Protocol
             'Change the boolean to string in a fast way
             Call _
                 WriteVar(AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & .Pos.Map & ".dat", "Mapa" & .Pos.Map,
-                         "backup", CStr(MapInfo_Renamed(.Pos.Map).BackUp))
+                         "backup", MapInfo_Renamed(.Pos.Map).BackUp.ToString())
 
             Call _
                 WriteConsoleMsg(UserIndex, "Mapa " & .Pos.Map & " Backup: " & MapInfo_Renamed(.Pos.Map).BackUp,
@@ -13393,7 +13393,7 @@ Module Protocol
                 Call _
                     WriteVar(
                         AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat",
-                        "Mapa" & UserList(UserIndex).Pos.Map, "MagiaSinEfecto", CStr(nomagic))
+                        "Mapa" & UserList(UserIndex).Pos.Map, "MagiaSinEfecto", nomagic.ToString())
                 Call _
                     WriteConsoleMsg(UserIndex,
                                     "Mapa " & .Pos.Map & " MagiaSinEfecto: " & MapInfo_Renamed(.Pos.Map).MagiaSinEfecto,
@@ -13435,7 +13435,7 @@ Module Protocol
                 Call _
                     WriteVar(
                         AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat",
-                        "Mapa" & UserList(UserIndex).Pos.Map, "InviSinEfecto", CStr(noinvi))
+                        "Mapa" & UserList(UserIndex).Pos.Map, "InviSinEfecto", noinvi.ToString())
                 Call _
                     WriteConsoleMsg(UserIndex,
                                     "Mapa " & .Pos.Map & " InviSinEfecto: " & MapInfo_Renamed(.Pos.Map).InviSinEfecto,
@@ -13476,7 +13476,7 @@ Module Protocol
                 Call _
                     WriteVar(
                         AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat",
-                        "Mapa" & UserList(UserIndex).Pos.Map, "ResuSinEfecto", CStr(noresu))
+                        "Mapa" & UserList(UserIndex).Pos.Map, "ResuSinEfecto", noresu.ToString())
                 Call _
                     WriteConsoleMsg(UserIndex,
                                     "Mapa " & .Pos.Map & " ResuSinEfecto: " & MapInfo_Renamed(.Pos.Map).ResuSinEfecto,
@@ -13634,7 +13634,7 @@ Module Protocol
                 (PlayerType.User Or PlayerType.Consejero Or
                  PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
 
-            Call LogGM(.name, .name & " ha guardado el mapa " & CStr(.Pos.Map))
+            Call LogGM(.name, .name & " ha guardado el mapa " & .Pos.Map.ToString())
 
             Call GrabarMapa(.Pos.Map, AppDomain.CurrentDomain.BaseDirectory & "WorldBackUp/Mapa" & .Pos.Map)
 
@@ -13835,10 +13835,10 @@ Module Protocol
                                         cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
 
                                         Call _
-                                            WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                                            WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
 
                                         Call _
-                                            WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & CStr(cantPenas + 1),
+                                            WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & (cantPenas + 1).ToString(),
                                                      .name.ToLower() & ": BAN POR Cambio de nick a " & newName.ToUpper() & " " &
                                                      Today & " " & TimeOfDay)
 
@@ -14359,21 +14359,21 @@ Module Protocol
                         Char_Renamed = CharPath & UserName & ".chr"
 
                         If FileExist(Char_Renamed) Then
-                            Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoReal", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoCaos", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoReal", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoCaos", (0).ToString())
                             Call WriteVar(Char_Renamed, "FACCIONES", "FechaIngreso", "No ingresó a ninguna Facción")
-                            Call WriteVar(Char_Renamed, "FACCIONES", "rArCaos", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "rArReal", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "rExCaos", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "rExReal", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "recCaos", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "recReal", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "Reenlistadas", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "NivelIngreso", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "MatadosIngreso", CStr(0))
-                            Call WriteVar(Char_Renamed, "FACCIONES", "NextRecompensa", CStr(0))
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rArCaos", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rArReal", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rExCaos", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "rExReal", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "recCaos", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "recReal", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "Reenlistadas", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "NivelIngreso", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "MatadosIngreso", (0).ToString())
+                            Call WriteVar(Char_Renamed, "FACCIONES", "NextRecompensa", (0).ToString())
                         Else
                             Call _
                                 WriteConsoleMsg(UserIndex, "El personaje " & UserName & " no existe.",
@@ -14598,12 +14598,12 @@ Module Protocol
 
                     Call _
                         WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "INIT", "NumLines",
-                                 CStr(MaxLines))
+                                 MaxLines.ToString())
 
                     For LoopC = 1 To MaxLines
                         Call _
                             WriteVar(AppDomain.CurrentDomain.BaseDirectory & "Dat/Motd.ini", "Motd",
-                                     "Line" & CStr(LoopC),
+                                     "Line" & LoopC.ToString(),
                                      auxiliaryString(LoopC - 1))
 
                         MOTD(LoopC).texto = auxiliaryString(LoopC - 1)
@@ -16758,7 +16758,7 @@ Module Protocol
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.ShowPartyForm)
                     PI = UserList(UserIndex).PartyIndex
-                    Call .WriteByte(CByte(Parties(PI).EsPartyLeader(UserIndex)))
+                    Call .WriteByte(Convert.ToByte(Parties(PI).EsPartyLeader(UserIndex)))
                     If PI > 0 Then
                         Call Parties(PI).ObtenerMiembrosOnline(members)
                         For i = 1 To PARTY_MAXMEMBERS

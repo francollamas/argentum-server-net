@@ -1763,7 +1763,7 @@ Module PraetoriansCoopNPC
                             Call _
                                 SendData(SendTarget.ToNPCArea, npcorig,
                                          PrepareMessageChatOverHead("Maldito bastardo, ¡Ven aquí!",
-                                                                    CShort(Str(Npclist(npcorig).Char_Renamed.CharIndex)),
+                                                                    Convert.ToInt16(Str(Npclist(npcorig).Char_Renamed.CharIndex)),
                                                                     ColorTranslator.ToOle(
                                                                         Color.Yellow)))
                             Npclist(npcorig).CanAttack = 0

@@ -79,7 +79,7 @@ Module modGuilds
         CantClanes = GetVar(GUILDINFOFILE, "INIT", "nroGuilds")
 
         If IsNumeric(CantClanes) Then
-            CANTIDADDECLANES = CShort(CantClanes)
+            CANTIDADDECLANES = Convert.ToInt16(CantClanes)
         Else
             CANTIDADDECLANES = 0
         End If
@@ -223,9 +223,9 @@ Module modGuilds
                             End If
                         Else
                             If FileExist(CharPath & MemberName & ".chr") Then
-                                Call WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "EjercitoCaos", CStr(0))
-                                Call WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "EjercitoReal", CStr(0))
-                                Reenlistadas = CShort(GetVar(CharPath & MemberName & ".chr", "FACCIONES", "Reenlistadas"))
+                                Call WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "EjercitoCaos", (0).ToString())
+                                Call WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "EjercitoReal", (0).ToString())
+                                Reenlistadas = Convert.ToInt16(GetVar(CharPath & MemberName & ".chr", "FACCIONES", "Reenlistadas"))
                                 Call _
                                     WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "Reenlistadas",
                                              IIf(Reenlistadas > 1, Reenlistadas - 1, Reenlistadas))
@@ -666,13 +666,13 @@ Module modGuilds
         End If
 
         If FileExist(CharPath & Personaje & ".chr") Then
-            Promedio = CInt(GetVar(CharPath & Personaje & ".chr", "REP", "Promedio"))
+            Promedio = Convert.ToInt32(GetVar(CharPath & Personaje & ".chr", "REP", "Promedio"))
             Select Case guilds(GuildIndex).Alineacion
                 Case ALINEACION_GUILD.ALINEACION_ARMADA
                     If Promedio >= 0 Then
-                        ELV = CShort(GetVar(CharPath & Personaje & ".chr", "Stats", "ELV"))
+                        ELV = Convert.ToInt16(GetVar(CharPath & Personaje & ".chr", "Stats", "ELV"))
                         If ELV >= 25 Then
-                            f = CByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoReal"))
+                            f = Convert.ToByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoReal"))
                         End If
                         m_EstadoPermiteEntrarChar = IIf(ELV >= 25, f <> 0, True)
                     End If
@@ -682,15 +682,15 @@ Module modGuilds
                     m_EstadoPermiteEntrarChar = Promedio < 0
                 Case ALINEACION_GUILD.ALINEACION_NEUTRO
                     m_EstadoPermiteEntrarChar =
-                        CByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoReal")) = 0
+                        Convert.ToByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoReal")) = 0
                     m_EstadoPermiteEntrarChar = m_EstadoPermiteEntrarChar And
-                                                (CByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoCaos")) =
+                                                (Convert.ToByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoCaos")) =
                                                  0)
                 Case ALINEACION_GUILD.ALINEACION_LEGION
                     If Promedio < 0 Then
-                        ELV = CShort(GetVar(CharPath & Personaje & ".chr", "Stats", "ELV"))
+                        ELV = Convert.ToInt16(GetVar(CharPath & Personaje & ".chr", "Stats", "ELV"))
                         If ELV >= 25 Then
-                            f = CByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoCaos"))
+                            f = Convert.ToByte(GetVar(CharPath & Personaje & ".chr", "Facciones", "EjercitoCaos"))
                         End If
                         m_EstadoPermiteEntrarChar = IIf(ELV >= 25, f <> 0, True)
                     End If
@@ -1015,7 +1015,7 @@ Module modGuilds
         End If
         Temps = GetVar(CharPath & PlayerName & ".chr", "GUILD", "GUILDINDEX")
         If IsNumeric(Temps) Then
-            GetGuildIndexFromChar = CShort(Temps)
+            GetGuildIndexFromChar = Convert.ToInt16(Temps)
         Else
             GetGuildIndexFromChar = 0
         End If
@@ -1116,7 +1116,7 @@ Module modGuilds
                 WriteGuildDetails(UserIndex, GuildName, .Fundador, .GetFechaFundacion, .GetLeader, .GetURL,
                                   .CantidadDeMiembros, .EleccionesAbiertas, Alineacion2String(.Alineacion),
                                   .CantidadEnemys, .CantidadAllies,
-                                  .PuntosAntifaccion & "/" & CStr(MAXANTIFACCION), codex, .GetDesc)
+                                  .PuntosAntifaccion & "/" & MAXANTIFACCION.ToString(), codex, .GetDesc)
         End With
     End Sub
 
@@ -1834,15 +1834,15 @@ Module modGuilds
                 End If
 
                 Call _
-                    WriteCharacterInfo(UserIndex, Personaje, CShort(.GetValue("INIT", "Raza")),
-                                       CShort(.GetValue("INIT", "Clase")), CShort(.GetValue("INIT", "Genero")),
-                                       CByte(.GetValue("STATS", "ELV")), CInt(.GetValue("STATS", "GLD")),
-                                       CInt(.GetValue("STATS", "Banco")), CInt(.GetValue("REP", "Promedio")),
+                    WriteCharacterInfo(UserIndex, Personaje, Convert.ToInt16(.GetValue("INIT", "Raza")),
+                                       Convert.ToInt16(.GetValue("INIT", "Clase")), Convert.ToInt16(.GetValue("INIT", "Genero")),
+                                       Convert.ToByte(.GetValue("STATS", "ELV")), Convert.ToInt32(.GetValue("STATS", "GLD")),
+                                       Convert.ToInt32(.GetValue("STATS", "Banco")), Convert.ToInt32(.GetValue("REP", "Promedio")),
                                        .GetValue("GUILD", "Pedidos"), GuildName, Miembro,
-                                       CBool(.GetValue("FACCIONES", "EjercitoReal")),
-                                       CBool(.GetValue("FACCIONES", "EjercitoCaos")),
-                                       CInt(.GetValue("FACCIONES", "CiudMatados")),
-                                       CInt(.GetValue("FACCIONES", "CrimMatados")))
+                                       Convert.ToBoolean(.GetValue("FACCIONES", "EjercitoReal")),
+                                       Convert.ToBoolean(.GetValue("FACCIONES", "EjercitoCaos")),
+                                       Convert.ToInt32(.GetValue("FACCIONES", "CiudMatados")),
+                                       Convert.ToInt32(.GetValue("FACCIONES", "CrimMatados")))
             End With
 
             'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
@@ -1916,7 +1916,7 @@ Module modGuilds
 
         If migr_LenB(ViejoSolicitado) <> 0 Then
             'borramos la vieja solicitud
-            ViejoGuildINdex = CShort(ViejoSolicitado)
+            ViejoGuildINdex = Convert.ToInt16(ViejoSolicitado)
             If ViejoGuildINdex <> 0 Then
                 ViejoNroAspirante = guilds(ViejoGuildINdex).NumeroDeAspirante(UserList(UserIndex).name)
                 If ViejoNroAspirante > 0 Then

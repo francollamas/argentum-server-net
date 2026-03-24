@@ -348,7 +348,7 @@ Friend Class clsIniReader
             j = FindKey(fileData(i), Key.ToUpper())
 
             'If we found it we change it
-            If j >= 0 Then fileData(i).values(j).Value = CStr(Value)
+            If j >= 0 Then fileData(i).values(j).Value = Value.ToString()
         End If
     End Sub
 

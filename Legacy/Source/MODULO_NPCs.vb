@@ -993,7 +993,7 @@ Module NPCs
                 'UPGRADE_WARNING: El límite inferior de la matriz .Criaturas ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 ReDim .Criaturas(.NroCriaturas)
                 For LoopC = 1 To .NroCriaturas
-                    .Criaturas(LoopC).NpcIndex = CShort(Leer.GetValue("NPC" & NpcNumber, "CI" & LoopC))
+                    .Criaturas(LoopC).NpcIndex = Convert.ToInt16(Leer.GetValue("NPC" & NpcNumber, "CI" & LoopC))
                     .Criaturas(LoopC).NpcName = Leer.GetValue("NPC" & NpcNumber, "CN" & LoopC)
                 Next LoopC
             End If

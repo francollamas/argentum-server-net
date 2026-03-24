@@ -37,7 +37,7 @@ Module wskapiAO
             UserList(NewIndex).ip = clientIP
 
             For i = 0 To BanIps.Count() - 1
-                Dim bannedIP = CStr(BanIps.Item(i))
+                Dim bannedIP = BanIps.Item(i).ToString()
                 If bannedIP = clientIP Then
                     Call WriteErrorMsg(NewIndex, "Su IP se encuentra bloqueada en este servidor.")
                     Call FlushBuffer(NewIndex)
