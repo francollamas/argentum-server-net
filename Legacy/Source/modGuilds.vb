@@ -195,7 +195,7 @@ Module modGuilds
             'uso GetMemberList y no los iteradores pq voy a rajar gente y puedo alterar
             'internamente al iterador en el proceso
             GuildMembers = guilds(GuildIndex).GetMemberList()
-            TotalMembers = UBound(GuildMembers)
+            TotalMembers = GuildMembers.Length - 1
 
             For MemberIndex = 0 To TotalMembers
                 MemberName = GuildMembers(MemberIndex)
@@ -374,7 +374,7 @@ Module modGuilds
         With guilds(GuildIndex)
             Call .SetDesc(desc)
 
-            For i = 0 To UBound(codex)
+            For i = 0 To codex.Length - 1
                 Call .SetCodex(i, codex(i))
             Next i
 
@@ -437,10 +437,10 @@ Module modGuilds
             Exit Function
         End If
 
-        CantCodex = UBound(codex) + 1
+        CantCodex = codex.Length
 
         'tenemos todo para fundar ya
-        If CANTIDADDECLANES < UBound(guilds) Then
+        If CANTIDADDECLANES < guilds.Length - 1 Then
             CANTIDADDECLANES = CANTIDADDECLANES + 1
             'ReDim Preserve Guilds(1 To CANTIDADDECLANES) As clsClan
 
@@ -937,11 +937,11 @@ Module modGuilds
 
 
             list = .GetMemberList()
-            For i = 0 To UBound(list)
+            For i = 0 To list.Length - 1
                 If Votado.ToUpper() = list(i) Then Exit For
             Next i
 
-            If i > UBound(list) Then
+            If i > list.Length - 1 Then
                 refError = Votado & " no pertenece al clan."
                 Exit Function
             End If
@@ -1800,11 +1800,11 @@ Module modGuilds
             If NroAsp = 0 Then
                 list = guilds(GI).GetMemberList()
 
-                For i = 0 To UBound(list)
+                For i = 0 To list.Length - 1
                     If Personaje = list(i) Then Exit For
                 Next i
 
-                If i > UBound(list) Then
+                If i > list.Length - 1 Then
                     Call _
                         WriteConsoleMsg(UserIndex, "El personaje no es ni aspirante ni miembro del clan.",
                                         FontTypeNames.FONTTYPE_INFO)

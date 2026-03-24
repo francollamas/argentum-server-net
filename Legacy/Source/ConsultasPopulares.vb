@@ -112,7 +112,7 @@ Friend Class ConsultasPopulares
                             FontTypeNames.FONTTYPE_GUILD)
         Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, FontTypeNames.FONTTYPE_GUILD)
         Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", FontTypeNames.FONTTYPE_GUILDMSG)
-        For i = 1 To UBound(pOpciones)
+        For i = 1 To pOpciones.Length - 1
             Call _
                 WriteConsoleMsg(UserIndex,
                                 "(Opcion " & i & "): " &
@@ -169,6 +169,6 @@ Friend Class ConsultasPopulares
 
 
     Private Function OpcionValida(opcion As Short) As Boolean
-        OpcionValida = opcion > 0 And opcion <= UBound(pOpciones)
+        OpcionValida = opcion > 0 And opcion <= pOpciones.Length - 1
     End Function
 End Class

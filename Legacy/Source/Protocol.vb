@@ -9413,7 +9413,7 @@ Module Protocol
 
                                 If Sex <> 0 Then ' Es Hombre o mujer?
                                     If tUser <= 0 Then ' OffLine
-                                        Call WriteVar(UserCharPath, "INIT", "Genero", Sex.ToString())
+                                        Call WriteVar(UserCharPath, "INIT", "Genero", Convert.ToInt32(Sex).ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -9454,7 +9454,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     If tUser <= 0 Then
-                                        Call WriteVar(UserCharPath, "INIT", "Raza", raza.ToString())
+                                        Call WriteVar(UserCharPath, "INIT", "Raza", Convert.ToInt32(raza).ToString())
                                         Call _
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
@@ -10547,7 +10547,7 @@ Module Protocol
                 (.flags.Privilegios And
                  (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
                 Then
-                If npc_Renamed > 0 And npc_Renamed <= UBound(SpawnList) Then _
+                If npc_Renamed > 0 And npc_Renamed <= SpawnList.Length - 1 Then _
                     Call SpawnNpc(SpawnList(npc_Renamed).NpcIndex, .Pos, True, False)
 
                 Call LogGM(.name, "Sumoneo " & SpawnList(npc_Renamed).NpcName)
@@ -14591,7 +14591,7 @@ Module Protocol
                     (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     Call LogGM(.name, "Ha fijado un nuevo MOTD")
 
-                    MaxLines = UBound(auxiliaryString) + 1
+                    MaxLines = auxiliaryString.Length
 
                     'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim MOTD(MaxLines)
@@ -14647,7 +14647,7 @@ Module Protocol
             End If
 
 
-            For LoopC = LBound(MOTD) To UBound(MOTD)
+            For LoopC = 0 To MOTD.Length - 1
                 auxiliaryString = auxiliaryString & MOTD(LoopC).texto & vbCrLf
             Next LoopC
 
@@ -15509,7 +15509,7 @@ Module Protocol
                 Dim i As Integer
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.guildList)
-                    For i = LBound(guildList) To UBound(guildList)
+                    For i = 0 To guildList.Length - 1
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
@@ -15788,10 +15788,10 @@ Module Protocol
                 Dim Obj_Renamed As ObjData
                 Dim validIndexes() As Short
                 Dim Count As Short
-                ReDim validIndexes(UBound(ArmasHerrero))
+                ReDim validIndexes(ArmasHerrero.Length - 1)
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.BlacksmithWeapons)
-                    For i = 1 To UBound(ArmasHerrero)
+                    For i = 1 To ArmasHerrero.Length - 1
                         If _
                                      ObjData_Renamed(ArmasHerrero(i)).SkHerreria <=
                                      Math.Round(
@@ -15832,10 +15832,10 @@ Module Protocol
                 Dim Obj_Renamed As ObjData
                 Dim validIndexes() As Short
                 Dim Count As Short
-                ReDim validIndexes(UBound(ArmadurasHerrero))
+                ReDim validIndexes(ArmadurasHerrero.Length - 1)
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.BlacksmithArmors)
-                    For i = 1 To UBound(ArmadurasHerrero)
+                    For i = 1 To ArmadurasHerrero.Length - 1
                         If _
                                      ObjData_Renamed(ArmadurasHerrero(i)).SkHerreria <=
                                      Math.Round(
@@ -15876,10 +15876,10 @@ Module Protocol
                 Dim Obj_Renamed As ObjData
                 Dim validIndexes() As Short
                 Dim Count As Short
-                ReDim validIndexes(UBound(ObjCarpintero))
+                ReDim validIndexes(ObjCarpintero.Length - 1)
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.CarpenterObjects)
-                    For i = 1 To UBound(ObjCarpintero)
+                    For i = 1 To ObjCarpintero.Length - 1
                         If _
                                      ObjData_Renamed(ObjCarpintero(i)).SkCarpinteria <=
                                      UserList(UserIndex).Stats.UserSkills(eSkill.Carpinteria)\
@@ -15994,7 +15994,7 @@ Module Protocol
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim ObjInfo As ObjData
-                If Obj.ObjIndex >= LBound(ObjData_Renamed) And Obj.ObjIndex <= UBound(ObjData_Renamed) Then
+                If Obj.ObjIndex >= 0 And Obj.ObjIndex <= ObjData_Renamed.Length - 1 Then
                     ObjInfo = ObjData_Renamed(Obj.ObjIndex)
                 End If
                 With UserList(UserIndex).outgoingData
@@ -16313,13 +16313,13 @@ Module Protocol
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.guildNews)
                     Call .WriteASCIIString(guildNews)
-                    For i = LBound(enemies) To UBound(enemies)
+                    For i = 0 To enemies.Length - 1
                         Tmp = Tmp & enemies(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
-                    For i = LBound(allies) To UBound(allies)
+                    For i = 0 To allies.Length - 1
                         Tmp = Tmp & allies(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
@@ -16364,7 +16364,7 @@ Module Protocol
                 Dim Tmp As String
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.AlianceProposalsList)
-                    For i = LBound(guilds) To UBound(guilds)
+                    For i = 0 To guilds.Length - 1
                         Tmp = Tmp & guilds(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
@@ -16389,7 +16389,7 @@ Module Protocol
                 Dim Tmp As String
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.PeaceProposalsList)
-                    For i = LBound(guilds) To UBound(guilds)
+                    For i = 0 To guilds.Length - 1
                         Tmp = Tmp & guilds(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
@@ -16444,20 +16444,20 @@ Module Protocol
                 Dim Tmp As String
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.GuildLeaderInfo)
-                    For i = LBound(guildList) To UBound(guildList)
+                    For i = 0 To guildList.Length - 1
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
-                    For i = LBound(MemberList) To UBound(MemberList)
+                    For i = 0 To MemberList.Length - 1
                         Tmp = Tmp & MemberList(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Call .WriteASCIIString(guildNews)
                     Tmp = vbNullString
-                    For i = LBound(joinRequests) To UBound(joinRequests)
+                    For i = 0 To joinRequests.Length - 1
                         Tmp = Tmp & joinRequests(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
@@ -16482,13 +16482,13 @@ Module Protocol
                 Dim Tmp As String
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.GuildMemberInfo)
-                    For i = LBound(guildList) To UBound(guildList)
+                    For i = 0 To guildList.Length - 1
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
-                    For i = LBound(MemberList) To UBound(MemberList)
+                    For i = 0 To MemberList.Length - 1
                         Tmp = Tmp & MemberList(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
@@ -16523,7 +16523,7 @@ Module Protocol
                     Call .WriteInteger(enemiesCount)
                     Call .WriteInteger(AlliesCount)
                     Call .WriteASCIIString(antifactionPoints)
-                    For i = LBound(codex) To UBound(codex)
+                    For i = 0 To codex.Length - 1
                         temp = temp & codex(i) & SEPARATOR
                     Next i
                     If temp.Length > 1 Then temp = temp.Substring(0, Math.Min(temp.Length - 1, temp.Length))
@@ -16705,7 +16705,7 @@ Module Protocol
                 Dim Tmp As String
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.SpawnList)
-                    For i = LBound(npcNames) To UBound(npcNames)
+                    For i = 0 To npcNames.Length - 1
                         Tmp = Tmp & npcNames(i) & SEPARATOR
                     Next i
                     If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))

@@ -148,8 +148,8 @@ Module modSistemaComercio
             ElseIf UserList(UserIndex).Invent.Object_Renamed(Slot).Amount < 0 Or Cantidad = 0 Then
                 Exit Sub
             ElseIf _
-                Slot < LBound(UserList(UserIndex).Invent.Object_Renamed) Or
-                Slot > UBound(UserList(UserIndex).Invent.Object_Renamed) Then
+                Slot < 0 Or
+                Slot > UserList(UserIndex).Invent.Object_Renamed.Length - 1 Then
                 Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                 Exit Sub
             ElseIf UserList(UserIndex).flags.Privilegios And PlayerType.Consejero Then
@@ -300,7 +300,7 @@ Module modSistemaComercio
         'Author: Nicolás (NicoNZ)
         '
         '*************************************************
-        If ObjIndex < 1 Or ObjIndex > UBound(ObjData_Renamed) Then Exit Function
+        If ObjIndex < 1 Or ObjIndex > ObjData_Renamed.Length - 1 Then Exit Function
         If ItemNewbie(ObjIndex) Then Exit Function
 
         SalePrice = ObjData_Renamed(ObjIndex).Valor/REDUCTOR_PRECIOVENTA

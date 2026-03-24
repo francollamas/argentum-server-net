@@ -288,7 +288,7 @@ Module Admin
         Dim i As Short
 
         If MD5ClientesActivado = 1 Then
-            For i = 0 To UBound(MD5s)
+            For i = 0 To MD5s.Length - 1
                 If (md5formateado = MD5s(i)) Then
                     MD5ok = True
                     Exit Function
@@ -313,7 +313,7 @@ Module Admin
 
         If MD5ClientesActivado = 1 Then
             ReDim MD5s(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados")))
-            For LoopC = 0 To UBound(MD5s)
+            For LoopC = 0 To MD5s.Length - 1
                 MD5s(LoopC) = GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptado" & (LoopC + 1))
                 MD5s(LoopC) = txtOffset(hexMd52Asc(MD5s(LoopC)), 55)
             Next LoopC

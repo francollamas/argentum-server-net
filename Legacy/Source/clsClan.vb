@@ -650,11 +650,11 @@ Friend Class clsClan
                 ElseIf CantGanadores = 1 Then
                     list = GetMemberList()
 
-                    For i = 0 To UBound(list)
+                    For i = 0 To list.Length - 1
                         If Ganador = list(i) Then Exit For
                     Next i
 
-                    If i <= UBound(list) Then
+                    If i <= list.Length - 1 Then
                         Call SetGuildNews("*" & Ganador & " ganó la elección del clan*")
                         Call Me.SetLeader(Ganador)
                         RevisarElecciones = True
@@ -810,7 +810,7 @@ Friend Class clsClan
 
     Public Function Iterador_ProximaRelacion(r As RELACIONES_GUILD) As Short
 
-        While p_IteradorRelaciones < UBound(p_Relaciones)
+        While p_IteradorRelaciones < p_Relaciones.Length - 1
 
             p_IteradorRelaciones = p_IteradorRelaciones + 1
             If p_Relaciones(p_IteradorRelaciones) = r Then
@@ -819,7 +819,7 @@ Friend Class clsClan
             End If
         End While
 
-        If p_IteradorRelaciones >= UBound(p_Relaciones) Then
+        If p_IteradorRelaciones >= p_Relaciones.Length - 1 Then
             p_IteradorRelaciones = 0
         End If
     End Function

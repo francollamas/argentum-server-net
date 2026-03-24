@@ -16,7 +16,7 @@
 | ✅ 1 | Reemplazar `Val()` | **COMPLETADO** (441 → 0) |
 | ✅ 2 | Reemplazar funciones string VB6 (`Left`, `Right`, `Mid`, `Len`, `InStr`, etc.) | **COMPLETADO** (0 instancias restantes) |
 | ✅ 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | **COMPLETADO** (0 instancias restantes) |
-| 🔲 4 | Reemplazar `UBound()` / `LBound()` | Pendiente |
+| ✅ 4 | Reemplazar `UBound()` / `LBound()` | **COMPLETADO** (58 → 0) |
 | 🔲 5 | Modernizar File I/O (`FileOpen`, `Line Input`, `Print #`) | Pendiente |
 | 🔲 6 | Resolver `As Object` (late binding) | Pendiente |
 | 🔲 7 | Activar `Option Strict On` archivo por archivo | Pendiente |
@@ -148,7 +148,7 @@ Incluyó también `CShort` → `Convert.ToInt16` en todos los archivos.
 
 ---
 
-## Etapa 4: `UBound()` / `LBound()` — ~75 instancias
+## Etapa 4: `UBound()` / `LBound()` — 58 instancias
 
 ### Reemplazos
 
@@ -159,7 +159,7 @@ For i = LBound(arr) To UBound(arr)
 
 ' Después:
 For i = 0 To arr.Length - 1
-For Each item In arr   ' cuando no se usa el índice
+For i = 0 To arr.Length - 1   ' LBound siempre es 0 en .NET
 ```
 
 Para arrays de tipo List(Of T), usar `.Count - 1` en vez de `.Length - 1`.
@@ -168,11 +168,18 @@ Para arrays de tipo List(Of T), usar `.Count - 1` en vez de `.Length - 1`.
 
 | Archivo | Usos | Estado |
 |---------|------|--------|
-| Protocol.vb | ~24 | 🔲 |
-| modGuilds.vb | ~7 | 🔲 |
-| Trabajo.vb | ~7 | 🔲 |
-| FileIO.vb | ~4 | 🔲 |
-| *(resto)* | ~33 | 🔲 |
+| Protocol.vb | 22 | ✅ |
+| modGuilds.vb | 8 | ✅ |
+| Trabajo.vb | 4 | ✅ |
+| FileIO.vb | 4 | ✅ |
+| clsClan.vb | 4 | ✅ |
+| InvUsuario.vb | 3 | ✅ |
+| General.vb | 3 | ✅ |
+| Comercio.vb | 3 | ✅ |
+| clsMapSoundManager.vb | 2 | ✅ |
+| ConsultasPopulares.vb | 2 | ✅ |
+| Admin.vb | 2 | ✅ |
+| Modulo_UsUaRiOs.vb | 1 | ✅ |
 
 ---
 
@@ -392,10 +399,10 @@ dotnet run --project Server
 | `With` statements | 647 usos |
 | `CStr()` | 256 usos |
 | Funciones string VB6 (`Left/Right/Mid/Len/InStr`) | ~137 usos |
-| `UBound/LBound` | 75 usos |
+| `UBound/LBound` | 0 usos |
 | `As Object` (late binding) | 31 usos |
 | File I/O legacy | ~97 usos |
 
 ---
 
-*Última actualización: 2026-03-23 — Plan inicial creado*
+*Última actualización: 2026-03-24 — Etapa 4 completada (UBound/LBound → 0)*

@@ -50,7 +50,7 @@ Friend Class SoundMapInfo
         'Usage of Val() prevents errors when dats are corrputed or incomplete. All invalid values are assumed to be zero.
 
         'TODO : Log the error in the dat for correction.
-        For i = 1 To UBound(p_Mapas)
+        For i = 1 To p_Mapas.Length - 1
             Temps = GetVar(MAPFILE & i & ".dat", "SONIDOS", "Cantidad")
 
             If IsNumeric(Temps) Then
@@ -84,7 +84,7 @@ Friend Class SoundMapInfo
         posX = RandomNumber(XMinMapSize, XMaxMapSize)
         posY = RandomNumber(YMinMapSize, YMaxMapSize)
 
-        For i = 1 To UBound(p_Mapas)
+        For i = 1 To p_Mapas.Length - 1
             If p_Mapas(i).Cantidad > 0 Then
                 SonidoMapa = RandomNumber(1, p_Mapas(i).Cantidad)
                 If RandomNumber(1, 100) <= p_Mapas(i).Probabilidad(SonidoMapa) Then

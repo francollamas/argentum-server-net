@@ -154,9 +154,9 @@ Public Module General
         Dim npcNames() As String
 
         'UPGRADE_WARNING: El límite inferior de la matriz npcNames ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-        ReDim npcNames(UBound(SpawnList))
+        ReDim npcNames(SpawnList.Length - 1)
 
-        For k = 1 To UBound(SpawnList)
+        For k = 1 To SpawnList.Length - 1
             npcNames(k) = SpawnList(k).NpcName
         Next k
 
@@ -838,7 +838,7 @@ Public Module General
             'Initialize statistics!!
             Call Initialize()
 
-            For LoopC = 1 To UBound(UserList)
+            For LoopC = 1 To UserList.Length - 1
                 'UPGRADE_NOTE: El objeto UserList().incomingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                 UserList(LoopC).incomingData = Nothing
                 'UPGRADE_NOTE: El objeto UserList().outgoingData no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'

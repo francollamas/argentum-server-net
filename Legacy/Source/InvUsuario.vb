@@ -442,7 +442,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        If Obj.ObjIndex > 0 And Obj.ObjIndex <= UBound(ObjData_Renamed) Then
+        If Obj.ObjIndex > 0 And Obj.ObjIndex <= ObjData_Renamed.Length - 1 Then
 
             With MapData(Map, X, Y)
                 If .ObjInfo.ObjIndex = Obj.ObjIndex Then
@@ -624,7 +624,7 @@ Module InvUsuario
 
             With UserList(UserIndex)
                 With .Invent
-                    If (Slot < LBound(.Object_Renamed)) Or (Slot > UBound(.Object_Renamed)) Then
+                    If (Slot < 0) Or (Slot > .Object_Renamed.Length - 1) Then
                         Exit Sub
                     ElseIf .Object_Renamed(Slot).ObjIndex = 0 Then
                         Exit Sub
@@ -1880,7 +1880,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        If ItemIndex < 1 Or ItemIndex > UBound(ObjData_Renamed) Then Exit Function
+        If ItemIndex < 1 Or ItemIndex > ObjData_Renamed.Length - 1 Then Exit Function
 
         ItemNewbie = ObjData_Renamed(ItemIndex).Newbie = 1
     End Function

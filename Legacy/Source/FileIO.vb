@@ -183,7 +183,7 @@ Module ES
         N = FreeFile()
         FileOpen(N, DatPath & "NombresInvalidos.txt", OpenMode.Input)
 
-        For i = 1 To UBound(ForbidenNames)
+        For i = 1 To ForbidenNames.Length - 1
             ForbidenNames(i) = LineInput(N)
         Next i
 
@@ -1327,7 +1327,6 @@ Module ES
             ReDim MapInfo_Renamed(NumMaps)
 
             For Map = 1 To NumMaps
-                Console.WriteLine("Cargando mapa:" & Map)
                 tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
                 Call CargarMapa(Map, tFileName)
             Next Map
@@ -1715,17 +1714,17 @@ Module ES
 
                 '¿Fueron modificados los atributos del usuario?
                 If Not .flags.TomoPocion Then
-                    For LoopC = 1 To UBound(.Stats.UserAtributos)
+                    For LoopC = 1 To .Stats.UserAtributos.Length - 1
                         Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, (.Stats.UserAtributos(LoopC)).ToString())
                     Next LoopC
                 Else
-                    For LoopC = 1 To UBound(.Stats.UserAtributos)
+                    For LoopC = 1 To .Stats.UserAtributos.Length - 1
                         '.Stats.UserAtributos(LoopC) = .Stats.UserAtributosBackUP(LoopC)
                         Call WriteVar(UserFile, "ATRIBUTOS", "AT" & LoopC, (.Stats.UserAtributosBackUP(LoopC)).ToString())
                     Next LoopC
                 End If
 
-                For LoopC = 1 To UBound(.Stats.UserSkills)
+                For LoopC = 1 To .Stats.UserSkills.Length - 1
                     Call WriteVar(UserFile, "SKILLS", "SK" & LoopC, (.Stats.UserSkills(LoopC)).ToString())
                     Call WriteVar(UserFile, "SKILLS", "ELUSK" & LoopC, (.Stats.EluSkills(LoopC)).ToString())
                     Call WriteVar(UserFile, "SKILLS", "EXPSK" & LoopC, (.Stats.ExpSkills(LoopC)).ToString())
@@ -1734,13 +1733,13 @@ Module ES
 
                 Call WriteVar(UserFile, "CONTACTO", "Email", .email)
 
-                Call WriteVar(UserFile, "INIT", "Genero", .Genero.ToString())
-                Call WriteVar(UserFile, "INIT", "Raza", .raza.ToString())
-                Call WriteVar(UserFile, "INIT", "Hogar", .Hogar.ToString())
-                Call WriteVar(UserFile, "INIT", "Clase", .clase.ToString())
+                Call WriteVar(UserFile, "INIT", "Genero", Convert.ToInt32(.Genero).ToString())
+                Call WriteVar(UserFile, "INIT", "Raza", Convert.ToInt32(.raza).ToString())
+                Call WriteVar(UserFile, "INIT", "Hogar", Convert.ToInt32(.Hogar).ToString())
+                Call WriteVar(UserFile, "INIT", "Clase", Convert.ToInt32(.clase).ToString())
                 Call WriteVar(UserFile, "INIT", "Desc", .desc)
 
-                Call WriteVar(UserFile, "INIT", "Heading", .Char_Renamed.heading.ToString())
+                Call WriteVar(UserFile, "INIT", "Heading", Convert.ToInt32(.Char_Renamed.heading).ToString())
 
                 Call WriteVar(UserFile, "INIT", "Head", .OrigChar.Head.ToString())
 
@@ -1949,8 +1948,8 @@ Module ES
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Desc", .desc)
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Head", (ParseVal(.Char_Renamed.Head.ToString())).ToString())
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Body", (ParseVal(.Char_Renamed.body.ToString())).ToString())
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Heading", (ParseVal(.Char_Renamed.heading.ToString())).ToString())
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "Movement", (ParseVal(.Movement.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Heading", Convert.ToInt32(.Char_Renamed.heading).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "Movement", Convert.ToInt32(.Movement).ToString())
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Attackable", (ParseVal(.Attackable.ToString())).ToString())
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Comercia", (ParseVal(.Comercia.ToString())).ToString())
             Call WriteVar(npcfile, "NPC" & NpcNumero, "TipoItems", (ParseVal(.TipoItems.ToString())).ToString())
@@ -1959,7 +1958,7 @@ Module ES
             Call WriteVar(npcfile, "NPC" & NpcNumero, "GiveGLD", (ParseVal(.GiveGLD.ToString())).ToString())
             Call WriteVar(npcfile, "NPC" & NpcNumero, "Hostil", (ParseVal(.Hostile.ToString())).ToString())
             Call WriteVar(npcfile, "NPC" & NpcNumero, "InvReSpawn", (ParseVal(.InvReSpawn.ToString())).ToString())
-            Call WriteVar(npcfile, "NPC" & NpcNumero, "NpcType", (ParseVal(.NPCtype.ToString())).ToString())
+            Call WriteVar(npcfile, "NPC" & NpcNumero, "NpcType", Convert.ToInt32(.NPCtype).ToString())
 
 
             'Stats

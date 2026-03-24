@@ -1425,7 +1425,7 @@ Module UsUaRiOs
 
                     Lvl = .ELV
 
-                    If Lvl > UBound(LevelSkill_Renamed) Then Lvl = UBound(LevelSkill_Renamed)
+                    If Lvl > LevelSkill_Renamed.Length - 1 Then Lvl = LevelSkill_Renamed.Length - 1
 
                     If .UserSkills(Skill) >= LevelSkill_Renamed(Lvl).LevelValue Then Exit Sub
 

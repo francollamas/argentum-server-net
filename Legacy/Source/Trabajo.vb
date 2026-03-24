@@ -609,13 +609,13 @@ Module Trabajo
         '***************************************************
         Dim i As Integer
 
-        For i = 1 To UBound(ArmasHerrero)
+        For i = 1 To ArmasHerrero.Length - 1
             If ArmasHerrero(i) = ItemIndex Then
                 PuedeConstruirHerreria = True
                 Exit Function
             End If
         Next i
-        For i = 1 To UBound(ArmadurasHerrero)
+        For i = 1 To ArmadurasHerrero.Length - 1
             If ArmadurasHerrero(i) = ItemIndex Then
                 PuedeConstruirHerreria = True
                 Exit Function
@@ -754,7 +754,7 @@ Module Trabajo
         '***************************************************
         Dim i As Integer
 
-        For i = 1 To UBound(ObjCarpintero)
+        For i = 1 To ObjCarpintero.Length - 1
             If ObjCarpintero(i) = ItemIndex Then
                 PuedeConstruirCarpintero = True
                 Exit Function
@@ -1635,7 +1635,7 @@ Module Trabajo
                     Else
                         MiObj.Amount = 1
                     End If
-                    MiObj.ObjIndex = PecesPosibles(RandomNumber(LBound(PecesPosibles), UBound(PecesPosibles)))
+                    MiObj.ObjIndex = PecesPosibles(RandomNumber(0, PecesPosibles.Length - 1))
 
                     If Not MeterItemEnInventario(UserIndex, MiObj) Then
                         Call TirarItemAlPiso(UserList(UserIndex).Pos, MiObj)
