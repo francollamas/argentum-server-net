@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -122,7 +122,7 @@ Module PraetoriansCoopNPC
 
                     Call _
                         SendData(SendTarget.ToNPCArea, TeleFrag,
-                                 PrepareMessageCharacterMove(Npclist(TeleFrag).Char_Renamed.CharIndex, wp2.X, wp2.Y))
+                                 PrepareMessageCharacterMove(Npclist(TeleFrag).Char_Renamed.CharIndex, Convert.ToByte(wp2.X), Convert.ToByte(wp2.Y)))
                     'Update map and user pos
                     MapData(wp.Map, wp.X, wp.Y).NpcIndex = 0
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -140,32 +140,32 @@ Module PraetoriansCoopNPC
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRKING_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.X = wp.X + 3
+            wp.X = Convert.ToInt16(wp.X + 3)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRCLER_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.X = wp.X - 6
+            wp.X = Convert.ToInt16(wp.X - 6)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRCLER_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.Y = wp.Y + 3
+            wp.Y = Convert.ToInt16(wp.Y + 3)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRGUER_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.X = wp.X + 3
+            wp.X = Convert.ToInt16(wp.X + 3)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRGUER_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.X = wp.X + 3
+            wp.X = Convert.ToInt16(wp.X + 3)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRGUER_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.Y = wp.Y - 6
-            wp.X = wp.X - 1
+            wp.Y = Convert.ToInt16(wp.Y - 6)
+            wp.X = Convert.ToInt16(wp.X - 1)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRCAZA_NPC, MAPA_PRETORIANO, nPos)
 
-            wp.X = wp.X - 4
+            wp.X = Convert.ToInt16(wp.X - 4)
             Call ClosestLegalPos(wp, nPos, False, True)
             Call CrearNPC(PRMAGO_NPC, MAPA_PRETORIANO, nPos)
 
@@ -213,10 +213,10 @@ Module PraetoriansCoopNPC
             quehacer = 0
 
 
-            azar = Math.Sign(RandomNumber(- 1, 1))
+            azar = Convert.ToInt16(Math.Sign(RandomNumber(- 1, 1)))
             'azar = Sgn(azar)
             If azar = 0 Then azar = 1
-            azar2 = Math.Sign(RandomNumber(- 1, 1))
+            azar2 = Convert.ToInt16(Math.Sign(RandomNumber(- 1, 1)))
             'azar2 = Sgn(azar2)
             If azar2 = 0 Then azar2 = 1
 
@@ -226,8 +226,8 @@ Module PraetoriansCoopNPC
             '   our primary target
             '2) in any other case, our nearest enemy will be attacked
 
-            For X = NPCPosX + (azar*8) To NPCPosX + (azar*- 8) Step - azar
-                For Y = NPCPosY + (azar2*7) To NPCPosY + (azar2*- 7) Step - azar2
+            For X = Convert.ToInt16(NPCPosX + (azar*8)) To Convert.ToInt16(NPCPosX + (azar*- 8)) Step - azar
+                For Y = Convert.ToInt16(NPCPosY + (azar2*7)) To Convert.ToInt16(NPCPosY + (azar2*- 7)) Step - azar2
                     NPCAlInd = MapData(NPCPosM, X, Y).NpcIndex ''por si implementamos algo contra NPCs
                     PJEnInd = MapData(NPCPosM, X, Y).UserIndex
                     If (PJEnInd > 0) And (Npclist(npcind).CanAttack = 1) Then
@@ -242,8 +242,8 @@ Module PraetoriansCoopNPC
                                 BestTarget = PJEnInd
                                 quehacer = 1
                                 'Call NpcLanzaSpellSobreUser(npcind, PJEnInd, Npclist(npcind).Spells(1)) ''flecha pasa como spell
-                                X = NPCPosX + (azar*- 8)
-                                Y = NPCPosY + (azar2*- 7)
+                                X = Convert.ToInt16(NPCPosX + (azar*- 8))
+                                Y = Convert.ToInt16(NPCPosY + (azar2*- 7))
                                 ''forma espantosa de zafar del for
                             Else
                                 If (BestTarget > 0) Then
@@ -308,13 +308,13 @@ Module PraetoriansCoopNPC
                 If NPCPosX < 50 Then
 
                     Call _
-                        GreedyWalkTo(npcind, MAPA_PRETORIANO, ALCOBA1_X + ((BTx - ALCOBA1_X)\2),
-                                     ALCOBA1_Y + ((BTy - ALCOBA1_Y)\2))
+                        GreedyWalkTo(npcind, MAPA_PRETORIANO, Convert.ToInt16(ALCOBA1_X + ((BTx - ALCOBA1_X))\2),
+                                     Convert.ToInt16(ALCOBA1_Y + ((BTy - ALCOBA1_Y))\2))
                     'GreedyWalkTo npcind, MAPA_PRETORIANO, ALCOBA1_X + ((BTx - ALCOBA1_X) \ 2), ALCOBA1_Y + ((BTy - ALCOBA1_Y) \ 2)
                 Else
                     Call _
-                        GreedyWalkTo(npcind, MAPA_PRETORIANO, ALCOBA2_X + ((BTx - ALCOBA2_X)\2),
-                                     ALCOBA2_Y + ((BTy - ALCOBA2_Y)\2))
+                        GreedyWalkTo(npcind, MAPA_PRETORIANO, Convert.ToInt16(ALCOBA2_X + ((BTx - ALCOBA2_X))\2),
+                                     Convert.ToInt16(ALCOBA2_Y + ((BTy - ALCOBA2_Y))\2))
                     'GreedyWalkTo npcind, MAPA_PRETORIANO, ALCOBA2_X + ((BTx - ALCOBA2_X) \ 2), ALCOBA2_Y + ((BTy - ALCOBA2_Y) \ 2)
                 End If
             Else
@@ -322,8 +322,8 @@ Module PraetoriansCoopNPC
                 If NPCPosX < 50 Then Xc = ALCOBA1_X Else Xc = ALCOBA2_X
                 Yc = ALCOBA1_Y
 
-                For X = Xc - 16 To Xc + 16
-                    For Y = Yc - 14 To Yc + 14
+                For X = Convert.ToInt16(Xc - 16) To Convert.ToInt16(Xc + 16)
+                    For Y = Convert.ToInt16(Yc - 14) To Convert.ToInt16(Yc + 14)
                         If Not (X <= NPCPosX + 8 And X >= NPCPosX - 8 And Y >= NPCPosY - 7 And Y <= NPCPosY + 7) Then
                             ''si es un tile no analizado
                             PJEnInd = MapData(NPCPosM, X, Y).UserIndex ''por si implementamos algo contra NPCs
@@ -415,10 +415,10 @@ Module PraetoriansCoopNPC
                 '1) invisible enemies can be detected sometimes
                 '2) a wizard's mission is background spellcasting attack
 
-                azar = Math.Sign(RandomNumber(- 1, 1))
+                azar = Convert.ToInt16(Math.Sign(RandomNumber(- 1, 1)))
                 'azar = Sgn(azar)
                 If azar = 0 Then azar = 1
-                azar2 = Math.Sign(RandomNumber(- 1, 1))
+                azar2 = Convert.ToInt16(Math.Sign(RandomNumber(- 1, 1)))
                 'azar2 = Sgn(azar2)
                 If azar2 = 0 Then azar2 = 1
 
@@ -429,8 +429,8 @@ Module PraetoriansCoopNPC
 
                 '        azar = 1
 
-                For X = NPCPosX + (azar*8) To NPCPosX + (azar*- 8) Step - azar
-                    For Y = NPCPosY + (azar2*7) To NPCPosY + (azar2*- 7) Step - azar2
+                For X = Convert.ToInt16(NPCPosX + (azar*8)) To Convert.ToInt16(NPCPosX + (azar*- 8)) Step - azar
+                    For Y = Convert.ToInt16(NPCPosY + (azar2*7)) To Convert.ToInt16(NPCPosY + (azar2*- 7)) Step - azar2
                         NPCAlInd = MapData(NPCPosM, X, Y).NpcIndex ''por si implementamos algo contra NPCs
                         PJEnInd = MapData(NPCPosM, X, Y).UserIndex
 
@@ -507,7 +507,7 @@ Module PraetoriansCoopNPC
                     If Npclist(npcind).CanAttack = 1 Then
                         Npclist(npcind).CanAttack = 0
                         bs = Npclist(npcind).Invent.BarcoSlot
-                        bs = bs - 1
+                        bs = Convert.ToByte(bs - 1)
                         Call MagoDestruyeWand(npcind, bs, DAT_APOCALIPSIS)
                         If bs = 0 Then
                             Call MuereNpc(npcind, 0)
@@ -619,7 +619,7 @@ Module PraetoriansCoopNPC
             Dim dist As Short
             Dim e_p As Short
             Dim hayPretorianos As Boolean
-            Dim headingloop As Byte
+            Dim headingloop As eHeading
             Dim nPos As WorldPos
             ''Dim quehacer As Integer
             ''1- remueve paralisis con un minimo % de efecto
@@ -639,8 +639,8 @@ Module PraetoriansCoopNPC
             'as to aid his loyal army.
             'If his army has been annihilated, the king will pick the
             'closest enemy an chase it using his special 'weapon speedhack' ability
-            For X = NPCPosX - 8 To NPCPosX + 8
-                For Y = NPCPosY - 7 To NPCPosY + 7
+            For X = Convert.ToInt16(NPCPosX - 8) To Convert.ToInt16(NPCPosX + 8)
+                For Y = Convert.ToInt16(NPCPosY - 7) To Convert.ToInt16(NPCPosY + 7)
                     'scan combat field
                     NPCAlInd = MapData(NPCPosM, X, Y).NpcIndex
                     PJEnInd = MapData(NPCPosM, X, Y).UserIndex
@@ -664,13 +664,13 @@ Module PraetoriansCoopNPC
 
                                 ''failed to remove
                             ElseIf (Npclist(NPCAlInd).flags.Envenenado = 1) Then ''un chiche :D
-                                If esPretoriano(NPCAlInd) Then
+                                If esPretoriano(NPCAlInd) <> 0 Then
                                     Call NPCRemueveVenenoNPC(npcind, NPCAlInd, DAT_CURARVENENO)
                                     Npclist(npcind).CanAttack = 0
                                     Exit Sub
                                 End If
                             ElseIf (Npclist(NPCAlInd).Stats.MaxHp > Npclist(NPCAlInd).Stats.MinHp) Then
-                                If esPretoriano(NPCAlInd) And Not (NPCAlInd = npcind) Then
+                                If esPretoriano(NPCAlInd) <> 0 And Not (NPCAlInd = npcind) Then
                                     ''cura, salvo q sea yo mismo. Eso lo hace 'despues'
                                     Call NPCCuraLevesNPC(npcind, NPCAlInd, DAT_CURARLEVES)
                                     Npclist(npcind).CanAttack = 0
@@ -686,9 +686,8 @@ Module PraetoriansCoopNPC
                                  UserList(PJEnInd).flags.Oculto = 1 Or UserList(PJEnInd).flags.Ceguera = 1) And
                                 UserList(PJEnInd).flags.AdminPerseguible Then
                                 ''si no esta muerto o invisible o ciego... o tiene el /ignorando
-                                dist =
-                                    Math.Sqrt(
-                                        (UserList(PJEnInd).Pos.X - NPCPosX)^2 + (UserList(PJEnInd).Pos.Y - NPCPosY)^2)
+                                dist = Convert.ToInt16(Math.Sqrt(
+                                        (UserList(PJEnInd)).Pos.X - NPCPosX)^2 + (UserList(PJEnInd).Pos.Y - NPCPosY)^2)
                                 If (dist < distBestTarget Or BestTarget = 0) Then
                                     BestTarget = PJEnInd
                                     distBestTarget = dist
@@ -760,7 +759,7 @@ Module PraetoriansCoopNPC
     Sub PRGUER_AI(npcind As Short)
         Try
 
-            Dim headingloop As Byte
+            Dim headingloop As eHeading
             Dim nPos As WorldPos
             Dim X As Short
             Dim Y As Short
@@ -780,8 +779,8 @@ Module PraetoriansCoopNPC
             dist = 0
             distBestTarget = 0
 
-            For X = NPCPosX - 8 To NPCPosX + 8
-                For Y = NPCPosY - 7 To NPCPosY + 7
+            For X = Convert.ToInt16(NPCPosX - 8) To Convert.ToInt16(NPCPosX + 8)
+                For Y = Convert.ToInt16(NPCPosY - 7) To Convert.ToInt16(NPCPosY + 7)
                     PJEnInd = MapData(NPCPosM, X, Y).UserIndex
                     If (PJEnInd > 0) Then
                         If _
@@ -792,17 +791,16 @@ Module PraetoriansCoopNPC
                             ''caluclo la distancia al PJ, si esta mas cerca q el actual
                             ''mejor besttarget entonces ataco a ese.
                             If (BestTarget > 0) Then
-                                dist =
-                                    Math.Sqrt(
-                                        (UserList(PJEnInd).Pos.X - NPCPosX)^2 + (UserList(PJEnInd).Pos.Y - NPCPosY)^2)
+                                dist = Convert.ToInt16(Math.Sqrt(
+                                        (UserList(PJEnInd)).Pos.X - NPCPosX)^2 + (UserList(PJEnInd).Pos.Y - NPCPosY)^2)
                                 If (dist < distBestTarget) Then
                                     BestTarget = PJEnInd
                                     distBestTarget = dist
                                 End If
                             Else
                                 distBestTarget =
-                                    Math.Sqrt(
-                                        (UserList(PJEnInd).Pos.X - NPCPosX)^2 + (UserList(PJEnInd).Pos.Y - NPCPosY)^2)
+                                    Convert.ToInt16(Math.Sqrt(
+                                        (UserList(PJEnInd).Pos.X - NPCPosX)^2 + (UserList(PJEnInd).Pos.Y - NPCPosY)^2))
                                 BestTarget = PJEnInd
                             End If
                         End If
@@ -903,10 +901,10 @@ Module PraetoriansCoopNPC
             BestTarget = 0
 
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            azar = Math.Sign(RandomNumber(- 1, 1))
+            azar = Convert.ToInt16(Math.Sign(RandomNumber(- 1, 1)))
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If azar = 0 Then azar = 1
-            azar2 = Math.Sign(RandomNumber(- 1, 1))
+            azar2 = Convert.ToInt16(Math.Sign(RandomNumber(- 1, 1)))
             If azar2 = 0 Then azar2 = 1
 
             'pick the best target according to the following criteria:
@@ -914,8 +912,8 @@ Module PraetoriansCoopNPC
             '2) enemy shall be annihilated no matter what
             '3) party healing if no threats
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            For X = NPCPosX + (azar*8) To NPCPosX + (azar*- 8) Step - azar
-                For Y = NPCPosY + (azar2*7) To NPCPosY + (azar2*- 7) Step - azar2
+            For X = Convert.ToInt16(NPCPosX + (azar*8)) To Convert.ToInt16(NPCPosX + (azar*- 8)) Step - azar
+                For Y = Convert.ToInt16(NPCPosY + (azar2*7)) To Convert.ToInt16(NPCPosY + (azar2*- 7)) Step - azar2
                     'scan combat field
                     NPCAlInd = MapData(NPCPosM, X, Y).NpcIndex
                     PJEnInd = MapData(NPCPosM, X, Y).UserIndex
@@ -987,8 +985,8 @@ Module PraetoriansCoopNPC
                     ''Este doble for busca amigos paralizados lejos para ir a rescatarlos
                     ''Entra aca solo si en el area cercana al rey no hay algo mejor que
                     ''hacer.
-                    For X = centroX - 16 To centroX + 16
-                        For Y = centroY - 15 To centroY + 15
+                    For X = Convert.ToInt16(centroX - 16) To Convert.ToInt16(centroX + 16)
+                        For Y = Convert.ToInt16(centroY - 15) To Convert.ToInt16(centroY + 15)
                             If Not (X < NPCPosX + 8 And X > NPCPosX + 8 And Y < NPCPosY + 7 And Y > NPCPosY - 7) Then
                                 ''si no es un tile ya analizado... (evito cuentas)
                                 NPCAlInd = MapData(NPCPosM, X, Y).NpcIndex
@@ -1143,8 +1141,8 @@ Module PraetoriansCoopNPC
                                                 Hechizos(indireccion).loops))
             Call _
                 SendData(SendTarget.ToNPCArea, NPCAlInd,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, Npclist(NPCAlInd).Pos.X,
-                                                Npclist(NPCAlInd).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(Npclist(NPCAlInd).Pos.X),
+                                                Convert.ToByte(Npclist(NPCAlInd).Pos.Y)))
             Npclist(NPCAlInd).Veneno = 0
             Npclist(NPCAlInd).flags.Envenenado = 0
 
@@ -1168,8 +1166,8 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, NPCAlInd,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, Npclist(NPCAlInd).Pos.X,
-                                                Npclist(NPCAlInd).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(Npclist(NPCAlInd).Pos.X),
+                                                Convert.ToByte(Npclist(NPCAlInd).Pos.Y)))
             Call _
                 SendData(SendTarget.ToNPCArea, NPCAlInd,
                          PrepareMessageCreateFX(Npclist(NPCAlInd).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
@@ -1202,8 +1200,8 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, NPCAlInd,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, Npclist(NPCAlInd).Pos.X,
-                                                Npclist(NPCAlInd).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(Npclist(NPCAlInd).Pos.X),
+                                                Convert.ToByte(Npclist(NPCAlInd).Pos.Y)))
             Call _
                 SendData(SendTarget.ToNPCArea, NPCAlInd,
                          PrepareMessageCreateFX(Npclist(NPCAlInd).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
@@ -1232,15 +1230,15 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, Paralizado,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, Npclist(Paralizado).Pos.X,
-                                                Npclist(Paralizado).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(Npclist(Paralizado).Pos.X),
+                                                Convert.ToByte(Npclist(Paralizado).Pos.Y)))
             Call _
                 SendData(SendTarget.ToNPCArea, Paralizado,
                          PrepareMessageCreateFX(Npclist(Paralizado).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
                                                 Hechizos(indireccion).loops))
 
             Npclist(Paralizado).flags.Paralizado = 1
-            Npclist(Paralizado).Contadores.Paralisis = IntervaloParalizado*2
+            Npclist(Paralizado).Contadores.Paralisis = Convert.ToInt16(IntervaloParalizado*2)
 
 
         Catch ex As Exception
@@ -1263,7 +1261,7 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, curado,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, Npclist(curado).Pos.X, Npclist(curado).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(Npclist(curado).Pos.X), Convert.ToByte(Npclist(curado).Pos.Y)))
             Call _
                 SendData(SendTarget.ToNPCArea, curado,
                          PrepareMessageCreateFX(Npclist(curado).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
@@ -1294,15 +1292,15 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, PJEnInd,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, UserList(PJEnInd).Pos.X,
-                                                UserList(PJEnInd).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(UserList(PJEnInd).Pos.X),
+                                                Convert.ToByte(UserList(PJEnInd).Pos.Y)))
             Call _
                 SendData(SendTarget.ToPCArea, PJEnInd,
                          PrepareMessageCreateFX(UserList(PJEnInd).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
                                                 Hechizos(indireccion).loops))
 
             UserList(PJEnInd).flags.Ceguera = 1
-            UserList(PJEnInd).Counters.Ceguera = IntervaloInvisible
+            UserList(PJEnInd).Counters.Ceguera = Convert.ToInt16(IntervaloInvisible)
             ''Envia ceguera
             Call WriteBlind(PJEnInd)
             ''bardea si es el rey
@@ -1336,14 +1334,14 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, PJEnInd,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, UserList(PJEnInd).Pos.X,
-                                                UserList(PJEnInd).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(UserList(PJEnInd).Pos.X),
+                                                Convert.ToByte(UserList(PJEnInd).Pos.Y)))
             Call _
                 SendData(SendTarget.ToPCArea, PJEnInd,
                          PrepareMessageCreateFX(UserList(PJEnInd).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
                                                 Hechizos(indireccion).loops))
             UserList(PJEnInd).flags.Estupidez = 1
-            UserList(PJEnInd).Counters.Estupidez = IntervaloInvisible
+            UserList(PJEnInd).Counters.Estupidez = Convert.ToInt16(IntervaloInvisible)
             'manda estupidez
             Call WriteDumb(PJEnInd)
 
@@ -1374,8 +1372,8 @@ Module PraetoriansCoopNPC
                                                     ColorTranslator.ToOle(Color.Cyan)))
             Call _
                 SendData(SendTarget.ToNPCArea, PJEnInd,
-                         PrepareMessagePlayWave(Hechizos(indireccion).WAV, UserList(PJEnInd).Pos.X,
-                                                UserList(PJEnInd).Pos.Y))
+                         PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(UserList(PJEnInd).Pos.X),
+                                                Convert.ToByte(UserList(PJEnInd).Pos.Y)))
             Call _
                 SendData(SendTarget.ToPCArea, PJEnInd,
                          PrepareMessageCreateFX(UserList(PJEnInd).Char_Renamed.CharIndex, Hechizos(indireccion).FXgrh,
@@ -1391,7 +1389,7 @@ Module PraetoriansCoopNPC
             Else
                 'sino, solo lo "iniciamos" en la sacada de invisibilidad.
                 Call WriteConsoleMsg(PJEnInd, "Comienzas a hacerte visible.", FontTypeNames.FONTTYPE_VENENO)
-                UserList(PJEnInd).Counters.Invisibilidad = IntervaloInvisible - 1
+                UserList(PJEnInd).Counters.Invisibilidad = Convert.ToInt16(IntervaloInvisible - 1)
             End If
 
 
@@ -1419,11 +1417,11 @@ Module PraetoriansCoopNPC
 
             If Hechizos(Spell).SubeHP = 1 Then
 
-                daño = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+                daño = Convert.ToInt16(RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(Hechizos(Spell).WAV, UserList(UserIndex).Pos.X,
-                                                    UserList(UserIndex).Pos.Y))
+                             PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(UserList(UserIndex).Pos.X),
+                                                    Convert.ToByte(UserList(UserIndex).Pos.Y)))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageCreateFX(UserList(UserIndex).Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
@@ -1440,17 +1438,17 @@ Module PraetoriansCoopNPC
                 Call WriteUpdateHP(UserIndex)
             ElseIf Hechizos(Spell).SubeHP = 2 Then
 
-                daño = RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp)
+                daño = Convert.ToInt16(RandomNumber(Hechizos(Spell).MinHp, Hechizos(Spell).MaxHp))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(Hechizos(Spell).WAV, UserList(UserIndex).Pos.X,
-                                                    UserList(UserIndex).Pos.Y))
+                             PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(UserList(UserIndex).Pos.X),
+                                                    Convert.ToByte(UserList(UserIndex).Pos.Y)))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageCreateFX(UserList(UserIndex).Char_Renamed.CharIndex, Hechizos(Spell).FXgrh,
                                                     Hechizos(Spell).loops))
 
-                If UserList(UserIndex).flags.Privilegios And PlayerType.User Then _
+                If (UserList(UserIndex).flags.Privilegios And PlayerType.User) <> 0 Then _
                     UserList(UserIndex).Stats.MinHp = UserList(UserIndex).Stats.MinHp - daño
 
                 Call _
@@ -1469,11 +1467,11 @@ Module PraetoriansCoopNPC
             If Hechizos(Spell).Paraliza = 1 Then
                 If UserList(UserIndex).flags.Paralizado = 0 Then
                     UserList(UserIndex).flags.Paralizado = 1
-                    UserList(UserIndex).Counters.Paralisis = IntervaloParalizado
+                    UserList(UserIndex).Counters.Paralisis = Convert.ToInt16(IntervaloParalizado)
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
-                                 PrepareMessagePlayWave(Hechizos(Spell).WAV, UserList(UserIndex).Pos.X,
-                                                        UserList(UserIndex).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(Hechizos(Spell).WAV), Convert.ToByte(UserList(UserIndex).Pos.X),
+                                                        Convert.ToByte(UserList(UserIndex).Pos.Y)))
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
                                  PrepareMessageCreateFX(UserList(UserIndex).Char_Renamed.CharIndex,
@@ -1517,7 +1515,7 @@ Module PraetoriansCoopNPC
                                                             ColorTranslator.ToOle(Color.Lime)))
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
-                                 PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO), Convert.ToByte(Npclist(npcind).Pos.X), Convert.ToByte(Npclist(npcind).Pos.Y)))
                 Case 4
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
@@ -1525,7 +1523,7 @@ Module PraetoriansCoopNPC
                                                             ColorTranslator.ToOle(Color.Lime)))
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
-                                 PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO), Convert.ToByte(Npclist(npcind).Pos.X), Convert.ToByte(Npclist(npcind).Pos.Y)))
                 Case 3
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
@@ -1533,7 +1531,7 @@ Module PraetoriansCoopNPC
                                                             ColorTranslator.ToOle(Color.Lime)))
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
-                                 PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO), Convert.ToByte(Npclist(npcind).Pos.X), Convert.ToByte(Npclist(npcind).Pos.Y)))
                 Case 2
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
@@ -1541,7 +1539,7 @@ Module PraetoriansCoopNPC
                                                             ColorTranslator.ToOle(Color.Lime)))
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
-                                 PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO), Convert.ToByte(Npclist(npcind).Pos.X), Convert.ToByte(Npclist(npcind).Pos.Y)))
                 Case 1
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
@@ -1549,7 +1547,7 @@ Module PraetoriansCoopNPC
                                                             ColorTranslator.ToOle(Color.Lime)))
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
-                                 PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO), Convert.ToByte(Npclist(npcind).Pos.X), Convert.ToByte(Npclist(npcind).Pos.Y)))
                 Case 0
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
@@ -1557,7 +1555,7 @@ Module PraetoriansCoopNPC
                                                             ColorTranslator.ToOle(Color.Lime)))
                     Call _
                         SendData(SendTarget.ToNPCArea, npcind,
-                                 PrepareMessagePlayWave(SONIDO_Dragon_VIVO, Npclist(npcind).Pos.X, Npclist(npcind).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO), Convert.ToByte(Npclist(npcind).Pos.X), Convert.ToByte(Npclist(npcind).Pos.Y)))
                     NPCPosX = Npclist(npcind).Pos.X
                     NPCPosY = Npclist(npcind).Pos.Y
                     NPCPosM = Npclist(npcind).Pos.Map
@@ -1569,13 +1567,12 @@ Module PraetoriansCoopNPC
                             PJInd = MapData(NPCPosM, X, Y).UserIndex
                             MascotaInd = MapData(NPCPosM, X, Y).NpcIndex
                             If PJInd > 0 Then
-                                dist =
-                                    Math.Sqrt(
-                                        (UserList(PJInd).Pos.X - NPCPosX)^2 + (UserList(PJInd).Pos.Y - NPCPosY)^2)
+                                dist = Convert.ToInt16(Math.Sqrt(
+                                        (UserList(PJInd)).Pos.X - NPCPosX)^2 + (UserList(PJInd).Pos.Y - NPCPosY)^2)
                                 danio = 880/(dist^(3/7))
-                                danioI = Math.Abs(Int(danio))
+                                danioI = Convert.ToInt16(Math.Abs(Int(danio)))
                                 ''efectiviza el danio
-                                If UserList(PJInd).flags.Privilegios And PlayerType.User Then _
+                                If (UserList(PJInd).flags.Privilegios And PlayerType.User) <> 0 Then _
                                     UserList(PJInd).Stats.MinHp = UserList(PJInd).Stats.MinHp - danioI
 
                                 Call _
@@ -1585,8 +1582,8 @@ Module PraetoriansCoopNPC
                                                     FontTypeNames.FONTTYPE_FIGHT)
                                 Call _
                                     SendData(SendTarget.ToPCArea, PJInd,
-                                             PrepareMessagePlayWave(Hechizos(indireccion).WAV, UserList(PJInd).Pos.X,
-                                                                    UserList(PJInd).Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV), Convert.ToByte(UserList(PJInd).Pos.X),
+                                                                    Convert.ToByte(UserList(PJInd).Pos.Y)))
                                 Call _
                                     SendData(SendTarget.ToPCArea, PJInd,
                                              PrepareMessageCreateFX(UserList(PJInd).Char_Renamed.CharIndex,
@@ -1601,20 +1598,19 @@ Module PraetoriansCoopNPC
                             ElseIf (MascotaInd > 0) Then
                                 If (Npclist(MascotaInd).MaestroUser > 0) Then
 
-                                    dist =
-                                        Math.Sqrt(
-                                            (Npclist(MascotaInd).Pos.X - NPCPosX)^2 +
+                                    dist = Convert.ToInt16(Math.Sqrt(
+                                        (Npclist(MascotaInd)).Pos.X - NPCPosX)^2 +
                                             (Npclist(MascotaInd).Pos.Y - NPCPosY)^2)
                                     danio = 880/(dist^(3/7))
-                                    danioI = Math.Abs(Int(danio))
+                                    danioI = Convert.ToInt16(Math.Abs(Int(danio)))
                                     ''efectiviza el danio
                                     Npclist(MascotaInd).Stats.MinHp = Npclist(MascotaInd).Stats.MinHp - danioI
 
                                     Call _
                                         SendData(SendTarget.ToNPCArea, MascotaInd,
-                                                 PrepareMessagePlayWave(Hechizos(indireccion).WAV,
-                                                                        Npclist(MascotaInd).Pos.X,
-                                                                        Npclist(MascotaInd).Pos.Y))
+                                                 PrepareMessagePlayWave(Convert.ToByte(Hechizos(indireccion).WAV),
+                                                                        Convert.ToByte(Npclist(MascotaInd).Pos.X),
+                                                                        Convert.ToByte(Npclist(MascotaInd).Pos.Y)))
                                     Call _
                                         SendData(SendTarget.ToNPCArea, MascotaInd,
                                                  PrepareMessageCreateFX(Npclist(MascotaInd).Char_Renamed.CharIndex,
@@ -1676,18 +1672,18 @@ Module PraetoriansCoopNPC
             If (NPCx > USRx) Then
                 If (NPCy < USRy) Then
                     ''NPC esta arriba a la derecha
-                    dual = RandomNumber(0, 10)
+                    dual = Convert.ToInt16(RandomNumber(0, 10))
                     If ((dual And 1) = 0) Then ''move down
-                        If LegalPos(mapa, NPCx, NPCy + 1) Then
+                        If LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then
                             Call MoverDer(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then
                             Call MoverArr(npcorig)
                             Exit Sub
                         Else
@@ -1696,16 +1692,16 @@ Module PraetoriansCoopNPC
                         End If
 
                     Else ''random first move
-                        If LegalPos(mapa, NPCx - 1, NPCy) Then
+                        If LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then
                             Call MoverDer(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then
                             Call MoverArr(npcorig)
                             Exit Sub
                         Else
@@ -1713,34 +1709,34 @@ Module PraetoriansCoopNPC
                         End If
                     End If ''checked random first move
                 ElseIf (NPCy > USRy) Then ''NPC esta abajo a la derecha
-                    dual = RandomNumber(0, 10)
+                    dual = Convert.ToInt16(RandomNumber(0, 10))
                     If ((dual And 1) = 0) Then ''move up
-                        If LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                        If LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                             Call MoverArr(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''D
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''D
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                             Call MoverDer(npcorig)
                             Exit Sub
                         Else
                             If CasperBlock(npcorig) Then Call LiberarCasperBlock(npcorig)
                         End If
                     Else ''random first move
-                        If LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                        If LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                             Call MoverArr(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''D
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''D
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                             Call MoverDer(npcorig)
                             Exit Sub
                         Else
@@ -1748,13 +1744,13 @@ Module PraetoriansCoopNPC
                         End If
                     End If ''endif random first move
                 Else ''x completitud, esta en la misma Y
-                    If LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                    If LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                         Call MoverIzq(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''D
+                    ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''D
                         Call MoverAba(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                    ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                         Call MoverArr(npcorig)
                         Exit Sub
                     Else
@@ -1775,34 +1771,34 @@ Module PraetoriansCoopNPC
 
                 If (NPCy < USRy) Then
                     ''NPC esta arriba a la izquierda
-                    dual = RandomNumber(0, 10)
+                    dual = Convert.ToInt16(RandomNumber(0, 10))
                     If ((dual And 1) = 0) Then ''move down
-                        If LegalPos(mapa, NPCx, NPCy + 1) Then ''ABA
+                        If LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''ABA
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                             Call MoverDer(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then
                             Call MoverArr(npcorig)
                             Exit Sub
                         Else
                             If CasperBlock(npcorig) Then Call LiberarCasperBlock(npcorig)
                         End If
                     Else ''random first move
-                        If LegalPos(mapa, NPCx + 1, NPCy) Then ''DER
+                        If LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''DER
                             Call MoverDer(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''ABA
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''ABA
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then
                             Call MoverArr(npcorig)
                             Exit Sub
                         Else
@@ -1811,34 +1807,34 @@ Module PraetoriansCoopNPC
                     End If
 
                 ElseIf (NPCy > USRy) Then ''NPC esta abajo a la izquierda
-                    dual = RandomNumber(0, 10)
+                    dual = Convert.ToInt16(RandomNumber(0, 10))
                     If ((dual And 1) = 0) Then ''move up
-                        If LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                        If LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                             Call MoverArr(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                             Call MoverDer(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                             Call MoverIzq(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''D
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''D
                             Call MoverAba(npcorig)
                             Exit Sub
                         Else
                             If CasperBlock(npcorig) Then Call LiberarCasperBlock(npcorig)
                         End If
                     Else
-                        If LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                        If LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                             Call MoverDer(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                             Call MoverArr(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''D
+                        ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''D
                             Call MoverAba(npcorig)
                             Exit Sub
-                        ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                        ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                             Call MoverIzq(npcorig)
                             Exit Sub
                         Else
@@ -1846,13 +1842,13 @@ Module PraetoriansCoopNPC
                         End If
                     End If
                 Else ''x completitud, esta en la misma Y
-                    If LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                    If LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                         Call MoverDer(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx, NPCy + 1) Then ''D
+                    ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''D
                         Call MoverAba(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                    ElseIf LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                         Call MoverArr(npcorig)
                         Exit Sub
                     Else
@@ -1872,13 +1868,13 @@ Module PraetoriansCoopNPC
 
             Else ''igual X
                 If (NPCy > USRy) Then ''NPC ESTA ABAJO
-                    If LegalPos(mapa, NPCx, NPCy - 1) Then ''U
+                    If LegalPos(mapa, NPCx, Convert.ToInt16(NPCy - 1)) Then ''U
                         Call MoverArr(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                    ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                         Call MoverDer(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                    ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                         Call MoverIzq(npcorig)
                         Exit Sub
                     Else
@@ -1894,13 +1890,13 @@ Module PraetoriansCoopNPC
                         End If
                     End If
                 Else ''NPC ESTA ARRIBA
-                    If LegalPos(mapa, NPCx, NPCy + 1) Then ''ABA
+                    If LegalPos(mapa, NPCx, Convert.ToInt16(NPCy + 1)) Then ''ABA
                         Call MoverAba(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx + 1, NPCy) Then ''R
+                    ElseIf LegalPos(mapa, Convert.ToInt16(NPCx + 1), NPCy) Then ''R
                         Call MoverDer(npcorig)
                         Exit Sub
-                    ElseIf LegalPos(mapa, NPCx - 1, NPCy) Then ''L
+                    ElseIf LegalPos(mapa, Convert.ToInt16(NPCx - 1), NPCy) Then ''L
                         Call MoverIzq(npcorig)
                         Exit Sub
                     Else
@@ -1937,10 +1933,10 @@ Module PraetoriansCoopNPC
 
             Call _
                 SendData(SendTarget.ToNPCArea, npcorig,
-                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, NPCx, NPCy + 1))
+                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, Convert.ToByte(NPCx), Convert.ToByte(NPCy + 1)))
             'Update map and npc pos
             MapData(mapa, NPCx, NPCy).NpcIndex = 0
-            Npclist(npcorig).Pos.Y = NPCy + 1
+            Npclist(npcorig).Pos.Y = Convert.ToInt16(NPCy + 1)
             Npclist(npcorig).Char_Renamed.heading = eHeading.SOUTH
             MapData(mapa, NPCx, NPCy + 1).NpcIndex = npcorig
 
@@ -1966,10 +1962,10 @@ Module PraetoriansCoopNPC
 
             Call _
                 SendData(SendTarget.ToNPCArea, npcorig,
-                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, NPCx, NPCy - 1))
+                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, Convert.ToByte(NPCx), Convert.ToByte(NPCy - 1)))
             'Update map and npc pos
             MapData(mapa, NPCx, NPCy).NpcIndex = 0
-            Npclist(npcorig).Pos.Y = NPCy - 1
+            Npclist(npcorig).Pos.Y = Convert.ToInt16(NPCy - 1)
             Npclist(npcorig).Char_Renamed.heading = eHeading.NORTH
             MapData(mapa, NPCx, NPCy - 1).NpcIndex = npcorig
 
@@ -1995,10 +1991,10 @@ Module PraetoriansCoopNPC
 
             Call _
                 SendData(SendTarget.ToNPCArea, npcorig,
-                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, NPCx - 1, NPCy))
+                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, Convert.ToByte(NPCx - 1), Convert.ToByte(NPCy)))
             'Update map and npc pos
             MapData(mapa, NPCx, NPCy).NpcIndex = 0
-            Npclist(npcorig).Pos.X = NPCx - 1
+            Npclist(npcorig).Pos.X = Convert.ToInt16(NPCx - 1)
             Npclist(npcorig).Char_Renamed.heading = eHeading.WEST
             MapData(mapa, NPCx - 1, NPCy).NpcIndex = npcorig
 
@@ -2024,10 +2020,10 @@ Module PraetoriansCoopNPC
 
             Call _
                 SendData(SendTarget.ToNPCArea, npcorig,
-                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, NPCx + 1, NPCy))
+                         PrepareMessageCharacterMove(Npclist(npcorig).Char_Renamed.CharIndex, Convert.ToByte(NPCx + 1), Convert.ToByte(NPCy)))
             'Update map and npc pos
             MapData(mapa, NPCx, NPCy).NpcIndex = 0
-            Npclist(npcorig).Pos.X = NPCx + 1
+            Npclist(npcorig).Pos.X = Convert.ToInt16(NPCx + 1)
             Npclist(npcorig).Char_Renamed.heading = eHeading.EAST
             MapData(mapa, NPCx + 1, NPCy).NpcIndex = npcorig
 
@@ -2208,8 +2204,8 @@ Module PraetoriansCoopNPC
 
             retvalue =
                 Not _
-                (LegalPos(NPCPosM, NPCPosX + 1, NPCPosY) Or LegalPos(NPCPosM, NPCPosX - 1, NPCPosY) Or
-                 LegalPos(NPCPosM, NPCPosX, NPCPosY + 1) Or LegalPos(NPCPosM, NPCPosX, NPCPosY - 1))
+                (LegalPos(NPCPosM, Convert.ToInt16(NPCPosX + 1), NPCPosY) Or LegalPos(NPCPosM, Convert.ToInt16(NPCPosX - 1), NPCPosY) Or
+                 LegalPos(NPCPosM, NPCPosX, Convert.ToInt16(NPCPosY + 1)) Or LegalPos(NPCPosM, NPCPosX, Convert.ToInt16(NPCPosY - 1)))
 
             If retvalue Then
                 ''si son todas invalidas
@@ -2264,15 +2260,14 @@ Module PraetoriansCoopNPC
             NPCPosY = Npclist(npcind).Pos.Y
             NPCPosM = Npclist(npcind).Pos.Map
 
-            If LegalPos(NPCPosM, NPCPosX + 1, NPCPosY + 1) Then
+            If LegalPos(NPCPosM, Convert.ToInt16(NPCPosX + 1), Convert.ToInt16(NPCPosY + 1)) Then
                 Call _
                     SendData(SendTarget.ToNPCArea, npcind,
-                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, NPCPosX + 1,
-                                                         NPCPosY + 1))
+                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, Convert.ToByte(NPCPosX + 1), Convert.ToByte(NPCPosY + 1)))
                 'Update map and npc pos
                 MapData(NPCPosM, NPCPosX, NPCPosY).NpcIndex = 0
-                Npclist(npcind).Pos.Y = NPCPosY + 1
-                Npclist(npcind).Pos.X = NPCPosX + 1
+                Npclist(npcind).Pos.Y = Convert.ToInt16(NPCPosY + 1)
+                Npclist(npcind).Pos.X = Convert.ToInt16(NPCPosX + 1)
                 Npclist(npcind).Char_Renamed.heading = eHeading.SOUTH
                 MapData(NPCPosM, NPCPosX + 1, NPCPosY + 1).NpcIndex = npcind
                 Call _
@@ -2282,15 +2277,14 @@ Module PraetoriansCoopNPC
                 Exit Sub
             End If
 
-            If LegalPos(NPCPosM, NPCPosX - 1, NPCPosY - 1) Then
+            If LegalPos(NPCPosM, Convert.ToInt16(NPCPosX - 1), Convert.ToInt16(NPCPosY - 1)) Then
                 Call _
                     SendData(SendTarget.ToNPCArea, npcind,
-                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, NPCPosX - 1,
-                                                         NPCPosY - 1))
+                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, Convert.ToByte(NPCPosX - 1), Convert.ToByte(NPCPosY - 1)))
                 'Update map and npc pos
                 MapData(NPCPosM, NPCPosX, NPCPosY).NpcIndex = 0
-                Npclist(npcind).Pos.Y = NPCPosY - 1
-                Npclist(npcind).Pos.X = NPCPosX - 1
+                Npclist(npcind).Pos.Y = Convert.ToInt16(NPCPosY - 1)
+                Npclist(npcind).Pos.X = Convert.ToInt16(NPCPosX - 1)
                 Npclist(npcind).Char_Renamed.heading = eHeading.NORTH
                 MapData(NPCPosM, NPCPosX - 1, NPCPosY - 1).NpcIndex = npcind
                 Call _
@@ -2300,15 +2294,14 @@ Module PraetoriansCoopNPC
                 Exit Sub
             End If
 
-            If LegalPos(NPCPosM, NPCPosX + 1, NPCPosY - 1) Then
+            If LegalPos(NPCPosM, Convert.ToInt16(NPCPosX + 1), Convert.ToInt16(NPCPosY - 1)) Then
                 Call _
                     SendData(SendTarget.ToNPCArea, npcind,
-                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, NPCPosX + 1,
-                                                         NPCPosY - 1))
+                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, Convert.ToByte(NPCPosX + 1), Convert.ToByte(NPCPosY - 1)))
                 'Update map and npc pos
                 MapData(NPCPosM, NPCPosX, NPCPosY).NpcIndex = 0
-                Npclist(npcind).Pos.Y = NPCPosY - 1
-                Npclist(npcind).Pos.X = NPCPosX + 1
+                Npclist(npcind).Pos.Y = Convert.ToInt16(NPCPosY - 1)
+                Npclist(npcind).Pos.X = Convert.ToInt16(NPCPosX + 1)
                 Npclist(npcind).Char_Renamed.heading = eHeading.EAST
                 MapData(NPCPosM, NPCPosX + 1, NPCPosY - 1).NpcIndex = npcind
                 Call _
@@ -2318,15 +2311,14 @@ Module PraetoriansCoopNPC
                 Exit Sub
             End If
 
-            If LegalPos(NPCPosM, NPCPosX - 1, NPCPosY + 1) Then
+            If LegalPos(NPCPosM, Convert.ToInt16(NPCPosX - 1), Convert.ToInt16(NPCPosY + 1)) Then
                 Call _
                     SendData(SendTarget.ToNPCArea, npcind,
-                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, NPCPosX - 1,
-                                                         NPCPosY + 1))
+                             PrepareMessageCharacterMove(Npclist(npcind).Char_Renamed.CharIndex, Convert.ToByte(NPCPosX - 1), Convert.ToByte(NPCPosY + 1)))
                 'Update map and npc pos
                 MapData(NPCPosM, NPCPosX, NPCPosY).NpcIndex = 0
-                Npclist(npcind).Pos.Y = NPCPosY + 1
-                Npclist(npcind).Pos.X = NPCPosX - 1
+                Npclist(npcind).Pos.Y = Convert.ToInt16(NPCPosY + 1)
+                Npclist(npcind).Pos.X = Convert.ToInt16(NPCPosX - 1)
                 Npclist(npcind).Char_Renamed.heading = eHeading.WEST
                 MapData(NPCPosM, NPCPosX - 1, NPCPosY + 1).NpcIndex = npcind
                 Call _
@@ -2361,27 +2353,27 @@ Module PraetoriansCoopNPC
                 Case 2
                     Call GreedyWalkTo(npcind, MAPA_PRETORIANO, 48, 70)
                     If Npclist(npcind).Pos.X = 48 And Npclist(npcind).Pos.Y = 70 Then _
-                        Npclist(npcind).Invent.ArmourEqpSlot = Npclist(npcind).Invent.ArmourEqpSlot + 1
+                        Npclist(npcind).Invent.ArmourEqpSlot = Convert.ToByte(Npclist(npcind).Invent.ArmourEqpSlot + 1)
                 Case 6
                     Call GreedyWalkTo(npcind, MAPA_PRETORIANO, 52, 71)
                     If Npclist(npcind).Pos.X = 52 And Npclist(npcind).Pos.Y = 71 Then _
-                        Npclist(npcind).Invent.ArmourEqpSlot = Npclist(npcind).Invent.ArmourEqpSlot + 1
+                        Npclist(npcind).Invent.ArmourEqpSlot = Convert.ToByte(Npclist(npcind).Invent.ArmourEqpSlot + 1)
                 Case 1
                     Call GreedyWalkTo(npcind, MAPA_PRETORIANO, 73, 56)
                     If Npclist(npcind).Pos.X = 73 And Npclist(npcind).Pos.Y = 56 Then _
-                        Npclist(npcind).Invent.ArmourEqpSlot = Npclist(npcind).Invent.ArmourEqpSlot + 1
+                        Npclist(npcind).Invent.ArmourEqpSlot = Convert.ToByte(Npclist(npcind).Invent.ArmourEqpSlot + 1)
                 Case 7
                     Call GreedyWalkTo(npcind, MAPA_PRETORIANO, 73, 48)
                     If Npclist(npcind).Pos.X = 73 And Npclist(npcind).Pos.Y = 48 Then _
-                        Npclist(npcind).Invent.ArmourEqpSlot = Npclist(npcind).Invent.ArmourEqpSlot + 1
+                        Npclist(npcind).Invent.ArmourEqpSlot = Convert.ToByte(Npclist(npcind).Invent.ArmourEqpSlot + 1)
                 Case 5
                     Call GreedyWalkTo(npcind, MAPA_PRETORIANO, 31, 56)
                     If Npclist(npcind).Pos.X = 31 And Npclist(npcind).Pos.Y = 56 Then _
-                        Npclist(npcind).Invent.ArmourEqpSlot = Npclist(npcind).Invent.ArmourEqpSlot + 1
+                        Npclist(npcind).Invent.ArmourEqpSlot = Convert.ToByte(Npclist(npcind).Invent.ArmourEqpSlot + 1)
                 Case 3
                     Call GreedyWalkTo(npcind, MAPA_PRETORIANO, 31, 48)
                     If Npclist(npcind).Pos.X = 31 And Npclist(npcind).Pos.Y = 48 Then _
-                        Npclist(npcind).Invent.ArmourEqpSlot = Npclist(npcind).Invent.ArmourEqpSlot + 1
+                        Npclist(npcind).Invent.ArmourEqpSlot = Convert.ToByte(Npclist(npcind).Invent.ArmourEqpSlot + 1)
                 Case 4, 8
                     Npclist(npcind).Invent.ArmourEqpSlot = 0
                     Exit Sub
