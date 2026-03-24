@@ -104,13 +104,28 @@ En los casos donde el tipo esperado es Integer o Long:
 
 ### Progreso por archivo
 
-| Archivo | Estado |
-|---------|--------|
-| Batch 1 (pequeños) | 🔲 |
-| Batch 2 (medianos) | 🔲 |
-| Batch 3 (complejos) | 🔲 |
-| FileIO.vb | 🔲 |
-| Protocol.vb | 🔲 |
+**COMPLETADOS (17 archivos)**:
+- Migration.vb ✅ (5 inst)
+- clsdicc.vb ✅ (2 inst)
+- Acciones.vb ✅ (1 inst)
+- InvUsuario.vb ✅ (1 inst)
+- ModCola.vb ✅ (6 inst)
+- modHexaStrings.vb ✅ (5 inst)
+- Statistics.vb ✅ (5 inst)
+- clsIniReader.vb ✅ (12 inst)
+- TCP.vb ✅ (17 inst)
+- Admin.vb ✅ (7 inst)
+- mdParty.vb ✅ (5 inst)
+- GameLogic.vb ✅ (9 inst)
+- clsClan.vb ✅ (18 inst)
+- modGuilds.vb ✅ (28 inst)
+
+**PENDIENTES (3 archivos, requieren atención especial)**:
+| Archivo | Estado | Notas |
+|---------|--------|-------|
+| General.vb | 🔲 | 5 inst, problemas con InStr → IndexOf (1-based vs 0-based) |
+| FileIO.vb | 🔲 | 27 inst, muy complejo, requiere validación adicional |
+| Protocol.vb | 🔲 | 72 inst, archivo más grande, estrategia de refactoring especial |
 
 ---
 
