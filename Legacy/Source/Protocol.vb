@@ -1659,7 +1659,7 @@ Module Protocol
                     'Analize chat...
                     Call ParseChat(Chat)
 
-                    If .flags.Privilegios And PlayerType.User Then
+                    If (.flags.Privilegios And PlayerType.User) <> 0 Then
                         If UserList(UserIndex).flags.Muerto = 1 Then
                             Call _
                                 SendData(SendTarget.ToDeadArea, UserIndex,
@@ -2075,8 +2075,8 @@ Module Protocol
             If .flags.Comerciando Then Exit Sub
 
             'Lower rank administrators can't pick up items
-            If .flags.Privilegios And PlayerType.Consejero Then
-                If Not .flags.Privilegios And PlayerType.RoleMaster Then
+            If (.flags.Privilegios And PlayerType.Consejero) <> 0 Then
+                If (.flags.Privilegios And PlayerType.RoleMaster) = 0 Then
                     Call WriteConsoleMsg(UserIndex, "No puedes tomar ningún objeto.", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
                 End If
@@ -3109,7 +3109,7 @@ Module Protocol
 
                         If tU > 0 And tU <> UserIndex Then
                             'Can't steal administrative players
-                            If UserList(tU).flags.Privilegios And PlayerType.User Then
+                            If (UserList(tU).flags.Privilegios And PlayerType.User) <> 0 Then
                                 If UserList(tU).flags.Muerto = 0 Then
                                     If Math.Abs(.Pos.X - X) + Math.Abs(.Pos.Y - Y) > 1 Then
                                         Call _
@@ -5284,7 +5284,7 @@ Module Protocol
                                           ColorTranslator.ToOle(Color.White))
 
                 Case eNPCType.Timbero
-                    If Not .flags.Privilegios And PlayerType.User Then
+                    If (.flags.Privilegios And PlayerType.User) = 0 Then
                         earnings = Apuestas.Ganancias - Apuestas.Perdidas
 
                         If earnings >= 0 And Apuestas.Ganancias <> 0 Then
@@ -5570,7 +5570,7 @@ Module Protocol
             End If
 
             'Admins don't have to wait :D
-            If Not .flags.Privilegios And PlayerType.User Then
+            If (.flags.Privilegios And PlayerType.User) = 0 Then
                 .Stats.MinMAN = .Stats.MaxMAN
                 Call WriteConsoleMsg(UserIndex, "Maná restaurado.", FontTypeNames.FONTTYPE_VENENO)
                 Call WriteUpdateMana(UserIndex)
@@ -5884,7 +5884,7 @@ Module Protocol
             ElseIf .flags.TargetUser > 0 Then
                 'User commerce...
                 'Can he commerce??
-                If .flags.Privilegios And PlayerType.Consejero Then
+                If (.flags.Privilegios And PlayerType.Consejero) <> 0 Then
                     Call WriteConsoleMsg(UserIndex, "No puedes vender ítems.", FontTypeNames.FONTTYPE_WARNING)
                     Exit Sub
                 End If
@@ -6630,12 +6630,12 @@ Module Protocol
                     'Analize chat...
                     Call ParseChat(Chat)
 
-                    If .flags.Privilegios And PlayerType.RoyalCouncil Then
+                    If (.flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then
                         Call _
                             SendData(SendTarget.ToConsejo, UserIndex,
                                      PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
                                                               FontTypeNames.FONTTYPE_CONSEJO))
-                    ElseIf .flags.Privilegios And PlayerType.ChaosCouncil Then
+                    ElseIf (.flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then
                         Call _
                             SendData(SendTarget.ToConsejoCaos, UserIndex,
                                      PrepareMessageConsoleMsg("(Consejero) " & .name & "> " & Chat,
@@ -6945,7 +6945,7 @@ Module Protocol
 
                     If _
                         (EsAdmin(name) Or EsDios(name) Or EsSemiDios(name) Or EsConsejero(name) Or EsRolesMaster(name)) And
-                        (UserList(UserIndex).flags.Privilegios And PlayerType.User) Then
+                        (UserList(UserIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                         Call _
                             WriteConsoleMsg(UserIndex, "No puedes ver las penas de los administradores.",
                                             FontTypeNames.FONTTYPE_INFO)
@@ -7824,7 +7824,7 @@ Module Protocol
 
                 message = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) = 0 Then
                     Call LogGM(.name, "Mensaje a Gms:" & message)
 
                     If migr_LenB(message) <> 0 Then
@@ -7890,7 +7890,7 @@ Module Protocol
             'Remove packet ID
             .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
 
             For i = 1 To LastUser
@@ -7935,7 +7935,7 @@ Module Protocol
             'Remove packet ID
             .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
 
             For i = 1 To LastUser
@@ -8082,7 +8082,7 @@ Module Protocol
 
                 comment = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) = 0 Then
                     Call LogGM(.name, "Comentario: " & comment)
                     Call WriteConsoleMsg(UserIndex, "Comentario salvado...", FontTypeNames.FONTTYPE_INFO)
                 End If
@@ -8112,7 +8112,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
             Call LogGM(.name, "Hora.")
         End With
@@ -8153,7 +8153,7 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) = 0 Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
@@ -8218,7 +8218,7 @@ Module Protocol
 
             Map = .incomingData.ReadInteger()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
             If MapaValido(Map) Then
                 For i = 1 To LastNPC
@@ -8334,7 +8334,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
             X = .flags.TargetX
             Y = .flags.TargetY
@@ -8381,10 +8381,10 @@ Module Protocol
                 X = buffer.ReadByte()
                 Y = buffer.ReadByte()
 
-                If Not .flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) = 0 Then
                     If MapaValido(Map) And migr_LenB(UserName) <> 0 Then
                         If UserName.ToUpper() <> "YO" Then
-                            If Not .flags.Privilegios And PlayerType.Consejero Then
+                            If (.flags.Privilegios And PlayerType.Consejero) = 0 Then
                                 tUser = NameIndex(UserName)
                             End If
                         Else
@@ -8448,7 +8448,7 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And PlayerType.User Then
+                If (.flags.Privilegios And PlayerType.User) = 0 Then
                     tUser = NameIndex(UserName)
 
                     If tUser <= 0 Then
@@ -8497,7 +8497,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
             Call WriteShowSOSForm(UserIndex)
         End With
     End Sub
@@ -8579,7 +8579,7 @@ Module Protocol
 
                 UserName = buffer.ReadASCIIString()
 
-                If Not .flags.Privilegios And PlayerType.User Then Call Ayuda.Quitar(UserName)
+                If (.flags.Privilegios And PlayerType.User) = 0 Then Call Ayuda.Quitar(UserName)
 
                 'If we got here then packet is complete, copy data back to original queue
                 Call .incomingData.CopyBuffer(buffer)
@@ -8681,7 +8681,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
             Call DoAdminInvisible(UserIndex)
             Call LogGM(.name, "/INVISIBLE")
@@ -8703,7 +8703,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
             Call WriteShowGMPanelForm(UserIndex)
         End With
@@ -8738,7 +8738,7 @@ Module Protocol
 
             For i = 1 To LastUser
                 If (migr_LenB(UserList(i).name) <> 0) Then
-                    If UserList(i).flags.Privilegios And PlayerType.User Then
+                    If (UserList(i).flags.Privilegios And PlayerType.User) <> 0 Then
                         names(Count) = UserList(i).name
                         Count = Count + 1
                     End If
@@ -8876,7 +8876,7 @@ Module Protocol
                         If tUser <= 0 Then
                             Call WriteConsoleMsg(UserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_INFO)
                         Else
-                            If Not UserList(tUser).flags.Privilegios And PlayerType.User Then
+                            If (UserList(tUser).flags.Privilegios And PlayerType.User) = 0 Then
                                 Call _
                                     WriteConsoleMsg(UserIndex, "No puedes encarcelar a administradores.",
                                                     FontTypeNames.FONTTYPE_INFO)
@@ -8937,11 +8937,11 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And PlayerType.User Then Exit Sub
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then Exit Sub
 
 
             'Los consejeros no pueden RMATAr a nada en el mapa pretoriano
-            If .flags.Privilegios And PlayerType.Consejero Then
+            If (.flags.Privilegios And PlayerType.Consejero) <> 0 Then
                 If .Pos.Map = MAPA_PRETORIANO Then
                     Call _
                         WriteConsoleMsg(UserIndex, "Los consejeros no pueden usar este comando en el mapa pretoriano.",
@@ -9010,7 +9010,7 @@ Module Protocol
                     Else
                         privs = UserDarPrivilegioLevel(UserName)
 
-                        If Not privs And PlayerType.User Then
+                        If (privs And PlayerType.User) = 0 Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "No puedes advertir a administradores.",
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -9103,7 +9103,7 @@ Module Protocol
                 Arg1 = buffer.ReadASCIIString()
                 Arg2 = buffer.ReadASCIIString()
 
-                If .flags.Privilegios And PlayerType.RoleMaster Then
+                If (.flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
                     Select Case _
                         .flags.Privilegios And
                         (PlayerType.Dios Or PlayerType.SemiDios Or
@@ -10247,7 +10247,7 @@ Module Protocol
                     tUser = NameIndex(UserName)
 
                     If tUser > 0 Then
-                        If Not UserList(tUser).flags.Privilegios And PlayerType.User Then
+                        If (UserList(tUser).flags.Privilegios And PlayerType.User) = 0 Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "¿¿Estás loco?? ¿¿Cómo vas a piñatear un gm?? :@",
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -11499,9 +11499,9 @@ Module Protocol
                                          UserName & " fue aceptado en el honorable Consejo Real de Banderbill.",
                                          FontTypeNames.FONTTYPE_CONSEJO))
                         With UserList(tUser)
-                            If .flags.Privilegios And PlayerType.ChaosCouncil Then _
+                            If (.flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then _
                                 .flags.Privilegios = .flags.Privilegios - PlayerType.ChaosCouncil
-                            If Not .flags.Privilegios And PlayerType.RoyalCouncil Then _
+                            If (.flags.Privilegios And PlayerType.RoyalCouncil) = 0 Then _
                                 .flags.Privilegios = .flags.Privilegios + PlayerType.RoyalCouncil
 
                             Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
@@ -11563,9 +11563,9 @@ Module Protocol
                                                               FontTypeNames.FONTTYPE_CONSEJO))
 
                         With UserList(tUser)
-                            If .flags.Privilegios And PlayerType.RoyalCouncil Then _
+                            If (.flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then _
                                 .flags.Privilegios = .flags.Privilegios - PlayerType.RoyalCouncil
-                            If Not .flags.Privilegios And PlayerType.ChaosCouncil Then _
+                            If (.flags.Privilegios And PlayerType.ChaosCouncil) = 0 Then _
                                 .flags.Privilegios = .flags.Privilegios + PlayerType.ChaosCouncil
 
                             Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
@@ -11802,7 +11802,7 @@ Module Protocol
                         End If
                     Else
                         With UserList(tUser)
-                            If .flags.Privilegios And PlayerType.RoyalCouncil Then
+                            If (.flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then
                                 Call _
                                     WriteConsoleMsg(tUser, "Has sido echado del consejo de Banderbill.",
                                                     FontTypeNames.FONTTYPE_TALK)
@@ -11816,7 +11816,7 @@ Module Protocol
                                                  FontTypeNames.FONTTYPE_CONSEJO))
                             End If
 
-                            If .flags.Privilegios And PlayerType.ChaosCouncil Then
+                            If (.flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then
                                 Call _
                                     WriteConsoleMsg(tUser, "Has sido echado del Concilio de las Sombras.",
                                                     FontTypeNames.FONTTYPE_TALK)
