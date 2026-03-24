@@ -562,7 +562,7 @@ Friend Class clsClan
         Call WriteVar(VOTACIONESFILE, "INIT", "NumVotos", (q + 1).ToString())
     End Sub
 
-    Public Function YaVoto(ByRef Votante As Object) As Boolean
+    Public Function YaVoto(ByRef Votante As String) As Boolean
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Votante. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         YaVoto = ((migr_LenB(Trim(GetVar(VOTACIONESFILE, "VOTOS", Votante)))) <> 0)
     End Function

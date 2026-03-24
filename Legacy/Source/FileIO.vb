@@ -2123,7 +2123,7 @@ Module ES
         'Retrieves the limit in the given side in the given map.
         'TODO: This should be set in the .inf map file.
         '***************************************************
-        Dim i, X As Object
+        Dim i, X As Short
         Dim Y As Short
 
         If mapa <= 0 Then Exit Function

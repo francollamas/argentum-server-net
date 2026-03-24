@@ -18,7 +18,7 @@
 | ✅ 3 | Reemplazar conversiones de tipo (`CStr`, `CInt`, `CDbl`, `CBool`) | **COMPLETADO** (0 instancias restantes) |
 | ✅ 4 | Reemplazar `UBound()` / `LBound()` | **COMPLETADO** (58 → 0) |
 | ✅ 5 | Modernizar File I/O (lectura texto/binario + logging + escritura) | **COMPLETADO** |
-| 🔲 6 | Resolver `As Object` (late binding) | Pendiente |
+| ✅ 6 | Resolver `As Object` (late binding) | **COMPLETADO** (25 → 9) |
 | 🔲 7 | Activar `Option Strict On` archivo por archivo | Pendiente |
 | 🔲 8 | Expandir `With` statements manualmente | Pendiente |
 
@@ -369,17 +369,57 @@ End Using
 
 ---
 
-## Etapa 6: Resolver `As Object` — ~31 instancias
+## Etapa 6: Resolver `As Object` — 25 instancias
 
 Revisar cada `Dim x As Object` y determinar el tipo real.
-Casos conocidos en Protocol.vb: `NPCcount1`, `i` → probablemente `Integer`.
+
+### Análisis de instancias
+
+**Corregidas (16):**
+
+| Archivo | Variable/Param | Antes | Después | Razón |
+|---------|---------------|-------|---------|-------|
+| mdParty.vb:356 | `IsPartyMember` (return) | Object | Boolean | Retorna booleano |
+| Protocol.vb:8210 | `NPCcount1` | Object | Integer | Contador con aritmética + ReDim |
+| Protocol.vb:8212 | `i` | Object | Short | Loop counter (LastNPC es Short) |
+| Protocol.vb:15370 | `UserIndex` (param) | Object | Short | UserList index, callers pasan Short |
+| MODULO_NPCs.vb:880 | `Respawn` (param) | Object | Boolean | Default `= True` |
+| praetorians.vb:891 | `azar` | Object | Short | Math.Sign(RandomNumber(...)) |
+| praetorians.vb:1221 | `indice` (param) | Object | Short | NPC spell index |
+| praetorians.vb:2073 | `npcind` (param) | Object | Short | NPC list index |
+| praetorians.vb:2101 | `npcind` (param) | Object | Short | NPC list index |
+| SecurityIp.vb:299 | `DumpTables()` (return) | Function As Object → Sub | — | No retorna nada |
+| Modulo_UsUaRiOs.vb:1785 | `nextMap` | Object | Boolean | IIf retorna True/False |
+| FileIO.vb:2126 | `i, X` | Object | Short | Loop variables |
+| GameLogic.vb:678 | `randomi` | Object | Short | Array index de RandomNumber |
+| wskapiAO.vb:113 | `Winsock_Close` (return) | Function As Object → Sub | — | Solo `Return Nothing` |
+| clsClan.vb:565 | `Votante` (param) | Object | String | Callers pasan UserList().Name |
+| PathFinding.vb:19 | `Limites` (return) | Object | Boolean | Retorna expresión booleana |
+
+**Mantenidas como `As Object` (7):**
+- `GameLoop.vb:37,42` + `SocketManager.vb:93` — Event handlers (`sender As Object` es el patrón .NET)
+- `clsByteQueue.vb:54,72` — Serialización polimórfica con `TypeOf`/`GetType`
+- `clsdicc.vb:13,49,82` — Diccionario genérico que almacena cualquier tipo
 
 ### Progreso
 
 | Archivo | Estado |
 |---------|--------|
-| Protocol.vb | 🔲 |
-| *(resto)* | 🔲 |
+| Protocol.vb | ✅ (3 corr.) |
+| praetorians.vb | ✅ (4 corr.) |
+| MODULO_NPCs.vb | ✅ (1 corr.) |
+| SecurityIp.vb | ✅ (1 corr.) |
+| Modulo_UsUaRiOs.vb | ✅ (1 corr.) |
+| FileIO.vb | ✅ (1 corr.) |
+| GameLogic.vb | ✅ (1 corr.) |
+| wskapiAO.vb | ✅ (1 corr.) |
+| clsClan.vb | ✅ (1 corr.) |
+| mdParty.vb | ✅ (1 corr.) |
+| PathFinding.vb | ✅ (1 corr.) |
+| clsByteQueue.vb | ✅ (mantiene Object, correcto) |
+| clsdicc.vb | ✅ (mantiene Object, correcto) |
+| GameLoop.vb | ✅ (mantiene Object, event handlers) |
+| SocketManager.vb | ✅ (mantiene Object, event handler) |
 
 ---
 
@@ -550,4 +590,4 @@ dotnet run --project Server
 
 ---
 
-*Última actualización: 2026-03-24 — Etapa 5 COMPLETADA (File I/O: 48 bloques, 6 sub-etapas)*
+*Última actualización: 2026-03-24 — Etapa 6 COMPLETADA (As Object: 25 → 9, 16 corregidas)*

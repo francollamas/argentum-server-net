@@ -296,7 +296,7 @@ Module SecurityIp
         End Select
     End Function
 
-    Public Function DumpTables() As Object
+    Public Sub DumpTables()
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -308,5 +308,5 @@ Module SecurityIp
         For i = 0 To MaxConTablesEntry*2 - 1 Step 2
             Call LogCriticEvent(GetAscIP(MaxConTables(i)) & " > " & MaxConTables(i + 1))
         Next i
-    End Function
+    End Sub
 End Module

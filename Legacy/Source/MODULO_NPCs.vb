@@ -877,7 +877,7 @@ Module NPCs
         End If
     End Sub
 
-    Public Function OpenNPC(NpcNumber As Short, Optional ByVal Respawn As Object = True) As Short
+    Public Function OpenNPC(NpcNumber As Short, Optional ByVal Respawn As Boolean = True) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -

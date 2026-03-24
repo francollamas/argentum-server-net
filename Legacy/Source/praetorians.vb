@@ -888,7 +888,7 @@ Module PraetoriansCoopNPC
             Dim centroY As Short
             Dim BestTarget As Short
             Dim PJBestTarget As Boolean
-            Dim azar As Object
+            Dim azar As Short
             Dim azar2 As Short
             Dim quehacer As Byte
             ''1- paralizar enemigo,
@@ -1218,7 +1218,7 @@ Module PraetoriansCoopNPC
         End Try
     End Sub
 
-    Sub NPCparalizaNPC(paralizador As Short, Paralizado As Short, indice As Object)
+    Sub NPCparalizaNPC(paralizador As Short, Paralizado As Short, indice As Short)
         Try
             Dim indireccion As Short
 
@@ -2070,7 +2070,7 @@ Module PraetoriansCoopNPC
         End Try
     End Sub
 
-    Function EstoyMuyLejos(npcind As Object) As Boolean
+    Function EstoyMuyLejos(npcind As Short) As Boolean
         ''me dice si estoy fuera del anillo exterior de proteccion
         ''de los clerigos
 
@@ -2098,7 +2098,7 @@ Module PraetoriansCoopNPC
         LogError(("Error en NPCAI.EstoymUYLejos"))
     End Function
 
-    Function EstoyLejos(npcind As Object) As Boolean
+    Function EstoyLejos(npcind As Short) As Boolean
         Try
 
             ''35,25 y 67,25 son las posiciones del rey

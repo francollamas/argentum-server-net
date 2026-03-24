@@ -16,7 +16,7 @@ Module PathFinding
 
     Dim TilePosY As Short
 
-    Private Function Limites(vfila As Short, vcolu As Short) As Object
+    Private Function Limites(vfila As Short, vcolu As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -

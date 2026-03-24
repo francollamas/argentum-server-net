@@ -353,7 +353,7 @@ Module mdParty
         End With
     End Sub
 
-    Private Function IsPartyMember(UserIndex As Short, PartyIndex As Short) As Object
+    Private Function IsPartyMember(UserIndex As Short, PartyIndex As Short) As Boolean
         Dim MemberIndex As Short
 
         For MemberIndex = 1 To PARTY_MAXMEMBERS

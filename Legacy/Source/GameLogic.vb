@@ -675,7 +675,7 @@ Module Extra
         '
         '***************************************************
 
-        Dim randomi As Object
+        Dim randomi As Short
         If Npclist(NpcIndex).NroExpresiones > 0 Then
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto randomi. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             randomi = RandomNumber(1, Npclist(NpcIndex).NroExpresiones)

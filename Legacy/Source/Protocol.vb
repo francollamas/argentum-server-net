@@ -8207,9 +8207,9 @@ Module Protocol
         Dim NPCcant2() As Short
         Dim List1() As String
         Dim List2() As String
-        Dim NPCcount1 As Object
+        Dim NPCcount1 As Integer
         Dim NPCcount2 As Short
-        Dim i As Object
+        Dim i As Short
         Dim j As Integer
         With UserList(UserIndex)
             'Remove packet ID
@@ -15367,7 +15367,7 @@ Module Protocol
             )
     End Sub
 
-    Public Sub WriteForceCharMove(UserIndex As Object, Direccion As eHeading)
+    Public Sub WriteForceCharMove(UserIndex As Short, Direccion As eHeading)
         '***************************************************
         'Author: ZaMa
         'Last Modification: 26/03/2009

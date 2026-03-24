@@ -1782,7 +1782,7 @@ Module UsUaRiOs
         Dim OldX As Short
         Dim OldY As Short
 
-        Dim nextMap As Object
+        Dim nextMap As Boolean
         Dim previousMap As Boolean
         With UserList(UserIndex)
             'Quitar el dialogo

@@ -110,7 +110,7 @@ Module wskapiAO
     ''' <summary>
     '''     Closes a socket connection
     ''' </summary>
-    Public Function Winsock_Close(ByRef socketID As Integer) As Object
+    Public Sub Winsock_Close(ByRef socketID As Integer)
         ' This is called from the main thread
         Dim userIndex As Integer = BuscaSlotSock(socketID)
 
@@ -124,9 +124,7 @@ Module wskapiAO
             UserList(userIndex).ConnIDValida = False
             Call EventoSockClose(userIndex)
         End If
-
-        Return Nothing
-    End Function
+    End Sub
 
     ''' <summary>
     '''     Initializes the socket API
