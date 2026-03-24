@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -14,7 +14,7 @@ Module UsUaRiOs
         Dim DaExp As Short
         Dim EraCriminal As Boolean
 
-        DaExp = Convert.ToInt16(UserList(VictimIndex).Stats.ELV)*2
+        DaExp = Convert.ToInt16(Convert.ToInt16(UserList(VictimIndex).Stats.ELV)*2)
 
         With UserList(AttackerIndex)
             .Stats.Exp = .Stats.Exp + DaExp
@@ -85,7 +85,7 @@ Module UsUaRiOs
                 .Char_Renamed.Head = .OrigChar.Head
             End If
 
-            If .flags.Traveling Then
+            If .flags.Traveling <> 0 Then
                 .flags.Traveling = 0
                 .Counters.goHome = 0
                 Call WriteMultiMessage(UserIndex, eMessages.CancelHome)
@@ -165,14 +165,14 @@ Module UsUaRiOs
         With UserList(UserIndex).Char_Renamed
             .body = body
             .Head = Head
-            .heading = heading
+            .heading = DirectCast(heading, eHeading)
             .WeaponAnim = Arma
             .ShieldAnim = Escudo
             .CascoAnim = casco
 
             Call _
                 SendData(SendTarget.ToPCArea, UserIndex,
-                         PrepareMessageCharacterChange(body, Head, heading, .CharIndex, Arma, Escudo, .FX, .loops, casco))
+                         PrepareMessageCharacterChange(body, Head, DirectCast(heading, eHeading), .CharIndex, Arma, Escudo, .FX, .loops, casco))
         End With
     End Sub
 
@@ -209,7 +209,7 @@ Module UsUaRiOs
 
         With UserList(UserIndex).Reputacion
             L = (- .AsesinoRep) + (- .BandidoRep) + .BurguesRep + (- .LadronesRep) + .NobleRep + .PlebeRep
-            L = Math.Round(L/6)
+            L = Convert.ToInt32(Math.Round(L/6))
 
             .Promedio = L
         End With
@@ -231,7 +231,7 @@ Module UsUaRiOs
 
                 If .Char_Renamed.CharIndex = LastChar Then
                     Do Until CharList(LastChar) > 0
-                        LastChar = LastChar - 1
+                        LastChar = Convert.ToInt16(LastChar - 1)
                         If LastChar <= 1 Then Exit Do
                     Loop
                 End If
@@ -252,7 +252,7 @@ Module UsUaRiOs
                 .Char_Renamed.CharIndex = 0
             End With
 
-            NumChars = NumChars - 1
+            NumChars = Convert.ToInt16(NumChars - 1)
 
 
         Catch ex As Exception
@@ -290,7 +290,7 @@ Module UsUaRiOs
             End If
 
             'Si esta navengando, se cambia la barca.
-            If .flags.Navegando Then
+            If .flags.Navegando <> 0 Then
                 If .flags.Muerto = 1 Then
                     .Char_Renamed.body = iFragataFantasmal
                 Else
@@ -314,12 +314,12 @@ Module UsUaRiOs
         With UserList(UserIndex)
 
             If criminal(UserIndex) Then
-                GetNickColor = eNickColor.ieCriminal
+                GetNickColor = Convert.ToByte(eNickColor.ieCriminal)
             Else
-                GetNickColor = eNickColor.ieCiudadano
+                GetNickColor = Convert.ToByte(eNickColor.ieCiudadano)
             End If
 
-            If .flags.AtacablePor > 0 Then GetNickColor = GetNickColor Or eNickColor.ieAtacable
+            If .flags.AtacablePor > 0 Then GetNickColor = Convert.ToByte(GetNickColor Or eNickColor.ieAtacable)
         End With
     End Function
 
@@ -361,7 +361,7 @@ Module UsUaRiOs
                         End If
 
                         NickColor = GetNickColor(UserIndex)
-                        Privileges = .flags.Privilegios
+                        Privileges = Convert.ToByte(.flags.Privilegios)
 
                         'Preparo el nick
                         If .showName Then
@@ -371,12 +371,12 @@ Module UsUaRiOs
                                 UserName = UserName & " " & TAG_CONSULT_MODE
                             Else
                                 If _
-                                    UserList(sndIndex).flags.Privilegios And
+                                    (UserList(sndIndex).flags.Privilegios And
                                     (PlayerType.User Or PlayerType.Consejero Or
-                                     PlayerType.RoleMaster) Then
+                                     PlayerType.RoleMaster)) <> 0 Then
                                     If migr_LenB(ClanTag) <> 0 Then UserName = UserName & " <" & ClanTag & ">"
                                 Else
-                                    If (.flags.invisible Or .flags.Oculto) And (Not .flags.AdminInvisible = 1) Then
+                                    If (.flags.invisible <> 0 OrElse .flags.Oculto <> 0) AndAlso (.flags.AdminInvisible <> 1) Then
                                         UserName = UserName & " " & TAG_USER_INVISIBLE
                                     Else
                                         If migr_LenB(ClanTag) <> 0 Then UserName = UserName & " <" & ClanTag & ">"
@@ -387,7 +387,7 @@ Module UsUaRiOs
 
                         Call _
                             WriteCharacterCreate(sndIndex, .Char_Renamed.body, .Char_Renamed.Head, .Char_Renamed.heading,
-                                                 .Char_Renamed.CharIndex, X, Y, .Char_Renamed.WeaponAnim,
+                                                 .Char_Renamed.CharIndex, Convert.ToByte(X), Convert.ToByte(Y), .Char_Renamed.WeaponAnim,
                                                  .Char_Renamed.ShieldAnim, .Char_Renamed.FX, 999,
                                                  .Char_Renamed.CascoAnim,
                                                  UserName, NickColor, Privileges)
@@ -459,36 +459,36 @@ Module UsUaRiOs
 
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
-                                 PrepareMessagePlayWave(SND_NIVEL, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(SND_NIVEL, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Call WriteConsoleMsg(UserIndex, "¡Has subido de nivel!", FontTypeNames.FONTTYPE_INFO)
 
                     If .Stats.ELV = 1 Then
                         Pts = 10
                     Else
                         'For multiple levels being rised at once
-                        Pts = Pts + 5
+                        Pts = Convert.ToInt16(Pts + 5)
                     End If
 
-                    .Stats.ELV = .Stats.ELV + 1
+                    .Stats.ELV = Convert.ToByte(.Stats.ELV + 1)
 
                     .Stats.Exp = .Stats.Exp - .Stats.ELU
 
                     'Nueva subida de exp x lvl. Pablo (ToxicWaste)
                     If .Stats.ELV < 15 Then
-                        .Stats.ELU = .Stats.ELU*1.4
+                        .Stats.ELU = Convert.ToInt32(.Stats.ELU*1.4)
                     ElseIf .Stats.ELV < 21 Then
-                        .Stats.ELU = .Stats.ELU*1.35
+                        .Stats.ELU = Convert.ToInt32(.Stats.ELU*1.35)
                     ElseIf .Stats.ELV < 33 Then
-                        .Stats.ELU = .Stats.ELU*1.3
+                        .Stats.ELU = Convert.ToInt32(.Stats.ELU*1.3)
                     ElseIf .Stats.ELV < 41 Then
-                        .Stats.ELU = .Stats.ELU*1.225
+                        .Stats.ELU = Convert.ToInt32(.Stats.ELU*1.225)
                     Else
-                        .Stats.ELU = .Stats.ELU*1.25
+                        .Stats.ELU = Convert.ToInt32(.Stats.ELU*1.25)
                     End If
 
                     'Calculo subida de vida
                     Promedio = ModVida(.clase) - (21 - .Stats.UserAtributos(eAtributos.Constitucion))*0.5
-                    aux = RandomNumber(0, 100)
+                    aux = Convert.ToInt16(RandomNumber(0, 100))
 
 
                     If Promedio - Int(Promedio) = 0.5 Then
@@ -499,13 +499,13 @@ Module UsUaRiOs
                         DistVida(4) = DistVida(3) + DistribucionSemienteraVida(4)
 
                         If aux <= DistVida(1) Then
-                            AumentoHP = Promedio + 1.5
+                            AumentoHP = Convert.ToInt16(Promedio + 1.5)
                         ElseIf aux <= DistVida(2) Then
-                            AumentoHP = Promedio + 0.5
+                            AumentoHP = Convert.ToInt16(Promedio + 0.5)
                         ElseIf aux <= DistVida(3) Then
-                            AumentoHP = Promedio - 0.5
+                            AumentoHP = Convert.ToInt16(Promedio - 0.5)
                         Else
-                            AumentoHP = Promedio - 1.5
+                            AumentoHP = Convert.ToInt16(Promedio - 1.5)
                         End If
                     Else
                         'Es promedio entero
@@ -517,26 +517,26 @@ Module UsUaRiOs
                         DistVida(5) = DistVida(4) + DistribucionEnteraVida(5)
 
                         If aux <= DistVida(1) Then
-                            AumentoHP = Promedio + 2
+                            AumentoHP = Convert.ToInt16(Promedio + 2)
                         ElseIf aux <= DistVida(2) Then
-                            AumentoHP = Promedio + 1
+                            AumentoHP = Convert.ToInt16(Promedio + 1)
                         ElseIf aux <= DistVida(3) Then
-                            AumentoHP = Promedio
+                            AumentoHP = Convert.ToInt16(Promedio)
                         ElseIf aux <= DistVida(4) Then
-                            AumentoHP = Promedio - 1
+                            AumentoHP = Convert.ToInt16(Promedio - 1)
                         Else
-                            AumentoHP = Promedio - 2
+                            AumentoHP = Convert.ToInt16(Promedio - 2)
                         End If
 
                     End If
 
                     Select Case .clase
                         Case eClass.Warrior
-                            AumentoHIT = IIf(.Stats.ELV > 35, 2, 3)
+                            AumentoHIT = Convert.ToInt16(If(.Stats.ELV > 35, 2, 3))
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Hunter
-                            AumentoHIT = IIf(.Stats.ELV > 35, 2, 3)
+                            AumentoHIT = Convert.ToInt16(If(.Stats.ELV > 35, 2, 3))
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Pirat
@@ -544,7 +544,7 @@ Module UsUaRiOs
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Paladin
-                            AumentoHIT = IIf(.Stats.ELV > 35, 1, 3)
+                            AumentoHIT = Convert.ToInt16(If(.Stats.ELV > 35, 1, 3))
                             AumentoMANA = .Stats.UserAtributos(eAtributos.Inteligencia)
                             AumentoSTA = AumentoSTDef
 
@@ -554,7 +554,7 @@ Module UsUaRiOs
 
                         Case eClass.Mage
                             AumentoHIT = 1
-                            AumentoMANA = 2.8*.Stats.UserAtributos(eAtributos.Inteligencia)
+                            AumentoMANA = Convert.ToInt16(2.8*.Stats.UserAtributos(eAtributos.Inteligencia))
                             AumentoSTA = AumentoSTMago
 
                         Case eClass.Worker
@@ -563,27 +563,27 @@ Module UsUaRiOs
 
                         Case eClass.Cleric
                             AumentoHIT = 2
-                            AumentoMANA = 2*.Stats.UserAtributos(eAtributos.Inteligencia)
+                            AumentoMANA = Convert.ToInt16(2*.Stats.UserAtributos(eAtributos.Inteligencia))
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Druid
                             AumentoHIT = 2
-                            AumentoMANA = 2*.Stats.UserAtributos(eAtributos.Inteligencia)
+                            AumentoMANA = Convert.ToInt16(2*.Stats.UserAtributos(eAtributos.Inteligencia))
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Assasin
-                            AumentoHIT = IIf(.Stats.ELV > 35, 1, 3)
+                            AumentoHIT = Convert.ToInt16(If(.Stats.ELV > 35, 1, 3))
                             AumentoMANA = .Stats.UserAtributos(eAtributos.Inteligencia)
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Bard
                             AumentoHIT = 2
-                            AumentoMANA = 2*.Stats.UserAtributos(eAtributos.Inteligencia)
+                            AumentoMANA = Convert.ToInt16(2*.Stats.UserAtributos(eAtributos.Inteligencia))
                             AumentoSTA = AumentoSTDef
 
                         Case eClass.Bandit
-                            AumentoHIT = IIf(.Stats.ELV > 35, 1, 3)
-                            AumentoMANA = .Stats.UserAtributos(eAtributos.Inteligencia)/3*2
+                            AumentoHIT = Convert.ToInt16(If(.Stats.ELV > 35, 1, 3))
+                            AumentoMANA = Convert.ToInt16(.Stats.UserAtributos(eAtributos.Inteligencia)/3*2)
                             AumentoSTA = AumentoStBandido
 
                         Case Else
@@ -768,8 +768,8 @@ Module UsUaRiOs
                             If Not .flags.AdminInvisible = 1 Then _
                                 Call _
                                     SendData(SendTarget.ToPCAreaButIndex, CasperIndex,
-                                             PrepareMessageCharacterMove(.Char_Renamed.CharIndex, CasPerPos.X,
-                                                                         CasPerPos.Y))
+                                             PrepareMessageCharacterMove(.Char_Renamed.CharIndex, Convert.ToByte(CasPerPos.X),
+                                                                         Convert.ToByte(CasPerPos.Y)))
 
                             Call WriteForceCharMove(CasperIndex, CasperHeading)
 
@@ -791,7 +791,7 @@ Module UsUaRiOs
                 If Not UserList(UserIndex).flags.AdminInvisible = 1 Then _
                     Call _
                         SendData(SendTarget.ToPCAreaButIndex, UserIndex,
-                                 PrepareMessageCharacterMove(UserList(UserIndex).Char_Renamed.CharIndex, nPos.X, nPos.Y))
+                                 PrepareMessageCharacterMove(UserList(UserIndex).Char_Renamed.CharIndex, Convert.ToByte(nPos.X), Convert.ToByte(nPos.Y)))
 
             End If
 
@@ -823,10 +823,10 @@ Module UsUaRiOs
             Call WritePosUpdate(UserIndex)
         End If
 
-        If UserList(UserIndex).Counters.Trabajando Then _
+        If UserList(UserIndex).Counters.Trabajando <> 0 Then _
             UserList(UserIndex).Counters.Trabajando = UserList(UserIndex).Counters.Trabajando - 1
 
-        If UserList(UserIndex).Counters.Ocultando Then _
+        If UserList(UserIndex).Counters.Ocultando <> 0 Then _
             UserList(UserIndex).Counters.Ocultando = UserList(UserIndex).Counters.Ocultando - 1
     End Sub
 
@@ -872,10 +872,10 @@ Module UsUaRiOs
 
         For LoopC = 1 To MAXCHARS
             If CharList(LoopC) = 0 Then
-                NextOpenCharIndex = LoopC
-                NumChars = NumChars + 1
+                NextOpenCharIndex = Convert.ToInt16(LoopC)
+                NumChars = Convert.ToInt16(NumChars + 1)
 
-                If LoopC > LastChar Then LastChar = LoopC
+                If LoopC > LastChar Then LastChar = Convert.ToInt16(LoopC)
 
                 Exit Function
             End If
@@ -896,7 +896,7 @@ Module UsUaRiOs
             If (UserList(LoopC).ConnID = - 1 And UserList(LoopC).flags.UserLogged = False) Then Exit For
         Next LoopC
 
-        NextOpenUser = LoopC
+        NextOpenUser = Convert.ToInt16(LoopC)
     End Function
 
     Public Sub SendUserStatsTxt(sendIndex As Short, UserIndex As Short)
@@ -1351,7 +1351,7 @@ Module UsUaRiOs
                 End If
 
             ElseIf Npclist(NpcIndex).Stats.Alineacion = 1 Then
-                UserList(UserIndex).Reputacion.PlebeRep = UserList(UserIndex).Reputacion.PlebeRep + vlCAZADOR/2
+                UserList(UserIndex).Reputacion.PlebeRep = UserList(UserIndex).Reputacion.PlebeRep + Convert.ToInt32(vlCAZADOR/2)
                 If UserList(UserIndex).Reputacion.PlebeRep > MAXREP Then _
                     UserList(UserIndex).Reputacion.PlebeRep = MAXREP
             End If
@@ -1425,7 +1425,7 @@ Module UsUaRiOs
 
                     Lvl = .ELV
 
-                    If Lvl > LevelSkill_Renamed.Length - 1 Then Lvl = LevelSkill_Renamed.Length - 1
+                    If Lvl > LevelSkill_Renamed.Length - 1 Then Lvl = Convert.ToInt16(LevelSkill_Renamed.Length - 1)
 
                     If .UserSkills(Skill) >= LevelSkill_Renamed(Lvl).LevelValue Then Exit Sub
 
@@ -1436,7 +1436,7 @@ Module UsUaRiOs
                     End If
 
                     If .ExpSkills(Skill) >= .EluSkills(Skill) Then
-                        .UserSkills(Skill) = .UserSkills(Skill) + 1
+                        .UserSkills(Skill) = Convert.ToByte(.UserSkills(Skill) + 1)
                         Call _
                             WriteConsoleMsg(UserIndex,
                                             "¡Has mejorado tu skill " & SkillsNames(Skill) &
@@ -1452,7 +1452,7 @@ Module UsUaRiOs
 
                         Call WriteUpdateExp(UserIndex)
                         Call CheckUserLevel(UserIndex)
-                        Call CheckEluSkill(UserIndex, Skill, False)
+                        Call CheckEluSkill(UserIndex, Convert.ToByte(Skill), False)
                     End If
                 End With
             End If
@@ -1486,11 +1486,11 @@ Module UsUaRiOs
                 If .Genero = eGenero.Mujer Then
                     Call _
                         SonidosMapas.ReproducirSonido(SendTarget.ToPCArea, UserIndex,
-                                                      SoundMapInfo.e_SoundIndex.MUERTE_MUJER)
+                                                      Convert.ToInt16(SoundMapInfo.e_SoundIndex.MUERTE_MUJER))
                 Else
                     Call _
                         SonidosMapas.ReproducirSonido(SendTarget.ToPCArea, UserIndex,
-                                                      SoundMapInfo.e_SoundIndex.MUERTE_HOMBRE)
+                                                      Convert.ToInt16(SoundMapInfo.e_SoundIndex.MUERTE_HOMBRE))
                 End If
 
                 'Quitar el dialogo del user muerto
@@ -1746,7 +1746,7 @@ Module UsUaRiOs
             For tY = Pos.Y - LoopC To Pos.Y + LoopC
                 For tX = Pos.X - LoopC To Pos.X + LoopC
 
-                    If LegalPos(nPos.Map, tX, tY, Agua, Tierra) Then
+                    If LegalPos(nPos.Map, Convert.ToInt16(tX), Convert.ToInt16(tY), Agua, Tierra) Then
                         'We continue if: a - the item is different from 0 and the dropped item or b - the amount dropped + amount in map exceeds MAX_INVENTORY_OBJS
                         hayobj =
                             (MapData(nPos.Map, tX, tY).ObjInfo.ObjIndex > 0 And
@@ -1754,8 +1754,8 @@ Module UsUaRiOs
                         If Not hayobj Then _
                             hayobj = (MapData(nPos.Map, tX, tY).ObjInfo.Amount + Obj.Amount > MAX_INVENTORY_OBJS)
                         If Not hayobj And MapData(nPos.Map, tX, tY).TileExit.Map = 0 Then
-                            nPos.X = tX
-                            nPos.Y = tY
+                            nPos.X = Convert.ToInt16(tX)
+                            nPos.Y = Convert.ToInt16(tY)
 
                             'break both fors
                             tX = Pos.X + LoopC
@@ -1766,7 +1766,7 @@ Module UsUaRiOs
                 Next tX
             Next tY
 
-            LoopC = LoopC + 1
+            LoopC = Convert.ToInt16(LoopC + 1)
         Loop
     End Sub
 
@@ -1800,21 +1800,21 @@ Module UsUaRiOs
 
             If OldMap <> Map Then
                 Call WriteChangeMap(UserIndex, Map, MapInfo_Renamed(.Pos.Map).MapVersion)
-                Call WritePlayMidi(UserIndex, ParseVal(ReadField(1, MapInfo_Renamed(Map).Music, 45)))
+                Call WritePlayMidi(UserIndex, Convert.ToByte(ParseVal(ReadField(1, MapInfo_Renamed(Map).Music, 45))))
 
                 'Update new Map Users
-                MapInfo_Renamed(Map).NumUsers = MapInfo_Renamed(Map).NumUsers + 1
+                MapInfo_Renamed(Map).NumUsers = Convert.ToInt16(MapInfo_Renamed(Map).NumUsers + 1)
 
                 'Update old Map Users
-                MapInfo_Renamed(OldMap).NumUsers = MapInfo_Renamed(OldMap).NumUsers - 1
+                MapInfo_Renamed(OldMap).NumUsers = Convert.ToInt16(MapInfo_Renamed(OldMap).NumUsers - 1)
                 If MapInfo_Renamed(OldMap).NumUsers < 0 Then
                     MapInfo_Renamed(OldMap).NumUsers = 0
                 End If
 
                 'Si el mapa al que entro NO ES superficial AND en el que estaba TAMPOCO ES superficial, ENTONCES
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nextMap. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                nextMap = IIf(distanceToCities(Map).distanceToCity(.Hogar) >= 0, True, False)
-                previousMap = IIf(distanceToCities(.Pos.Map).distanceToCity(.Hogar) >= 0, True, False)
+                nextMap = If(distanceToCities(Map).distanceToCity(.Hogar) >= 0, True, False)
+                previousMap = If(distanceToCities(.Pos.Map).distanceToCity(.Hogar) >= 0, True, False)
 
                 If previousMap And nextMap Then '138 => 139 (Ambos superficiales, no tiene que pasar nada)
                     'NO PASA NADA PORQUE NO ENTRO A UN DUNGEON.
@@ -1856,13 +1856,13 @@ Module UsUaRiOs
             End If
 
             If FX And .flags.AdminInvisible = 0 Then 'FX
-                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_WARP, X, Y))
+                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_WARP, Convert.ToByte(X), Convert.ToByte(Y)))
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
                              PrepareMessageCreateFX(.Char_Renamed.CharIndex, FXIDs.FXWARP, 0))
             End If
 
-            If .NroMascotas Then Call WarpMascotas(UserIndex)
+            If .NroMascotas <> 0 Then Call WarpMascotas(UserIndex)
 
             ' No puede ser atacado cuando cambia de mapa, por cierto tiempo
             Call IntervaloPermiteSerAtacado(UserIndex, True)
@@ -1921,8 +1921,8 @@ Module UsUaRiOs
                 If Npclist(Index).Contadores.TiempoExistencia > 0 Then
                     Call QuitarNPC(Index)
                     UserList(UserIndex).MascotasIndex(i) = 0
-                    InvocadosMatados = InvocadosMatados + 1
-                    NroPets = NroPets - 1
+                    InvocadosMatados = Convert.ToInt16(InvocadosMatados + 1)
+                    NroPets = Convert.ToInt16(NroPets - 1)
 
                     petType = 0
                 Else
@@ -1932,7 +1932,7 @@ Module UsUaRiOs
                     'PetTiempoDeVida = Npclist(index).Contadores.TiempoExistencia
 
                     ' Guardamos el hp, para restaurarlo uando se cree el npc
-                    iMinHP = Npclist(Index).Stats.MinHp
+                    iMinHP = Convert.ToInt16(Npclist(Index).Stats.MinHp)
 
                     Call QuitarNPC(Index)
 
@@ -1962,7 +1962,7 @@ Module UsUaRiOs
                     UserList(UserIndex).MascotasIndex(i) = Index
 
                     ' Nos aseguramos de que conserve el hp, si estaba dañado
-                    Npclist(Index).Stats.MinHp = IIf(iMinHP = 0, Npclist(Index).Stats.MinHp, iMinHP)
+                    Npclist(Index).Stats.MinHp = If(iMinHP = 0, Npclist(Index).Stats.MinHp, Convert.ToInt32(iMinHP))
 
                     Npclist(Index).MaestroUser = UserIndex
                     Npclist(Index).Contadores.TiempoExistencia = PetTiempoDeVida
@@ -2009,13 +2009,13 @@ Module UsUaRiOs
             petType = .MascotasType(PetIndex)
 
             ' Guardamos el hp, para restaurarlo cuando se cree el npc
-            iMinHP = Npclist(NpcIndex).Stats.MinHp
+            iMinHP = Convert.ToInt16(Npclist(NpcIndex).Stats.MinHp)
 
             Call QuitarNPC(NpcIndex)
 
             ' Restauramos el valor de la variable
             .MascotasType(PetIndex) = petType
-            .NroMascotas = .NroMascotas + 1
+            .NroMascotas = Convert.ToInt16(.NroMascotas + 1)
             NpcIndex = SpawnNpc(petType, TargetPos, False, False)
 
             'Controlamos que se sumoneo OK - should never happen. Continue to allow removal of other pets if not alone
@@ -2030,7 +2030,7 @@ Module UsUaRiOs
 
                 With Npclist(NpcIndex)
                     ' Nos aseguramos de que conserve el hp, si estaba dañado
-                    .Stats.MinHp = IIf(iMinHP = 0, .Stats.MinHp, iMinHP)
+                    .Stats.MinHp = If(iMinHP = 0, .Stats.MinHp, Convert.ToInt32(iMinHP))
 
                     .MaestroUser = UserIndex
                     .Movement = TipoAI.SigueAmo
@@ -2062,14 +2062,14 @@ Module UsUaRiOs
             If .flags.UserLogged And Not .Counters.Saliendo Then
                 .Counters.Saliendo = True
                 .Counters.salir =
-                    IIf((.flags.Privilegios And PlayerType.User) And MapInfo_Renamed(.Pos.Map).Pk,
-                        IntervaloCerrarConexion, 0)
+                    Convert.ToInt16(If((.flags.Privilegios And PlayerType.User) <> 0 AndAlso MapInfo_Renamed(.Pos.Map).Pk,
+                        IntervaloCerrarConexion, 0))
 
-                isNotVisible = (.flags.Oculto Or .flags.invisible)
+                isNotVisible = (.flags.Oculto <> 0 OrElse .flags.invisible <> 0)
                 If isNotVisible Then
                     .flags.invisible = 0
 
-                    If .flags.Oculto Then
+                    If .flags.Oculto <> 0 Then
                         If .flags.Navegando = 1 Then
                             If .clase = eClass.Pirat Then
                                 ' Pierde la apariencia de fragata fantasmal
@@ -2127,9 +2127,9 @@ Module UsUaRiOs
             Else
                 'Simply reset
                 UserList(UserIndex).Counters.salir =
-                    IIf(
-                        (UserList(UserIndex).flags.Privilegios And PlayerType.User) And
-                        MapInfo_Renamed(UserList(UserIndex).Pos.Map).Pk, IntervaloCerrarConexion, 0)
+                    Convert.ToInt16(If(
+                        (UserList(UserIndex).flags.Privilegios And PlayerType.User) <> 0 AndAlso
+                        MapInfo_Renamed(UserList(UserIndex).Pos.Map).Pk, IntervaloCerrarConexion, 0))
             End If
         End If
     End Sub
@@ -2244,7 +2244,7 @@ Module UsUaRiOs
         With UserList(UserIndex)
             If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = eTrigger.ZONAPELEA Then Exit Sub
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then
                 .Reputacion.BurguesRep = 0
                 .Reputacion.NobleRep = 0
                 .Reputacion.PlebeRep = 0
@@ -2382,7 +2382,7 @@ Module UsUaRiOs
                 ' Dejan de atacar las mascotas
                 If .NroMascotas > 0 Then
                     For PetIndex = 1 To MAXMASCOTAS
-                        If .MascotasType(PetIndex) > 0 Then Call FollowAmo(PetIndex)
+                        If .MascotasType(PetIndex) > 0 Then Call FollowAmo(Convert.ToInt16(PetIndex))
                     Next PetIndex
                 End If
             End If
@@ -2530,7 +2530,7 @@ Module UsUaRiOs
                     .ExpSkills(Skill) = .ExpSkills(Skill) - .EluSkills(Skill)
                 End If
 
-                .EluSkills(Skill) = ELU_SKILL_INICIAL*1.05^.UserSkills(Skill)
+                .EluSkills(Skill) = Convert.ToInt32(ELU_SKILL_INICIAL*1.05^.UserSkills(Skill))
             Else
                 .ExpSkills(Skill) = 0
                 .EluSkills(Skill) = 0
@@ -2585,8 +2585,8 @@ Module UsUaRiOs
         '***************************************************
 
         If UserList(UserIndex).Invent.MochilaEqpObjIndex > 0 Then
-            getMaxInventorySlots = MAX_NORMAL_INVENTORY_SLOTS +
-                                   ObjData_Renamed(UserList(UserIndex).Invent.MochilaEqpObjIndex).MochilaType*5 _
+            getMaxInventorySlots = Convert.ToByte(MAX_NORMAL_INVENTORY_SLOTS +
+                                   ObjData_Renamed(UserList(UserIndex).Invent.MochilaEqpObjIndex).MochilaType*5) _
             '5=slots por fila, hacer constante
         Else
             getMaxInventorySlots = MAX_NORMAL_INVENTORY_SLOTS
@@ -2607,7 +2607,7 @@ Module UsUaRiOs
 
                 tiempo = (Distance + 1)*30 'segundos
 
-                .Counters.goHome = tiempo/6 'Se va a chequear cada 6 segundos.
+                .Counters.goHome = tiempo\6 'Se va a chequear cada 6 segundos.
 
                 .flags.Traveling = 1
 
