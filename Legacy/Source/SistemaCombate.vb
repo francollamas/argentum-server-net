@@ -1,10 +1,10 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module SistemaCombate
     Public Const MAXDISTANCIAARCO As Byte = 18
     Public Const MAXDISTANCIAMAGIA As Byte = 18
 
-    Public Function MinimoInt(a As Short, b As Short) As Short
+    Public Function MinimoInt(a As Integer, b As Integer) As Integer
         If a > b Then
             MinimoInt = b
         Else
@@ -12,7 +12,7 @@ Module SistemaCombate
         End If
     End Function
 
-    Public Function MaximoInt(a As Short, b As Short) As Short
+    Public Function MaximoInt(a As Integer, b As Integer) As Integer
         If a > b Then
             MaximoInt = a
         Else
@@ -28,8 +28,8 @@ Module SistemaCombate
         '***************************************************
 
         PoderEvasionEscudo =
-            (UserList(UserIndex).Stats.UserSkills(eSkill.Defensa)*
-             ModClase_Renamed(UserList(UserIndex).clase).Escudo)/2
+            Convert.ToInt32((UserList(UserIndex).Stats.UserSkills(eSkill.Defensa)*
+             ModClase_Renamed(UserList(UserIndex).clase).Escudo)/2)
     End Function
 
     Private Function PoderEvasion(UserIndex As Short) As Integer
@@ -41,11 +41,11 @@ Module SistemaCombate
         Dim lTemp As Integer
         With UserList(UserIndex)
             lTemp =
-                (.Stats.UserSkills(eSkill.Tacticas) +
+                Convert.ToInt32((.Stats.UserSkills(eSkill.Tacticas) +
                  .Stats.UserSkills(eSkill.Tacticas)/33*
-                 .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).Evasion
+                 .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).Evasion)
 
-            PoderEvasion = (lTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
+            PoderEvasion = Convert.ToInt32(lTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
         End With
     End Function
 
@@ -60,22 +60,22 @@ Module SistemaCombate
 
         With UserList(UserIndex)
             If .Stats.UserSkills(eSkill.Armas) < 31 Then
-                PoderAtaqueTemp = .Stats.UserSkills(eSkill.Armas)*ModClase_Renamed(.clase).AtaqueArmas
+                PoderAtaqueTemp = Convert.ToInt32(.Stats.UserSkills(eSkill.Armas)*ModClase_Renamed(.clase).AtaqueArmas)
             ElseIf .Stats.UserSkills(eSkill.Armas) < 61 Then
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Armas) +
-                     .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueArmas
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Armas) +
+                     .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueArmas)
             ElseIf .Stats.UserSkills(eSkill.Armas) < 91 Then
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Armas) +
-                     2*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueArmas
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Armas) +
+                     2*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueArmas)
             Else
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Armas) +
-                     3*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueArmas
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Armas) +
+                     3*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueArmas)
             End If
 
-            PoderAtaqueArma = (PoderAtaqueTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
+            PoderAtaqueArma = Convert.ToInt32(PoderAtaqueTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
         End With
     End Function
 
@@ -90,25 +90,25 @@ Module SistemaCombate
 
         With UserList(UserIndex)
             If .Stats.UserSkills(eSkill.Proyectiles) < 31 Then
-                PoderAtaqueTemp = .Stats.UserSkills(eSkill.Proyectiles)*
-                                  ModClase_Renamed(.clase).AtaqueProyectiles
+                PoderAtaqueTemp = Convert.ToInt32(.Stats.UserSkills(eSkill.Proyectiles)*
+                                  ModClase_Renamed(.clase).AtaqueProyectiles)
             ElseIf .Stats.UserSkills(eSkill.Proyectiles) < 61 Then
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Proyectiles) +
-                     .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueProyectiles
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Proyectiles) +
+                     .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueProyectiles)
             ElseIf .Stats.UserSkills(eSkill.Proyectiles) < 91 Then
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Proyectiles) +
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Proyectiles) +
                      2*.Stats.UserAtributos(eAtributos.Agilidad))*
-                    ModClase_Renamed(.clase).AtaqueProyectiles
+                    ModClase_Renamed(.clase).AtaqueProyectiles)
             Else
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Proyectiles) +
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Proyectiles) +
                      3*.Stats.UserAtributos(eAtributos.Agilidad))*
-                    ModClase_Renamed(.clase).AtaqueProyectiles
+                    ModClase_Renamed(.clase).AtaqueProyectiles)
             End If
 
-            PoderAtaqueProyectil = (PoderAtaqueTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
+            PoderAtaqueProyectil = Convert.ToInt32(PoderAtaqueTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
         End With
     End Function
 
@@ -123,23 +123,23 @@ Module SistemaCombate
 
         With UserList(UserIndex)
             If .Stats.UserSkills(eSkill.Wrestling) < 31 Then
-                PoderAtaqueTemp = .Stats.UserSkills(eSkill.Wrestling)*
-                                  ModClase_Renamed(.clase).AtaqueWrestling
+                PoderAtaqueTemp = Convert.ToInt32(.Stats.UserSkills(eSkill.Wrestling)*
+                                  ModClase_Renamed(.clase).AtaqueWrestling)
             ElseIf .Stats.UserSkills(eSkill.Wrestling) < 61 Then
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Wrestling) +
-                     .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueWrestling
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Wrestling) +
+                     .Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueWrestling)
             ElseIf .Stats.UserSkills(eSkill.Wrestling) < 91 Then
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Wrestling) +
-                     2*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueWrestling
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Wrestling) +
+                     2*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueWrestling)
             Else
                 PoderAtaqueTemp =
-                    (.Stats.UserSkills(eSkill.Wrestling) +
-                     3*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueWrestling
+                    Convert.ToInt32((.Stats.UserSkills(eSkill.Wrestling) +
+                     3*.Stats.UserAtributos(eAtributos.Agilidad))*ModClase_Renamed(.clase).AtaqueWrestling)
             End If
 
-            PoderAtaqueWrestling = (PoderAtaqueTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
+            PoderAtaqueWrestling = Convert.ToInt32(PoderAtaqueTemp + (2.5*MaximoInt(.Stats.ELV - 12, 0)))
         End With
     End Function
 
@@ -171,7 +171,7 @@ Module SistemaCombate
         End If
 
         ' Chances are rounded
-        ProbExito = MaximoInt(10, MinimoInt(90, 50 + ((PoderAtaque - Npclist(NpcIndex).PoderEvasion)*0.4)))
+        ProbExito = MaximoInt(10, MinimoInt(90, Convert.ToInt32(50 + ((PoderAtaque - Npclist(NpcIndex).PoderEvasion)*0.4))))
 
         UserImpactoNpc = (RandomNumber(1, 100) <= ProbExito)
 
@@ -209,7 +209,7 @@ Module SistemaCombate
         If UserList(UserIndex).Invent.EscudoEqpObjIndex > 0 Then UserEvasion = UserEvasion + PoderEvasioEscudo
 
         ' Chances are rounded
-        ProbExito = MaximoInt(10, MinimoInt(90, 50 + ((NpcPoderAtaque - UserEvasion)*0.4)))
+        ProbExito = MaximoInt(10, MinimoInt(90, Convert.ToInt32(50 + ((NpcPoderAtaque - UserEvasion)*0.4))))
 
         NpcImpacto = (RandomNumber(1, 100) <= ProbExito)
 
@@ -218,15 +218,15 @@ Module SistemaCombate
             If Not NpcImpacto Then
                 If SkillDefensa + SkillTacticas > 0 Then 'Evitamos división por cero
                     ' Chances are rounded
-                    ProbRechazo = MaximoInt(10, MinimoInt(90, 100*SkillDefensa/(SkillDefensa + SkillTacticas)))
+                    ProbRechazo = MaximoInt(10, MinimoInt(90, Convert.ToInt32(100*SkillDefensa/(SkillDefensa + SkillTacticas))))
                     Rechazo = (RandomNumber(1, 100) <= ProbRechazo)
 
                     If Rechazo Then
                         'Se rechazo el ataque con el escudo
                         Call _
                             SendData(SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessagePlayWave(SND_ESCUDO, UserList(UserIndex).Pos.X,
-                                                            UserList(UserIndex).Pos.Y))
+                                     PrepareMessagePlayWave(SND_ESCUDO, Convert.ToByte(UserList(UserIndex).Pos.X),
+                                                            Convert.ToByte(UserList(UserIndex).Pos.Y)))
                         Call WriteMultiMessage(UserIndex, eMessages.BlockedWithShieldUser) _
                         'Call WriteBlockedWithShieldUser(UserIndex)
                         Call SubirSkill(UserIndex, eSkill.Defensa, True)
@@ -268,7 +268,7 @@ Module SistemaCombate
                 ' Ataca a un npc?
                 If NpcIndex > 0 Then
                     If Arma.proyectil = 1 Then
-                        ModifClase = ModClase_Renamed(.clase).DañoProyectiles
+                        ModifClase = Convert.ToSingle(ModClase_Renamed(.clase).DañoProyectiles)
                         DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
                         DañoMaxArma = Arma.MaxHIT
 
@@ -280,7 +280,7 @@ Module SistemaCombate
                             'DañoMaxArma = DañoMaxArma + proyectil.MaxHIT
                         End If
                     Else
-                        ModifClase = ModClase_Renamed(.clase).DañoArmas
+                        ModifClase = Convert.ToSingle(ModClase_Renamed(.clase).DañoArmas)
 
                         If .Invent.WeaponEqpObjIndex = EspadaMataDragonesIndex Then ' Usa la mata Dragones?
                             If Npclist(NpcIndex).NPCtype = eNPCType.DRAGON Then 'Ataca Dragon?
@@ -298,7 +298,7 @@ Module SistemaCombate
                     End If
                 Else ' Ataca usuario
                     If Arma.proyectil = 1 Then
-                        ModifClase = ModClase_Renamed(.clase).DañoProyectiles
+                        ModifClase = Convert.ToSingle(ModClase_Renamed(.clase).DañoProyectiles)
                         DañoArma = RandomNumber(Arma.MinHIT, Arma.MaxHIT)
                         DañoMaxArma = Arma.MaxHIT
 
@@ -310,10 +310,10 @@ Module SistemaCombate
                             'DañoMaxArma = DañoMaxArma + proyectil.MaxHIT
                         End If
                     Else
-                        ModifClase = ModClase_Renamed(.clase).DañoArmas
+                        ModifClase = Convert.ToSingle(ModClase_Renamed(.clase).DañoArmas)
 
                         If .Invent.WeaponEqpObjIndex = EspadaMataDragonesIndex Then
-                            ModifClase = ModClase_Renamed(.clase).DañoArmas
+                            ModifClase = Convert.ToSingle(ModClase_Renamed(.clase).DañoArmas)
                             DañoArma = 1 ' Si usa la espada mataDragones daño es 1
                             DañoMaxArma = 1
                         Else
@@ -323,7 +323,7 @@ Module SistemaCombate
                     End If
                 End If
             Else
-                ModifClase = ModClase_Renamed(.clase).DañoWrestling
+                ModifClase = Convert.ToSingle(ModClase_Renamed(.clase).DañoWrestling)
 
                 ' Daño sin guantes
                 DañoMinArma = 4
@@ -349,9 +349,9 @@ Module SistemaCombate
                 CalcularDaño = Npclist(NpcIndex).Stats.MinHp + Npclist(NpcIndex).Stats.def
             Else
                 CalcularDaño =
-                    (3*DañoArma +
-                     ((DañoMaxArma/5)*MaximoInt(0, .Stats.UserAtributos(eAtributos.Fuerza) - 15)) +
-                     DañoUsuario)*ModifClase
+                    Convert.ToInt32((3*DañoArma +
+                     ((DañoMaxArma/5)*MaximoInt(0, Convert.ToInt32(.Stats.UserAtributos(eAtributos.Fuerza) - 15))) +
+                     DañoUsuario)*ModifClase)
             End If
         End With
     End Function
@@ -392,14 +392,14 @@ Module SistemaCombate
             If .Stats.MinHp > 0 Then
                 'Trata de apuñalar por la espalda al enemigo
                 If PuedeApuñalar(UserIndex) Then
-                    Call DoApuñalar(UserIndex, NpcIndex, 0, DañoBase)
+                    Call DoApuñalar(UserIndex, NpcIndex, 0, Convert.ToInt16(DañoBase))
                 End If
 
                 'trata de dar golpe crítico
-                Call DoGolpeCritico(UserIndex, NpcIndex, 0, daño)
+                Call DoGolpeCritico(UserIndex, NpcIndex, 0, Convert.ToInt16(daño))
 
                 If PuedeAcuchillar(UserIndex) Then
-                    Call DoAcuchillar(UserIndex, NpcIndex, 0, daño)
+                    Call DoAcuchillar(UserIndex, NpcIndex, 0, Convert.ToInt16(daño))
                 End If
             End If
 
@@ -445,7 +445,7 @@ Module SistemaCombate
         'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
         Dim Obj_Renamed As ObjData
 
-        daño = RandomNumber(Npclist(NpcIndex).Stats.MinHIT, Npclist(NpcIndex).Stats.MaxHIT)
+        daño = Convert.ToInt16(RandomNumber(Npclist(NpcIndex).Stats.MinHIT, Npclist(NpcIndex).Stats.MaxHIT))
 
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj2, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim Obj2 As ObjData
@@ -453,30 +453,30 @@ Module SistemaCombate
             If .flags.Navegando = 1 And .Invent.BarcoObjIndex > 0 Then
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 Obj_Renamed = ObjData_Renamed(.Invent.BarcoObjIndex)
-                defbarco = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
+                defbarco = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
             End If
 
-            Lugar = RandomNumber(PartesCuerpo.bCabeza, PartesCuerpo.bTorso)
+            Lugar = Convert.ToInt16(RandomNumber(Convert.ToInt32(PartesCuerpo.bCabeza), Convert.ToInt32(PartesCuerpo.bTorso)))
 
             Select Case Lugar
-                Case PartesCuerpo.bCabeza
+                Case Convert.ToInt16(PartesCuerpo.bCabeza)
                     'Si tiene casco absorbe el golpe
                     If .Invent.CascoEqpObjIndex > 0 Then
                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         Obj_Renamed = ObjData_Renamed(.Invent.CascoEqpObjIndex)
-                        absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
+                        absorbido = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
                     End If
                 Case Else
                     'Si tiene armadura absorbe el golpe
                     If .Invent.ArmourEqpObjIndex > 0 Then
                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         Obj_Renamed = ObjData_Renamed(.Invent.ArmourEqpObjIndex)
-                        If .Invent.EscudoEqpObjIndex Then
+                        If .Invent.EscudoEqpObjIndex <> 0 Then
                             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                             Obj2 = ObjData_Renamed(.Invent.EscudoEqpObjIndex)
-                            absorbido = RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef, Obj_Renamed.MaxDef + Obj2.MaxDef)
+                            absorbido = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef, Obj_Renamed.MaxDef + Obj2.MaxDef))
                         Else
-                            absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
+                            absorbido = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
                         End If
                     End If
             End Select
@@ -488,7 +488,7 @@ Module SistemaCombate
             Call WriteMultiMessage(UserIndex, eMessages.NPCHitUser, Lugar, daño)
             'Call WriteNPCHitUser(UserIndex, Lugar, daño)
 
-            If .flags.Privilegios And PlayerType.User Then .Stats.MinHp = .Stats.MinHp - daño
+            If (.flags.Privilegios And PlayerType.User) <> 0 Then .Stats.MinHp = .Stats.MinHp - daño
 
             If .flags.Meditando Then
                 If _
@@ -643,7 +643,7 @@ Module SistemaCombate
             If .flags.Snd1 > 0 Then
                 Call _
                     SendData(SendTarget.ToNPCArea, NpcIndex,
-                             PrepareMessagePlayWave(.flags.Snd1, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(Convert.ToByte(.flags.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
             End If
         End With
 
@@ -651,7 +651,7 @@ Module SistemaCombate
             With UserList(UserIndex)
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(SND_IMPACTO, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(SND_IMPACTO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
 
                 If .flags.Meditando = False Then
                     If .flags.Navegando = 0 Then
@@ -693,7 +693,7 @@ Module SistemaCombate
         PoderEva = Npclist(Victima).PoderEvasion
 
         ' Chances are rounded
-        ProbExito = MaximoInt(10, MinimoInt(90, 50 + (PoderAtt - PoderEva)*0.4))
+        ProbExito = MaximoInt(10, MinimoInt(90, Convert.ToInt32(50 + (PoderAtt - PoderEva)*0.4)))
         NpcImpactoNpc = (RandomNumber(1, 100) <= ProbExito)
     End Function
 
@@ -707,7 +707,7 @@ Module SistemaCombate
         Dim daño As Short
 
         With Npclist(Atacante)
-            daño = RandomNumber(.Stats.MinHIT, .Stats.MaxHIT)
+            daño = Convert.ToInt16(RandomNumber(.Stats.MinHIT, .Stats.MaxHIT))
             Npclist(Victima).Stats.MinHp = Npclist(Victima).Stats.MinHp - daño
 
             If Npclist(Victima).Stats.MinHp < 1 Then
@@ -761,29 +761,29 @@ Module SistemaCombate
             If .flags.Snd1 > 0 Then
                 Call _
                     SendData(SendTarget.ToNPCArea, Atacante,
-                             PrepareMessagePlayWave(.flags.Snd1, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(Convert.ToByte(.flags.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
             End If
 
             If NpcImpactoNpc(Atacante, Victima) Then
                 If Npclist(Victima).flags.Snd2 > 0 Then
                     Call _
                         SendData(SendTarget.ToNPCArea, Victima,
-                                 PrepareMessagePlayWave(Npclist(Victima).flags.Snd2, Npclist(Victima).Pos.X,
-                                                        Npclist(Victima).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(Npclist(Victima).flags.Snd2), Convert.ToByte(Npclist(Victima).Pos.X),
+                                                        Convert.ToByte(Npclist(Victima).Pos.Y)))
                 Else
                     Call _
                         SendData(SendTarget.ToNPCArea, Victima,
-                                 PrepareMessagePlayWave(SND_IMPACTO2, Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y))
+                                 PrepareMessagePlayWave(SND_IMPACTO2, Convert.ToByte(Npclist(Victima).Pos.X), Convert.ToByte(Npclist(Victima).Pos.Y)))
                 End If
 
                 If .MaestroUser > 0 Then
                     Call _
                         SendData(SendTarget.ToNPCArea, Atacante,
-                                 PrepareMessagePlayWave(SND_IMPACTO, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(SND_IMPACTO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                 Else
                     Call _
                         SendData(SendTarget.ToNPCArea, Victima,
-                                 PrepareMessagePlayWave(SND_IMPACTO, Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y))
+                                 PrepareMessagePlayWave(SND_IMPACTO, Convert.ToByte(Npclist(Victima).Pos.X), Convert.ToByte(Npclist(Victima).Pos.Y)))
                 End If
 
                 Call NpcDañoNpc(Atacante, Victima)
@@ -791,11 +791,11 @@ Module SistemaCombate
                 If .MaestroUser > 0 Then
                     Call _
                         SendData(SendTarget.ToNPCArea, Atacante,
-                                 PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(SND_SWING, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                 Else
                     Call _
                         SendData(SendTarget.ToNPCArea, Victima,
-                                 PrepareMessagePlayWave(SND_SWING, Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y))
+                                 PrepareMessagePlayWave(SND_SWING, Convert.ToByte(Npclist(Victima).Pos.X), Convert.ToByte(Npclist(Victima).Pos.Y)))
                 End If
             End If
         End With
@@ -819,19 +819,19 @@ Module SistemaCombate
                 If Npclist(NpcIndex).flags.Snd2 > 0 Then
                     Call _
                         SendData(SendTarget.ToNPCArea, NpcIndex,
-                                 PrepareMessagePlayWave(Npclist(NpcIndex).flags.Snd2, Npclist(NpcIndex).Pos.X,
-                                                        Npclist(NpcIndex).Pos.Y))
+                                 PrepareMessagePlayWave(Convert.ToByte(Npclist(NpcIndex).flags.Snd2), Convert.ToByte(Npclist(NpcIndex).Pos.X),
+                                                        Convert.ToByte(Npclist(NpcIndex).Pos.Y)))
                 Else
                     Call _
                         SendData(SendTarget.ToPCArea, UserIndex,
-                                 PrepareMessagePlayWave(SND_IMPACTO2, Npclist(NpcIndex).Pos.X, Npclist(NpcIndex).Pos.Y))
+                                 PrepareMessagePlayWave(SND_IMPACTO2, Convert.ToByte(Npclist(NpcIndex).Pos.X), Convert.ToByte(Npclist(NpcIndex).Pos.Y)))
                 End If
 
                 Call UserDañoNpc(UserIndex, NpcIndex)
             Else
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(SND_SWING, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y))
+                             PrepareMessagePlayWave(SND_SWING, Convert.ToByte(UserList(UserIndex).Pos.X), Convert.ToByte(UserList(UserIndex).Pos.Y)))
                 Call WriteMultiMessage(UserIndex, eMessages.UserSwing)
             End If
 
@@ -871,7 +871,7 @@ Module SistemaCombate
         With UserList(UserIndex)
             'Quitamos stamina
             If .Stats.MinSta >= 10 Then
-                Call QuitarSta(UserIndex, RandomNumber(1, 10))
+                Call QuitarSta(UserIndex, Convert.ToInt16(RandomNumber(1, 10)))
             Else
                 If .Genero = eGenero.Hombre Then
                     Call _
@@ -895,7 +895,7 @@ Module SistemaCombate
                 AttackPos.Y > YMaxMapSize Then
                 Call _
                     SendData(SendTarget.ToPCArea, UserIndex,
-                             PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
+                             PrepareMessagePlayWave(SND_SWING, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                 Exit Sub
             End If
 
@@ -913,7 +913,7 @@ Module SistemaCombate
 
             'Look for NPC
             If Index > 0 Then
-                If Npclist(Index).Attackable Then
+                If Npclist(Index).Attackable <> 0 Then
                     If Npclist(Index).MaestroUser > 0 And MapInfo_Renamed(Npclist(Index).Pos.Map).Pk = False Then
                         Call _
                             WriteConsoleMsg(UserIndex, "No puedes atacar mascotas en zona segura.",
@@ -932,12 +932,12 @@ Module SistemaCombate
                 Exit Sub
             End If
 
-            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_SWING, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
             Call WriteUpdateUserStats(UserIndex)
 
-            If .Counters.Trabajando Then .Counters.Trabajando = .Counters.Trabajando - 1
+            If .Counters.Trabajando <> 0 Then .Counters.Trabajando = .Counters.Trabajando - 1
 
-            If .Counters.Ocultando Then .Counters.Ocultando = .Counters.Ocultando - 1
+            If .Counters.Ocultando <> 0 Then .Counters.Ocultando = .Counters.Ocultando - 1
         End With
     End Sub
 
@@ -992,11 +992,11 @@ Module SistemaCombate
             End If
 
             ' Chances are rounded
-            ProbExito = MaximoInt(10, MinimoInt(90, 50 + (PoderAtaque - UserPoderEvasion)*0.4))
+            ProbExito = MaximoInt(10, MinimoInt(90, Convert.ToInt32(50 + (PoderAtaque - UserPoderEvasion)*0.4)))
 
             ' Se reduce la evasion un 25%
             If UserList(VictimaIndex).flags.Meditando = True Then
-                ProbEvadir = (100 - ProbExito)*0.75
+                ProbEvadir = Convert.ToInt32((100 - ProbExito)*0.75)
                 ProbExito = MinimoInt(90, 100 - ProbEvadir)
             End If
 
@@ -1007,14 +1007,14 @@ Module SistemaCombate
                 'Fallo ???
                 If Not UsuarioImpacto Then
                     ' Chances are rounded
-                    ProbRechazo = MaximoInt(10, MinimoInt(90, 100*SkillDefensa/(SkillDefensa + SkillTacticas)))
+                    ProbRechazo = MaximoInt(10, MinimoInt(90, Convert.ToInt32(100*SkillDefensa/(SkillDefensa + SkillTacticas))))
                     Rechazo = (RandomNumber(1, 100) <= ProbRechazo)
                     If Rechazo Then
                         'Se rechazo el ataque con el escudo
                         Call _
                             SendData(SendTarget.ToPCArea, VictimaIndex,
-                                     PrepareMessagePlayWave(SND_ESCUDO, UserList(VictimaIndex).Pos.X,
-                                                            UserList(VictimaIndex).Pos.Y))
+                                     PrepareMessagePlayWave(SND_ESCUDO, Convert.ToByte(UserList(VictimaIndex).Pos.X),
+                                                            Convert.ToByte(UserList(VictimaIndex).Pos.Y)))
 
                         Call WriteMultiMessage(AtacanteIndex, eMessages.BlockedWithShieldother)
                         Call WriteMultiMessage(VictimaIndex, eMessages.BlockedWithShieldUser)
@@ -1074,7 +1074,7 @@ Module SistemaCombate
                 If UsuarioImpacto(AtacanteIndex, VictimaIndex) Then
                     Call _
                         SendData(SendTarget.ToPCArea, AtacanteIndex,
-                                 PrepareMessagePlayWave(SND_IMPACTO, .Pos.X, .Pos.Y))
+                                 PrepareMessagePlayWave(SND_IMPACTO, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
 
                     If UserList(VictimaIndex).flags.Navegando = 0 Then
                         Call _
@@ -1096,11 +1096,11 @@ Module SistemaCombate
                 Else
                     ' Invisible admins doesn't make sound to other clients except itself
                     If .flags.AdminInvisible = 1 Then
-                        Call EnviarDatosASlot(AtacanteIndex, PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
+                        Call EnviarDatosASlot(AtacanteIndex, PrepareMessagePlayWave(SND_SWING, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Else
                         Call _
                             SendData(SendTarget.ToPCArea, AtacanteIndex,
-                                     PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
+                                     PrepareMessagePlayWave(SND_SWING, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     End If
 
                     Call WriteMultiMessage(AtacanteIndex, eMessages.UserSwing)
@@ -1156,17 +1156,17 @@ Module SistemaCombate
                 If UserList(VictimaIndex).flags.Navegando = 1 And UserList(VictimaIndex).Invent.BarcoObjIndex > 0 Then
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.BarcoObjIndex)
-                    defbarco = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
+                    defbarco = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
                 End If
 
                 If .Invent.WeaponEqpObjIndex > 0 Then
                     Resist = ObjData_Renamed(.Invent.WeaponEqpObjIndex).Refuerzo
                 End If
 
-                Lugar = RandomNumber(PartesCuerpo.bCabeza, PartesCuerpo.bTorso)
+                Lugar = Convert.ToByte(RandomNumber(Convert.ToInt32(PartesCuerpo.bCabeza), Convert.ToInt32(PartesCuerpo.bTorso)))
 
                 Select Case Lugar
-                    Case PartesCuerpo.bCabeza
+                    Case Convert.ToByte(PartesCuerpo.bCabeza)
                         'Si tiene casco absorbe el golpe
                         If UserList(VictimaIndex).Invent.CascoEqpObjIndex > 0 Then
                             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -1182,7 +1182,7 @@ Module SistemaCombate
                         If UserList(VictimaIndex).Invent.ArmourEqpObjIndex > 0 Then
                             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                             Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.ArmourEqpObjIndex)
-                            If UserList(VictimaIndex).Invent.EscudoEqpObjIndex Then
+                            If UserList(VictimaIndex).Invent.EscudoEqpObjIndex <> 0 Then
                                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                 Obj2 = ObjData_Renamed(UserList(VictimaIndex).Invent.EscudoEqpObjIndex)
                                 absorbido = RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef,
@@ -1203,12 +1203,12 @@ Module SistemaCombate
                     WriteMultiMessage(VictimaIndex, eMessages.UserHittedByUser, .Char_Renamed.CharIndex, Lugar,
                                       daño)
 
-                UserList(VictimaIndex).Stats.MinHp = UserList(VictimaIndex).Stats.MinHp - daño
+                UserList(VictimaIndex).Stats.MinHp = Convert.ToInt16(UserList(VictimaIndex).Stats.MinHp - daño)
 
                 If .flags.Hambre = 0 And .flags.Sed = 0 Then
                     'Si usa un arma quizas suba "Combate con armas"
                     If .Invent.WeaponEqpObjIndex > 0 Then
-                        If ObjData_Renamed(.Invent.WeaponEqpObjIndex).proyectil Then
+                        If ObjData_Renamed(.Invent.WeaponEqpObjIndex).proyectil <> 0 Then
                             'es un Arco. Sube Armas a Distancia
                             Call SubirSkill(AtacanteIndex, eSkill.Proyectiles, True)
 
@@ -1216,7 +1216,7 @@ Module SistemaCombate
                             If ObjData_Renamed(.Invent.WeaponEqpObjIndex).Municion = 0 Then
                                 ' Si acuchilla
                                 If ObjData_Renamed(.Invent.WeaponEqpObjIndex).Acuchilla = 1 Then
-                                    Call DoAcuchillar(AtacanteIndex, 0, VictimaIndex, daño)
+                                    Call DoAcuchillar(AtacanteIndex, 0, VictimaIndex, Convert.ToInt16(daño))
                                 End If
                             End If
                         Else
@@ -1230,10 +1230,10 @@ Module SistemaCombate
 
                     'Trata de apuñalar por la espalda al enemigo
                     If PuedeApuñalar(AtacanteIndex) Then
-                        Call DoApuñalar(AtacanteIndex, 0, VictimaIndex, daño)
+                        Call DoApuñalar(AtacanteIndex, 0, VictimaIndex, Convert.ToInt16(daño))
                     End If
                     'e intenta dar un golpe crítico [Pablo (ToxicWaste)]
-                    Call DoGolpeCritico(AtacanteIndex, 0, VictimaIndex, daño)
+                    Call DoGolpeCritico(AtacanteIndex, 0, VictimaIndex, Convert.ToInt16(daño))
                 End If
 
                 If UserList(VictimaIndex).Stats.MinHp <= 0 Then
@@ -1331,7 +1331,7 @@ Module SistemaCombate
                     .BandidoRep = .BandidoRep + vlASALTO
                     If .BandidoRep > MAXREP Then .BandidoRep = MAXREP
 
-                    .NobleRep = .NobleRep*0.5
+                    .NobleRep = Convert.ToInt32(.NobleRep*0.5)
                     If .NobleRep < 0 Then .NobleRep = 0
                 Else
                     .NobleRep = .NobleRep + vlNoble
@@ -1583,7 +1583,7 @@ Module SistemaCombate
         End If
 
         'Sos consejero?
-        If UserList(AttackerIndex).flags.Privilegios And PlayerType.Consejero Then
+        If (UserList(AttackerIndex).flags.Privilegios And PlayerType.Consejero) <> 0 Then
             'No pueden atacar NPC los Consejeros.
             Exit Function
         End If
