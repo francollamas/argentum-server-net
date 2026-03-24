@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modBanco
     Sub IniciarDeposito(UserIndex As Short)
@@ -130,7 +130,7 @@ Module modBanco
                     .Invent.Object_Renamed(Slot).ObjIndex = obji And
                     .Invent.Object_Renamed(Slot).Amount + Cantidad <= MAX_INVENTORY_OBJS
 
-                Slot = Slot + 1
+                Slot = Convert.ToInt16(Slot + 1)
                 If Slot > .CurrentInventorySlots Then
                     Exit Do
                 End If
@@ -140,7 +140,7 @@ Module modBanco
             If Slot > .CurrentInventorySlots Then
                 Slot = 1
                 Do Until .Invent.Object_Renamed(Slot).ObjIndex = 0
-                    Slot = Slot + 1
+                    Slot = Convert.ToInt16(Slot + 1)
 
                     If Slot > .CurrentInventorySlots Then
                         Call _
@@ -149,7 +149,7 @@ Module modBanco
                         Exit Sub
                     End If
                 Loop
-                .Invent.NroItems = .Invent.NroItems + 1
+                .Invent.NroItems = Convert.ToInt16(.Invent.NroItems + 1)
             End If
 
 
@@ -183,7 +183,7 @@ Module modBanco
             .BancoInvent.Object_Renamed(Slot).Amount = .BancoInvent.Object_Renamed(Slot).Amount - Cantidad
 
             If .BancoInvent.Object_Renamed(Slot).Amount <= 0 Then
-                .BancoInvent.NroItems = .BancoInvent.NroItems - 1
+                .BancoInvent.NroItems = Convert.ToInt16(.BancoInvent.NroItems - 1)
                 .BancoInvent.Object_Renamed(Slot).ObjIndex = 0
                 .BancoInvent.Object_Renamed(Slot).Amount = 0
             End If
@@ -252,7 +252,7 @@ Module modBanco
                 Until _
                     .BancoInvent.Object_Renamed(Slot).ObjIndex = obji And
                     .BancoInvent.Object_Renamed(Slot).Amount + Cantidad <= MAX_INVENTORY_OBJS
-                Slot = Slot + 1
+                Slot = Convert.ToInt16(Slot + 1)
 
                 If Slot > MAX_BANCOINVENTORY_SLOTS Then
                     Exit Do
@@ -263,7 +263,7 @@ Module modBanco
             If Slot > MAX_BANCOINVENTORY_SLOTS Then
                 Slot = 1
                 Do Until .BancoInvent.Object_Renamed(Slot).ObjIndex = 0
-                    Slot = Slot + 1
+                    Slot = Convert.ToInt16(Slot + 1)
 
                     If Slot > MAX_BANCOINVENTORY_SLOTS Then
                         Call _
@@ -273,7 +273,7 @@ Module modBanco
                     End If
                 Loop
 
-                .BancoInvent.NroItems = .BancoInvent.NroItems + 1
+                .BancoInvent.NroItems = Convert.ToInt16(.BancoInvent.NroItems + 1)
             End If
 
             If Slot <= MAX_BANCOINVENTORY_SLOTS Then 'Slot valido

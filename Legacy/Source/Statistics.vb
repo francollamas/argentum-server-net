@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Statistics
     '**************************************************************
@@ -63,7 +63,7 @@ Module Statistics
         trainningInfo(UserIndex).trainningTime = Convert.ToInt32(ParseVal(GetVar(CharPath & UserList(UserIndex).name.ToUpper() & ".chr",
                                                             "RESEARCH", "TrainningTime", 30)))
 
-        trainningInfo(UserIndex).startTick = GetTickCount()
+        trainningInfo(UserIndex).startTick = Convert.ToInt32(GetTickCount())
     End Sub
 
     Public Sub UserDisconnected(UserIndex As Short)
@@ -75,9 +75,9 @@ Module Statistics
 
         With trainningInfo(UserIndex)
             'Update trainning time
-            .trainningTime = .trainningTime + (GetTickCount() - .startTick)/1000
+            .trainningTime = Convert.ToInt32(.trainningTime + (GetTickCount() - .startTick)/1000)
 
-            .startTick = GetTickCount()
+            .startTick = Convert.ToInt32(GetTickCount())
 
             'Store info in char file
             Call _
@@ -101,7 +101,7 @@ Module Statistics
 
             'Reset data
             .trainningTime = 0
-            .startTick = GetTickCount()
+            .startTick = Convert.ToInt32(GetTickCount())
         End With
     End Sub
 
@@ -164,9 +164,9 @@ Module Statistics
                 Exit Sub
         End Select
 
-        If UserList(killer).Faccion.ArmadaReal Then
+        If UserList(killer).Faccion.ArmadaReal <> 0 Then
             alignment = 1
-        ElseIf UserList(killer).Faccion.FuerzasCaos Then
+        ElseIf UserList(killer).Faccion.FuerzasCaos <> 0 Then
             alignment = 2
         ElseIf criminal(killer) Then
             alignment = 3
@@ -520,7 +520,7 @@ Module Statistics
         Dim key As Short
 
         For i = 1 To S.Length
-            key = Asc(S.Substring(i - 1, 1))
+            key = Convert.ToInt16(Asc(S.Substring(i - 1, 1)))
 
             keyOcurrencies(key) = keyOcurrencies(key) + 1
         Next i

@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class ConsultasPopulares
     Private Const ARCHIVOMAILS As String = "logs/votaron.dat"
@@ -34,19 +34,19 @@ Friend Class ConsultasPopulares
         Dim CantOpciones As Short
         Dim i As Short
 
-        pEncuestaActualNum = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
+        pEncuestaActualNum = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual")))
         pEncuestaActualTex = GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActualTexto")
         pNivelRequerido = Convert.ToInt16(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
 
         If pEncuestaActualNum > 0 Then
             'cargo todas las opciones
-            CantOpciones = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                      "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES"))
+            CantOpciones = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                      "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES")))
             'UPGRADE_WARNING: El límite inferior de la matriz pOpciones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim pOpciones(CantOpciones)
             For i = 1 To CantOpciones
-                pOpciones(i) = ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                          "ENCUESTA" & pEncuestaActualNum, "OPCION" & i))
+                pOpciones(i) = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                          "ENCUESTA" & pEncuestaActualNum, "OPCION" & i)))
             Next i
         End If
     End Sub
@@ -74,9 +74,9 @@ Friend Class ConsultasPopulares
                     If Not YaVoto Then
                         If Not MailYaVoto(UserList(UserIndex).email) Then
                             'pj apto para votar
-                            sufragio = Convert.ToInt32(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                                       "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
-                            sufragio = sufragio + 1
+                        sufragio = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                                   "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
+                            sufragio = Convert.ToInt16(sufragio + 1)
                             Call _
                                 WriteVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                          "RESULTADOS" & pEncuestaActualNum, "V" & opcion, Str(sufragio))
@@ -112,7 +112,7 @@ Friend Class ConsultasPopulares
                             FontTypeNames.FONTTYPE_GUILD)
         Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, FontTypeNames.FONTTYPE_GUILD)
         Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", FontTypeNames.FONTTYPE_GUILDMSG)
-        For i = 1 To pOpciones.Length - 1
+        For i = 1 To Convert.ToInt16(pOpciones.Length - 1)
             Call _
                 WriteConsoleMsg(UserIndex,
                                 "(Opcion " & i & "): " &

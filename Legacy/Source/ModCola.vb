@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class cCola
     '                    Metodos publicos
@@ -20,14 +20,14 @@ Friend Class cCola
 
     Private Const FRENTE As Short = 0
 
-    Private Cola As List(Of Integer)
+    Private Cola As List(Of String)
 
     'UPGRADE_NOTE: Reset se actualizó a Reset_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Public Sub Reset_Renamed()
         Try
 
             Dim i As Short
-            For i = 0 To Me.Longitud - 1
+            For i = 0 To Convert.ToInt16(Me.Longitud - 1)
                 Cola.RemoveAt(FRENTE)
             Next i
 
@@ -38,7 +38,7 @@ Friend Class cCola
 
     Public ReadOnly Property Longitud As Short
         Get
-            Longitud = Cola.Count()
+            Longitud = Convert.ToInt16(Cola.Count())
         End Get
     End Property
 
@@ -48,7 +48,7 @@ Friend Class cCola
 
     'UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
     Private Sub Class_Initialize_Renamed()
-        Cola = New List(Of Integer)
+        Cola = New List(Of String)
     End Sub
 
     Public Sub New()
@@ -96,7 +96,7 @@ Friend Class cCola
             If Cola.Count() > 0 Then
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Cola(). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 Pop = Cola.Item(FRENTE)
-                Call Cola.Remove(FRENTE)
+                Call Cola.RemoveAt(FRENTE)
             Else
                 Pop = "0"
             End If
@@ -131,7 +131,7 @@ Friend Class cCola
             Dim NombreEnMayusculas As String
             NombreEnMayusculas = Nombre.ToUpper()
 
-            For i = 0 To Me.Longitud - 1
+            For i = 0 To Convert.ToInt16(Me.Longitud - 1)
                 'Pablo
                 V = Me.VerElemento(i).Substring(9)
                 '/Pablo
@@ -156,13 +156,13 @@ Friend Class cCola
 
             NombreEnMayusculas = Nombre.ToUpper()
 
-            For i = 0 To Me.Longitud - 1
+            For i = 0 To Convert.ToInt16(Me.Longitud - 1)
                 'Pablo
                 V = Me.VerElemento(i).Substring(9)
                 '/Pablo
                 'V = Me.VerElemento(i)
                 If V = NombreEnMayusculas Then
-                    Call Cola.Remove(i)
+                    Call Cola.RemoveAt(i)
                     Exit Sub
                 End If
             Next i
@@ -174,7 +174,7 @@ Friend Class cCola
 
     Public Sub QuitarIndex(index As Short)
         Try
-            If IndexValido(index) Then Call Cola.Remove(index)
+            If IndexValido(index) Then Call Cola.RemoveAt(index)
 
         Catch ex As Exception
             Console.WriteLine("Error in QuitarIndex: " & ex.Message)
