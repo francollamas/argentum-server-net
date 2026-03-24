@@ -145,8 +145,8 @@ Module Admin
 
             Next loopX
 
-            If FileExist(DatPath & "/bkNpc.dat") Then Kill((DatPath & "bkNpc.dat"))
-            'If FileExist(DatPath & "/bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
+            If System.IO.File.Exists(DatPath & "/bkNpc.dat") Then Kill((DatPath & "bkNpc.dat"))
+            'If System.IO.File.Exists(DatPath & "/bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
 
             For loopX = 1 To LastNPC
                 If Npclist(loopX).flags.BackUp = 1 Then
@@ -233,7 +233,7 @@ Module Admin
         '***************************************************
 
         Try
-            If FileExist(CharPath & UserName.ToUpper() & ".chr") Then
+            If System.IO.File.Exists(CharPath & UserName.ToUpper() & ".chr") Then
                 Kill(CharPath & UserName.ToUpper() & ".chr")
             End If
 
@@ -260,7 +260,7 @@ Module Admin
         '
         '***************************************************
 
-        PersonajeExiste = FileExist(CharPath & name.ToUpper() & ".chr")
+        PersonajeExiste = System.IO.File.Exists(CharPath & name.ToUpper() & ".chr")
     End Function
 
     Public Function UnBan(name As String) As Boolean
@@ -476,7 +476,7 @@ Module Admin
                 Call _
                     WriteConsoleMsg(bannerUserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_TALK)
 
-                If FileExist(CharPath & UserName & ".chr") Then
+                If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                     userPriv = UserDarPrivilegioLevel(UserName)
 
                     If (userPriv And rank) > (.flags.Privilegios And rank) Then

@@ -215,7 +215,7 @@ Module TCP
             End If
 
             '¿Existe el personaje?
-            If FileExist(CharPath & name.ToUpper() & ".chr") = True Then
+            If System.IO.File.Exists(CharPath & name.ToUpper() & ".chr") = True Then
                 Call WriteErrorMsg(UserIndex, "Ya existe el personaje.")
                 Exit Sub
             End If
@@ -703,7 +703,7 @@ Module TCP
             End If
 
             '¿Existe el personaje?
-            If Not FileExist(CharPath & name.ToUpper() & ".chr") Then
+            If Not System.IO.File.Exists(CharPath & name.ToUpper() & ".chr") Then
                 Call WriteErrorMsg(UserIndex, "El personaje no existe.")
                 Call FlushBuffer(UserIndex)
                 Call CloseSocket(UserIndex)

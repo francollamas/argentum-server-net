@@ -385,20 +385,6 @@ Public Module General
         End Try
     End Sub
 
-    Function FileExist(file As String) As Boolean
-        '*****************************************************************
-        'Se fija si existe el archivo
-        '*****************************************************************
-
-        Try
-            'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            FileExist = (Dir(file) <> "")
-
-        Catch ex As Exception
-            Console.WriteLine("Error in FileExist: " & ex.Message)
-        End Try
-    End Function
-
     Function ReadField(Pos As Short, ByRef Text As String, SepASCII As Byte) As String
         '*****************************************************************
         'Gets a field from a string

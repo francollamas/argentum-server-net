@@ -56,7 +56,7 @@ Module modForum
 
             .ID = sForoID
 
-            If FileExist(ForumPath) Then
+            If System.IO.File.Exists(ForumPath) Then
                 .CantPosts = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
                 .CantAnuncios = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
 
@@ -221,7 +221,7 @@ Module modForum
 
             ' Elimino todo
             ForumPath = AppDomain.CurrentDomain.BaseDirectory & "Foros/" & .ID & ".for"
-            If FileExist(ForumPath) Then
+            If System.IO.File.Exists(ForumPath) Then
 
                 NumPost = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
 

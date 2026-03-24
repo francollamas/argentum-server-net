@@ -298,7 +298,7 @@ Friend Class clsClan
         Dim ruta As String
 
         ruta = CharPath & Nombre & ".chr"
-        If FileExist(ruta) Then
+        If System.IO.File.Exists(ruta) Then
             Call WriteVar(ruta, "GUILD", "GUILDINDEX", p_GuildNumber.ToString())
             Call WriteVar(ruta, "GUILD", "AspiranteA", "0")
             'CantPs = GetVar(CharPath & Nombre & ".chr", "GUILD", "ClanesParticipo")
@@ -326,8 +326,7 @@ Friend Class clsClan
         Dim EsMiembro As Boolean
         Dim MiembroDe As String
 
-        'UPGRADE_WARNING: Dir tiene un nuevo comportamiento. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If migr_LenB(Dir(CharPath & Nombre & ".chr")) <> 0 Then
+        If System.IO.File.Exists(CharPath & Nombre & ".chr") Then
             OldQ = Convert.ToInt16(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
             i = 1
             Nombre = Nombre.ToUpper()

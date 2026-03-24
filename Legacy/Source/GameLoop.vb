@@ -555,18 +555,18 @@ Module GameLoop
 
     Private Sub TickKillLog()
         Try
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log")
-            If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
-                If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
+            If Not System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
+                If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
                     Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
             End If
 

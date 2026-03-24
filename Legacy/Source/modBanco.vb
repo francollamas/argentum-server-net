@@ -339,7 +339,7 @@ Module modBanco
 
             CharFile = CharPath & charName & ".chr"
 
-            If FileExist(CharFile) Then
+            If System.IO.File.Exists(CharFile) Then
                 Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,

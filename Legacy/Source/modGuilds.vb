@@ -222,7 +222,7 @@ Module modGuilds
                                 UserList(UserIndex).Faccion.Reenlistadas = UserList(UserIndex).Faccion.Reenlistadas - 1
                             End If
                         Else
-                            If FileExist(CharPath & MemberName & ".chr") Then
+                            If System.IO.File.Exists(CharPath & MemberName & ".chr") Then
                                 Call WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "EjercitoCaos", (0).ToString())
                                 Call WriteVar(CharPath & MemberName & ".chr", "FACCIONES", "EjercitoReal", (0).ToString())
                                 Reenlistadas = Convert.ToInt16(GetVar(CharPath & MemberName & ".chr", "FACCIONES", "Reenlistadas"))
@@ -665,7 +665,7 @@ Module modGuilds
             Personaje = Personaje.Replace(".", vbNullString)
         End If
 
-        If FileExist(CharPath & Personaje & ".chr") Then
+        If System.IO.File.Exists(CharPath & Personaje & ".chr") Then
             Promedio = Convert.ToInt32(GetVar(CharPath & Personaje & ".chr", "REP", "Promedio"))
             Select Case guilds(GuildIndex).Alineacion
                 Case ALINEACION_GUILD.ALINEACION_ARMADA
@@ -1853,7 +1853,7 @@ Module modGuilds
             Console.WriteLine("Error in GetGuildIndexFromChar: " & ex.Message)
             'UPGRADE_NOTE: El objeto UserFile no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
             UserFile = Nothing
-            If Not (FileExist(CharPath & Personaje & ".chr")) Then
+            If Not (System.IO.File.Exists(CharPath & Personaje & ".chr")) Then
                 Call _
                     LogError(
                         "El usuario " & UserList(UserIndex).name & " (" & UserIndex &

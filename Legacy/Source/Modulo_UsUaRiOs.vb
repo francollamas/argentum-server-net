@@ -1082,7 +1082,7 @@ Module UsUaRiOs
         BanDetailPath = AppDomain.CurrentDomain.BaseDirectory & "logs/" & "BanDetail.dat"
         CharFile = CharPath & charName & ".chr"
 
-        If FileExist(CharFile) Then
+        If System.IO.File.Exists(CharFile) Then
             Call WriteConsoleMsg(sendIndex, "Pj: " & charName, FontTypeNames.FONTTYPE_INFO)
             Call _
                 WriteConsoleMsg(sendIndex,
@@ -1220,7 +1220,7 @@ Module UsUaRiOs
 
             CharFile = CharPath & charName & ".chr"
 
-            If FileExist(CharFile) Then
+            If System.IO.File.Exists(CharFile) Then
                 Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex, "Tiene " & GetVar(CharFile, "Inventory", "CantidadItems") & " objetos.",
@@ -2152,7 +2152,7 @@ Module UsUaRiOs
         If UserList(UserIndexDestino).flags.UserLogged = False Then Exit Sub
         ViejoNick = UserList(UserIndexDestino).name
 
-        If FileExist(CharPath & ViejoNick & ".chr") Then
+        If System.IO.File.Exists(CharPath & ViejoNick & ".chr") Then
             'hace un backup del char
             ViejoCharBackup = CharPath & ViejoNick & ".chr.old-"
             Rename(CharPath & ViejoNick & ".chr", ViejoCharBackup)
@@ -2168,7 +2168,7 @@ Module UsUaRiOs
 
         Dim TempSecs As Integer
         Dim tempStr As String
-        If FileExist(CharPath & Nombre & ".chr") = False Then
+        If System.IO.File.Exists(CharPath & Nombre & ".chr") = False Then
             Call WriteConsoleMsg(sendIndex, "Pj Inexistente", FontTypeNames.FONTTYPE_INFO)
         Else
             Call WriteConsoleMsg(sendIndex, "Estadísticas de: " & Nombre, FontTypeNames.FONTTYPE_INFO)
@@ -2220,7 +2220,7 @@ Module UsUaRiOs
         Try
             CharFile = CharPath & charName & ".chr"
 
-            If FileExist(CharFile) Then
+            If System.IO.File.Exists(CharFile) Then
                 Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex, "Tiene " & GetVar(CharFile, "STATS", "BANCO") & " en el banco.",

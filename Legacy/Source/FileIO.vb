@@ -1190,7 +1190,7 @@ Module ES
                                "BackUp")) <> 0 Then
                     tFileName = AppDomain.CurrentDomain.BaseDirectory & "WorldBackUp/Mapa" & Map
 
-                    If Not FileExist(tFileName & ".*") Then _
+                    If Not System.IO.File.Exists(tFileName & ".*") Then _
 'Miramos que exista al menos uno de los 3 archivos, sino lo cargamos de la carpeta de los mapas
                         tFileName = AppDomain.CurrentDomain.BaseDirectory & MapPath & "Mapa" & Map
                     End If
@@ -1571,7 +1571,7 @@ Module ES
                     .flags.Ignorado = False
                 End If
 
-                If FileExist(UserFile) Then
+                If System.IO.File.Exists(UserFile) Then
                     If .flags.Muerto = 1 Then
                         OldUserHead = .Char_Renamed.Head
                         .Char_Renamed.Head = Convert.ToInt16(GetVar(UserFile, "INIT", "Head"))

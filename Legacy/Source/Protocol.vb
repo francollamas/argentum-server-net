@@ -6950,7 +6950,7 @@ Module Protocol
                             WriteConsoleMsg(UserIndex, "No puedes ver las penas de los administradores.",
                                             FontTypeNames.FONTTYPE_INFO)
                     Else
-                        If FileExist(CharPath & name & ".chr") Then
+                        If System.IO.File.Exists(CharPath & name & ".chr") Then
                             Count = ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
                             If Count = 0 Then
                                 Call WriteConsoleMsg(UserIndex, "Sin prontuario..", FontTypeNames.FONTTYPE_INFO)
@@ -7768,7 +7768,7 @@ Module Protocol
                         guild = guild.Replace("/", "")
                     End If
 
-                    If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
+                    If Not System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
                         Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
                     Else
                         memberCount =
@@ -8892,7 +8892,7 @@ Module Protocol
                                     UserName = UserName.Replace("/", "")
                                 End If
 
-                                If FileExist(CharPath & UserName & ".chr") Then
+                                If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                                     Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                                     Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                                     Call _
@@ -9022,7 +9022,7 @@ Module Protocol
                                 UserName = UserName.Replace("/", "")
                             End If
 
-                            If FileExist(CharPath & UserName & ".chr") Then
+                            If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                                 Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
                                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                                 Call _
@@ -9137,7 +9137,7 @@ Module Protocol
 
                 If valido Then
                     UserCharPath = CharPath & UserName & ".chr"
-                    If tUser <= 0 And Not FileExist(UserCharPath) Then
+                    If tUser <= 0 And Not System.IO.File.Exists(UserCharPath) Then
                         Call _
                             WriteConsoleMsg(UserIndex, "Estás intentando editar un usuario inexistente.",
                                             FontTypeNames.FONTTYPE_INFO)
@@ -10365,7 +10365,7 @@ Module Protocol
                         UserName = UserName.Replace("/", "")
                     End If
 
-                    If Not FileExist(CharPath & UserName & ".chr") Then
+                    If Not System.IO.File.Exists(CharPath & UserName & ".chr") Then
                         Call WriteConsoleMsg(UserIndex, "Charfile inexistente (no use +).", FontTypeNames.FONTTYPE_INFO)
                     Else
                         If (ParseVal(GetVar(CharPath & UserName & ".chr", "FLAGS", "Ban")) = 1) Then
@@ -11789,7 +11789,7 @@ Module Protocol
                     (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
-                        If FileExist(CharPath & UserName & ".chr") Then
+                        If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "Usuario offline, echando de los consejos.",
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -12016,7 +12016,7 @@ Module Protocol
                     (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
                     tFile = AppDomain.CurrentDomain.BaseDirectory & "guilds/" & GuildName & "-members.mem"
 
-                    If Not FileExist(tFile) Then
+                    If Not System.IO.File.Exists(tFile) Then
                         Call WriteConsoleMsg(UserIndex, "No existe el clan: " & GuildName, FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call _
@@ -12345,7 +12345,7 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_FIGHT)
                         Call FlushBuffer(tUser)
                     Else
-                        If FileExist(CharPath & UserName & ".chr") Then
+                        If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoCaos", (0).ToString())
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", (200).ToString())
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
@@ -12425,7 +12425,7 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_FIGHT)
                         Call FlushBuffer(tUser)
                     Else
-                        If FileExist(CharPath & UserName & ".chr") Then
+                        If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "EjercitoReal", (0).ToString())
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Reenlistadas", (200).ToString())
                             Call WriteVar(CharPath & UserName & ".chr", "FACCIONES", "Extra", "Expulsado por " & .name)
@@ -12566,7 +12566,7 @@ Module Protocol
                             UserName = UserName.Replace("/", "")
                         End If
 
-                        If FileExist(CharPath & UserName & ".chr") Then
+                        If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                             Call _
                                 LogGM(.name,
                                       " borro la pena: " & punishment & "-" &
@@ -12751,7 +12751,7 @@ Module Protocol
                     If validCheck Then
                         Call LogGM(.name, "/LASTIP " & UserName)
 
-                        If FileExist(CharPath & UserName & ".chr") Then
+                        If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                             lista = "Las ultimas IPs con las que " & UserName & " se conectó son:"
                             For LoopC = 1 To 5
                                 lista = lista & vbCrLf & LoopC & " - " &
@@ -13805,7 +13805,7 @@ Module Protocol
                                 WriteConsoleMsg(UserIndex, "El Pj está online, debe salir para hacer el cambio.",
                                                 FontTypeNames.FONTTYPE_WARNING)
                         Else
-                            If Not FileExist(CharPath & UserName & ".chr") Then
+                            If Not System.IO.File.Exists(CharPath & UserName & ".chr") Then
                                 Call _
                                     WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.",
                                                     FontTypeNames.FONTTYPE_INFO)
@@ -13819,7 +13819,7 @@ Module Protocol
                                                         " pertenece a un clan, debe salir del mismo con /salirclan para ser transferido.",
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
-                                    If Not FileExist(CharPath & newName & ".chr") Then
+                                    If Not System.IO.File.Exists(CharPath & newName & ".chr") Then
                                         Call FileCopy(CharPath & UserName & ".chr", CharPath & newName.ToUpper() & ".chr")
 
                                         Call _
@@ -13901,7 +13901,7 @@ Module Protocol
                     If migr_LenB(UserName) = 0 Or migr_LenB(newMail) = 0 Then
                         Call WriteConsoleMsg(UserIndex, "usar /AEMAIL <pj>-<nuevomail>", FontTypeNames.FONTTYPE_INFO)
                     Else
-                        If Not FileExist(CharPath & UserName & ".chr") Then
+                        If Not System.IO.File.Exists(CharPath & UserName & ".chr") Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "No existe el charfile " & UserName & ".chr",
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -13968,7 +13968,7 @@ Module Protocol
                             WriteConsoleMsg(UserIndex, "usar /APASS <pjsinpass>@<pjconpass>",
                                             FontTypeNames.FONTTYPE_INFO)
                     Else
-                        If Not FileExist(CharPath & UserName & ".chr") Or Not FileExist(CharPath & copyFrom & ".chr") _
+                        If Not System.IO.File.Exists(CharPath & UserName & ".chr") Or Not System.IO.File.Exists(CharPath & copyFrom & ".chr") _
                             Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "Alguno de los PJs no existe " & UserName & "@" & copyFrom,
@@ -14349,7 +14349,7 @@ Module Protocol
                     Else
                         Char_Renamed = CharPath & UserName & ".chr"
 
-                        If FileExist(Char_Renamed) Then
+                        If System.IO.File.Exists(Char_Renamed) Then
                             Call WriteVar(Char_Renamed, "FACCIONES", "EjercitoReal", (0).ToString())
                             Call WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", (0).ToString())
                             Call WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", (0).ToString())
@@ -14477,7 +14477,7 @@ Module Protocol
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
                     (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
-                    If FileExist(CharPath & UserName & ".chr") Then
+                    If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                         mail = GetVar(CharPath & UserName & ".chr", "CONTACTO", "email")
 
                         Call _
