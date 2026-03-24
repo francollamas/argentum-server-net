@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modForum
     Public Const MAX_MENSAJES_FORO As Byte = 30
@@ -44,7 +44,7 @@ Module modForum
         Dim PostIndex As Short
         Dim FileIndex As Short
 
-        NumForos = NumForos + 1
+        NumForos = Convert.ToInt16(NumForos + 1)
         'UPGRADE_WARNING: Es posible que la matriz Foros necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
         'UPGRADE_WARNING: El límite inferior de la matriz Foros ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve Foros(NumForos)
@@ -57,8 +57,8 @@ Module modForum
             .ID = sForoID
 
             If System.IO.File.Exists(ForumPath) Then
-                .CantPosts = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
-                .CantAnuncios = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
+                .CantPosts = Convert.ToByte(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
+                .CantAnuncios = Convert.ToByte(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
 
                 ' Cargo posts
                 For PostIndex = 1 To .CantPosts
@@ -120,7 +120,7 @@ Module modForum
         With Foros(ForumIndex)
 
             If bAnuncio Then
-                If .CantAnuncios < MAX_ANUNCIOS_FORO Then .CantAnuncios = .CantAnuncios + 1
+                If .CantAnuncios < MAX_ANUNCIOS_FORO Then .CantAnuncios = Convert.ToByte(.CantAnuncios + 1)
 
                 Call MoveArray(ForumIndex, bAnuncio)
 
@@ -132,7 +132,7 @@ Module modForum
                 End With
 
             Else
-                If .CantPosts < MAX_MENSAJES_FORO Then .CantPosts = .CantPosts + 1
+                If .CantPosts < MAX_MENSAJES_FORO Then .CantPosts = Convert.ToByte(.CantPosts + 1)
 
                 Call MoveArray(ForumIndex, bAnuncio)
 
@@ -223,7 +223,7 @@ Module modForum
             ForumPath = AppDomain.CurrentDomain.BaseDirectory & "Foros/" & .ID & ".for"
             If System.IO.File.Exists(ForumPath) Then
 
-                NumPost = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
+                NumPost = Convert.ToInt16(ParseVal(GetVar(ForumPath, "INFO", "CantMSG")))
 
                 ' Elimino los post viejos
                 For PostIndex = 1 To NumPost
@@ -231,7 +231,7 @@ Module modForum
                 Next PostIndex
 
 
-                NumPost = Convert.ToInt32(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
+                NumPost = Convert.ToInt16(ParseVal(GetVar(ForumPath, "INFO", "CantAnuncios")))
 
                 ' Elimino los post viejos
                 For PostIndex = 1 To NumPost
@@ -267,7 +267,7 @@ Module modForum
                 For PostIndex = 1 To .CantPosts
                     With .vsPost(PostIndex)
                         Call _
-                            WriteAddForumMsg(UserIndex, eForumMsgType.ieGeneral, .sTitulo, .Autor, .sPost)
+                            WriteAddForumMsg(UserIndex, CType(eForumMsgType.ieGeneral, eForumType), .sTitulo, .Autor, .sPost)
                     End With
                 Next PostIndex
 
@@ -275,7 +275,7 @@ Module modForum
                 For PostIndex = 1 To .CantAnuncios
                     With .vsAnuncio(PostIndex)
                         Call _
-                            WriteAddForumMsg(UserIndex, eForumMsgType.ieGENERAL_STICKY, .sTitulo, .Autor,
+                            WriteAddForumMsg(UserIndex, CType(eForumMsgType.ieGENERAL_STICKY, eForumType), .sTitulo, .Autor,
                                              .sPost)
                     End With
                 Next PostIndex
@@ -296,7 +296,7 @@ Module modForum
 
                         With .vsPost(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, eForumMsgType.ieCAOS, .sTitulo, .Autor, .sPost)
+                                WriteAddForumMsg(UserIndex, CType(eForumMsgType.ieCAOS, eForumType), .sTitulo, .Autor, .sPost)
                         End With
 
                     Next PostIndex
@@ -305,7 +305,7 @@ Module modForum
                     For PostIndex = 1 To .CantAnuncios
                         With .vsAnuncio(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, eForumMsgType.ieCAOS_STICKY, .sTitulo, .Autor,
+                                WriteAddForumMsg(UserIndex, CType(eForumMsgType.ieCAOS_STICKY, eForumType), .sTitulo, .Autor,
                                                  .sPost)
                         End With
                     Next PostIndex
@@ -325,7 +325,7 @@ Module modForum
 
                         With .vsPost(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, eForumMsgType.ieREAL, .sTitulo, .Autor, .sPost)
+                                WriteAddForumMsg(UserIndex, CType(eForumMsgType.ieREAL, eForumType), .sTitulo, .Autor, .sPost)
                         End With
 
                     Next PostIndex
@@ -334,7 +334,7 @@ Module modForum
                     For PostIndex = 1 To .CantAnuncios
                         With .vsAnuncio(PostIndex)
                             Call _
-                                WriteAddForumMsg(UserIndex, eForumMsgType.ieREAL_STICKY, .sTitulo, .Autor,
+                                WriteAddForumMsg(UserIndex, CType(eForumMsgType.ieREAL_STICKY, eForumType), .sTitulo, .Autor,
                                                  .sPost)
                         End With
                     Next PostIndex
@@ -373,13 +373,13 @@ Module modForum
         '***************************************************
         Select Case yForumType
             Case eForumMsgType.ieCAOS, eForumMsgType.ieCAOS_STICKY
-                ForumAlignment = eForumType.ieCAOS
+                ForumAlignment = Convert.ToByte(eForumType.ieCAOS)
 
             Case eForumMsgType.ieGeneral, eForumMsgType.ieGENERAL_STICKY
-                ForumAlignment = eForumType.ieGeneral
+                ForumAlignment = Convert.ToByte(eForumType.ieGeneral)
 
             Case eForumMsgType.ieREAL, eForumMsgType.ieREAL_STICKY
-                ForumAlignment = eForumType.ieREAL
+                ForumAlignment = Convert.ToByte(eForumType.ieREAL)
 
         End Select
     End Function
