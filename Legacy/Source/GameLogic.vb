@@ -101,7 +101,7 @@ Module Extra
                         DestPos.Map = .TileExit.Map
 
                         '¿Es mapa de newbies?
-                        If UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "NEWBIE" Then
+                        If MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "NEWBIE" Then
                             '¿El usuario es un newbie?
                             If EsNewbie(UserIndex) Or EsGM(UserIndex) Then
                                 If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
@@ -122,7 +122,7 @@ Module Extra
                                     Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, False)
                                 End If
                             End If
-                        ElseIf UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "ARMADA" Then '¿Es mapa de Armadas?
+                        ElseIf MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "ARMADA" Then '¿Es mapa de Armadas?
                             '¿El usuario es Armada?
                             If esArmada(UserIndex) Or EsGM(UserIndex) Then
                                 If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
@@ -143,7 +143,7 @@ Module Extra
                                     Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag)
                                 End If
                             End If
-                        ElseIf UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "CAOS" Then '¿Es mapa de Caos?
+                        ElseIf MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "CAOS" Then '¿Es mapa de Caos?
                             '¿El usuario es Caos?
                             If esCaos(UserIndex) Or EsGM(UserIndex) Then
                                 If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
@@ -164,7 +164,7 @@ Module Extra
                                     Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag)
                                 End If
                             End If
-                        ElseIf UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "FACCION" Then _
+                        ElseIf MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "FACCION" Then _
                             '¿Es mapa de faccionarios?
                             '¿El usuario es Armada o Caos?
                             If esArmada(UserIndex) Or esCaos(UserIndex) Or EsGM(UserIndex) Then

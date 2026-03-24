@@ -233,8 +233,8 @@ Module Admin
         '***************************************************
 
         Try
-            If FileExist(CharPath & UCase(UserName) & ".chr") Then
-                Kill(CharPath & UCase(UserName) & ".chr")
+            If FileExist(CharPath & UserName.ToUpper() & ".chr") Then
+                Kill(CharPath & UserName.ToUpper() & ".chr")
             End If
 
         Catch ex As Exception
@@ -260,7 +260,7 @@ Module Admin
         '
         '***************************************************
 
-        PersonajeExiste = FileExist(CharPath & UCase(name) & ".chr")
+        PersonajeExiste = FileExist(CharPath & name.ToUpper() & ".chr")
     End Function
 
     Public Function UnBan(name As String) As Boolean
@@ -531,7 +531,7 @@ Module Admin
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                                         LCase(.name) & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
+                                         .name.ToLower() & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
 
                             If (userPriv And rank) = (.flags.Privilegios And rank) Then
                                 .flags.Ban = 1
@@ -586,7 +586,7 @@ Module Admin
                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
                 Call _
                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                             LCase(.name) & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
+                             .name.ToLower() & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
 
                 Call CloseSocket(tUser)
             End If

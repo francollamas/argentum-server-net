@@ -248,7 +248,7 @@ Module mdParty
             End If
         Else
             Call _
-                WriteConsoleMsg(leader, LCase(UserList(OldMember).name) & " no pertenece a tu party.",
+                WriteConsoleMsg(leader, UserList(OldMember).name.ToLower() & " no pertenece a tu party.",
                                 FontTypeNames.FONTTYPE_INFO)
         End If
     End Sub
@@ -321,7 +321,7 @@ Module mdParty
                     Else
                         If .PartyIndex = PI Then
                             Call _
-                                WriteConsoleMsg(leader, LCase(.name) & " ya es miembro de la party.",
+                                WriteConsoleMsg(leader, .name.ToLower() & " ya es miembro de la party.",
                                                 FontTypeNames.FONTTYPE_PARTY)
                         Else
                             Call _
@@ -340,11 +340,11 @@ Module mdParty
             Else
                 If .PartyIndex = PI Then
                     Call _
-                        WriteConsoleMsg(leader, LCase(.name) & " ya es miembro de la party.",
+                        WriteConsoleMsg(leader, .name.ToLower() & " ya es miembro de la party.",
                                         FontTypeNames.FONTTYPE_PARTY)
                 Else
                     Call _
-                        WriteConsoleMsg(leader, LCase(.name) & " no ha solicitado ingresar a tu party.",
+                        WriteConsoleMsg(leader, .name.ToLower() & " no ha solicitado ingresar a tu party.",
                                         FontTypeNames.FONTTYPE_PARTY)
                 End If
 

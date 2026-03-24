@@ -92,10 +92,10 @@ Module TCP
         Dim car As Byte
         Dim i As Short
 
-        cad = LCase(cad)
+        cad = cad.ToLower()
 
-        For i = 1 To Len(cad)
-            car = Asc(Mid(cad, i, 1))
+        For i = 1 To cad.Length
+            car = Asc(cad.Substring(i - 1, 1))
 
             If (car < 97 Or car > 122) And (car <> 255) And (car <> 32) Then
                 AsciiValidos = False
@@ -117,10 +117,10 @@ Module TCP
         Dim car As Byte
         Dim i As Short
 
-        cad = LCase(cad)
+        cad = cad.ToLower()
 
-        For i = 1 To Len(cad)
-            car = Asc(Mid(cad, i, 1))
+        For i = 1 To cad.Length
+            car = Asc(cad.Substring(i - 1, 1))
 
             If (car < 48 Or car > 57) Then
                 Numeric = False
@@ -142,8 +142,8 @@ Module TCP
 
         Dim i As Short
 
-        For i = 1 To UBound(ForbidenNames)
-            If InStr(Nombre, ForbidenNames(i)) Then
+        For i = 0 To ForbidenNames.GetUpperBound(0)
+            If Nombre.IndexOf(ForbidenNames(i)) >= 0 Then
                 NombrePermitido = False
                 Exit Function
             End If
@@ -215,7 +215,7 @@ Module TCP
             End If
 
             '¿Existe el personaje?
-            If FileExist(CharPath & UCase(name) & ".chr") = True Then
+            If FileExist(CharPath & name.ToUpper() & ".chr") = True Then
                 Call WriteErrorMsg(UserIndex, "Ya existe el personaje.")
                 Exit Sub
             End If
@@ -446,7 +446,7 @@ Module TCP
         'Valores Default de facciones al Activar nuevo usuario
         Call ResetFacciones(UserIndex)
 
-        Call WriteVar(CharPath & UCase(name) & ".chr", "INIT", "Password", Password) _
+        Call WriteVar(CharPath & name.ToUpper() & ".chr", "INIT", "Password", Password) _
         'grabamos el password aqui afuera, para no mantenerlo cargado en memoria
 
         Call SaveUser(UserIndex, CharPath & UCase(name) & ".chr")
@@ -703,7 +703,7 @@ Module TCP
             End If
 
             '¿Existe el personaje?
-            If Not FileExist(CharPath & UCase(name) & ".chr") Then
+            If Not FileExist(CharPath & name.ToUpper() & ".chr") Then
                 Call WriteErrorMsg(UserIndex, "El personaje no existe.")
                 Call FlushBuffer(UserIndex)
                 Call CloseSocket(UserIndex)

@@ -258,7 +258,7 @@ Friend Class clsClan
         ReDim list(OldQ - 1)
 
         For i = 1 To OldQ
-            list(i - 1) = UCase(GetVar(MEMBERSFILE, "Members", "Member" & i))
+            list(i - 1) = GetVar(MEMBERSFILE, "Members", "Member" & i).ToUpper()
         Next i
 
         Return list
@@ -330,7 +330,7 @@ Friend Class clsClan
         If migr_LenB(Dir(CharPath & Nombre & ".chr")) <> 0 Then
             OldQ = CShort(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
             i = 1
-            Nombre = UCase(Nombre)
+            Nombre = Nombre.ToUpper()
             While i <= OldQ And UCase(Trim(GetVar(MEMBERSFILE, "Members", "Member" & i))) <> Nombre
                 i = i + 1
             End While

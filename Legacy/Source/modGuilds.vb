@@ -277,7 +277,7 @@ Module modGuilds
         '
         '***************************************************
 
-        m_EsGuildLeader = (UCase(PJ) = UCase(Trim(guilds(GuildIndex).GetLeader)))
+        m_EsGuildLeader = (PJ.ToUpper() = guilds(GuildIndex).GetLeader.Trim().ToUpper())
     End Function
 
     Private Function m_EsGuildFounder(ByRef PJ As String, GuildIndex As Short) As Boolean
@@ -287,7 +287,7 @@ Module modGuilds
         '
         '***************************************************
 
-        m_EsGuildFounder = (UCase(PJ) = UCase(Trim(guilds(GuildIndex).Fundador)))
+        m_EsGuildFounder = (PJ.ToUpper() = guilds(GuildIndex).Fundador.Trim().ToUpper())
     End Function
 
     Public Function m_EcharMiembroDeClan(Expulsador As Short, Expulsado As String) As Short
@@ -571,15 +571,15 @@ Module modGuilds
         'cuando UI no puede echar a nombre?
         'si no es gm Y no es lider del clan del pj Y no es el mismo que se va voluntariamente
         If UserList(QuienLoEchaUI).flags.Privilegios And PlayerType.User Then
-            If Not m_EsGuildLeader(UCase(UserList(QuienLoEchaUI).name), GuildIndex) Then
-                If UCase(UserList(QuienLoEchaUI).name) <> UCase(Nombre) Then 'si no sale voluntariamente...
+            If Not m_EsGuildLeader(UserList(QuienLoEchaUI).name.ToUpper(), GuildIndex) Then
+                If UserList(QuienLoEchaUI).name.ToUpper() <> Nombre.ToUpper() Then 'si no sale voluntariamente...
                     Exit Function
                 End If
             End If
         End If
 
         ' Ahora el lider es el unico que no puede salir del clan
-        m_PuedeSalirDeClan = UCase(guilds(GuildIndex).GetLeader) <> UCase(Nombre)
+        m_PuedeSalirDeClan = guilds(GuildIndex).GetLeader.ToUpper() <> Nombre.ToUpper()
     End Function
 
     Public Function PuedeFundarUnClan(UserIndex As Short, Alineacion As ALINEACION_GUILD,

@@ -151,22 +151,22 @@ Friend Class clsIniReader
             Text = LineInput(handle)
 
             'Is it null??
-            If Len(Text) Then
+            If Text.Length Then
                 'If it starts with '[' it is a main node or nothing (GetPrivateProfileStringA works this way), otherwise it's a value
-                If Left(Text, 1) = "[" Then
+                If Text.Substring(0, 1) = "[" Then
                     'If it has an ending ']' it's a main node, otherwise it's nothing
-                    Pos = InStr(2, Text, "]")
+                    Pos = Text.IndexOf("]", 1) + 1
                     If Pos Then
                         'Add a main node
                         ReDim Preserve fileData(MainNodes)
 
-                        fileData(MainNodes).name = UCase(Trim(Mid(Text, 2, Pos - 2)))
+                        fileData(MainNodes).name = Text.Substring(1, Pos - 2).Trim().ToUpper()
 
                         MainNodes = MainNodes + 1
                     End If
                 Else
                     'So it's a value. Check if it has a '=', otherwise it's nothing
-                    Pos = InStr(2, Text, "=")
+                    Pos = Text.IndexOf("=", 1) + 1
                     If Pos Then
                         'Is it under any main node??
                         If MainNodes Then
@@ -174,8 +174,8 @@ Friend Class clsIniReader
                                 'Add it to the main node's value
                                 ReDim Preserve .values(.numValues)
 
-                                .values(.numValues).Value = Right(Text, Len(Text) - Pos)
-                                .values(.numValues).Key = UCase(Left(Text, Pos - 1))
+                                .values(.numValues).Value = Text.Substring(Pos)
+                                .values(.numValues).Key = Text.Substring(0, Pos - 1).ToUpper()
 
                                 .numValues = .numValues + 1
                             End With
@@ -313,11 +313,11 @@ Friend Class clsIniReader
         Dim j As Integer
 
         'Search for the main node
-        i = FindMain(UCase(Main))
+        i = FindMain(Main.ToUpper())
 
         If i >= 0 Then
             'If valid, binary search among keys
-            j = FindKey(fileData(i), UCase(Key))
+            j = FindKey(fileData(i), Key.ToUpper())
 
             'If we found it we return it
             If j >= 0 Then GetValue = fileData(i).values(j).Value
@@ -341,11 +341,11 @@ Friend Class clsIniReader
         Dim j As Integer
 
         'Search for the main node
-        i = FindMain(UCase(Main))
+        i = FindMain(Main.ToUpper())
 
         If i >= 0 Then
             'If valid, binary search among keys
-            j = FindKey(fileData(i), UCase(Key))
+            j = FindKey(fileData(i), Key.ToUpper())
 
             'If we found it we change it
             If j >= 0 Then fileData(i).values(j).Value = CStr(Value)
@@ -445,6 +445,6 @@ Friend Class clsIniReader
         'Last Modify Date: 04/01/2008
         'Returns true of the key exists, false otherwise.
         '**************************************************************
-        KeyExists = FindMain(UCase(name)) >= 0
+        KeyExists = FindMain(name.ToUpper()) >= 0
     End Function
 End Class
