@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -791,7 +791,7 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.MultiMessage)
-                    Call .WriteByte(MessageIndex)
+                    Call .WriteByte(Convert.ToByte(MessageIndex))
 
                     Select Case MessageIndex
                         Case eMessages.DontSeeAnything, eMessages.NPCSwing,
@@ -803,8 +803,8 @@ Module Protocol
                                      eMessages.CancelHome, eMessages.FinishHome
 
                         Case eMessages.NPCHitUser
-                            Call .WriteByte(Arg1) 'Target
-                            Call .WriteInteger(Arg2) 'damage
+                            Call .WriteByte(Convert.ToByte(Arg1)) 'Target
+                            Call .WriteInteger(Convert.ToInt16(Arg2)) 'damage
 
                         Case eMessages.UserHitNPC
                             Call .WriteLong(Arg1) 'damage
@@ -813,17 +813,17 @@ Module Protocol
                             Call .WriteInteger(UserList(Arg1).Char_Renamed.CharIndex)
 
                         Case eMessages.UserHittedByUser
-                            Call .WriteInteger(Arg1) 'AttackerIndex
-                            Call .WriteByte(Arg2) 'Target
-                            Call .WriteInteger(Arg3) 'damage
+                            Call .WriteInteger(Convert.ToInt16(Arg1)) 'AttackerIndex
+                            Call .WriteByte(Convert.ToByte(Arg2)) 'Target
+                            Call .WriteInteger(Convert.ToInt16(Arg3)) 'damage
 
                         Case eMessages.UserHittedUser
-                            Call .WriteInteger(Arg1) 'AttackerIndex
-                            Call .WriteByte(Arg2) 'Target
-                            Call .WriteInteger(Arg3) 'damage
+                            Call .WriteInteger(Convert.ToInt16(Arg1)) 'AttackerIndex
+                            Call .WriteByte(Convert.ToByte(Arg2)) 'Target
+                            Call .WriteInteger(Convert.ToInt16(Arg3)) 'damage
 
                         Case eMessages.WorkRequestTarget
-                            Call .WriteByte(Arg1) 'skill
+                            Call .WriteByte(Convert.ToByte(Arg1)) 'skill
 
                         Case eMessages.HaveKilledUser _
 '"Has matado a " & UserList(VictimIndex).name & "!" "Has ganado " & DaExp & " puntos de experiencia."
@@ -1285,7 +1285,7 @@ Module Protocol
         With UserList(UserIndex)
             Call .incomingData.ReadByte()
             If .flags.TargetNpcTipo = eNPCType.Gobernador Then
-                Call setHome(UserIndex, Npclist(.flags.TargetNPC).Ciudad, .flags.TargetNPC)
+                Call setHome(UserIndex, CType(Npclist(.flags.TargetNPC).Ciudad, Declaraciones.eCiudad), .flags.TargetNPC)
             Else
                 If .flags.Muerto = 1 Then
                     'Si es un mapa común y no está en cana
@@ -1403,15 +1403,15 @@ Module Protocol
         Call UserList(UserIndex).incomingData.ReadByte()
 
         With UserList(UserIndex).Stats
-            .UserAtributos(eAtributos.Fuerza) = MaximoInt(15, 13 + RandomNumber(0, 3) + RandomNumber(0, 2))
-            .UserAtributos(eAtributos.Agilidad) = MaximoInt(15,
-                                                            12 + RandomNumber(0, 3) + RandomNumber(0, 3))
-            .UserAtributos(eAtributos.Inteligencia) = MaximoInt(16,
+            .UserAtributos(eAtributos.Fuerza) = Convert.ToByte(MaximoInt(15, 13 + RandomNumber(0, 3) + RandomNumber(0, 2)))
+            .UserAtributos(eAtributos.Agilidad) = Convert.ToByte(MaximoInt(15,
+                                                            12 + RandomNumber(0, 3) + RandomNumber(0, 3)))
+            .UserAtributos(eAtributos.Inteligencia) = Convert.ToByte(MaximoInt(16,
                                                                 13 + RandomNumber(0, 3) +
-                                                                RandomNumber(0, 2))
-            .UserAtributos(eAtributos.Carisma) = MaximoInt(15,
-                                                           12 + RandomNumber(0, 3) + RandomNumber(0, 3))
-            .UserAtributos(eAtributos.Constitucion) = 16 + RandomNumber(0, 1) + RandomNumber(0, 1)
+                                                                RandomNumber(0, 2)))
+            .UserAtributos(eAtributos.Carisma) = Convert.ToByte(MaximoInt(15,
+                                                           12 + RandomNumber(0, 3) + RandomNumber(0, 3)))
+            .UserAtributos(eAtributos.Constitucion) = Convert.ToByte(16 + RandomNumber(0, 1) + RandomNumber(0, 1))
         End With
 
         Call WriteDiceRoll(UserIndex)
@@ -1475,12 +1475,12 @@ Module Protocol
 
             'Convert version number to string
             version = (buffer.ReadByte()).ToString() & "." & (buffer.ReadByte()).ToString() & "." & (buffer.ReadByte()).ToString()
-            race = buffer.ReadByte()
-            gender = buffer.ReadByte()
-            Class_Renamed = buffer.ReadByte()
+            race = DirectCast(buffer.ReadByte(), Declaraciones.eRaza)
+            gender = DirectCast(buffer.ReadByte(), Declaraciones.eGenero)
+            Class_Renamed = CType(buffer.ReadByte(), Declaraciones.eClass)
             Head = buffer.ReadInteger
             mail = buffer.ReadASCIIString()
-            homeland = buffer.ReadByte()
+            homeland = CType(buffer.ReadByte(), Declaraciones.eCiudad)
 
             If Not VersionOK(version) Then
                 Call _
@@ -1533,7 +1533,7 @@ Module Protocol
                 Chat = buffer.ReadASCIIString()
 
                 '[Consejeros & GMs]
-                If .flags.Privilegios And (PlayerType.Consejero Or PlayerType.SemiDios) Then
+                If (.flags.Privilegios And (PlayerType.Consejero Or PlayerType.SemiDios)) <> 0 Then
                     Call LogGM(.name, "Dijo: " & Chat)
                 End If
 
@@ -1627,7 +1627,7 @@ Module Protocol
 
 
                 '[Consejeros & GMs]
-                If .flags.Privilegios And (PlayerType.Consejero Or PlayerType.SemiDios) Then
+                If (.flags.Privilegios And (PlayerType.Consejero Or PlayerType.SemiDios)) <> 0 Then
                     Call LogGM(.name, "Grito: " & Chat)
                 End If
 
@@ -1731,7 +1731,7 @@ Module Protocol
 
                 TargetUserIndex = CharIndexToUserIndex(targetCharIndex)
 
-                If .flags.Muerto Then
+                If .flags.Muerto <> 0 Then
                     Call _
                         WriteConsoleMsg(UserIndex,
                                         "¡¡Estás muerto!! Los muertos no pueden comunicarse con el mundo de los vivos. ",
@@ -1769,8 +1769,8 @@ Module Protocol
                         Else
                             '[Consejeros & GMs]
                             If _
-                                .flags.Privilegios And
-                                (PlayerType.Consejero Or PlayerType.SemiDios) Then
+                                (.flags.Privilegios And
+                                (PlayerType.Consejero Or PlayerType.SemiDios)) <> 0 Then
                                 Call LogGM(.name, "Le dijo a '" & UserList(TargetUserIndex).name & "' " & Chat)
                             End If
 
@@ -1789,8 +1789,8 @@ Module Protocol
 
                                     '[CDT 17-02-2004]
                                     If _
-                                        .flags.Privilegios And
-                                        (PlayerType.User Or PlayerType.Consejero) Then
+                                        (.flags.Privilegios And
+                                        (PlayerType.User Or PlayerType.Consejero)) <> 0 Then
                                         Call _
                                             SendData(SendTarget.ToAdminsAreaButConsejeros, UserIndex,
                                                      PrepareMessageChatOverHead(
@@ -1806,8 +1806,8 @@ Module Protocol
                                                             FontTypeNames.FONTTYPE_GM)
 
                                     If _
-                                        .flags.Privilegios And
-                                        (PlayerType.User Or PlayerType.Consejero) Then
+                                        (.flags.Privilegios And
+                                        (PlayerType.User Or PlayerType.Consejero)) <> 0 Then
                                         Call _
                                             SendData(SendTarget.ToAdminsAreaButConsejeros, UserIndex,
                                                      PrepareMessageConsoleMsg(
@@ -1855,11 +1855,11 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            heading = .incomingData.ReadByte()
+            heading = DirectCast(.incomingData.ReadByte(), Declaraciones.eHeading)
 
             'Prevent SpeedHack
             If .flags.TimesWalk >= 30 Then
-                TempTick = GetTickCount()
+                TempTick = Convert.ToInt32(GetTickCount())
                 dummy = (TempTick - .flags.StartWalk)
 
                 ' 5800 is actually less than what would be needed in perfect conditions to take 30 steps
@@ -2598,7 +2598,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            Skill = .incomingData.ReadByte()
+            Skill = CType(.incomingData.ReadByte(), Declaraciones.eSkill)
 
             If UserList(UserIndex).flags.Muerto = 1 Then Exit Sub
 
@@ -2671,7 +2671,7 @@ Module Protocol
             If TotalItems > 0 Then
 
                 .Construir.Cantidad = TotalItems
-                .Construir.PorCiclo = MinimoInt(MaxItemsConstruibles(UserIndex), ItemsPorCiclo)
+                .Construir.PorCiclo = Convert.ToInt16(MinimoInt(MaxItemsConstruibles(UserIndex), ItemsPorCiclo))
 
             End If
         End With
@@ -2837,7 +2837,7 @@ Module Protocol
             X = .incomingData.ReadByte()
             Y = .incomingData.ReadByte()
 
-            Skill = .incomingData.ReadByte()
+            Skill = CType(.incomingData.ReadByte(), Declaraciones.eSkill)
 
 
             If .flags.Muerto = 1 Or .flags.Descansar Or .flags.Meditando Or Not InMapBounds(.Pos.Map, X, Y) Then _
@@ -2906,7 +2906,7 @@ Module Protocol
 
                     'Quitamos stamina
                     If .Stats.MinSta >= 10 Then
-                        Call QuitarSta(UserIndex, RandomNumber(1, 10))
+                        Call QuitarSta(UserIndex, Convert.ToInt16(RandomNumber(1, 10)))
                     Else
                         If .Genero = eGenero.Hombre Then
                             Call _
@@ -2972,11 +2972,11 @@ Module Protocol
 
 
                                 'Take 1 arrow away - we do it AFTER hitting, since if Ammo Slot is 0 it gives a rt9 and kicks players
-                                Call QuitarUserInvItem(UserIndex, DummyInt, 1)
+                                Call QuitarUserInvItem(UserIndex, Convert.ToByte(DummyInt), 1)
 
                                 If .Object_Renamed(DummyInt).Amount > 0 Then
                                     'QuitarUserInvItem unequips the ammo, so we equip it again
-                                    .MunicionEqpSlot = DummyInt
+                                    .MunicionEqpSlot = Convert.ToByte(DummyInt)
                                     .MunicionEqpObjIndex = .Object_Renamed(DummyInt).ObjIndex
                                     .Object_Renamed(DummyInt).Equipped = 1
                                 Else
@@ -2988,11 +2988,11 @@ Module Protocol
                                 DummyInt = .WeaponEqpSlot
 
                                 'Take 1 knife away
-                                Call QuitarUserInvItem(UserIndex, DummyInt, 1)
+                                Call QuitarUserInvItem(UserIndex, Convert.ToByte(DummyInt), 1)
 
                                 If .Object_Renamed(DummyInt).Amount > 0 Then
                                     'QuitarUserInvItem unequips the weapon, so we equip it again
-                                    .WeaponEqpSlot = DummyInt
+                                    .WeaponEqpSlot = Convert.ToByte(DummyInt)
                                     .WeaponEqpObjIndex = .Object_Renamed(DummyInt).ObjIndex
                                     .Object_Renamed(DummyInt).Equipped = 1
                                 Else
@@ -3002,7 +3002,7 @@ Module Protocol
 
                             End If
 
-                            Call UpdateUserInv(False, UserIndex, DummyInt)
+                            Call UpdateUserInv(False, UserIndex, Convert.ToByte(DummyInt))
                         End With
                     End If
 
@@ -3088,7 +3088,7 @@ Module Protocol
                         'Play sound!
                         Call _
                             SendData(SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessagePlayWave(SND_PESCAR, .Pos.X, .Pos.Y))
+                                     PrepareMessagePlayWave(SND_PESCAR, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Else
                         Call _
                             WriteConsoleMsg(UserIndex, "No hay agua donde pescar. Busca un lago, río o mar.",
@@ -3182,7 +3182,7 @@ Module Protocol
                             .Invent.WeaponEqpObjIndex = HACHA_LEÑADOR Then
                             Call _
                                 SendData(SendTarget.ToPCArea, UserIndex,
-                                         PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
+                                         PrepareMessagePlayWave(SND_TALAR, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Call DoTalar(UserIndex)
                         ElseIf _
                             ObjData_Renamed(DummyInt).OBJType = eOBJType.otArbolElfico And
@@ -3190,7 +3190,7 @@ Module Protocol
                             If .Invent.WeaponEqpObjIndex = HACHA_LEÑA_ELFICA Then
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_TALAR, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(SND_TALAR, Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                                 Call DoTalar(UserIndex, True)
                             Else
                                 Call _
@@ -3270,7 +3270,7 @@ Module Protocol
                         Call WriteConsoleMsg(UserIndex, "¡No hay ninguna criatura allí!", FontTypeNames.FONTTYPE_INFO)
                     End If
 
-                Case FundirMetal 'UGLY!!! This is a constant, not a skill!!
+                Case CType(FundirMetal, Declaraciones.eSkill) 'UGLY!!! This is a constant, not a skill!!
                     'Check interval
                     If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
 
@@ -3504,7 +3504,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            heading = .incomingData.ReadByte()
+            heading = DirectCast(.incomingData.ReadByte(), Declaraciones.eHeading)
 
             If .flags.Paralizado = 1 And .flags.Inmovilizado = 0 Then
                 Select Case heading
@@ -3582,7 +3582,7 @@ Module Protocol
             End If
             '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-            .Counters.AsignedSkills = MinimoInt(10, .Counters.AsignedSkills + Count)
+            .Counters.AsignedSkills = Convert.ToByte(MinimoInt(10, .Counters.AsignedSkills + Count))
 
             With .Stats
                 For i = 1 To NUMSKILLS
@@ -3592,11 +3592,11 @@ Module Protocol
 
                         'Client should prevent this, but just in case...
                         If .UserSkills(i) > 100 Then
-                            .SkillPts = .SkillPts + .UserSkills(i) - 100
+                            .SkillPts = Convert.ToInt16(.SkillPts + .UserSkills(i) - 100)
                             .UserSkills(i) = 100
                         End If
 
-                        Call CheckEluSkill(UserIndex, i, True)
+                        Call CheckEluSkill(UserIndex, Convert.ToByte(i), True)
                     End If
                 Next i
             End With
@@ -3640,7 +3640,7 @@ Module Protocol
 
                     If SpawnedNpc > 0 Then
                         Npclist(SpawnedNpc).MaestroNpc = .flags.TargetNPC
-                        Npclist(.flags.TargetNPC).Mascotas = Npclist(.flags.TargetNPC).Mascotas + 1
+                        Npclist(.flags.TargetNPC).Mascotas = Convert.ToInt16(Npclist(.flags.TargetNPC).Mascotas + 1)
                     End If
                 End If
             Else
@@ -3882,7 +3882,7 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                ForumMsgType = buffer.ReadByte()
+                ForumMsgType = DirectCast(buffer.ReadByte(), Declaraciones.eForumMsgType)
 
                 Title = buffer.ReadASCIIString()
                 Post = buffer.ReadASCIIString()
@@ -4116,7 +4116,7 @@ Module Protocol
                 'If modifing a filled offerSlot, we already got the objIndex, then we don't need to know it
                 If Slot <> 0 Then ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
                 ' Can't offer more than he has
-                If Not TieneObjetos(ObjIndex, TotalOfferItems(ObjIndex, UserIndex) + Amount, UserIndex) Then
+                If Not TieneObjetos(ObjIndex, Convert.ToInt16(TotalOfferItems(ObjIndex, UserIndex) + Amount), UserIndex) Then
 
                     Call WriteCommerceChat(UserIndex, "No tienes esa cantidad.", FontTypeNames.FONTTYPE_TALK)
                     Exit Sub
@@ -5152,8 +5152,8 @@ Module Protocol
             For i = 1 To LastUser
                 If migr_LenB(UserList(i).name) <> 0 Then
                     If _
-                        UserList(i).flags.Privilegios And
-                        (PlayerType.User Or PlayerType.Consejero) Then Count = Count + 1
+                        (UserList(i).flags.Privilegios And
+                        (PlayerType.User Or PlayerType.Consejero)) <> 0 Then Count = Count + 1
                 End If
             Next i
 
@@ -5285,14 +5285,14 @@ Module Protocol
 
                 Case eNPCType.Timbero
                     If (.flags.Privilegios And PlayerType.User) = 0 Then
-                        earnings = Apuestas.Ganancias - Apuestas.Perdidas
+                        earnings = Convert.ToInt16(Apuestas.Ganancias - Apuestas.Perdidas)
 
                         If earnings >= 0 And Apuestas.Ganancias <> 0 Then
-                            Percentage = Int(earnings*100/Apuestas.Ganancias)
+                            Percentage = Convert.ToInt16(Int(earnings*100/Apuestas.Ganancias))
                         End If
 
                         If earnings < 0 And Apuestas.Perdidas <> 0 Then
-                            Percentage = Int(earnings*100/Apuestas.Perdidas)
+                            Percentage = Convert.ToInt16(Int(earnings*100/Apuestas.Perdidas))
                         End If
 
                         Call _
@@ -5585,7 +5585,7 @@ Module Protocol
 
             'Barrin 3/10/03 Tiempo de inicio al meditar
             If .flags.Meditando Then
-                .Counters.tInicioMeditar = GetTickCount()
+                .Counters.tInicioMeditar = Convert.ToInt32(GetTickCount())
 
                 Call _
                     WriteConsoleMsg(UserIndex,
@@ -6073,7 +6073,7 @@ Module Protocol
                     Exit Sub
                 End If
 
-                Matados = .Faccion.CriminalesMatados
+                Matados = Convert.ToInt16(.Faccion.CriminalesMatados)
                 Diferencia = NextRecom - Matados
 
                 If Diferencia > 0 Then
@@ -6099,7 +6099,7 @@ Module Protocol
                     Exit Sub
                 End If
 
-                Matados = .Faccion.CiudadanosMatados
+                Matados = Convert.ToInt16(.Faccion.CiudadanosMatados)
                 Diferencia = NextRecom - Matados
 
                 If Diferencia > 0 Then
@@ -6208,7 +6208,7 @@ Module Protocol
         Dim UpTimeStr As String
 
         'Get total time in seconds
-        time = (GetTickCount() - tInicioServer)\1000
+        time = Convert.ToInt32((GetTickCount() - tInicioServer)\1000)
 
         'Get times in dd:hh:mm:ss format
         UpTimeStr = (time Mod 60) & " segundos."
@@ -6951,7 +6951,7 @@ Module Protocol
                                             FontTypeNames.FONTTYPE_INFO)
                     Else
                         If System.IO.File.Exists(CharPath & name & ".chr") Then
-                            Count = ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
+                            Count = Convert.ToInt16(ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant")))
                             If Count = 0 Then
                                 Call WriteConsoleMsg(UserIndex, "Sin prontuario..", FontTypeNames.FONTTYPE_INFO)
                             Else
@@ -6961,7 +6961,7 @@ Module Protocol
                                                         Count & " - " &
                                                         GetVar(CharPath & name & ".chr", "PENAS", "P" & Count),
                                                         FontTypeNames.FONTTYPE_INFO)
-                                    Count = Count - 1
+                                    Count = Convert.ToInt16(Count - 1)
                                 End While
                             End If
                         Else
@@ -7490,7 +7490,7 @@ Module Protocol
             Call .incomingData.ReadByte()
 
 
-            clanType = .incomingData.ReadByte()
+            clanType = CType(.incomingData.ReadByte(), Declaraciones.eClanType)
 
             If HasFound(.name) Then
                 Call _
@@ -7567,7 +7567,7 @@ Module Protocol
                     If tUser > 0 Then
                         Call ExpulsarDeParty(UserIndex, tUser)
                     Else
-                        If UserName.IndexOf("+") + 1 Then
+                        If UserName.IndexOf("+") + 1 <> 0 Then
                             UserName = UserName.Replace("+", " ")
                         End If
 
@@ -7615,8 +7615,8 @@ Module Protocol
             'Remove packet ID
             Call buffer.ReadByte()
 
-            rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-                   PlayerType.Consejero
+            rank = Convert.ToInt16(PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                   PlayerType.Consejero)
 
             UserName = buffer.ReadASCIIString()
             If UserPuedeEjecutarComandos(UserIndex) Then
@@ -7632,7 +7632,7 @@ Module Protocol
                     End If
 
                 Else
-                    If UserName.IndexOf("+") + 1 Then
+                    If UserName.IndexOf("+") + 1 <> 0 Then
                         UserName = UserName.Replace("+", " ")
                     End If
                     Call _
@@ -7677,11 +7677,11 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-                       PlayerType.Consejero
+                rank = Convert.ToInt16(PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                       PlayerType.Consejero)
 
                 UserName = buffer.ReadASCIIString()
-                If UserList(UserIndex).flags.Muerto Then
+                If UserList(UserIndex).flags.Muerto <> 0 Then
                     Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_PARTY)
                 Else
                     bUserVivo = True
@@ -7700,7 +7700,7 @@ Module Protocol
                                                 FontTypeNames.FONTTYPE_INFO)
                         End If
                     Else
-                        If UserName.IndexOf("+") + 1 Then
+                        If UserName.IndexOf("+") + 1 <> 0 Then
                             UserName = UserName.Replace("+", " ")
                         End If
 
@@ -7760,7 +7760,7 @@ Module Protocol
 
                 guild = buffer.ReadASCIIString()
 
-                If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
+                If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If (migr_InStrB(guild, "\") <> 0) Then
                         guild = guild.Replace("\", "")
                     End If
@@ -7771,9 +7771,9 @@ Module Protocol
                     If Not System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "guilds/" & guild & "-members.mem") Then
                         Call WriteConsoleMsg(UserIndex, "No existe el clan: " & guild, FontTypeNames.FONTTYPE_INFO)
                     Else
-                        memberCount =
+                        memberCount = Convert.ToInt16(
                             ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "Guilds/" & guild & "-Members" & ".mem",
-                                       "INIT", "NroMembers"))
+                                       "INIT", "NroMembers")))
 
                         For i = 1 To memberCount
                             UserName =
@@ -7863,8 +7863,8 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
-                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                (.flags.Privilegios And
+                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                 Then
                 .showName = Not .showName 'Show / Hide the name
 
@@ -7897,10 +7897,10 @@ Module Protocol
                 If UserList(i).ConnID <> - 1 Then
                     If UserList(i).Faccion.ArmadaReal = 1 Then
                         If _
-                            UserList(i).flags.Privilegios And
+                            (UserList(i).flags.Privilegios And
                             (PlayerType.User Or PlayerType.Consejero Or
-                             PlayerType.SemiDios) Or
-                            .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) _
+                             PlayerType.SemiDios)) <> 0 Or
+                            (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 _
                             Then
                             list = list & UserList(i).name & ", "
                         End If
@@ -7942,10 +7942,10 @@ Module Protocol
                 If UserList(i).ConnID <> - 1 Then
                     If UserList(i).Faccion.FuerzasCaos = 1 Then
                         If _
-                            UserList(i).flags.Privilegios And
+                            (UserList(i).flags.Privilegios And
                             (PlayerType.User Or PlayerType.Consejero Or
-                             PlayerType.SemiDios) Or
-                            .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) _
+                             PlayerType.SemiDios)) <> 0 Or
+                            (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 _
                             Then
                             list = list & UserList(i).name & ", "
                         End If
@@ -8001,13 +8001,13 @@ Module Protocol
 
                 'Check the user has enough powers
                 If _
-                    .flags.Privilegios And
+                    (.flags.Privilegios And
                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-                     PlayerType.Consejero) Then
+                     PlayerType.Consejero)) <> 0 Then
                     'Si es dios o Admins no podemos salvo que nosotros también lo seamos
                     If _
                         Not (EsDios(UserName) Or EsAdmin(UserName)) Or
-                        (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) Then
+                        (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Then
                         If tIndex <= 0 Then 'existe el usuario destino?
                             Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
                         Else
@@ -8015,8 +8015,8 @@ Module Protocol
                                 For X = UserList(tIndex).Pos.X - i To UserList(tIndex).Pos.X + i
                                     For Y = UserList(tIndex).Pos.Y - i To UserList(tIndex).Pos.Y + i
                                         If MapData(UserList(tIndex).Pos.Map, X, Y).UserIndex = 0 Then
-                                            If LegalPos(UserList(tIndex).Pos.Map, X, Y, True, True) Then
-                                                Call WarpUserChar(UserIndex, UserList(tIndex).Pos.Map, X, Y, True)
+                                            If LegalPos(UserList(tIndex).Pos.Map, Convert.ToInt16(X), Convert.ToInt16(Y), True, True) Then
+                                                Call WarpUserChar(UserIndex, UserList(tIndex).Pos.Map, Convert.ToInt16(X), Convert.ToInt16(Y), True)
                                                 Call _
                                                     LogGM(.name,
                                                           "/IRCERCA " & UserName & " Mapa:" & UserList(tIndex).Pos.Map &
@@ -8163,7 +8163,7 @@ Module Protocol
                              (PlayerType.User Or PlayerType.Consejero Or
                               PlayerType.SemiDios)) <> 0 Or
                             ((UserList(tUser).flags.Privilegios And
-                              (PlayerType.Dios Or PlayerType.Admin) <> 0) And
+                              (PlayerType.Dios Or PlayerType.Admin)) <> 0 And
                              (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0) _
                             Then
                             Call _
@@ -8245,7 +8245,7 @@ Module Protocol
                                     If List1(j).Substring(0, Math.Min(Npclist(i).name.Length, List1(j).Length)) = Npclist(i).name Then
                                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                         List1(j) = List1(j) & ", (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
-                                        NPCcant1(j) = NPCcant1(j) + 1
+                                        NPCcant1(j) = Convert.ToInt16(NPCcant1(j) + 1)
                                         Exit For
                                     End If
                                 Next j
@@ -8276,14 +8276,14 @@ Module Protocol
                                     If List2(j).Substring(0, Math.Min(Npclist(i).name.Length, List2(j).Length)) = Npclist(i).name Then
                                         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                         List2(j) = List2(j) & ", (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
-                                        NPCcant2(j) = NPCcant2(j) + 1
+                                        NPCcant2(j) = Convert.ToInt16(NPCcant2(j) + 1)
                                         Exit For
                                     End If
                                 Next j
                                 If j = NPCcount2 Then
                                     ReDim Preserve List2(NPCcount2)
                                     ReDim Preserve NPCcant2(NPCcount2)
-                                    NPCcount2 = NPCcount2 + 1
+                                    NPCcount2 = Convert.ToInt16(NPCcount2 + 1)
                                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto i. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                     List2(j) = Npclist(i).name & ": (" & Npclist(i).Pos.X & "," & Npclist(i).Pos.Y & ")"
                                     NPCcant2(j) = 1
@@ -8625,9 +8625,9 @@ Module Protocol
                 tUser = NameIndex(UserName)
 
                 If _
-                    .flags.Privilegios And
+                    (.flags.Privilegios And
                     (PlayerType.Dios Or PlayerType.Admin Or PlayerType.SemiDios Or
-                     PlayerType.Consejero) Then
+                     PlayerType.Consejero)) <> 0 Then
                     'Si es dios o Admins no podemos salvo que nosotros también lo seamos
                     If _
                         Not (EsDios(UserName) Or EsAdmin(UserName)) Or
@@ -8636,7 +8636,7 @@ Module Protocol
                             Call WriteConsoleMsg(UserIndex, "Usuario offline.", FontTypeNames.FONTTYPE_INFO)
                         Else
                             X = UserList(tUser).Pos.X
-                            Y = UserList(tUser).Pos.Y + 1
+                            Y = Convert.ToInt16(UserList(tUser).Pos.Y + 1)
                             Call FindLegalPos(UserIndex, UserList(tUser).Pos.Map, X, Y)
 
                             Call WarpUserChar(UserIndex, UserList(tUser).Pos.Map, X, Y, True)
@@ -8729,7 +8729,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster)) <> 0 Then _
                 Exit Sub
 
             'UPGRADE_WARNING: El límite inferior de la matriz names ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -8745,7 +8745,7 @@ Module Protocol
                 End If
             Next i
 
-            If Count > 1 Then Call WriteUserNameList(UserIndex, names, Count - 1)
+            If Count > 1 Then Call WriteUserNameList(UserIndex, names, Convert.ToInt16(Count - 1))
         End With
     End Sub
 
@@ -8767,7 +8767,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster)) <> 0 Then _
                 Exit Sub
 
             For i = 1 To LastUser
@@ -8806,7 +8806,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.RoleMaster)) <> 0 Then _
                 Exit Sub
 
             For i = 1 To LastUser
@@ -8859,7 +8859,7 @@ Module Protocol
                 reason = buffer.ReadASCIIString()
                 jailTime = buffer.ReadByte()
 
-                If UserName.IndexOf("+", 1 - 1) + 1 Then
+                If UserName.IndexOf("+", 1 - 1) + 1 <> 0 Then
                     UserName = UserName.Replace("+", " ")
                 End If
 
@@ -8893,7 +8893,7 @@ Module Protocol
                                 End If
 
                                 If System.IO.File.Exists(CharPath & UserName & ".chr") Then
-                                    Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                    Count = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
                                     Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                                     Call _
                                         WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
@@ -9023,7 +9023,7 @@ Module Protocol
                             End If
 
                             If System.IO.File.Exists(CharPath & UserName & ".chr") Then
-                                Count = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                Count = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
                                 Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                                 Call _
                                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & Count + 1,
@@ -9130,7 +9130,7 @@ Module Protocol
                                      opcion = eEditOptions.eo_Skills Or opcion = eEditOptions.eo_addGold
                     End Select
 
-                ElseIf .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then _
+                ElseIf (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then _
 'Si no es RM debe ser dios para poder usar este comando
                     valido = True
                 End If
@@ -9155,7 +9155,7 @@ Module Protocol
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
-                                        UserList(tUser).Stats.GLD = ParseVal(Arg1)
+                                        UserList(tUser).Stats.GLD = Convert.ToInt32(ParseVal(Arg1))
                                         Call WriteUpdateGold(tUser)
                                     End If
                                 Else
@@ -9197,7 +9197,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     Call _
-                                        ChangeUserChar(tUser, ParseVal(Arg1), UserList(tUser).Char_Renamed.Head,
+                                        ChangeUserChar(tUser, Convert.ToInt16(ParseVal(Arg1)), UserList(tUser).Char_Renamed.Head,
                                                        UserList(tUser).Char_Renamed.heading,
                                                        UserList(tUser).Char_Renamed.WeaponAnim,
                                                        UserList(tUser).Char_Renamed.ShieldAnim,
@@ -9215,7 +9215,7 @@ Module Protocol
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else
                                     Call _
-                                        ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, ParseVal(Arg1),
+                                        ChangeUserChar(tUser, UserList(tUser).Char_Renamed.body, Convert.ToInt16(ParseVal(Arg1)),
                                                        UserList(tUser).Char_Renamed.heading,
                                                        UserList(tUser).Char_Renamed.WeaponAnim,
                                                        UserList(tUser).Char_Renamed.ShieldAnim,
@@ -9226,7 +9226,7 @@ Module Protocol
                                 CommandString = CommandString & "HEAD "
 
                             Case eEditOptions.eo_CriminalsKilled
-                                Var = If(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Convert.ToInt32(ParseVal(Arg1)))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CrimMatados", Var.ToString())
@@ -9241,7 +9241,7 @@ Module Protocol
                                 CommandString = CommandString & "CRI "
 
                             Case eEditOptions.eo_CiticensKilled
-                                Var = If(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXUSERMATADOS, MAXUSERMATADOS, Convert.ToInt32(ParseVal(Arg1)))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "FACCIONES", "CiudMatados", Var.ToString())
@@ -9299,7 +9299,7 @@ Module Protocol
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
-                                    UserList(tUser).Stats.ELV = ParseVal(Arg1)
+                                    UserList(tUser).Stats.ELV = Convert.ToByte(ParseVal(Arg1))
                                     Call WriteUpdateUserStats(tUser)
                                 End If
 
@@ -9322,7 +9322,7 @@ Module Protocol
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
-                                        UserList(tUser).clase = LoopC
+                                        UserList(tUser).clase = CType(LoopC, Declaraciones.eClass)
                                     End If
                                 End If
 
@@ -9353,7 +9353,7 @@ Module Protocol
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
-                                        UserList(tUser).Stats.UserSkills(LoopC) = ParseVal(Arg2)
+                                        UserList(tUser).Stats.UserSkills(LoopC) = Convert.ToByte(ParseVal(Arg2))
                                         Call CheckEluSkill(tUser, LoopC, True)
                                     End If
                                 End If
@@ -9368,14 +9368,14 @@ Module Protocol
                                         WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                         FontTypeNames.FONTTYPE_INFO)
                                 Else ' Online
-                                    UserList(tUser).Stats.SkillPts = ParseVal(Arg1)
+                                    UserList(tUser).Stats.SkillPts = Convert.ToInt16(ParseVal(Arg1))
                                 End If
 
                                 ' Log it
                                 CommandString = CommandString & "SKILLSLIBRES "
 
                             Case eEditOptions.eo_Nobleza
-                                Var = If(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXREP, MAXREP, Convert.ToInt32(ParseVal(Arg1)))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Nobles", Var.ToString())
@@ -9390,7 +9390,7 @@ Module Protocol
                                 CommandString = CommandString & "NOB "
 
                             Case eEditOptions.eo_Asesino
-                                Var = If(ParseVal(Arg1) > MAXREP, MAXREP, ParseVal(Arg1))
+                                Var = If(ParseVal(Arg1) > MAXREP, MAXREP, Convert.ToInt32(ParseVal(Arg1)))
 
                                 If tUser <= 0 Then ' Offline
                                     Call WriteVar(UserCharPath, "REP", "Asesino", Var.ToString())
@@ -9415,7 +9415,7 @@ Module Protocol
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else ' Online
-                                        UserList(tUser).Genero = Sex
+                                        UserList(tUser).Genero = DirectCast(Sex, Declaraciones.eGenero)
                                     End If
                                 Else
                                     Call _
@@ -9456,7 +9456,7 @@ Module Protocol
                                             WriteConsoleMsg(UserIndex, "Charfile Alterado: " & UserName,
                                                             FontTypeNames.FONTTYPE_INFO)
                                     Else
-                                        UserList(tUser).raza = raza
+                                        UserList(tUser).raza = DirectCast(raza, Declaraciones.eRaza)
                                     End If
                                 End If
 
@@ -9484,9 +9484,9 @@ Module Protocol
                                                             UserName &
                                                             ".", FontTypeNames.FONTTYPE_TALK)
                                     Else
-                                        UserList(tUser).Stats.Banco = If(UserList(tUser).Stats.Banco + ParseVal(Arg1) <= 0,
+                                        UserList(tUser).Stats.Banco = If(UserList(tUser).Stats.Banco + Convert.ToInt32(ParseVal(Arg1)) <= 0,
                                                                          0,
-                                                                         UserList(tUser).Stats.Banco + ParseVal(Arg1))
+                                                                         Convert.ToInt32(UserList(tUser).Stats.Banco + ParseVal(Arg1)))
                                         Call _
                                             WriteConsoleMsg(tUser, STANDARD_BOUNTY_HUNTER_MESSAGE,
                                                             FontTypeNames.FONTTYPE_TALK)
@@ -9551,8 +9551,8 @@ Module Protocol
 
 
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios) _
+                    (.flags.Privilegios And
+                    (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     'is the player offline?
                     If TargetIndex <= 0 Then
@@ -9566,9 +9566,9 @@ Module Protocol
                     Else
                         'don't allow to retrieve administrator's info
                         If _
-                            UserList(TargetIndex).flags.Privilegios And
+                            (UserList(TargetIndex).flags.Privilegios And
                             (PlayerType.User Or PlayerType.Consejero Or
-                             PlayerType.SemiDios) Then
+                             PlayerType.SemiDios)) <> 0 Then
                             Call SendUserStatsTxt(UserIndex, TargetIndex)
                         End If
                     End If
@@ -9676,7 +9676,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     Call LogGM(.name, "/BAL " & UserName)
 
@@ -9738,7 +9738,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     Call LogGM(.name, "/INV " & UserName)
 
@@ -9797,7 +9797,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     Call LogGM(.name, "/BOV " & UserName)
 
@@ -9858,7 +9858,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     Call LogGM(.name, "/STATS " & UserName)
 
@@ -9929,7 +9929,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     If UserName.ToUpper() <> "YO" Then
                         tUser = NameIndex(UserName)
@@ -10018,16 +10018,16 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then _
                 Exit Sub
 
             priv = PlayerType.Consejero Or PlayerType.SemiDios
-            If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then _
+            If (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Then _
                 priv = priv Or PlayerType.Dios Or PlayerType.Admin
 
             For i = 1 To LastUser
                 If UserList(i).flags.UserLogged Then
-                    If UserList(i).flags.Privilegios And priv Then list = list & UserList(i).name & ", "
+                    If (UserList(i).flags.Privilegios And priv) <> 0 Then list = list & UserList(i).name & ", "
                 End If
             Next i
 
@@ -10061,18 +10061,18 @@ Module Protocol
 
             Map = .incomingData.ReadInteger
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then _
                 Exit Sub
 
 
             priv = PlayerType.User Or PlayerType.Consejero Or
                    PlayerType.SemiDios
-            If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then _
-                priv = priv + Convert.ToInt16(PlayerType.Dios Or PlayerType.Admin)
+            If (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Then _
+                priv = CType(priv Or PlayerType.Dios Or PlayerType.Admin, Declaraciones.PlayerType)
 
             For LoopC = 1 To LastUser
                 If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).Pos.Map = Map Then
-                    If UserList(LoopC).flags.Privilegios And priv Then list = list & UserList(LoopC).name & ", "
+                    If (UserList(LoopC).flags.Privilegios And priv) <> 0 Then list = list & UserList(LoopC).name & ", "
                 End If
             Next LoopC
 
@@ -10170,14 +10170,14 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-                       PlayerType.Consejero
+                rank = Convert.ToInt16(PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                       PlayerType.Consejero)
 
                 UserName = buffer.ReadASCIIString()
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     tUser = NameIndex(UserName)
 
@@ -10372,7 +10372,7 @@ Module Protocol
                             Call UnBan(UserName)
 
                             'penas
-                            cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                            cantPenas = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
                             Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
@@ -10413,7 +10413,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then _
                 Exit Sub
 
             If .flags.TargetNPC > 0 Then
@@ -10459,7 +10459,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     tUser = NameIndex(UserName)
 
@@ -10472,7 +10472,7 @@ Module Protocol
                              (PlayerType.Consejero Or PlayerType.User)) <> 0 Then
                             Call WriteConsoleMsg(tUser, .name & " te ha trasportado.", FontTypeNames.FONTTYPE_INFO)
                             X = .Pos.X
-                            Y = .Pos.Y + 1
+                            Y = Convert.ToInt16(.Pos.Y + 1)
                             Call FindLegalPos(tUser, .Pos.Map, X, Y)
                             Call WarpUserChar(tUser, .Pos.Map, X, Y, True, True)
                             Call LogGM(.name, "/SUM " & UserName & " Map:" & .Pos.Map & " X:" & .Pos.X & " Y:" & .Pos.Y)
@@ -10509,7 +10509,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then _
                 Exit Sub
 
             Call EnviarSpawnList(UserIndex)
@@ -10542,7 +10542,7 @@ Module Protocol
 
             If _
                 (.flags.Privilegios And
-                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                 Then
                 If npc_Renamed > 0 And npc_Renamed <= SpawnList.Length - 1 Then _
                     Call SpawnNpc(SpawnList(npc_Renamed).NpcIndex, .Pos, True, False)
@@ -10568,9 +10568,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.RoleMaster)) <> 0 Then Exit Sub
             If .flags.TargetNPC = 0 Then Exit Sub
 
             Call ResetNpcInv(.flags.TargetNPC)
@@ -10594,9 +10594,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LimpiarMundo()
         End With
@@ -10632,7 +10632,7 @@ Module Protocol
 
                 If _
                     (.flags.Privilegios And
-                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) _
+                     (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios)) <> 0 _
                     Then
                     If migr_LenB(message) <> 0 Then
                         Call LogGM(.name, "Mensaje Broadcast:" & message)
@@ -10697,7 +10697,7 @@ Module Protocol
                     tUser = NameIndex(UserName)
                     Call LogGM(.name, "NICK2IP Solicito la IP de " & UserName)
 
-                    If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then
+                    If (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Then
                         priv = PlayerType.User Or PlayerType.Consejero Or
                                PlayerType.SemiDios Or PlayerType.Dios Or
                                PlayerType.Admin
@@ -10706,7 +10706,7 @@ Module Protocol
                     End If
 
                     If tUser > 0 Then
-                        If UserList(tUser).flags.Privilegios And priv Then
+                        If (UserList(tUser).flags.Privilegios And priv) <> 0 Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "El ip de " & UserName & " es " & UserList(tUser).ip,
                                                 FontTypeNames.FONTTYPE_INFO)
@@ -10714,7 +10714,7 @@ Module Protocol
                             For LoopC = 1 To LastUser
                                 If UserList(LoopC).ip = ip Then
                                     If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).flags.UserLogged Then
-                                        If UserList(LoopC).flags.Privilegios And priv Then
+                                        If (UserList(LoopC).flags.Privilegios And priv) <> 0 Then
                                             lista = lista & UserList(LoopC).name & ", "
                                         End If
                                     End If
@@ -10773,13 +10773,13 @@ Module Protocol
             ip = ip & .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, "IP2NICK Solicito los Nicks de IP " & ip)
 
-            If .flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then
+            If (.flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 Then
                 priv = PlayerType.User Or PlayerType.Consejero Or
                        PlayerType.SemiDios Or PlayerType.Dios Or
                        PlayerType.Admin
@@ -10790,7 +10790,7 @@ Module Protocol
             For LoopC = 1 To LastUser
                 If UserList(LoopC).ip = ip Then
                     If migr_LenB(UserList(LoopC).name) <> 0 And UserList(LoopC).flags.UserLogged Then
-                        If UserList(LoopC).flags.Privilegios And priv Then
+                        If (UserList(LoopC).flags.Privilegios And priv) <> 0 Then
                             lista = lista & UserList(LoopC).name & ", "
                         End If
                     End If
@@ -10895,12 +10895,12 @@ Module Protocol
             Y = .incomingData.ReadByte()
             Radio = .incomingData.ReadByte()
 
-            Radio = MinimoInt(Radio, 6)
+            Radio = Convert.ToByte(MinimoInt(Radio, 6))
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             Call LogGM(.name, "/CT " & mapa & "," & X & "," & Y & "," & Radio)
 
@@ -10932,7 +10932,7 @@ Module Protocol
                 .TileExit.Y = Y
             End With
 
-            Call MakeObj(ET, .Pos.Map, .Pos.X, .Pos.Y - 1)
+            Call MakeObj(ET, .Pos.Map, .Pos.X, Convert.ToInt16(.Pos.Y - 1))
         End With
     End Sub
 
@@ -10957,13 +10957,13 @@ Module Protocol
 
             '/dt
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             mapa = .flags.TargetMap
-            X = .flags.TargetX
-            Y = .flags.TargetY
+            X = Convert.ToByte(.flags.TargetX)
+            Y = Convert.ToByte(.flags.TargetY)
 
             If Not InMapBounds(mapa, X, Y) Then Exit Sub
 
@@ -11003,7 +11003,7 @@ Module Protocol
             'Remove packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then _
                 Exit Sub
 
             Call LogGM(.name, "/LLUVIA")
@@ -11094,8 +11094,8 @@ Module Protocol
 
             'Solo dioses, admins y RMS
             If _
-                .flags.Privilegios And
-                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                (.flags.Privilegios And
+                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                 Then
                 'Si el mapa no fue enviado tomo el actual
                 If Not InMapBounds(mapa, 50, 50) Then
@@ -11147,14 +11147,14 @@ Module Protocol
 
             'Solo dioses, admins y RMS
             If _
-                .flags.Privilegios And
-                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                (.flags.Privilegios And
+                (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                 Then
                 'Si el mapa no fue enviado tomo el actual
                 If Not InMapBounds(mapa, X, Y) Then
                     mapa = .Pos.Map
-                    X = .Pos.X
-                    Y = .Pos.Y
+                    X = Convert.ToByte(.Pos.X)
+                    Y = Convert.ToByte(.Pos.Y)
                 End If
 
                 'Ponemos el pedido por el GM
@@ -11193,8 +11193,8 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    (.flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                     Then
                     Call _
                         SendData(SendTarget.ToRealYRMs, 0,
@@ -11241,8 +11241,8 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    (.flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                     Then
                     Call _
                         SendData(SendTarget.ToCaosYRMs, 0,
@@ -11289,8 +11289,8 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    (.flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                     Then
                     Call _
                         SendData(SendTarget.ToCiudadanosYRMs, 0,
@@ -11337,8 +11337,8 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    (.flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                     Then
                     Call _
                         SendData(SendTarget.ToCriminalesYRMs, 0,
@@ -11385,8 +11385,8 @@ Module Protocol
 
                 'Solo dioses, admins y RMS
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster) _
+                    (.flags.Privilegios And
+                    (PlayerType.Dios Or PlayerType.Admin Or PlayerType.RoleMaster)) <> 0 _
                     Then
                     'Asegurarse haya un NPC seleccionado
                     If .flags.TargetNPC > 0 Then
@@ -11433,9 +11433,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
 
             For Y = .Pos.Y - MinYBorder + 1 To .Pos.Y + MinYBorder - 1
@@ -11444,7 +11444,7 @@ Module Protocol
                         If MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex > 0 Then
                             bIsExit = MapData(.Pos.Map, X, Y).TileExit.Map > 0
                             If ItemNoEsDeMapa(MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex, bIsExit) Then
-                                Call EraseObj(MAX_INVENTORY_OBJS, .Pos.Map, X, Y)
+                                Call EraseObj(MAX_INVENTORY_OBJS, .Pos.Map, Convert.ToInt16(X), Convert.ToInt16(Y))
                             End If
                         End If
                     End If
@@ -11488,7 +11488,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
@@ -11500,9 +11500,9 @@ Module Protocol
                                          FontTypeNames.FONTTYPE_CONSEJO))
                         With UserList(tUser)
                             If (.flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then _
-                                .flags.Privilegios = .flags.Privilegios - PlayerType.ChaosCouncil
+                                .flags.Privilegios = CType(.flags.Privilegios - PlayerType.ChaosCouncil, Declaraciones.PlayerType)
                             If (.flags.Privilegios And PlayerType.RoyalCouncil) = 0 Then _
-                                .flags.Privilegios = .flags.Privilegios + PlayerType.RoyalCouncil
+                                .flags.Privilegios = CType(.flags.Privilegios + PlayerType.RoyalCouncil, Declaraciones.PlayerType)
 
                             Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                         End With
@@ -11552,7 +11552,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     tUser = NameIndex(UserName)
                     If tUser <= 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usuario offline", FontTypeNames.FONTTYPE_INFO)
@@ -11564,9 +11564,9 @@ Module Protocol
 
                         With UserList(tUser)
                             If (.flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then _
-                                .flags.Privilegios = .flags.Privilegios - PlayerType.RoyalCouncil
+                                .flags.Privilegios = CType(.flags.Privilegios - PlayerType.RoyalCouncil, Declaraciones.PlayerType)
                             If (.flags.Privilegios And PlayerType.ChaosCouncil) = 0 Then _
-                                .flags.Privilegios = .flags.Privilegios + PlayerType.ChaosCouncil
+                                .flags.Privilegios = CType(.flags.Privilegios + PlayerType.ChaosCouncil, Declaraciones.PlayerType)
 
                             Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                         End With
@@ -11603,9 +11603,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
 
             For X = 5 To 95
@@ -11746,9 +11746,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             Call DumpTables()
         End With
@@ -11806,7 +11806,7 @@ Module Protocol
                                 Call _
                                     WriteConsoleMsg(tUser, "Has sido echado del consejo de Banderbill.",
                                                     FontTypeNames.FONTTYPE_TALK)
-                                .flags.Privilegios = .flags.Privilegios - PlayerType.RoyalCouncil
+                                .flags.Privilegios = CType(.flags.Privilegios - PlayerType.RoyalCouncil, Declaraciones.PlayerType)
 
                                 Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                                 Call _
@@ -11820,7 +11820,7 @@ Module Protocol
                                 Call _
                                     WriteConsoleMsg(tUser, "Has sido echado del Concilio de las Sombras.",
                                                     FontTypeNames.FONTTYPE_TALK)
-                                .flags.Privilegios = .flags.Privilegios - PlayerType.ChaosCouncil
+                                .flags.Privilegios = CType(.flags.Privilegios - PlayerType.ChaosCouncil, Declaraciones.PlayerType)
 
                                 Call WarpUserChar(tUser, .Pos.Map, .Pos.X, .Pos.Y, False)
                                 Call _
@@ -11869,12 +11869,12 @@ Module Protocol
             tTrigger = .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             If tTrigger >= 0 Then
-                MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = tTrigger
+                MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = CType(tTrigger, Declaraciones.eTrigger)
                 tLog = "Trigger " & tTrigger & " en mapa " & .Pos.Map & " " & .Pos.X & "," & .Pos.Y
 
                 Call LogGM(.name, tLog)
@@ -11901,11 +11901,11 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
-            tTrigger = MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger
+            tTrigger = Convert.ToByte(MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger)
 
             Call LogGM(.name, "Miro el trigger en " & .Pos.Map & "," & .Pos.X & "," & .Pos.Y & ". Era " & tTrigger)
 
@@ -11933,9 +11933,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
 
             Call LogGM(.name, "/BANIPLIST")
@@ -11967,9 +11967,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call BanIpGuardar()
             Call BanIpCargar()
@@ -12013,7 +12013,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     tFile = AppDomain.CurrentDomain.BaseDirectory & "guilds/" & GuildName & "-members.mem"
 
                     If Not System.IO.File.Exists(tFile) Then
@@ -12027,7 +12027,7 @@ Module Protocol
                         'baneamos a los miembros
                         Call LogGM(.name, "BANCLAN a " & GuildName.ToUpper())
 
-                        cantMembers = ParseVal(GetVar(tFile, "INIT", "NroMembers"))
+                        cantMembers = Convert.ToInt16(ParseVal(GetVar(tFile, "INIT", "NroMembers")))
 
                         For LoopC = 1 To cantMembers
                             member = GetVar(tFile, "Members", "Member" & LoopC)
@@ -12050,7 +12050,7 @@ Module Protocol
                             'ponemos el flag de ban a 1
                             Call WriteVar(CharPath & member & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
-                            Count = ParseVal(GetVar(CharPath & member & ".chr", "PENAS", "Cant"))
+                            Count = Convert.ToByte(ParseVal(GetVar(CharPath & member & ".chr", "PENAS", "Cant")))
                             Call WriteVar(CharPath & member & ".chr", "PENAS", "Cant", (Count + 1).ToString())
                             Call _
                                 WriteVar(CharPath & member & ".chr", "PENAS", "P" & Count + 1,
@@ -12116,7 +12116,7 @@ Module Protocol
                 reason = buffer.ReadASCIIString()
 
 
-                If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
+                If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If migr_LenB(bannedIP) > 0 Then
                         Call LogGM(.name, "/BanIP " & bannedIP & " por " & reason)
 
@@ -12183,9 +12183,9 @@ Module Protocol
             bannedIP = bannedIP & .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             If BanIpQuita(bannedIP) Then
                 Call _
@@ -12225,9 +12225,9 @@ Module Protocol
             tObj = .incomingData.ReadInteger()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             Call LogGM(.name, "/CI: " & tObj)
 
@@ -12247,7 +12247,7 @@ Module Protocol
 
             Objeto.Amount = 100
             Objeto.ObjIndex = tObj
-            Call MakeObj(Objeto, .Pos.Map, .Pos.X, .Pos.Y - 1)
+            Call MakeObj(Objeto, .Pos.Map, .Pos.X, Convert.ToInt16(.Pos.Y - 1))
         End With
     End Sub
 
@@ -12267,9 +12267,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             If MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex = 0 Then Exit Sub
 
@@ -12474,9 +12474,9 @@ Module Protocol
             midiID = .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             Call _
                 SendData(SendTarget.ToAll, 0,
@@ -12510,9 +12510,9 @@ Module Protocol
             waveID = .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             Call SendData(SendTarget.ToAll, 0, PrepareMessagePlayWave(waveID, NO_3D_SOUND, NO_3D_SOUND))
         End With
@@ -12553,7 +12553,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If migr_LenB(UserName) = 0 Then
                         Call _
                             WriteConsoleMsg(UserIndex, "Utilice /borrarpena Nick@NumeroDePena@NuevaPena",
@@ -12609,9 +12609,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             Call LogGM(.name, "/BLOQ")
 
@@ -12621,7 +12621,7 @@ Module Protocol
                 MapData(.Pos.Map, .Pos.X, .Pos.Y).Blocked = 0
             End If
 
-            Call Bloquear(True, .Pos.Map, .Pos.X, .Pos.Y, MapData(.Pos.Map, .Pos.X, .Pos.Y).Blocked)
+            Call Bloquear(True, .Pos.Map, .Pos.X, .Pos.Y, Convert.ToBoolean(MapData(.Pos.Map, .Pos.X, .Pos.Y).Blocked))
         End With
     End Sub
 
@@ -12641,9 +12641,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             If .flags.TargetNPC = 0 Then Exit Sub
 
@@ -12670,9 +12670,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
 
             For Y = .Pos.Y - MinYBorder + 1 To .Pos.Y + MinYBorder - 1
@@ -12717,8 +12717,8 @@ Module Protocol
                 Call buffer.ReadByte()
 
 
-                priv = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-                       PlayerType.Consejero
+                priv = Convert.ToInt16(PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+                       PlayerType.Consejero)
                 UserName = buffer.ReadASCIIString()
 
                 If _
@@ -12807,7 +12807,7 @@ Module Protocol
 
             If _
                 (.flags.Privilegios And
-                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.RoleMaster)) _
+                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.RoleMaster)) <> 0 _
                 Then
                 .flags.ChatColor = color
             End If
@@ -12830,9 +12830,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-                 PlayerType.Consejero) Then
+                 PlayerType.Consejero)) <> 0 Then
                 .flags.AdminPerseguible = Not .flags.AdminPerseguible
             End If
         End With
@@ -12872,8 +12872,8 @@ Module Protocol
                 Slot = buffer.ReadByte() 'Que Slot?
 
                 If _
-                    .flags.Privilegios And
-                    (PlayerType.Admin Or PlayerType.SemiDios Or PlayerType.Dios) _
+                    (.flags.Privilegios And
+                    (PlayerType.Admin Or PlayerType.SemiDios Or PlayerType.Dios)) <> 0 _
                     Then
                     tIndex = NameIndex(UserName) 'Que user index?
 
@@ -12929,9 +12929,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
             If .name.ToUpper() <> "MARAXUS" Then Exit Sub
 
             Call WriteConsoleMsg(UserIndex, "TID: " & (ReiniciarAutoUpdate()).ToString(), FontTypeNames.FONTTYPE_INFO)
@@ -12954,9 +12954,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
             If .name.ToUpper() <> "MARAXUS" Then Exit Sub
 
             'time and Time BUG!
@@ -12982,9 +12982,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los objetos.")
 
@@ -13008,9 +13008,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los hechizos.")
 
@@ -13034,9 +13034,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los INITs.")
 
@@ -13060,9 +13060,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha recargado los NPCs.")
 
@@ -13088,9 +13088,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha echado a todos los personajes.")
 
@@ -13116,9 +13116,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
             If .name.ToUpper() <> "MARAXUS" Then Exit Sub
 
             DeNoche = Not DeNoche
@@ -13126,7 +13126,7 @@ Module Protocol
 
             For i = 1 To NumUsers
                 If UserList(i).flags.UserLogged And UserList(i).ConnID > - 1 Then
-                    Call EnviarNoche(i)
+                    Call EnviarNoche(Convert.ToInt16(i))
                 End If
             Next i
         End With
@@ -13148,9 +13148,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha solicitado mostrar el formulario del servidor.")
             ' TODO FIX: no funciona como se espera, de todas formas no es algo funcional
@@ -13173,9 +13173,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha borrado los SOS.")
 
@@ -13199,9 +13199,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha guardado todos los chars.")
 
@@ -13386,7 +13386,7 @@ Module Protocol
 
             If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                 Call LogGM(.name, .name & " ha cambiado la información sobre si está permitido usar la magia el mapa.")
-                MapInfo_Renamed(UserList(UserIndex).Pos.Map).MagiaSinEfecto = nomagic
+                MapInfo_Renamed(UserList(UserIndex).Pos.Map).MagiaSinEfecto = If(nomagic, CByte(1), CByte(0))
                 Call _
                     WriteVar(
                         AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat",
@@ -13428,7 +13428,7 @@ Module Protocol
                     LogGM(.name,
                           .name &
                           " ha cambiado la información sobre si está permitido usar la invisibilidad en el mapa.")
-                MapInfo_Renamed(UserList(UserIndex).Pos.Map).InviSinEfecto = noinvi
+                MapInfo_Renamed(UserList(UserIndex).Pos.Map).InviSinEfecto = If(noinvi, CByte(1), CByte(0))
                 Call _
                     WriteVar(
                         AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat",
@@ -13469,7 +13469,7 @@ Module Protocol
                 Call _
                     LogGM(.name,
                           .name & " ha cambiado la información sobre si está permitido usar el resucitar en el mapa.")
-                MapInfo_Renamed(UserList(UserIndex).Pos.Map).ResuSinEfecto = noresu
+                MapInfo_Renamed(UserList(UserIndex).Pos.Map).ResuSinEfecto = If(noresu, CByte(1), CByte(0))
                 Call _
                     WriteVar(
                         AppDomain.CurrentDomain.BaseDirectory & MapPath & "mapa" & UserList(UserIndex).Pos.Map & ".dat",
@@ -13627,9 +13627,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha guardado el mapa " & .Pos.Map.ToString())
 
@@ -13671,7 +13671,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call GMEscuchaClan(UserIndex, guild)
                 End If
 
@@ -13701,9 +13701,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, .name & " ha hecho un backup.")
 
@@ -13728,9 +13728,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             centinelaActivado = Not centinelaActivado
 
@@ -13740,7 +13740,7 @@ Module Protocol
                 .TiempoRestante = 0
             End With
 
-            If CentinelaNPCIndex Then
+            If CentinelaNPCIndex <> 0 Then
                 Call QuitarNPC(CentinelaNPCIndex)
                 CentinelaNPCIndex = 0
             End If
@@ -13794,7 +13794,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If migr_LenB(UserName) = 0 Or migr_LenB(newName) = 0 Then
                         Call WriteConsoleMsg(UserIndex, "Usar: /ANAME origen@destino", FontTypeNames.FONTTYPE_INFO)
                     Else
@@ -13810,7 +13810,7 @@ Module Protocol
                                     WriteConsoleMsg(UserIndex, "El pj " & UserName & " es inexistente.",
                                                     FontTypeNames.FONTTYPE_INFO)
                             Else
-                                GuildIndex = ParseVal(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX"))
+                                GuildIndex = Convert.ToInt16(ParseVal(GetVar(CharPath & UserName & ".chr", "GUILD", "GUILDINDEX")))
 
                                 If GuildIndex > 0 Then
                                     Call _
@@ -13829,7 +13829,7 @@ Module Protocol
                                         Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
 
 
-                                        cantPenas = ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
+                                        cantPenas = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
 
                                         Call _
                                             WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
@@ -13897,7 +13897,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If migr_LenB(UserName) = 0 Or migr_LenB(newMail) = 0 Then
                         Call WriteConsoleMsg(UserIndex, "usar /AEMAIL <pj>-<nuevomail>", FontTypeNames.FONTTYPE_INFO)
                     Else
@@ -13960,7 +13960,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call LogGM(.name, "Ha alterado la contraseña de " & UserName)
 
                     If migr_LenB(UserName) = 0 Or migr_LenB(copyFrom) = 0 Then
@@ -14020,9 +14020,9 @@ Module Protocol
             NpcIndex = .incomingData.ReadInteger()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             NpcIndex = SpawnNpc(NpcIndex, .Pos, True, False)
 
@@ -14058,9 +14058,9 @@ Module Protocol
             NpcIndex = .incomingData.ReadInteger()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios) Then Exit Sub
+                 PlayerType.SemiDios)) <> 0 Then Exit Sub
 
             NpcIndex = SpawnNpc(NpcIndex, .Pos, True, True)
 
@@ -14097,9 +14097,9 @@ Module Protocol
             ObjIndex = .incomingData.ReadInteger()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Select Case Index
                 Case 1
@@ -14144,9 +14144,9 @@ Module Protocol
             ObjIndex = .incomingData.ReadInteger()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Select Case Index
                 Case 1
@@ -14179,7 +14179,7 @@ Module Protocol
             'Remove Packet ID
             Call .incomingData.ReadByte()
 
-            If .flags.Privilegios And (PlayerType.User Or PlayerType.Consejero) Then _
+            If (.flags.Privilegios And (PlayerType.User Or PlayerType.Consejero)) <> 0 Then _
                 Exit Sub
 
             If .flags.Navegando = 1 Then
@@ -14209,9 +14209,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             If ServerSoloGMs > 0 Then
                 Call WriteConsoleMsg(UserIndex, "Servidor habilitado para todos.", FontTypeNames.FONTTYPE_INFO)
@@ -14241,9 +14241,9 @@ Module Protocol
             Call .incomingData.ReadByte()
 
             If _
-                .flags.Privilegios And
+                (.flags.Privilegios And
                 (PlayerType.User Or PlayerType.Consejero Or
-                 PlayerType.SemiDios Or PlayerType.RoleMaster) Then Exit Sub
+                 PlayerType.SemiDios Or PlayerType.RoleMaster)) <> 0 Then Exit Sub
 
             Call LogGM(.name, "/APAGAR")
             Call _
@@ -14288,7 +14288,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call LogGM(.name, "/CONDEN " & UserName)
 
                     tUser = NameIndex(UserName)
@@ -14339,7 +14339,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call LogGM(.name, "/RAJAR " & UserName)
 
                     tUser = NameIndex(UserName)
@@ -14415,7 +14415,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call LogGM(.name, "/RAJARCLAN " & UserName)
 
                     GuildIndex = m_EcharMiembroDeClan(UserIndex, UserName)
@@ -14476,7 +14476,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     If System.IO.File.Exists(CharPath & UserName & ".chr") Then
                         mail = GetVar(CharPath & UserName & ".chr", "CONTACTO", "email")
 
@@ -14526,7 +14526,7 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call LogGM(.name, "Mensaje de sistema:" & message)
 
                     Call SendData(SendTarget.ToAll, 0, PrepareMessageShowMessageBox(message))
@@ -14579,10 +14579,10 @@ Module Protocol
 
                 If _
                     (Not .flags.Privilegios And PlayerType.RoleMaster) <> 0 And
-                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) Then
+                    (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
                     Call LogGM(.name, "Ha fijado un nuevo MOTD")
 
-                    MaxLines = auxiliaryString.Length
+                    MaxLines = Convert.ToInt16(auxiliaryString.Length)
 
                     'UPGRADE_WARNING: El límite inferior de la matriz MOTD ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim MOTD(MaxLines)
@@ -14633,7 +14633,7 @@ Module Protocol
             If _
                 (.flags.Privilegios And
                  (PlayerType.RoleMaster Or PlayerType.User Or
-                  PlayerType.Consejero Or PlayerType.SemiDios)) Then
+                  PlayerType.Consejero Or PlayerType.SemiDios)) <> 0 Then
                 Exit Sub
             End If
 
@@ -14708,7 +14708,7 @@ Module Protocol
                 sClave = buffer.ReadASCIIString()
                 sValor = buffer.ReadASCIIString()
 
-                If .flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios) Then
+                If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
 
                     'No podemos modificar [INIT]Dioses ni [Dioses]*
                     If (sLlave.ToUpper() = "INIT" And sClave.ToUpper() = "DIOSES") Or sLlave.ToUpper() = "DIOSES" Then
@@ -14720,7 +14720,7 @@ Module Protocol
                         sTmp = GetVar(IniPath & "Server.ini", sLlave, sClave)
 
                         'Si obtengo un valor escribo en el server.ini
-                        If migr_LenB(sTmp) Then
+                        If migr_LenB(sTmp) <> 0 Then
                             Call WriteVar(IniPath & "Server.ini", sLlave, sClave, sValor)
                             Call _
                                 LogGM(.name,
@@ -15087,7 +15087,7 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.UpdateExp)
-                    Call .WriteLong(UserList(UserIndex).Stats.Exp)
+                    Call .WriteLong(Convert.ToInt32(UserList(UserIndex).Stats.Exp))
                 End With
             End Sub,
             Sub()
@@ -15184,8 +15184,8 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.PosUpdate)
-                    Call .WriteByte(UserList(UserIndex).Pos.X)
-                    Call .WriteByte(UserList(UserIndex).Pos.Y)
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Pos.X))
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Pos.Y))
                 End With
             End Sub,
             Sub()
@@ -15503,7 +15503,7 @@ Module Protocol
                     For i = 0 To guildList.Length - 1
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -15523,8 +15523,8 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.AreaChanged)
-                    Call .WriteByte(UserList(UserIndex).Pos.X)
-                    Call .WriteByte(UserList(UserIndex).Pos.Y)
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Pos.X))
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Pos.Y))
                 End With
             End Sub,
             Sub()
@@ -15597,8 +15597,8 @@ Module Protocol
                     Call .WriteInteger(UserList(UserIndex).Stats.MinSta)
                     Call .WriteLong(UserList(UserIndex).Stats.GLD)
                     Call .WriteByte(UserList(UserIndex).Stats.ELV)
-                    Call .WriteLong(UserList(UserIndex).Stats.ELU)
-                    Call .WriteLong(UserList(UserIndex).Stats.Exp)
+                    Call .WriteLong(Convert.ToInt32(UserList(UserIndex).Stats.ELU))
+                    Call .WriteLong(Convert.ToInt32(UserList(UserIndex).Stats.Exp))
                 End With
             End Sub,
             Sub()
@@ -15617,7 +15617,7 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.WorkRequestTarget)
-                    Call .WriteByte(Skill)
+                    Call .WriteByte(Convert.ToByte(Skill))
                 End With
             End Sub,
             Sub()
@@ -15647,9 +15647,9 @@ Module Protocol
                     Call .WriteInteger(ObjIndex)
                     Call .WriteASCIIString(obData.name)
                     Call .WriteInteger(UserList(UserIndex).Invent.Object_Renamed(Slot).Amount)
-                    Call .WriteBoolean(UserList(UserIndex).Invent.Object_Renamed(Slot).Equipped)
+                    Call .WriteBoolean(Convert.ToBoolean(UserList(UserIndex).Invent.Object_Renamed(Slot).Equipped))
                     Call .WriteInteger(obData.GrhIndex)
-                    Call .WriteByte(obData.OBJType)
+                    Call .WriteByte(Convert.ToByte(obData.OBJType))
                     Call .WriteInteger(obData.MaxHIT)
                     Call .WriteInteger(obData.MinHIT)
                     Call .WriteInteger(obData.MaxDef)
@@ -15671,7 +15671,7 @@ Module Protocol
         '***************************************************
         With UserList(UserIndex).outgoingData
             Call .WriteByte(ServerPacketID.AddSlots)
-            Call .WriteByte(Mochila)
+            Call .WriteByte(Convert.ToByte(Mochila))
         End With
     End Sub
 
@@ -15705,7 +15705,7 @@ Module Protocol
                     Call .WriteASCIIString(obData.name)
                     Call .WriteInteger(UserList(UserIndex).BancoInvent.Object_Renamed(Slot).Amount)
                     Call .WriteInteger(obData.GrhIndex)
-                    Call .WriteByte(obData.OBJType)
+                    Call .WriteByte(Convert.ToByte(obData.OBJType))
                     Call .WriteInteger(obData.MaxHIT)
                     Call .WriteInteger(obData.MinHIT)
                     Call .WriteInteger(obData.MaxDef)
@@ -15729,7 +15729,7 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.ChangeSpellSlot)
-                    Call .WriteByte(Slot)
+                    Call .WriteByte(Convert.ToByte(Slot))
                     Call .WriteInteger(UserList(UserIndex).Stats.UserHechizos(Slot))
                     If UserList(UserIndex).Stats.UserHechizos(Slot) > 0 Then
                         Call .WriteASCIIString(Hechizos(UserList(UserIndex).Stats.UserHechizos(Slot)).Nombre)
@@ -15788,8 +15788,8 @@ Module Protocol
                                      Math.Round(
                                          UserList(UserIndex).Stats.UserSkills(eSkill.Herreria)/
                                          ModHerreriA(UserList(UserIndex).clase), 0) Then
-                            Count = Count + 1
-                            validIndexes(Count) = i
+                            Count = Convert.ToInt16(Count + 1)
+                            validIndexes(Count) = Convert.ToInt16(i)
                         End If
                     Next i
                     Call .WriteInteger(Count)
@@ -15832,8 +15832,8 @@ Module Protocol
                                      Math.Round(
                                          UserList(UserIndex).Stats.UserSkills(eSkill.Herreria)/
                                          ModHerreriA(UserList(UserIndex).clase), 0) Then
-                            Count = Count + 1
-                            validIndexes(Count) = i
+                            Count = Convert.ToInt16(Count + 1)
+                            validIndexes(Count) = Convert.ToInt16(i)
                         End If
                     Next i
                     Call .WriteInteger(Count)
@@ -15875,8 +15875,8 @@ Module Protocol
                                      ObjData_Renamed(ObjCarpintero(i)).SkCarpinteria <=
                                      UserList(UserIndex).Stats.UserSkills(eSkill.Carpinteria)\
                                      ModCarpinteria(UserList(UserIndex).clase) Then
-                            Count = Count + 1
-                            validIndexes(Count) = i
+                            Count = Convert.ToInt16(Count + 1)
+                            validIndexes(Count) = Convert.ToInt16(i)
                         End If
                     Next i
                     Call .WriteInteger(Count)
@@ -15996,7 +15996,7 @@ Module Protocol
                     Call .WriteSingle(price)
                     Call .WriteInteger(ObjInfo.GrhIndex)
                     Call .WriteInteger(Obj.ObjIndex)
-                    Call .WriteByte(ObjInfo.OBJType)
+                    Call .WriteByte(Convert.ToByte(ObjInfo.OBJType))
                     Call .WriteInteger(ObjInfo.MaxHIT)
                     Call .WriteInteger(ObjInfo.MinHIT)
                     Call .WriteInteger(ObjInfo.MaxDef)
@@ -16019,10 +16019,10 @@ Module Protocol
             Sub()
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.UpdateHungerAndThirst)
-                    Call .WriteByte(UserList(UserIndex).Stats.MaxAGU)
-                    Call .WriteByte(UserList(UserIndex).Stats.MinAGU)
-                    Call .WriteByte(UserList(UserIndex).Stats.MaxHam)
-                    Call .WriteByte(UserList(UserIndex).Stats.MinHam)
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Stats.MaxAGU))
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Stats.MinAGU))
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Stats.MaxHam))
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).Stats.MinHam))
                 End With
             End Sub,
             Sub()
@@ -16070,7 +16070,7 @@ Module Protocol
                     Call .WriteLong(UserList(UserIndex).Faccion.CriminalesMatados)
                     Call .WriteLong(UserList(UserIndex).Stats.UsuariosMatados)
                     Call .WriteInteger(UserList(UserIndex).Stats.NPCsMuertos)
-                    Call .WriteByte(UserList(UserIndex).clase)
+                    Call .WriteByte(Convert.ToByte(UserList(UserIndex).clase))
                     Call .WriteLong(UserList(UserIndex).Counters.Pena)
                 End With
             End Sub,
@@ -16129,12 +16129,12 @@ Module Protocol
                 Dim CanMakeSticky As Byte
                 With UserList(UserIndex)
                     Call .outgoingData.WriteByte(ServerPacketID.ShowForumForm)
-                    Visibilidad = eForumVisibility.ieGENERAL_MEMBER
+                    Visibilidad = Convert.ToByte(eForumVisibility.ieGENERAL_MEMBER)
                     If esCaos(UserIndex) Or EsGM(UserIndex) Then
-                        Visibilidad = Visibilidad Or eForumVisibility.ieCAOS_MEMBER
+                        Visibilidad = Convert.ToByte(Visibilidad Or eForumVisibility.ieCAOS_MEMBER)
                     End If
                     If esArmada(UserIndex) Or EsGM(UserIndex) Then
-                        Visibilidad = Visibilidad Or eForumVisibility.ieREAL_MEMBER
+                        Visibilidad = Convert.ToByte(Visibilidad Or eForumVisibility.ieREAL_MEMBER)
                     End If
                     Call .outgoingData.WriteByte(Visibilidad)
                     If EsGM(UserIndex) Then
@@ -16254,11 +16254,11 @@ Module Protocol
                 Dim i As Integer
                 With UserList(UserIndex)
                     Call .outgoingData.WriteByte(ServerPacketID.SendSkills)
-                    Call .outgoingData.WriteByte(.clase)
+                    Call .outgoingData.WriteByte(Convert.ToByte(.clase))
                     For i = 1 To NUMSKILLS
                         Call .outgoingData.WriteByte(UserList(UserIndex).Stats.UserSkills(i))
                         If .Stats.UserSkills(i) < MAXSKILLPOINTS Then
-                            Call .outgoingData.WriteByte(Int(.Stats.ExpSkills(i)*100/.Stats.EluSkills(i)))
+                            Call .outgoingData.WriteByte(Convert.ToByte(Int(.Stats.ExpSkills(i)*100/.Stats.EluSkills(i))))
                         Else
                             Call .outgoingData.WriteByte(0)
                         End If
@@ -16307,13 +16307,13 @@ Module Protocol
                     For i = 0 To enemies.Length - 1
                         Tmp = Tmp & enemies(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
                     For i = 0 To allies.Length - 1
                         Tmp = Tmp & allies(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16358,7 +16358,7 @@ Module Protocol
                     For i = 0 To guilds.Length - 1
                         Tmp = Tmp & guilds(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16383,7 +16383,7 @@ Module Protocol
                     For i = 0 To guilds.Length - 1
                         Tmp = Tmp & guilds(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16406,7 +16406,7 @@ Module Protocol
                     Call .WriteByte(ServerPacketID.CharacterInfo)
                     Call .WriteASCIIString(charName)
                     Call .WriteByte(race)
-                    Call .WriteByte(Class_Renamed)
+                    Call .WriteByte(Convert.ToByte(Class_Renamed))
                     Call .WriteByte(gender)
                     Call .WriteByte(level)
                     Call .WriteLong(gold)
@@ -16438,20 +16438,20 @@ Module Protocol
                     For i = 0 To guildList.Length - 1
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
                     For i = 0 To MemberList.Length - 1
                         Tmp = Tmp & MemberList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Call .WriteASCIIString(guildNews)
                     Tmp = vbNullString
                     For i = 0 To joinRequests.Length - 1
                         Tmp = Tmp & joinRequests(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16476,13 +16476,13 @@ Module Protocol
                     For i = 0 To guildList.Length - 1
                         Tmp = Tmp & guildList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                     Tmp = vbNullString
                     For i = 0 To MemberList.Length - 1
                         Tmp = Tmp & MemberList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16640,12 +16640,12 @@ Module Protocol
                     Call .WriteLong(Amount)
                     If ObjIndex > 0 Then
                         Call .WriteInteger(ObjData_Renamed(ObjIndex).GrhIndex)
-                        Call .WriteByte(ObjData_Renamed(ObjIndex).OBJType)
+                        Call .WriteByte(Convert.ToByte(ObjData_Renamed(ObjIndex).OBJType))
                         Call .WriteInteger(ObjData_Renamed(ObjIndex).MaxHIT)
                         Call .WriteInteger(ObjData_Renamed(ObjIndex).MinHIT)
                         Call .WriteInteger(ObjData_Renamed(ObjIndex).MaxDef)
                         Call .WriteInteger(ObjData_Renamed(ObjIndex).MinDef)
-                        Call .WriteLong(SalePrice(ObjIndex))
+                        Call .WriteLong(Convert.ToInt32(SalePrice(ObjIndex)))
                         Call .WriteASCIIString(ObjData_Renamed(ObjIndex).name)
                     Else ' Borra el item
                         Call .WriteInteger(0)
@@ -16699,7 +16699,7 @@ Module Protocol
                     For i = 0 To npcNames.Length - 1
                         Tmp = Tmp & npcNames(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16722,7 +16722,7 @@ Module Protocol
                 With UserList(UserIndex).outgoingData
                     Call .WriteByte(ServerPacketID.ShowSOSForm)
                     For i = 0 To Ayuda.Longitud - 1
-                        Tmp = Tmp & Ayuda.VerElemento(i) & SEPARATOR
+                        Tmp = Tmp & Ayuda.VerElemento(Convert.ToInt16(i)) & SEPARATOR
                     Next i
                     If migr_LenB(Tmp) <> 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
@@ -16821,7 +16821,7 @@ Module Protocol
                     For i = 1 To cant
                         Tmp = Tmp & userNamesList(i) & SEPARATOR
                     Next i
-                    If Tmp.Length Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
+                    If Tmp.Length > 0 Then Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length))
                     Call .WriteASCIIString(Tmp)
                 End With
             End Sub,
@@ -16938,9 +16938,9 @@ Module Protocol
             Call .WriteInteger(CharIndex)
 
             ' Write rgb channels and save one byte from long :D
-            Call .WriteByte(color And &HFF)
-            Call .WriteByte((color And &HFF00)\&H100)
-            Call .WriteByte((color And &HFF0000)\&H10000)
+            Call .WriteByte(Convert.ToByte(color And &HFF))
+            Call .WriteByte(Convert.ToByte((color And &HFF00)\&H100))
+            Call .WriteByte(Convert.ToByte((color And &HFF0000)\&H10000))
 
             PrepareMessageChatOverHead = .ReadASCIIStringFixed(.length)
         End With
@@ -16963,7 +16963,7 @@ Module Protocol
         With auxiliarBuffer
             Call .WriteByte(ServerPacketID.ConsoleMsg)
             Call .WriteASCIIString(Chat)
-            Call .WriteByte(FontIndex)
+            Call .WriteByte(Convert.ToByte(FontIndex))
 
             PrepareMessageConsoleMsg = .ReadASCIIStringFixed(.length)
         End With
@@ -16978,7 +16978,7 @@ Module Protocol
         With auxiliarBuffer
             Call .WriteByte(ServerPacketID.CommerceChat)
             Call .WriteASCIIString(Chat)
-            Call .WriteByte(FontIndex)
+            Call .WriteByte(Convert.ToByte(FontIndex))
 
             PrepareCommerceConsoleMsg = .ReadASCIIStringFixed(.length)
         End With
