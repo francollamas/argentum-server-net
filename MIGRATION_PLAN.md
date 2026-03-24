@@ -428,83 +428,24 @@ La clase `diccionario` (138 líneas) era un wrapper VB6 con solo 1 caller (`clsC
 
 ---
 
-## Etapa 7: Activar `Option Strict On` — 48 archivos
+## Etapa 7: Activar `Option Strict On` — 5468 errores
 
-Cambiar archivo por archivo. Después de cada cambio: `dotnet build` y corregir errores.
+> **Plan detallado**: Ver [MIGRATION_STAGE7_PLAN.md](MIGRATION_STAGE7_PLAN.md) para clasificación completa de errores, ejemplos antes/después, y orden de ejecución.
 
-**Orden recomendado** (de menor a mayor riesgo):
+`Option Strict On` ya activado globalmente. Los errores se resuelven por tipo de error (accionables), no por archivo.
 
-### Batch A — Archivos utilitarios/simples
-| Archivo | Estado |
-|---------|--------|
-| modHexaStrings.vb | 🔲 |
-| clsIniReader.vb | 🔲 |
-| Migration.vb | 🔲 |
-| Matematicas.vb | 🔲 |
-| clsByteQueue.vb | 🔲 |
-| Queue.vb | 🔲 |
-| SecurityIp.vb | 🔲 |
-| clsMapSoundManager.vb | 🔲 |
-| clsEstadisticasIPC.vb | 🔲 |
-| cSolicitud.vb | 🔲 |
-| clsdicc.vb | 🔲 |
-| ModCola.vb | 🔲 |
-| ArrayInitializers.vb | 🔲 |
-| PathFinding.vb | 🔲 |
+### Accionables
 
-### Batch B — Medianos
-| Archivo | Estado |
-|---------|--------|
-| clsClan.vb | 🔲 |
-| clsParty.vb | 🔲 |
-| mdParty.vb | 🔲 |
-| modBanco.vb | 🔲 |
-| Statistics.vb | 🔲 |
-| Comercio.vb | 🔲 |
-| mdlCOmercioConUsuario.vb | 🔲 |
-| modForum.vb | 🔲 |
-| ModAreas.vb | 🔲 |
-| ModFacciones.vb | 🔲 |
-| praetorians.vb | 🔲 |
-| wskapiAO.vb | 🔲 |
-| ConsultasPopulares.vb | 🔲 |
-| modCentinela.vb | 🔲 |
-| modNuevoTimer.vb | 🔲 |
-
-### Batch C — Complejos
-| Archivo | Estado |
-|---------|--------|
-| AI_NPC.vb | 🔲 |
-| SistemaCombate.vb | 🔲 |
-| modGuilds.vb | 🔲 |
-| modHechizos.vb | 🔲 |
-| Trabajo.vb | 🔲 |
-| Acciones.vb | 🔲 |
-| InvUsuario.vb | 🔲 |
-| Modulo_InventANDobj.vb | 🔲 |
-| Characters.vb | 🔲 |
-| Declares.vb | 🔲 |
-| GameLogic.vb | 🔲 |
-| GameLoop.vb | 🔲 |
-| CargaMapa.vb | 🔲 |
-| Admin.vb | 🔲 |
-
-### Batch D — Críticos
-| Archivo | Estado |
-|---------|--------|
-| modSendData.vb | 🔲 |
-| SocketManager.vb | 🔲 |
-| General.vb | 🔲 |
-| Statistics.vb | 🔲 |
-| MODULO_NPCs.vb | 🔲 |
-| Modulo_UsUaRiOs.vb | 🔲 |
-| FileIO.vb | 🔲 |
-| TCP.vb | 🔲 |
-
-### Batch E — El más grande (último)
-| Archivo | Estado |
-|---------|--------|
-| Protocol.vb | 🔲 |
+| # | Accionable | Errores | Estado |
+|---|-----------|---------|--------|
+| 1 | Cambiar tipo base de Enums (As Byte/Short) | ~1334 | 🔲 |
+| 2 | Reemplazar IIf() por If() | ~100+ | 🔲 |
+| 3 | PlayerType bitwise → `<> 0` / `= 0` | ~352 | 🔲 |
+| 4 | Truthiness numérica → `<> 0` | ~338 | 🔲 |
+| 5 | Boolean → Numérico (`If(boolExpr, 1S, 0S)`) | ~84 | 🔲 |
+| 6 | Casts explícitos `Convert.ToXxx()` en aritmética | ~2546 | 🔲 |
+| 7 | `.ToString()` en concatenaciones string | ~30 | 🔲 |
+| 8 | Residuales (ByRef narrowing, Object operators) | ~4 | 🔲 |
 
 ---
 
