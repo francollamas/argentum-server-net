@@ -670,7 +670,7 @@ Module NPCs
                 Call HeadtoPos(CType(nHeading, eHeading), nPos)
 
                 ' es una posicion legal
-                If LegalPosNPC(.Pos.Map, nPos.X, nPos.Y, Convert.ToByte(CInt(.flags.AguaValida)), .MaestroUser <> 0) Then
+                If LegalPosNPC(.Pos.Map, nPos.X, nPos.Y, .flags.AguaValida, .MaestroUser <> 0) Then
 
                     If .flags.AguaValida = 0 And HayAgua(.Pos.Map, nPos.X, nPos.Y) Then Exit Sub
                     If .flags.TierraInvalida = 1 And Not HayAgua(.Pos.Map, nPos.X, nPos.Y) Then Exit Sub

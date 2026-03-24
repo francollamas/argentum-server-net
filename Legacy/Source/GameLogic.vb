@@ -836,7 +836,7 @@ Module Extra
                                         Stat = Stat & " [CONCILIO DE LAS SOMBRAS]"
                                         ft = FontTypeNames.FONTTYPE_CONSEJOCAOSVesA
                                     Else
-                                        If (Not (.flags.Privilegios And PlayerType.User)) <> 0 Then
+                                        If (.flags.Privilegios And PlayerType.User) = CType(0, PlayerType) Then
                                             Stat = Stat & " <GAME MASTER>"
 
                                             ' Elijo el color segun el rango del GM:

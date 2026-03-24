@@ -93,7 +93,7 @@ Module ModFacciones
 
         With UserList(UserIndex)
 
-            Rango = Convert.ToInt16(ParseVal(Convert.ToString(IIf(IsCaos, .Faccion.RecompensasCaos, .Faccion.RecompensasReal))) + 1)
+            Rango = Convert.ToInt16(If(IsCaos, .Faccion.RecompensasCaos, .Faccion.RecompensasReal) + 1)
 
 
             ' Entrego armaduras de defensa baja

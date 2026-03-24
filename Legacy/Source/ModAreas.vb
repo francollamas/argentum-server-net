@@ -209,9 +209,9 @@ Module ModAreas
                                 'Si el user estaba invisible le avisamos al nuevo cliente de eso
                                 If (UserList(TempInt).flags.invisible <> 0) Or (UserList(TempInt).flags.Oculto <> 0) Then
                                     If _
-                                        .flags.Privilegios <> 0 And
-                                        (.flags.Privilegios = PlayerType.User Or .flags.Privilegios = PlayerType.Consejero Or
-                                         .flags.Privilegios = PlayerType.RoleMaster) Then
+                                        (.flags.Privilegios And
+                                        (PlayerType.User Or PlayerType.Consejero Or
+                                         PlayerType.RoleMaster)) <> CType(0, PlayerType) Then
                                         Call _
                                             WriteSetInvisible(UserIndex, UserList(TempInt).Char_Renamed.CharIndex, True)
                                     End If
@@ -223,7 +223,7 @@ Module ModAreas
                                 Call MakeUserChar(False, Convert.ToInt16(TempInt), UserIndex, .Pos.Map, .Pos.X, .Pos.Y)
 
                                 If (.flags.invisible <> 0) Or (.flags.Oculto <> 0) Then
-                                    If UserList(TempInt).flags.Privilegios <> 0 And UserList(TempInt).flags.Privilegios = PlayerType.User Then
+                                    If (UserList(TempInt).flags.Privilegios And PlayerType.User) <> CType(0, PlayerType) Then
                                         Call WriteSetInvisible(Convert.ToInt16(TempInt), .Char_Renamed.CharIndex, True)
                                     End If
                                 End If
