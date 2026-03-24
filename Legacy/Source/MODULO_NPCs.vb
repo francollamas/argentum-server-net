@@ -926,70 +926,70 @@ Module NPCs
             .Movement = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Movement")), TipoAI)
             .flags.OldMovement = .Movement
 
-            .flags.AguaValida = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AguaValida")), Byte)
-            .flags.TierraInvalida = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "TierraInValida")), Byte)
-            .flags.Faccion = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Faccion")), Byte)
-            .flags.AtacaDoble = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AtacaDoble")), Byte)
+            .flags.AguaValida = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AguaValida")))
+            .flags.TierraInvalida = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "TierraInValida")))
+            .flags.Faccion = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Faccion")))
+            .flags.AtacaDoble = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AtacaDoble")))
 
             .NPCtype = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NpcType")), eNPCType)
 
-            .Char_Renamed.body = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Body")), Short)
-            .Char_Renamed.Head = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Head")), Short)
+            .Char_Renamed.body = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Body")))
+            .Char_Renamed.Head = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Head")))
             .Char_Renamed.heading = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Heading")), eHeading)
 
-            .Attackable = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Attackable")), Byte)
-            .Comercia = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Comercia")), Short)
-            .Hostile = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Hostile")), Byte)
+            .Attackable = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Attackable")))
+            .Comercia = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Comercia")))
+            .Hostile = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Hostile")))
             .flags.OldHostil = .Hostile
 
             .GiveEXP = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "GiveEXP")))
 
             .flags.ExpCount = .GiveEXP
 
-            .Veneno = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Veneno")), Byte)
+            .Veneno = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Veneno")))
 
-            .flags.Domable = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Domable")), Short)
+            .flags.Domable = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Domable")))
 
             .GiveGLD = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "GiveGLD")))
 
             .PoderAtaque = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "PoderAtaque")))
             .PoderEvasion = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "PoderEvasion")))
 
-            .InvReSpawn = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "InvReSpawn")), Byte)
+            .InvReSpawn = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "InvReSpawn")))
 
             With .Stats
                 .MaxHp = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MaxHP")))
                 .MinHp = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MinHP")))
-                .MaxHIT = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MaxHIT")), Short)
-                .MinHIT = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MinHIT")), Short)
-                .def = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "DEF")), Short)
-                .defM = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "DEFm")), Short)
-                .Alineacion = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Alineacion")), Short)
+                .MaxHIT = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MaxHIT")))
+                .MinHIT = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MinHIT")))
+                .def = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "DEF")))
+                .defM = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "DEFm")))
+                .Alineacion = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Alineacion")))
             End With
 
-            .Invent.NroItems = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NROITEMS")), Short)
+            .Invent.NroItems = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NROITEMS")))
             For LoopC = 1 To .Invent.NroItems
                 ln = Leer.GetValue("NPC" & NpcNumber, "Obj" & LoopC)
-                .Invent.Object_Renamed(LoopC).ObjIndex = CType(ParseVal(ReadField(1, ln, 45)), Short)
-                .Invent.Object_Renamed(LoopC).Amount = CType(ParseVal(ReadField(2, ln, 45)), Short)
+                .Invent.Object_Renamed(LoopC).ObjIndex = Convert.ToInt32(ParseVal(ReadField(1, ln, 45)))
+                .Invent.Object_Renamed(LoopC).Amount = Convert.ToInt32(ParseVal(ReadField(2, ln, 45)))
             Next LoopC
 
             For LoopC = 1 To MAX_NPC_DROPS
                 ln = Leer.GetValue("NPC" & NpcNumber, "Drop" & LoopC)
-                .Drop(LoopC).ObjIndex = CType(ParseVal(ReadField(1, ln, 45)), Short)
-                .Drop(LoopC).Amount = CType(ParseVal(ReadField(2, ln, 45)), Short)
+                .Drop(LoopC).ObjIndex = Convert.ToInt32(ParseVal(ReadField(1, ln, 45)))
+                .Drop(LoopC).Amount = Convert.ToInt32(ParseVal(ReadField(2, ln, 45)))
             Next LoopC
 
 
-            .flags.LanzaSpells = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "LanzaSpells")), Byte)
+            .flags.LanzaSpells = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "LanzaSpells")))
             'UPGRADE_WARNING: El límite inferior de la matriz .Spells ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             If .flags.LanzaSpells > 0 Then ReDim .Spells(.flags.LanzaSpells)
             For LoopC = 1 To .flags.LanzaSpells
-                .Spells(LoopC) = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Sp" & LoopC)), Short)
+                .Spells(LoopC) = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Sp" & LoopC)))
             Next LoopC
 
             If .NPCtype = eNPCType.Entrenador Then
-                .NroCriaturas = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NroCriaturas")), Short)
+                .NroCriaturas = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NroCriaturas")))
                 'UPGRADE_WARNING: El límite inferior de la matriz .Criaturas ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 ReDim .Criaturas(.NroCriaturas)
                 For LoopC = 1 To .NroCriaturas
@@ -1003,22 +1003,22 @@ Module NPCs
 
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Respawn. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 If Respawn Then
-                    .Respawn = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "ReSpawn")), Byte)
+                    .Respawn = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "ReSpawn")))
                 Else
                     .Respawn = 1
                 End If
 
-                .BackUp = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "BackUp")), Byte)
-                .RespawnOrigPos = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "OrigPos")), Byte)
-                .AfectaParalisis = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AfectaParalisis")), Byte)
+                .BackUp = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "BackUp")))
+                .RespawnOrigPos = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "OrigPos")))
+                .AfectaParalisis = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AfectaParalisis")))
 
-                .Snd1 = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd1")), Short)
-                .Snd2 = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd2")), Short)
-                .Snd3 = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd3")), Short)
+                .Snd1 = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd1")))
+                .Snd2 = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd2")))
+                .Snd3 = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd3")))
             End With
 
             '<<<<<<<<<<<<<< Expresiones >>>>>>>>>>>>>>>>
-            .NroExpresiones = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NROEXP")), Byte)
+            .NroExpresiones = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NROEXP")))
             'UPGRADE_WARNING: El límite inferior de la matriz .Expresiones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             If .NroExpresiones > 0 Then ReDim .Expresiones(.NroExpresiones)
             For LoopC = 1 To .NroExpresiones
@@ -1027,9 +1027,9 @@ Module NPCs
             '<<<<<<<<<<<<<< Expresiones >>>>>>>>>>>>>>>>
 
             'Tipo de items con los que comercia
-            .TipoItems = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "TipoItems")), Short)
+            .TipoItems = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "TipoItems")))
 
-            .Ciudad = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Ciudad")), Byte)
+            .Ciudad = Convert.ToInt32(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Ciudad")))
         End With
 
         'Update contadores de NPCs
