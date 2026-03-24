@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -31,8 +31,8 @@ Module modCentinela
             If Centinela.RevisandoUserIndex <> 0 And centinelaActivado Then
                 If Not UserList(Centinela.RevisandoUserIndex).flags.CentinelaOK Then
                     Call _
-                        WritePlayWave(Centinela.RevisandoUserIndex, SND_WARP, Npclist(CentinelaNPCIndex).Pos.X,
-                                      Npclist(CentinelaNPCIndex).Pos.Y)
+                        WritePlayWave(Centinela.RevisandoUserIndex, SND_WARP, Convert.ToByte(Npclist(CentinelaNPCIndex).Pos.X),
+                                      Convert.ToByte(Npclist(CentinelaNPCIndex).Pos.Y))
                     Call _
                         WriteCreateFX(Centinela.RevisandoUserIndex, Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex,
                                       FXIDs.FXWARP, 0)
@@ -54,31 +54,31 @@ Module modCentinela
 
         For LoopC = 1 To LastUser
             If _
-                UserList(LoopC).flags.UserLogged And UserList(LoopC).Counters.Trabajando > 0 And
-                (UserList(LoopC).flags.Privilegios And PlayerType.User) Then
+                UserList(LoopC).flags.UserLogged AndAlso UserList(LoopC).Counters.Trabajando > 0 AndAlso
+                (UserList(LoopC).flags.Privilegios And PlayerType.User) <> 0 Then
                 If Not UserList(LoopC).flags.CentinelaOK Then
                     'Inicializamos
-                    Centinela.RevisandoUserIndex = LoopC
+                    Centinela.RevisandoUserIndex = Convert.ToInt16(LoopC)
                     Centinela.TiempoRestante = TIEMPO_INICIAL
-                    Centinela.clave = RandomNumber(1, 32000)
-                    Centinela.spawnTime = GetTickCount()
+                    Centinela.clave = Convert.ToInt16(RandomNumber(1, 32000))
+                    Centinela.spawnTime = Convert.ToInt32(GetTickCount())
 
                     'Ponemos al centinela en posición
-                    Call WarpCentinela(LoopC)
+                    Call WarpCentinela(Convert.ToInt16(LoopC))
 
-                    If CentinelaNPCIndex Then
+                    If CentinelaNPCIndex <> 0 Then
                         'Mandamos el mensaje (el centinela habla y aparece en consola para que no haya dudas)
                         Call _
-                            WriteChatOverHead(LoopC,
+                            WriteChatOverHead(Convert.ToInt16(LoopC),
                                               "Saludos " & UserList(LoopC).name &
                                               ", soy el Centinela de estas tierras. Me gustaría que escribas /CENTINELA " &
                                               Centinela.clave & " en no más de dos minutos.",
                                               Convert.ToInt16(Npclist(CentinelaNPCIndex).Char_Renamed.CharIndex),
                                               ColorTranslator.ToOle(Color.Lime))
                         Call _
-                            WriteConsoleMsg(LoopC, "El centinela intenta llamar tu atención. ¡Respóndele rápido!",
+                            WriteConsoleMsg(Convert.ToInt16(LoopC), "El centinela intenta llamar tu atención. ¡Respóndele rápido!",
                                             FontTypeNames.FONTTYPE_CENTINELA)
-                        Call FlushBuffer(LoopC)
+                        Call FlushBuffer(Convert.ToInt16(LoopC))
                     End If
                     Exit Sub
                 End If
@@ -86,7 +86,7 @@ Module modCentinela
         Next LoopC
 
         'No hay chars trabajando, eliminamos el NPC si todavía estaba en algún lado y esperamos otro minuto
-        If CentinelaNPCIndex Then
+        If CentinelaNPCIndex <> 0 Then
             Call QuitarNPC(CentinelaNPCIndex)
             CentinelaNPCIndex = 0
         End If
@@ -126,7 +126,7 @@ Module modCentinela
                 'ponemos el flag de ban a 1
                 Call WriteVar(CharPath & name & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
-                numPenas = ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant"))
+                numPenas = Convert.ToInt16(ParseVal(GetVar(CharPath & name & ".chr", "PENAS", "Cant")))
                 Call WriteVar(CharPath & name & ".chr", "PENAS", "Cant", (numPenas + 1).ToString())
                 Call _
                     WriteVar(CharPath & name & ".chr", "PENAS", "P" & numPenas + 1,
@@ -143,7 +143,7 @@ Module modCentinela
             Centinela.TiempoRestante = 0
             Centinela.RevisandoUserIndex = 0
 
-            If CentinelaNPCIndex Then
+            If CentinelaNPCIndex <> 0 Then
                 Call QuitarNPC(CentinelaNPCIndex)
                 CentinelaNPCIndex = 0
             End If
@@ -155,7 +155,7 @@ Module modCentinela
             Centinela.TiempoRestante = 0
             Centinela.RevisandoUserIndex = 0
 
-            If CentinelaNPCIndex Then
+            If CentinelaNPCIndex <> 0 Then
                 Call QuitarNPC(CentinelaNPCIndex)
                 CentinelaNPCIndex = 0
             End If
@@ -251,7 +251,7 @@ Module modCentinela
         If Centinela.RevisandoUserIndex = 0 Then
             Call GoToNextWorkingChar()
         Else
-            Centinela.TiempoRestante = Centinela.TiempoRestante - 1
+            Centinela.TiempoRestante = Convert.ToInt16(Centinela.TiempoRestante - 1)
 
             If Centinela.TiempoRestante = 0 Then
                 Call CentinelaFinalCheck()
@@ -285,7 +285,7 @@ Module modCentinela
         'Inciamos la revisión del usuario UserIndex
         '############################################################
         'Evitamos conflictos de índices
-        If CentinelaNPCIndex Then
+        If CentinelaNPCIndex <> 0 Then
             Call QuitarNPC(CentinelaNPCIndex)
             CentinelaNPCIndex = 0
         End If
@@ -304,7 +304,7 @@ Module modCentinela
         '############################################################
         'El usuario al que revisabamos se desconectó
         '############################################################
-        If Centinela.RevisandoUserIndex Then
+        If Centinela.RevisandoUserIndex <> 0 Then
             'Logueamos el evento
             Call _
                 LogCentinela(
@@ -316,7 +316,7 @@ Module modCentinela
             Centinela.TiempoRestante = 0
             Centinela.RevisandoUserIndex = 0
 
-            If CentinelaNPCIndex Then
+            If CentinelaNPCIndex <> 0 Then
                 Call QuitarNPC(CentinelaNPCIndex)
                 CentinelaNPCIndex = 0
             End If

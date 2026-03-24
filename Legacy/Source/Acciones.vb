@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Acciones
     ''
@@ -134,7 +134,7 @@ Module Acciones
                         Select Case ObjData_Renamed(tempIndex).OBJType
 
                             Case eOBJType.otPuertas 'Es una puerta
-                                Call AccionParaPuerta(Map, X + 1, Y, UserIndex)
+                                Call AccionParaPuerta(Map, Convert.ToInt16(X + 1), Y, UserIndex)
 
                         End Select
 
@@ -144,7 +144,7 @@ Module Acciones
 
                         Select Case ObjData_Renamed(tempIndex).OBJType
                             Case eOBJType.otPuertas 'Es una puerta
-                                Call AccionParaPuerta(Map, X + 1, Y + 1, UserIndex)
+                                Call AccionParaPuerta(Map, Convert.ToInt16(X + 1), Convert.ToInt16(Y + 1), UserIndex)
                         End Select
 
                     ElseIf MapData(Map, X, Y + 1).ObjInfo.ObjIndex > 0 Then
@@ -153,7 +153,7 @@ Module Acciones
 
                         Select Case ObjData_Renamed(tempIndex).OBJType
                             Case eOBJType.otPuertas 'Es una puerta
-                                Call AccionParaPuerta(Map, X, Y + 1, UserIndex)
+                                Call AccionParaPuerta(Map, X, Convert.ToInt16(Y + 1), UserIndex)
                         End Select
                     End If
                 End With
@@ -215,21 +215,21 @@ Module Acciones
                                 SendToAreaByPos(Map, X, Y,
                                                 PrepareMessageObjectCreate(
                                                     ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).
-                                                                              GrhIndex, X, Y))
+                                                                              GrhIndex, Convert.ToByte(X), Convert.ToByte(Y)))
 
                             'Desbloquea
                             MapData(Map, X, Y).Blocked = 0
                             MapData(Map, X - 1, Y).Blocked = 0
 
                             'Bloquea todos los mapas
-                            Call Bloquear(True, Map, X, Y, 0)
-                            Call Bloquear(True, Map, X - 1, Y, 0)
+                            Call Bloquear(True, Map, X, Y, False)
+                            Call Bloquear(True, Map, Convert.ToInt16(X - 1), Y, False)
 
 
                             'Sonido
                             Call _
                                 SendData(SendTarget.ToPCArea, UserIndex,
-                                         PrepareMessagePlayWave(SND_PUERTA, X, Y))
+                                         PrepareMessagePlayWave(SND_PUERTA, Convert.ToByte(X), Convert.ToByte(Y)))
 
                         Else
                             Call _
@@ -244,17 +244,17 @@ Module Acciones
                         Call _
                             SendToAreaByPos(Map, X, Y,
                                             PrepareMessageObjectCreate(
-                                                ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).GrhIndex, X,
-                                                Y))
+                                                ObjData_Renamed(MapData(Map, X, Y).ObjInfo.ObjIndex).GrhIndex, Convert.ToByte(X),
+                                                Convert.ToByte(Y)))
 
                         MapData(Map, X, Y).Blocked = 1
                         MapData(Map, X - 1, Y).Blocked = 1
 
 
-                        Call Bloquear(True, Map, X - 1, Y, 1)
-                        Call Bloquear(True, Map, X, Y, 1)
+                        Call Bloquear(True, Map, Convert.ToInt16(X - 1), Y, True)
+                        Call Bloquear(True, Map, X, Y, True)
 
-                        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_PUERTA, X, Y))
+                        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_PUERTA, Convert.ToByte(X), Convert.ToByte(Y)))
                     End If
 
                     UserList(UserIndex).flags.TargetObj = MapData(Map, X, Y).ObjInfo.ObjIndex
@@ -335,12 +335,12 @@ Module Acciones
                     .Stats.UserSkills(eSkill.Supervivencia) <= 10 Then
                     Suerte = 2
                 ElseIf _
-                    .Stats.UserSkills(eSkill.Supervivencia) >= 10 And
-                    .Stats.UserSkills(eSkill.Supervivencia) Then
+                    .Stats.UserSkills(eSkill.Supervivencia) >= 10 AndAlso
+                    .Stats.UserSkills(eSkill.Supervivencia) <> 0 Then
                     Suerte = 1
                 End If
 
-                exito = RandomNumber(1, Suerte)
+                exito = Convert.ToByte(RandomNumber(1, Suerte))
 
                 If exito = 1 Then
                     If MapInfo_Renamed(.Pos.Map).Zona <> Ciudad Then
