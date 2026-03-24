@@ -394,7 +394,7 @@ Module TCP
                     .Invent.Object_Renamed(Slot).ObjIndex = 859
                 Case eClass.Worker
                     ' Herramienta (Newbie)
-                    .Invent.Object_Renamed(Slot).ObjIndex = RandomNumber(561, 565)
+                    .Invent.Object_Renamed(Slot).ObjIndex = Convert.ToInt16(RandomNumber(561, 565))
                 Case Else
                     ' Daga (Newbie)
                     .Invent.Object_Renamed(Slot).ObjIndex = 460
@@ -1600,11 +1600,11 @@ Module TCP
 
         Call _
             WriteSendNight(UserIndex,
-                           IIf(
+                           If(
                                DeNoche And
                                (MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = Campo Or
                                 MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = Ciudad), True, False))
-        Call WriteSendNight(UserIndex, IIf(DeNoche, True, False))
+        Call WriteSendNight(UserIndex, If(DeNoche, True, False))
     End Sub
 
     Public Sub EcharPjsNoPrivilegiados()
@@ -1618,7 +1618,7 @@ Module TCP
 
         For LoopC = 1 To LastUser
             If UserList(LoopC).flags.UserLogged And UserList(LoopC).ConnID >= 0 And UserList(LoopC).ConnIDValida Then
-                If UserList(LoopC).flags.Privilegios And PlayerType.User Then
+                If (UserList(LoopC).flags.Privilegios And PlayerType.User) <> 0 Then
                     Call CloseSocket(LoopC)
                 End If
             End If
