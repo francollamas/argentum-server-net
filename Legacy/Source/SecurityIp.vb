@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module SecurityIp
     ' TODO MIGRA: se modifico para NO usar CopyMemory. Quizas tenga algun problema de performance. Revisar!
@@ -84,7 +84,7 @@ Module SecurityIp
         If IpTableIndex >= 0 Then
             If IpTables(IpTableIndex + 1) + IntervaloEntreConexiones <= GetTickCount Then _
 'No está saturando de connects?
-                IpTables(IpTableIndex + 1) = GetTickCount
+                IpTables(IpTableIndex + 1) = Convert.ToInt32(GetTickCount)
                 IpSecurityAceptarNuevaConexion = True
                 Console.WriteLine("CONEXION ACEPTADA")
                 Exit Function
@@ -97,7 +97,7 @@ Module SecurityIp
         Else
             IpTableIndex = Not IpTableIndex
             AddNewIpIntervalo(ip, IpTableIndex)
-            IpTables(IpTableIndex + 1) = GetTickCount
+            IpTables(IpTableIndex + 1) = Convert.ToInt32(GetTickCount)
             IpSecurityAceptarNuevaConexion = True
             Exit Function
         End If
@@ -303,7 +303,7 @@ Module SecurityIp
         '
         '***************************************************
 
-        Dim i As Short
+        Dim i As Integer
 
         For i = 0 To MaxConTablesEntry*2 - 1 Step 2
             Call LogCriticEvent(GetAscIP(MaxConTables(i)) & " > " & MaxConTables(i + 1))

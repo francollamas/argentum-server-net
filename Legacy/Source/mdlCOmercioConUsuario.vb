@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module mdlCOmercioConUsuario
     Private Const MAX_ORO_LOGUEABLE As Integer = 50000
@@ -164,8 +164,8 @@ Module mdlCOmercioConUsuario
 
                     ' Le pasa lo ofertado de los slots con items
                 ElseIf .ComUsu.Objeto(OfferSlot) > 0 Then
-                    TradingObj.ObjIndex = .ComUsu.Objeto(OfferSlot)
-                    TradingObj.Amount = .ComUsu.cant(OfferSlot)
+                    TradingObj.ObjIndex = Convert.ToInt16(.ComUsu.Objeto(OfferSlot))
+                    TradingObj.Amount = Convert.ToInt16(.ComUsu.cant(OfferSlot))
 
                     'Quita el objeto y se lo da al otro
                     If Not MeterItemEnInventario(OtroUserIndex, TradingObj) Then
@@ -221,8 +221,8 @@ Module mdlCOmercioConUsuario
 
                     ' Le pasa la oferta de los slots con items
                 ElseIf .ComUsu.Objeto(OfferSlot) > 0 Then
-                    TradingObj.ObjIndex = .ComUsu.Objeto(OfferSlot)
-                    TradingObj.Amount = .ComUsu.cant(OfferSlot)
+                    TradingObj.ObjIndex = Convert.ToInt16(.ComUsu.Objeto(OfferSlot))
+                    TradingObj.Amount = Convert.ToInt16(.ComUsu.cant(OfferSlot))
 
                     'Quita el objeto y se lo da al otro
                     If Not MeterItemEnInventario(UserIndex, TradingObj) Then

@@ -34,7 +34,7 @@ Module Protocol
     Private ReadOnly auxiliarBuffer As New clsByteQueue
 
 
-    Private Enum ServerPacketID
+    Private Enum ServerPacketID As Byte
         Logged ' LOGGED
         RemoveDialogs ' QTDL
         RemoveCharDialog ' QDL
@@ -142,7 +142,7 @@ Module Protocol
         CancelOfferItem
     End Enum
 
-    Private Enum ClientPacketID
+    Private Enum ClientPacketID As Byte
         LoginExistingChar 'OLOGIN
         ThrowDices 'TIRDAD
         LoginNewChar 'NLOGIN
@@ -302,7 +302,7 @@ Module Protocol
         FONTTYPE_DIOS
     End Enum
 
-    Public Enum eEditOptions
+    Public Enum eEditOptions As Byte
         eo_Gold = 1
         eo_Experience
         eo_Body

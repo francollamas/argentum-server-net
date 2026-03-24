@@ -79,7 +79,7 @@ Module Declaraciones
         cArghal
     End Enum
 
-    Public Enum eRaza
+    Public Enum eRaza As Byte
         Humano = 1
         Elfo
         Drow
@@ -87,7 +87,7 @@ Module Declaraciones
         Enano
     End Enum
 
-    Enum eGenero
+    Enum eGenero As Byte
         Hombre = 1
         Mujer
     End Enum
@@ -128,7 +128,7 @@ Module Declaraciones
 
     Public Const MAXMASCOTASENTRENADOR As Byte = 7
 
-    Public Enum FXIDs
+    Public Enum FXIDs As Short
         FXWARP = 1
         FXMEDITARCHICO = 4
         FXMEDITARMEDIANO = 5
@@ -324,7 +324,7 @@ Module Declaraciones
     ' @param SOUTH Sur
     ' @param WEST Oeste
     '
-    Public Enum eHeading
+    Public Enum eHeading As Byte
         NORTH = 1
         EAST = 2
         SOUTH = 3
@@ -359,7 +359,7 @@ Module Declaraciones
     End Enum
 
     '%%%%%%%%%% CONSTANTES DE INDICES %%%%%%%%%%%%%%%
-    Public Enum eSkill
+    Public Enum eSkill As Short
         Magia = 1
         Robar = 2
         Tacticas = 3
@@ -825,7 +825,7 @@ Module Declaraciones
     '*******
 
     ' Tipos de mensajes
-    Public Enum eForumMsgType
+    Public Enum eForumMsgType As Byte
         ieGeneral
         ieGENERAL_STICKY
         ieREAL
@@ -842,7 +842,7 @@ Module Declaraciones
     End Enum
 
     ' Indica el tipo de foro
-    Public Enum eForumType
+    Public Enum eForumType As Byte
         ieGeneral
         ieREAL
         ieCAOS
@@ -1489,7 +1489,7 @@ Module Declaraciones
         ManzanaNewbie = 467
     End Enum
 
-    Public Enum eMessages
+    Public Enum eMessages As Short
         DontSeeAnything
         NPCSwing
         NPCKillUser
@@ -1516,7 +1516,7 @@ Module Declaraciones
         FinishHome
     End Enum
 
-    Public Enum eGMCommands
+    Public Enum eGMCommands As Byte
         GMMessage = 1 '/GMSG
         showName '/SHOWNAME
         OnlineRoyalArmy '/ONLINEREAL
