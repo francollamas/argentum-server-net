@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module ModAreas
     '**************************************************************
@@ -56,29 +56,29 @@ Module ModAreas
 
         ' Setup areas...
         For LoopC = 0 To 11
-            AreasRecive(LoopC) = (2^LoopC) Or IIf(LoopC <> 0, 2^(LoopC - 1), 0) Or IIf(LoopC <> 11, 2^(LoopC + 1), 0)
+            AreasRecive(LoopC) = Convert.ToInt16(CLng(Convert.ToInt64(2) ^ LoopC) Or Convert.ToInt64(If(LoopC <> 0, CLng(Convert.ToInt64(2) ^ Convert.ToInt64(LoopC - 1)), CLng(0))) Or Convert.ToInt64(If(LoopC <> 11, CLng(Convert.ToInt64(2) ^ Convert.ToInt64(LoopC + 1)), CLng(0))))
         Next LoopC
 
         For LoopC = 1 To 100
-            PosToArea(LoopC) = LoopC\9
+            PosToArea(LoopC) = Convert.ToByte(LoopC \ 9)
         Next LoopC
 
         For LoopC = 1 To 100
             For loopX = 1 To 100
                 'Usamos 121 IDs de area para saber si pasasamos de area "más rápido"
-                AreasInfo(LoopC, loopX) = (LoopC\9 + 1)*(loopX\9 + 1)
+                AreasInfo(LoopC, loopX) = Convert.ToByte((LoopC \ 9 + 1) * (loopX \ 9 + 1))
             Next loopX
         Next LoopC
 
         'Setup AutoOptimizacion de areas
-        CurDay = IIf(WeekDay(Today) > 6, 1, 2) 'A ke tipo de dia pertenece?
-        CurHour = Fix(Hour(TimeOfDay)\3) 'A ke parte de la hora pertenece
+        CurDay = Convert.ToByte(If(WeekDay(Today) > 6, 1, 2)) 'A ke tipo de dia pertenece?
+        CurHour = Convert.ToByte(Fix(Hour(TimeOfDay) \ 3)) 'A ke parte de la hora pertenece
 
         'UPGRADE_WARNING: El límite inferior de la matriz ConnGroups ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim ConnGroups(NumMaps)
 
         For LoopC = 1 To NumMaps
-            ConnGroups(LoopC).OptValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
+            ConnGroups(LoopC).OptValue = Convert.ToInt32(ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour)))
 
             If ConnGroups(LoopC).OptValue = 0 Then ConnGroups(LoopC).OptValue = 1
             'UPGRADE_WARNING: El límite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -97,19 +97,19 @@ Module ModAreas
         Dim tCurHour As Byte
         Dim EntryValue As Integer
 
-        If (CurDay <> IIf(WeekDay(Today) > 6, 1, 2)) Or (CurHour <> Fix(Hour(TimeOfDay)\3)) Then
+        If (CurDay <> Convert.ToByte(If(WeekDay(Today) > 6, 1, 2))) Or (CurHour <> Convert.ToByte(Fix(Hour(TimeOfDay) \ 3))) Then
 
-            tCurDay = IIf(WeekDay(Today) > 6, 1, 2) 'A ke tipo de dia pertenece?
-            tCurHour = Fix(Hour(TimeOfDay)\3) 'A ke parte de la hora pertenece
+            tCurDay = Convert.ToByte(If(WeekDay(Today) > 6, 1, 2)) 'A ke tipo de dia pertenece?
+            tCurHour = Convert.ToByte(Fix(Hour(TimeOfDay) \ 3)) 'A ke parte de la hora pertenece
 
             For LoopC = 1 To NumMaps
-                EntryValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour))
+                EntryValue = Convert.ToInt32(ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour)))
                 Call _
                     WriteVar(DatPath & "AreasStats.dat", "Mapa" & LoopC, CurDay & "-" & CurHour,
-                             CStr(CShort((EntryValue + ConnGroups(LoopC).OptValue)\2)))
+                             Convert.ToInt16((EntryValue + ConnGroups(LoopC).OptValue) \ 2).ToString())
 
-                ConnGroups(LoopC).OptValue = Val(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC,
-                                                        tCurDay & "-" & tCurHour))
+                ConnGroups(LoopC).OptValue = Convert.ToInt32(ParseVal(GetVar(DatPath & "AreasStats.dat", "Mapa" & LoopC,
+                                                        tCurDay & "-" & tCurHour)))
                 If ConnGroups(LoopC).OptValue = 0 Then ConnGroups(LoopC).OptValue = 1
                 'UPGRADE_WARNING: El límite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 If ConnGroups(LoopC).OptValue >= MapInfo_Renamed(LoopC).NumUsers Then _
@@ -143,30 +143,30 @@ Module ModAreas
                 MaxY = MinY - 1
                 MinY = MinY - 9
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
             ElseIf Head = eHeading.SOUTH Then
                 MaxY = MinY + 35
                 MinY = MinY + 27
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY - 18)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY - 18)
 
             ElseIf Head = eHeading.WEST Then
                 MaxX = MinX - 1
                 MinX = MinX - 9
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = eHeading.EAST Then
                 MaxX = MinX + 35
                 MinX = MinX + 27
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX - 18)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX - 18)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = USER_NUEVO Then
@@ -177,8 +177,8 @@ Module ModAreas
                 MinX = ((.Pos.X\9) - 1)*9
                 MaxX = MinX + 26
 
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
             End If
 
             If MinY < 1 Then MinY = 1
@@ -196,7 +196,7 @@ Module ModAreas
                 For Y = MinY To MaxY
 
                     '<<< User >>>
-                    If MapData(Map, X, Y).UserIndex Then
+                    If MapData(Map, X, Y).UserIndex <> 0 Then
 
                         TempInt = MapData(Map, X, Y).UserIndex
 
@@ -204,14 +204,14 @@ Module ModAreas
 
                             ' Solo avisa al otro cliente si no es un admin invisible
                             If Not (UserList(TempInt).flags.AdminInvisible = 1) Then
-                                Call MakeUserChar(False, UserIndex, TempInt, Map, X, Y)
+                                Call MakeUserChar(False, Convert.ToInt16(UserIndex), Convert.ToInt16(TempInt), Convert.ToInt16(Map), Convert.ToInt16(X), Convert.ToInt16(Y))
 
                                 'Si el user estaba invisible le avisamos al nuevo cliente de eso
-                                If UserList(TempInt).flags.invisible Or UserList(TempInt).flags.Oculto Then
+                                If (UserList(TempInt).flags.invisible <> 0) Or (UserList(TempInt).flags.Oculto <> 0) Then
                                     If _
-                                        .flags.Privilegios And
+                                        (.flags.Privilegios And
                                         (PlayerType.User Or PlayerType.Consejero Or
-                                         PlayerType.RoleMaster) Then
+                                         PlayerType.RoleMaster)) <> CType(0, PlayerType) Then
                                         Call _
                                             WriteSetInvisible(UserIndex, UserList(TempInt).Char_Renamed.CharIndex, True)
                                     End If
@@ -220,38 +220,38 @@ Module ModAreas
 
                             ' Solo avisa al otro cliente si no es un admin invisible
                             If Not (.flags.AdminInvisible = 1) Then
-                                Call MakeUserChar(False, TempInt, UserIndex, .Pos.Map, .Pos.X, .Pos.Y)
+                                Call MakeUserChar(False, Convert.ToInt16(TempInt), UserIndex, .Pos.Map, .Pos.X, .Pos.Y)
 
-                                If .flags.invisible Or .flags.Oculto Then
-                                    If UserList(TempInt).flags.Privilegios And PlayerType.User Then
-                                        Call WriteSetInvisible(TempInt, .Char_Renamed.CharIndex, True)
+                                If (.flags.invisible <> 0) Or (.flags.Oculto <> 0) Then
+                                    If (UserList(TempInt).flags.Privilegios And PlayerType.User) <> CType(0, PlayerType) Then
+                                        Call WriteSetInvisible(Convert.ToInt16(TempInt), .Char_Renamed.CharIndex, True)
                                     End If
                                 End If
                             End If
 
-                            Call FlushBuffer(TempInt)
+                            Call FlushBuffer(Convert.ToInt16(TempInt))
 
                         ElseIf Head = USER_NUEVO Then
                             If Not ButIndex Then
-                                Call MakeUserChar(False, UserIndex, UserIndex, Map, X, Y)
+                                Call MakeUserChar(False, Convert.ToInt16(UserIndex), Convert.ToInt16(UserIndex), Convert.ToInt16(Map), Convert.ToInt16(X), Convert.ToInt16(Y))
                             End If
                         End If
                     End If
 
                     '<<< Npc >>>
-                    If MapData(Map, X, Y).NpcIndex Then
-                        Call MakeNPCChar(False, UserIndex, MapData(Map, X, Y).NpcIndex, Map, X, Y)
+                    If MapData(Map, X, Y).NpcIndex <> 0 Then
+                        Call MakeNPCChar(False, Convert.ToInt16(UserIndex), MapData(Map, X, Y).NpcIndex, Convert.ToInt16(Map), Convert.ToInt16(X), Convert.ToInt16(Y))
                     End If
 
                     '<<< Item >>>
-                    If MapData(Map, X, Y).ObjInfo.ObjIndex Then
+                    If MapData(Map, X, Y).ObjInfo.ObjIndex <> 0 Then
                         TempInt = MapData(Map, X, Y).ObjInfo.ObjIndex
                         If Not EsObjetoFijo(ObjData_Renamed(TempInt).OBJType) Then
-                            Call WriteObjectCreate(UserIndex, ObjData_Renamed(TempInt).GrhIndex, X, Y)
+                            Call WriteObjectCreate(UserIndex, ObjData_Renamed(TempInt).GrhIndex, Convert.ToByte(X), Convert.ToByte(Y))
 
                             If ObjData_Renamed(TempInt).OBJType = eOBJType.otPuertas Then
-                                Call Bloquear(False, UserIndex, X, Y, MapData(Map, X, Y).Blocked)
-                                Call Bloquear(False, UserIndex, X - 1, Y, MapData(Map, X - 1, Y).Blocked)
+                                Call Bloquear(False, UserIndex, Convert.ToInt16(X), Convert.ToInt16(Y), MapData(Map, X, Y).Blocked <> 0)
+                                Call Bloquear(False, UserIndex, Convert.ToInt16(X - 1), Convert.ToInt16(Y), MapData(Map, X - 1, Y).Blocked <> 0)
                             End If
                         End If
                     End If
@@ -260,13 +260,13 @@ Module ModAreas
             Next X
 
             'Precalculados :P
-            TempInt = .Pos.X\9
+            TempInt = .Pos.X \ 9
             .AreasInfo.AreaReciveX = AreasRecive(TempInt)
-            .AreasInfo.AreaPerteneceX = 2^TempInt
+            .AreasInfo.AreaPerteneceX = Convert.ToInt16(2 ^ TempInt)
 
-            TempInt = .Pos.Y\9
+            TempInt = .Pos.Y \ 9
             .AreasInfo.AreaReciveY = AreasRecive(TempInt)
-            .AreasInfo.AreaPerteneceY = 2^TempInt
+            .AreasInfo.AreaPerteneceY = Convert.ToInt16(2 ^ TempInt)
 
             .AreasInfo.AreaID = AreasInfo(.Pos.X, .Pos.Y)
         End With
@@ -292,42 +292,42 @@ Module ModAreas
                 MaxY = MinY - 1
                 MinY = MinY - 9
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
             ElseIf Head = eHeading.SOUTH Then
                 MaxY = MinY + 35
                 MinY = MinY + 27
                 MaxX = MinX + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY - 18)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY - 18)
 
             ElseIf Head = eHeading.WEST Then
                 MaxX = MinX - 1
                 MinX = MinX - 9
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = eHeading.EAST Then
                 MaxX = MinX + 35
                 MinX = MinX + 27
                 MaxY = MinY + 26
-                .AreasInfo.MinX = CShort(MinX - 18)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX - 18)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
 
 
             ElseIf Head = USER_NUEVO Then
                 'Esto pasa por cuando cambiamos de mapa o logeamos...
-                MinY = ((.Pos.Y\9) - 1)*9
+                MinY = ((.Pos.Y \ 9) - 1) * 9
                 MaxY = MinY + 26
 
-                MinX = ((.Pos.X\9) - 1)*9
+                MinX = ((.Pos.X \ 9) - 1) * 9
                 MaxX = MinX + 26
 
-                .AreasInfo.MinX = CShort(MinX)
-                .AreasInfo.MinY = CShort(MinY)
+                .AreasInfo.MinX = Convert.ToInt16(MinX)
+                .AreasInfo.MinY = Convert.ToInt16(MinY)
             End If
 
             If MinY < 1 Then MinY = 1
@@ -340,7 +340,7 @@ Module ModAreas
             If MapInfo_Renamed(.Pos.Map).NumUsers <> 0 Then
                 For X = MinX To MaxX
                     For Y = MinY To MaxY
-                        If MapData(.Pos.Map, X, Y).UserIndex Then _
+                        If MapData(.Pos.Map, X, Y).UserIndex <> 0 Then _
                             Call _
                                 MakeNPCChar(False, MapData(.Pos.Map, X, Y).UserIndex, NpcIndex, .Pos.Map, .Pos.X, .Pos.Y)
                     Next Y
@@ -348,13 +348,13 @@ Module ModAreas
             End If
 
             'Precalculados :P
-            TempInt = .Pos.X\9
+            TempInt = .Pos.X \ 9
             .AreasInfo.AreaReciveX = AreasRecive(TempInt)
-            .AreasInfo.AreaPerteneceX = 2^TempInt
+            .AreasInfo.AreaPerteneceX = Convert.ToInt16(2 ^ TempInt)
 
-            TempInt = .Pos.Y\9
+            TempInt = .Pos.Y \ 9
             .AreasInfo.AreaReciveY = AreasRecive(TempInt)
-            .AreasInfo.AreaPerteneceY = 2^TempInt
+            .AreasInfo.AreaPerteneceY = Convert.ToInt16(2 ^ TempInt)
 
             .AreasInfo.AreaID = AreasInfo(.Pos.X, .Pos.Y)
         End With

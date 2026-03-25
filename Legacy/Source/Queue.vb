@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Queue
     Public Structure tVertice
@@ -27,8 +27,8 @@ Module Queue
 
             If IsEmpty Then m_firstelem = 1
 
-            m_lastelem = m_lastelem + 1
-            m_size = m_size + 1
+            m_lastelem = Convert.ToInt16(m_lastelem + 1)
+            m_size = Convert.ToInt16(m_size + 1)
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto m_array(m_lastelem). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             m_array(m_lastelem) = Vertice
 
@@ -43,8 +43,8 @@ Module Queue
         If Not IsEmpty Then
 
             Pop = m_array(m_firstelem)
-            m_firstelem = m_firstelem + 1
-            m_size = m_size - 1
+            m_firstelem = Convert.ToInt16(m_firstelem + 1)
+            m_size = Convert.ToInt16(m_size - 1)
 
             If m_firstelem > m_lastelem And m_size = 0 Then
                 m_lastelem = 0

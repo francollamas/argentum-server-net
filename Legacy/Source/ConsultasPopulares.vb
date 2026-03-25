@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class ConsultasPopulares
     Private Const ARCHIVOMAILS As String = "logs/votaron.dat"
@@ -34,19 +34,19 @@ Friend Class ConsultasPopulares
         Dim CantOpciones As Short
         Dim i As Short
 
-        pEncuestaActualNum = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual"))
+        pEncuestaActualNum = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActual")))
         pEncuestaActualTex = GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "ConsultaActualTexto")
-        pNivelRequerido = CShort(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
+        pNivelRequerido = Convert.ToInt16(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG, "INIT", "NivelRequerido"))
 
         If pEncuestaActualNum > 0 Then
             'cargo todas las opciones
-            CantOpciones = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                      "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES"))
+            CantOpciones = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                      "ENCUESTA" & pEncuestaActualNum, "CANTOPCIONES")))
             'UPGRADE_WARNING: El límite inferior de la matriz pOpciones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim pOpciones(CantOpciones)
             For i = 1 To CantOpciones
-                pOpciones(i) = Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                          "ENCUESTA" & pEncuestaActualNum, "OPCION" & i))
+                pOpciones(i) = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                          "ENCUESTA" & pEncuestaActualNum, "OPCION" & i)))
             Next i
         End If
     End Sub
@@ -70,13 +70,13 @@ Friend Class ConsultasPopulares
 
             If (UserList(UserIndex).Stats.ELV >= pNivelRequerido) Then
                 If (OpcionValida(opcion)) Then
-                    YaVoto = Val(GetVar(CharFile, "CONSULTAS", "Voto")) >= pEncuestaActualNum
+                    YaVoto = ParseVal(GetVar(CharFile, "CONSULTAS", "Voto")) >= pEncuestaActualNum
                     If Not YaVoto Then
                         If Not MailYaVoto(UserList(UserIndex).email) Then
                             'pj apto para votar
-                            sufragio = CInt(Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
-                                                       "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
-                            sufragio = sufragio + 1
+                        sufragio = Convert.ToInt16(ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
+                                                   "RESULTADOS" & pEncuestaActualNum, "V" & opcion)))
+                            sufragio = Convert.ToInt16(sufragio + 1)
                             Call _
                                 WriteVar(AppDomain.CurrentDomain.BaseDirectory & ARCHIVOCONFIG,
                                          "RESULTADOS" & pEncuestaActualNum, "V" & opcion, Str(sufragio))
@@ -112,7 +112,7 @@ Friend Class ConsultasPopulares
                             FontTypeNames.FONTTYPE_GUILD)
         Call WriteConsoleMsg(UserIndex, pEncuestaActualTex, FontTypeNames.FONTTYPE_GUILD)
         Call WriteConsoleMsg(UserIndex, " Opciones de voto: ", FontTypeNames.FONTTYPE_GUILDMSG)
-        For i = 1 To UBound(pOpciones)
+        For i = 1 To Convert.ToInt16(pOpciones.Length - 1)
             Call _
                 WriteConsoleMsg(UserIndex,
                                 "(Opcion " & i & "): " &
@@ -133,42 +133,17 @@ Friend Class ConsultasPopulares
 
 
     Private Function MailYaVoto(email As String) As Boolean
-        'abro el archivo, while not eof levnato 1 linea y comparo. Si da true, cierro
-        Dim ArchN As Short
-        Dim Tmp As String
-
-        MailYaVoto = False
-
-        ArchN = FreeFile
-
-        FileOpen(ArchN, AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS, OpenMode.Input)
-
-        Do While Not EOF(ArchN)
-            Tmp = LineInput(ArchN)
-            If email = Tmp Then
-                MailYaVoto = True
-                FileClose(ArchN)
-                Exit Function
-            End If
-        Loop
-
-        FileClose(ArchN)
+        Dim filePath = AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS
+        Return IO.File.ReadAllLines(filePath).Any(Function(line) line = email)
     End Function
 
 
     Private Sub MarcarMailComoQueYaVoto(email As String)
-        Dim ArchN As Short
-
-        ArchN = FreeFile
-
-        FileOpen(ArchN, AppDomain.CurrentDomain.BaseDirectory & ARCHIVOMAILS, OpenMode.Append)
-        PrintLine(ArchN, email)
-
-        FileClose(ArchN)
+        AppendLog(ARCHIVOMAILS, email)
     End Sub
 
 
     Private Function OpcionValida(opcion As Short) As Boolean
-        OpcionValida = opcion > 0 And opcion <= UBound(pOpciones)
+        OpcionValida = opcion > 0 And opcion <= pOpciones.Length - 1
     End Function
 End Class

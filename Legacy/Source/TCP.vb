@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -92,10 +92,10 @@ Module TCP
         Dim car As Byte
         Dim i As Short
 
-        cad = LCase(cad)
+        cad = cad.ToLower()
 
-        For i = 1 To Len(cad)
-            car = Asc(Mid(cad, i, 1))
+        For i = 1 To Convert.ToInt16(cad.Length)
+            car = Convert.ToByte(Asc(cad.Substring(i - 1, 1)))
 
             If (car < 97 Or car > 122) And (car <> 255) And (car <> 32) Then
                 AsciiValidos = False
@@ -117,10 +117,10 @@ Module TCP
         Dim car As Byte
         Dim i As Short
 
-        cad = LCase(cad)
+        cad = cad.ToLower()
 
-        For i = 1 To Len(cad)
-            car = Asc(Mid(cad, i, 1))
+        For i = 1 To Convert.ToInt16(cad.Length)
+            car = Convert.ToByte(Asc(cad.Substring(i - 1, 1)))
 
             If (car < 48 Or car > 57) Then
                 Numeric = False
@@ -142,8 +142,8 @@ Module TCP
 
         Dim i As Short
 
-        For i = 1 To UBound(ForbidenNames)
-            If InStr(Nombre, ForbidenNames(i)) Then
+        For i = 0 To Convert.ToInt16(ForbidenNames.GetUpperBound(0))
+            If Nombre.IndexOf(ForbidenNames(i)) >= 0 Then
                 NombrePermitido = False
                 Exit Function
             End If
@@ -215,7 +215,7 @@ Module TCP
             End If
 
             '¿Existe el personaje?
-            If FileExist(CharPath & UCase(name) & ".chr") = True Then
+            If System.IO.File.Exists(CharPath & name.ToUpper() & ".chr") = True Then
                 Call WriteErrorMsg(UserIndex, "Ya existe el personaje.")
                 Exit Sub
             End If
@@ -243,7 +243,7 @@ Module TCP
             .Reputacion.NobleRep = 1000
             .Reputacion.PlebeRep = 30
 
-            .Reputacion.Promedio = 30/6
+            .Reputacion.Promedio = 5
 
 
             .name = name
@@ -255,20 +255,20 @@ Module TCP
 
             '[Pablo (Toxic Waste) 9/01/08]
             .Stats.UserAtributos(eAtributos.Fuerza) =
-                .Stats.UserAtributos(eAtributos.Fuerza) + ModRaza_Renamed(UserRaza).Fuerza
+                Convert.ToByte(.Stats.UserAtributos(eAtributos.Fuerza) + ModRaza_Renamed(UserRaza).Fuerza)
             .Stats.UserAtributos(eAtributos.Agilidad) =
-                .Stats.UserAtributos(eAtributos.Agilidad) + ModRaza_Renamed(UserRaza).Agilidad
+                Convert.ToByte(.Stats.UserAtributos(eAtributos.Agilidad) + ModRaza_Renamed(UserRaza).Agilidad)
             .Stats.UserAtributos(eAtributos.Inteligencia) =
-                .Stats.UserAtributos(eAtributos.Inteligencia) + ModRaza_Renamed(UserRaza).Inteligencia
+                Convert.ToByte(.Stats.UserAtributos(eAtributos.Inteligencia) + ModRaza_Renamed(UserRaza).Inteligencia)
             .Stats.UserAtributos(eAtributos.Carisma) =
-                .Stats.UserAtributos(eAtributos.Carisma) + ModRaza_Renamed(UserRaza).Carisma
+                Convert.ToByte(.Stats.UserAtributos(eAtributos.Carisma) + ModRaza_Renamed(UserRaza).Carisma)
             .Stats.UserAtributos(eAtributos.Constitucion) =
-                .Stats.UserAtributos(eAtributos.Constitucion) + ModRaza_Renamed(UserRaza).Constitucion
+                Convert.ToByte(.Stats.UserAtributos(eAtributos.Constitucion) + ModRaza_Renamed(UserRaza).Constitucion)
             '[/Pablo (Toxic Waste)]
 
             For i = 1 To NUMSKILLS
                 .Stats.UserSkills(i) = 0
-                Call CheckEluSkill(UserIndex, i, True)
+                Call CheckEluSkill(UserIndex, Convert.ToByte(i), True)
             Next i
 
             .Stats.SkillPts = 10
@@ -283,14 +283,14 @@ Module TCP
 
             MiInt = RandomNumber(1, .Stats.UserAtributos(eAtributos.Constitucion)\3)
 
-            .Stats.MaxHp = 15 + MiInt
-            .Stats.MinHp = 15 + MiInt
+            .Stats.MaxHp = Convert.ToInt16(15 + MiInt)
+            .Stats.MinHp = Convert.ToInt16(15 + MiInt)
 
             MiInt = RandomNumber(1, .Stats.UserAtributos(eAtributos.Agilidad)\6)
             If MiInt = 1 Then MiInt = 2
 
-            .Stats.MaxSta = 20*MiInt
-            .Stats.MinSta = 20*MiInt
+            .Stats.MaxSta = Convert.ToInt16(20*MiInt)
+            .Stats.MinSta = Convert.ToInt16(20*MiInt)
 
 
             .Stats.MaxAGU = 100
@@ -303,8 +303,8 @@ Module TCP
             '<-----------------MANA----------------------->
             If UserClase = eClass.Mage Then 'Cambio en mana inicial (ToxicWaste)
                 MiInt = .Stats.UserAtributos(eAtributos.Inteligencia)*3
-                .Stats.MaxMAN = MiInt
-                .Stats.MinMAN = MiInt
+                .Stats.MaxMAN = Convert.ToInt16(MiInt)
+                .Stats.MinMAN = Convert.ToInt16(MiInt)
             ElseIf _
                 UserClase = eClass.Cleric Or UserClase = eClass.Druid Or
                 UserClase = eClass.Bard Or UserClase = eClass.Assasin Then
@@ -347,25 +347,25 @@ Module TCP
 
             'Pociones azules (Newbie)
             If .Stats.MaxMAN > 0 Or IsPaladin Then
-                Slot = Slot + 1
+                Slot = Convert.ToByte(Slot + 1)
                 .Invent.Object_Renamed(Slot).ObjIndex = 856
                 .Invent.Object_Renamed(Slot).Amount = 200
 
             Else
                 'Pociones amarillas (Newbie)
-                Slot = Slot + 1
+                Slot = Convert.ToByte(Slot + 1)
                 .Invent.Object_Renamed(Slot).ObjIndex = 855
                 .Invent.Object_Renamed(Slot).Amount = 100
 
                 'Pociones verdes (Newbie)
-                Slot = Slot + 1
+                Slot = Convert.ToByte(Slot + 1)
                 .Invent.Object_Renamed(Slot).ObjIndex = 858
                 .Invent.Object_Renamed(Slot).Amount = 50
 
             End If
 
             ' Ropa (Newbie)
-            Slot = Slot + 1
+            Slot = Convert.ToByte(Slot + 1)
             Select Case UserRaza
                 Case eRaza.Humano
                     .Invent.Object_Renamed(Slot).ObjIndex = 463
@@ -387,14 +387,14 @@ Module TCP
             .Invent.ArmourEqpObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
 
             'Arma (Newbie)
-            Slot = Slot + 1
+            Slot = Convert.ToByte(Slot + 1)
             Select Case UserClase
                 Case eClass.Hunter
                     ' Arco (Newbie)
                     .Invent.Object_Renamed(Slot).ObjIndex = 859
                 Case eClass.Worker
                     ' Herramienta (Newbie)
-                    .Invent.Object_Renamed(Slot).ObjIndex = RandomNumber(561, 565)
+                    .Invent.Object_Renamed(Slot).ObjIndex = Convert.ToInt16(RandomNumber(561, 565))
                 Case Else
                     ' Daga (Newbie)
                     .Invent.Object_Renamed(Slot).ObjIndex = 460
@@ -411,7 +411,7 @@ Module TCP
 
             ' Municiones (Newbie)
             If UserClase = eClass.Hunter Then
-                Slot = Slot + 1
+                Slot = Convert.ToByte(Slot + 1)
                 .Invent.Object_Renamed(Slot).ObjIndex = 860
                 .Invent.Object_Renamed(Slot).Amount = 150
 
@@ -422,12 +422,12 @@ Module TCP
             End If
 
             ' Manzanas (Newbie)
-            Slot = Slot + 1
+            Slot = Convert.ToByte(Slot + 1)
             .Invent.Object_Renamed(Slot).ObjIndex = 467
             .Invent.Object_Renamed(Slot).Amount = 100
 
             ' Jugos (Nwbie)
-            Slot = Slot + 1
+            Slot = Convert.ToByte(Slot + 1)
             .Invent.Object_Renamed(Slot).ObjIndex = 468
             .Invent.Object_Renamed(Slot).Amount = 100
 
@@ -446,10 +446,10 @@ Module TCP
         'Valores Default de facciones al Activar nuevo usuario
         Call ResetFacciones(UserIndex)
 
-        Call WriteVar(CharPath & UCase(name) & ".chr", "INIT", "Password", Password) _
+        Call WriteVar(CharPath & name.ToUpper() & ".chr", "INIT", "Password", Password) _
         'grabamos el password aqui afuera, para no mantenerlo cargado en memoria
 
-        Call SaveUser(UserIndex, CharPath & UCase(name) & ".chr")
+        Call SaveUser(UserIndex, CharPath & name.ToUpper() & ".chr")
 
         'Open User
         Call ConnectUser(UserIndex, name, Password)
@@ -466,7 +466,7 @@ Module TCP
 
             If UserIndex = LastUser Then
                 Do Until UserList(LastUser).flags.UserLogged
-                    LastUser = LastUser - 1
+                    LastUser = Convert.ToInt16(LastUser - 1)
                     If LastUser < 1 Then Exit Do
                 Loop
             End If
@@ -499,7 +499,7 @@ Module TCP
             Call UserList(UserIndex).incomingData.ReadASCIIStringFixed(UserList(UserIndex).incomingData.length)
 
             If UserList(UserIndex).flags.UserLogged Then
-                If NumUsers > 0 Then NumUsers = NumUsers - 1
+                If NumUsers > 0 Then NumUsers = Convert.ToInt16(NumUsers - 1)
                 Call CloseUser(UserIndex)
 
                 Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)
@@ -578,8 +578,8 @@ Module TCP
         '***************************************************
 
         Dim X, Y As Short
-        For Y = UserList(Index).Pos.Y - MinYBorder + 1 To UserList(Index).Pos.Y + MinYBorder - 1
-            For X = UserList(Index).Pos.X - MinXBorder + 1 To UserList(Index).Pos.X + MinXBorder - 1
+        For Y = Convert.ToInt16(UserList(Index).Pos.Y - MinYBorder + 1) To Convert.ToInt16(UserList(Index).Pos.Y + MinYBorder - 1)
+            For X = Convert.ToInt16(UserList(Index).Pos.X - MinXBorder + 1) To Convert.ToInt16(UserList(Index).Pos.X + MinXBorder - 1)
 
                 If MapData(UserList(Index).Pos.Map, X, Y).UserIndex = Index2 Then
                     EstaPCarea = True
@@ -599,8 +599,8 @@ Module TCP
         '***************************************************
 
         Dim X, Y As Short
-        For Y = Pos.Y - MinYBorder + 1 To Pos.Y + MinYBorder - 1
-            For X = Pos.X - MinXBorder + 1 To Pos.X + MinXBorder - 1
+        For Y = Convert.ToInt16(Pos.Y - MinYBorder + 1) To Convert.ToInt16(Pos.Y + MinYBorder - 1)
+            For X = Convert.ToInt16(Pos.X - MinXBorder + 1) To Convert.ToInt16(Pos.X + MinXBorder - 1)
                 If X > 0 And Y > 0 And X < 101 And Y < 101 Then
                     If MapData(Pos.Map, X, Y).UserIndex > 0 Then
                         HayPCarea = True
@@ -620,8 +620,8 @@ Module TCP
         '***************************************************
 
         Dim X, Y As Short
-        For Y = Pos.Y - MinYBorder + 1 To Pos.Y + MinYBorder - 1
-            For X = Pos.X - MinXBorder + 1 To Pos.X + MinXBorder - 1
+        For Y = Convert.ToInt16(Pos.Y - MinYBorder + 1) To Convert.ToInt16(Pos.Y + MinYBorder - 1)
+            For X = Convert.ToInt16(Pos.X - MinXBorder + 1) To Convert.ToInt16(Pos.X + MinXBorder - 1)
                 If MapData(Pos.Map, X, Y).ObjInfo.ObjIndex = ObjIndex Then
                     HayOBJarea = True
                     Exit Function
@@ -703,7 +703,7 @@ Module TCP
             End If
 
             '¿Existe el personaje?
-            If Not FileExist(CharPath & UCase(name) & ".chr") Then
+            If Not System.IO.File.Exists(CharPath & name.ToUpper() & ".chr") Then
                 Call WriteErrorMsg(UserIndex, "El personaje no existe.")
                 Call FlushBuffer(UserIndex)
                 Call CloseSocket(UserIndex)
@@ -711,7 +711,7 @@ Module TCP
             End If
 
             '¿Es el passwd valido?
-            If UCase(Password) <> UCase(GetVar(CharPath & UCase(name) & ".chr", "INIT", "Password")) Then
+            If Password.ToUpper() <> GetVar(CharPath & name.ToUpper() & ".chr", "INIT", "Password").ToUpper() Then
                 Call WriteErrorMsg(UserIndex, "Password incorrecto.")
                 Call FlushBuffer(UserIndex)
                 Call CloseSocket(UserIndex)
@@ -772,7 +772,7 @@ Module TCP
 
             'Cargamos el personaje
 
-            Call Leer.Initialize(CharPath & UCase(name) & ".chr")
+            Call Leer.Initialize(CharPath & name.ToUpper() & ".chr")
 
             'Cargamos los datos del personaje
             Call LoadUserInit(UserIndex, Leer)
@@ -795,9 +795,9 @@ Module TCP
             If .Invent.WeaponEqpSlot = 0 Then .Char_Renamed.WeaponAnim = NingunArma
 
             If .Invent.MochilaEqpSlot > 0 Then
-                .CurrentInventorySlots = MAX_NORMAL_INVENTORY_SLOTS +
+                .CurrentInventorySlots = Convert.ToByte(MAX_NORMAL_INVENTORY_SLOTS +
                                          ObjData_Renamed(.Invent.Object_Renamed(.Invent.MochilaEqpSlot).ObjIndex).
-                                             MochilaType*5
+                                            MochilaType*5)
             Else
                 .CurrentInventorySlots = MAX_NORMAL_INVENTORY_SLOTS
             End If
@@ -814,7 +814,7 @@ Module TCP
             Call UpdateUserInv(True, UserIndex, 0)
             Call UpdateUserHechizos(True, UserIndex, 0)
 
-            If .flags.Paralizado Then
+            If .flags.Paralizado <> 0 Then
                 Call WriteParalizeOK(UserIndex)
             End If
 
@@ -867,13 +867,13 @@ Module TCP
                     For tX = .Pos.X - 1 To .Pos.X + 1
                         If esAgua Then
                             'reviso que sea pos legal en agua, que no haya User ni NPC para poder loguear.
-                            If LegalPos(.Pos.Map, tX, tY, True, False) Then
+                            If LegalPos(.Pos.Map, Convert.ToInt16(tX), Convert.ToInt16(tY), True, False) Then
                                 FoundPlace = True
                                 Exit For
                             End If
                         Else
                             'reviso que sea pos legal en tierra, que no haya User ni NPC para poder loguear.
-                            If LegalPos(.Pos.Map, tX, tY, False, True) Then
+                            If LegalPos(.Pos.Map, Convert.ToInt16(tX), Convert.ToInt16(tY), False, True) Then
                                 FoundPlace = True
                                 Exit For
                             End If
@@ -884,8 +884,8 @@ Module TCP
                 Next tY
 
                 If FoundPlace Then 'Si encontramos un lugar, listo, nos quedamos ahi
-                    .Pos.X = tX
-                    .Pos.Y = tY
+                    .Pos.X = Convert.ToInt16(tX)
+                    .Pos.Y = Convert.ToInt16(tY)
                 Else
                     'Si no encontramos un lugar, sacamos al usuario que tenemos abajo, y si es un NPC, lo pisamos.
                     If MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex <> 0 Then
@@ -944,7 +944,7 @@ Module TCP
             'Info
             Call WriteUserIndexInServer(UserIndex) 'Enviamos el User index
             Call WriteChangeMap(UserIndex, .Pos.Map, MapInfo_Renamed(.Pos.Map).MapVersion) 'Carga el mapa
-            Call WritePlayMidi(UserIndex, Val(ReadField(1, MapInfo_Renamed(.Pos.Map).Music, 45)))
+            Call WritePlayMidi(UserIndex, Convert.ToByte(ParseVal(ReadField(1, MapInfo_Renamed(.Pos.Map).Music, 45))))
 
             If .flags.Privilegios = PlayerType.Dios Then
                 .flags.ChatColor = RGB(250, 250, 150)
@@ -1004,7 +1004,7 @@ Module TCP
 
             'Actualiza el Num de usuarios
             'DE ACA EN ADELANTE GRABA EL CHARFILE, OJO!
-            NumUsers = NumUsers + 1
+            NumUsers = Convert.ToInt16(NumUsers + 1)
             .flags.UserLogged = True
 
             'usado para borrar Pjs
@@ -1012,7 +1012,7 @@ Module TCP
 
             Call EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE, NumUsers)
 
-            MapInfo_Renamed(.Pos.Map).NumUsers = MapInfo_Renamed(.Pos.Map).NumUsers + 1
+            MapInfo_Renamed(.Pos.Map).NumUsers = Convert.ToInt16(MapInfo_Renamed(.Pos.Map).NumUsers + 1)
 
             If .Stats.SkillPts > 0 Then
                 Call WriteSendSkills(UserIndex)
@@ -1096,16 +1096,10 @@ Module TCP
 
             Call MostrarNumUsers()
 
-            N = FreeFile
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output)
-            PrintLine(N, NumUsers)
-            FileClose(N)
+            IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", NumUsers.ToString() & Environment.NewLine)
 
-            N = FreeFile
             'Log
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Connect.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, .name & " ha entrado al juego. UserIndex:" & UserIndex & " " & TimeOfDay & " " & Today)
-            FileClose(N)
+            AppendLog("logs/Connect.log", .name & " ha entrado al juego. UserIndex:" & UserIndex & " " & TimeOfDay & " " & Today)
 
         End With
     End Sub
@@ -1340,7 +1334,7 @@ Module TCP
             .Inmovilizado = 0
             .Maldicion = 0
             .Bendicion = 0
-            .Meditando = 0
+            .Meditando = False
             .Privilegios = 0
             .PuedeMoverse = 0
             .OldBody = 0
@@ -1501,7 +1495,7 @@ Module TCP
             UserList(UserIndex).flags.NPCAtacado = 0
 
             Map = UserList(UserIndex).Pos.Map
-            name = UCase(UserList(UserIndex).name)
+            name = UserList(UserIndex).name.ToUpper()
 
             UserList(UserIndex).Char_Renamed.FX = 0
             UserList(UserIndex).Char_Renamed.loops = 0
@@ -1555,7 +1549,7 @@ Module TCP
             Next i
 
             'Update Map Users
-            MapInfo_Renamed(Map).NumUsers = MapInfo_Renamed(Map).NumUsers - 1
+            MapInfo_Renamed(Map).NumUsers = Convert.ToInt16(MapInfo_Renamed(Map).NumUsers - 1)
 
             If MapInfo_Renamed(Map).NumUsers < 0 Then
                 MapInfo_Renamed(Map).NumUsers = 0
@@ -1568,10 +1562,7 @@ Module TCP
 
             Call MostrarNumUsers()
 
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Connect.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & TimeOfDay & " " & Today)
-            FileClose(N)
+            AppendLog("logs/Connect.log", name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & TimeOfDay & " " & Today)
 
 
         Catch ex As Exception
@@ -1609,11 +1600,11 @@ Module TCP
 
         Call _
             WriteSendNight(UserIndex,
-                           IIf(
+                           If(
                                DeNoche And
                                (MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = Campo Or
                                 MapInfo_Renamed(UserList(UserIndex).Pos.Map).Zona = Ciudad), True, False))
-        Call WriteSendNight(UserIndex, IIf(DeNoche, True, False))
+        Call WriteSendNight(UserIndex, If(DeNoche, True, False))
     End Sub
 
     Public Sub EcharPjsNoPrivilegiados()
@@ -1627,8 +1618,8 @@ Module TCP
 
         For LoopC = 1 To LastUser
             If UserList(LoopC).flags.UserLogged And UserList(LoopC).ConnID >= 0 And UserList(LoopC).ConnIDValida Then
-                If UserList(LoopC).flags.Privilegios And PlayerType.User Then
-                    Call CloseSocket(LoopC)
+                If (UserList(LoopC).flags.Privilegios And PlayerType.User) <> 0 Then
+                    Call CloseSocket(Convert.ToInt16(LoopC))
                 End If
             End If
         Next LoopC

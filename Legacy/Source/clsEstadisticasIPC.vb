@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class clsEstadisticasIPC
     ' TODO MIGRA: se elimino esto ya que no hace al juego en si y usaba librerias del sistema para manejar ventanas. Ver si vale la pena completarlo nuevamente o directamente borrar todo el sistema

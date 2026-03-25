@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module mdParty
     ''
@@ -85,7 +85,7 @@ Module mdParty
         '    If UserList(UserIndex).Stats.ELV < MINPARTYLEVEL Then
 
         If _
-            CShort(UserList(UserIndex).Stats.UserAtributos(eAtributos.Carisma))*
+            Convert.ToInt16(UserList(UserIndex).Stats.UserAtributos(eAtributos.Carisma))*
             UserList(UserIndex).Stats.UserSkills(eSkill.Liderazgo) < 100 Then
             Call _
                 WriteConsoleMsg(UserIndex, "Tu carisma y liderazgo no son suficientes para liderar una party.",
@@ -248,7 +248,7 @@ Module mdParty
             End If
         Else
             Call _
-                WriteConsoleMsg(leader, LCase(UserList(OldMember).name) & " no pertenece a tu party.",
+                WriteConsoleMsg(leader, UserList(OldMember).name.ToLower() & " no pertenece a tu party.",
                                 FontTypeNames.FONTTYPE_INFO)
         End If
     End Sub
@@ -321,7 +321,7 @@ Module mdParty
                     Else
                         If .PartyIndex = PI Then
                             Call _
-                                WriteConsoleMsg(leader, LCase(.name) & " ya es miembro de la party.",
+                                WriteConsoleMsg(leader, .name.ToLower() & " ya es miembro de la party.",
                                                 FontTypeNames.FONTTYPE_PARTY)
                         Else
                             Call _
@@ -340,11 +340,11 @@ Module mdParty
             Else
                 If .PartyIndex = PI Then
                     Call _
-                        WriteConsoleMsg(leader, LCase(.name) & " ya es miembro de la party.",
+                        WriteConsoleMsg(leader, .name.ToLower() & " ya es miembro de la party.",
                                         FontTypeNames.FONTTYPE_PARTY)
                 Else
                     Call _
-                        WriteConsoleMsg(leader, LCase(.name) & " no ha solicitado ingresar a tu party.",
+                        WriteConsoleMsg(leader, .name.ToLower() & " no ha solicitado ingresar a tu party.",
                                         FontTypeNames.FONTTYPE_PARTY)
                 End If
 
@@ -353,7 +353,7 @@ Module mdParty
         End With
     End Sub
 
-    Private Function IsPartyMember(UserIndex As Short, PartyIndex As Short) As Object
+    Private Function IsPartyMember(UserIndex As Short, PartyIndex As Short) As Boolean
         Dim MemberIndex As Short
 
         For MemberIndex = 1 To PARTY_MAXMEMBERS
@@ -435,7 +435,7 @@ Module mdParty
             End If
         Else
             Call _
-                WriteConsoleMsg(OldLeader, LCase(UserList(NewLeader).name) & " no pertenece a tu party.",
+                WriteConsoleMsg(OldLeader, UserList(NewLeader).name.ToLower() & " no pertenece a tu party.",
                                 FontTypeNames.FONTTYPE_INFO)
         End If
     End Sub

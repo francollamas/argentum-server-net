@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modSendData
     '**************************************************************
@@ -68,10 +68,10 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If UserList(LoopC).ConnID <> - 1 Then
                             If _
-                                UserList(LoopC).flags.Privilegios And
+                                (UserList(LoopC).flags.Privilegios And
                                 (PlayerType.Admin Or PlayerType.Dios Or
-                                 PlayerType.SemiDios Or PlayerType.Consejero) Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                 PlayerType.SemiDios Or PlayerType.Consejero)) <> 0 Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -81,7 +81,7 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If UserList(LoopC).ConnID <> - 1 Then
                             If UserList(LoopC).flags.UserLogged Then 'Esta logeado como usuario?
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -91,7 +91,7 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) And (LoopC <> sndIndex) Then
                             If UserList(LoopC).flags.UserLogged Then 'Esta logeado como usuario?
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -109,7 +109,7 @@ Module modSendData
                     LoopC = m_Iterador_ProximoUserIndex(sndIndex)
                     While LoopC > 0
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            Call EnviarDatosASlot(LoopC, sndData)
+                            Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                         End If
                         LoopC = m_Iterador_ProximoUserIndex(sndIndex)
                     End While
@@ -143,7 +143,7 @@ Module modSendData
                     LoopC = m_Iterador_ProximoUserIndex(sndIndex)
                     While LoopC > 0
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            Call EnviarDatosASlot(LoopC, sndData)
+                            Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                         End If
                         LoopC = m_Iterador_ProximoUserIndex(sndIndex)
                     End While
@@ -151,7 +151,7 @@ Module modSendData
                     LoopC = Iterador_ProximoGM(sndIndex)
                     While LoopC > 0
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            Call EnviarDatosASlot(LoopC, sndData)
+                            Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                         End If
                         LoopC = Iterador_ProximoGM(sndIndex)
                     End While
@@ -161,8 +161,8 @@ Module modSendData
                 Case SendTarget.ToConsejo
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If UserList(LoopC).flags.Privilegios And PlayerType.RoyalCouncil Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                            If (UserList(LoopC).flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -171,8 +171,8 @@ Module modSendData
                 Case SendTarget.ToConsejoCaos
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If UserList(LoopC).flags.Privilegios And PlayerType.ChaosCouncil Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                            If (UserList(LoopC).flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -181,8 +181,8 @@ Module modSendData
                 Case SendTarget.ToRolesMasters
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                            If (UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -191,8 +191,8 @@ Module modSendData
                 Case SendTarget.ToCiudadanos
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If Not criminal(LoopC) Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                            If Not criminal(Convert.ToInt16(LoopC)) Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -201,8 +201,8 @@ Module modSendData
                 Case SendTarget.ToCriminales
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
-                            If criminal(LoopC) Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                            If criminal(Convert.ToInt16(LoopC)) Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -212,7 +212,7 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
                             If UserList(LoopC).Faccion.ArmadaReal = 1 Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -222,7 +222,7 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
                             If UserList(LoopC).Faccion.FuerzasCaos = 1 Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -232,9 +232,9 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
                             If _
-                                Not criminal(LoopC) Or
+                                Not criminal(Convert.ToInt16(LoopC)) Or
                                 (UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -244,9 +244,9 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If (UserList(LoopC).ConnID <> - 1) Then
                             If _
-                                criminal(LoopC) Or
+                                criminal(Convert.ToInt16(LoopC)) Or
                                 (UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -258,7 +258,7 @@ Module modSendData
                             If _
                                 UserList(LoopC).Faccion.ArmadaReal = 1 Or
                                 (UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -270,7 +270,7 @@ Module modSendData
                             If _
                                 UserList(LoopC).Faccion.FuerzasCaos = 1 Or
                                 (UserList(LoopC).flags.Privilegios And PlayerType.RoleMaster) <> 0 Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -280,9 +280,9 @@ Module modSendData
                     For LoopC = 1 To LastUser
                         If UserList(LoopC).ConnID <> - 1 Then
                             If _
-                                UserList(LoopC).flags.Privilegios And
-                                (PlayerType.Admin Or PlayerType.Dios) Then
-                                Call EnviarDatosASlot(LoopC, sndData)
+                                (UserList(LoopC).flags.Privilegios And
+                                (PlayerType.Admin Or PlayerType.Dios)) <> 0 Then
+                                Call EnviarDatosASlot(Convert.ToInt16(LoopC), sndData)
                             End If
                         End If
                     Next LoopC
@@ -325,10 +325,10 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     If UserList(tempIndex).ConnIDValida Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
@@ -358,12 +358,12 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             TempInt = UserList(tempIndex).AreasInfo.AreaReciveX And AreaX
-            If TempInt Then 'Esta en el area?
+            If TempInt <> 0 Then 'Esta en el area?
                 TempInt = UserList(tempIndex).AreasInfo.AreaReciveY And AreaY
-                If TempInt Then
+                If TempInt <> 0 Then
                     If tempIndex <> UserIndex Then
                         If UserList(tempIndex).ConnIDValida Then
                             Call EnviarDatosASlot(tempIndex, sdData)
@@ -394,17 +394,17 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     'Dead and admins read
                     If _
                         UserList(tempIndex).ConnIDValida = True And
                         (UserList(tempIndex).flags.Muerto = 1 Or
-                         (UserList(tempIndex).flags.Privilegios And
+                         ((UserList(tempIndex).flags.Privilegios And
                           (PlayerType.Admin Or PlayerType.Dios Or
-                           PlayerType.SemiDios Or PlayerType.Consejero)) <> 0) Then
+                           PlayerType.SemiDios Or PlayerType.Consejero)) <> 0)) Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
                 End If
@@ -434,15 +434,15 @@ Module modSendData
         If UserList(UserIndex).GuildIndex = 0 Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     If _
                         UserList(tempIndex).ConnIDValida And
                         (UserList(tempIndex).GuildIndex = UserList(UserIndex).GuildIndex Or
-                         ((UserList(tempIndex).flags.Privilegios And PlayerType.Dios) And
-                          (UserList(tempIndex).flags.Privilegios And PlayerType.RoleMaster) = 0)) Then
+                         (((UserList(tempIndex).flags.Privilegios And PlayerType.Dios) <> 0) And
+                          ((UserList(tempIndex).flags.Privilegios And PlayerType.RoleMaster) = 0))) Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
                 End If
@@ -472,10 +472,10 @@ Module modSendData
         If UserList(UserIndex).PartyIndex = 0 Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     If _
                         UserList(tempIndex).ConnIDValida And
                         UserList(tempIndex).PartyIndex = UserList(UserIndex).PartyIndex Then
@@ -506,15 +506,15 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     If UserList(tempIndex).ConnIDValida Then
                         If _
-                            UserList(tempIndex).flags.Privilegios And
+                            (UserList(tempIndex).flags.Privilegios And
                             (PlayerType.SemiDios Or PlayerType.Dios Or
-                             PlayerType.Admin) Then Call EnviarDatosASlot(tempIndex, sdData)
+                             PlayerType.Admin)) <> 0 Then Call EnviarDatosASlot(tempIndex, sdData)
                     End If
                 End If
             End If
@@ -542,12 +542,12 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             TempInt = UserList(tempIndex).AreasInfo.AreaReciveX And AreaX
-            If TempInt Then 'Esta en el area?
+            If TempInt <> 0 Then 'Esta en el area?
                 TempInt = UserList(tempIndex).AreasInfo.AreaReciveY And AreaY
-                If TempInt Then
+                If TempInt <> 0 Then
                     If UserList(tempIndex).ConnIDValida Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
@@ -566,18 +566,18 @@ Module modSendData
         Dim TempInt As Short
         Dim tempIndex As Short
 
-        AreaX = 2^(AreaX\9)
-        AreaY = 2^(AreaY\9)
+        AreaX = Convert.ToInt16(2^(AreaX\9))
+        AreaY = Convert.ToInt16(2^(AreaY\9))
 
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             TempInt = UserList(tempIndex).AreasInfo.AreaReciveX And AreaX
-            If TempInt Then 'Esta en el area?
+            If TempInt <> 0 Then 'Esta en el area?
                 TempInt = UserList(tempIndex).AreasInfo.AreaReciveY And AreaY
-                If TempInt Then
+                If TempInt <> 0 Then
                     If UserList(tempIndex).ConnIDValida Then
                         Call EnviarDatosASlot(tempIndex, sdData)
                     End If
@@ -598,7 +598,7 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             If UserList(tempIndex).ConnIDValida Then
                 Call EnviarDatosASlot(tempIndex, sdData)
@@ -621,7 +621,7 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             If tempIndex <> UserIndex And UserList(tempIndex).ConnIDValida Then
                 Call EnviarDatosASlot(tempIndex, sdData)
@@ -650,17 +650,17 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             With UserList(tempIndex)
-                If .AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                    If .AreasInfo.AreaReciveY And AreaY Then
+                If (.AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                    If (.AreasInfo.AreaReciveY And AreaY) <> 0 Then
                         If .ConnIDValida Then
                             ' Exclusivo para dioses, admins y gms
                             If _
-                                (.flags.Privilegios And Not PlayerType.User And
-                                 Not PlayerType.Consejero And Not PlayerType.RoleMaster) =
-                                .flags.Privilegios Then
+                                ((.flags.Privilegios And Not PlayerType.User And
+                                 Not PlayerType.Consejero And Not PlayerType.RoleMaster) <>
+                                0) And (.flags.Privilegios <> 0) Then
                                 Call EnviarDatosASlot(tempIndex, sdData)
                             End If
                         End If
@@ -690,12 +690,12 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     If UserList(tempIndex).ConnIDValida Then
-                        If UserList(tempIndex).flags.Privilegios And PlayerType.User Then
+                        If (UserList(tempIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                             Call EnviarDatosASlot(tempIndex, sdData)
                         End If
                     End If
@@ -724,15 +724,15 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
-            If UserList(tempIndex).AreasInfo.AreaReciveX And AreaX Then 'Esta en el area?
-                If UserList(tempIndex).AreasInfo.AreaReciveY And AreaY Then
+            If (UserList(tempIndex).AreasInfo.AreaReciveX And AreaX) <> 0 Then 'Esta en el area?
+                If (UserList(tempIndex).AreasInfo.AreaReciveY And AreaY) <> 0 Then
                     If UserList(tempIndex).ConnIDValida Then
                         If _
-                            UserList(tempIndex).flags.Privilegios And
+                            (UserList(tempIndex).flags.Privilegios And
                             (PlayerType.User Or PlayerType.Consejero Or
-                             PlayerType.RoleMaster) Then
+                             PlayerType.RoleMaster)) <> 0 Then
                             Call EnviarDatosASlot(tempIndex, sdData)
                         End If
                     End If
@@ -763,7 +763,7 @@ Module modSendData
         If Not MapaValido(Map) Then Exit Sub
 
         For LoopC = 1 To ConnGroups(Map).CountEntrys
-            tempIndex = ConnGroups(Map).UserEntrys(LoopC)
+            tempIndex = Convert.ToInt16(ConnGroups(Map).UserEntrys(LoopC))
 
             If UserList(tempIndex).ConnIDValida Then
                 If tempIndex <> UserIndex Then

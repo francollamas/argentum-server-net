@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module NPCs
     'Contiene todas las rutinas necesarias para cotrolar los
@@ -19,7 +19,7 @@ Module NPCs
                 UserList(UserIndex).MascotasIndex(i) = 0
                 UserList(UserIndex).MascotasType(i) = 0
 
-                UserList(UserIndex).NroMascotas = UserList(UserIndex).NroMascotas - 1
+                UserList(UserIndex).NroMascotas = Convert.ToInt16(UserList(UserIndex).NroMascotas - 1)
                 Exit For
             End If
         Next i
@@ -32,7 +32,7 @@ Module NPCs
         '
         '***************************************************
 
-        Npclist(Maestro).Mascotas = Npclist(Maestro).Mascotas - 1
+        Npclist(Maestro).Mascotas = Convert.ToInt16(Npclist(Maestro).Mascotas - 1)
     End Sub
 
     Sub MuereNpc(NpcIndex As Short, UserIndex As Short)
@@ -81,7 +81,7 @@ Module NPCs
                 IsPretoriano = True
                 If Npclist(NpcIndex).Pos.Map = MAPA_PRETORIANO Then
                     Npclist(NpcIndex).Invent.ArmourEqpSlot = 0
-                    pretorianosVivos = pretorianosVivos - 1
+                    pretorianosVivos = Convert.ToInt16(pretorianosVivos - 1)
                 End If
             End If
 
@@ -96,7 +96,7 @@ Module NPCs
                     If MiNPC.flags.Snd3 > 0 Then
                         Call _
                             SendData(SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessagePlayWave(MiNPC.flags.Snd3, MiNPC.Pos.X, MiNPC.Pos.Y))
+                                     PrepareMessagePlayWave(Convert.ToByte(MiNPC.flags.Snd3), Convert.ToByte(MiNPC.Pos.X), Convert.ToByte(MiNPC.Pos.Y)))
                     End If
                     .flags.TargetNPC = 0
                     .flags.TargetNpcTipo = eNPCType.Comun
@@ -131,7 +131,7 @@ Module NPCs
 
                     '[/KEVIN]
                     Call WriteConsoleMsg(UserIndex, "¡Has matado a la criatura!", FontTypeNames.FONTTYPE_FIGHT)
-                    If .Stats.NPCsMuertos < 32000 Then .Stats.NPCsMuertos = .Stats.NPCsMuertos + 1
+                    If .Stats.NPCsMuertos < 32000 Then .Stats.NPCsMuertos = Convert.ToInt16(.Stats.NPCsMuertos + 1)
 
                     EraCriminal = criminal(UserIndex)
 
@@ -153,7 +153,7 @@ Module NPCs
                         If .Reputacion.PlebeRep > MAXREP Then .Reputacion.PlebeRep = MAXREP
 
                     ElseIf MiNPC.Stats.Alineacion = 2 Then
-                        .Reputacion.NobleRep = .Reputacion.NobleRep + vlASESINO/2
+                        .Reputacion.NobleRep = Convert.ToInt32(.Reputacion.NobleRep + vlASESINO/2)
                         If .Reputacion.NobleRep > MAXREP Then .Reputacion.NobleRep = MAXREP
 
                     ElseIf MiNPC.Stats.Alineacion = 4 Then
@@ -381,14 +381,14 @@ Module NPCs
 
             If NpcIndex = LastNPC Then
                 Do Until Npclist(LastNPC).flags.NPCActive
-                    LastNPC = LastNPC - 1
+                    LastNPC = Convert.ToInt16(LastNPC - 1)
                     If LastNPC < 1 Then Exit Do
                 Loop
             End If
 
 
             If NumNPCs <> 0 Then
-                NumNPCs = NumNPCs - 1
+                NumNPCs = Convert.ToInt16(NumNPCs - 1)
             End If
 
 
@@ -419,7 +419,7 @@ Module NPCs
                 If PetIndex = 0 Then Exit Sub
 
                 ' Limpio el slot de la mascota
-                .NroMascotas = .NroMascotas - 1
+                .NroMascotas = Convert.ToInt16(.NroMascotas - 1)
                 .MascotasIndex(PetIndex) = 0
                 .MascotasType(PetIndex) = 0
 
@@ -477,8 +477,8 @@ Module NPCs
         nIndex = OpenNPC(NroNPC) 'Conseguimos un indice
 
         If nIndex > MAXNPCS Then Exit Sub
-        PuedeAgua = Npclist(nIndex).flags.AguaValida
-        PuedeTierra = IIf(Npclist(nIndex).flags.TierraInvalida = 1, False, True)
+        PuedeAgua = Npclist(nIndex).flags.AguaValida <> 0
+        PuedeTierra = If(Npclist(nIndex).flags.TierraInvalida = 1, False, True)
 
         'Necesita ser respawned en un lugar especifico
         If InMapBounds(OrigPos.Map, OrigPos.X, OrigPos.Y) Then
@@ -497,8 +497,8 @@ Module NPCs
             altpos.Map = mapa
 
             Do While Not PosicionValida
-                Pos.X = RandomNumber(MinXBorder, MaxXBorder) 'Obtenemos posicion al azar en x
-                Pos.Y = RandomNumber(MinYBorder, MaxYBorder) 'Obtenemos posicion al azar en y
+                Pos.X = Convert.ToInt16(RandomNumber(MinXBorder, MaxXBorder)) 'Obtenemos posicion al azar en x
+                Pos.Y = Convert.ToInt16(RandomNumber(MinYBorder, MaxYBorder)) 'Obtenemos posicion al azar en y
 
                 Call ClosestLegalPos(Pos, newpos, PuedeAgua, PuedeTierra) 'Nos devuelve la posicion valida mas cercana
                 If newpos.X <> 0 And newpos.Y <> 0 Then
@@ -514,7 +514,7 @@ Module NPCs
                 End If
                 'Si X e Y son iguales a 0 significa que no se encontro posicion valida
                 If _
-                    LegalPosNPC(newpos.Map, newpos.X, newpos.Y, PuedeAgua) And Not HayPCarea(newpos) And
+                    LegalPosNPC(newpos.Map, newpos.X, newpos.Y, Convert.ToByte(PuedeAgua)) And Not HayPCarea(newpos) And
                     TestSpawnTrigger(newpos, PuedeAgua) Then
                     'Asignamos las nuevas coordenas solo si son validas
                     Npclist(nIndex).Pos.Map = newpos.Map
@@ -591,8 +591,8 @@ Module NPCs
         If Not toMap Then
             Call _
                 WriteCharacterCreate(sndIndex, Npclist(NpcIndex).Char_Renamed.body, Npclist(NpcIndex).Char_Renamed.Head,
-                                     Npclist(NpcIndex).Char_Renamed.heading, Npclist(NpcIndex).Char_Renamed.CharIndex, X,
-                                     Y, 0, 0, 0, 0, 0, vbNullString, 0, 0)
+                                     Npclist(NpcIndex).Char_Renamed.heading, Npclist(NpcIndex).Char_Renamed.CharIndex, Convert.ToByte(X),
+                                     Convert.ToByte(Y), 0, 0, 0, 0, 0, vbNullString, 0, 0)
             Call FlushBuffer(sndIndex)
         Else
             Call AgregarNpc(NpcIndex)
@@ -631,7 +631,7 @@ Module NPCs
 
         If Npclist(NpcIndex).Char_Renamed.CharIndex = LastChar Then
             Do Until CharList(LastChar) > 0
-                LastChar = LastChar - 1
+                LastChar = Convert.ToInt16(LastChar - 1)
                 If LastChar <= 1 Then Exit Do
             Loop
         End If
@@ -649,7 +649,7 @@ Module NPCs
 
 
         'update NumChars
-        NumChars = NumChars - 1
+        NumChars = Convert.ToInt16(NumChars - 1)
     End Sub
 
     Public Sub MoveNPCChar(NpcIndex As Short, nHeading As Byte)
@@ -667,10 +667,10 @@ Module NPCs
             With Npclist(NpcIndex)
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = .Pos
-                Call HeadtoPos(nHeading, nPos)
+                Call HeadtoPos(CType(nHeading, eHeading), nPos)
 
                 ' es una posicion legal
-                If LegalPosNPC(.Pos.Map, nPos.X, nPos.Y, .flags.AguaValida = 1, .MaestroUser <> 0) Then
+                If LegalPosNPC(.Pos.Map, nPos.X, nPos.Y, .flags.AguaValida, .MaestroUser <> 0) Then
 
                     If .flags.AguaValida = 0 And HayAgua(.Pos.Map, nPos.X, nPos.Y) Then Exit Sub
                     If .flags.TierraInvalida = 1 And Not HayAgua(.Pos.Map, nPos.X, nPos.Y) Then Exit Sub
@@ -694,21 +694,21 @@ Module NPCs
                             ' Avisamos a los usuarios del area, y al propio usuario lo forzamos a moverse
                             Call _
                                 SendData(SendTarget.ToPCAreaButIndex, UserIndex,
-                                         PrepareMessageCharacterMove(UserList(UserIndex).Char_Renamed.CharIndex, .Pos.X,
-                                                                     .Pos.Y))
-                            Call WriteForceCharMove(UserIndex, InvertHeading(nHeading))
+                                         PrepareMessageCharacterMove(UserList(UserIndex).Char_Renamed.CharIndex, Convert.ToByte(.Pos.X),
+                                                                     Convert.ToByte(.Pos.Y)))
+                            Call WriteForceCharMove(UserIndex, InvertHeading(CType(nHeading, eHeading)))
                         End With
                     End If
 
                     Call _
                         SendData(SendTarget.ToNPCArea, NpcIndex,
-                                 PrepareMessageCharacterMove(.Char_Renamed.CharIndex, nPos.X, nPos.Y))
+                             PrepareMessageCharacterMove(.Char_Renamed.CharIndex, Convert.ToByte(nPos.X), Convert.ToByte(nPos.Y)))
 
                     'Update map and user pos
                     MapData(.Pos.Map, .Pos.X, .Pos.Y).NpcIndex = 0
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     .Pos = nPos
-                    .Char_Renamed.heading = nHeading
+                    .Char_Renamed.heading = CType(nHeading, eHeading)
                     MapData(.Pos.Map, nPos.X, nPos.Y).NpcIndex = NpcIndex
                     Call CheckUpdateNeededNpc(NpcIndex, nHeading)
 
@@ -742,7 +742,7 @@ Module NPCs
                 If Not Npclist(LoopC).flags.NPCActive Then Exit For
             Next LoopC
 
-            NextOpenNPC = LoopC
+            NextOpenNPC = Convert.ToInt16(LoopC)
 
 
         Catch ex As Exception
@@ -759,7 +759,7 @@ Module NPCs
         '***************************************************
 
         Dim N As Short
-        N = RandomNumber(1, 100)
+        N = Convert.ToInt16(RandomNumber(1, 100))
         If N < 30 Then
             UserList(UserIndex).flags.Envenenado = 1
             Call WriteConsoleMsg(UserIndex, "¡¡La criatura te ha envenenado!!", FontTypeNames.FONTTYPE_FIGHT)
@@ -793,7 +793,7 @@ Module NPCs
             Exit Function
         End If
 
-        PuedeAgua = Npclist(nIndex).flags.AguaValida
+        PuedeAgua = Npclist(nIndex).flags.AguaValida <> 0
         PuedeTierra = Not Npclist(nIndex).flags.TierraInvalida = 1
 
         Call ClosestLegalPos(Pos, newpos, PuedeAgua, PuedeTierra) 'Nos devuelve la posicion valida mas cercana
@@ -832,7 +832,7 @@ Module NPCs
         Call MakeNPCChar(True, Map, nIndex, Map, X, Y)
 
         If FX Then
-            Call SendData(SendTarget.ToNPCArea, nIndex, PrepareMessagePlayWave(SND_WARP, X, Y))
+            Call SendData(SendTarget.ToNPCArea, nIndex, PrepareMessagePlayWave(SND_WARP, Convert.ToByte(X), Convert.ToByte(Y)))
             Call _
                 SendData(SendTarget.ToNPCArea, nIndex,
                          PrepareMessageCreateFX(Npclist(nIndex).Char_Renamed.CharIndex, FXIDs.FXWARP, 0))
@@ -870,14 +870,14 @@ Module NPCs
                 MiAux = MiAux - MAX_INVENTORY_OBJS
             Loop
             If MiAux > 0 Then
-                MiObj.Amount = MiAux
+                MiObj.Amount = Convert.ToInt16(MiAux)
                 MiObj.ObjIndex = iORO
                 Call TirarItemAlPiso(MiNPC.Pos, MiObj)
             End If
         End If
     End Sub
 
-    Public Function OpenNPC(NpcNumber As Short, Optional ByVal Respawn As Object = True) As Short
+    Public Function OpenNPC(NpcNumber As Short, Optional ByVal Respawn As Boolean = True) As Short
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -923,77 +923,77 @@ Module NPCs
             .name = Leer.GetValue("NPC" & NpcNumber, "Name")
             .desc = Leer.GetValue("NPC" & NpcNumber, "Desc")
 
-            .Movement = Val(Leer.GetValue("NPC" & NpcNumber, "Movement"))
+            .Movement = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Movement")), TipoAI)
             .flags.OldMovement = .Movement
 
-            .flags.AguaValida = Val(Leer.GetValue("NPC" & NpcNumber, "AguaValida"))
-            .flags.TierraInvalida = Val(Leer.GetValue("NPC" & NpcNumber, "TierraInValida"))
-            .flags.Faccion = Val(Leer.GetValue("NPC" & NpcNumber, "Faccion"))
-            .flags.AtacaDoble = Val(Leer.GetValue("NPC" & NpcNumber, "AtacaDoble"))
+            .flags.AguaValida = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AguaValida")))
+            .flags.TierraInvalida = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "TierraInValida")))
+            .flags.Faccion = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Faccion")))
+            .flags.AtacaDoble = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AtacaDoble")))
 
-            .NPCtype = Val(Leer.GetValue("NPC" & NpcNumber, "NpcType"))
+            .NPCtype = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NpcType")), eNPCType)
 
-            .Char_Renamed.body = Val(Leer.GetValue("NPC" & NpcNumber, "Body"))
-            .Char_Renamed.Head = Val(Leer.GetValue("NPC" & NpcNumber, "Head"))
-            .Char_Renamed.heading = Val(Leer.GetValue("NPC" & NpcNumber, "Heading"))
+            .Char_Renamed.body = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Body")))
+            .Char_Renamed.Head = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Head")))
+            .Char_Renamed.heading = CType(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Heading")), eHeading)
 
-            .Attackable = Val(Leer.GetValue("NPC" & NpcNumber, "Attackable"))
-            .Comercia = Val(Leer.GetValue("NPC" & NpcNumber, "Comercia"))
-            .Hostile = Val(Leer.GetValue("NPC" & NpcNumber, "Hostile"))
+            .Attackable = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Attackable")))
+            .Comercia = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Comercia")))
+            .Hostile = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Hostile")))
             .flags.OldHostil = .Hostile
 
-            .GiveEXP = Val(Leer.GetValue("NPC" & NpcNumber, "GiveEXP"))
+            .GiveEXP = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "GiveEXP")))
 
             .flags.ExpCount = .GiveEXP
 
-            .Veneno = Val(Leer.GetValue("NPC" & NpcNumber, "Veneno"))
+            .Veneno = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Veneno")))
 
-            .flags.Domable = Val(Leer.GetValue("NPC" & NpcNumber, "Domable"))
+            .flags.Domable = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Domable")))
 
-            .GiveGLD = Val(Leer.GetValue("NPC" & NpcNumber, "GiveGLD"))
+            .GiveGLD = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "GiveGLD")))
 
-            .PoderAtaque = Val(Leer.GetValue("NPC" & NpcNumber, "PoderAtaque"))
-            .PoderEvasion = Val(Leer.GetValue("NPC" & NpcNumber, "PoderEvasion"))
+            .PoderAtaque = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "PoderAtaque")))
+            .PoderEvasion = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "PoderEvasion")))
 
-            .InvReSpawn = Val(Leer.GetValue("NPC" & NpcNumber, "InvReSpawn"))
+            .InvReSpawn = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "InvReSpawn")))
 
             With .Stats
-                .MaxHp = Val(Leer.GetValue("NPC" & NpcNumber, "MaxHP"))
-                .MinHp = Val(Leer.GetValue("NPC" & NpcNumber, "MinHP"))
-                .MaxHIT = Val(Leer.GetValue("NPC" & NpcNumber, "MaxHIT"))
-                .MinHIT = Val(Leer.GetValue("NPC" & NpcNumber, "MinHIT"))
-                .def = Val(Leer.GetValue("NPC" & NpcNumber, "DEF"))
-                .defM = Val(Leer.GetValue("NPC" & NpcNumber, "DEFm"))
-                .Alineacion = Val(Leer.GetValue("NPC" & NpcNumber, "Alineacion"))
+                .MaxHp = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MaxHP")))
+                .MinHp = CInt(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MinHP")))
+                .MaxHIT = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MaxHIT")))
+                .MinHIT = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "MinHIT")))
+                .def = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "DEF")))
+                .defM = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "DEFm")))
+                .Alineacion = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Alineacion")))
             End With
 
-            .Invent.NroItems = Val(Leer.GetValue("NPC" & NpcNumber, "NROITEMS"))
+            .Invent.NroItems = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NROITEMS")))
             For LoopC = 1 To .Invent.NroItems
                 ln = Leer.GetValue("NPC" & NpcNumber, "Obj" & LoopC)
-                .Invent.Object_Renamed(LoopC).ObjIndex = Val(ReadField(1, ln, 45))
-                .Invent.Object_Renamed(LoopC).Amount = Val(ReadField(2, ln, 45))
+                .Invent.Object_Renamed(LoopC).ObjIndex = Convert.ToInt16(ParseVal(ReadField(1, ln, 45)))
+                .Invent.Object_Renamed(LoopC).Amount = Convert.ToInt16(ParseVal(ReadField(2, ln, 45)))
             Next LoopC
 
             For LoopC = 1 To MAX_NPC_DROPS
                 ln = Leer.GetValue("NPC" & NpcNumber, "Drop" & LoopC)
-                .Drop(LoopC).ObjIndex = Val(ReadField(1, ln, 45))
-                .Drop(LoopC).Amount = Val(ReadField(2, ln, 45))
+                .Drop(LoopC).ObjIndex = Convert.ToInt16(ParseVal(ReadField(1, ln, 45)))
+                .Drop(LoopC).Amount = Convert.ToInt32(ParseVal(ReadField(2, ln, 45)))
             Next LoopC
 
 
-            .flags.LanzaSpells = Val(Leer.GetValue("NPC" & NpcNumber, "LanzaSpells"))
+            .flags.LanzaSpells = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "LanzaSpells")))
             'UPGRADE_WARNING: El límite inferior de la matriz .Spells ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             If .flags.LanzaSpells > 0 Then ReDim .Spells(.flags.LanzaSpells)
             For LoopC = 1 To .flags.LanzaSpells
-                .Spells(LoopC) = Val(Leer.GetValue("NPC" & NpcNumber, "Sp" & LoopC))
+                .Spells(LoopC) = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Sp" & LoopC)))
             Next LoopC
 
             If .NPCtype = eNPCType.Entrenador Then
-                .NroCriaturas = Val(Leer.GetValue("NPC" & NpcNumber, "NroCriaturas"))
+                .NroCriaturas = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NroCriaturas")))
                 'UPGRADE_WARNING: El límite inferior de la matriz .Criaturas ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 ReDim .Criaturas(.NroCriaturas)
                 For LoopC = 1 To .NroCriaturas
-                    .Criaturas(LoopC).NpcIndex = CShort(Leer.GetValue("NPC" & NpcNumber, "CI" & LoopC))
+                    .Criaturas(LoopC).NpcIndex = Convert.ToInt16(Leer.GetValue("NPC" & NpcNumber, "CI" & LoopC))
                     .Criaturas(LoopC).NpcName = Leer.GetValue("NPC" & NpcNumber, "CN" & LoopC)
                 Next LoopC
             End If
@@ -1003,22 +1003,22 @@ Module NPCs
 
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Respawn. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 If Respawn Then
-                    .Respawn = Val(Leer.GetValue("NPC" & NpcNumber, "ReSpawn"))
+                    .Respawn = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "ReSpawn")))
                 Else
                     .Respawn = 1
                 End If
 
-                .BackUp = Val(Leer.GetValue("NPC" & NpcNumber, "BackUp"))
-                .RespawnOrigPos = Val(Leer.GetValue("NPC" & NpcNumber, "OrigPos"))
-                .AfectaParalisis = Val(Leer.GetValue("NPC" & NpcNumber, "AfectaParalisis"))
+                .BackUp = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "BackUp")))
+                .RespawnOrigPos = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "OrigPos")))
+                .AfectaParalisis = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "AfectaParalisis")))
 
-                .Snd1 = Val(Leer.GetValue("NPC" & NpcNumber, "Snd1"))
-                .Snd2 = Val(Leer.GetValue("NPC" & NpcNumber, "Snd2"))
-                .Snd3 = Val(Leer.GetValue("NPC" & NpcNumber, "Snd3"))
+                .Snd1 = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd1")))
+                .Snd2 = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd2")))
+                .Snd3 = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Snd3")))
             End With
 
             '<<<<<<<<<<<<<< Expresiones >>>>>>>>>>>>>>>>
-            .NroExpresiones = Val(Leer.GetValue("NPC" & NpcNumber, "NROEXP"))
+            .NroExpresiones = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "NROEXP")))
             'UPGRADE_WARNING: El límite inferior de la matriz .Expresiones ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             If .NroExpresiones > 0 Then ReDim .Expresiones(.NroExpresiones)
             For LoopC = 1 To .NroExpresiones
@@ -1027,14 +1027,14 @@ Module NPCs
             '<<<<<<<<<<<<<< Expresiones >>>>>>>>>>>>>>>>
 
             'Tipo de items con los que comercia
-            .TipoItems = Val(Leer.GetValue("NPC" & NpcNumber, "TipoItems"))
+            .TipoItems = Convert.ToInt16(ParseVal(Leer.GetValue("NPC" & NpcNumber, "TipoItems")))
 
-            .Ciudad = Val(Leer.GetValue("NPC" & NpcNumber, "Ciudad"))
+            .Ciudad = Convert.ToByte(ParseVal(Leer.GetValue("NPC" & NpcNumber, "Ciudad")))
         End With
 
         'Update contadores de NPCs
         If NpcIndex > LastNPC Then LastNPC = NpcIndex
-        NumNPCs = NumNPCs + 1
+        NumNPCs = Convert.ToInt16(NumNPCs + 1)
 
         'Devuelve el nuevo Indice
         OpenNPC = NpcIndex

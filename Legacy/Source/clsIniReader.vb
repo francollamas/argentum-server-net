@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Friend Class clsIniReader
     '**************************************************************
@@ -107,7 +107,7 @@ Friend Class clsIniReader
         Dim i As Integer
 
         'Clean up
-        If MainNodes Then
+        If MainNodes <> 0 Then
             For i = 1 To MainNodes - 1
                 Erase fileData(i).values
             Next i
@@ -142,60 +142,56 @@ Friend Class clsIniReader
         'Prevent memory losses if we are attempting to reload a file....
         Call Class_Terminate_Renamed()
 
-        'Get a free handle and start reading line by line until the end
-        handle = FreeFile
+        'Read line by line until the end
+        Using reader As New IO.StreamReader(file)
+            Do Until reader.EndOfStream
+                Text = reader.ReadLine()
 
-        FileOpen(handle, file, OpenMode.Input)
+                'Is it null??
+                If Text.Length <> 0 Then
+                    'If it starts with '[' it is a main node or nothing (GetPrivateProfileStringA works this way), otherwise it's a value
+                    If Text.Substring(0, 1) = "[" Then
+                        'If it has an ending ']' it's a main node, otherwise it's nothing
+                        Pos = Text.IndexOf("]", 1) + 1
+                        If Pos <> 0 Then
+                            'Add a main node
+                            ReDim Preserve fileData(MainNodes)
 
-        Do Until EOF(handle)
-            Text = LineInput(handle)
+                            fileData(MainNodes).name = Text.Substring(1, Pos - 2).Trim().ToUpper()
 
-            'Is it null??
-            If Len(Text) Then
-                'If it starts with '[' it is a main node or nothing (GetPrivateProfileStringA works this way), otherwise it's a value
-                If Left(Text, 1) = "[" Then
-                    'If it has an ending ']' it's a main node, otherwise it's nothing
-                    Pos = InStr(2, Text, "]")
-                    If Pos Then
-                        'Add a main node
-                        ReDim Preserve fileData(MainNodes)
+                            MainNodes = MainNodes + 1
+                        End If
+                    Else
+                        'So it's a value. Check if it has a '=', otherwise it's nothing
+                        Pos = Text.IndexOf("=", 1) + 1
+                        If Pos <> 0 Then
+                            'Is it under any main node??
+                            If MainNodes <> 0 Then
+                                With fileData(MainNodes - 1)
+                                    'Add it to the main node's value
+                                    ReDim Preserve .values(.numValues)
 
-                        fileData(MainNodes).name = UCase(Trim(Mid(Text, 2, Pos - 2)))
+                                    .values(.numValues).Value = Text.Substring(Pos)
+                                    .values(.numValues).Key = Text.Substring(0, Pos - 1).ToUpper()
 
-                        MainNodes = MainNodes + 1
-                    End If
-                Else
-                    'So it's a value. Check if it has a '=', otherwise it's nothing
-                    Pos = InStr(2, Text, "=")
-                    If Pos Then
-                        'Is it under any main node??
-                        If MainNodes Then
-                            With fileData(MainNodes - 1)
-                                'Add it to the main node's value
-                                ReDim Preserve .values(.numValues)
-
-                                .values(.numValues).Value = Right(Text, Len(Text) - Pos)
-                                .values(.numValues).Key = UCase(Left(Text, Pos - 1))
-
-                                .numValues = .numValues + 1
-                            End With
+                                    .numValues = Convert.ToInt16(.numValues + 1)
+                                End With
+                            End If
                         End If
                     End If
                 End If
-            End If
-        Loop
-
-        FileClose(handle)
+            Loop
+        End Using
 
         Dim i As Integer
 
-        If MainNodes Then
+        If MainNodes <> 0 Then
             'Sort main nodes to allow binary search
-            Call SortMainNodes(0, MainNodes - 1)
+            Call SortMainNodes(0, Convert.ToInt16(MainNodes - 1))
 
             'Sort values of each node to allow binary search
             For i = 0 To MainNodes - 1
-                If fileData(i).numValues Then Call SortChildNodes(fileData(i), 0, fileData(i).numValues - 1)
+                If fileData(i).numValues <> 0 Then Call SortChildNodes(fileData(i), 0, Convert.ToInt16(fileData(i).numValues - 1))
             Next i
         End If
     End Sub
@@ -227,10 +223,10 @@ Friend Class clsIniReader
 
             Do While min <= max
                 Do While .values(min).Key < comp And min < Last
-                    min = min + 1
+                    min = Convert.ToInt16(min + 1)
                 Loop
                 Do While .values(max).Key > comp And max > First
-                    max = max - 1
+                    max = Convert.ToInt16(max - 1)
                 Loop
                 If min <= max Then
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -239,8 +235,8 @@ Friend Class clsIniReader
                     .values(min) = .values(max)
                     'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Node.values(max). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     .values(max) = temp
-                    min = min + 1
-                    max = max - 1
+                    min = Convert.ToInt16(min + 1)
+                    max = Convert.ToInt16(max - 1)
                 End If
             Loop
         End With
@@ -275,10 +271,10 @@ Friend Class clsIniReader
 
         Do While min <= max
             Do While fileData(min).name < comp And min < Last
-                min = min + 1
+                min = Convert.ToInt16(min + 1)
             Loop
             Do While fileData(max).name > comp And max > First
-                max = max - 1
+                max = Convert.ToInt16(max - 1)
             Loop
             If min <= max Then
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto temp. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -287,8 +283,8 @@ Friend Class clsIniReader
                 fileData(min) = fileData(max)
                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto fileData(max). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 fileData(max) = temp
-                min = min + 1
-                max = max - 1
+                min = Convert.ToInt16(min + 1)
+                max = Convert.ToInt16(max - 1)
             End If
         Loop
 
@@ -313,11 +309,11 @@ Friend Class clsIniReader
         Dim j As Integer
 
         'Search for the main node
-        i = FindMain(UCase(Main))
+        i = FindMain(Main.ToUpper())
 
         If i >= 0 Then
             'If valid, binary search among keys
-            j = FindKey(fileData(i), UCase(Key))
+            j = FindKey(fileData(i), Key.ToUpper())
 
             'If we found it we return it
             If j >= 0 Then GetValue = fileData(i).values(j).Value
@@ -341,14 +337,14 @@ Friend Class clsIniReader
         Dim j As Integer
 
         'Search for the main node
-        i = FindMain(UCase(Main))
+        i = FindMain(Main.ToUpper())
 
         If i >= 0 Then
             'If valid, binary search among keys
-            j = FindKey(fileData(i), UCase(Key))
+            j = FindKey(fileData(i), Key.ToUpper())
 
             'If we found it we change it
-            If j >= 0 Then fileData(i).values(j).Value = CStr(Value)
+            If j >= 0 Then fileData(i).values(j).Value = Value.ToString()
         End If
     End Sub
 
@@ -445,6 +441,6 @@ Friend Class clsIniReader
         'Last Modify Date: 04/01/2008
         'Returns true of the key exists, false otherwise.
         '**************************************************************
-        KeyExists = FindMain(UCase(name)) >= 0
+        KeyExists = FindMain(name.ToUpper()) >= 0
     End Function
 End Class

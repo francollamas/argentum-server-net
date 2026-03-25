@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Admin
     Public Structure tMotd
@@ -132,7 +132,7 @@ Module Admin
             Dim j, k As Short
 
             For j = 1 To NumMaps
-                If MapInfo_Renamed(j).BackUp = 1 Then k = k + 1
+                If MapInfo_Renamed(j).BackUp = 1 Then k = Convert.ToInt16(k + 1)
             Next j
 
             For loopX = 1 To NumMaps
@@ -145,8 +145,8 @@ Module Admin
 
             Next loopX
 
-            If FileExist(DatPath & "/bkNpc.dat") Then Kill((DatPath & "bkNpc.dat"))
-            'If FileExist(DatPath & "/bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
+            If System.IO.File.Exists(DatPath & "/bkNpc.dat") Then Kill((DatPath & "bkNpc.dat"))
+            'If System.IO.File.Exists(DatPath & "/bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
 
             For loopX = 1 To LastNPC
                 If Npclist(loopX).flags.BackUp = 1 Then
@@ -182,10 +182,10 @@ Module Admin
 
                     If UserList(i).Counters.Pena < 1 Then
                         UserList(i).Counters.Pena = 0
-                        Call WarpUserChar(i, Libertad.Map, Libertad.X, Libertad.Y, True)
-                        Call WriteConsoleMsg(i, "¡Has sido liberado!", FontTypeNames.FONTTYPE_INFO)
+                        Call WarpUserChar(Convert.ToInt16(i), Libertad.Map, Libertad.X, Libertad.Y, True)
+                        Call WriteConsoleMsg(Convert.ToInt16(i), "¡Has sido liberado!", FontTypeNames.FONTTYPE_INFO)
 
-                        Call FlushBuffer(i)
+                        Call FlushBuffer(Convert.ToInt16(i))
                     End If
                 End If
             End If
@@ -233,8 +233,8 @@ Module Admin
         '***************************************************
 
         Try
-            If FileExist(CharPath & UCase(UserName) & ".chr") Then
-                Kill(CharPath & UCase(UserName) & ".chr")
+            If System.IO.File.Exists(CharPath & UserName.ToUpper() & ".chr") Then
+                Kill(CharPath & UserName.ToUpper() & ".chr")
             End If
 
         Catch ex As Exception
@@ -250,7 +250,7 @@ Module Admin
         '***************************************************
 
         BANCheck =
-            (Val(GetVar(AppDomain.CurrentDomain.BaseDirectory & "charfile/" & name & ".chr", "FLAGS", "Ban")) = 1)
+            (ParseVal(GetVar(AppDomain.CurrentDomain.BaseDirectory & "charfile/" & name & ".chr", "FLAGS", "Ban")) = 1)
     End Function
 
     Public Function PersonajeExiste(name As String) As Boolean
@@ -260,7 +260,7 @@ Module Admin
         '
         '***************************************************
 
-        PersonajeExiste = FileExist(CharPath & UCase(name) & ".chr")
+        PersonajeExiste = System.IO.File.Exists(CharPath & name.ToUpper() & ".chr")
     End Function
 
     Public Function UnBan(name As String) As Boolean
@@ -288,7 +288,7 @@ Module Admin
         Dim i As Short
 
         If MD5ClientesActivado = 1 Then
-            For i = 0 To UBound(MD5s)
+            For i = 0 To Convert.ToInt16(MD5s.Length - 1)
                 If (md5formateado = MD5s(i)) Then
                     MD5ok = True
                     Exit Function
@@ -309,11 +309,11 @@ Module Admin
 
         Dim LoopC As Short
 
-        MD5ClientesActivado = Val(GetVar(IniPath & "Server.ini", "MD5Hush", "Activado"))
+        MD5ClientesActivado = Convert.ToByte(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "Activado")))
 
         If MD5ClientesActivado = 1 Then
-            ReDim MD5s(Val(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados")))
-            For LoopC = 0 To UBound(MD5s)
+            ReDim MD5s(Convert.ToInt32(ParseVal(GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptados"))))
+            For LoopC = 0 To Convert.ToInt16(MD5s.Length - 1)
                 MD5s(LoopC) = GetVar(IniPath & "Server.ini", "MD5Hush", "MD5Aceptado" & (LoopC + 1))
                 MD5s(LoopC) = txtOffset(hexMd52Asc(MD5s(LoopC)), 55)
             Next LoopC
@@ -370,7 +370,7 @@ Module Admin
 
             N = BanIpBuscar(ip)
             If N > 0 Then
-                BanIps.Remove(N)
+                BanIps.RemoveAt(N - 1)
                 BanIpGuardar()
                 BanIpQuita = True
             Else
@@ -383,54 +383,26 @@ Module Admin
     End Function
 
     Public Sub BanIpGuardar()
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
+        Dim ArchivoBanIp As String = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
+        Dim lines As New List(Of String)
 
-        Dim ArchivoBanIp As String
-        Dim ArchN As Integer
-        Dim LoopC As Integer
-
-        ArchivoBanIp = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
-
-        ArchN = FreeFile
-        FileOpen(ArchN, ArchivoBanIp, OpenMode.Output)
-
-        For LoopC = 1 To BanIps.Count()
-            PrintLine(ArchN, BanIps.Item(LoopC))
+        For LoopC As Integer = 1 To BanIps.Count()
+            lines.Add(BanIps.Item(LoopC))
         Next LoopC
 
-        FileClose(ArchN)
+        IO.File.WriteAllLines(ArchivoBanIp, lines)
     End Sub
 
     Public Sub BanIpCargar()
-        '***************************************************
-        'Author: Unknown
-        'Last Modification: -
-        '
-        '***************************************************
-
-        Dim ArchN As Integer
-        Dim Tmp As String
-        Dim ArchivoBanIp As String
-
-        ArchivoBanIp = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
+        Dim ArchivoBanIp As String = AppDomain.CurrentDomain.BaseDirectory & "Dat/BanIps.dat"
 
         Do While BanIps.Count() > 0
-            BanIps.Remove(1)
+            BanIps.RemoveAt(0)
         Loop
 
-        ArchN = FreeFile
-        FileOpen(ArchN, ArchivoBanIp, OpenMode.Input)
-
-        Do While Not EOF(ArchN)
-            Tmp = LineInput(ArchN)
-            BanIps.Add(Tmp)
-        Loop
-
-        FileClose(ArchN)
+        For Each line As String In IO.File.ReadAllLines(ArchivoBanIp)
+            BanIps.Add(line)
+        Next
     End Sub
 
     Public Sub ActualizaEstadisticasWeb()
@@ -490,22 +462,22 @@ Module Admin
         Dim cantPenas As Byte
         Dim rank As Short
 
-        If migr_InStrB(UserName, "+") Then
-            UserName = Replace(UserName, "+", " ")
+        If migr_InStrB(UserName, "+") <> 0 Then
+            UserName = UserName.Replace("+", " ")
         End If
 
         tUser = NameIndex(UserName)
 
-        rank = PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-               PlayerType.Consejero
+        rank = Convert.ToInt16(PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
+               PlayerType.Consejero)
 
         With UserList(bannerUserIndex)
             If tUser <= 0 Then
                 Call _
                     WriteConsoleMsg(bannerUserIndex, "El usuario no está online.", FontTypeNames.FONTTYPE_TALK)
 
-                If FileExist(CharPath & UserName & ".chr") Then
-                    userPriv = UserDarPrivilegioLevel(UserName)
+                If System.IO.File.Exists(CharPath & UserName & ".chr") Then
+                    userPriv = Convert.ToByte(UserDarPrivilegioLevel(UserName))
 
                     If (userPriv And rank) > (.flags.Privilegios And rank) Then
                         Call _
@@ -527,11 +499,11 @@ Module Admin
                             'ponemos el flag de ban a 1
                             Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                             'ponemos la pena
-                            cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                            cantPenas = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
+                            Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                             Call _
                                 WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                                         LCase(.name) & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
+                                         .name.ToLower() & ": BAN POR " & reason.ToLower() & " " & Today & " " & TimeOfDay)
 
                             If (userPriv And rank) = (.flags.Privilegios And rank) Then
                                 .flags.Ban = 1
@@ -582,11 +554,11 @@ Module Admin
                 'ponemos el flag de ban a 1
                 Call WriteVar(CharPath & UserName & ".chr", "FLAGS", "Ban", "1")
                 'ponemos la pena
-                cantPenas = Val(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant"))
-                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", CStr(cantPenas + 1))
+                cantPenas = Convert.ToByte(ParseVal(GetVar(CharPath & UserName & ".chr", "PENAS", "Cant")))
+                Call WriteVar(CharPath & UserName & ".chr", "PENAS", "Cant", (cantPenas + 1).ToString())
                 Call _
                     WriteVar(CharPath & UserName & ".chr", "PENAS", "P" & cantPenas + 1,
-                             LCase(.name) & ": BAN POR " & LCase(reason) & " " & Today & " " & TimeOfDay)
+                             .name.ToLower() & ": BAN POR " & reason.ToLower() & " " & Today & " " & TimeOfDay)
 
                 Call CloseSocket(tUser)
             End If

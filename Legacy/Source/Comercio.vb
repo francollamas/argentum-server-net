@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modSistemaComercio
     Enum eModoComercio
@@ -60,7 +60,7 @@ Module modSistemaComercio
             'Es decir, 1.1 = 2, por lo cual se hace de la siguiente forma Precio = Clng(PrecioFinal + 0.5) Siempre va a darte el proximo numero. O el "Techo" (MarKoxX)
 
             Precio =
-                CInt(
+                Convert.ToInt32(
                     (ObjData_Renamed(Npclist(NpcIndex).Invent.Object_Renamed(Slot).ObjIndex).Valor/Descuento(UserIndex)*
                      Cantidad) + 0.5)
 
@@ -79,7 +79,7 @@ Module modSistemaComercio
 
             UserList(UserIndex).Stats.GLD = UserList(UserIndex).Stats.GLD - Precio
 
-            Call QuitarNpcInvItem(UserList(UserIndex).flags.TargetNPC, CByte(Slot), Cantidad)
+            Call QuitarNpcInvItem(UserList(UserIndex).flags.TargetNPC, Convert.ToByte(Slot), Cantidad)
 
             'Bien, ahora logueo de ser necesario. Pablo (ToxicWaste) 07/09/07
             'Es un Objeto que tenemos que loguear?
@@ -148,21 +148,21 @@ Module modSistemaComercio
             ElseIf UserList(UserIndex).Invent.Object_Renamed(Slot).Amount < 0 Or Cantidad = 0 Then
                 Exit Sub
             ElseIf _
-                Slot < LBound(UserList(UserIndex).Invent.Object_Renamed) Or
-                Slot > UBound(UserList(UserIndex).Invent.Object_Renamed) Then
+                Slot < 0 Or
+                Slot > UserList(UserIndex).Invent.Object_Renamed.Length - 1 Then
                 Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                 Exit Sub
-            ElseIf UserList(UserIndex).flags.Privilegios And PlayerType.Consejero Then
+            ElseIf (UserList(UserIndex).flags.Privilegios And PlayerType.Consejero) <> CType(0, PlayerType) Then
                 Call WriteConsoleMsg(UserIndex, "No puedes vender ítems.", FontTypeNames.FONTTYPE_WARNING)
                 Call EnviarNpcInv(UserIndex, UserList(UserIndex).flags.TargetNPC)
                 Call WriteTradeOK(UserIndex)
                 Exit Sub
             End If
 
-            Call QuitarUserInvItem(UserIndex, Slot, Cantidad)
+            Call QuitarUserInvItem(UserIndex, Convert.ToByte(Slot), Cantidad)
 
             'Precio = Round(ObjData(Objeto.ObjIndex).valor / REDUCTOR_PRECIOVENTA * Cantidad, 0)
-            Precio = Fix(SalePrice(Objeto.ObjIndex)*Cantidad)
+            Precio = Convert.ToInt32(Fix(SalePrice(Objeto.ObjIndex)*Cantidad))
             UserList(UserIndex).Stats.GLD = UserList(UserIndex).Stats.GLD + Precio
 
             If UserList(UserIndex).Stats.GLD > MAXORO Then UserList(UserIndex).Stats.GLD = MAXORO
@@ -227,7 +227,7 @@ Module modSistemaComercio
                 Npclist(NpcIndex).Invent.Object_Renamed(SlotEnNPCInv).ObjIndex = Objeto And
                 Npclist(NpcIndex).Invent.Object_Renamed(SlotEnNPCInv).Amount + Cantidad <= MAX_INVENTORY_OBJS
 
-            SlotEnNPCInv = SlotEnNPCInv + 1
+            SlotEnNPCInv = Convert.ToInt16(SlotEnNPCInv + 1)
             If SlotEnNPCInv > MAX_INVENTORY_SLOTS Then Exit Do
 
         Loop
@@ -238,13 +238,13 @@ Module modSistemaComercio
 
             Do Until Npclist(NpcIndex).Invent.Object_Renamed(SlotEnNPCInv).ObjIndex = 0
 
-                SlotEnNPCInv = SlotEnNPCInv + 1
+                SlotEnNPCInv = Convert.ToInt16(SlotEnNPCInv + 1)
                 If SlotEnNPCInv > MAX_INVENTORY_SLOTS Then Exit Do
 
             Loop
 
             If SlotEnNPCInv <= MAX_INVENTORY_SLOTS Then _
-                Npclist(NpcIndex).Invent.NroItems = Npclist(NpcIndex).Invent.NroItems + 1
+                Npclist(NpcIndex).Invent.NroItems = Convert.ToInt16(Npclist(NpcIndex).Invent.NroItems + 1)
 
         End If
     End Function
@@ -254,7 +254,7 @@ Module modSistemaComercio
         'Author: Nacho (Integer)
         'Last modified: 2/8/06
         '*************************************************
-        Descuento = 1 + UserList(UserIndex).Stats.UserSkills(eSkill.Comerciar)/100
+        Descuento = CSng(1 + UserList(UserIndex).Stats.UserSkills(eSkill.Comerciar)/100)
     End Function
 
     ''
@@ -300,9 +300,9 @@ Module modSistemaComercio
         'Author: Nicolás (NicoNZ)
         '
         '*************************************************
-        If ObjIndex < 1 Or ObjIndex > UBound(ObjData_Renamed) Then Exit Function
+        If ObjIndex < 1 Or ObjIndex > ObjData_Renamed.Length - 1 Then Exit Function
         If ItemNewbie(ObjIndex) Then Exit Function
 
-        SalePrice = ObjData_Renamed(ObjIndex).Valor/REDUCTOR_PRECIOVENTA
+        SalePrice = CSng(ObjData_Renamed(ObjIndex).Valor/REDUCTOR_PRECIOVENTA)
     End Function
 End Module

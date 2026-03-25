@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module modBanco
     Sub IniciarDeposito(UserIndex As Short)
@@ -90,7 +90,7 @@ Module modBanco
                 If Cantidad > UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount Then _
                     Cantidad = UserList(UserIndex).BancoInvent.Object_Renamed(i).Amount
                 'Agregamos el obj que compro al inventario
-                Call UserReciveObj(UserIndex, CShort(i), Cantidad)
+                Call UserReciveObj(UserIndex, Convert.ToInt16(i), Cantidad)
                 'Actualizamos el inventario del usuario
                 Call UpdateUserInv(True, UserIndex, 0)
                 'Actualizamos el banco
@@ -130,7 +130,7 @@ Module modBanco
                     .Invent.Object_Renamed(Slot).ObjIndex = obji And
                     .Invent.Object_Renamed(Slot).Amount + Cantidad <= MAX_INVENTORY_OBJS
 
-                Slot = Slot + 1
+                Slot = Convert.ToInt16(Slot + 1)
                 If Slot > .CurrentInventorySlots Then
                     Exit Do
                 End If
@@ -140,7 +140,7 @@ Module modBanco
             If Slot > .CurrentInventorySlots Then
                 Slot = 1
                 Do Until .Invent.Object_Renamed(Slot).ObjIndex = 0
-                    Slot = Slot + 1
+                    Slot = Convert.ToInt16(Slot + 1)
 
                     If Slot > .CurrentInventorySlots Then
                         Call _
@@ -149,7 +149,7 @@ Module modBanco
                         Exit Sub
                     End If
                 Loop
-                .Invent.NroItems = .Invent.NroItems + 1
+                .Invent.NroItems = Convert.ToInt16(.Invent.NroItems + 1)
             End If
 
 
@@ -159,7 +159,7 @@ Module modBanco
                 .Invent.Object_Renamed(Slot).ObjIndex = obji
                 .Invent.Object_Renamed(Slot).Amount = .Invent.Object_Renamed(Slot).Amount + Cantidad
 
-                Call QuitarBancoInvItem(UserIndex, CByte(ObjIndex), Cantidad)
+                Call QuitarBancoInvItem(UserIndex, Convert.ToByte(ObjIndex), Cantidad)
             Else
                 Call WriteConsoleMsg(UserIndex, "No podés tener mas objetos.", FontTypeNames.FONTTYPE_INFO)
             End If
@@ -183,7 +183,7 @@ Module modBanco
             .BancoInvent.Object_Renamed(Slot).Amount = .BancoInvent.Object_Renamed(Slot).Amount - Cantidad
 
             If .BancoInvent.Object_Renamed(Slot).Amount <= 0 Then
-                .BancoInvent.NroItems = .BancoInvent.NroItems - 1
+                .BancoInvent.NroItems = Convert.ToInt16(.BancoInvent.NroItems - 1)
                 .BancoInvent.Object_Renamed(Slot).ObjIndex = 0
                 .BancoInvent.Object_Renamed(Slot).Amount = 0
             End If
@@ -213,7 +213,7 @@ Module modBanco
                     Cantidad = UserList(UserIndex).Invent.Object_Renamed(Item).Amount
 
                 'Agregamos el obj que deposita al banco
-                Call UserDejaObj(UserIndex, CShort(Item), Cantidad)
+                Call UserDejaObj(UserIndex, Convert.ToInt16(Item), Cantidad)
 
                 'Actualizamos el inventario del usuario
                 Call UpdateUserInv(True, UserIndex, 0)
@@ -252,7 +252,7 @@ Module modBanco
                 Until _
                     .BancoInvent.Object_Renamed(Slot).ObjIndex = obji And
                     .BancoInvent.Object_Renamed(Slot).Amount + Cantidad <= MAX_INVENTORY_OBJS
-                Slot = Slot + 1
+                Slot = Convert.ToInt16(Slot + 1)
 
                 If Slot > MAX_BANCOINVENTORY_SLOTS Then
                     Exit Do
@@ -263,7 +263,7 @@ Module modBanco
             If Slot > MAX_BANCOINVENTORY_SLOTS Then
                 Slot = 1
                 Do Until .BancoInvent.Object_Renamed(Slot).ObjIndex = 0
-                    Slot = Slot + 1
+                    Slot = Convert.ToInt16(Slot + 1)
 
                     If Slot > MAX_BANCOINVENTORY_SLOTS Then
                         Call _
@@ -273,7 +273,7 @@ Module modBanco
                     End If
                 Loop
 
-                .BancoInvent.NroItems = .BancoInvent.NroItems + 1
+                .BancoInvent.NroItems = Convert.ToInt16(.BancoInvent.NroItems + 1)
             End If
 
             If Slot <= MAX_BANCOINVENTORY_SLOTS Then 'Slot valido
@@ -284,7 +284,7 @@ Module modBanco
                     .BancoInvent.Object_Renamed(Slot).ObjIndex = obji
                     .BancoInvent.Object_Renamed(Slot).Amount = .BancoInvent.Object_Renamed(Slot).Amount + Cantidad
 
-                    Call QuitarUserInvItem(UserIndex, CByte(ObjIndex), Cantidad)
+                    Call QuitarUserInvItem(UserIndex, Convert.ToByte(ObjIndex), Cantidad)
                 Else
                     Call _
                         WriteConsoleMsg(UserIndex, "El banco no puede cargar tantos objetos.",
@@ -339,7 +339,7 @@ Module modBanco
 
             CharFile = CharPath & charName & ".chr"
 
-            If FileExist(CharFile) Then
+            If System.IO.File.Exists(CharFile) Then
                 Call WriteConsoleMsg(sendIndex, charName, FontTypeNames.FONTTYPE_INFO)
                 Call _
                     WriteConsoleMsg(sendIndex,
@@ -347,8 +347,8 @@ Module modBanco
                                     FontTypeNames.FONTTYPE_INFO)
                 For j = 1 To MAX_BANCOINVENTORY_SLOTS
                     Tmp = GetVar(CharFile, "BancoInventory", "Obj" & j)
-                    ObjInd = CInt(ReadField(1, Tmp, Asc("-")))
-                    ObjCant = CInt(ReadField(2, Tmp, Asc("-")))
+                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Convert.ToByte(Asc("-"))))
+                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Convert.ToByte(Asc("-"))))
                     If ObjInd > 0 Then
                         Call _
                             WriteConsoleMsg(sendIndex,

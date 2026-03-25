@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module PathFinding
     Private Const ROWS As Short = 100
@@ -16,7 +16,7 @@ Module PathFinding
 
     Dim TilePosY As Short
 
-    Private Function Limites(vfila As Short, vcolu As Short) As Object
+    Private Function Limites(vfila As Short, vcolu As Short) As Boolean
         '***************************************************
         'Author: Unknown
         'Last Modification: -
@@ -53,14 +53,14 @@ Module PathFinding
         Dim V As tVertice
         Dim j As Short
         'Look to North
-        j = vfila - 1
+        j = Convert.ToInt16(vfila - 1)
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(j, vcolu). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If Limites(j, vcolu) Then
             If IsWalkable(MapIndex, j, vcolu, NpcIndex) Then
                 'Nos aseguramos que no hay un camino más corto
                 If T(j, vcolu).DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
-                    T(j, vcolu).DistV = T(vfila, vcolu).DistV + 1
+                    T(j, vcolu).DistV = Convert.ToInt16(T(vfila, vcolu).DistV + 1)
                     T(j, vcolu).PrevV.X = vcolu
                     T(j, vcolu).PrevV.Y = vfila
                     'Mete el vertice en la cola
@@ -70,7 +70,7 @@ Module PathFinding
                 End If
             End If
         End If
-        j = vfila + 1
+        j = Convert.ToInt16(vfila + 1)
         'look to south
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(j, vcolu). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If Limites(j, vcolu) Then
@@ -78,7 +78,7 @@ Module PathFinding
                 'Nos aseguramos que no hay un camino más corto
                 If T(j, vcolu).DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
-                    T(j, vcolu).DistV = T(vfila, vcolu).DistV + 1
+                    T(j, vcolu).DistV = Convert.ToInt16(T(vfila, vcolu).DistV + 1)
                     T(j, vcolu).PrevV.X = vcolu
                     T(j, vcolu).PrevV.Y = vfila
                     'Mete el vertice en la cola
@@ -90,16 +90,16 @@ Module PathFinding
         End If
         'look to west
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(vfila, vcolu - 1). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        If Limites(vfila, vcolu - 1) Then
-            If IsWalkable(MapIndex, vfila, vcolu - 1, NpcIndex) Then
+        If Limites(vfila, Convert.ToInt16(vcolu - 1)) Then
+            If IsWalkable(MapIndex, vfila, Convert.ToInt16(vcolu - 1), NpcIndex) Then
                 'Nos aseguramos que no hay un camino más corto
-                If T(vfila, vcolu - 1).DistV = MAXINT Then
+                If T(vfila, Convert.ToInt16(vcolu - 1)).DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
-                    T(vfila, vcolu - 1).DistV = T(vfila, vcolu).DistV + 1
-                    T(vfila, vcolu - 1).PrevV.X = vcolu
-                    T(vfila, vcolu - 1).PrevV.Y = vfila
+                    T(vfila, Convert.ToInt16(vcolu - 1)).DistV = Convert.ToInt16(T(vfila, vcolu).DistV + 1)
+                    T(vfila, Convert.ToInt16(vcolu - 1)).PrevV.X = vcolu
+                    T(vfila, Convert.ToInt16(vcolu - 1)).PrevV.Y = vfila
                     'Mete el vertice en la cola
-                    V.X = vcolu - 1
+                    V.X = Convert.ToInt16(vcolu - 1)
                     V.Y = vfila
                     Call Push(V)
                 End If
@@ -107,16 +107,16 @@ Module PathFinding
         End If
         'look to east
         'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Limites(vfila, vcolu + 1). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        If Limites(vfila, vcolu + 1) Then
-            If IsWalkable(MapIndex, vfila, vcolu + 1, NpcIndex) Then
+        If Limites(vfila, Convert.ToInt16(vcolu + 1)) Then
+            If IsWalkable(MapIndex, vfila, Convert.ToInt16(vcolu + 1), NpcIndex) Then
                 'Nos aseguramos que no hay un camino más corto
-                If T(vfila, vcolu + 1).DistV = MAXINT Then
+                If T(vfila, Convert.ToInt16(vcolu + 1)).DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
-                    T(vfila, vcolu + 1).DistV = T(vfila, vcolu).DistV + 1
-                    T(vfila, vcolu + 1).PrevV.X = vcolu
-                    T(vfila, vcolu + 1).PrevV.Y = vfila
+                    T(vfila, Convert.ToInt16(vcolu + 1)).DistV = Convert.ToInt16(T(vfila, vcolu).DistV + 1)
+                    T(vfila, Convert.ToInt16(vcolu + 1)).PrevV.X = vcolu
+                    T(vfila, Convert.ToInt16(vcolu + 1)).PrevV.Y = vfila
                     'Mete el vertice en la cola
-                    V.X = vcolu + 1
+                    V.X = Convert.ToInt16(vcolu + 1)
                     V.Y = vfila
                     Call Push(V)
                 End If

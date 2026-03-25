@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Threading
@@ -129,7 +129,7 @@ Module GameLoop
         ' Dim NuevoL As Boolean
         Dim GI As Short
 
-        Dim i As Integer
+        Dim i As Short
 
         Try
             For i = 1 To LastUser
@@ -212,7 +212,7 @@ Module GameLoop
         'Attempts to resend to the user all data that may be enqueued.
         '***************************************************
         Try
-            Dim i As Integer
+            Dim i As Short
 
             For i = 1 To MaxUsers
                 If UserList(i).ConnIDValida Then
@@ -248,7 +248,7 @@ Module GameLoop
         Try
             Static centinelSecs As Byte
 
-            centinelSecs = centinelSecs + 1
+            centinelSecs = Convert.ToByte(centinelSecs + 1)
 
             If centinelSecs = 5 Then
                 'Every 5 seconds, we try to call the player's attention so it will report the code.
@@ -273,7 +273,7 @@ Module GameLoop
         'Author: Unknown
         'Last Modify Date: -
         '********************************************************
-        Dim iUserIndex As Integer
+        Dim iUserIndex As Short
         Dim bEnviarStats As Boolean
         Dim bEnviarAyS As Boolean
 
@@ -296,13 +296,13 @@ Module GameLoop
 
 
                             If .flags.Paralizado = 1 Then Call EfectoParalisisUser(iUserIndex)
-                            If .flags.Ceguera = 1 Or .flags.Estupidez Then Call EfectoCegueEstu(iUserIndex)
+                            If .flags.Ceguera = 1 Or .flags.Estupidez <> 0 Then Call EfectoCegueEstu(iUserIndex)
 
 
                             If .flags.Muerto = 0 Then
 
                                 '[Consejeros]
-                                If (.flags.Privilegios And PlayerType.User) Then Call EfectoLava(iUserIndex)
+                                If (.flags.Privilegios And PlayerType.User) <> 0 Then Call EfectoLava(iUserIndex)
 
                                 If .flags.Desnudo <> 0 And (.flags.Privilegios And PlayerType.User) <> 0 Then _
                                     Call EfectoFrio(iUserIndex)
@@ -436,7 +436,7 @@ Module GameLoop
             Static MinutosSinLluvia As Integer
 
             If Not Lloviendo Then
-                MinutosSinLluvia = MinutosSinLluvia + 1
+                MinutosSinLluvia = Convert.ToInt32(MinutosSinLluvia + 1)
                 If MinutosSinLluvia >= 15 And MinutosSinLluvia < 1440 Then
                     If RandomNumber(1, 100) <= 2 Then
                         Lloviendo = True
@@ -449,7 +449,7 @@ Module GameLoop
                     Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
                 End If
             Else
-                MinutosLloviendo = MinutosLloviendo + 1
+                MinutosLloviendo = Convert.ToInt32(MinutosLloviendo + 1)
                 If MinutosLloviendo >= 5 Then
                     Lloviendo = False
                     Call SendData(SendTarget.ToAll, 0, PrepareMessageRainToggle())
@@ -473,7 +473,7 @@ Module GameLoop
     Private Sub TickLluvia()
         Try
 
-            Dim iCount As Integer
+            Dim iCount As Short
             If Lloviendo Then
                 For iCount = 1 To LastUser
                     Call EfectoLluvia(iCount)
@@ -497,7 +497,7 @@ Module GameLoop
             Dim i As Short
             Dim num As Integer
 
-            Minutos = Minutos + 1
+            Minutos = Convert.ToInt32(Minutos + 1)
 
             '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
             Call AreasOptimizacion()
@@ -522,18 +522,14 @@ Module GameLoop
                 Call ReSpawnOrigPosNpcs() 'respawn de los guardias en las pos originales
                 Call LimpiarMundo()
             Else
-                MinutosLatsClean = MinutosLatsClean + 1
+                MinutosLatsClean = Convert.ToInt32(MinutosLatsClean + 1)
             End If
 
             Call PurgarPenas()
             Call CheckIdleUser()
 
             '<<<<<-------- Log the number of users online ------>>>
-            Dim N As Short
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", OpenMode.Output, , OpenShare.Shared)
-            PrintLine(N, NumUsers)
-            FileClose(N)
+            IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory & "logs/numusers.log", NumUsers.ToString() & Environment.NewLine)
             '<<<<<-------- Log the number of users online ------>>>
 
 
@@ -546,7 +542,7 @@ Module GameLoop
     Private Sub TickNpcAtaca()
         Try
             'UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Dim npc_Renamed As Integer
+            Dim npc_Renamed As Short
 
             For npc_Renamed = 1 To LastNPC
                 Npclist(npc_Renamed).CanAttack = 1
@@ -559,18 +555,18 @@ Module GameLoop
 
     Private Sub TickKillLog()
         Try
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/connect.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/haciendo.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/stats.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/Asesinatos.log")
-            If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
+            If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log") Then _
                 Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/HackAttemps.log")
-            If Not FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
-                If FileExist(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
+            If Not System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/nokillwsapi.txt") Then
+                If System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log") Then _
                     Kill(AppDomain.CurrentDomain.BaseDirectory & "logs/wsapi.log")
             End If
 
@@ -580,7 +576,7 @@ Module GameLoop
     End Sub
 
     Private Sub TickAI()
-        Dim NpcIndex As Integer
+        Dim NpcIndex As Short
         Dim X As Short
         Dim Y As Short
         Dim UseAI As Short
@@ -653,7 +649,7 @@ Module GameLoop
 
     ' TODO: esta funcion estaba suelta en el frmMain, ver donde deberia reubicarla
     Sub CheckIdleUser()
-        Dim iUserIndex As Integer
+        Dim iUserIndex As Short
 
         For iUserIndex = 1 To MaxUsers
             With UserList(iUserIndex)
@@ -701,11 +697,7 @@ Module GameLoop
             Next
 
             'Log
-            Dim N As Short
-            N = FreeFile()
-            FileOpen(N, AppDomain.CurrentDomain.BaseDirectory & "logs/Main.log", OpenMode.Append, , OpenShare.Shared)
-            PrintLine(N, Today & " " & TimeOfDay & " server cerrado.")
-            FileClose(N)
+            AppendLog("logs/Main.log", Today & " " & TimeOfDay & " server cerrado.")
 
             running = False
 

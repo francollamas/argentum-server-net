@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing
@@ -41,7 +41,7 @@ Module Extra
         EsGM =
             (UserList(UserIndex).flags.Privilegios And
              (PlayerType.Admin Or PlayerType.Dios Or PlayerType.SemiDios Or
-              PlayerType.Consejero))
+              PlayerType.Consejero)) <> 0
     End Function
 
     Public Sub DoTileEvents(UserIndex As Short, Map As Short, X As Short, Y As Short)
@@ -79,8 +79,8 @@ Module Extra
                         ' the teleport will act as if its radius = 0.
                         If FxFlag And TelepRadio > 0 Then
                             Do
-                                DestPos.X = .TileExit.X + RandomNumber(TelepRadio*(- 1), TelepRadio)
-                                DestPos.Y = .TileExit.Y + RandomNumber(TelepRadio*(- 1), TelepRadio)
+                                DestPos.X = .TileExit.X + Convert.ToInt16(RandomNumber(TelepRadio*(- 1), TelepRadio))
+                                DestPos.Y = .TileExit.Y + Convert.ToInt16(RandomNumber(TelepRadio*(- 1), TelepRadio))
 
                                 attemps = attemps + 1
 
@@ -101,7 +101,7 @@ Module Extra
                         DestPos.Map = .TileExit.Map
 
                         '¿Es mapa de newbies?
-                        If UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "NEWBIE" Then
+                        If MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "NEWBIE" Then
                             '¿El usuario es un newbie?
                             If EsNewbie(UserIndex) Or EsGM(UserIndex) Then
                                 If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
@@ -122,7 +122,7 @@ Module Extra
                                     Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, False)
                                 End If
                             End If
-                        ElseIf UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "ARMADA" Then '¿Es mapa de Armadas?
+                        ElseIf MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "ARMADA" Then '¿Es mapa de Armadas?
                             '¿El usuario es Armada?
                             If esArmada(UserIndex) Or EsGM(UserIndex) Then
                                 If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
@@ -143,7 +143,7 @@ Module Extra
                                     Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag)
                                 End If
                             End If
-                        ElseIf UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "CAOS" Then '¿Es mapa de Caos?
+                        ElseIf MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "CAOS" Then '¿Es mapa de Caos?
                             '¿El usuario es Caos?
                             If esCaos(UserIndex) Or EsGM(UserIndex) Then
                                 If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
@@ -164,7 +164,7 @@ Module Extra
                                     Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag)
                                 End If
                             End If
-                        ElseIf UCase(MapInfo_Renamed(DestPos.Map).Restringir) = "FACCION" Then _
+                        ElseIf MapInfo_Renamed(DestPos.Map).Restringir.ToUpper() = "FACCION" Then _
                             '¿Es mapa de faccionarios?
                             '¿El usuario es Armada o Caos?
                             If esArmada(UserIndex) Or esCaos(UserIndex) Or EsGM(UserIndex) Then
@@ -297,18 +297,18 @@ Module Extra
             For tY = Pos.Y - LoopC To Pos.Y + LoopC
                 For tX = Pos.X - LoopC To Pos.X + LoopC
 
-                    If LegalPos(nPos.Map, tX, tY, PuedeAgua, PuedeTierra) Then
-                        nPos.X = tX
-                        nPos.Y = tY
+                    If LegalPos(nPos.Map, Convert.ToInt16(tX), Convert.ToInt16(tY), PuedeAgua, PuedeTierra) Then
+                        nPos.X = Convert.ToInt16(tX)
+                        nPos.Y = Convert.ToInt16(tY)
                         '¿Hay objeto?
 
-                        tX = Pos.X + LoopC
-                        tY = Pos.Y + LoopC
+                        tX = Convert.ToInt16(Pos.X + LoopC)
+                        tY = Convert.ToInt16(Pos.Y + LoopC)
                     End If
                 Next tX
             Next tY
 
-            LoopC = LoopC + 1
+            LoopC = Convert.ToInt16(LoopC + 1)
         Loop
 
         If Notfound = True Then
@@ -340,18 +340,18 @@ Module Extra
             For tY = Pos.Y - LoopC To Pos.Y + LoopC
                 For tX = Pos.X - LoopC To Pos.X + LoopC
 
-                    If LegalPos(nPos.Map, tX, tY) And MapData(nPos.Map, tX, tY).TileExit.Map = 0 Then
-                        nPos.X = tX
-                        nPos.Y = tY
+                    If LegalPos(nPos.Map, Convert.ToInt16(tX), Convert.ToInt16(tY)) And MapData(nPos.Map, Convert.ToInt16(tX), Convert.ToInt16(tY)).TileExit.Map = 0 Then
+                        nPos.X = Convert.ToInt16(tX)
+                        nPos.Y = Convert.ToInt16(tY)
                         '¿Hay objeto?
 
-                        tX = Pos.X + LoopC
-                        tY = Pos.Y + LoopC
+                        tX = Convert.ToInt16(Pos.X + LoopC)
+                        tY = Convert.ToInt16(Pos.Y + LoopC)
                     End If
                 Next tX
             Next tY
 
-            LoopC = LoopC + 1
+            LoopC = Convert.ToInt16(LoopC + 1)
         Loop
 
         If Notfound = True Then
@@ -376,11 +376,11 @@ Module Extra
         End If
 
         If migr_InStrB(name, "+") <> 0 Then
-            name = UCase(Replace(name, "+", " "))
+            name = name.Replace("+", " ").ToUpper()
         End If
 
         UserIndex = 1
-        Do Until UCase(UserList(UserIndex).name) = UCase(name)
+        Do Until UserList(UserIndex).name.ToUpper() = name.ToUpper()
 
             UserIndex = UserIndex + 1
 
@@ -390,7 +390,7 @@ Module Extra
             End If
         Loop
 
-        NameIndex = UserIndex
+        NameIndex = Convert.ToInt16(UserIndex)
     End Function
 
     Function CheckForSameIP(UserIndex As Short, UserIP As String) As Boolean
@@ -433,7 +433,7 @@ Module Extra
                 'ESE EVENTO NO DISPARA UN SAVE USER, LO QUE PUEDE SER UTILIZADO PARA DUPLICAR ITEMS
                 'ESTE BUG EN ALKON PRODUJO QUE EL SERVIDOR ESTE CAIDO DURANTE 3 DIAS. ATENTOS.
 
-                If UCase(UserList(LoopC).name) = UCase(name) Then
+                If UserList(LoopC).name.ToUpper() = name.ToUpper() Then
                     CheckForSameName = True
                     Exit Function
                 End If
@@ -452,16 +452,16 @@ Module Extra
 
         Select Case Head
             Case eHeading.NORTH
-                Pos.Y = Pos.Y - 1
+                Pos.Y = Convert.ToInt16(Pos.Y - 1)
 
             Case eHeading.SOUTH
-                Pos.Y = Pos.Y + 1
+                Pos.Y = Convert.ToInt16(Pos.Y + 1)
 
             Case eHeading.EAST
-                Pos.X = Pos.X + 1
+                Pos.X = Convert.ToInt16(Pos.X + 1)
 
             Case eHeading.WEST
-                Pos.X = Pos.X - 1
+                Pos.X = Convert.ToInt16(Pos.X - 1)
         End Select
     End Sub
 
@@ -560,9 +560,9 @@ Module Extra
                 For tY = Y - Rango To Y + Rango
                     For tX = X - Rango To X + Rango
                         'Reviso que no haya User ni NPC
-                        If MapData(Map, tX, tY).UserIndex = 0 And MapData(Map, tX, tY).NpcIndex = 0 Then
+                        If MapData(Map, Convert.ToInt16(tX), Convert.ToInt16(tY)).UserIndex = 0 And MapData(Map, Convert.ToInt16(tX), Convert.ToInt16(tY)).NpcIndex = 0 Then
 
-                            If InMapBounds(Map, tX, tY) Then FoundPlace = True
+                            If InMapBounds(Map, Convert.ToInt16(tX), Convert.ToInt16(tY)) Then FoundPlace = True
 
                             Exit For
                         End If
@@ -577,8 +577,8 @@ Module Extra
 
 
             If FoundPlace Then 'Si encontramos un lugar, listo, nos quedamos ahi
-                X = tX
-                Y = tY
+                X = Convert.ToInt16(tX)
+                Y = Convert.ToInt16(tY)
             Else
                 'Muy poco probable, pero..
                 'Si no encontramos un lugar, sacamos al usuario que tenemos abajo, y si es un NPC, lo pisamos.
@@ -659,7 +659,7 @@ Module Extra
         Dim NumHelpLines As Short
         Dim LoopC As Short
 
-        NumHelpLines = Val(GetVar(DatPath & "Help.dat", "INIT", "NumLines"))
+        NumHelpLines = Convert.ToInt16(ParseVal(GetVar(DatPath & "Help.dat", "INIT", "NumLines")))
 
         For LoopC = 1 To NumHelpLines
             Call _
@@ -675,10 +675,10 @@ Module Extra
         '
         '***************************************************
 
-        Dim randomi As Object
+        Dim randomi As Short
         If Npclist(NpcIndex).NroExpresiones > 0 Then
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto randomi. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            randomi = RandomNumber(1, Npclist(NpcIndex).NroExpresiones)
+            randomi = Convert.ToInt16(RandomNumber(1, Npclist(NpcIndex).NroExpresiones))
             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto randomi. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             Call _
                 SendData(SendTarget.ToPCArea, UserIndex,
@@ -734,7 +734,7 @@ Module Extra
                                 ObjData_Renamed(MapData(Map, X + 1, Y).ObjInfo.ObjIndex).OBJType =
                                 eOBJType.otPuertas Then
                                 .TargetObjMap = Map
-                                .TargetObjX = X + 1
+                                .TargetObjX = Convert.ToInt16(X + 1)
                                 .TargetObjY = Y
                                 FoundSomething = 1
                             End If
@@ -744,8 +744,8 @@ Module Extra
                                 eOBJType.otPuertas Then
                                 'Informa el nombre
                                 .TargetObjMap = Map
-                                .TargetObjX = X + 1
-                                .TargetObjY = Y + 1
+                                .TargetObjX = Convert.ToInt16(X + 1)
+                                .TargetObjY = Convert.ToInt16(Y + 1)
                                 FoundSomething = 1
                             End If
                         ElseIf MapData(Map, X, Y + 1).ObjInfo.ObjIndex > 0 Then
@@ -755,7 +755,7 @@ Module Extra
                                 'Informa el nombre
                                 .TargetObjMap = Map
                                 .TargetObjX = X
-                                .TargetObjY = Y + 1
+                                .TargetObjY = Convert.ToInt16(Y + 1)
                                 FoundSomething = 1
                             End If
                         End If
@@ -804,7 +804,7 @@ Module Extra
                     If FoundChar = 1 Then '  ¿Encontro un Usuario?
                         If _
                             UserList(TempCharIndex).flags.AdminInvisible = 0 Or
-                            .flags.Privilegios And PlayerType.Dios Then
+                            (.flags.Privilegios And PlayerType.Dios) <> 0 Then
                             With UserList(TempCharIndex)
                                 If migr_LenB(.DescRM) = 0 And .showName Then _
                                     'No tiene descRM y quiere que se vea su nombre.
@@ -822,21 +822,21 @@ Module Extra
                                         Stat = Stat & " <" & GuildName(.GuildIndex) & ">"
                                     End If
 
-                                    If Len(.desc) > 0 Then
+                                    If .desc.Length > 0 Then
                                         Stat = "Ves a " & .name & Stat & " - " & .desc
                                     Else
                                         Stat = "Ves a " & .name & Stat
                                     End If
 
 
-                                    If .flags.Privilegios And PlayerType.RoyalCouncil Then
+                                    If (.flags.Privilegios And PlayerType.RoyalCouncil) <> 0 Then
                                         Stat = Stat & " [CONSEJO DE BANDERBILL]"
                                         ft = FontTypeNames.FONTTYPE_CONSEJOVesA
-                                    ElseIf .flags.Privilegios And PlayerType.ChaosCouncil Then
+                                    ElseIf (.flags.Privilegios And PlayerType.ChaosCouncil) <> 0 Then
                                         Stat = Stat & " [CONCILIO DE LAS SOMBRAS]"
                                         ft = FontTypeNames.FONTTYPE_CONSEJOCAOSVesA
                                     Else
-                                        If Not .flags.Privilegios And PlayerType.User Then
+                                        If (.flags.Privilegios And PlayerType.User) = CType(0, PlayerType) Then
                                             Stat = Stat & " <GAME MASTER>"
 
                                             ' Elijo el color segun el rango del GM:
@@ -891,9 +891,9 @@ Module Extra
                             SupervivenciaSkill = UserList(UserIndex).Stats.UserSkills(eSkill.Supervivencia)
 
                             If _
-                                .Privilegios And
+                                (.Privilegios And
                                 (PlayerType.SemiDios Or PlayerType.Dios Or
-                                 PlayerType.Admin) Then
+                                 PlayerType.Admin)) <> 0 Then
                                 estatus = "(" & MinHp & "/" & MaxHp & ") "
                             Else
                                 If .Muerto = 0 Then
@@ -947,7 +947,7 @@ Module Extra
                                 End If
                             End If
 
-                            If Len(Npclist(TempCharIndex).desc) > 1 Then
+                            If Npclist(TempCharIndex).desc.Length > 1 Then
                                 Call _
                                     WriteChatOverHead(UserIndex, Npclist(TempCharIndex).desc,
                                                       Npclist(TempCharIndex).Char_Renamed.CharIndex,
@@ -970,7 +970,7 @@ Module Extra
 
                                     Call WriteConsoleMsg(UserIndex, sDesc, FontTypeNames.FONTTYPE_INFO)
 
-                                    If .Privilegios And (PlayerType.Dios Or PlayerType.Admin) _
+                                    If (.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) <> 0 _
                                         Then
                                         Call _
                                             WriteConsoleMsg(UserIndex,
@@ -1046,25 +1046,25 @@ Module Extra
 
         'NE
         If Math.Sign(X) = - 1 And Math.Sign(Y) = 1 Then
-            FindDirection = IIf(RandomNumber(0, 1), eHeading.NORTH, eHeading.EAST)
+            FindDirection = If(RandomNumber(0, 1) <> 0, eHeading.NORTH, eHeading.EAST)
             Exit Function
         End If
 
         'NW
         If Math.Sign(X) = 1 And Math.Sign(Y) = 1 Then
-            FindDirection = IIf(RandomNumber(0, 1), eHeading.WEST, eHeading.NORTH)
+            FindDirection = If(RandomNumber(0, 1) <> 0, eHeading.WEST, eHeading.NORTH)
             Exit Function
         End If
 
         'SW
         If Math.Sign(X) = 1 And Math.Sign(Y) = - 1 Then
-            FindDirection = IIf(RandomNumber(0, 1), eHeading.WEST, eHeading.SOUTH)
+            FindDirection = If(RandomNumber(0, 1) <> 0, eHeading.WEST, eHeading.SOUTH)
             Exit Function
         End If
 
         'SE
         If Math.Sign(X) = - 1 And Math.Sign(Y) = - 1 Then
-            FindDirection = IIf(RandomNumber(0, 1), eHeading.SOUTH, eHeading.EAST)
+            FindDirection = If(RandomNumber(0, 1) <> 0, eHeading.SOUTH, eHeading.EAST)
             Exit Function
         End If
 

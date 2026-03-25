@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module InvUsuario
     Public Function TieneObjetosRobables(UserIndex As Short) As Boolean
@@ -48,7 +48,7 @@ Module InvUsuario
 
             'Admins can use ANYTHING!
             Dim i As Short
-            If UserList(UserIndex).flags.Privilegios And PlayerType.User Then
+            If (UserList(UserIndex).flags.Privilegios And PlayerType.User) <> 0 Then
                 If ObjData_Renamed(ObjIndex).ClaseProhibida(1) <> 0 Then
                     For i = 1 To NUMCLASES
                         If ObjData_Renamed(ObjIndex).ClaseProhibida(i) = UserList(UserIndex).clase Then
@@ -84,15 +84,15 @@ Module InvUsuario
                 If .Invent.Object_Renamed(j).ObjIndex > 0 Then
 
                     If ObjData_Renamed(.Invent.Object_Renamed(j).ObjIndex).Newbie = 1 Then _
-                        Call QuitarUserInvItem(UserIndex, j, MAX_INVENTORY_OBJS)
-                    Call UpdateUserInv(False, UserIndex, j)
+                        Call QuitarUserInvItem(UserIndex, Convert.ToByte(j), MAX_INVENTORY_OBJS)
+                    Call UpdateUserInv(False, UserIndex, Convert.ToByte(j))
 
                 End If
             Next j
 
             '[Barrin 17-12-03] Si el usuario dejó de ser Newbie, y estaba en el Newbie Dungeon
             'es transportado a su hogar de origen ;)
-            If UCase(MapInfo_Renamed(.Pos.Map).Restringir) = "NEWBIE" Then
+            If MapInfo_Renamed(.Pos.Map).Restringir.ToUpper() = "NEWBIE" Then
 
 
                 Select Case .Hogar
@@ -190,8 +190,8 @@ Module InvUsuario
                     'Seguridad Alkon (guardo el oro tirado si supera los 50k)
                     If Cantidad > 50000 Then
                         M = .Pos.Map
-                        For j = .Pos.X - 10 To .Pos.X + 10
-                            For k = .Pos.Y - 10 To .Pos.Y + 10
+                        For j = Convert.ToInt16(.Pos.X - 10) To Convert.ToInt16(.Pos.X + 10)
+                            For k = Convert.ToInt16(.Pos.Y - 10) To Convert.ToInt16(.Pos.Y + 10)
                                 If InMapBounds(M, j, k) Then
                                     If MapData(M, j, k).UserIndex > 0 Then
                                         Cercanos = Cercanos & UserList(MapData(M, j, k).UserIndex).name & ","
@@ -214,7 +214,7 @@ Module InvUsuario
                             MiObj.Amount = MAX_INVENTORY_OBJS
                             Cantidad = Cantidad - MiObj.Amount
                         Else
-                            MiObj.Amount = Cantidad
+                            MiObj.Amount = Convert.ToInt16(Cantidad)
                             Cantidad = Cantidad - MiObj.Amount
                         End If
 
@@ -241,7 +241,7 @@ Module InvUsuario
                         End If
 
                         'info debug
-                        loops = loops + 1
+                        loops = Convert.ToInt16(loops + 1)
                         If loops > 100 Then
                             LogError(("Error en tiraroro"))
                             Exit Sub
@@ -283,7 +283,7 @@ Module InvUsuario
                 .Amount = .Amount - Cantidad
                 '¿Quedan mas?
                 If .Amount <= 0 Then
-                    UserList(UserIndex).Invent.NroItems = UserList(UserIndex).Invent.NroItems - 1
+                    UserList(UserIndex).Invent.NroItems = Convert.ToInt16(UserList(UserIndex).Invent.NroItems - 1)
                     .ObjIndex = 0
                     .Amount = 0
                 End If
@@ -325,9 +325,9 @@ Module InvUsuario
                     For LoopC = 1 To .CurrentInventorySlots
                         'Actualiza el inventario
                         If .Invent.Object_Renamed(LoopC).ObjIndex > 0 Then
-                            Call ChangeUserInv(UserIndex, LoopC, .Invent.Object_Renamed(LoopC))
+                            Call ChangeUserInv(UserIndex, Convert.ToByte(LoopC), .Invent.Object_Renamed(LoopC))
                         Else
-                            Call ChangeUserInv(UserIndex, LoopC, NullObj)
+                            Call ChangeUserInv(UserIndex, Convert.ToByte(LoopC), NullObj)
                         End If
                     Next LoopC
                 End If
@@ -361,7 +361,7 @@ Module InvUsuario
                 Obj_Renamed.ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
                 Obj_Renamed.Amount = num
 
-                If (ItemNewbie(Obj_Renamed.ObjIndex) And (.flags.Privilegios And PlayerType.User)) Then
+                If ItemNewbie(Obj_Renamed.ObjIndex) AndAlso (.flags.Privilegios And PlayerType.User) <> 0 Then
                     Call _
                         WriteConsoleMsg(UserIndex, "No puedes tirar objetos newbie.",
                                         FontTypeNames.FONTTYPE_INFO)
@@ -386,7 +386,7 @@ Module InvUsuario
                                             FontTypeNames.FONTTYPE_TALK)
                     End If
 
-                    If Not .flags.Privilegios And PlayerType.User Then _
+                    If (.flags.Privilegios And PlayerType.User) = 0 Then _
                         Call _
                             LogGM(.name,
                                   "Tiró cantidad:" & num & " Objeto:" & ObjData_Renamed(Obj_Renamed.ObjIndex).name)
@@ -430,7 +430,7 @@ Module InvUsuario
                 .ObjInfo.ObjIndex = 0
                 .ObjInfo.Amount = 0
 
-                Call SendToAreaByPos(Map, X, Y, PrepareMessageObjectDelete(X, Y))
+                Call SendToAreaByPos(Map, X, Y, PrepareMessageObjectDelete(Convert.ToByte(X), Convert.ToByte(Y)))
             End If
         End With
     End Sub
@@ -442,7 +442,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        If Obj.ObjIndex > 0 And Obj.ObjIndex <= UBound(ObjData_Renamed) Then
+        If Obj.ObjIndex > 0 And Obj.ObjIndex <= ObjData_Renamed.Length - 1 Then
 
             With MapData(Map, X, Y)
                 If .ObjInfo.ObjIndex = Obj.ObjIndex Then
@@ -453,8 +453,8 @@ Module InvUsuario
 
                     Call _
                         SendToAreaByPos(Map, X, Y,
-                                        PrepareMessageObjectCreate(ObjData_Renamed(Obj.ObjIndex).GrhIndex, X,
-                                                                   Y))
+                                        PrepareMessageObjectCreate(ObjData_Renamed(Obj.ObjIndex).GrhIndex, Convert.ToByte(X),
+                                                                   Convert.ToByte(Y)))
                 End If
             End With
         End If
@@ -480,7 +480,7 @@ Module InvUsuario
                     Until _
                         .Invent.Object_Renamed(Slot).ObjIndex = MiObj.ObjIndex And
                         .Invent.Object_Renamed(Slot).Amount + MiObj.Amount <= MAX_INVENTORY_OBJS
-                    Slot = Slot + 1
+                    Slot = Convert.ToByte(Slot + 1)
                     If Slot > .CurrentInventorySlots Then
                         Exit Do
                     End If
@@ -490,7 +490,7 @@ Module InvUsuario
                 If Slot > .CurrentInventorySlots Then
                     Slot = 1
                     Do Until .Invent.Object_Renamed(Slot).ObjIndex = 0
-                        Slot = Slot + 1
+                        Slot = Convert.ToByte(Slot + 1)
                         If Slot > .CurrentInventorySlots Then
                             Call _
                                 WriteConsoleMsg(UserIndex, "No puedes cargar más objetos.",
@@ -499,7 +499,7 @@ Module InvUsuario
                             Exit Function
                         End If
                     Loop
-                    .Invent.NroItems = .Invent.NroItems + 1
+                    .Invent.NroItems = Convert.ToInt16(.Invent.NroItems + 1)
                 End If
 
                 If Slot > MAX_NORMAL_INVENTORY_SLOTS And Slot < MAX_INVENTORY_SLOTS Then
@@ -576,7 +576,7 @@ Module InvUsuario
 
                             'Quitamos el objeto
                             Call EraseObj(MapData(.Pos.Map, X, Y).ObjInfo.Amount, .Pos.Map, .Pos.X, .Pos.Y)
-                            If Not .flags.Privilegios And PlayerType.User Then _
+                            If (.flags.Privilegios And PlayerType.User) = 0 Then _
                                 Call _
                                     LogGM(.name,
                                           "Agarro:" & MiObj.Amount & " Objeto:" & ObjData_Renamed(MiObj.ObjIndex).name)
@@ -624,7 +624,7 @@ Module InvUsuario
 
             With UserList(UserIndex)
                 With .Invent
-                    If (Slot < LBound(.Object_Renamed)) Or (Slot > UBound(.Object_Renamed)) Then
+                    If (Slot < 0) Or (Slot > .Object_Renamed.Length - 1) Then
                         Exit Sub
                     ElseIf .Object_Renamed(Slot).ObjIndex = 0 Then
                         Exit Sub
@@ -821,7 +821,7 @@ Module InvUsuario
                             ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) And
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
                             'Si esta equipado lo quita
-                            If .Invent.Object_Renamed(Slot).Equipped Then
+                            If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                                 'Quitamos del inv el item
                                 Call Desequipar(UserIndex, Slot)
                                 'Animacion por defecto
@@ -850,7 +850,7 @@ Module InvUsuario
                             If Not (.flags.AdminInvisible = 1) Then _
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_SACARARMA, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(SND_SACARARMA), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
 
                             If .flags.Mimetizado = 1 Then
                                 .CharMimetizado.WeaponAnim = GetWeaponAnim(UserIndex, ObjIndex)
@@ -871,7 +871,7 @@ Module InvUsuario
                             ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) And
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
                             'Si esta equipado lo quita
-                            If .Invent.Object_Renamed(Slot).Equipped Then
+                            If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                                 'Quitamos del inv el item
                                 Call Desequipar(UserIndex, Slot)
                                 Exit Sub
@@ -896,7 +896,7 @@ Module InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
 
                             'Si esta equipado lo quita
-                            If .Invent.Object_Renamed(Slot).Equipped Then
+                            If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                                 'Quitamos del inv el item
                                 Call Desequipar(UserIndex, Slot)
                                 Exit Sub
@@ -926,7 +926,7 @@ Module InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
 
                             'Si esta equipado lo quita
-                            If .Invent.Object_Renamed(Slot).Equipped Then
+                            If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                                 Call Desequipar(UserIndex, Slot)
                                 Call DarCuerpoDesnudo(UserIndex, .flags.Mimetizado = 1)
                                 If Not .flags.Mimetizado = 1 Then
@@ -967,7 +967,7 @@ Module InvUsuario
                         If .flags.Navegando = 1 Then Exit Sub
                         If ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
                             'Si esta equipado lo quita
-                            If .Invent.Object_Renamed(Slot).Equipped Then
+                            If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                                 Call Desequipar(UserIndex, Slot)
                                 If .flags.Mimetizado = 1 Then
                                     .CharMimetizado.CascoAnim = NingunCasco
@@ -1013,7 +1013,7 @@ Module InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
 
                             'Si esta equipado lo quita
-                            If .Invent.Object_Renamed(Slot).Equipped Then
+                            If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                                 Call Desequipar(UserIndex, Slot)
                                 If .flags.Mimetizado = 1 Then
                                     .CharMimetizado.ShieldAnim = NingunEscudo
@@ -1060,7 +1060,7 @@ Module InvUsuario
                                                 FontTypeNames.FONTTYPE_INFO)
                             Exit Sub
                         End If
-                        If .Invent.Object_Renamed(Slot).Equipped Then
+                        If .Invent.Object_Renamed(Slot).Equipped <> 0 Then
                             Call Desequipar(UserIndex, Slot)
                             Exit Sub
                         End If
@@ -1070,8 +1070,8 @@ Module InvUsuario
                         .Invent.Object_Renamed(Slot).Equipped = 1
                         .Invent.MochilaEqpObjIndex = ObjIndex
                         .Invent.MochilaEqpSlot = Slot
-                        .CurrentInventorySlots = MAX_NORMAL_INVENTORY_SLOTS + Obj_Renamed.MochilaType*5
-                        Call WriteAddSlots(UserIndex, Obj_Renamed.MochilaType)
+                        .CurrentInventorySlots = Convert.ToByte(MAX_NORMAL_INVENTORY_SLOTS + Obj_Renamed.MochilaType*5)
+                        Call WriteAddSlots(UserIndex, CType(Convert.ToInt32(Obj_Renamed.MochilaType), eMochilas))
                 End Select
             End With
 
@@ -1109,7 +1109,7 @@ Module InvUsuario
                 End If
 
                 'Solo se habilita la ropa exclusiva para Drows por ahora. Pablo (ToxicWaste)
-                If (.raza <> eRaza.Drow) And ObjData_Renamed(ItemIndex).RazaDrow Then
+                If (.raza <> eRaza.Drow) And ObjData_Renamed(ItemIndex).RazaDrow <> 0 Then
                     CheckRazaUsaRopa = False
                 End If
             End With
@@ -1198,11 +1198,11 @@ Module InvUsuario
                         ObjIndex = e_ObjetosCriticos.ManzanaNewbie Then
                         Call _
                             SonidosMapas.ReproducirSonido(SendTarget.ToPCArea, UserIndex,
-                                                          SoundMapInfo.e_SoundIndex.MORFAR_MANZANA)
+                                                          Convert.ToInt16(SoundMapInfo.e_SoundIndex.MORFAR_MANZANA))
                     Else
                         Call _
                             SonidosMapas.ReproducirSonido(SendTarget.ToPCArea, UserIndex,
-                                                          SoundMapInfo.e_SoundIndex.SOUND_COMIDA)
+                                                          Convert.ToInt16(SoundMapInfo.e_SoundIndex.SOUND_COMIDA))
                     End If
 
                     'Quitamos del inv el item
@@ -1221,7 +1221,7 @@ Module InvUsuario
                     .Stats.GLD = .Stats.GLD + .Invent.Object_Renamed(Slot).Amount
                     .Invent.Object_Renamed(Slot).Amount = 0
                     .Invent.Object_Renamed(Slot).ObjIndex = 0
-                    .Invent.NroItems = .Invent.NroItems - 1
+                    .Invent.NroItems = Convert.ToInt16(.Invent.NroItems - 1)
 
                     Call UpdateUserInv(False, UserIndex, Slot)
                     Call WriteUpdateGold(UserIndex)
@@ -1237,7 +1237,7 @@ Module InvUsuario
                     If Not .Stats.MinSta > 0 Then
                         Call _
                             WriteConsoleMsg(UserIndex,
-                                            "Estás muy cansad" & IIf(.Genero = eGenero.Hombre, "o", "a") &
+                                            "Estás muy cansad" & (If(.Genero = eGenero.Hombre, "o", "a")) &
                                             ".", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
                     End If
@@ -1361,28 +1361,28 @@ Module InvUsuario
 
                             'Usa el item
                             .Stats.UserAtributos(eAtributos.Agilidad) =
-                                .Stats.UserAtributos(eAtributos.Agilidad) +
-                                RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador)
+                                Convert.ToByte(.Stats.UserAtributos(eAtributos.Agilidad) +
+                                RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador))
                             If .Stats.UserAtributos(eAtributos.Agilidad) > MAXATRIBUTOS Then _
                                 .Stats.UserAtributos(eAtributos.Agilidad) = MAXATRIBUTOS
                             If _
                                 .Stats.UserAtributos(eAtributos.Agilidad) >
                                 2*.Stats.UserAtributosBackUP(eAtributos.Agilidad) Then _
-                                .Stats.UserAtributos(eAtributos.Agilidad) = 2*
+                                .Stats.UserAtributos(eAtributos.Agilidad) = Convert.ToByte(2*
                                                                             .Stats.UserAtributosBackUP(
                                                                                 eAtributos.
-                                                                                                          Agilidad)
+                                                                                                          Agilidad))
 
                             'Quitamos del inv el item
                             Call QuitarUserInvItem(UserIndex, Slot, 1)
 
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
-                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
                             Call WriteUpdateDexterity(UserIndex)
 
@@ -1391,17 +1391,17 @@ Module InvUsuario
 
                             'Usa el item
                             .Stats.UserAtributos(eAtributos.Fuerza) =
-                                .Stats.UserAtributos(eAtributos.Fuerza) +
-                                RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador)
+                                Convert.ToByte(.Stats.UserAtributos(eAtributos.Fuerza) +
+                                RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador))
                             If .Stats.UserAtributos(eAtributos.Fuerza) > MAXATRIBUTOS Then _
                                 .Stats.UserAtributos(eAtributos.Fuerza) = MAXATRIBUTOS
                             If _
                                 .Stats.UserAtributos(eAtributos.Fuerza) >
                                 2*.Stats.UserAtributosBackUP(eAtributos.Fuerza) Then _
-                                .Stats.UserAtributos(eAtributos.Fuerza) = 2*
+                                .Stats.UserAtributos(eAtributos.Fuerza) = Convert.ToByte(2*
                                                                           .Stats.UserAtributosBackUP(
                                                                               eAtributos.
-                                                                                                        Fuerza)
+                                                                                                        Fuerza))
 
 
                             'Quitamos del inv el item
@@ -1409,18 +1409,18 @@ Module InvUsuario
 
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
-                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
                             Call WriteUpdateStrenght(UserIndex)
 
                         Case 3 'Pocion roja, restaura HP
                             'Usa el item
                             .Stats.MinHp = .Stats.MinHp +
-                                           RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador)
+                                           Convert.ToInt16(RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador))
                             If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
 
                             'Quitamos del inv el item
@@ -1428,17 +1428,17 @@ Module InvUsuario
 
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
-                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                         Case 4 'Pocion azul, restaura MANA
                             'Usa el item
                             'nuevo calculo para recargar mana
-                            .Stats.MinMAN = .Stats.MinMAN + Porcentaje(.Stats.MaxMAN, 4) + .Stats.ELV\2 + 40/.Stats.ELV
+                            .Stats.MinMAN = Convert.ToInt16(.Stats.MinMAN + Porcentaje(.Stats.MaxMAN, 4) + .Stats.ELV\2 + 40/.Stats.ELV)
                             If .Stats.MinMAN > .Stats.MaxMAN Then .Stats.MinMAN = .Stats.MaxMAN
 
                             'Quitamos del inv el item
@@ -1446,11 +1446,11 @@ Module InvUsuario
 
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
-                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                         Case 5 ' Pocion violeta
@@ -1465,15 +1465,15 @@ Module InvUsuario
 
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
-                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call _
                                     SendData(SendTarget.ToPCArea, UserIndex,
-                                             PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                         Case 6 ' Pocion Negra
-                            If .flags.Privilegios And PlayerType.User Then
+                            If (.flags.Privilegios And PlayerType.User) <> 0 Then
                                 Call QuitarUserInvItem(UserIndex, Slot, 1)
                                 Call UserDie(UserIndex)
                                 Call _
@@ -1501,11 +1501,11 @@ Module InvUsuario
 
                     ' Los admin invisibles solo producen sonidos a si mismos
                     If .flags.AdminInvisible = 1 Then
-                        Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                        Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Else
                         Call _
                             SendData(SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+                                     PrepareMessagePlayWave(Convert.ToByte(SND_BEBER), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     End If
 
                     Call UpdateUserInv(False, UserIndex, Slot)
@@ -1654,7 +1654,7 @@ Module InvUsuario
                         Exit Sub
                     End If
 
-                    If Obj_Renamed.Real Then '¿Es el Cuerno Real?
+                    If Obj_Renamed.Real <> 0 Then '¿Es el Cuerno Real?
                         If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
                             If MapInfo_Renamed(.Pos.Map).Pk = False Then
                                 Call _
@@ -1666,12 +1666,12 @@ Module InvUsuario
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
                                 Call _
-                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Obj_Renamed.Snd1, .Pos.X, .Pos.Y))
+                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call AlertarFaccionarios(UserIndex)
                                 Call _
                                     SendData(SendTarget.toMap, .Pos.Map,
-                                             PrepareMessagePlayWave(Obj_Renamed.Snd1, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                             Exit Sub
@@ -1681,7 +1681,7 @@ Module InvUsuario
                                                 FontTypeNames.FONTTYPE_INFO)
                             Exit Sub
                         End If
-                    ElseIf Obj_Renamed.Caos Then '¿Es el Cuerno Legión?
+                    ElseIf Obj_Renamed.Caos <> 0 Then '¿Es el Cuerno Legión?
                         If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
                             If MapInfo_Renamed(.Pos.Map).Pk = False Then
                                 Call _
@@ -1693,12 +1693,12 @@ Module InvUsuario
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
                                 Call _
-                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Obj_Renamed.Snd1, .Pos.X, .Pos.Y))
+                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call AlertarFaccionarios(UserIndex)
                                 Call _
                                     SendData(SendTarget.toMap, .Pos.Map,
-                                             PrepareMessagePlayWave(Obj_Renamed.Snd1, .Pos.X, .Pos.Y))
+                                             PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                             Exit Sub
@@ -1712,11 +1712,11 @@ Module InvUsuario
                     'Si llega aca es porque es o Laud o Tambor o Flauta
                     ' Los admin invisibles solo producen sonidos a si mismos
                     If .flags.AdminInvisible = 1 Then
-                        Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Obj_Renamed.Snd1, .Pos.X, .Pos.Y))
+                        Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Else
                         Call _
                             SendData(SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessagePlayWave(Obj_Renamed.Snd1, .Pos.X, .Pos.Y))
+                                     PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     End If
 
                 Case eOBJType.otBarcos
@@ -1738,10 +1738,10 @@ Module InvUsuario
                     End If
 
                     If _
-                        ((LegalPos(.Pos.Map, .Pos.X - 1, .Pos.Y, True, False) Or
-                          LegalPos(.Pos.Map, .Pos.X, .Pos.Y - 1, True, False) Or
-                          LegalPos(.Pos.Map, .Pos.X + 1, .Pos.Y, True, False) Or
-                          LegalPos(.Pos.Map, .Pos.X, .Pos.Y + 1, True, False)) And .flags.Navegando = 0) Or
+                        ((LegalPos(.Pos.Map, Convert.ToInt16(.Pos.X - 1), .Pos.Y, True, False) Or
+                          LegalPos(.Pos.Map, .Pos.X, Convert.ToInt16(.Pos.Y - 1), True, False) Or
+                          LegalPos(.Pos.Map, Convert.ToInt16(.Pos.X + 1), .Pos.Y, True, False) Or
+                          LegalPos(.Pos.Map, .Pos.X, Convert.ToInt16(.Pos.Y + 1), True, False)) And .flags.Navegando = 0) Or
                         .flags.Navegando = 1 Then
                         Call DoNavega(UserIndex, Obj_Renamed, Slot)
                     Else
@@ -1800,7 +1800,7 @@ Module InvUsuario
 
                 Call TirarTodosLosItems(UserIndex)
 
-                Cantidad = .Stats.GLD - CInt(.Stats.ELV)*10000
+                Cantidad = .Stats.GLD - Convert.ToInt32(.Stats.ELV)*10000
 
                 If Cantidad > 0 Then Call TirarOro(Cantidad, UserIndex)
             End With
@@ -1880,7 +1880,7 @@ Module InvUsuario
         '
         '***************************************************
 
-        If ItemIndex < 1 Or ItemIndex > UBound(ObjData_Renamed) Then Exit Function
+        If ItemIndex < 1 Or ItemIndex > ObjData_Renamed.Length - 1 Then Exit Function
 
         ItemNewbie = ObjData_Renamed(ItemIndex).Newbie = 1
     End Function

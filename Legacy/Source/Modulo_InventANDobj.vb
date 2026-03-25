@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module InvNpc
     'Modulo Inv & Obj
@@ -65,19 +65,19 @@ Module InvNpc
                     Exit Sub
                 End If
 
-                Random = RandomNumber(1, 100)
+                Random = Convert.ToInt16(RandomNumber(1, 100))
 
                 ' Tiene 10% de prob de no tirar nada
                 If Random <= 90 Then
                     NroDrop = 1
 
                     If Random <= 10 Then
-                        NroDrop = NroDrop + 1
+                        NroDrop = Convert.ToInt16(NroDrop + 1)
 
                         For i = 1 To 3
                             ' 10% de ir pasando de etapas
                             If RandomNumber(1, 100) <= 10 Then
-                                NroDrop = NroDrop + 1
+                                NroDrop = Convert.ToInt16(NroDrop + 1)
                             Else
                                 Exit For
                             End If
@@ -92,7 +92,7 @@ Module InvNpc
                         If ObjIndex = iORO Then
                             Call TirarOroNpc(.Drop(NroDrop).Amount, npc.Pos)
                         Else
-                            MiObj.Amount = .Drop(NroDrop).Amount
+                            MiObj.Amount = Convert.ToInt16(.Drop(NroDrop).Amount)
                             MiObj.ObjIndex = .Drop(NroDrop).ObjIndex
 
                             Call TirarItemAlPiso(.Pos, MiObj)
@@ -157,8 +157,8 @@ Module InvNpc
 
             For i = 1 To MAX_INVENTORY_SLOTS
                 ln = GetVar(npcfile, "NPC" & Npclist(NpcIndex).Numero, "Obj" & i)
-                If ObjIndex = Val(ReadField(1, ln, 45)) Then
-                    EncontrarCant = Val(ReadField(2, ln, 45))
+                If ObjIndex = Convert.ToInt16(ParseVal(ReadField(1, ln, 45))) Then
+                    EncontrarCant = Convert.ToInt16(ParseVal(ReadField(2, ln, 45)))
                     Exit Function
                 End If
             Next
@@ -219,10 +219,10 @@ Module InvNpc
 
             'Quita un Obj
             If ObjData_Renamed(.Invent.Object_Renamed(Slot).ObjIndex).Crucial = 0 Then
-                .Invent.Object_Renamed(Slot).Amount = .Invent.Object_Renamed(Slot).Amount - Cantidad
+                .Invent.Object_Renamed(Slot).Amount = Convert.ToInt16(.Invent.Object_Renamed(Slot).Amount - Cantidad)
 
                 If .Invent.Object_Renamed(Slot).Amount <= 0 Then
-                    .Invent.NroItems = .Invent.NroItems - 1
+                    .Invent.NroItems = Convert.ToInt16(.Invent.NroItems - 1)
                     .Invent.Object_Renamed(Slot).ObjIndex = 0
                     .Invent.Object_Renamed(Slot).Amount = 0
                     If .Invent.NroItems = 0 And .InvReSpawn <> 1 Then
@@ -230,20 +230,20 @@ Module InvNpc
                     End If
                 End If
             Else
-                .Invent.Object_Renamed(Slot).Amount = .Invent.Object_Renamed(Slot).Amount - Cantidad
+                .Invent.Object_Renamed(Slot).Amount = Convert.ToInt16(.Invent.Object_Renamed(Slot).Amount - Cantidad)
 
                 If .Invent.Object_Renamed(Slot).Amount <= 0 Then
-                    .Invent.NroItems = .Invent.NroItems - 1
+                    .Invent.NroItems = Convert.ToInt16(.Invent.NroItems - 1)
                     .Invent.Object_Renamed(Slot).ObjIndex = 0
                     .Invent.Object_Renamed(Slot).Amount = 0
 
                     If Not QuedanItems(NpcIndex, ObjIndex) Then
                         'Check if the item is in the npc's dat.
-                        iCant = EncontrarCant(NpcIndex, ObjIndex)
-                        If iCant Then
+                        iCant = Convert.ToInt16(EncontrarCant(NpcIndex, ObjIndex))
+                        If iCant <> 0 Then
                             .Invent.Object_Renamed(Slot).ObjIndex = ObjIndex
                             .Invent.Object_Renamed(Slot).Amount = iCant
-                            .Invent.NroItems = .Invent.NroItems + 1
+                            .Invent.NroItems = Convert.ToInt16(.Invent.NroItems + 1)
                         End If
                     End If
 
@@ -270,12 +270,12 @@ Module InvNpc
         npcfile = DatPath & "NPCs.dat"
 
         With Npclist(NpcIndex)
-            .Invent.NroItems = Val(GetVar(npcfile, "NPC" & .Numero, "NROITEMS"))
+            .Invent.NroItems = Convert.ToInt16(ParseVal(GetVar(npcfile, "NPC" & .Numero, "NROITEMS")))
 
             For LoopC = 1 To .Invent.NroItems
                 ln = GetVar(npcfile, "NPC" & .Numero, "Obj" & LoopC)
-                .Invent.Object_Renamed(LoopC).ObjIndex = Val(ReadField(1, ln, 45))
-                .Invent.Object_Renamed(LoopC).Amount = Val(ReadField(2, ln, 45))
+                .Invent.Object_Renamed(LoopC).ObjIndex = Convert.ToInt16(ParseVal(ReadField(1, ln, 45)))
+                .Invent.Object_Renamed(LoopC).Amount = Convert.ToInt16(ParseVal(ReadField(2, ln, 45)))
 
             Next LoopC
         End With
@@ -305,7 +305,7 @@ Module InvNpc
 
                         ' Tira lo que quede
                     Else
-                        MiObj.Amount = RemainingGold
+                        MiObj.Amount = Convert.ToInt16(RemainingGold)
                         RemainingGold = 0
                     End If
 

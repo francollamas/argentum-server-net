@@ -1,7 +1,7 @@
 'Codigo by Loopzer todos los derechos se le reservan a él!
 'GSZone 2010
 Option Explicit On
-Option Strict Off
+Option Strict On
 
 Imports System.IO
 Imports System.Text.Json
@@ -167,32 +167,32 @@ Module CargaMapa
         Dim tsalir As TXYSalir
         Dim tblk As TXY
 
-        For t = 0 To CountObj - 1
+        For t = 0 To Convert.ToInt16(CountObj - 1)
             tm = Mocha_Obj(t)
             MapData(ind, tm.XY.x, tm.XY.y).OBJInfo = tm.mobj
         Next
 
-        For t = 0 To CTriger - 1
+        For t = 0 To Convert.ToInt16(CTriger - 1)
             tt = Mocha_Triger(t)
             MapData(ind, tt.XY.x, tt.XY.y).trigger = CType(tt.Numero, eTrigger)
         Next
 
-        For t = 0 To CG1 - 1
+        For t = 0 To Convert.ToInt16(CG1 - 1)
             tg1 = Mocha_CG1(t)
             MapData(ind, tg1.XY.x, tg1.XY.y).Graphic(1) = tg1.Numero
         Next
 
-        For t = 0 To CG2 - 1
+        For t = 0 To Convert.ToInt16(CG2 - 1)
             tg2 = Mocha_CG2(t)
             MapData(ind, tg2.XY.x, tg2.XY.y).Graphic(2) = tg2.Numero
         Next
 
-        For t = 0 To CG3 - 1
+        For t = 0 To Convert.ToInt16(CG3 - 1)
             tg3 = Mocha_CG3(t)
             MapData(ind, tg3.XY.x, tg3.XY.y).Graphic(3) = tg3.Numero
         Next
 
-        For t = 0 To CG4 - 1
+        For t = 0 To Convert.ToInt16(CG4 - 1)
             tg4 = Mocha_CG4(t)
             MapData(ind, tg4.XY.x, tg4.XY.y).Graphic(4) = tg4.Numero
         Next
@@ -201,7 +201,7 @@ Module CargaMapa
         Dim y As Short
         Dim npcfile As String
 
-        For t = 0 To CNpc - 1
+        For t = 0 To Convert.ToInt16(CNpc - 1)
             tnpc = Mocha_Npc(t)
             x = tnpc.XY.x
             y = tnpc.XY.y
@@ -212,7 +212,7 @@ Module CargaMapa
             'Si el npc debe hacer respawn en la pos
             'original la guardamos
 
-            If CInt(LeerNPCs.GetValue("NPC" & MapData(ind, x, y).NpcIndex, "PosOrig")) = 1 Then
+            If Convert.ToInt32(LeerNPCs.GetValue("NPC" & MapData(ind, x, y).NpcIndex, "PosOrig")) = 1 Then
                 'If Val(GetVar(npcfile, "NPC" & MapData(ind, x, y).NpcIndex, "PosOrig")) = 1 Then
                 MapData(ind, x, y).NpcIndex = OpenNPC(MapData(ind, x, y).NpcIndex)
                 Npclist(MapData(ind, x, y).NpcIndex).Orig.Map = ind
@@ -229,12 +229,12 @@ Module CargaMapa
             Call MakeNPCChar(True, 0, MapData(ind, x, y).NpcIndex, ind, x, y)
         Next
 
-        For t = 0 To CSalir - 1
+        For t = 0 To Convert.ToInt16(CSalir - 1)
             tsalir = Mocha_Salir(t)
             MapData(ind, tsalir.XY.x, tsalir.XY.y).TileExit = tsalir.Salida
         Next
 
-        For t = 0 To CBlk - 1
+        For t = 0 To Convert.ToInt16(CBlk - 1)
             tblk = Mocha_BLK(t)
             MapData(ind, tblk.x, tblk.y).Blocked = 1
         Next
@@ -247,7 +247,7 @@ Module CargaMapa
         With MapInfo_Renamed(ind)
             Dim tempProperty As JsonElement
             If root.TryGetProperty("name", tempProperty) Then .name = tempProperty.GetString()
-            If root.TryGetProperty("musicnum", tempProperty) Then .Music = tempProperty.GetInt32()
+            If root.TryGetProperty("musicnum", tempProperty) Then .Music = tempProperty.GetInt32().ToString()
             If root.TryGetProperty("magiasinefecto", tempProperty) Then .MagiaSinEfecto = tempProperty.GetByte()
             If root.TryGetProperty("invisinefecto", tempProperty) Then .InviSinEfecto = tempProperty.GetByte()
             If root.TryGetProperty("resusinefecto", tempProperty) Then .ResuSinEfecto = tempProperty.GetByte()

@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Module Matematicas
     Public Function Porcentaje(Total As Integer, Porc As Integer) As Integer
@@ -8,7 +8,7 @@ Module Matematicas
         '
         '***************************************************
 
-        Porcentaje = (Total*Porc)/100
+        Porcentaje = Convert.ToInt32((Total * Porc) / 100)
     End Function
 
     Function Distancia(ByRef wp1 As WorldPos, ByRef wp2 As WorldPos) As Integer
@@ -41,6 +41,6 @@ Module Matematicas
         'Last Modify Date: 3/06/2006
         'Generates a random number in the range given - recoded to use longs and work properly with ranges
         '**************************************************************
-        RandomNumber = Fix(Rnd()*(UpperBound - LowerBound + 1)) + LowerBound
+        RandomNumber = Convert.ToInt32(Fix(Rnd() * (UpperBound - LowerBound + 1))) + LowerBound
     End Function
 End Module
