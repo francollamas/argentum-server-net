@@ -1228,8 +1228,8 @@ Module UsUaRiOs
 
                 For j = 1 To MAX_INVENTORY_SLOTS
                     Tmp = GetVar(CharFile, "Inventory", "Obj" & j)
-                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Asc("-")))
-                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Asc("-")))
+                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Convert.ToByte(Asc("-"))))
+                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Convert.ToByte(Asc("-"))))
                     If ObjInd > 0 Then
                         Call _
                             WriteConsoleMsg(sendIndex,

@@ -347,8 +347,8 @@ Module modBanco
                                     FontTypeNames.FONTTYPE_INFO)
                 For j = 1 To MAX_BANCOINVENTORY_SLOTS
                     Tmp = GetVar(CharFile, "BancoInventory", "Obj" & j)
-                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Asc("-")))
-                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Asc("-")))
+                    ObjInd = Convert.ToInt32(ReadField(1, Tmp, Convert.ToByte(Asc("-"))))
+                    ObjCant = Convert.ToInt32(ReadField(2, Tmp, Convert.ToByte(Asc("-"))))
                     If ObjInd > 0 Then
                         Call _
                             WriteConsoleMsg(sendIndex,
