@@ -161,7 +161,7 @@ Module modSistemaComercio
 
             Call QuitarUserInvItem(UserIndex, Convert.ToByte(Slot), Cantidad)
 
-            'Precio = Round(ObjData_Renamed(Objeto.ObjIndex).valor / REDUCTOR_PRECIOVENTA * Cantidad, 0)
+            'Precio = Round(ObjData(Objeto.ObjIndex).valor / REDUCTOR_PRECIOVENTA * Cantidad, 0)
             Precio = Convert.ToInt32(Fix(SalePrice(Objeto.ObjIndex)*Cantidad))
             UserList(UserIndex).Stats.GLD = UserList(UserIndex).Stats.GLD + Precio
 
