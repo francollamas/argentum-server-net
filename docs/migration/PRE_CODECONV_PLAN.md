@@ -84,7 +84,7 @@ Cada script:
 | # | Acción | Impacto | Archivos | Estado |
 |---|--------|---------|----------|--------|
 | 1 | Reemplazar `Err.Number`/`Err.Description` en bloques `Catch` | Crítico | 9 archivos, ~25 lugares | 🔲 |
-| 2 | Reemplazar `MsgBox()` en código de servidor | Crítico | `FileIO.vb` (4 lugares) | 🔲 |
+| 2 | Reemplazar `MsgBox()` en código de servidor | Crítico | `FileIO.vb` (4 lugares) | ✅ |
 | 3 | Reemplazar `vbNullString` | Alto | ~18 archivos | 🔲 |
 | 4 | Reemplazar `vbObjectError` en `clsByteQueue.vb` | Alto | 1 archivo, 2 líneas | ✅ |
 | 5 | Reemplazar `IsNumeric()` por `TryParse()` | Medio | 5 archivos, ~15 lugares | 🔲 |

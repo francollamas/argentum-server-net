@@ -294,7 +294,7 @@ Module ES
 
         Catch ex As Exception
             Console.WriteLine("Error in CargarSpawnList: " & ex.Message)
-            MsgBox("Error cargando hechizos.dat " & Err.Number & ": " & Err.Description)
+            Call LogError("[" & ex.GetType().Name & "] Error cargando hechizos.dat: " & ex.Message)
         End Try
     End Sub
 
@@ -842,7 +842,7 @@ Module ES
 
         Catch ex As Exception
             Console.WriteLine("Error in LoadMotd: " & ex.Message)
-            MsgBox("error cargando objetos " & Err.Number & ": " & Err.Description)
+            Call LogError("[" & ex.GetType().Name & "] Error cargando objetos: " & ex.Message)
         End Try
     End Sub
 
@@ -1204,8 +1204,7 @@ Module ES
 
         Catch ex As Exception
             Console.WriteLine("Error in CargarBackUp: " & ex.Message)
-            MsgBox("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
-            Call LogError(Today & " " & Err.Description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
+            Throw New Exception("Error durante la carga de mapas, el mapa " & Map & " contiene errores: " & ex.Message, ex)
         End Try
     End Sub
 
@@ -1242,8 +1241,7 @@ Module ES
 
         Catch ex As Exception
             Console.WriteLine("Error in LoadMapData: " & ex.Message)
-            MsgBox("Error durante la carga de mapas, el mapa " & Map & " contiene errores")
-            Call LogError(Today & " " & Err.Description & " " & Err.HelpContext & " " & Err.HelpFile & " " & Err.Source)
+            Throw New Exception("Error durante la carga de mapas, el mapa " & Map & " contiene errores: " & ex.Message, ex)
         End Try
     End Sub
 
