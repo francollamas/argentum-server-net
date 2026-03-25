@@ -160,7 +160,7 @@ Module modCentinela
                 CentinelaNPCIndex = 0
             End If
 
-            Call LogError("Error en el checkeo del centinela: " & Err.Description)
+            Call LogError("Error en el checkeo del centinela: " & ex.Message)
         End Try
     End Sub
 

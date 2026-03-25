@@ -188,7 +188,7 @@ Module NPCs
 
         Catch ex As Exception
             Console.WriteLine("Error in QuitarMascota: " & ex.Message)
-            Call LogError("Error en MuereNpc - Error: " & Err.Number & " - Desc: " & Err.Description)
+            Call LogError("Error en MuereNpc - Error: " & ex.GetType().Name & " - Desc: " & ex.Message)
         End Try
     End Sub
 
@@ -432,7 +432,7 @@ Module NPCs
             Console.WriteLine("Error in QuitarPet: " & ex.Message)
             Call _
                 LogError(
-                    "Error en QuitarPet. Error: " & Err.Number & " Desc: " & Err.Description & " NpcIndex: " & NpcIndex &
+                    "Error en QuitarPet. Error: " & ex.GetType().Name & " Desc: " & ex.Message & " NpcIndex: " & NpcIndex &
                     " UserIndex: " & UserIndex & " PetIndex: " & PetIndex)
         End Try
     End Sub

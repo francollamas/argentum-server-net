@@ -993,7 +993,7 @@ Module modGuilds
 
         Catch ex As Exception
             Console.WriteLine("Error in LoadGuildsDB: " & ex.Message)
-            Call LogError("modGuilds.v_RutinaElecciones():" & Err.Description)
+            Call LogError("modGuilds.v_RutinaElecciones():" & ex.Message)
         End Try
     End Sub
 
@@ -1869,7 +1869,7 @@ Module modGuilds
             Else
                 Call _
                     LogError(
-                        "[" & Err.Number & "] " & Err.Description &
+                        "[" & ex.GetType().Name & "] " & ex.Message &
                         " En la rutina SendDetallesPersonaje, por el usuario " &
                         UserList(UserIndex).name & " (" & UserIndex & " ), pidiendo información sobre el personaje " &
                         Personaje)

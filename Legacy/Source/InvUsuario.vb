@@ -259,7 +259,7 @@ Module InvUsuario
 
         Catch ex As Exception
             Console.WriteLine("Error in QuitarNewbieObj: " & ex.Message)
-            Call LogError("Error en TirarOro. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en TirarOro. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -292,7 +292,7 @@ Module InvUsuario
 
         Catch ex As Exception
             Console.WriteLine("Error in QuitarUserInvItem: " & ex.Message)
-            Call LogError("Error en QuitarUserInvItem. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en QuitarUserInvItem. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -338,7 +338,7 @@ Module InvUsuario
 
         Catch ex As Exception
             Console.WriteLine("Error in UpdateUserInv: " & ex.Message)
-            Call LogError("Error en UpdateUserInv. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en UpdateUserInv. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -530,7 +530,7 @@ Module InvUsuario
 
         Catch ex As Exception
             Console.WriteLine("Error in DropObj: " & ex.Message)
-            Call LogError("Error en MeterItemEnInventario. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en MeterItemEnInventario. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Function
 
@@ -727,7 +727,7 @@ Module InvUsuario
 
         Catch ex As Exception
             Console.WriteLine("Error in GetObj: " & ex.Message)
-            Call LogError("Error en Desquipar. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en Desquipar. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -1083,8 +1083,8 @@ Module InvUsuario
             Console.WriteLine("Error in FaccionPuedeUsarItem: " & ex.Message)
             Call _
                 LogError(
-                    "EquiparInvItem Slot:" & Slot & " - Error: " & Err.Number & " - Error Description : " &
-                    Err.Description)
+                    "EquiparInvItem Slot:" & Slot & " - Error: " & ex.GetType().Name & " - Error Description : " &
+                    ex.Message)
         End Try
     End Sub
 

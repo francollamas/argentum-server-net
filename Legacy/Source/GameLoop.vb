@@ -201,7 +201,7 @@ Module GameLoop
 
         Catch ex As Exception
             Console.WriteLine("Error in OnExit: " & ex.Message)
-            Call LogError("Error en tPiqueteC_Timer " & Err.Number & ": " & Err.Description)
+            Call LogError("Error en tPiqueteC_Timer " & ex.GetType().Name & ": " & ex.Message)
         End Try
     End Sub
 
@@ -228,7 +228,7 @@ Module GameLoop
 
         Catch ex As Exception
             Console.WriteLine("Error in TickPacketResend: " & ex.Message)
-            LogError(("Error en packetResend - Error: " & Err.Number & " - Desc: " & Err.Description))
+            LogError(("Error en packetResend - Error: " & ex.GetType().Name & " - Desc: " & ex.Message))
         End Try
     End Sub
 
@@ -264,7 +264,7 @@ Module GameLoop
 
         Catch ex As Exception
             Console.WriteLine("Error in TickAuditoria: " & ex.Message)
-            Call LogError("Error en Timer Auditoria. Err: " & Err.Description & " - " & Err.Number)
+            Call LogError("Error en Timer Auditoria. Err: " & ex.Message & " - " & ex.GetType().Name)
         End Try
     End Sub
 
@@ -426,7 +426,7 @@ Module GameLoop
 
         Catch ex As Exception
             Console.WriteLine("Error in TickGameTimer: " & ex.Message)
-            LogError(("Error en GameTimer: " & Err.Description & " UserIndex = " & iUserIndex))
+            LogError(("Error en GameTimer: " & ex.Message & " UserIndex = " & iUserIndex))
         End Try
     End Sub
 
@@ -483,7 +483,7 @@ Module GameLoop
 
         Catch ex As Exception
             Console.WriteLine("Error in TickLluvia: " & ex.Message)
-            Call LogError("tLluvia " & Err.Number & ": " & Err.Description)
+            Call LogError("tLluvia " & ex.GetType().Name & ": " & ex.Message)
         End Try
     End Sub
 
@@ -535,7 +535,7 @@ Module GameLoop
 
         Catch ex As Exception
             Console.WriteLine("Error in TickAutoSave: " & ex.Message)
-            Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.Description)
+            Call LogError("Error en TimerAutoSave " & ex.GetType().Name & ": " & ex.Message)
         End Try
     End Sub
 

@@ -519,7 +519,7 @@ Module TCP
 
             Call _
                 LogError(
-                    "CloseSocket - Error = " & Err.Number & " - Descripción = " & Err.Description & " - UserIndex = " &
+                    "CloseSocket - Error = " & ex.GetType().Name & " - Descripción = " & ex.Message & " - UserIndex = " &
                     UserIndex)
         End Try
     End Sub
@@ -1567,7 +1567,7 @@ Module TCP
 
         Catch ex As Exception
             Console.WriteLine("Error in EstaPCarea: " & ex.Message)
-            Call LogError("Error en CloseUser. Número " & Err.Number & " Descripción: " & Err.Description)
+            Call LogError("Error en CloseUser. Número " & ex.GetType().Name & " Descripción: " & ex.Message)
         End Try
     End Sub
 
@@ -1587,7 +1587,7 @@ Module TCP
 
         Catch ex As Exception
             Console.WriteLine("Error in ReloadSokcet: " & ex.Message)
-            Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.Description)
+            Call LogError("Error en CheckSocketState " & ex.GetType().Name & ": " & ex.Message)
         End Try
     End Sub
 

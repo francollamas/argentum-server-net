@@ -83,14 +83,14 @@ Cada script:
 
 | # | Acción | Impacto | Archivos | Estado |
 |---|--------|---------|----------|--------|
-| 1 | Reemplazar `Err.Number`/`Err.Description` en bloques `Catch` | Crítico | 9 archivos, ~25 lugares | 🔲 |
+| 1 | Reemplazar `Err.Number`/`Err.Description` en bloques `Catch` | Crítico | 18 archivos, 55 lugares | ✅ |
 | 2 | Reemplazar `MsgBox()` en código de servidor | Crítico | `FileIO.vb` (4 lugares) | ✅ |
 | 3 | Reemplazar `vbNullString` | Alto | ~18 archivos | 🔲 |
 | 4 | Reemplazar `vbObjectError` en `clsByteQueue.vb` | Alto | 1 archivo, 2 líneas | ✅ |
 | 5 | Reemplazar `IsNumeric()` por `TryParse()` | Medio | 5 archivos, ~15 lugares | 🔲 |
 | 6 | Reemplazar `Today` / `TimeOfDay` en concatenaciones | Medio | 4 archivos, ~8 lugares | 🔲 |
 | 7 | Renombrar identificadores `_Renamed` antes de convertir | Bajo | Global, 4 tipos centrales | 🔲 |
-| 8 | Auditar `ReDim Preserve` sobre arrays multidimensionales | Bajo | `FileIO.vb` (2 lugares) | 🔲 |
+| 8 | Auditar `ReDim Preserve` sobre arrays multidimensionales | Bajo | `FileIO.vb` (2 lugares) | ✅ |
 
 **Leyenda**: ✅ Completado | 🔄 En progreso | 🔲 Pendiente
 
@@ -149,17 +149,25 @@ End Try
 
 ### Archivos afectados
 
-| Archivo | Usos aprox. | Estado |
-|---------|-------------|--------|
-| `Trabajo.vb` | 6 | 🔲 |
-| `SistemaCombate.vb` | 5 | 🔲 |
-| `TCP.vb` | 3 | 🔲 |
-| `FileIO.vb` | 3 | 🔲 |
-| `modHechizos.vb` | 2 | 🔲 |
-| `MODULO_NPCs.vb` | 2 | 🔲 |
-| `Modulo_InventANDobj.vb` | 1 | 🔲 |
-| `mdlCOmercioConUsuario.vb` | 1 | 🔲 |
-| `modCentinela.vb` | 1 | 🔲 |
+| Archivo | Usos | Estado |
+|---------|------|--------|
+| `Trabajo.vb` | 6 | ✅ |
+| `SistemaCombate.vb` | 5 | ✅ |
+| `TCP.vb` | 3 | ✅ |
+| `GameLoop.vb` | 6 | ✅ |
+| `InvUsuario.vb` | 6 | ✅ |
+| `modHechizos.vb` | 3 | ✅ |
+| `Modulo_UsUaRiOs.vb` | 4 | ✅ |
+| `GameLogic.vb` | 2 | ✅ |
+| `General.vb` | 2 | ✅ |
+| `MODULO_NPCs.vb` | 2 | ✅ |
+| `modGuilds.vb` | 2 | ✅ |
+| `Modulo_InventANDobj.vb` | 1 | ✅ |
+| `mdlCOmercioConUsuario.vb` | 1 | ✅ |
+| `modCentinela.vb` | 1 | ✅ |
+| `clsClan.vb` | 1 | ✅ |
+| `ConsultasPopulares.vb` | 1 | ✅ |
+| `Protocol.vb` | 4 (fuera de Catch, COM VB6 — no tocado intencionalmente) | ⚠️ |
 
 ### Verificación
 
@@ -514,7 +522,7 @@ rg 'ReDim Preserve' Legacy/Source/ --type vb
 |------|--------|-------------|-----------------|
 | 1 | Acción 4 — `vbObjectError` | Edición directa | 5 min |
 | 2 | Acción 2 — `MsgBox()` | Edición directa | 15 min |
-| 3 | Acción 8 — Auditoría `ReDim Preserve` multidim | Script Roslyn (solo lectura) | 20 min |
+| 3 | Acción 8 — Auditoría `ReDim Preserve` multidim | Script Roslyn (solo lectura) | 20 min | ✅ |
 | 4 | Acción 1 — `Err.Number`/`Err.Description` | Script Roslyn | 30 min |
 | 5 | Acción 3 — `vbNullString` | Script Roslyn | 30 min |
 | 6 | Acción 6 — `Today`/`TimeOfDay` | Script Roslyn | 20 min |

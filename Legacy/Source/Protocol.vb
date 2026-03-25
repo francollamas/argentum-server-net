@@ -1266,7 +1266,7 @@ Module Protocol
             Console.WriteLine("Error in HandleGMCommands: " & ex.Message)
             Call _
                 LogError(
-                    "Error en GmCommands. Error: " & Err.Number & " - " & Err.Description & ". Paquete: " &
+                    "Error en GmCommands. Error: " & ex.GetType().Name & " - " & ex.Message & ". Paquete: " &
                     Command_Renamed)
         End Try
     End Sub

@@ -222,7 +222,7 @@ Module Extra
 
         Catch ex As Exception
             Console.WriteLine("Error in EsNewbie: " & ex.Message)
-            Call LogError("Error en DotileEvents. Error: " & Err.Number & " - Desc: " & Err.Description)
+            Call LogError("Error en DotileEvents. Error: " & ex.GetType().Name & " - Desc: " & ex.Message)
         End Try
     End Sub
 
@@ -1026,7 +1026,7 @@ Module Extra
 
         Catch ex As Exception
             Console.WriteLine("Error in InRangoVision: " & ex.Message)
-            Call LogError("Error en LookAtTile. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en LookAtTile. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 

@@ -318,7 +318,7 @@ Module InvNpc
 
         Catch ex As Exception
             Console.WriteLine("Error in NPC_TIRAR_ITEMS: " & ex.Message)
-            Call LogError("Error en TirarOro. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en TirarOro. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 End Module
