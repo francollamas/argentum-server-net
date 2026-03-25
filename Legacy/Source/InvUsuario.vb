@@ -350,18 +350,18 @@ Module InvUsuario
         '
         '***************************************************
 
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As Obj
+        'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+        Dim obj As Obj
 
         With UserList(UserIndex)
             If num > 0 Then
 
                 If num > .Invent.Object_Renamed(Slot).Amount Then num = .Invent.Object_Renamed(Slot).Amount
 
-                Obj_Renamed.ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
-                Obj_Renamed.Amount = num
+                obj.ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
+                obj.Amount = num
 
-                If ItemNewbie(Obj_Renamed.ObjIndex) AndAlso (.flags.Privilegios And PlayerType.User) <> 0 Then
+                If ItemNewbie(obj.ObjIndex) AndAlso (.flags.Privilegios And PlayerType.User) <> 0 Then
                     Call _
                         WriteConsoleMsg(UserIndex, "No puedes tirar objetos newbie.",
                                         FontTypeNames.FONTTYPE_INFO)
@@ -371,16 +371,16 @@ Module InvUsuario
                 'Check objeto en el suelo
                 If _
                     MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex = 0 Or
-                    MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex = Obj_Renamed.ObjIndex Then
+                    MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex = obj.ObjIndex Then
                     If num + MapData(.Pos.Map, X, Y).ObjInfo.Amount > MAX_INVENTORY_OBJS Then
                         num = MAX_INVENTORY_OBJS - MapData(.Pos.Map, X, Y).ObjInfo.Amount
                     End If
 
-                    Call MakeObj(Obj_Renamed, Map, X, Y)
+                    Call MakeObj(obj, Map, X, Y)
                     Call QuitarUserInvItem(UserIndex, Slot, num)
                     Call UpdateUserInv(False, UserIndex, Slot)
 
-                    If ObjData_Renamed(Obj_Renamed.ObjIndex).OBJType = eOBJType.otBarcos Then
+                    If ObjData_Renamed(obj.ObjIndex).OBJType = eOBJType.otBarcos Then
                         Call _
                             WriteConsoleMsg(UserIndex, "¡¡ATENCIÓN!! ¡ACABAS DE TIRAR TU BARCA!",
                                             FontTypeNames.FONTTYPE_TALK)
@@ -389,23 +389,23 @@ Module InvUsuario
                     If (.flags.Privilegios And PlayerType.User) = 0 Then _
                         Call _
                             LogGM(.name,
-                                  "Tiró cantidad:" & num & " Objeto:" & ObjData_Renamed(Obj_Renamed.ObjIndex).name)
+                                  "Tiró cantidad:" & num & " Objeto:" & ObjData_Renamed(obj.ObjIndex).name)
 
                     'Log de Objetos que se tiran al piso. Pablo (ToxicWaste) 07/09/07
                     'Es un Objeto que tenemos que loguear?
-                    If ObjData_Renamed(Obj_Renamed.ObjIndex).Log = 1 Then
+                    If ObjData_Renamed(obj.ObjIndex).Log = 1 Then
                         Call _
                             LogDesarrollo(
-                                .name & " tiró al piso " & Obj_Renamed.Amount & " " &
-                                ObjData_Renamed(Obj_Renamed.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
-                    ElseIf Obj_Renamed.Amount > 5000 Then _
+                                .name & " tiró al piso " & obj.Amount & " " &
+                                ObjData_Renamed(obj.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
+                    ElseIf obj.Amount > 5000 Then _
 'Es mucha cantidad? > Subí a 5000 el minimo porque si no se llenaba el log de cosas al pedo. (NicoNZ)
                         'Si no es de los prohibidos de loguear, lo logueamos.
-                        If ObjData_Renamed(Obj_Renamed.ObjIndex).NoLog <> 1 Then
+                        If ObjData_Renamed(obj.ObjIndex).NoLog <> 1 Then
                             Call _
                                 LogDesarrollo(
-                                    .name & " tiró al piso " & Obj_Renamed.Amount & " " &
-                                    ObjData_Renamed(Obj_Renamed.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " &
+                                    .name & " tiró al piso " & obj.Amount & " " &
+                                    ObjData_Renamed(obj.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " &
                                     Y)
                         End If
                     End If
@@ -542,8 +542,8 @@ Module InvUsuario
         '***************************************************
 
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As ObjData
+        'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+        Dim obj As ObjData
         Dim MiObj As Obj
         Dim ObjPos As String
 
@@ -559,13 +559,13 @@ Module InvUsuario
                     X = .Pos.X
                     Y = .Pos.Y
 
-                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = ObjData_Renamed(MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex)
+                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = ObjData_Renamed(MapData(.Pos.Map, .Pos.X, .Pos.Y).ObjInfo.ObjIndex)
                     MiObj.Amount = MapData(.Pos.Map, X, Y).ObjInfo.Amount
                     MiObj.ObjIndex = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
 
                     ' Oro directo a la billetera!
-                    If Obj_Renamed.OBJType = eOBJType.otGuita Then
+                    If obj.OBJType = eOBJType.otGuita Then
                         .Stats.GLD = .Stats.GLD + MiObj.Amount
                         'Quitamos el objeto
                         Call EraseObj(MapData(.Pos.Map, X, Y).ObjInfo.Amount, .Pos.Map, .Pos.X, .Pos.Y)
@@ -619,8 +619,8 @@ Module InvUsuario
 
             'Desequipa el item slot del inventario
             'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Dim Obj_Renamed As ObjData
+            'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim obj As ObjData
 
             With UserList(UserIndex)
                 With .Invent
@@ -630,11 +630,11 @@ Module InvUsuario
                         Exit Sub
                     End If
 
-                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = ObjData_Renamed(.Object_Renamed(Slot).ObjIndex)
+                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = ObjData_Renamed(.Object_Renamed(Slot).ObjIndex)
                 End With
 
-                Select Case Obj_Renamed.OBJType
+                Select Case obj.OBJType
                     Case eOBJType.otWeapon
                         With .Invent
                             .Object_Renamed(Slot).Equipped = 0
@@ -798,24 +798,24 @@ Module InvUsuario
 
             'Equipa un item del inventario
             'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Dim Obj_Renamed As ObjData
+            'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim obj As ObjData
             Dim ObjIndex As Short
             Dim sMotivo As String
 
             With UserList(UserIndex)
                 ObjIndex = .Invent.Object_Renamed(Slot).ObjIndex
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = ObjData_Renamed(ObjIndex)
+                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                obj = ObjData_Renamed(ObjIndex)
 
-                If Obj_Renamed.Newbie = 1 And Not EsNewbie(UserIndex) Then
+                If obj.Newbie = 1 And Not EsNewbie(UserIndex) Then
                     Call _
                         WriteConsoleMsg(UserIndex, "Sólo los newbies pueden usar este objeto.",
                                         FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
                 End If
 
-                Select Case Obj_Renamed.OBJType
+                Select Case obj.OBJType
                     Case eOBJType.otWeapon
                         If _
                             ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) And
@@ -949,9 +949,9 @@ Module InvUsuario
                             .Invent.ArmourEqpSlot = Slot
 
                             If .flags.Mimetizado = 1 Then
-                                .CharMimetizado.body = Obj_Renamed.Ropaje
+                                .CharMimetizado.body = obj.Ropaje
                             Else
-                                .Char_Renamed.body = Obj_Renamed.Ropaje
+                                .Char_Renamed.body = obj.Ropaje
                                 Call _
                                     ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head,
                                                    .Char_Renamed.heading,
@@ -992,9 +992,9 @@ Module InvUsuario
                             .Invent.CascoEqpObjIndex = ObjIndex
                             .Invent.CascoEqpSlot = Slot
                             If .flags.Mimetizado = 1 Then
-                                .CharMimetizado.CascoAnim = Obj_Renamed.CascoAnim
+                                .CharMimetizado.CascoAnim = obj.CascoAnim
                             Else
-                                .Char_Renamed.CascoAnim = Obj_Renamed.CascoAnim
+                                .Char_Renamed.CascoAnim = obj.CascoAnim
                                 Call _
                                     ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head,
                                                    .Char_Renamed.heading,
@@ -1039,9 +1039,9 @@ Module InvUsuario
                             .Invent.EscudoEqpSlot = Slot
 
                             If .flags.Mimetizado = 1 Then
-                                .CharMimetizado.ShieldAnim = Obj_Renamed.ShieldAnim
+                                .CharMimetizado.ShieldAnim = obj.ShieldAnim
                             Else
-                                .Char_Renamed.ShieldAnim = Obj_Renamed.ShieldAnim
+                                .Char_Renamed.ShieldAnim = obj.ShieldAnim
 
                                 Call _
                                     ChangeUserChar(UserIndex, .Char_Renamed.body, .Char_Renamed.Head,
@@ -1070,8 +1070,8 @@ Module InvUsuario
                         .Invent.Object_Renamed(Slot).Equipped = 1
                         .Invent.MochilaEqpObjIndex = ObjIndex
                         .Invent.MochilaEqpSlot = Slot
-                        .CurrentInventorySlots = Convert.ToByte(MAX_NORMAL_INVENTORY_SLOTS + Obj_Renamed.MochilaType*5)
-                        Call WriteAddSlots(UserIndex, CType(Convert.ToInt32(Obj_Renamed.MochilaType), eMochilas))
+                        .CurrentInventorySlots = Convert.ToByte(MAX_NORMAL_INVENTORY_SLOTS + obj.MochilaType*5)
+                        Call WriteAddSlots(UserIndex, CType(Convert.ToInt32(obj.MochilaType), eMochilas))
                 End Select
             End With
 
@@ -1138,8 +1138,8 @@ Module InvUsuario
         '*************************************************
 
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As ObjData
+        'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+        Dim obj As ObjData
         Dim ObjIndex As Short
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura TargObj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim TargObj As ObjData
@@ -1149,18 +1149,18 @@ Module InvUsuario
 
             If .Invent.Object_Renamed(Slot).Amount = 0 Then Exit Sub
 
-            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            Obj_Renamed = ObjData_Renamed(.Invent.Object_Renamed(Slot).ObjIndex)
+            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            obj = ObjData_Renamed(.Invent.Object_Renamed(Slot).ObjIndex)
 
-            If Obj_Renamed.Newbie = 1 And Not EsNewbie(UserIndex) Then
+            If obj.Newbie = 1 And Not EsNewbie(UserIndex) Then
                 Call _
                     WriteConsoleMsg(UserIndex, "Sólo los newbies pueden usar estos objetos.",
                                     FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
             End If
 
-            If Obj_Renamed.OBJType = eOBJType.otWeapon Then
-                If Obj_Renamed.proyectil = 1 Then
+            If obj.OBJType = eOBJType.otWeapon Then
+                If obj.proyectil = 1 Then
 
                     'valido para evitar el flood pero no bloqueo. El bloqueo se hace en WLC con proyectiles.
                     If Not IntervaloPermiteUsar(UserIndex, False) Then Exit Sub
@@ -1176,7 +1176,7 @@ Module InvUsuario
             .flags.TargetObjInvIndex = ObjIndex
             .flags.TargetObjInvSlot = Slot
 
-            Select Case Obj_Renamed.OBJType
+            Select Case obj.OBJType
                 Case eOBJType.otUseOnce
                     If .flags.Muerto = 1 Then
                         Call _
@@ -1186,7 +1186,7 @@ Module InvUsuario
                     End If
 
                     'Usa el item
-                    .Stats.MinHam = .Stats.MinHam + Obj_Renamed.MinHam
+                    .Stats.MinHam = .Stats.MinHam + obj.MinHam
                     If .Stats.MinHam > .Stats.MaxHam Then .Stats.MinHam = .Stats.MaxHam
                     .flags.Hambre = 0
                     Call WriteUpdateHungerAndThirst(UserIndex)
@@ -1352,17 +1352,17 @@ Module InvUsuario
                     End If
 
                     .flags.TomoPocion = True
-                    .flags.TipoPocion = Obj_Renamed.TipoPocion
+                    .flags.TipoPocion = obj.TipoPocion
 
                     Select Case .flags.TipoPocion
 
                         Case 1 'Modif la agilidad
-                            .flags.DuracionEfecto = Obj_Renamed.DuracionEfecto
+                            .flags.DuracionEfecto = obj.DuracionEfecto
 
                             'Usa el item
                             .Stats.UserAtributos(eAtributos.Agilidad) =
                                 Convert.ToByte(.Stats.UserAtributos(eAtributos.Agilidad) +
-                                RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador))
+                                RandomNumber(obj.MinModificador, obj.MaxModificador))
                             If .Stats.UserAtributos(eAtributos.Agilidad) > MAXATRIBUTOS Then _
                                 .Stats.UserAtributos(eAtributos.Agilidad) = MAXATRIBUTOS
                             If _
@@ -1387,12 +1387,12 @@ Module InvUsuario
                             Call WriteUpdateDexterity(UserIndex)
 
                         Case 2 'Modif la fuerza
-                            .flags.DuracionEfecto = Obj_Renamed.DuracionEfecto
+                            .flags.DuracionEfecto = obj.DuracionEfecto
 
                             'Usa el item
                             .Stats.UserAtributos(eAtributos.Fuerza) =
                                 Convert.ToByte(.Stats.UserAtributos(eAtributos.Fuerza) +
-                                RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador))
+                                RandomNumber(obj.MinModificador, obj.MaxModificador))
                             If .Stats.UserAtributos(eAtributos.Fuerza) > MAXATRIBUTOS Then _
                                 .Stats.UserAtributos(eAtributos.Fuerza) = MAXATRIBUTOS
                             If _
@@ -1420,7 +1420,7 @@ Module InvUsuario
                         Case 3 'Pocion roja, restaura HP
                             'Usa el item
                             .Stats.MinHp = .Stats.MinHp +
-                                           Convert.ToInt16(RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador))
+                                           Convert.ToInt16(RandomNumber(obj.MinModificador, obj.MaxModificador))
                             If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
 
                             'Quitamos del inv el item
@@ -1491,7 +1491,7 @@ Module InvUsuario
                                             FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
                     End If
-                    .Stats.MinAGU = .Stats.MinAGU + Obj_Renamed.MinSed
+                    .Stats.MinAGU = .Stats.MinAGU + obj.MinSed
                     If .Stats.MinAGU > .Stats.MaxAGU Then .Stats.MinAGU = .Stats.MaxAGU
                     .flags.Sed = 0
                     Call WriteUpdateHungerAndThirst(UserIndex)
@@ -1527,7 +1527,7 @@ Module InvUsuario
                         If TargObj.Cerrada = 1 Then
                             '¿Cerrada con llave?
                             If TargObj.Llave > 0 Then
-                                If TargObj.clave = Obj_Renamed.clave Then
+                                If TargObj.clave = obj.clave Then
 
                                     MapData(.flags.TargetObjMap, .flags.TargetObjX, .flags.TargetObjY).ObjInfo.ObjIndex _
                                         =
@@ -1548,7 +1548,7 @@ Module InvUsuario
                                     Exit Sub
                                 End If
                             Else
-                                If TargObj.clave = Obj_Renamed.clave Then
+                                If TargObj.clave = obj.clave Then
                                     MapData(.flags.TargetObjMap, .flags.TargetObjX, .flags.TargetObjY).ObjInfo.ObjIndex _
                                         =
                                         ObjData_Renamed(
@@ -1601,7 +1601,7 @@ Module InvUsuario
                                             FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
                     End If
-                    .Stats.MinAGU = .Stats.MinAGU + Obj_Renamed.MinSed
+                    .Stats.MinAGU = .Stats.MinAGU + obj.MinSed
                     If .Stats.MinAGU > .Stats.MaxAGU Then .Stats.MinAGU = .Stats.MaxAGU
                     .flags.Sed = 0
                     Call WriteUpdateHungerAndThirst(UserIndex)
@@ -1654,7 +1654,7 @@ Module InvUsuario
                         Exit Sub
                     End If
 
-                    If Obj_Renamed.Real <> 0 Then '¿Es el Cuerno Real?
+                    If obj.Real <> 0 Then '¿Es el Cuerno Real?
                         If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
                             If MapInfo_Renamed(.Pos.Map).Pk = False Then
                                 Call _
@@ -1666,12 +1666,12 @@ Module InvUsuario
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
                                 Call _
-                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
+                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(obj.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call AlertarFaccionarios(UserIndex)
                                 Call _
                                     SendData(SendTarget.toMap, .Pos.Map,
-                                             PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
+                                             PrepareMessagePlayWave(Convert.ToByte(obj.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                             Exit Sub
@@ -1681,7 +1681,7 @@ Module InvUsuario
                                                 FontTypeNames.FONTTYPE_INFO)
                             Exit Sub
                         End If
-                    ElseIf Obj_Renamed.Caos <> 0 Then '¿Es el Cuerno Legión?
+                    ElseIf obj.Caos <> 0 Then '¿Es el Cuerno Legión?
                         If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
                             If MapInfo_Renamed(.Pos.Map).Pk = False Then
                                 Call _
@@ -1693,12 +1693,12 @@ Module InvUsuario
                             ' Los admin invisibles solo producen sonidos a si mismos
                             If .flags.AdminInvisible = 1 Then
                                 Call _
-                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
+                                    EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(obj.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             Else
                                 Call AlertarFaccionarios(UserIndex)
                                 Call _
                                     SendData(SendTarget.toMap, .Pos.Map,
-                                             PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
+                                             PrepareMessagePlayWave(Convert.ToByte(obj.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                             End If
 
                             Exit Sub
@@ -1712,11 +1712,11 @@ Module InvUsuario
                     'Si llega aca es porque es o Laud o Tambor o Flauta
                     ' Los admin invisibles solo producen sonidos a si mismos
                     If .flags.AdminInvisible = 1 Then
-                        Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
+                        Call EnviarDatosASlot(UserIndex, PrepareMessagePlayWave(Convert.ToByte(obj.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     Else
                         Call _
                             SendData(SendTarget.ToPCArea, UserIndex,
-                                     PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
+                                     PrepareMessagePlayWave(Convert.ToByte(obj.Snd1), Convert.ToByte(.Pos.X), Convert.ToByte(.Pos.Y)))
                     End If
 
                 Case eOBJType.otBarcos
@@ -1743,7 +1743,7 @@ Module InvUsuario
                           LegalPos(.Pos.Map, Convert.ToInt16(.Pos.X + 1), .Pos.Y, True, False) Or
                           LegalPos(.Pos.Map, .Pos.X, Convert.ToInt16(.Pos.Y + 1), True, False)) And .flags.Navegando = 0) Or
                         .flags.Navegando = 1 Then
-                        Call DoNavega(UserIndex, Obj_Renamed, Slot)
+                        Call DoNavega(UserIndex, obj, Slot)
                     Else
                         Call _
                             WriteConsoleMsg(UserIndex, "¡Debes aproximarte al agua para usar el barco!",

@@ -442,8 +442,8 @@ Module SistemaCombate
         Dim absorbido As Short
         Dim defbarco As Short
         'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As ObjData
+        'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+        Dim obj As ObjData
 
         daño = Convert.ToInt16(RandomNumber(Npclist(NpcIndex).Stats.MinHIT, Npclist(NpcIndex).Stats.MaxHIT))
 
@@ -451,9 +451,9 @@ Module SistemaCombate
         Dim Obj2 As ObjData
         With UserList(UserIndex)
             If .flags.Navegando = 1 And .Invent.BarcoObjIndex > 0 Then
-                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = ObjData_Renamed(.Invent.BarcoObjIndex)
-                defbarco = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
+                'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                obj = ObjData_Renamed(.Invent.BarcoObjIndex)
+                defbarco = Convert.ToInt16(RandomNumber(obj.MinDef, obj.MaxDef))
             End If
 
             Lugar = Convert.ToInt16(RandomNumber(Convert.ToInt32(PartesCuerpo.bCabeza), Convert.ToInt32(PartesCuerpo.bTorso)))
@@ -462,21 +462,21 @@ Module SistemaCombate
                 Case Convert.ToInt16(PartesCuerpo.bCabeza)
                     'Si tiene casco absorbe el golpe
                     If .Invent.CascoEqpObjIndex > 0 Then
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        Obj_Renamed = ObjData_Renamed(.Invent.CascoEqpObjIndex)
-                        absorbido = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
+                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        obj = ObjData_Renamed(.Invent.CascoEqpObjIndex)
+                        absorbido = Convert.ToInt16(RandomNumber(obj.MinDef, obj.MaxDef))
                     End If
                 Case Else
                     'Si tiene armadura absorbe el golpe
                     If .Invent.ArmourEqpObjIndex > 0 Then
-                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        Obj_Renamed = ObjData_Renamed(.Invent.ArmourEqpObjIndex)
+                        'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        obj = ObjData_Renamed(.Invent.ArmourEqpObjIndex)
                         If .Invent.EscudoEqpObjIndex <> 0 Then
                             'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                             Obj2 = ObjData_Renamed(.Invent.EscudoEqpObjIndex)
-                            absorbido = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef, Obj_Renamed.MaxDef + Obj2.MaxDef))
+                            absorbido = Convert.ToInt16(RandomNumber(obj.MinDef + Obj2.MinDef, obj.MaxDef + Obj2.MaxDef))
                         Else
-                            absorbido = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
+                            absorbido = Convert.ToInt16(RandomNumber(obj.MinDef, obj.MaxDef))
                         End If
                     End If
             End Select
@@ -1135,8 +1135,8 @@ Module SistemaCombate
             Dim absorbido As Integer
             Dim defbarco As Short
             'UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Dim Obj_Renamed As ObjData
+            'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim obj As ObjData
             Dim Resist As Byte
 
             daño = CalcularDaño(AtacanteIndex)
@@ -1148,15 +1148,15 @@ Module SistemaCombate
             Dim Obj2 As ObjData
             With UserList(AtacanteIndex)
                 If .flags.Navegando = 1 And .Invent.BarcoObjIndex > 0 Then
-                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = ObjData_Renamed(.Invent.BarcoObjIndex)
-                    daño = daño + RandomNumber(Obj_Renamed.MinHIT, Obj_Renamed.MaxHIT)
+                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = ObjData_Renamed(.Invent.BarcoObjIndex)
+                    daño = daño + RandomNumber(obj.MinHIT, obj.MaxHIT)
                 End If
 
                 If UserList(VictimaIndex).flags.Navegando = 1 And UserList(VictimaIndex).Invent.BarcoObjIndex > 0 Then
-                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.BarcoObjIndex)
-                    defbarco = Convert.ToInt16(RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef))
+                    'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = ObjData_Renamed(UserList(VictimaIndex).Invent.BarcoObjIndex)
+                    defbarco = Convert.ToInt16(RandomNumber(obj.MinDef, obj.MaxDef))
                 End If
 
                 If .Invent.WeaponEqpObjIndex > 0 Then
@@ -1169,9 +1169,9 @@ Module SistemaCombate
                     Case Convert.ToByte(PartesCuerpo.bCabeza)
                         'Si tiene casco absorbe el golpe
                         If UserList(VictimaIndex).Invent.CascoEqpObjIndex > 0 Then
-                            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.CascoEqpObjIndex)
-                            absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
+                            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            obj = ObjData_Renamed(UserList(VictimaIndex).Invent.CascoEqpObjIndex)
+                            absorbido = RandomNumber(obj.MinDef, obj.MaxDef)
                             absorbido = absorbido + defbarco - Resist
                             daño = daño - absorbido
                             If daño < 0 Then daño = 1
@@ -1180,15 +1180,15 @@ Module SistemaCombate
                     Case Else
                         'Si tiene armadura absorbe el golpe
                         If UserList(VictimaIndex).Invent.ArmourEqpObjIndex > 0 Then
-                            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Obj_Renamed = ObjData_Renamed(UserList(VictimaIndex).Invent.ArmourEqpObjIndex)
+                            'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            obj = ObjData_Renamed(UserList(VictimaIndex).Invent.ArmourEqpObjIndex)
                             If UserList(VictimaIndex).Invent.EscudoEqpObjIndex <> 0 Then
                                 'UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                                 Obj2 = ObjData_Renamed(UserList(VictimaIndex).Invent.EscudoEqpObjIndex)
-                                absorbido = RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef,
-                                                         Obj_Renamed.MaxDef + Obj2.MaxDef)
+                                absorbido = RandomNumber(obj.MinDef + Obj2.MinDef,
+                                                         obj.MaxDef + Obj2.MaxDef)
                             Else
-                                absorbido = RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef)
+                                absorbido = RandomNumber(obj.MinDef, obj.MaxDef)
                             End If
                             absorbido = absorbido + defbarco - Resist
                             daño = daño - absorbido

@@ -1524,7 +1524,7 @@ Module TCP
 
 
             'Quitar el dialogo
-            'If MapInfo(Map).NumUsers > 0 Then
+            'If MapInfo_Renamed(Map).NumUsers > 0 Then
             '    Call SendToUserArea(UserIndex, "QDL" & UserList(UserIndex).Char.charindex)
             'End If
 

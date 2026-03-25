@@ -304,8 +304,8 @@ Module Acciones
 
             Dim Suerte As Byte
             Dim exito As Byte
-            'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Dim Obj_Renamed As Obj
+            'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Dim obj As Obj
 
             Dim Pos As WorldPos
             Pos.Map = Map
@@ -344,12 +344,12 @@ Module Acciones
 
                 If exito = 1 Then
                     If MapInfo_Renamed(.Pos.Map).Zona <> Ciudad Then
-                        Obj_Renamed.ObjIndex = FOGATA
-                        Obj_Renamed.Amount = 1
+                        obj.ObjIndex = FOGATA
+                        obj.Amount = 1
 
                         Call WriteConsoleMsg(UserIndex, "Has prendido la fogata.", FontTypeNames.FONTTYPE_INFO)
 
-                        Call MakeObj(Obj_Renamed, Map, X, Y)
+                        Call MakeObj(obj, Map, X, Y)
 
                         'Las fogatas prendidas se deben eliminar
                         Fogatita.Map = Map

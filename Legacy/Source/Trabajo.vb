@@ -1441,8 +1441,8 @@ Module Trabajo
 
         Dim Suerte As Byte
         Dim exito As Byte
-        'UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Dim Obj_Renamed As Obj
+        'UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+        Dim obj As Obj
         Dim posMadera As WorldPos
 
         If Not LegalPos(Map, X, Y) Then Exit Sub
@@ -1496,14 +1496,14 @@ Module Trabajo
         exito = Convert.ToByte(RandomNumber(1, Suerte))
 
         If exito = 1 Then
-            Obj_Renamed.ObjIndex = FOGATA_APAG
-            Obj_Renamed.Amount = Convert.ToInt16(MapData(Map, X, Y).ObjInfo.Amount\3)
+            obj.ObjIndex = FOGATA_APAG
+            obj.Amount = Convert.ToInt16(MapData(Map, X, Y).ObjInfo.Amount\3)
 
             Call _
-                WriteConsoleMsg(UserIndex, "Has hecho " & Obj_Renamed.Amount & " fogatas.",
+                WriteConsoleMsg(UserIndex, "Has hecho " & obj.Amount & " fogatas.",
                                 FontTypeNames.FONTTYPE_INFO)
 
-            Call MakeObj(Obj_Renamed, Map, X, Y)
+            Call MakeObj(obj, Map, X, Y)
 
             'Seteamos la fogata como el nuevo TargetObj del user
             UserList(UserIndex).flags.TargetObj = FOGATA_APAG

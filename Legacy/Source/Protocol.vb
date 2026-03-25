@@ -15776,7 +15776,7 @@ Module Protocol
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim i As Integer
-                Dim Obj_Renamed As ObjData
+                Dim obj As ObjData
                 Dim validIndexes() As Short
                 Dim Count As Short
                 ReDim validIndexes(ArmasHerrero.Length - 1)
@@ -15794,14 +15794,14 @@ Module Protocol
                     Next i
                     Call .WriteInteger(Count)
                     For i = 1 To Count
-                        Obj_Renamed = ObjData_Renamed(ArmasHerrero(validIndexes(i)))
-                        Call .WriteASCIIString(Obj_Renamed.name)
-                        Call .WriteInteger(Obj_Renamed.GrhIndex)
-                        Call .WriteInteger(Obj_Renamed.LingH)
-                        Call .WriteInteger(Obj_Renamed.LingP)
-                        Call .WriteInteger(Obj_Renamed.LingO)
+                        obj = ObjData_Renamed(ArmasHerrero(validIndexes(i)))
+                        Call .WriteASCIIString(obj.name)
+                        Call .WriteInteger(obj.GrhIndex)
+                        Call .WriteInteger(obj.LingH)
+                        Call .WriteInteger(obj.LingP)
+                        Call .WriteInteger(obj.LingO)
                         Call .WriteInteger(ArmasHerrero(validIndexes(i)))
-                        Call .WriteInteger(Obj_Renamed.Upgrade)
+                        Call .WriteInteger(obj.Upgrade)
                     Next i
                 End With
             End Sub,
@@ -15820,7 +15820,7 @@ Module Protocol
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim i As Integer
-                Dim Obj_Renamed As ObjData
+                Dim obj As ObjData
                 Dim validIndexes() As Short
                 Dim Count As Short
                 ReDim validIndexes(ArmadurasHerrero.Length - 1)
@@ -15838,14 +15838,14 @@ Module Protocol
                     Next i
                     Call .WriteInteger(Count)
                     For i = 1 To Count
-                        Obj_Renamed = ObjData_Renamed(ArmadurasHerrero(validIndexes(i)))
-                        Call .WriteASCIIString(Obj_Renamed.name)
-                        Call .WriteInteger(Obj_Renamed.GrhIndex)
-                        Call .WriteInteger(Obj_Renamed.LingH)
-                        Call .WriteInteger(Obj_Renamed.LingP)
-                        Call .WriteInteger(Obj_Renamed.LingO)
+                        obj = ObjData_Renamed(ArmadurasHerrero(validIndexes(i)))
+                        Call .WriteASCIIString(obj.name)
+                        Call .WriteInteger(obj.GrhIndex)
+                        Call .WriteInteger(obj.LingH)
+                        Call .WriteInteger(obj.LingP)
+                        Call .WriteInteger(obj.LingO)
                         Call .WriteInteger(ArmadurasHerrero(validIndexes(i)))
-                        Call .WriteInteger(Obj_Renamed.Upgrade)
+                        Call .WriteInteger(obj.Upgrade)
                     Next i
                 End With
             End Sub,
@@ -15864,7 +15864,7 @@ Module Protocol
         RetryOnceIfNotEnoughSpace(
             Sub()
                 Dim i As Integer
-                Dim Obj_Renamed As ObjData
+                Dim obj As ObjData
                 Dim validIndexes() As Short
                 Dim Count As Short
                 ReDim validIndexes(ObjCarpintero.Length - 1)
@@ -15881,13 +15881,13 @@ Module Protocol
                     Next i
                     Call .WriteInteger(Count)
                     For i = 1 To Count
-                        Obj_Renamed = ObjData_Renamed(ObjCarpintero(validIndexes(i)))
-                        Call .WriteASCIIString(Obj_Renamed.name)
-                        Call .WriteInteger(Obj_Renamed.GrhIndex)
-                        Call .WriteInteger(Obj_Renamed.Madera)
-                        Call .WriteInteger(Obj_Renamed.MaderaElfica)
+                        obj = ObjData_Renamed(ObjCarpintero(validIndexes(i)))
+                        Call .WriteASCIIString(obj.name)
+                        Call .WriteInteger(obj.GrhIndex)
+                        Call .WriteInteger(obj.Madera)
+                        Call .WriteInteger(obj.MaderaElfica)
                         Call .WriteInteger(ObjCarpintero(validIndexes(i)))
-                        Call .WriteInteger(Obj_Renamed.Upgrade)
+                        Call .WriteInteger(obj.Upgrade)
                     Next i
                 End With
             End Sub,
