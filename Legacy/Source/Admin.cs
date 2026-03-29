@@ -142,7 +142,7 @@ internal static class Admin
                     ES.GrabarMapa(loopX, AppDomain.CurrentDomain.BaseDirectory + "WorldBackUp/Mapa" + loopX);
 
             if (File.Exists(Declaraciones.DatPath + "/bkNpc.dat"))
-                FileSystem.Kill(Declaraciones.DatPath + "bkNpc.dat");
+                File.Delete(Declaraciones.DatPath + "bkNpc.dat");
             // If System.IO.File.Exists(DatPath & "/bkNPCs-HOSTILES.dat") Then Kill (DatPath & "bkNPCs-HOSTILES.dat")
 
             var loopTo2 = Declaraciones.LastNPC;
@@ -236,7 +236,7 @@ internal static class Admin
         try
         {
             if (File.Exists(Declaraciones.CharPath + UserName.ToUpper() + ".chr"))
-                FileSystem.Kill(Declaraciones.CharPath + UserName.ToUpper() + ".chr");
+                File.Delete(Declaraciones.CharPath + UserName.ToUpper() + ".chr");
         }
 
         catch (Exception ex)
@@ -560,8 +560,8 @@ internal static class Admin
                                 (cantPenas + 1).ToString());
                             ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + (cantPenas + 1),
                                 withBlock.name.ToLower() + ": BAN POR " + reason.ToLower() + " " +
-                                Conversions.ToString(DateTime.Today) + " " +
-                                Conversions.ToString(DateAndTime.TimeOfDay));
+                                DateTime.Today.ToString() + " " +
+                                DateTime.Now.TimeOfDay.ToString());
 
                             if ((userPriv & rank) == ((int)withBlock.flags.Privilegios & rank))
                             {
@@ -623,7 +623,7 @@ internal static class Admin
                 ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "Cant", (cantPenas + 1).ToString());
                 ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + (cantPenas + 1),
                     withBlock.name.ToLower() + ": BAN POR " + reason.ToLower() + " " +
-                    Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay));
+                    DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString());
 
                 TCP.CloseSocket(tUser);
             }

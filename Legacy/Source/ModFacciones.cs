@@ -307,7 +307,7 @@ internal static class ModFacciones
             if (withBlock.flags.Navegando != 0)
                 UsUaRiOs.RefreshCharStatus(UserIndex); // Actualizamos la barca si esta navegando (NicoNZ)
 
-            var argdesc = withBlock.name + " ingresó el " + Conversions.ToString(DateTime.Today) +
+            var argdesc = withBlock.name + " ingresó el " + DateTime.Today.ToString() +
                           " cuando era nivel " + withBlock.Stats.ELV;
             General.LogEjercitoReal(ref argdesc);
         }
@@ -871,7 +871,7 @@ internal static class ModFacciones
             if (withBlock.flags.Navegando != 0)
                 UsUaRiOs.RefreshCharStatus(UserIndex); // Actualizamos la barca si esta navegando (NicoNZ)
 
-            var argdesc = withBlock.name + " ingresó el " + Conversions.ToString(DateTime.Today) +
+            var argdesc = withBlock.name + " ingresó el " + DateTime.Today.ToString() +
                           " cuando era nivel " + withBlock.Stats.ELV;
             General.LogEjercitoCaos(ref argdesc);
         }

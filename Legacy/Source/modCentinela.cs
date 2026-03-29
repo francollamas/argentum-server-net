@@ -129,8 +129,8 @@ internal static class modCentinela
                     "Cant", ref argEmptySpaces)));
                 ES.WriteVar(Declaraciones.CharPath + name + ".chr", "PENAS", "Cant", (numPenas + 1).ToString());
                 ES.WriteVar(Declaraciones.CharPath + name + ".chr", "PENAS", "P" + (numPenas + 1),
-                    "CENTINELA : BAN POR MACRO INASISTIDO " + Conversions.ToString(DateTime.Today) + " " +
-                    Conversions.ToString(DateAndTime.TimeOfDay));
+                    "CENTINELA : BAN POR MACRO INASISTIDO " + DateTime.Today.ToString() + " " +
+                    DateTime.Now.TimeOfDay.ToString());
 
                 // Evitamos loguear el logout
                 Index = Centinela.RevisandoUserIndex;
@@ -351,7 +351,7 @@ internal static class modCentinela
         try
         {
             General.AppendLog("logs/Centinela.log",
-                Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+                DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
         }
 
 

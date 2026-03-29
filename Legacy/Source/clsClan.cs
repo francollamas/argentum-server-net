@@ -262,11 +262,11 @@ internal class clsClan
         for (i = 1; i <= loopTo1; i++)
         {
             var argEmptySpaces2 = 1024;
-            if (Strings.Trim(ES.GetVar(PROPUESTASFILE, i.ToString(), "Pendiente", ref argEmptySpaces2)) == "1")
+            if (ES.GetVar(PROPUESTASFILE, i.ToString(), "Pendiente", ref argEmptySpaces2).Trim() == "1")
             {
                 var argEmptySpaces1 = 1024;
-                switch (modGuilds.String2Relacion(Strings.Trim(ES.GetVar(PROPUESTASFILE, i.ToString(), "Tipo",
-                            ref argEmptySpaces1))))
+                switch (modGuilds.String2Relacion(ES.GetVar(PROPUESTASFILE, i.ToString(), "Tipo",
+                            ref argEmptySpaces1).Trim()))
                 {
                     case modGuilds.RELACIONES_GUILD.ALIADOS:
                     {
@@ -300,7 +300,7 @@ internal class clsClan
         var argEmptySpaces = 1024;
         OldQ = ES.GetVar(GUILDINFOFILE, "INIT", "nroguilds", ref argEmptySpaces);
         if (Information.IsNumeric(OldQ))
-            NewQ = Convert.ToInt16(Convert.ToInt16(Strings.Trim(OldQ)) + 1);
+            NewQ = Convert.ToInt16(Convert.ToInt16(OldQ.Trim()) + 1);
         else
             NewQ = 1;
 
@@ -551,7 +551,7 @@ internal class clsClan
             {
                 ES.WriteVar(SOLICITUDESFILE, "SOLICITUD" + i, "Nombre", Nombre);
                 ES.WriteVar(SOLICITUDESFILE, "SOLICITUD" + i, "Detalle",
-                    string.IsNullOrEmpty(Strings.Trim(Peticion)) ? "Peticion vacia" : Peticion);
+                    string.IsNullOrEmpty(Peticion.Trim()) ? "Peticion vacia" : Peticion);
                 ES.WriteVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", (OldQI + 1).ToString());
                 ES.WriteVar(Declaraciones.CharPath + Nombre + ".chr", "GUILD", "ASPIRANTEA", p_GuildNumber.ToString());
                 return;
@@ -706,7 +706,7 @@ internal class clsClan
     {
         ES.WriteVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesAbiertas", "0");
         ES.WriteVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesFinalizan", Constants.vbNullString);
-        FileSystem.Kill(VOTACIONESFILE); // borramos toda la evidencia ;-)
+        File.Delete(VOTACIONESFILE); // borramos toda la evidencia ;-)
     }
 
     public void ContabilizarVoto(ref string Votante, ref string Votado)
@@ -727,7 +727,7 @@ internal class clsClan
         // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Votante. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         var argEmptySpaces = 1024;
         YaVotoRet =
-            Migration.migr_LenB(Strings.Trim(ES.GetVar(VOTACIONESFILE, "VOTOS", Votante, ref argEmptySpaces))) != 0;
+            Migration.migr_LenB(ES.GetVar(VOTACIONESFILE, "VOTOS", Votante, ref argEmptySpaces).Trim()) != 0;
         return YaVotoRet;
     }
 
@@ -817,15 +817,15 @@ internal class clsClan
 
         RevisarEleccionesRet = false;
         var argEmptySpaces = 1024;
-        Temps = Strings.Trim(ES.GetVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesFinalizan",
-            ref argEmptySpaces));
+        Temps = ES.GetVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesFinalizan",
+            ref argEmptySpaces).Trim();
 
         if (string.IsNullOrEmpty(Temps))
             return RevisarEleccionesRet;
 
         if (Information.IsDate(Temps))
         {
-            FechaSufragio = Conversions.ToDate(Temps);
+            FechaSufragio = DateTime.Parse(Temps);
             if (FechaSufragio < DateTime.Now) // toca!
             {
                 Ganador = ContarVotos(ref CantGanadores);

@@ -1473,8 +1473,8 @@ internal static class UsUaRiOs
                 {
                     var argEmptySpaces1 = 1024;
                     Tmp = ES.GetVar(CharFile, "Inventory", "Obj" + j, ref argEmptySpaces1);
-                    ObjInd = Convert.ToInt32(General.ReadField(1, ref Tmp, Convert.ToByte(Strings.Asc("-"))));
-                    ObjCant = Convert.ToInt32(General.ReadField(2, ref Tmp, Convert.ToByte(Strings.Asc("-"))));
+                    ObjInd = Convert.ToInt32(General.ReadField(1, ref Tmp, (byte)'-'));
+                    ObjCant = Convert.ToInt32(General.ReadField(2, ref Tmp, (byte)'-'));
                     if (ObjInd > 0)
                         Protocol.WriteConsoleMsg(sendIndex,
                             "Objeto " + j + " " + Declaraciones.objData[ObjInd].name + " Cantidad:" + ObjCant,

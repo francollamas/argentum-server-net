@@ -1137,7 +1137,7 @@ internal static class modGuilds
         var loopTo = Convert.ToInt16(cad.Length);
         for (i = 1; i <= loopTo; i++)
         {
-            car = Convert.ToByte(Strings.AscW(cad[i - 1]));
+            car = (byte)cad[i - 1];
 
             if (((car < 97) | (car > 122)) & (car != 255) & (car != 32))
             {
@@ -1662,7 +1662,7 @@ internal static class modGuilds
             return r_DeclararGuerraRet;
         }
 
-        if (string.IsNullOrEmpty(Strings.Trim(GuildGuerra)))
+        if (string.IsNullOrEmpty(GuildGuerra.Trim()))
         {
             refError = "No has seleccionado ningún clan.";
             return r_DeclararGuerraRet;
@@ -1726,7 +1726,7 @@ internal static class modGuilds
             return r_AceptarPropuestaDePazRet;
         }
 
-        if (string.IsNullOrEmpty(Strings.Trim(GuildPaz)))
+        if (string.IsNullOrEmpty(GuildPaz.Trim()))
         {
             refError = "No has seleccionado ningún clan.";
             return r_AceptarPropuestaDePazRet;
@@ -1792,7 +1792,7 @@ internal static class modGuilds
             return r_RechazarPropuestaDeAlianzaRet;
         }
 
-        if (string.IsNullOrEmpty(Strings.Trim(GuildPro)))
+        if (string.IsNullOrEmpty(GuildPro.Trim()))
         {
             refError = "No has seleccionado ningún clan.";
             return r_RechazarPropuestaDeAlianzaRet;
@@ -1853,7 +1853,7 @@ internal static class modGuilds
             return r_RechazarPropuestaDePazRet;
         }
 
-        if (string.IsNullOrEmpty(Strings.Trim(GuildPro)))
+        if (string.IsNullOrEmpty(GuildPro.Trim()))
         {
             refError = "No has seleccionado ningún clan.";
             return r_RechazarPropuestaDePazRet;
@@ -1911,7 +1911,7 @@ internal static class modGuilds
             return r_AceptarPropuestaDeAlianzaRet;
         }
 
-        if (string.IsNullOrEmpty(Strings.Trim(GuildAllie)))
+        if (string.IsNullOrEmpty(GuildAllie.Trim()))
         {
             refError = "No has seleccionado ningún clan.";
             return r_AceptarPropuestaDeAlianzaRet;

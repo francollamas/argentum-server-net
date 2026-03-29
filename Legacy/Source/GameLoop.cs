@@ -676,18 +676,18 @@ internal static class GameLoop
         try
         {
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/connect.log"))
-                FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "logs/connect.log");
+                File.Delete(AppDomain.CurrentDomain.BaseDirectory + "logs/connect.log");
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/haciendo.log"))
-                FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "logs/haciendo.log");
+                File.Delete(AppDomain.CurrentDomain.BaseDirectory + "logs/haciendo.log");
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/stats.log"))
-                FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "logs/stats.log");
+                File.Delete(AppDomain.CurrentDomain.BaseDirectory + "logs/stats.log");
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/Asesinatos.log"))
-                FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "logs/Asesinatos.log");
+                File.Delete(AppDomain.CurrentDomain.BaseDirectory + "logs/Asesinatos.log");
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/HackAttemps.log"))
-                FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "logs/HackAttemps.log");
+                File.Delete(AppDomain.CurrentDomain.BaseDirectory + "logs/HackAttemps.log");
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/nokillwsapi.txt"))
                 if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "logs/wsapi.log"))
-                    FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "logs/wsapi.log");
+                    File.Delete(AppDomain.CurrentDomain.BaseDirectory + "logs/wsapi.log");
         }
 
         catch (Exception ex)
@@ -848,7 +848,7 @@ internal static class GameLoop
 
             // Log
             General.AppendLog("logs/Main.log",
-                Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) +
+                DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() +
                 " server cerrado.");
 
             running = false;

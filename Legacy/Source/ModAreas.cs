@@ -53,9 +53,9 @@ internal static class ModAreas
             AreasInfo[LoopC, loopX] = Convert.ToByte((LoopC / 9 + 1) * (loopX / 9 + 1));
 
         // Setup AutoOptimizacion de areas
-        CurDay = Convert.ToByte(DateAndTime.Weekday(DateTime.Today) > 6 ? 1 : 2); // A ke tipo de dia pertenece?
+        CurDay = Convert.ToByte(((int)DateTime.Today.DayOfWeek + 1) > 6 ? 1 : 2); // A ke tipo de dia pertenece?
         CurHour = Convert.ToByte(
-            Conversion.Fix(Thread.CurrentThread.CurrentCulture.Calendar.GetHour(DateAndTime.TimeOfDay) /
+            Conversion.Fix(Thread.CurrentThread.CurrentCulture.Calendar.GetHour(DateTime.Now) /
                            3)); // A ke parte de la hora pertenece
 
         // UPGRADE_WARNING: El límite inferior de la matriz ConnGroups ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -87,13 +87,13 @@ internal static class ModAreas
         byte tCurHour;
         int EntryValue;
 
-        if ((CurDay != Convert.ToByte(DateAndTime.Weekday(DateTime.Today) > 6 ? 1 : 2)) | (CurHour !=
+        if ((CurDay != Convert.ToByte(((int)DateTime.Today.DayOfWeek + 1) > 6 ? 1 : 2)) | (CurHour !=
                 Convert.ToByte(
-                    Conversion.Fix(Thread.CurrentThread.CurrentCulture.Calendar.GetHour(DateAndTime.TimeOfDay) / 3))))
+                    Conversion.Fix(Thread.CurrentThread.CurrentCulture.Calendar.GetHour(DateTime.Now) / 3))))
         {
-            tCurDay = Convert.ToByte(DateAndTime.Weekday(DateTime.Today) > 6 ? 1 : 2); // A ke tipo de dia pertenece?
+            tCurDay = Convert.ToByte(((int)DateTime.Today.DayOfWeek + 1) > 6 ? 1 : 2); // A ke tipo de dia pertenece?
             tCurHour = Convert.ToByte(
-                Conversion.Fix(Thread.CurrentThread.CurrentCulture.Calendar.GetHour(DateAndTime.TimeOfDay) /
+                Conversion.Fix(Thread.CurrentThread.CurrentCulture.Calendar.GetHour(DateTime.Now) /
                                3)); // A ke parte de la hora pertenece
 
             var loopTo = (int)Declaraciones.NumMaps;

@@ -24,7 +24,7 @@ internal static class modHexaStrings
         for (i = 1; i <= loopTo; i++)
         {
             L = MD5.Substring(2 * i - 2, 2);
-            hexMd52AscRet = hexMd52AscRet + Strings.Chr(hexHex2Dec(L));
+            hexMd52AscRet = hexMd52AscRet + (char)hexHex2Dec(L);
         }
 
         return hexMd52AscRet;
@@ -59,7 +59,7 @@ internal static class modHexaStrings
         for (i = 1; i <= loopTo; i++)
         {
             L = Text.Substring(i - 1, 1);
-            txtOffsetRet = txtOffsetRet + Strings.Chr((Strings.Asc(L) + off) & 0xFF);
+            txtOffsetRet = txtOffsetRet + (char)((L[0] + off) & 0xFF);
         }
 
         return txtOffsetRet;

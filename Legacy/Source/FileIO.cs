@@ -465,7 +465,7 @@ internal static class ES
 
         // Log
         General.AppendLog("logs/BackUps.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay));
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString());
     }
 
     public static void GrabarMapa(int Map, string MAPFILE)
@@ -2253,8 +2253,8 @@ internal static class ES
                 {
                     // Is it a different ip from last time?
                     WriteVar(UserFile, "INIT", "LastIP1",
-                        withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" +
-                        Conversions.ToString(DateAndTime.TimeOfDay));
+                        withBlock.ip + " - " + DateTime.Today.ToString() + ":" +
+                        DateTime.Now.TimeOfDay.ToString());
                 }
                 else
                 {
@@ -2281,15 +2281,15 @@ internal static class ES
                         }
 
                         WriteVar(UserFile, "INIT", "LastIP1",
-                            withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" +
-                            Conversions.ToString(DateAndTime.TimeOfDay));
+                            withBlock.ip + " - " + DateTime.Today.ToString() + ":" +
+                            DateTime.Now.TimeOfDay.ToString());
                     }
                     // Same ip, just update the date
                     else
                     {
                         WriteVar(UserFile, "INIT", "LastIP1",
-                            withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" +
-                            Conversions.ToString(DateAndTime.TimeOfDay));
+                            withBlock.ip + " - " + DateTime.Today.ToString() + ":" +
+                            DateTime.Now.TimeOfDay.ToString());
                     }
                 }
 

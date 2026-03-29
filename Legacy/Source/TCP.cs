@@ -200,7 +200,7 @@ internal static class TCP
         var loopTo = Convert.ToInt16(cad.Length);
         for (i = 1; i <= loopTo; i++)
         {
-            car = Convert.ToByte(Strings.Asc(cad.Substring(i - 1, 1)));
+            car = (byte)cad[i - 1];
 
             if (((car < 97) | (car > 122)) & (car != 255) & (car != 32))
             {
@@ -230,7 +230,7 @@ internal static class TCP
         var loopTo = Convert.ToInt16(cad.Length);
         for (i = 1; i <= loopTo; i++)
         {
-            car = Convert.ToByte(Strings.Asc(cad.Substring(i - 1, 1)));
+            car = (byte)cad[i - 1];
 
             if ((car < 48) | (car > 57))
             {
@@ -1379,7 +1379,7 @@ internal static class TCP
             // Log
             General.AppendLog("logs/Connect.log",
                 withBlock.name + " ha entrado al juego. UserIndex:" + UserIndex + " " +
-                Conversions.ToString(DateAndTime.TimeOfDay) + " " + Conversions.ToString(DateTime.Today));
+                DateTime.Now.TimeOfDay.ToString() + " " + DateTime.Today.ToString());
         }
     }
 
@@ -1866,7 +1866,7 @@ internal static class TCP
 
             General.AppendLog("logs/Connect.log",
                 name + " ha dejado el juego. " + "User Index:" + UserIndex + " " +
-                Conversions.ToString(DateAndTime.TimeOfDay) + " " + Conversions.ToString(DateTime.Today));
+                DateTime.Now.TimeOfDay.ToString() + " " + DateTime.Today.ToString());
         }
 
 

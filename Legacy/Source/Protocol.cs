@@ -4234,7 +4234,7 @@ internal static class Protocol
                 desc = buffer.ReadASCIIString();
                 GuildName = buffer.ReadASCIIString().Trim();
                 site = buffer.ReadASCIIString();
-                codex = Strings.Split(buffer.ReadASCIIString(), Conversions.ToString(SEPARATOR));
+                codex = Strings.Split(buffer.ReadASCIIString(), SEPARATOR.ToString());
 
                 if (modGuilds.CrearNuevoClan(UserIndex, ref desc, ref GuildName, ref site, ref codex,
                         withBlock.FundandoGuildAlineacion, ref errorStr))
@@ -5000,7 +5000,7 @@ internal static class Protocol
 
 
                 desc = buffer.ReadASCIIString();
-                codex = Strings.Split(buffer.ReadASCIIString(), Conversions.ToString(SEPARATOR));
+                codex = Strings.Split(buffer.ReadASCIIString(), SEPARATOR.ToString());
 
                 modGuilds.ChangeCodexAndDesc(ref desc, ref codex, withBlock.GuildIndex);
 
@@ -7981,8 +7981,8 @@ internal static class Protocol
                 bugReport = buffer.ReadASCIIString();
 
                 General.AppendLog("LOGS/BUGs.log",
-                    "Usuario:" + withBlock.name + "  Fecha:" + Conversions.ToString(DateTime.Today) + "    Hora:" +
-                    Conversions.ToString(DateAndTime.TimeOfDay));
+                    "Usuario:" + withBlock.name + "  Fecha:" + DateTime.Today.ToString() + "    Hora:" +
+                    DateTime.Now.TimeOfDay.ToString());
                 General.AppendLog("LOGS/BUGs.log", "BUG:");
                 General.AppendLog("LOGS/BUGs.log", bugReport);
                 General.AppendLog("LOGS/BUGs.log",
@@ -9497,7 +9497,7 @@ internal static class Protocol
 
         modSendData.SendData(modSendData.SendTarget.ToAll, 0,
             PrepareMessageConsoleMsg(
-                "Hora: " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + Conversions.ToString(DateTime.Today),
+                "Hora: " + DateTime.Now.TimeOfDay.ToString() + " " + DateTime.Today.ToString(),
                 FontTypeNames.FONTTYPE_INFO));
     }
 
@@ -10399,8 +10399,8 @@ internal static class Protocol
                                     (Count + 1).ToString());
                                 ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + (Count + 1),
                                     withBlock.name.ToLower() + ": CARCEL " + jailTime + "m, MOTIVO: " +
-                                    reason.ToLower() + " " + Conversions.ToString(DateTime.Today) + " " +
-                                    Conversions.ToString(DateAndTime.TimeOfDay));
+                                    reason.ToLower() + " " + DateTime.Today.ToString() + " " +
+                                    DateTime.Now.TimeOfDay.ToString());
                             }
 
                             Admin.Encarcelar(tUser, jailTime, withBlock.name);
@@ -10543,8 +10543,8 @@ internal static class Protocol
                                     (Count + 1).ToString());
                                 ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + (Count + 1),
                                     withBlock.name.ToLower() + ": ADVERTENCIA por: " + reason.ToLower() + " " +
-                                    Conversions.ToString(DateTime.Today) + " " +
-                                    Conversions.ToString(DateAndTime.TimeOfDay));
+                                    DateTime.Today.ToString() + " " +
+                                    DateTime.Now.TimeOfDay.ToString());
 
                                 WriteConsoleMsg(UserIndex, "Has advertido a " + UserName.ToUpper() + ".",
                                     FontTypeNames.FONTTYPE_INFO);
@@ -12131,8 +12131,8 @@ internal static class Protocol
                             ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "Cant",
                                 (cantPenas + 1).ToString());
                             ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + (cantPenas + 1),
-                                withBlock.name.ToLower() + ": UNBAN. " + Conversions.ToString(DateTime.Today) + " " +
-                                Conversions.ToString(DateAndTime.TimeOfDay));
+                                withBlock.name.ToLower() + ": UNBAN. " + DateTime.Today.ToString() + " " +
+                                DateTime.Now.TimeOfDay.ToString());
 
                             var argtexto = "/UNBAN a " + UserName;
                             General.LogGM(ref withBlock.name, ref argtexto);
@@ -13985,8 +13985,8 @@ internal static class Protocol
                                 (Count + 1).ToString());
                             ES.WriteVar(Declaraciones.CharPath + member + ".chr", "PENAS", "P" + (Count + 1),
                                 withBlock.name.ToLower() + ": BAN AL CLAN: " + GuildName + " " +
-                                Conversions.ToString(DateTime.Today) + " " +
-                                Conversions.ToString(DateAndTime.TimeOfDay));
+                                DateTime.Today.ToString() + " " +
+                                DateTime.Now.TimeOfDay.ToString());
                         }
                     }
                 }
@@ -14558,8 +14558,8 @@ internal static class Protocol
 
                             ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + punishment,
                                 withBlock.name.ToLower() + ": <" + NewText + "> " +
-                                Conversions.ToString(DateTime.Today) + " " +
-                                Conversions.ToString(DateAndTime.TimeOfDay));
+                                DateTime.Today.ToString() + " " +
+                                DateTime.Now.TimeOfDay.ToString());
 
                             WriteConsoleMsg(UserIndex, "Pena modificada.", FontTypeNames.FONTTYPE_INFO);
                         }
@@ -15938,7 +15938,7 @@ internal static class Protocol
                             }
                             else if (!File.Exists(Declaraciones.CharPath + newName + ".chr"))
                             {
-                                FileSystem.FileCopy(Declaraciones.CharPath + UserName + ".chr",
+                                File.Copy(Declaraciones.CharPath + UserName + ".chr",
                                     Declaraciones.CharPath + newName.ToUpper() + ".chr");
 
                                 WriteConsoleMsg(UserIndex, "Transferencia exitosa.", FontTypeNames.FONTTYPE_INFO);
@@ -15955,8 +15955,8 @@ internal static class Protocol
 
                                 ES.WriteVar(Declaraciones.CharPath + UserName + ".chr", "PENAS", "P" + (cantPenas + 1),
                                     withBlock.name.ToLower() + ": BAN POR Cambio de nick a " + newName.ToUpper() + " " +
-                                    Conversions.ToString(DateTime.Today) + " " +
-                                    Conversions.ToString(DateAndTime.TimeOfDay));
+                                    DateTime.Today.ToString() + " " +
+                                    DateTime.Now.TimeOfDay.ToString());
 
                                 var argtexto = "Ha cambiado de nombre al usuario " + UserName + ". Ahora se llama " +
                                                newName;
@@ -16436,7 +16436,7 @@ internal static class Protocol
 
             // Log
             General.AppendLog("logs/Main.log",
-                Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) +
+                DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() +
                 " server apagado por " + withBlock.name + ". ");
         }
     }

@@ -244,7 +244,7 @@ internal static class modForum
                 // Elimino los post viejos
                 var loopTo = NumPost;
                 for (PostIndex = 1; PostIndex <= loopTo; PostIndex++)
-                    FileSystem.Kill(
+                    File.Delete(
                         AppDomain.CurrentDomain.BaseDirectory + "Foros/" + withBlock.ID + PostIndex + ".for");
 
 
@@ -255,12 +255,12 @@ internal static class modForum
                 // Elimino los post viejos
                 var loopTo1 = NumPost;
                 for (PostIndex = 1; PostIndex <= loopTo1; PostIndex++)
-                    FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "Foros/" + withBlock.ID + PostIndex +
+                    File.Delete(AppDomain.CurrentDomain.BaseDirectory + "Foros/" + withBlock.ID + PostIndex +
                                     "a.for");
 
 
                 // Elimino el foro
-                FileSystem.Kill(AppDomain.CurrentDomain.BaseDirectory + "Foros/" + withBlock.ID + ".for");
+                File.Delete(AppDomain.CurrentDomain.BaseDirectory + "Foros/" + withBlock.ID + ".for");
             }
         }
     }

@@ -101,7 +101,7 @@ internal class cCola
             // Mete elemento en la cola
             // Pablo
             string aux;
-            aux = DateAndTime.TimeString + " " + Nombre.ToUpper();
+            aux = DateTime.Now.ToString("HH:mm:ss") + " " + Nombre.ToUpper();
             Cola.Add(aux);
         }
         // /Pablo

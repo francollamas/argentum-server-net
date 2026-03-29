@@ -552,7 +552,7 @@ internal static class Statistics
         var loopTo = S.Length;
         for (i = 1; i <= loopTo; i++)
         {
-            key = Convert.ToInt16(Strings.Asc(S.Substring(i - 1, 1)));
+            key = (short)S[i - 1];
 
             keyOcurrencies[key] = keyOcurrencies[key] + 1m;
         }

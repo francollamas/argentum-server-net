@@ -475,7 +475,7 @@ public static class General
         var CurrentPos = default(int);
         string delimiter;
 
-        delimiter = Conversions.ToString(Strings.Chr(SepASCII));
+        delimiter = ((char)SepASCII).ToString();
 
         if (string.IsNullOrEmpty(Text))
         {
@@ -526,7 +526,7 @@ public static class General
     public static void LogCriticEvent(ref string desc)
     {
         AppendLog("logs/Eventos.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + desc);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + desc);
     }
 
     public static void LogEjercitoReal(ref string desc)
@@ -543,40 +543,40 @@ public static class General
     public static void LogIndex(short Index, string desc)
     {
         AppendLog("logs/" + Index + ".log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + desc);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + desc);
     }
 
 
     public static void LogError(ref string desc)
     {
         AppendLog("logs/errores.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + desc);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + desc);
     }
 
     public static void LogStatic(ref string desc)
     {
         AppendLog("logs/Stats.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + desc);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + desc);
     }
 
     public static void LogTarea(ref string desc)
     {
         AppendLog("logs/haciendo.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + desc);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + desc);
     }
 
 
     public static void LogClanes(string str)
     {
         AppendLog("logs/clanes.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " +
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " +
             str);
     }
 
     public static void LogIP(string str)
     {
         AppendLog("logs/IP.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " +
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " +
             str);
     }
 
@@ -586,27 +586,27 @@ public static class General
         AppendLog(
             "logs/desarrollo" + Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(DateTime.Today) +
             Thread.CurrentThread.CurrentCulture.Calendar.GetYear(DateTime.Today) + ".log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " +
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " +
             str);
     }
 
     public static void LogGM(ref string Nombre, ref string texto)
     {
         AppendLog("logs/" + Nombre + ".log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
     }
 
     public static void LogAsesinato(ref string texto)
     {
         AppendLog("logs/asesinatos.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
     }
 
     public static void logVentaCasa(string texto)
     {
         AppendLog("logs/propiedades.log", "----------------------------------------------------------");
         AppendLog("logs/propiedades.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
         AppendLog("logs/propiedades.log", "----------------------------------------------------------");
     }
 
@@ -614,14 +614,14 @@ public static class General
     {
         AppendLog("logs/HackAttemps.log", "----------------------------------------------------------");
         AppendLog("logs/HackAttemps.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
         AppendLog("logs/HackAttemps.log", "----------------------------------------------------------");
     }
 
     public static void LogCheating(ref string texto)
     {
         AppendLog("logs/CH.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
     }
 
 
@@ -629,14 +629,14 @@ public static class General
     {
         AppendLog("logs/CriticalHackAttemps.log", "----------------------------------------------------------");
         AppendLog("logs/CriticalHackAttemps.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
         AppendLog("logs/CriticalHackAttemps.log", "----------------------------------------------------------");
     }
 
     public static void LogAntiCheat(ref string texto)
     {
         AppendLog("logs/AntiCheat.log",
-            Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " + texto);
+            DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() + " " + texto);
         AppendLog("logs/AntiCheat.log", "");
     }
 
@@ -725,7 +725,7 @@ public static class General
 
             // Log it
             AppendLog("logs/Main.log",
-                Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) +
+                DateTime.Today.ToString() + " " + DateTime.Now.TimeOfDay.ToString() +
                 " servidor reiniciado.");
         }
 
@@ -1391,8 +1391,13 @@ public static class General
         // 
         // ***************************************************
 
-        ReiniciarAutoUpdateRet = Interaction.Shell(AppDomain.CurrentDomain.BaseDirectory + "autoupdater/aoau.exe",
-            AppWinStyle.MinimizedNoFocus);
+        var process = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = AppDomain.CurrentDomain.BaseDirectory + "autoupdater/aoau.exe",
+            WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized,
+            UseShellExecute = true
+        });
+        ReiniciarAutoUpdateRet = process?.Id ?? 0;
         return ReiniciarAutoUpdateRet;
     }
 
@@ -1414,7 +1419,11 @@ public static class General
         GuardarUsuarios();
 
         if (EjecutarLauncher)
-            Interaction.Shell(AppDomain.CurrentDomain.BaseDirectory + "/launcher.exe");
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = AppDomain.CurrentDomain.BaseDirectory + "/launcher.exe",
+                UseShellExecute = true
+            });
     }
 
 
