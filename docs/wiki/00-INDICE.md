@@ -2,8 +2,9 @@
 
 > Este documento es el indice maestro de la documentacion funcional del servidor de Argentum Online.
 > Describe **que hace** el juego, no como esta implementado.
-> El objetivo es servir como especificacion para construir un servidor nuevo desde cero,
-> sin sesgos ni deuda tecnica del codigo legacy.
+>
+> Las notas y consideraciones sobre la reimplementacion se encuentran en un documento aparte:
+> [90-CONSIDERACIONES-REIMPLEMENTACION.md](90-CONSIDERACIONES-REIMPLEMENTACION.md).
 
 ---
 
@@ -54,6 +55,12 @@ es esencialmente un renderer que envia comandos y recibe actualizaciones de esta
 | 12 | Mundo y Mapas | [12-MUNDO-Y-MAPAS.md](12-MUNDO-Y-MAPAS.md) | Estructura de mapas, tiles, triggers, teleports, clima, sistema de areas |
 | 13 | Protocolo y Red | [13-PROTOCOLO-Y-RED.md](13-PROTOCOLO-Y-RED.md) | Paquetes cliente/servidor, serializacion binaria, flujo de conexion |
 | 14 | Administracion y Seguridad | [14-ADMIN-Y-SEGURIDAD.md](14-ADMIN-Y-SEGURIDAD.md) | Comandos GM, niveles de privilegio, centinela anti-bot, seguridad IP, foro, encuestas |
+
+### 5. Reimplementacion
+
+| # | Sistema | Documento | Descripcion |
+|---|---------|-----------|-------------|
+| 90 | Consideraciones de Reimplementacion | [90-CONSIDERACIONES-REIMPLEMENTACION.md](90-CONSIDERACIONES-REIMPLEMENTACION.md) | Notas arquitectonicas, decisiones de diseno y compatibilidad para el servidor nuevo |
 
 ---
 
@@ -218,3 +225,4 @@ Estos son los limites fundamentales del juego que definen la escala del mundo:
 | 12 | Mundo y Mapas | Completo |
 | 13 | Protocolo y Red | Completo |
 | 14 | Admin y Seguridad | Completo |
+| 90 | Consideraciones de Reimplementacion | Completo |

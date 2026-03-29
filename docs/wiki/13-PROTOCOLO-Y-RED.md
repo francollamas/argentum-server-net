@@ -402,45 +402,22 @@ TCP, reduciendo overhead de red.
 
 ---
 
-## 7. Consideraciones de Compatibilidad
+## 7. Relacion con Otros Sistemas
 
-### 7.1 Critico para el Nuevo Servidor
+> **Nota**: Las consideraciones de compatibilidad para la reimplementacion se encuentran en
+> [90-CONSIDERACIONES-REIMPLEMENTACION.md](90-CONSIDERACIONES-REIMPLEMENTACION.md).
 
-Para mantener compatibilidad con el cliente existente:
-
-- El **orden de bytes** debe ser exactamente el mismo (Little-endian)
-- La **codificacion de texto** debe ser Windows-1252 (no UTF-8)
-- Los **IDs de paquetes** deben coincidir exactamente
-- La **estructura de cada paquete** (orden y tipo de campos) debe ser identica
-- Los **tamanos de campos** deben coincidir (Int16 vs Int32, etc.)
-- Los paquetes no tienen header de longitud; el parser depende del conocimiento de la estructura
-
-### 7.2 Fragilidad del Protocolo
-
-El protocolo es fragil por disenio:
-- Sin versionado: no hay forma de negociar la version del protocolo
-- Sin checksums: no se detectan errores de transmision (TCP los maneja, pero no la logica)
-- Sin framing: un byte corrupto desincroniza todo el stream
-- Sin compresion: los datos se envian en crudo
-
-Un nuevo servidor que quiera ser compatible con el cliente existente **debe implementar este
-protocolo exactamente como esta**.
-
----
-
-## 8. Relacion con Otros Sistemas
-
-### 8.1 Game Loop
+### 7.1 Game Loop
 - El procesamiento de red esta integrado en el game loop (tick de 5ms)
 - El envio de datos es un subsistema separado (tick de 10ms)
 - La logica de juego que generan los paquetes se ejecuta en el tick de 40ms
 
-### 8.2 Areas de Interes
+### 7.2 Areas de Interes
 - El sistema de areas determina a quien se envian los paquetes
 - Los cambios de area generan paquetes de datos incrementales
 - Las transiciones de mapa generan paquetes completos
 
-### 8.3 Seguridad
+### 7.3 Seguridad
 - La validacion de version y MD5 ocurre en la capa de protocolo
 - Los limites de conexion por IP se verifican al nivel de socket
 - El centinela usa paquetes especificos para desafios
