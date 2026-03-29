@@ -55,7 +55,7 @@ internal static class NPCs
         try
         {
             // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            Declaraciones.npc MiNPC;
+            Declaraciones.Npc MiNPC;
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             MiNPC = Declaraciones.Npclist[NpcIndex];
             bool EraCriminal;
@@ -104,7 +104,7 @@ internal static class NPCs
                 }
             }
 
-            // Quitamos el npc
+            // Quitamos el Npc
             QuitarNPC(NpcIndex);
 
 
@@ -243,7 +243,7 @@ internal static class NPCs
         // 
         // ***************************************************
 
-        // Clear the npc's flags
+        // Clear the Npc's flags
 
         {
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex].flags;
@@ -740,7 +740,7 @@ internal static class NPCs
         modSendData.SendData(modSendData.SendTarget.ToNPCArea, NpcIndex,
             Protocol.PrepareMessageCharacterRemove(Declaraciones.Npclist[NpcIndex].character.CharIndex));
 
-        // Update la lista npc
+        // Update la lista Npc
         Declaraciones.Npclist[NpcIndex].character.CharIndex = 0;
 
 
@@ -778,7 +778,7 @@ internal static class NPCs
                         return;
 
                     UserIndex = Declaraciones.MapData[withBlock.Pos.Map, nPos.X, nPos.Y].UserIndex;
-                    // Si hay un usuario a donde se mueve el npc, entonces esta muerto
+                    // Si hay un usuario a donde se mueve el Npc, entonces esta muerto
                     if (UserIndex > 0)
                     {
                         // No se traslada caspers de agua a tierra
@@ -825,7 +825,7 @@ internal static class NPCs
                 else if (withBlock.MaestroUser == 0)
                 {
                     if (withBlock.Movement == AI.TipoAI.NpcPathfinding)
-                        // Someone has blocked the npc's way, we must to seek a new path!
+                        // Someone has blocked the Npc's way, we must to seek a new path!
                         withBlock.PFINFO.PathLenght = 0;
                 }
             }
@@ -835,7 +835,7 @@ internal static class NPCs
         catch (Exception ex)
         {
             Console.WriteLine("Error in TestSpawnTrigger: " + ex.Message);
-            var argdesc = "Error en move npc " + NpcIndex;
+            var argdesc = "Error en move Npc " + NpcIndex;
             General.LogError(ref argdesc);
         }
     }
@@ -979,7 +979,7 @@ internal static class NPCs
         return SpawnNpcRet;
     }
 
-    public static void ReSpawnNpc(ref Declaraciones.npc MiNPC)
+    public static void ReSpawnNpc(ref Declaraciones.Npc MiNPC)
     {
         // ***************************************************
         // Author: Unknown
@@ -991,7 +991,7 @@ internal static class NPCs
             CrearNPC(ref MiNPC.Numero, ref MiNPC.Pos.Map, ref MiNPC.Orig);
     }
 
-    private static void NPCTirarOro(ref Declaraciones.npc MiNPC)
+    private static void NPCTirarOro(ref Declaraciones.Npc MiNPC)
     {
         // ***************************************************
         // Author: Unknown
@@ -1050,7 +1050,6 @@ internal static class NPCs
         clsIniReader Leer;
         int LoopC;
         string ln;
-        string aux;
 
         Leer = General.LeerNPCs;
 
@@ -1272,7 +1271,7 @@ internal static class NPCs
         // ***************************************************
         // Author: Unknown
         // Last Modification: -
-        // Chequea si el npc continua perteneciendo a algún usuario
+        // Chequea si el Npc continua perteneciendo a algún usuario
         // ***************************************************
 
         {

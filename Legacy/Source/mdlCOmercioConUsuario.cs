@@ -128,7 +128,6 @@ internal static class mdlCOmercioConUsuario
         // ***************************************************
         Declaraciones.Obj TradingObj;
         short OtroUserIndex;
-        bool TerminarAhora;
         short OfferSlot;
 
         Declaraciones.UserList[UserIndex].ComUsu.Acepto = true;

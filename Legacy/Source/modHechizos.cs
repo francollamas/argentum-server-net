@@ -480,7 +480,7 @@ internal static class modHechizos
     }
 
     // '
-    // Le da propiedades al nuevo npc
+    // Le da propiedades al nuevo Npc
     // 
     // @param UserIndex  Indice del usuario que invoca.
     // @param b  Indica si se termino la operación.
@@ -766,7 +766,7 @@ internal static class modHechizos
                         {
                             // 50% menos de mana para mimetismo
                             ManaRequerida = Convert.ToInt32(ManaRequerida * 0.5d);
-                            // Será ignorado hasta que pierda el efecto del mimetismo o ataque un npc
+                            // Será ignorado hasta que pierda el efecto del mimetismo o ataque un Npc
                             withBlock.flags.Ignorado = true;
                         }
                         // 10% menos de mana para hechizos
@@ -1524,12 +1524,6 @@ internal static class modHechizos
 
                         Protocol.WriteConsoleMsg(UserIndex,
                             "Sólo puedes remover la parálisis de los Guardias si perteneces a su facción.",
-                            Protocol.FontTypeNames.FONTTYPE_INFO);
-                        HechizoCasteado = false;
-                        return;
-
-                        Protocol.WriteConsoleMsg(UserIndex,
-                            "Solo puedes remover la parálisis de los NPCs que te consideren su amo.",
                             Protocol.FontTypeNames.FONTTYPE_INFO);
                         HechizoCasteado = false;
                         return;

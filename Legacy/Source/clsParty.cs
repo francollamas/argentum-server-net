@@ -131,15 +131,6 @@ internal class clsParty
                     {
                         p_members[i].Experiencia = p_members[i].Experiencia + expThisUser;
                         if (p_members[i].Experiencia < 0d) p_members[i].Experiencia = 0d;
-                        if (mdParty.PARTY_EXPERIENCIAPORGOLPE)
-                        {
-                            Declaraciones.UserList[UI].Stats.Exp =
-                                Declaraciones.UserList[UI].Stats.Exp + Conversion.Fix(expThisUser);
-                            if (Declaraciones.UserList[UI].Stats.Exp > Declaraciones.MAXEXP)
-                                Declaraciones.UserList[UI].Stats.Exp = Declaraciones.MAXEXP;
-                            UsUaRiOs.CheckUserLevel(UI);
-                            Protocol.WriteUpdateUserStats(UI);
-                        }
                     }
             }
         }

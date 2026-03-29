@@ -18,7 +18,7 @@ internal static class modSistemaComercio
     // 
     // @param Modo The trade type (sell or buy)
     // @param UserIndex Specifies the index of the user
-    // @param NpcIndex specifies the index of the npc
+    // @param NpcIndex specifies the index of the Npc
     // @param Slot Specifies which slot are you trying to sell / buy
     // @param Cantidad Specifies how many items in that slot are you trying to sell / buy
     public static void Comercio(eModoComercio Modo, short UserIndex, short NpcIndex, short Slot, short Cantidad)

@@ -26,7 +26,6 @@ internal static class modForum
         string ForumPath;
         string PostPath;
         short PostIndex;
-        short FileIndex;
 
         NumForos = Convert.ToInt16(NumForos + 1);
         // UPGRADE_WARNING: Es posible que la matriz Foros necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
@@ -179,7 +178,6 @@ internal static class modForum
         // ***************************************************
 
         short PostIndex;
-        short FileIndex;
         string PostPath;
 
         CleanForum(ForumIndex);

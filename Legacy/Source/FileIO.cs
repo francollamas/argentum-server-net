@@ -434,7 +434,6 @@ internal static class ES
         // ***************************************************
 
         Declaraciones.haciendoBK = true;
-        short i;
 
 
         // Lo saco porque elimina elementales y mascotas - Maraxus
@@ -1283,7 +1282,6 @@ internal static class ES
         int LoopC;
         string ln;
 
-        short NpcIndex;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             {
@@ -1537,7 +1535,7 @@ internal static class ES
         }
         catch (Exception ex)
         {
-            // Podés loguear el error si querés
+            Console.WriteLine($"Exception in GetVar: {ex.Message}");
         }
 
         return GetVarRet;
@@ -1553,9 +1551,7 @@ internal static class ES
         // ***************************************************
 
         var Map = default(short);
-        short TempInt;
         string tFileName;
-        string npcfile;
 
         try
         {
@@ -2559,12 +2555,10 @@ internal static class ES
             withBlock.name = GetVar(npcfile, "NPC" + NpcNumber, "Name", ref argEmptySpaces);
             var argEmptySpaces1 = 1024;
             withBlock.desc = GetVar(npcfile, "NPC" + NpcNumber, "Desc", ref argEmptySpaces1);
-            var argEmptySpaces2 = 1024;
             var argEmptySpaces3 = 1024;
             withBlock.Movement =
                 (AI.TipoAI)Convert.ToInt32(Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "Movement",
                     ref argEmptySpaces3)));
-            var argEmptySpaces4 = 1024;
             var argEmptySpaces5 = 1024;
             withBlock.NPCtype =
                 (Declaraciones.eNPCType)Convert.ToInt32(Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "NpcType",
@@ -2576,7 +2570,6 @@ internal static class ES
             var argEmptySpaces7 = 1024;
             withBlock.character.Head =
                 Convert.ToInt16(Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "Head", ref argEmptySpaces7)));
-            var argEmptySpaces8 = 1024;
             var argEmptySpaces9 = 1024;
             withBlock.character.heading = (Declaraciones.eHeading)Convert.ToByte(
                 Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "Heading", ref argEmptySpaces9)));
@@ -2762,8 +2755,6 @@ internal static class ES
 
         short i;
         short j;
-        short X;
-        short Y;
 
         // UPGRADE_WARNING: Es posible que la matriz distanceToCities necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
         // UPGRADE_WARNING: El límite inferior de la matriz distanceToCities ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -2869,7 +2860,7 @@ internal static class ES
         // Retrieves the limit in the given side in the given map.
         // TODO: This should be set in the .inf map file.
         // ***************************************************
-        short i, X;
+        short X;
         short Y;
 
         if (mapa <= 0)
@@ -2922,7 +2913,6 @@ internal static class ES
         // 
         // ***************************************************
         int ClassIndex;
-        int RaceIndex;
 
         short ArmaduraIndex;
 

@@ -75,7 +75,6 @@ internal class clsIniReader
         // Last Modify Date: 27/07/2006
         // Opens the requested file and loads it's data into memory
         // **************************************************************
-        short handle;
         string Text;
         int Pos;
 

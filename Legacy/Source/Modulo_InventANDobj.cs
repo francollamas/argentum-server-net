@@ -39,12 +39,12 @@ internal static class InvNpc
         return TirarItemAlPisoRet;
     }
 
-    public static void NPC_TIRAR_ITEMS(ref Declaraciones.npc npc, bool IsPretoriano)
+    public static void NPC_TIRAR_ITEMS(ref Declaraciones.Npc Npc, bool IsPretoriano)
     {
         // ***************************************************
         // Autor: Unknown (orginal version)
         // Last Modification: 28/11/2009
-        // Give away npc's items.
+        // Give away Npc's items.
         // 28/11/2009: ZaMa - Implementado drops complejos
         // 02/04/2010: ZaMa - Los pretos vuelven a tirar oro.
         // ***************************************************
@@ -61,17 +61,17 @@ internal static class InvNpc
             if (IsPretoriano)
             {
                 for (i = 1; i <= Declaraciones.MAX_INVENTORY_SLOTS; i++)
-                    if (npc.Invent.userObj[i].ObjIndex > 0)
+                    if (Npc.Invent.userObj[i].ObjIndex > 0)
                     {
-                        MiObj.Amount = npc.Invent.userObj[i].Amount;
-                        MiObj.ObjIndex = npc.Invent.userObj[i].ObjIndex;
+                        MiObj.Amount = Npc.Invent.userObj[i].Amount;
+                        MiObj.ObjIndex = Npc.Invent.userObj[i].ObjIndex;
                         var argNotPirata = true;
-                        TirarItemAlPiso(ref npc.Pos, ref MiObj, ref argNotPirata);
+                        TirarItemAlPiso(ref Npc.Pos, ref MiObj, ref argNotPirata);
                     }
 
                 // Dropea oro?
-                if (npc.GiveGLD > 0)
-                    TirarOroNpc(npc.GiveGLD, ref npc.Pos);
+                if (Npc.GiveGLD > 0)
+                    TirarOroNpc(Npc.GiveGLD, ref Npc.Pos);
 
                 return;
             }
@@ -96,20 +96,20 @@ internal static class InvNpc
                 }
 
 
-                ObjIndex = npc.Drop[NroDrop].ObjIndex;
+                ObjIndex = Npc.Drop[NroDrop].ObjIndex;
                 if (ObjIndex > 0)
                 {
                     if (ObjIndex == Declaraciones.iORO)
                     {
-                        TirarOroNpc(npc.Drop[NroDrop].Amount, ref npc.Pos);
+                        TirarOroNpc(Npc.Drop[NroDrop].Amount, ref Npc.Pos);
                     }
                     else
                     {
-                        MiObj.Amount = Convert.ToInt16(npc.Drop[NroDrop].Amount);
-                        MiObj.ObjIndex = npc.Drop[NroDrop].ObjIndex;
+                        MiObj.Amount = Convert.ToInt16(Npc.Drop[NroDrop].Amount);
+                        MiObj.ObjIndex = Npc.Drop[NroDrop].ObjIndex;
 
                         var argNotPirata1 = true;
-                        TirarItemAlPiso(ref npc.Pos, ref MiObj, ref argNotPirata1);
+                        TirarItemAlPiso(ref Npc.Pos, ref MiObj, ref argNotPirata1);
                     }
                 }
             }
@@ -153,11 +153,11 @@ internal static class InvNpc
     }
 
     // '
-    // Gets the amount of a certain item that an npc has.
+    // Gets the amount of a certain item that an Npc has.
     // 
     // @param npcIndex Specifies reference to npcmerchant
     // @param ObjIndex Specifies reference to object
-    // @return   The amount of the item that the npc has
+    // @return   The amount of the item that the Npc has
     // @remarks This function reads the Npc.dat file
     public static short EncontrarCant(short NpcIndex, short ObjIndex)
     {
@@ -166,11 +166,11 @@ internal static class InvNpc
         // Author: Unknown
         // Last Modification: 03/09/08
         // Last Modification By: Marco Vanotti (Marco)
-        // - 03/09/08 EncontrarCant now returns 0 if the npc doesn't have it (Marco)
+        // - 03/09/08 EncontrarCant now returns 0 if the Npc doesn't have it (Marco)
         // ***************************************************
         try
         {
-            // Devuelve la cantidad original del obj de un npc
+            // Devuelve la cantidad original del obj de un Npc
 
             string ln, npcfile;
             short i;
@@ -232,10 +232,10 @@ internal static class InvNpc
     }
 
     // '
-    // Removes a certain amount of items from a slot of an npc's inventory
+    // Removes a certain amount of items from a slot of an Npc's inventory
     // 
     // @param npcIndex Specifies reference to npcmerchant
-    // @param Slot Specifies reference to npc's inventory's slot
+    // @param Slot Specifies reference to Npc's inventory's slot
     // @param antidad Specifies amount of items that will be removed
     public static void QuitarNpcInvItem(short NpcIndex, byte Slot, short Cantidad)
     {
@@ -243,7 +243,7 @@ internal static class InvNpc
         // Author: Unknown
         // Last Modification: 23/11/2009
         // Last Modification By: Marco Vanotti (Marco)
-        // - 03/09/08 Now this sub checks that te npc has an item before respawning it (Marco)
+        // - 03/09/08 Now this sub checks that te Npc has an item before respawning it (Marco)
         // 23/11/2009: ZaMa - Optimizacion de codigo.
         // ***************************************************
         short ObjIndex;
@@ -281,7 +281,7 @@ internal static class InvNpc
 
                     if (!QuedanItems(NpcIndex, ObjIndex))
                     {
-                        // Check if the item is in the npc's dat.
+                        // Check if the item is in the Npc's dat.
                         iCant = Convert.ToInt16(EncontrarCant(NpcIndex, ObjIndex));
                         if (iCant != 0)
                         {
@@ -306,7 +306,7 @@ internal static class InvNpc
         // 
         // ***************************************************
 
-        // Vuelve a cargar el inventario del npc NpcIndex
+        // Vuelve a cargar el inventario del Npc NpcIndex
         short LoopC;
         string ln;
         string npcfile;
@@ -341,7 +341,6 @@ internal static class InvNpc
         // ***************************************************
         try
         {
-            byte i;
             Declaraciones.Obj MiObj;
             int RemainingGold;
             if (Cantidad > 0)

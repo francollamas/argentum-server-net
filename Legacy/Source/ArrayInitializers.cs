@@ -34,7 +34,7 @@ internal static class ArrayInitializers
             @struct[i].Initialize();
     }
 
-    public static void InitializeStruct(Declaraciones.npc[] @struct)
+    public static void InitializeStruct(Declaraciones.Npc[] @struct)
     {
         int i;
         var loopTo = @struct.Length - 1;

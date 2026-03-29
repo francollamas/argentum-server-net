@@ -257,8 +257,6 @@ public static class General
 
         try
         {
-            DateTime f;
-
             ES.LoadMotd();
             Admin.BanIpCargar();
 

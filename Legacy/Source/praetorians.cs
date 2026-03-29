@@ -148,7 +148,7 @@ internal static class PraetoriansCoopNPC
 
             if (TeleFrag > 0)
             {
-                // 'El rey va a pisar a un npc de antiguo rey
+                // 'El rey va a pisar a un Npc de antiguo rey
                 // 'Obtengo en WP2 la mejor posicion cercana
                 var argPuedeAgua = false;
                 var argPuedeTierra = true;
@@ -261,7 +261,6 @@ internal static class PraetoriansCoopNPC
             short NPCAlInd;
             short PJEnInd;
 
-            bool PJBestTarget;
             short BTx;
             short BTy;
             short Xc;
@@ -275,8 +274,6 @@ internal static class PraetoriansCoopNPC
             NPCPosX = Declaraciones.Npclist[npcind].Pos.X;
             NPCPosY = Declaraciones.Npclist[npcind].Pos.Y;
             NPCPosM = Declaraciones.Npclist[npcind].Pos.Map;
-
-            PJBestTarget = false;
             X = 0;
             Y = 0;
             quehacer = 0;
@@ -318,7 +315,6 @@ internal static class PraetoriansCoopNPC
                             if (EsMagoOClerigo(PJEnInd))
                             {
                                 // 'say no more, atacar a este
-                                PJBestTarget = true;
                                 BestTarget = PJEnInd;
                                 quehacer = 1;
                                 // Call NpcLanzaSpellSobreUser(npcind, PJEnInd, Npclist(npcind).Spells(1)) ''flecha pasa como spell
@@ -334,14 +330,12 @@ internal static class PraetoriansCoopNPC
                                               Math.Pow(NPCPosY - Declaraciones.UserList[BestTarget].Pos.Y, 2d)))
                                 {
                                     // 'el nuevo esta mas cerca
-                                    PJBestTarget = true;
                                     BestTarget = PJEnInd;
                                     quehacer = 1;
                                 }
                             }
                             else
                             {
-                                PJBestTarget = true;
                                 BestTarget = PJEnInd;
                                 quehacer = 1;
                             }
@@ -476,7 +470,6 @@ internal static class PraetoriansCoopNPC
             short BestTarget;
             short NPCAlInd;
             short PJEnInd;
-            bool PJBestTarget;
             byte bs;
             short azar;
             short azar2;
@@ -489,8 +482,6 @@ internal static class PraetoriansCoopNPC
             NPCPosX = Declaraciones.Npclist[npcind].Pos.X; // 'store current position
             NPCPosY = Declaraciones.Npclist[npcind].Pos.Y; // 'for direct access
             NPCPosM = Declaraciones.Npclist[npcind].Pos.Map;
-
-            PJBestTarget = false;
             BestTarget = 0;
             quehacer = 0;
             X = 0;
@@ -563,7 +554,6 @@ internal static class PraetoriansCoopNPC
                                     {
                                         // 'los usuarios invisibles y paralizados son un buen target!
                                         BestTarget = PJEnInd;
-                                        PJBestTarget = true;
                                         quehacer = 2;
                                     }
                                 }
@@ -578,14 +568,12 @@ internal static class PraetoriansCoopNPC
                                         {
                                             // 'encontre un paralizado visible, y no hay un besttarget invisible (paralizado invisible)
                                             BestTarget = PJEnInd;
-                                            PJBestTarget = true;
                                             quehacer = 2;
                                         }
                                     }
                                     else
                                     {
                                         BestTarget = PJEnInd;
-                                        PJBestTarget = true;
                                         quehacer = 2;
                                     }
                                 }
@@ -593,7 +581,6 @@ internal static class PraetoriansCoopNPC
                                 {
                                     // 'movil visible
                                     BestTarget = PJEnInd;
-                                    PJBestTarget = true;
                                     quehacer = 2;
                                 } // '
                             } // 'endif:    not muerto
@@ -928,7 +915,6 @@ internal static class PraetoriansCoopNPC
             short NPCPosX;
             short NPCPosY;
             short NPCPosM;
-            short NPCAlInd;
             short UI;
             short PJEnInd;
             short BestTarget;
@@ -1205,7 +1191,7 @@ internal static class PraetoriansCoopNPC
                                             Declaraciones.Npclist[NPCAlInd].Pos.Y);
                                         // GreedyWalkTo npcind, NPCPosM, Npclist(NPCAlInd).Pos.X, Npclist(NPCAlInd).Pos.Y
                                         return;
-                                    } // 'endif npc
+                                    } // 'endif Npc
                             } // 'endif tile analizado
                     }
 
@@ -1218,7 +1204,7 @@ internal static class PraetoriansCoopNPC
 
                     break;
                 }
-                // 'fin quehacer = 0 (npc al cuete)
+                // 'fin quehacer = 0 (Npc al cuete)
 
                 case 1: // ' paralizar enemigo PJ
                 {
@@ -1361,7 +1347,7 @@ internal static class PraetoriansCoopNPC
             short indireccion;
 
             indireccion = Declaraciones.Npclist[npcind].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1392,7 +1378,7 @@ internal static class PraetoriansCoopNPC
             short indireccion;
 
             indireccion = Declaraciones.Npclist[npcind].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1427,7 +1413,7 @@ internal static class PraetoriansCoopNPC
             short indireccion;
 
             indireccion = Declaraciones.Npclist[npcind].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1459,7 +1445,7 @@ internal static class PraetoriansCoopNPC
 
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto indice. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             indireccion = Declaraciones.Npclist[paralizador].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, paralizador,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[paralizador].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1492,7 +1478,7 @@ internal static class PraetoriansCoopNPC
 
 
             indireccion = Declaraciones.Npclist[curador].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, curador,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[curador].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1525,7 +1511,7 @@ internal static class PraetoriansCoopNPC
             short indireccion;
 
             indireccion = Declaraciones.Npclist[npcind].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1569,7 +1555,7 @@ internal static class PraetoriansCoopNPC
 
 
             indireccion = Declaraciones.Npclist[npcind].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1607,7 +1593,7 @@ internal static class PraetoriansCoopNPC
             short indireccion;
 
             indireccion = Declaraciones.Npclist[npcind].Spells[indice];
-            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
+            // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del Npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
                     Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
@@ -1901,7 +1887,7 @@ internal static class PraetoriansCoopNPC
                                     NPCs.MuereNpc(MascotaInd, 0);
                                 }
                             } // 'es mascota
-                        } // 'hay npc
+                        } // 'hay Npc
                     }
 
                     break;
@@ -2235,7 +2221,7 @@ internal static class PraetoriansCoopNPC
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                 Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx), Convert.ToByte(NPCy + 1)));
-            // Update map and npc pos
+            // Update map and Npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.Y = Convert.ToInt16(NPCy + 1);
             Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.SOUTH;
@@ -2268,7 +2254,7 @@ internal static class PraetoriansCoopNPC
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                 Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx), Convert.ToByte(NPCy - 1)));
-            // Update map and npc pos
+            // Update map and Npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.Y = Convert.ToInt16(NPCy - 1);
             Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.NORTH;
@@ -2301,7 +2287,7 @@ internal static class PraetoriansCoopNPC
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                 Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx - 1), Convert.ToByte(NPCy)));
-            // Update map and npc pos
+            // Update map and Npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.X = Convert.ToInt16(NPCx - 1);
             Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.WEST;
@@ -2334,7 +2320,7 @@ internal static class PraetoriansCoopNPC
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                 Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx + 1), Convert.ToByte(NPCy)));
-            // Update map and npc pos
+            // Update map and Npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.X = Convert.ToInt16(NPCx + 1);
             Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.EAST;
@@ -2410,9 +2396,6 @@ internal static class PraetoriansCoopNPC
             EstoyMuyLejosRet = retvalue;
 
         return EstoyMuyLejosRet;
-
-        var argdesc = "Error en NPCAI.EstoymUYLejos";
-        General.LogError(ref argdesc);
     }
 
     public static bool EstoyLejos(short npcind)
@@ -2526,7 +2509,7 @@ internal static class PraetoriansCoopNPC
     }
 
 
-    public static bool CasperBlock(short npc)
+    public static bool CasperBlock(short Npc)
     {
         bool CasperBlockRet = default;
         try
@@ -2538,9 +2521,9 @@ internal static class PraetoriansCoopNPC
 
             bool retvalue;
 
-            NPCPosX = Declaraciones.Npclist[npc].Pos.X;
-            NPCPosY = Declaraciones.Npclist[npc].Pos.Y;
-            NPCPosM = Declaraciones.Npclist[npc].Pos.Map;
+            NPCPosX = Declaraciones.Npclist[Npc].Pos.X;
+            NPCPosY = Declaraciones.Npclist[Npc].Pos.Y;
+            NPCPosM = Declaraciones.Npclist[Npc].Pos.Map;
 
             retvalue = !(Extra.LegalPos(NPCPosM, Convert.ToInt16(NPCPosX + 1), NPCPosY) |
                          Extra.LegalPos(NPCPosM, Convert.ToInt16(NPCPosX - 1), NPCPosY) |
@@ -2605,7 +2588,7 @@ internal static class PraetoriansCoopNPC
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX + 1), Convert.ToByte(NPCPosY + 1)));
-                // Update map and npc pos
+                // Update map and Npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY + 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX + 1);
@@ -2622,7 +2605,7 @@ internal static class PraetoriansCoopNPC
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX - 1), Convert.ToByte(NPCPosY - 1)));
-                // Update map and npc pos
+                // Update map and Npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY - 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX - 1);
@@ -2639,7 +2622,7 @@ internal static class PraetoriansCoopNPC
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX + 1), Convert.ToByte(NPCPosY - 1)));
-                // Update map and npc pos
+                // Update map and Npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY - 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX + 1);
@@ -2656,7 +2639,7 @@ internal static class PraetoriansCoopNPC
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX - 1), Convert.ToByte(NPCPosY + 1)));
-                // Update map and npc pos
+                // Update map and Npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY + 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX - 1);

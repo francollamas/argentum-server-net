@@ -163,6 +163,7 @@ public class SocketManager
         }
         catch (ObjectDisposedException ex)
         {
+            Console.WriteLine($"ObjectDisposedException in AcceptCallback: {ex.Message}");
         }
         // Socket was closed
         catch (Exception ex)
@@ -216,6 +217,7 @@ public class SocketManager
         }
         catch (ObjectDisposedException ex)
         {
+            Console.WriteLine($"ObjectDisposedException in StartReceive: {ex.Message}");
             // Socket was closed
             lock (_pendingReceivesLock)
             {
@@ -292,12 +294,14 @@ public class SocketManager
         }
         catch (ObjectDisposedException ex)
         {
+            Console.WriteLine($"ObjectDisposedException in ReadCallback: {ex.Message}");
             // Socket was closed
             if (socketID >= 0)
                 CloseSocketInternal(socketID);
         }
         catch (SocketException ex)
         {
+            Console.WriteLine($"SocketException in ReadCallback: {ex.Message}");
             // Socket error
             if (socketID >= 0)
                 CloseSocketInternal(socketID);
@@ -372,6 +376,7 @@ public class SocketManager
         }
         catch (ObjectDisposedException ex)
         {
+            Console.WriteLine($"ObjectDisposedException in BeginSendData: {ex.Message}");
             // Socket was closed
             lock (_pendingSendsLock)
             {
@@ -427,10 +432,12 @@ public class SocketManager
         }
         catch (ObjectDisposedException ex)
         {
+            Console.WriteLine($"ObjectDisposedException in SendCallback: {ex.Message}");
         }
         // Socket was closed
         catch (SocketException ex)
         {
+            Console.WriteLine($"SocketException in SendCallback: {ex.Message}");
             // Socket error
             if (socketID >= 0)
                 CloseSocketInternal(socketID);
@@ -554,15 +561,17 @@ public class SocketManager
         }
         catch (ObjectDisposedException ex)
         {
+            Console.WriteLine($"ObjectDisposedException in CloseSocketInternal: {ex.Message}");
         }
         // Socket was already disposed
         catch (SocketException ex)
         {
+            Console.WriteLine($"SocketException in CloseSocketInternal: {ex.Message}");
         }
         // Socket error during shutdown/close
         catch (Exception ex)
         {
-            // Other errors during shutdown/close
+            Console.WriteLine($"Exception in CloseSocketInternal: {ex.Message}");
         }
 
         // Notify about the closed connection

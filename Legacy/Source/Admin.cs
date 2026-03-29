@@ -28,9 +28,6 @@ internal static class Admin
     public static short IntervaloInvisible;
     public static short IntervaloFrio;
     public static short IntervaloWavFx;
-    public static short IntervaloLanzaHechizo;
-    public static short IntervaloNPCPuedeAtacar;
-    public static short IntervaloNPCAI;
     public static short IntervaloInvocacion;
     public static short IntervaloOculto; // [Nacho]
     public static int IntervaloUserPuedeAtacar;
@@ -86,7 +83,7 @@ internal static class Admin
         {
             short i;
             // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            Declaraciones.npc MiNPC;
+            Declaraciones.Npc MiNPC;
 
             var loopTo = Declaraciones.LastNPC;
             for (i = 1; i <= loopTo; i++)
@@ -124,7 +121,6 @@ internal static class Admin
         try
         {
             short loopX;
-            int Porc;
 
             modSendData.SendData(modSendData.SendTarget.ToAll, 0,
                 Protocol.PrepareMessageConsoleMsg("Servidor> Iniciando WorldSave",

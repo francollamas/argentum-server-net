@@ -596,8 +596,6 @@ internal class clsByteQueue
     private class ByteConverter
     {
         public byte[] ByteArr;
-        public int LongValue;
-        public float SingleValue;
 
         public ByteConverter()
         {
@@ -608,7 +606,6 @@ internal class clsByteQueue
     private class DoubleConverter
     {
         public byte[] ByteArr;
-        public double DoubleValue;
 
         public DoubleConverter()
         {

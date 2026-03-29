@@ -63,7 +63,6 @@ internal static class modSendData
         try
         {
             int LoopC;
-            short Map;
 
             switch (sndRoute)
             {

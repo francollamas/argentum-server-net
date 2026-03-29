@@ -46,7 +46,6 @@ internal static class GameLoop
 
     private static int _TickAutoSave_Minutos;
     private static int _TickAutoSave_MinutosLatsClean;
-    private static int _TickAutoSave_MinsPjesSave;
 
     private static void OnExit(object sender, EventArgs e)
     {
@@ -606,9 +605,6 @@ internal static class GameLoop
         // fired every minute
         try
         {
-            short i;
-            int num;
-
             _TickAutoSave_Minutos = Convert.ToInt32(_TickAutoSave_Minutos + 1);
 
             // ¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
@@ -662,11 +658,11 @@ internal static class GameLoop
     {
         try
         {
-            short npc;
+            short Npc;
 
             var loopTo = Declaraciones.LastNPC;
-            for (npc = 1; npc <= loopTo; npc++)
-                Declaraciones.Npclist[npc].CanAttack = 1;
+            for (Npc = 1; Npc <= loopTo; Npc++)
+                Declaraciones.Npclist[Npc].CanAttack = 1;
         }
 
         catch (Exception ex)
@@ -703,16 +699,13 @@ internal static class GameLoop
     private static void TickAI()
     {
         var NpcIndex = default(short);
-        short X;
-        short Y;
-        short UseAI;
         short mapa;
         short e_p;
 
         try
         {
             // Barrin 29/9/03
-            if (!Declaraciones.haciendoBK & !Declaraciones.EnPausa)
+            if (!Declaraciones.haciendoBK)
             {
                 // Update NPCs
                 var loopTo = Declaraciones.LastNPC;

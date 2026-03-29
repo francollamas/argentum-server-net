@@ -762,7 +762,7 @@ internal static class Extra
         // ***************************************************
         // Autor: Unkwnown
         // Last Modification: 09/23/2009
-        // Checks if it's a Legal pos for the npc to move to.
+        // Checks if it's a Legal pos for the Npc to move to.
         // 09/23/2009: Pato - If UserIndex is a AdminInvisible, then is a legal pos.
         // ***************************************************
         bool IsDeadChar;

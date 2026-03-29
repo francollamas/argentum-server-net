@@ -822,9 +822,7 @@ internal static class Declaraciones
 
     // ********** V A R I A B L E S     P U B L I C A S ***********
 
-    public static bool SERVERONLINE;
     public static string ULTIMAVERSION;
-    public static bool BackUp; // TODO: Se usa esta variable ?
 
     // UPGRADE_WARNING: El límite inferior de la matriz ListaRazas ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     public static string[] ListaRazas = new string[NUMRAZAS + 1];
@@ -876,7 +874,6 @@ internal static class Declaraciones
     public static short NumChars;
     public static short LastNPC;
     public static short NumNPCs;
-    public static short NumFX;
     public static short NumMaps;
     public static short NumObjDatas;
     public static short NumeroHechizos;
@@ -894,8 +891,6 @@ internal static class Declaraciones
     // Esta activada la verificacion MD5 ?
     public static byte MD5ClientesActivado;
 
-
-    public static bool EnPausa;
     public static bool EnTesting;
 
 
@@ -904,7 +899,7 @@ internal static class Declaraciones
 
     // UPGRADE_WARNING: El límite inferior de la matriz Npclist ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     // UPGRADE_WARNING: Es posible que la matriz Npclist necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-    public static npc[] Npclist = new npc[MAXNPCS + 1]; // NPCS
+    public static Npc[] Npclist = new Npc[MAXNPCS + 1]; // NPCS
 
     public static MapBlock[,,] MapData;
 
@@ -916,7 +911,6 @@ internal static class Declaraciones
     public static short[] CharList = new short[MAXCHARS + 1];
 
     public static ObjData[] objData;
-    public static FXdata[] FX;
 
     public static tCriaturasEntrenador[] SpawnList;
 
@@ -1086,9 +1080,6 @@ internal static class Declaraciones
 
     public struct tPartyData
     {
-        public short PIndex;
-        public double RemXP; // La exp. en el server se cuenta con Doubles
-        public short TargetUser; // Para las invitaciones
     }
 
     public struct Position
@@ -1106,12 +1097,9 @@ internal static class Declaraciones
 
     public struct FXdata
     {
-        public string Nombre;
-        public short GrhIndex;
-        public short Delay;
     }
 
-    // Datos de user o npc
+    // Datos de user o Npc
     public struct Character
     {
         public short CharIndex;
@@ -1403,7 +1391,7 @@ internal static class Declaraciones
         public bool SeguroResu;
         public int DuracionEfecto;
         public short TargetNPC; // Npc señalado por el usuario
-        public eNPCType TargetNpcTipo; // Tipo del npc señalado
+        public eNPCType TargetNpcTipo; // Tipo del Npc señalado
         public short OwnedNpc; // Npc que le pertenece (no puede ser atacado)
         public short NpcInv;
         public byte Ban;
@@ -1689,13 +1677,13 @@ internal static class Declaraciones
         public Queue.tVertice[] Path; // This array holds the path
         public Position Target; // The location where the NPC has to go
         public short PathLenght; // Number of steps *
-        public short CurPos; // Current location of the npc
+        public short CurPos; // Current location of the Npc
         public short TargetUser; // UserIndex chased
 
         public bool NoPath; // If it is true there is no path to the target location
         // * By setting PathLenght to 0 we force the recalculation
         // of the path, this is very useful. For example,
-        // if a NPC or a User moves over the npc's path, blocking
+        // if a NPC or a User moves over the Npc's path, blocking
         // its way, the function NpcLegalPos set PathLenght to 0
         // forcing the seek of a new path.
     }
@@ -1707,7 +1695,7 @@ internal static class Declaraciones
         public int Amount;
     }
 
-    public struct npc
+    public struct Npc
     {
         public string name;
 

@@ -56,8 +56,6 @@ internal static class InvUsuario
 
         try
         {
-            bool flag;
-
             // Admins can use ANYTHING!
             short i;
             if ((Declaraciones.UserList[UserIndex].flags.Privilegios & Declaraciones.PlayerType.User) != 0)
@@ -205,7 +203,6 @@ internal static class InvUsuario
         {
             // If Cantidad > 100000 Then Exit Sub
 
-            byte i;
             Declaraciones.Obj MiObj;
             var loops = default(short);
             short j;
@@ -538,8 +535,6 @@ internal static class InvUsuario
 
         try
         {
-            short X;
-            short Y;
             byte Slot;
 
             {
@@ -631,7 +626,6 @@ internal static class InvUsuario
 
         short X;
         short Y;
-        byte Slot;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             // ¿Hay algun obj?

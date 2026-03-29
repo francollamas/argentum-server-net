@@ -1598,7 +1598,7 @@ internal static class Trabajo
     // Checks if the user can tames a pet.
     // 
     // @param integer userIndex The user id from who wants tame the pet.
-    // @param integer NPCindex The index of the npc to tome.
+    // @param integer NPCindex The index of the Npc to tome.
     // @return boolean True if can, false if not.
     private static bool PuedeDomarMascota(short UserIndex, short NpcIndex)
     {

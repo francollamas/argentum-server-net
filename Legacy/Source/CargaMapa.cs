@@ -191,7 +191,7 @@ internal static class CargaMapa
 
             npcfile = Declaraciones.DatPath + "NPCs.dat";
 
-            // Si el npc debe hacer respawn en la pos
+            // Si el Npc debe hacer respawn en la pos
             // original la guardamos
 
             if (Convert.ToInt32(General.LeerNPCs.GetValue("NPC" + Declaraciones.MapData[ind, x, y].NpcIndex,

@@ -326,7 +326,7 @@ internal static class SistemaCombate
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Arma. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 Arma = Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex];
 
-                // Ataca a un npc?
+                // Ataca a un Npc?
                 if (NpcIndex > 0)
                 {
                     if (Arma.proyectil == 1)
@@ -447,7 +447,7 @@ internal static class SistemaCombate
         // Author: Unknown
         // Last Modification: 07/04/2010 (ZaMa)
         // 25/01/2010: ZaMa - Agrego poder acuchillar npcs.
-        // 07/04/2010: ZaMa - Los asesinos apuñalan acorde al daño base sin descontar la defensa del npc.
+        // 07/04/2010: ZaMa - Los asesinos apuñalan acorde al daño base sin descontar la defensa del Npc.
         // ***************************************************
 
         int daño;
@@ -750,7 +750,7 @@ internal static class SistemaCombate
 
         {
             ref var withBlock1 = ref Declaraciones.Npclist[NpcIndex];
-            // El npc puede atacar ???
+            // El Npc puede atacar ???
             if (withBlock1.CanAttack == 1)
             {
                 NpcAtacaUserRet = true;
@@ -884,7 +884,7 @@ internal static class SistemaCombate
                     return;
                 }
 
-            // El npc puede atacar ???
+            // El Npc puede atacar ???
             if (withBlock.CanAttack == 1)
             {
                 withBlock.CanAttack = 0;
@@ -1857,7 +1857,7 @@ internal static class SistemaCombate
         // 24/01/2007 Pablo (ToxicWaste) - Orden y corrección de ataque sobre una mascota y guardias
         // 14/08/2007 Pablo (ToxicWaste) - Reescribo y agrego TODOS los casos posibles cosa de usar
         // esta función para todo lo referente a ataque a un NPC. Ya sea Magia, Físico o a Distancia.
-        // 16/11/2009: ZaMa - Agrego validacion de pertenencia de npc.
+        // 16/11/2009: ZaMa - Agrego validacion de pertenencia de Npc.
         // 02/04/2010: ZaMa - Los armadas ya no peuden atacar npcs no hotiles.
         // ***************************************************
 
@@ -2042,7 +2042,7 @@ internal static class SistemaCombate
 
         {
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
-            // El npc le pertenece a alguien?
+            // El Npc le pertenece a alguien?
             OwnerUserIndex = withBlock.Owner;
 
             if (OwnerUserIndex > 0)
@@ -2055,7 +2055,7 @@ internal static class SistemaCombate
                     return PuedeAtacarNPCRet;
                 }
 
-                // Esta compartiendo el npc con el atacante? => Puede atacar!
+                // Esta compartiendo el Npc con el atacante? => Puede atacar!
                 if (Declaraciones.UserList[OwnerUserIndex].flags.ShareNpcWith == AttackerIndex)
                 {
                     PuedeAtacarNPCRet = true;
@@ -2088,17 +2088,17 @@ internal static class SistemaCombate
                                 // El atacante es Armada
                                 if (Extra.esArmada(AttackerIndex))
                                 {
-                                    // Intententa paralizar un npc de un armada?
+                                    // Intententa paralizar un Npc de un armada?
                                     if (Extra.esArmada(OwnerUserIndex))
                                     {
-                                        // El atacante es Armada y esta intentando paralizar un npc de un armada: No puede
+                                        // El atacante es Armada y esta intentando paralizar un Npc de un armada: No puede
                                         Protocol.WriteConsoleMsg(AttackerIndex,
                                             "Los miembros del Ejército Real no pueden paralizar criaturas ya paralizadas pertenecientes a otros miembros del Ejército Real",
                                             Protocol.FontTypeNames.FONTTYPE_INFO);
                                         return PuedeAtacarNPCRet;
                                     }
 
-                                    // El atacante es Armada y esta intentando paralizar un npc de un ciuda
+                                    // El atacante es Armada y esta intentando paralizar un Npc de un ciuda
                                     // Si tiene seguro no puede
 
                                     if (Declaraciones.UserList[AttackerIndex].flags.Seguro)
@@ -2109,7 +2109,7 @@ internal static class SistemaCombate
                                         return PuedeAtacarNPCRet;
                                     }
 
-                                    // Si ya estaba atacable, no podrá atacar a un npc perteneciente a otro ciuda
+                                    // Si ya estaba atacable, no podrá atacar a un Npc perteneciente a otro ciuda
                                     if (UsUaRiOs.ToogleToAtackable(AttackerIndex, OwnerUserIndex))
                                     {
                                         Protocol.WriteConsoleMsg(AttackerIndex,
@@ -2134,7 +2134,7 @@ internal static class SistemaCombate
 
                                 // El atacante no tiene el seguro puesto, ataca.
 
-                                // Si ya estaba atacable, no podrá atacar a un npc perteneciente a otro ciuda
+                                // Si ya estaba atacable, no podrá atacar a un Npc perteneciente a otro ciuda
                                 if (UsUaRiOs.ToogleToAtackable(AttackerIndex, OwnerUserIndex))
                                 {
                                     Protocol.WriteConsoleMsg(AttackerIndex,
@@ -2151,7 +2151,7 @@ internal static class SistemaCombate
 
                             if (Extra.esCaos(AttackerIndex) & Extra.esCaos(OwnerUserIndex))
                             {
-                                // El atacante es Caos y esta intentando paralizar un npc de un Caos
+                                // El atacante es Caos y esta intentando paralizar un Npc de un Caos
                                 Protocol.WriteConsoleMsg(AttackerIndex,
                                     "Los miembros de la legión oscura no pueden paralizar criaturas ya paralizadas por otros legionarios.",
                                     Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -2159,7 +2159,7 @@ internal static class SistemaCombate
                             }
                         }
 
-                        // El npc no esta inmobilizado ni paralizado
+                        // El Npc no esta inmobilizado ni paralizado
                         else
                         {
                             // Si no tiene dueño, puede apropiarselo
@@ -2177,23 +2177,23 @@ internal static class SistemaCombate
 
                     // No lanzó hechizos inmobilizantes
 
-                    // El npc le pertenece a un ciudadano
+                    // El Npc le pertenece a un ciudadano
                     else if (!ES.criminal(OwnerUserIndex))
                     {
-                        // El atacante es Armada y esta intentando atacar un npc de un Ciudadano
+                        // El atacante es Armada y esta intentando atacar un Npc de un Ciudadano
                         if (Extra.esArmada(AttackerIndex))
                         {
-                            // Intententa atacar un npc de un armada?
+                            // Intententa atacar un Npc de un armada?
                             if (Extra.esArmada(OwnerUserIndex))
                             {
-                                // El atacante es Armada y esta intentando atacar el npc de un armada: No puede
+                                // El atacante es Armada y esta intentando atacar el Npc de un armada: No puede
                                 Protocol.WriteConsoleMsg(AttackerIndex,
                                     "Los miembros del Ejército Real no pueden atacar criaturas pertenecientes a otros miembros del Ejército Real",
                                     Protocol.FontTypeNames.FONTTYPE_INFO);
                                 return PuedeAtacarNPCRet;
                             }
 
-                            // El atacante es Armada y esta intentando atacar un npc de un ciuda
+                            // El atacante es Armada y esta intentando atacar un Npc de un ciuda
 
                             // Si tiene seguro no puede
 
@@ -2205,7 +2205,7 @@ internal static class SistemaCombate
                                 return PuedeAtacarNPCRet;
                             }
 
-                            // Si ya estaba atacable, no podrá atacar a un npc perteneciente a otro ciuda
+                            // Si ya estaba atacable, no podrá atacar a un Npc perteneciente a otro ciuda
                             if (UsUaRiOs.ToogleToAtackable(AttackerIndex, OwnerUserIndex))
                             {
                                 Protocol.WriteConsoleMsg(AttackerIndex,
@@ -2219,7 +2219,7 @@ internal static class SistemaCombate
 
                         // No es aramda, puede ser criminal o ciuda
 
-                        // El atacante es Ciudadano y esta intentando atacar un npc de un Ciudadano.
+                        // El atacante es Ciudadano y esta intentando atacar un Npc de un Ciudadano.
 
                         if (!ES.criminal(AttackerIndex))
                         {
@@ -2245,9 +2245,9 @@ internal static class SistemaCombate
                             return PuedeAtacarNPCRet;
                         }
 
-                        // El atacante es criminal y esta intentando atacar un npc de un Ciudadano.
+                        // El atacante es criminal y esta intentando atacar un Npc de un Ciudadano.
 
-                        // Es criminal atacando un npc de un ciuda, con seguro puesto.
+                        // Es criminal atacando un Npc de un ciuda, con seguro puesto.
                         if (Declaraciones.UserList[AttackerIndex].flags.Seguro)
                         {
                             Protocol.WriteConsoleMsg(AttackerIndex,
@@ -2259,13 +2259,13 @@ internal static class SistemaCombate
                         PuedeAtacarNPCRet = true;
                     }
 
-                    // Es npc de un criminal
+                    // Es Npc de un criminal
                     else if (Extra.esCaos(OwnerUserIndex))
                     {
                         // Es Caos el Dueño.
                         if (Extra.esCaos(AttackerIndex))
                         {
-                            // Un Caos intenta atacar una npc de un Caos. No puede atacar.
+                            // Un Caos intenta atacar una Npc de un Caos. No puede atacar.
                             Protocol.WriteConsoleMsg(AttackerIndex,
                                 "Los miembros de la Legión Oscura no pueden atacar criaturas de otros legionarios. ",
                                 Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -2275,20 +2275,20 @@ internal static class SistemaCombate
                 }
             }
 
-            // Si no tiene dueño el npc, se lo apropia
+            // Si no tiene dueño el Npc, se lo apropia
             // Solo pueden apropiarse de npcs los caos, armadas o ciudas.
             else if (!ES.criminal(AttackerIndex) | Extra.esCaos(AttackerIndex))
             {
                 // No puede apropiarse de los pretos!
                 if (!(PraetoriansCoopNPC.esPretoriano(NpcIndex) != 0))
-                    // Si es una mascota atacando, no se apropia del npc
+                    // Si es una mascota atacando, no se apropia del Npc
                     if (!IsPet)
                     {
-                        // No es dueño de ningun npc => Se lo apropia.
+                        // No es dueño de ningun Npc => Se lo apropia.
                         if (Declaraciones.UserList[AttackerIndex].flags.OwnedNpc == 0)
                             UsUaRiOs.ApropioNpc(AttackerIndex, NpcIndex);
-                        // Es dueño de un npc, pero no puede ser de este porque no tiene propietario.
-                        // Se va a adueñar del npc (y perder el otro) solo si no inmobiliza/paraliza
+                        // Es dueño de un Npc, pero no puede ser de este porque no tiene propietario.
+                        // Se va a adueñar del Npc (y perder el otro) solo si no inmobiliza/paraliza
                         else if (!Paraliza)
                             UsUaRiOs.ApropioNpc(AttackerIndex, NpcIndex);
                     }
@@ -2342,7 +2342,7 @@ internal static class SistemaCombate
         // Autor: Nacho (Integer)
         // Last Modification: 03/09/06 Nacho
         // Reescribi gran parte del Sub
-        // Ahora, da toda la experiencia del npc mientras este vivo.
+        // Ahora, da toda la experiencia del Npc mientras este vivo.
         // ***************************************************
         int ExpaDar;
 

@@ -128,7 +128,7 @@ internal static class AI
     // '
     // Handles the evil npcs' artificial intelligency.
     // 
-    // @param NpcIndex Specifies reference to the npc
+    // @param NpcIndex Specifies reference to the Npc
     private static void HostilMalvadoAI(short NpcIndex)
     {
         // **************************************************************
@@ -172,7 +172,7 @@ internal static class AI
                             {
                                 atacoPJ = true;
                                 if (withBlock.Movement == TipoAI.NpcObjeto)
-                                    // Los npc objeto no atacan siempre al mismo usuario
+                                    // Los Npc objeto no atacan siempre al mismo usuario
                                     if (Matematicas.RandomNumber(1, 3) == 3)
                                         atacoPJ = false;
 
@@ -423,7 +423,7 @@ internal static class AI
     // '
     // Makes a Pet / Summoned Npc to Follow an enemy
     // 
-    // @param NpcIndex Specifies reference to the npc
+    // @param NpcIndex Specifies reference to the Npc
     private static void SeguirAgresor(short NpcIndex)
     {
         // **************************************************************
@@ -944,10 +944,7 @@ internal static class AI
         // 14/09/2009: ZaMa - Now npcs don't follow protected users.
         // ***************************************************
         short UserIndex;
-        byte tHeading;
         int i;
-        short SignoNS;
-        short SignoEO;
         bool UserProtected;
 
         {
@@ -987,7 +984,7 @@ internal static class AI
         // Last Modify by: ZaMa
         // Last Modify Date: 15/11/2009
         // 08/16/2008: MarKoxX - Now pets that do melï¿½ attacks have to be near the enemy to attack.
-        // 15/11/2009: ZaMa - Implementacion de npc objetos ai.
+        // 15/11/2009: ZaMa - Implementacion de Npc objetos ai.
         // **************************************************************
         try
         {
@@ -1137,7 +1134,7 @@ internal static class AI
                           Declaraciones.Npclist[NpcIndex].TargetNPC;
             General.LogError(ref argdesc);
             // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura MiNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            Declaraciones.npc MiNPC;
+            Declaraciones.Npc MiNPC;
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto MiNPC. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             MiNPC = Declaraciones.Npclist[NpcIndex];
             NPCs.QuitarNPC(NpcIndex);
@@ -1151,7 +1148,7 @@ internal static class AI
         // ***************************************************
         // Author: Unknown
         // Last Modification: -
-        // Returns True if there is an user adjacent to the npc position.
+        // Returns True if there is an user adjacent to the Npc position.
         // ***************************************************
 
         {
@@ -1187,7 +1184,7 @@ internal static class AI
         // ***************************************************
         // Author: Gulfas Morgolock
         // Last Modification: -
-        // Returns if the npc has arrived to the end of its path
+        // Returns if the Npc has arrived to the end of its path
         // ***************************************************
         PathEndRet = Declaraciones.Npclist[NpcIndex].PFINFO.CurPos == Declaraciones.Npclist[NpcIndex].PFINFO.PathLenght;
         return PathEndRet;
@@ -1198,7 +1195,7 @@ internal static class AI
         // ***************************************************
         // Author: Gulfas Morgolock
         // Last Modification: -
-        // Moves the npc.
+        // Moves the Npc.
         // ***************************************************
         Declaraciones.WorldPos tmpPos;
         byte tHeading;

@@ -6772,7 +6772,7 @@ internal static class Protocol
             // Remove packet ID
             withBlock.incomingData.ReadByte();
 
-            // Se asegura que el target es un npc
+            // Se asegura que el target es un Npc
             if (withBlock.flags.TargetNPC == 0)
             {
                 WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.",
@@ -6911,7 +6911,7 @@ internal static class Protocol
             // Remove packet ID
             withBlock.incomingData.ReadByte();
 
-            // Se asegura que el target es un npc
+            // Se asegura que el target es un Npc
             if (withBlock.flags.TargetNPC == 0)
             {
                 WriteConsoleMsg(UserIndex, "Primero tienes que seleccionar un personaje, haz click izquierdo sobre él.",
@@ -9748,7 +9748,7 @@ internal static class Protocol
         // ***************************************************
         // Author: Juan Martín Sotuyo Dodero (Maraxus)
         // Last Modification: 26/03/09
-        // 26/03/06: ZaMa - Chequeo que no se teletransporte donde haya un char o npc
+        // 26/03/06: ZaMa - Chequeo que no se teletransporte donde haya un char o Npc
         // ***************************************************
         short X;
         short Y;
@@ -9782,7 +9782,7 @@ internal static class Protocol
         // ***************************************************
         // Author: Juan Martín Sotuyo Dodero (Maraxus)
         // Last Modification: 26/03/2009
-        // 26/03/2009: ZaMa -  Chequeo que no se teletransporte a un tile donde haya un char o npc.
+        // 26/03/2009: ZaMa -  Chequeo que no se teletransporte a un tile donde haya un char o Npc.
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 7)
         {
@@ -10062,7 +10062,7 @@ internal static class Protocol
         // ***************************************************
         // Author: Juan Martín Sotuyo Dodero (Maraxus)
         // Last Modification: 26/03/2009
-        // 26/03/2009: ZaMa -  Chequeo que no se teletransporte a un tile donde haya un char o npc.
+        // 26/03/2009: ZaMa -  Chequeo que no se teletransporte a un tile donde haya un char o Npc.
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
@@ -10436,7 +10436,7 @@ internal static class Protocol
         // ***************************************************
         short tNPC;
         // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura auxNPC, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Declaraciones.npc auxNPC;
+        Declaraciones.Npc auxNPC;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             // Remove packet ID
@@ -12199,7 +12199,7 @@ internal static class Protocol
         // ***************************************************
         // Author: Nicolas Matias Gonzalez (NIGO)
         // Last Modification: 26/03/2009
-        // 26/03/2009: ZaMa - Chequeo que no se teletransporte donde haya un char o npc
+        // 26/03/2009: ZaMa - Chequeo que no se teletransporte donde haya un char o Npc
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
@@ -12310,22 +12310,22 @@ internal static class Protocol
             return;
         }
 
-        short npc;
+        short Npc;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             // Remove packet ID
             withBlock.incomingData.ReadByte();
 
-            npc = withBlock.incomingData.ReadInteger();
+            Npc = withBlock.incomingData.ReadInteger();
 
             if ((withBlock.flags.Privilegios & (Declaraciones.PlayerType.Admin | Declaraciones.PlayerType.Dios |
                                                 Declaraciones.PlayerType.SemiDios)) != 0)
 
             {
-                if ((npc > 0) & (npc <= Declaraciones.SpawnList.Length - 1))
-                    NPCs.SpawnNpc(Declaraciones.SpawnList[npc].NpcIndex, ref withBlock.Pos, true, false);
+                if ((Npc > 0) & (Npc <= Declaraciones.SpawnList.Length - 1))
+                    NPCs.SpawnNpc(Declaraciones.SpawnList[Npc].NpcIndex, ref withBlock.Pos, true, false);
 
-                var argtexto = "Sumoneo " + Declaraciones.SpawnList[npc].NpcName;
+                var argtexto = "Sumoneo " + Declaraciones.SpawnList[Npc].NpcName;
                 General.LogGM(ref withBlock.name, ref argtexto);
             }
         }
@@ -16991,7 +16991,6 @@ internal static class Protocol
         catch (Exception ex)
         {
             Console.WriteLine("Error in HandleSetIniVar: " + ex.Message);
-            int error;
         }
     }
 
@@ -19559,6 +19558,7 @@ internal static class Protocol
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Exception in TryWithRetry: {ex.Message}");
             onRetry();
             tryAction(); // Reintenta una sola vez
         }

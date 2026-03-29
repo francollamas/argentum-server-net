@@ -1268,14 +1268,6 @@ internal static class TCP
                     Protocol.FontTypeNames.FONTTYPE_SERVER);
             }
 
-            if (Declaraciones.EnPausa)
-            {
-                Protocol.WritePauseToggle(UserIndex);
-                Protocol.WriteConsoleMsg(UserIndex,
-                    "Servidor> Lo sentimos mucho pero el servidor se encuentra actualmente detenido. Intenta ingresar más tarde.",
-                    Protocol.FontTypeNames.FONTTYPE_SERVER);
-            }
-
             if (Declaraciones.EnTesting & (withBlock.Stats.ELV >= 18))
             {
                 Protocol.WriteErrorMsg(UserIndex,

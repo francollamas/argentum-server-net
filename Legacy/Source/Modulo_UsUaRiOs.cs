@@ -1553,11 +1553,11 @@ internal static class UsUaRiOs
         // 24/01/2007 -> Pablo (ToxicWaste): Agrego para que se actualize el tag si corresponde.
         // 24/07/2007 -> Pablo (ToxicWaste): Guardar primero que ataca NPC y el que atacas ahora.
         // 06/28/2008 -> NicoNZ: Los elementales al atacarlos por su amo no se paran más al lado de él sin hacer nada.
-        // 02/04/2010: ZaMa: Un ciuda no se vuelve mas criminal al atacar un npc no hostil.
+        // 02/04/2010: ZaMa: Un ciuda no se vuelve mas criminal al atacar un Npc no hostil.
         // **********************************************
         bool EraCriminal;
 
-        // Guardamos el usuario que ataco el npc.
+        // Guardamos el usuario que ataco el Npc.
         Declaraciones.Npclist[NpcIndex].flags.AttackedBy = Declaraciones.UserList[UserIndex].name;
 
         // Npc que estabas atacando.
@@ -1566,7 +1566,7 @@ internal static class UsUaRiOs
         // Guarda el NPC que estas atacando ahora.
         Declaraciones.UserList[UserIndex].flags.NPCAtacado = NpcIndex;
 
-        // Revisamos robo de npc.
+        // Revisamos robo de Npc.
         // Guarda el primer nick que lo ataca.
         if (string.IsNullOrEmpty(Declaraciones.Npclist[NpcIndex].flags.AttackedFirstBy))
         {
@@ -1621,7 +1621,7 @@ internal static class UsUaRiOs
 
             if (Declaraciones.Npclist[NpcIndex].MaestroUser != UserIndex)
             {
-                // hacemos que el npc se defienda
+                // hacemos que el Npc se defienda
                 Declaraciones.Npclist[NpcIndex].Movement = AI.TipoAI.NPCDEFENSA;
                 Declaraciones.Npclist[NpcIndex].Hostile = 1;
             }
@@ -2064,7 +2064,7 @@ internal static class UsUaRiOs
         // Author: Unknown
         // Last Modify Date: 13/11/2009
         // 15/07/2009 - ZaMa: Automatic toogle navigate after warping to water.
-        // 13/11/2009 - ZaMa: Now it's activated the timer which determines if the npc can atacak the user.
+        // 13/11/2009 - ZaMa: Now it's activated the timer which determines if the Npc can atacak the user.
         // **************************************************************
         short OldMap;
         short OldX;
@@ -2170,7 +2170,7 @@ internal static class UsUaRiOs
             // No puede ser atacado cuando cambia de mapa, por cierto tiempo
             modNuevoTimer.IntervaloPermiteSerAtacado(UserIndex, true);
 
-            // Perdes el npc al cambiar de mapa
+            // Perdes el Npc al cambiar de mapa
             PerdioNpc(UserIndex);
 
             // Automatic toogle navigate
@@ -2243,7 +2243,7 @@ internal static class UsUaRiOs
                     petType = Declaraciones.UserList[UserIndex].MascotasType[i];
                     // PetTiempoDeVida = Npclist(index).Contadores.TiempoExistencia
 
-                    // Guardamos el hp, para restaurarlo uando se cree el npc
+                    // Guardamos el hp, para restaurarlo uando se cree el Npc
                     iMinHP = Convert.ToInt16(Declaraciones.Npclist[Index].Stats.MinHp);
 
                     NPCs.QuitarNPC(Index);
@@ -2325,7 +2325,7 @@ internal static class UsUaRiOs
             // Store data and remove NPC to recreate it after warp
             petType = withBlock.MascotasType[PetIndex];
 
-            // Guardamos el hp, para restaurarlo cuando se cree el npc
+            // Guardamos el hp, para restaurarlo cuando se cree el Npc
             iMinHP = Convert.ToInt16(Declaraciones.Npclist[NpcIndex].Stats.MinHp);
 
             NPCs.QuitarNPC(NpcIndex);
@@ -2740,8 +2740,8 @@ internal static class UsUaRiOs
         // **************************************************************
         // Author: ZaMa
         // Last Modify Date: 18/01/2010 (ZaMa)
-        // The user loses his owned npc
-        // 18/01/2010: ZaMa - Las mascotas dejan de atacar al npc que se perdió.
+        // The user loses his owned Npc
+        // 18/01/2010: ZaMa - Las mascotas dejan de atacar al Npc que se perdió.
         // **************************************************************
 
         int PetIndex;
@@ -2767,7 +2767,7 @@ internal static class UsUaRiOs
         // **************************************************************
         // Author: ZaMa
         // Last Modify Date: 18/01/2010 (zaMa)
-        // The user owns a new npc
+        // The user owns a new Npc
         // 18/01/2010: ZaMa - El sistema no aplica a zonas seguras.
         // 19/04/2010: ZaMa - Ahora los admins no se pueden apropiar de npcs.
         // **************************************************************
@@ -2787,7 +2787,7 @@ internal static class UsUaRiOs
             if (Declaraciones.mapInfo[withBlock.Pos.Map].RoboNpcsPermitido == 1)
                 return;
 
-            // Pierde el npc anterior
+            // Pierde el Npc anterior
             if (withBlock.flags.OwnedNpc > 0)
                 Declaraciones.Npclist[withBlock.flags.OwnedNpc].Owner = 0;
 
@@ -3060,10 +3060,10 @@ internal static class UsUaRiOs
 
             if (AtacablePor > 0)
             {
-                // Intenta robar un npc
+                // Intenta robar un Npc
                 if (StealingNpc)
                 {
-                    // Puede atacar el mismo npc que ya estaba robando, pero no una nuevo.
+                    // Puede atacar el mismo Npc que ya estaba robando, pero no una nuevo.
                     if (AtacablePor != OwnerIndex)
                     {
                         Protocol.WriteConsoleMsg(UserIndex,
@@ -3101,7 +3101,7 @@ internal static class UsUaRiOs
         // ***************************************************
         // Author: Budi
         // Last Modification: 30/04/2010
-        // 30/04/2010: ZaMa - Ahora el npc avisa que se cambio de hogar.
+        // 30/04/2010: ZaMa - Ahora el Npc avisa que se cambio de hogar.
         // ***************************************************
         if ((newHome < Declaraciones.eCiudad.cUllathorpe) | (newHome > Declaraciones.eCiudad.cArghal))
             return;
