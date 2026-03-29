@@ -65,7 +65,7 @@ Module mdlCOmercioConUsuario
 
         Catch ex As Exception
             Console.WriteLine("Error in Initialize: " & ex.Message)
-            Call LogError("Error en IniciarComercioConUsuario: " & Err.Description)
+            Call LogError("Error en IniciarComercioConUsuario: " & ex.Message)
         End Try
     End Sub
 

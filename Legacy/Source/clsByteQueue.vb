@@ -5,8 +5,8 @@ Imports System.Text
 
 Friend Class clsByteQueue
     ' Exception codes
-    Private Const NOT_ENOUGH_DATA As Integer = vbObjectError + 9
-    Private Const NOT_ENOUGH_SPACE As Integer = vbObjectError + 10
+    Private Const NOT_ENOUGH_DATA As Integer = -2147221495  ' vbObjectError + 9
+    Private Const NOT_ENOUGH_SPACE As Integer = -2147221494  ' vbObjectError + 10
     Private Const DATA_BUFFER As Integer = 10240
 
     ' Modern classes using BitConverter instead of fixed arrays

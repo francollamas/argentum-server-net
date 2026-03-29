@@ -100,7 +100,7 @@ Friend Class ConsultasPopulares
 
         Catch ex As Exception
             Console.WriteLine("Error in LoadData: " & ex.Message)
-            Call LogError("Error en ConsultasPopularse.doVotar: " & Err.Description)
+            Call LogError("Error en ConsultasPopularse.doVotar: " & ex.Message)
         End Try
     End Function
 

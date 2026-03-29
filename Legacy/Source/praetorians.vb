@@ -2382,7 +2382,7 @@ Module PraetoriansCoopNPC
 
         Catch ex As Exception
             Console.WriteLine("Error in CambiarAlcoba: " & ex.Message)
-            Call LogError("Error en CambiarAlcoba " & Err.Description)
+            Call LogError("Error en CambiarAlcoba " & ex.Message)
         End Try
     End Sub
 End Module

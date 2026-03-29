@@ -257,7 +257,7 @@ Module UsUaRiOs
 
         Catch ex As Exception
             Console.WriteLine("Error in ActStats: " & ex.Message)
-            Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.Description)
+            Call LogError("Error en EraseUserchar " & ex.GetType().Name & ": " & ex.Message)
         End Try
     End Sub
 
@@ -401,7 +401,7 @@ Module UsUaRiOs
 
         Catch ex As Exception
             Console.WriteLine("Error in RefreshCharStatus: " & ex.Message)
-            LogError(("MakeUserChar: num: " & Err.Number & " desc: " & Err.Description))
+            LogError(("MakeUserChar: num: " & ex.GetType().Name & " desc: " & ex.Message))
             Call CloseSocket(UserIndex)
         End Try
     End Sub
@@ -703,8 +703,8 @@ Module UsUaRiOs
             Console.WriteLine("Error in CheckUserLevel: " & ex.Message)
             Call _
                 LogError(
-                    "Error en la subrutina CheckUserLevel - Error : " & Err.Number & " - Description : " &
-                    Err.Description)
+                    "Error en la subrutina CheckUserLevel - Error : " & ex.GetType().Name & " - Description : " &
+                    ex.Message)
         End Try
     End Sub
 
@@ -1680,7 +1680,7 @@ Module UsUaRiOs
 
         Catch ex As Exception
             Console.WriteLine("Error in PuedeAtravesarAgua: " & ex.Message)
-            Call LogError("Error en SUB USERDIE. Error: " & Err.Number & " Descripción: " & Err.Description)
+            Call LogError("Error en SUB USERDIE. Error: " & ex.GetType().Name & " Descripción: " & ex.Message)
         End Try
     End Sub
 

@@ -533,7 +533,7 @@ Module modHechizos
             Console.WriteLine("Error in AgregarHechizo: " & ex.Message)
             With UserList(UserIndex)
                 LogError(
-                    ("[" & Err.Number & "] " & Err.Description & " por el usuario " & .name & "(" & UserIndex & ") en (" &
+                    ("[" & ex.GetType().Name & "] " & ex.Message & " por el usuario " & .name & "(" & UserIndex & ") en (" &
                      .Pos.Map & ", " & .Pos.X & ", " & .Pos.Y & "). Tratando de tirar el hechizo " &
                      Hechizos(SpellIndex).Nombre & "(" & SpellIndex & ") en la posicion ( " & .flags.TargetX & ", " &
                      .flags.TargetY & ")"))
@@ -805,7 +805,7 @@ Module modHechizos
             Console.WriteLine("Error in HandleHechizoTerreno: " & ex.Message)
             Call _
                 LogError(
-                    "Error en LanzarHechizo. Error " & Err.Number & " : " & Err.Description & " Hechizo: " &
+                    "Error en LanzarHechizo. Error " & ex.GetType().Name & " : " & ex.Message & " Hechizo: " &
                     Hechizos(SpellIndex).Nombre & "(" & SpellIndex & "). Casteado por: " & UserList(UserIndex).name &
                     "(" &
                     UserIndex & ").")
@@ -2230,7 +2230,7 @@ Module modHechizos
             Console.WriteLine("Error in HechizoEstadoUsuario: " & ex.Message)
             Call _
                 LogError(
-                    "Error en CanSupportUser, Error: " & Err.Number & " - " & Err.Description & " CasterIndex: " &
+                    "Error en CanSupportUser, Error: " & ex.GetType().Name & " - " & ex.Message & " CasterIndex: " &
                     CasterIndex & ", TargetIndex: " & TargetIndex)
         End Try
     End Function

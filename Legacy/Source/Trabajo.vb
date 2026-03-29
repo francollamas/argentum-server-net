@@ -272,7 +272,7 @@ Module Trabajo
 
         Catch ex As Exception
             Console.WriteLine("Error in DoNavega: " & ex.Message)
-            Call LogError("Error en FundirMineral. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en FundirMineral. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -304,7 +304,7 @@ Module Trabajo
 
         Catch ex As Exception
             Console.WriteLine("Error in FundirArmas: " & ex.Message)
-            Call LogError("Error en FundirArmas. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en FundirArmas. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -1341,7 +1341,7 @@ Module Trabajo
 
         Catch ex As Exception
             Console.WriteLine("Error in TieneObjetos: " & ex.Message)
-            Call LogError("Error en DoDomar. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en DoDomar. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -1585,7 +1585,7 @@ Module Trabajo
 
         Catch ex As Exception
             Console.WriteLine("Error in PuedeDomarMascota: " & ex.Message)
-            Call LogError("Error en DoPescar. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en DoPescar. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -1847,7 +1847,7 @@ Module Trabajo
 
         Catch ex As Exception
             Console.WriteLine("Error in DoRobar: " & ex.Message)
-            Call LogError("Error en DoRobar. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en DoRobar. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 
@@ -2110,7 +2110,7 @@ Module Trabajo
 
         Catch ex As Exception
             Console.WriteLine("Error in ObjEsRobable: " & ex.Message)
-            Call LogError("Error en QuitarSta. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en QuitarSta. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Sub
 

@@ -151,7 +151,7 @@ Public Module General
 
         Catch ex As Exception
             Console.WriteLine("Error in LimpiarMundo: " & ex.Message)
-            Call LogError("Error producido en el sub LimpiarMundo: " & Err.Description)
+            Call LogError("Error producido en el sub LimpiarMundo: " & ex.Message)
         End Try
     End Sub
 
@@ -1111,7 +1111,7 @@ Public Module General
 
         Catch ex As Exception
             Console.WriteLine("Error in EfectoInvisibilidad: " & ex.Message)
-            Call LogError("Error en PasarSegundo. Err: " & Err.Description & " - " & Err.Number & " - UserIndex: " & i)
+            Call LogError("Error en PasarSegundo. Err: " & ex.Message & " - " & ex.GetType().Name & " - UserIndex: " & i)
         End Try
     End Sub
 

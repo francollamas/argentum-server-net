@@ -843,7 +843,7 @@ Module SistemaCombate
 
         Catch ex As Exception
             Console.WriteLine("Error in MinimoInt: " & ex.Message)
-            Call LogError("Error en UsuarioAtacaNpc. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en UsuarioAtacaNpc. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Function
 
@@ -1043,7 +1043,7 @@ Module SistemaCombate
 
             Call _
                 LogError(
-                    "Error en UsuarioImpacto. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " &
+                    "Error en UsuarioImpacto. Error " & ex.GetType().Name & " : " & ex.Message & " AtacanteIndex: " &
                     AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " &
                     VictimaNick)
         End Try
@@ -1116,7 +1116,7 @@ Module SistemaCombate
 
         Catch ex As Exception
             Console.WriteLine("Error in UsuarioAtacaUsuario: " & ex.Message)
-            Call LogError("Error en UsuarioAtacaUsuario. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en UsuarioAtacaUsuario. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Function
 
@@ -1281,7 +1281,7 @@ Module SistemaCombate
 
             Call _
                 LogError(
-                    "Error en UserDañoUser. Error " & Err.Number & " : " & Err.Description & " AtacanteIndex: " &
+                    "Error en UserDañoUser. Error " & ex.GetType().Name & " : " & ex.Message & " AtacanteIndex: " &
                     AtacanteIndex & " Nick: " & AtacanteNick & " VictimaIndex: " & VictimaIndex & " Nick: " &
                     VictimaNick)
         End Try
@@ -1556,7 +1556,7 @@ Module SistemaCombate
 
         Catch ex As Exception
             Console.WriteLine("Error in UsuarioAtacadoPorUsuario: " & ex.Message)
-            Call LogError("Error en PuedeAtacar. Error " & Err.Number & " : " & Err.Description)
+            Call LogError("Error en PuedeAtacar. Error " & ex.GetType().Name & " : " & ex.Message)
         End Try
     End Function
 
@@ -2100,7 +2100,7 @@ Module SistemaCombate
         Catch ex As Exception
             Console.WriteLine("Error in PuedeAtacarNPC: " & ex.Message)
             TriggerZonaPelea = eTrigger6.TRIGGER6_AUSENTE
-            LogError(("Error en TriggerZonaPelea - " & Err.Description))
+            LogError(("Error en TriggerZonaPelea - " & ex.Message))
         End Try
     End Function
 

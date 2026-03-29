@@ -622,7 +622,7 @@ Friend Class clsClan
 
         Catch ex As Exception
             Console.WriteLine("Error in CambiarAlineacion: " & ex.Message)
-            LogError(("clsClan.Contarvotos: " & Err.Description))
+            LogError(("clsClan.Contarvotos: " & ex.Message))
             ContarVotos = vbNullString
         End Try
     End Function
