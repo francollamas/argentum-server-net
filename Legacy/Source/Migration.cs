@@ -14,14 +14,13 @@ internal static class Migration
         return GetTickCountRet;
     }
 
-    // UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static int migr_LenB(string str_Renamed)
+    public static int migr_LenB(string str)
     {
         int migr_LenBRet = default;
-        if (string.IsNullOrEmpty(str_Renamed))
+        if (string.IsNullOrEmpty(str))
             migr_LenBRet = 0;
         else
-            migr_LenBRet = str_Renamed.Length * 2;
+            migr_LenBRet = str.Length * 2;
 
         return migr_LenBRet;
     }

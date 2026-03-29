@@ -136,13 +136,13 @@ internal static class Admin
 
             var loopTo = Declaraciones.NumMaps;
             for (j = 1; j <= loopTo; j++)
-                if (Declaraciones.MapInfo_Renamed[j].BackUp == 1)
+                if (Declaraciones.mapInfo[j].BackUp == 1)
                     k = Convert.ToInt16(k + 1);
 
             var loopTo1 = Declaraciones.NumMaps;
             for (loopX = 1; loopX <= loopTo1; loopX++)
                 // DoEvents
-                if (Declaraciones.MapInfo_Renamed[loopX].BackUp == 1)
+                if (Declaraciones.mapInfo[loopX].BackUp == 1)
                     ES.GrabarMapa(loopX, AppDomain.CurrentDomain.BaseDirectory + "WorldBackUp/Mapa" + loopX);
 
             if (File.Exists(Declaraciones.DatPath + "/bkNpc.dat"))

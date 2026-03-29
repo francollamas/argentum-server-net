@@ -123,7 +123,7 @@ internal static class Acciones
 
                     withBlock.flags.TargetObj = tempIndex;
 
-                    switch (Declaraciones.ObjData_Renamed[tempIndex].OBJType)
+                    switch (Declaraciones.objData[tempIndex].OBJType)
                     {
                         case Declaraciones.eOBJType.otPuertas: // Es una puerta
                         {
@@ -155,7 +155,7 @@ internal static class Acciones
                     tempIndex = Declaraciones.MapData[Map, X + 1, Y].ObjInfo.ObjIndex;
                     withBlock.flags.TargetObj = tempIndex;
 
-                    switch (Declaraciones.ObjData_Renamed[tempIndex].OBJType)
+                    switch (Declaraciones.objData[tempIndex].OBJType)
                     {
                         case Declaraciones.eOBJType.otPuertas: // Es una puerta
                         {
@@ -170,7 +170,7 @@ internal static class Acciones
                     tempIndex = Declaraciones.MapData[Map, X + 1, Y + 1].ObjInfo.ObjIndex;
                     withBlock.flags.TargetObj = tempIndex;
 
-                    switch (Declaraciones.ObjData_Renamed[tempIndex].OBJType)
+                    switch (Declaraciones.objData[tempIndex].OBJType)
                     {
                         case Declaraciones.eOBJType.otPuertas: // Es una puerta
                         {
@@ -185,7 +185,7 @@ internal static class Acciones
                     tempIndex = Declaraciones.MapData[Map, X, Y + 1].ObjInfo.ObjIndex;
                     withBlock.flags.TargetObj = tempIndex;
 
-                    switch (Declaraciones.ObjData_Renamed[tempIndex].OBJType)
+                    switch (Declaraciones.objData[tempIndex].OBJType)
                     {
                         case Declaraciones.eOBJType.otPuertas: // Es una puerta
                         {
@@ -226,7 +226,7 @@ internal static class Acciones
             }
 
             if (modForum.SendPosts(UserIndex,
-                    ref Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].ForoID))
+                    ref Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].ForoID))
                 Protocol.WriteShowForumForm(UserIndex);
         }
 
@@ -249,19 +249,19 @@ internal static class Acciones
             if (!(Matematicas.Distance(Declaraciones.UserList[UserIndex].Pos.X, Declaraciones.UserList[UserIndex].Pos.Y,
                     X, Y) > 2d))
             {
-                if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].Llave == 0)
+                if (Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].Llave == 0)
                 {
-                    if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].Cerrada == 1)
+                    if (Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].Cerrada == 1)
                     {
                         // Abre la puerta
-                        if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].Llave == 0)
+                        if (Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].Llave == 0)
                         {
                             Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex = Declaraciones
-                                .ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].IndexAbierta;
+                                .objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].IndexAbierta;
 
                             modSendData.SendToAreaByPos(Map, X, Y,
                                 Protocol.PrepareMessageObjectCreate(
-                                    Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex]
+                                    Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex]
                                         .GrhIndex, Convert.ToByte(X), Convert.ToByte(Y)));
 
                             // Desbloquea
@@ -289,11 +289,11 @@ internal static class Acciones
                     {
                         // Cierra puerta
                         Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex = Declaraciones
-                            .ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].IndexCerrada;
+                            .objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].IndexCerrada;
 
                         modSendData.SendToAreaByPos(Map, X, Y,
                             Protocol.PrepareMessageObjectCreate(
-                                Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex]
+                                Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex]
                                     .GrhIndex, Convert.ToByte(X), Convert.ToByte(Y)));
 
                         Declaraciones.MapData[Map, X, Y].Blocked = 1;
@@ -339,8 +339,8 @@ internal static class Acciones
 
         try
         {
-            if ((int)Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].OBJType == 8)
-                if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].texto.Length > 0)
+            if ((int)Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].OBJType == 8)
+                if (Declaraciones.objData[Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex].texto.Length > 0)
                     Protocol.WriteShowSignal(UserIndex, Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex);
         }
 
@@ -362,8 +362,7 @@ internal static class Acciones
         {
             var Suerte = default(byte);
             byte exito;
-            // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.Obj Obj_Renamed;
+            Declaraciones.Obj obj;
 
             Declaraciones.WorldPos Pos;
             Pos.Map = Map;
@@ -380,7 +379,7 @@ internal static class Acciones
                 }
 
                 if ((Declaraciones.MapData[Map, X, Y].trigger == Declaraciones.eTrigger.ZONASEGURA) |
-                    !Declaraciones.MapInfo_Renamed[Map].Pk)
+                    !Declaraciones.mapInfo[Map].Pk)
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "No puedes hacer fogatas en zona segura.",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -400,15 +399,15 @@ internal static class Acciones
 
                 if (exito == 1)
                 {
-                    if ((Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Zona ?? "") != Declaraciones.Ciudad)
+                    if ((Declaraciones.mapInfo[withBlock.Pos.Map].Zona ?? "") != Declaraciones.Ciudad)
                     {
-                        Obj_Renamed.ObjIndex = Declaraciones.FOGATA;
-                        Obj_Renamed.Amount = 1;
+                        obj.ObjIndex = Declaraciones.FOGATA;
+                        obj.Amount = 1;
 
                         Protocol.WriteConsoleMsg(UserIndex, "Has prendido la fogata.",
                             Protocol.FontTypeNames.FONTTYPE_INFO);
 
-                        InvUsuario.MakeObj(ref Obj_Renamed, Map, X, Y);
+                        InvUsuario.MakeObj(ref obj, Map, X, Y);
 
                         // Las fogatas prendidas se deben eliminar
                         Fogatita.Map = Map;

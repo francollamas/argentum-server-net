@@ -41,7 +41,7 @@ internal static class SistemaCombate
 
         PoderEvasionEscudoRet =
             Convert.ToInt32(Declaraciones.UserList[UserIndex].Stats.UserSkills[(int)Declaraciones.eSkill.Defensa] *
-                Declaraciones.ModClase_Renamed[(int)Declaraciones.UserList[UserIndex].clase].Escudo / 2d);
+                Declaraciones.modClase[(int)Declaraciones.UserList[UserIndex].clase].Escudo / 2d);
         return PoderEvasionEscudoRet;
     }
 
@@ -60,7 +60,7 @@ internal static class SistemaCombate
                 (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Tacticas] +
                  withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Tacticas] / 33d *
                  withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                Declaraciones.ModClase_Renamed[(int)withBlock.clase].Evasion);
+                Declaraciones.modClase[(int)withBlock.clase].Evasion);
 
             PoderEvasionRet = Convert.ToInt32(lTemp + 2.5d * MaximoInt(withBlock.Stats.ELV - 12, 0));
         }
@@ -83,22 +83,22 @@ internal static class SistemaCombate
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] < 31)
                 PoderAtaqueTemp = Convert.ToInt32(withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] *
-                                                  Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueArmas);
+                                                  Declaraciones.modClase[(int)withBlock.clase].AtaqueArmas);
             else if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] < 61)
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] +
                      withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueArmas);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueArmas);
             else if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] < 91)
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] +
                      2 * withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueArmas);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueArmas);
             else
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Armas] +
                      3 * withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueArmas);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueArmas);
 
             PoderAtaqueArmaRet = Convert.ToInt32(PoderAtaqueTemp + 2.5d * MaximoInt(withBlock.Stats.ELV - 12, 0));
         }
@@ -121,23 +121,23 @@ internal static class SistemaCombate
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] < 31)
                 PoderAtaqueTemp = Convert.ToInt32(withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] *
-                                                  Declaraciones.ModClase_Renamed[(int)withBlock.clase]
+                                                  Declaraciones.modClase[(int)withBlock.clase]
                                                       .AtaqueProyectiles);
             else if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] < 61)
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] +
                      withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueProyectiles);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueProyectiles);
             else if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] < 91)
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] +
                      2 * withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueProyectiles);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueProyectiles);
             else
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Proyectiles] +
                      3 * withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueProyectiles);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueProyectiles);
 
             PoderAtaqueProyectilRet = Convert.ToInt32(PoderAtaqueTemp + 2.5d * MaximoInt(withBlock.Stats.ELV - 12, 0));
         }
@@ -160,22 +160,22 @@ internal static class SistemaCombate
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] < 31)
                 PoderAtaqueTemp = Convert.ToInt32(withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] *
-                                                  Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueWrestling);
+                                                  Declaraciones.modClase[(int)withBlock.clase].AtaqueWrestling);
             else if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] < 61)
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] +
                      withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueWrestling);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueWrestling);
             else if (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] < 91)
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] +
                      2 * withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueWrestling);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueWrestling);
             else
                 PoderAtaqueTemp = Convert.ToInt32(
                     (withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling] +
                      3 * withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad]) *
-                    Declaraciones.ModClase_Renamed[(int)withBlock.clase].AtaqueWrestling);
+                    Declaraciones.modClase[(int)withBlock.clase].AtaqueWrestling);
 
             PoderAtaqueWrestlingRet = Convert.ToInt32(PoderAtaqueTemp + 2.5d * MaximoInt(withBlock.Stats.ELV - 12, 0));
         }
@@ -201,7 +201,7 @@ internal static class SistemaCombate
 
         if (Arma > 0) // Usando un arma
         {
-            if (Declaraciones.ObjData_Renamed[Arma].proyectil == 1)
+            if (Declaraciones.objData[Arma].proyectil == 1)
             {
                 PoderAtaque = PoderAtaqueProyectil(UserIndex);
                 Skill = Declaraciones.eSkill.Proyectiles;
@@ -325,7 +325,7 @@ internal static class SistemaCombate
             if (withBlock.Invent.WeaponEqpObjIndex > 0)
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Arma. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Arma = Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex];
+                Arma = Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex];
 
                 // Ataca a un npc?
                 if (NpcIndex > 0)
@@ -333,14 +333,14 @@ internal static class SistemaCombate
                     if (Arma.proyectil == 1)
                     {
                         ModifClase =
-                            Convert.ToSingle(Declaraciones.ModClase_Renamed[(int)withBlock.clase].DañoProyectiles);
+                            Convert.ToSingle(Declaraciones.modClase[(int)withBlock.clase].DañoProyectiles);
                         DañoArma = Matematicas.RandomNumber(Arma.MinHIT, Arma.MaxHIT);
                         DañoMaxArma = Arma.MaxHIT;
 
                         if (Arma.Municion == 1)
                         {
                             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto proyectil. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            proyectil = Declaraciones.ObjData_Renamed[withBlock.Invent.MunicionEqpObjIndex];
+                            proyectil = Declaraciones.objData[withBlock.Invent.MunicionEqpObjIndex];
                             DañoArma = DañoArma + Matematicas.RandomNumber(proyectil.MinHIT, proyectil.MaxHIT);
                             // For some reason this isn't done...
                             // DañoMaxArma = DañoMaxArma + proyectil.MaxHIT
@@ -348,7 +348,7 @@ internal static class SistemaCombate
                     }
                     else
                     {
-                        ModifClase = Convert.ToSingle(Declaraciones.ModClase_Renamed[(int)withBlock.clase].DañoArmas);
+                        ModifClase = Convert.ToSingle(Declaraciones.modClase[(int)withBlock.clase].DañoArmas);
 
                         if (withBlock.Invent.WeaponEqpObjIndex ==
                             Declaraciones.EspadaMataDragonesIndex) // Usa la mata Dragones?
@@ -375,14 +375,14 @@ internal static class SistemaCombate
                 }
                 else if (Arma.proyectil == 1) // Ataca usuario
                 {
-                    ModifClase = Convert.ToSingle(Declaraciones.ModClase_Renamed[(int)withBlock.clase].DañoProyectiles);
+                    ModifClase = Convert.ToSingle(Declaraciones.modClase[(int)withBlock.clase].DañoProyectiles);
                     DañoArma = Matematicas.RandomNumber(Arma.MinHIT, Arma.MaxHIT);
                     DañoMaxArma = Arma.MaxHIT;
 
                     if (Arma.Municion == 1)
                     {
                         // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto proyectil. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        proyectil = Declaraciones.ObjData_Renamed[withBlock.Invent.MunicionEqpObjIndex];
+                        proyectil = Declaraciones.objData[withBlock.Invent.MunicionEqpObjIndex];
                         DañoArma = DañoArma + Matematicas.RandomNumber(proyectil.MinHIT, proyectil.MaxHIT);
                         // For some reason this isn't done...
                         // DañoMaxArma = DañoMaxArma + proyectil.MaxHIT
@@ -390,11 +390,11 @@ internal static class SistemaCombate
                 }
                 else
                 {
-                    ModifClase = Convert.ToSingle(Declaraciones.ModClase_Renamed[(int)withBlock.clase].DañoArmas);
+                    ModifClase = Convert.ToSingle(Declaraciones.modClase[(int)withBlock.clase].DañoArmas);
 
                     if (withBlock.Invent.WeaponEqpObjIndex == Declaraciones.EspadaMataDragonesIndex)
                     {
-                        ModifClase = Convert.ToSingle(Declaraciones.ModClase_Renamed[(int)withBlock.clase].DañoArmas);
+                        ModifClase = Convert.ToSingle(Declaraciones.modClase[(int)withBlock.clase].DañoArmas);
                         DañoArma = 1; // Si usa la espada mataDragones daño es 1
                         DañoMaxArma = 1;
                     }
@@ -407,7 +407,7 @@ internal static class SistemaCombate
             }
             else
             {
-                ModifClase = Convert.ToSingle(Declaraciones.ModClase_Renamed[(int)withBlock.clase].DañoWrestling);
+                ModifClase = Convert.ToSingle(Declaraciones.modClase[(int)withBlock.clase].DañoWrestling);
 
                 // Daño sin guantes
                 DañoMinArma = 4;
@@ -416,10 +416,10 @@ internal static class SistemaCombate
                 // Plus de guantes (en slot de anillo)
                 ObjIndex = withBlock.Invent.AnilloEqpObjIndex;
                 if (ObjIndex > 0)
-                    if (Declaraciones.ObjData_Renamed[ObjIndex].Guante == 1)
+                    if (Declaraciones.objData[ObjIndex].Guante == 1)
                     {
-                        DañoMinArma = DañoMinArma + Declaraciones.ObjData_Renamed[ObjIndex].MinHIT;
-                        DañoMaxArma = DañoMaxArma + Declaraciones.ObjData_Renamed[ObjIndex].MaxHIT;
+                        DañoMinArma = DañoMinArma + Declaraciones.objData[ObjIndex].MinHIT;
+                        DañoMaxArma = DañoMaxArma + Declaraciones.objData[ObjIndex].MaxHIT;
                     }
 
                 DañoArma = Matematicas.RandomNumber(DañoMinArma, DañoMaxArma);
@@ -460,8 +460,8 @@ internal static class SistemaCombate
         if (Declaraciones.UserList[UserIndex].flags.Navegando == 1)
             if (Declaraciones.UserList[UserIndex].Invent.BarcoObjIndex > 0)
                 DañoBase = DañoBase + Matematicas.RandomNumber(
-                    Declaraciones.ObjData_Renamed[Declaraciones.UserList[UserIndex].Invent.BarcoObjIndex].MinHIT,
-                    Declaraciones.ObjData_Renamed[Declaraciones.UserList[UserIndex].Invent.BarcoObjIndex].MaxHIT);
+                    Declaraciones.objData[Declaraciones.UserList[UserIndex].Invent.BarcoObjIndex].MinHIT,
+                    Declaraciones.objData[Declaraciones.UserList[UserIndex].Invent.BarcoObjIndex].MaxHIT);
 
         short j;
         {
@@ -533,8 +533,7 @@ internal static class SistemaCombate
         var absorbido = default(short);
         var defbarco = default(short);
         // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Declaraciones.ObjData Obj_Renamed;
+        Declaraciones.ObjData obj;
 
         daño = Convert.ToInt16(Matematicas.RandomNumber(Declaraciones.Npclist[NpcIndex].Stats.MinHIT,
             Declaraciones.Npclist[NpcIndex].Stats.MaxHIT));
@@ -545,9 +544,9 @@ internal static class SistemaCombate
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             if ((withBlock.flags.Navegando == 1) & (withBlock.Invent.BarcoObjIndex > 0))
             {
-                // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = Declaraciones.ObjData_Renamed[withBlock.Invent.BarcoObjIndex];
-                defbarco = Convert.ToInt16(Matematicas.RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef));
+                // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                obj = Declaraciones.objData[withBlock.Invent.BarcoObjIndex];
+                defbarco = Convert.ToInt16(Matematicas.RandomNumber(obj.MinDef, obj.MaxDef));
             }
 
             Lugar = Convert.ToInt16(Matematicas.RandomNumber(Convert.ToInt32((int)Declaraciones.PartesCuerpo.bCabeza),
@@ -560,9 +559,9 @@ internal static class SistemaCombate
                     // Si tiene casco absorbe el golpe
                     if (withBlock.Invent.CascoEqpObjIndex > 0)
                     {
-                        // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        Obj_Renamed = Declaraciones.ObjData_Renamed[withBlock.Invent.CascoEqpObjIndex];
-                        absorbido = Convert.ToInt16(Matematicas.RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef));
+                        // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        obj = Declaraciones.objData[withBlock.Invent.CascoEqpObjIndex];
+                        absorbido = Convert.ToInt16(Matematicas.RandomNumber(obj.MinDef, obj.MaxDef));
                     }
 
                     break;
@@ -573,19 +572,19 @@ internal static class SistemaCombate
                     // Si tiene armadura absorbe el golpe
                     if (withBlock.Invent.ArmourEqpObjIndex > 0)
                     {
-                        // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        Obj_Renamed = Declaraciones.ObjData_Renamed[withBlock.Invent.ArmourEqpObjIndex];
+                        // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        obj = Declaraciones.objData[withBlock.Invent.ArmourEqpObjIndex];
                         if (withBlock.Invent.EscudoEqpObjIndex != 0)
                         {
                             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Obj2 = Declaraciones.ObjData_Renamed[withBlock.Invent.EscudoEqpObjIndex];
-                            absorbido = Convert.ToInt16(Matematicas.RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef,
-                                Obj_Renamed.MaxDef + Obj2.MaxDef));
+                            Obj2 = Declaraciones.objData[withBlock.Invent.EscudoEqpObjIndex];
+                            absorbido = Convert.ToInt16(Matematicas.RandomNumber(obj.MinDef + Obj2.MinDef,
+                                obj.MaxDef + Obj2.MaxDef));
                         }
                         else
                         {
                             absorbido = Convert.ToInt16(
-                                Matematicas.RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef));
+                                Matematicas.RandomNumber(obj.MinDef, obj.MaxDef));
                         }
                     }
 
@@ -613,10 +612,10 @@ internal static class SistemaCombate
                     withBlock.flags.Meditando = false;
                     Protocol.WriteMeditateToggle(UserIndex);
                     Protocol.WriteConsoleMsg(UserIndex, "Dejas de meditar.", Protocol.FontTypeNames.FONTTYPE_INFO);
-                    withBlock.Char_Renamed.FX = 0;
-                    withBlock.Char_Renamed.loops = 0;
+                    withBlock.character.FX = 0;
+                    withBlock.character.loops = 0;
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, 0, 0));
+                        Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex, 0, 0));
                 }
 
             // Muere el usuario
@@ -790,7 +789,7 @@ internal static class SistemaCombate
                 if (!withBlock2.flags.Meditando)
                     if (withBlock2.flags.Navegando == 0)
                         modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                            Protocol.PrepareMessageCreateFX(withBlock2.Char_Renamed.CharIndex, Declaraciones.FXSANGRE,
+                            Protocol.PrepareMessageCreateFX(withBlock2.character.CharIndex, Declaraciones.FXSANGRE,
                                 0));
 
                 NpcDaño(NpcIndex, UserIndex);
@@ -1046,7 +1045,7 @@ internal static class SistemaCombate
 
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto AttackPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             AttackPos = withBlock.Pos;
-            Extra.HeadtoPos(withBlock.Char_Renamed.heading, ref AttackPos);
+            Extra.HeadtoPos(withBlock.character.heading, ref AttackPos);
 
             // Exit if not legal
             if ((AttackPos.X < Declaraciones.XMinMapSize) | (AttackPos.X > Declaraciones.XMaxMapSize) |
@@ -1077,7 +1076,7 @@ internal static class SistemaCombate
                 if (Declaraciones.Npclist[Index].Attackable != 0)
                 {
                     if ((Declaraciones.Npclist[Index].MaestroUser > 0) &
-                        !Declaraciones.MapInfo_Renamed[Declaraciones.Npclist[Index].Pos.Map].Pk)
+                        !Declaraciones.mapInfo[Declaraciones.Npclist[Index].Pos.Map].Pk)
                     {
                         Protocol.WriteConsoleMsg(UserIndex, "No puedes atacar mascotas en zona segura.",
                             Protocol.FontTypeNames.FONTTYPE_FIGHT);
@@ -1154,7 +1153,7 @@ internal static class SistemaCombate
             // Esta usando un arma ???
             if (Declaraciones.UserList[AtacanteIndex].Invent.WeaponEqpObjIndex > 0)
             {
-                if (Declaraciones.ObjData_Renamed[Arma].proyectil == 1)
+                if (Declaraciones.objData[Arma].proyectil == 1)
                 {
                     PoderAtaque = PoderAtaqueProyectil(AtacanteIndex);
                     Skill = Declaraciones.eSkill.Proyectiles;
@@ -1273,7 +1272,7 @@ internal static class SistemaCombate
 
                     if (Declaraciones.UserList[VictimaIndex].flags.Navegando == 0)
                         modSendData.SendData(modSendData.SendTarget.ToPCArea, VictimaIndex,
-                            Protocol.PrepareMessageCreateFX(Declaraciones.UserList[VictimaIndex].Char_Renamed.CharIndex,
+                            Protocol.PrepareMessageCreateFX(Declaraciones.UserList[VictimaIndex].character.CharIndex,
                                 Declaraciones.FXSANGRE, 0));
 
                     // Pablo (ToxicWaste): Guantes de Hurto del Bandido en acción
@@ -1343,8 +1342,7 @@ internal static class SistemaCombate
             int absorbido;
             var defbarco = default(short);
             // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.ObjData Obj_Renamed;
+            Declaraciones.ObjData obj;
             var Resist = default(byte);
 
             daño = CalcularDaño(AtacanteIndex);
@@ -1358,22 +1356,22 @@ internal static class SistemaCombate
                 ref var withBlock = ref Declaraciones.UserList[AtacanteIndex];
                 if ((withBlock.flags.Navegando == 1) & (withBlock.Invent.BarcoObjIndex > 0))
                 {
-                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = Declaraciones.ObjData_Renamed[withBlock.Invent.BarcoObjIndex];
-                    daño = daño + Matematicas.RandomNumber(Obj_Renamed.MinHIT, Obj_Renamed.MaxHIT);
+                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = Declaraciones.objData[withBlock.Invent.BarcoObjIndex];
+                    daño = daño + Matematicas.RandomNumber(obj.MinHIT, obj.MaxHIT);
                 }
 
                 if ((Declaraciones.UserList[VictimaIndex].flags.Navegando == 1) &
                     (Declaraciones.UserList[VictimaIndex].Invent.BarcoObjIndex > 0))
                 {
-                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed =
-                        Declaraciones.ObjData_Renamed[Declaraciones.UserList[VictimaIndex].Invent.BarcoObjIndex];
-                    defbarco = Convert.ToInt16(Matematicas.RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef));
+                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj =
+                        Declaraciones.objData[Declaraciones.UserList[VictimaIndex].Invent.BarcoObjIndex];
+                    defbarco = Convert.ToInt16(Matematicas.RandomNumber(obj.MinDef, obj.MaxDef));
                 }
 
                 if (withBlock.Invent.WeaponEqpObjIndex > 0)
-                    Resist = Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].Refuerzo;
+                    Resist = Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].Refuerzo;
 
                 Lugar = Convert.ToByte(Matematicas.RandomNumber(
                     Convert.ToInt32((int)Declaraciones.PartesCuerpo.bCabeza),
@@ -1386,11 +1384,11 @@ internal static class SistemaCombate
                         // Si tiene casco absorbe el golpe
                         if (Declaraciones.UserList[VictimaIndex].Invent.CascoEqpObjIndex > 0)
                         {
-                            // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Obj_Renamed =
-                                Declaraciones.ObjData_Renamed[
+                            // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            obj =
+                                Declaraciones.objData[
                                     Declaraciones.UserList[VictimaIndex].Invent.CascoEqpObjIndex];
-                            absorbido = Matematicas.RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef);
+                            absorbido = Matematicas.RandomNumber(obj.MinDef, obj.MaxDef);
                             absorbido = absorbido + defbarco - Resist;
                             daño = daño - absorbido;
                             if (daño < 0)
@@ -1405,21 +1403,21 @@ internal static class SistemaCombate
                         // Si tiene armadura absorbe el golpe
                         if (Declaraciones.UserList[VictimaIndex].Invent.ArmourEqpObjIndex > 0)
                         {
-                            // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Obj_Renamed =
-                                Declaraciones.ObjData_Renamed[
+                            // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            obj =
+                                Declaraciones.objData[
                                     Declaraciones.UserList[VictimaIndex].Invent.ArmourEqpObjIndex];
                             if (Declaraciones.UserList[VictimaIndex].Invent.EscudoEqpObjIndex != 0)
                             {
                                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj2. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                                Obj2 = Declaraciones.ObjData_Renamed[
+                                Obj2 = Declaraciones.objData[
                                     Declaraciones.UserList[VictimaIndex].Invent.EscudoEqpObjIndex];
-                                absorbido = Matematicas.RandomNumber(Obj_Renamed.MinDef + Obj2.MinDef,
-                                    Obj_Renamed.MaxDef + Obj2.MaxDef);
+                                absorbido = Matematicas.RandomNumber(obj.MinDef + Obj2.MinDef,
+                                    obj.MaxDef + Obj2.MaxDef);
                             }
                             else
                             {
-                                absorbido = Matematicas.RandomNumber(Obj_Renamed.MinDef, Obj_Renamed.MaxDef);
+                                absorbido = Matematicas.RandomNumber(obj.MinDef, obj.MaxDef);
                             }
 
                             absorbido = absorbido + defbarco - Resist;
@@ -1433,9 +1431,9 @@ internal static class SistemaCombate
                 }
 
                 Protocol.WriteMultiMessage(AtacanteIndex, (short)Declaraciones.eMessages.UserHittedUser,
-                    Declaraciones.UserList[VictimaIndex].Char_Renamed.CharIndex, Lugar, daño);
+                    Declaraciones.UserList[VictimaIndex].character.CharIndex, Lugar, daño);
                 Protocol.WriteMultiMessage(VictimaIndex, (short)Declaraciones.eMessages.UserHittedByUser,
-                    withBlock.Char_Renamed.CharIndex, Lugar, daño);
+                    withBlock.character.CharIndex, Lugar, daño);
 
                 Declaraciones.UserList[VictimaIndex].Stats.MinHp =
                     Convert.ToInt16(Declaraciones.UserList[VictimaIndex].Stats.MinHp - daño);
@@ -1445,15 +1443,15 @@ internal static class SistemaCombate
                     // Si usa un arma quizas suba "Combate con armas"
                     if (withBlock.Invent.WeaponEqpObjIndex > 0)
                     {
-                        if (Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].proyectil != 0)
+                        if (Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].proyectil != 0)
                         {
                             // es un Arco. Sube Armas a Distancia
                             UsUaRiOs.SubirSkill(AtacanteIndex, (short)Declaraciones.eSkill.Proyectiles, true);
 
                             // Si es arma arrojadiza..
-                            if (Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].Municion == 0)
+                            if (Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].Municion == 0)
                                 // Si acuchilla
-                                if (Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].Acuchilla == 1)
+                                if (Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].Acuchilla == 1)
                                     Trabajo.DoAcuchillar(AtacanteIndex, 0, VictimaIndex, Convert.ToInt16(daño));
                         }
                         else
@@ -1563,10 +1561,10 @@ internal static class SistemaCombate
                 withBlock.flags.Meditando = false;
                 Protocol.WriteMeditateToggle(VictimIndex);
                 Protocol.WriteConsoleMsg(VictimIndex, "Dejas de meditar.", Protocol.FontTypeNames.FONTTYPE_INFO);
-                withBlock.Char_Renamed.FX = 0;
-                withBlock.Char_Renamed.loops = 0;
+                withBlock.character.FX = 0;
+                withBlock.character.loops = 0;
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, VictimIndex,
-                    Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, 0, 0));
+                    Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex, 0, 0));
             }
         }
 
@@ -1787,7 +1785,7 @@ internal static class SistemaCombate
             }
 
             // Estas en un Mapa Seguro?
-            if (!Declaraciones.MapInfo_Renamed[Declaraciones.UserList[VictimIndex].Pos.Map].Pk)
+            if (!Declaraciones.mapInfo[Declaraciones.UserList[VictimIndex].Pos.Map].Pk)
             {
                 if (Extra.esArmada(AttackerIndex))
                     if (Declaraciones.UserList[AttackerIndex].Faccion.RecompensasReal > 11)
@@ -2457,11 +2455,11 @@ internal static class SistemaCombate
 
         if (ObjInd > 0)
         {
-            if (Declaraciones.ObjData_Renamed[ObjInd].proyectil == 1)
+            if (Declaraciones.objData[ObjInd].proyectil == 1)
                 ObjInd = Declaraciones.UserList[AtacanteIndex].Invent.MunicionEqpObjIndex;
 
             if (ObjInd > 0)
-                if (Declaraciones.ObjData_Renamed[ObjInd].Envenena == 1)
+                if (Declaraciones.objData[ObjInd].Envenena == 1)
                     if (Matematicas.RandomNumber(1, 100) < 60)
                     {
                         Declaraciones.UserList[VictimaIndex].flags.Envenenado = 1;

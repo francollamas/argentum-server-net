@@ -29,7 +29,7 @@ internal class cCola
 
     public cCola()
     {
-        Class_Initialize_Renamed();
+        Class_Initialize();
     }
 
     public short Longitud
@@ -42,8 +42,7 @@ internal class cCola
         }
     }
 
-    // UPGRADE_NOTE: Reset se actualizó a Reset_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public void Reset_Renamed()
+    public void Reset()
     {
         try
         {
@@ -66,8 +65,7 @@ internal class cCola
         return IndexValidoRet;
     }
 
-    // UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Initialize_Renamed()
+    private void Class_Initialize()
     {
         Cola = new List<string>();
     }
@@ -246,8 +244,7 @@ internal class cCola
     }
 
 
-    // UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Terminate_Renamed()
+    private void Class_Terminate()
     {
         // Destruimos el objeto Cola
         // UPGRADE_NOTE: El objeto Cola no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
@@ -256,6 +253,6 @@ internal class cCola
 
     ~cCola()
     {
-        Class_Terminate_Renamed();
+        Class_Terminate();
     }
 }

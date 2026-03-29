@@ -112,7 +112,7 @@ internal static class ModAreas
                 if (ConnGroups[LoopC].OptValue == 0)
                     ConnGroups[LoopC].OptValue = 1;
                 // UPGRADE_WARNING: El límite inferior de la matriz ConnGroups(LoopC).UserEntrys ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-                if (ConnGroups[LoopC].OptValue >= Declaraciones.MapInfo_Renamed[LoopC].NumUsers)
+                if (ConnGroups[LoopC].OptValue >= Declaraciones.mapInfo[LoopC].NumUsers)
                     Array.Resize(ref ConnGroups[LoopC].UserEntrys, ConnGroups[LoopC].OptValue + 1);
             }
 
@@ -234,7 +234,7 @@ internal static class ModAreas
                                                                         Declaraciones.PlayerType.Consejero |
                                                                         Declaraciones.PlayerType.RoleMaster)) != 0)
                                         Protocol.WriteSetInvisible(UserIndex,
-                                            Declaraciones.UserList[TempInt].Char_Renamed.CharIndex, true);
+                                            Declaraciones.UserList[TempInt].character.CharIndex, true);
                             }
 
                             // Solo avisa al otro cliente si no es un admin invisible
@@ -248,7 +248,7 @@ internal static class ModAreas
                                     if ((Declaraciones.UserList[TempInt].flags.Privilegios &
                                          Declaraciones.PlayerType.User) != 0)
                                         Protocol.WriteSetInvisible(Convert.ToInt16(TempInt),
-                                            withBlock.Char_Renamed.CharIndex, true);
+                                            withBlock.character.CharIndex, true);
                             }
 
                             Protocol.FlushBuffer(Convert.ToInt16(TempInt));
@@ -277,12 +277,12 @@ internal static class ModAreas
                     if (Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex != 0)
                     {
                         TempInt = Declaraciones.MapData[Map, X, Y].ObjInfo.ObjIndex;
-                        if (!Extra.EsObjetoFijo(Declaraciones.ObjData_Renamed[TempInt].OBJType))
+                        if (!Extra.EsObjetoFijo(Declaraciones.objData[TempInt].OBJType))
                         {
-                            Protocol.WriteObjectCreate(UserIndex, Declaraciones.ObjData_Renamed[TempInt].GrhIndex,
+                            Protocol.WriteObjectCreate(UserIndex, Declaraciones.objData[TempInt].GrhIndex,
                                 Convert.ToByte(X), Convert.ToByte(Y));
 
-                            if (Declaraciones.ObjData_Renamed[TempInt].OBJType == Declaraciones.eOBJType.otPuertas)
+                            if (Declaraciones.objData[TempInt].OBJType == Declaraciones.eOBJType.otPuertas)
                             {
                                 General.Bloquear(false, UserIndex, Convert.ToInt16(X), Convert.ToInt16(Y),
                                     Declaraciones.MapData[Map, X, Y].Blocked != 0);
@@ -388,7 +388,7 @@ internal static class ModAreas
 
 
             // Actualizamos!!!
-            if (Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].NumUsers != 0)
+            if (Declaraciones.mapInfo[withBlock.Pos.Map].NumUsers != 0)
             {
                 var loopTo = MaxX;
                 for (X = MinX; X <= loopTo; X++)

@@ -1001,7 +1001,7 @@ internal static class Protocol
                     }
                     case (short)Declaraciones.eMessages.UserAttackedSwing:
                     {
-                        withBlock.WriteInteger(Declaraciones.UserList[Arg1].Char_Renamed.CharIndex);
+                        withBlock.WriteInteger(Declaraciones.UserList[Arg1].character.CharIndex);
                         break;
                     }
                     case (short)Declaraciones.eMessages.UserHittedByUser:
@@ -1025,13 +1025,13 @@ internal static class Protocol
                     }
                     case (short)Declaraciones.eMessages.HaveKilledUser:
                     {
-                        withBlock.WriteInteger(Declaraciones.UserList[Arg1].Char_Renamed.CharIndex);
+                        withBlock.WriteInteger(Declaraciones.UserList[Arg1].character.CharIndex);
                         withBlock.WriteLong(Arg2);
                         break;
                     }
                     case (short)Declaraciones.eMessages.UserKill:
                     {
-                        withBlock.WriteInteger(Declaraciones.UserList[Arg1].Char_Renamed.CharIndex);
+                        withBlock.WriteInteger(Declaraciones.UserList[Arg1].character.CharIndex);
                         break;
                     }
                     case (short)Declaraciones.eMessages.EarnExp:
@@ -1073,9 +1073,8 @@ internal static class Protocol
         // Last Modification: -
         // 
         // ***************************************************
-
-        // UPGRADE_NOTE: Command se actualizó a Command_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        var Command_Renamed = default(byte);
+ 
+        var command = default(byte);
 
         try
         {
@@ -1083,9 +1082,9 @@ internal static class Protocol
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 withBlock.incomingData.ReadByte();
 
-                Command_Renamed = withBlock.incomingData.PeekByte();
+                command = withBlock.incomingData.PeekByte();
 
-                switch (Command_Renamed)
+                switch (command)
                 {
                     case (byte)Declaraciones.eGMCommands.GMMessage: // /GMSG
                     {
@@ -1874,7 +1873,7 @@ internal static class Protocol
         {
             Console.WriteLine("Error in HandleGMCommands: " + ex.Message);
             var argdesc = "Error en GmCommands. Error: " + ex.GetType().Name + " - " + ex.Message + ". Paquete: " +
-                          Command_Renamed;
+                          command;
             General.LogError(ref argdesc);
         }
     }
@@ -1903,7 +1902,7 @@ internal static class Protocol
             else if (withBlock.flags.Muerto == 1)
             {
                 // Si es un mapa común y no está en cana
-                if ((Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Restringir.ToUpper() == "NO") &
+                if ((Declaraciones.mapInfo[withBlock.Pos.Map].Restringir.ToUpper() == "NO") &
                     (withBlock.Counters.Pena == 0))
                 {
                     if (withBlock.flags.Traveling == 0)
@@ -2074,8 +2073,7 @@ internal static class Protocol
             Declaraciones.eRaza race;
             Declaraciones.eGenero gender;
             Declaraciones.eCiudad homeland;
-            // UPGRADE_NOTE: Class se actualizó a Class_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.eClass Class_Renamed;
+            Declaraciones.eClass characterClass;
             short Head;
             string mail;
 
@@ -2105,7 +2103,7 @@ internal static class Protocol
             version = buffer.ReadByte() + "." + buffer.ReadByte() + "." + buffer.ReadByte();
             race = (Declaraciones.eRaza)buffer.ReadByte();
             gender = (Declaraciones.eGenero)buffer.ReadByte();
-            Class_Renamed = (Declaraciones.eClass)buffer.ReadByte();
+            characterClass = (Declaraciones.eClass)buffer.ReadByte();
             Head = buffer.ReadInteger();
             mail = buffer.ReadASCIIString();
             homeland = (Declaraciones.eCiudad)buffer.ReadByte();
@@ -2115,7 +2113,7 @@ internal static class Protocol
                     "Esta versión del juego es obsoleta, la versión correcta es la " + Declaraciones.ULTIMAVERSION +
                     ". La misma se encuentra disponible en www.argentumonline.com.ar");
             else
-                TCP.ConnectNewUser(UserIndex, ref UserName, ref Password, race, gender, Class_Renamed, ref mail,
+                TCP.ConnectNewUser(UserIndex, ref UserName, ref Password, race, gender, characterClass, ref mail,
                     homeland, Head);
 
             // If we got here then packet is complete, copy data back to original queue
@@ -2187,14 +2185,14 @@ internal static class Protocol
                             UsUaRiOs.ToogleBoatBody(UserIndex);
                             WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                                 FontTypeNames.FONTTYPE_INFO);
-                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                                (byte)withBlock.Char_Renamed.heading, Declaraciones.NingunArma,
+                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                                (byte)withBlock.character.heading, Declaraciones.NingunArma,
                                 Declaraciones.NingunEscudo, Declaraciones.NingunCasco);
                         }
                     }
                     else if (withBlock.flags.invisible == 0)
                     {
-                        UsUaRiOs.SetInvisible(UserIndex, Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex,
+                        UsUaRiOs.SetInvisible(UserIndex, Declaraciones.UserList[UserIndex].character.CharIndex,
                             false);
                         WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO);
                     }
@@ -2209,11 +2207,11 @@ internal static class Protocol
                     {
                         if (withBlock.flags.Muerto == 1)
                             modSendData.SendData(modSendData.SendTarget.ToDeadArea, UserIndex,
-                                PrepareMessageChatOverHead(Chat, withBlock.Char_Renamed.CharIndex,
+                                PrepareMessageChatOverHead(Chat, withBlock.character.CharIndex,
                                     Declaraciones.CHAT_COLOR_DEAD_CHAR));
                         else
                             modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                PrepareMessageChatOverHead(Chat, withBlock.Char_Renamed.CharIndex,
+                                PrepareMessageChatOverHead(Chat, withBlock.character.CharIndex,
                                     withBlock.flags.ChatColor));
                     }
                     else if (!string.IsNullOrEmpty(Chat.TrimEnd()))
@@ -2293,14 +2291,14 @@ internal static class Protocol
                             UsUaRiOs.ToogleBoatBody(UserIndex);
                             WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                                 FontTypeNames.FONTTYPE_INFO);
-                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                                (byte)withBlock.Char_Renamed.heading, Declaraciones.NingunArma,
+                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                                (byte)withBlock.character.heading, Declaraciones.NingunArma,
                                 Declaraciones.NingunEscudo, Declaraciones.NingunCasco);
                         }
                     }
                     else if (withBlock.flags.invisible == 0)
                     {
-                        UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                        UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                         WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO);
                     }
                 }
@@ -2314,17 +2312,17 @@ internal static class Protocol
                     {
                         if (Declaraciones.UserList[UserIndex].flags.Muerto == 1)
                             modSendData.SendData(modSendData.SendTarget.ToDeadArea, UserIndex,
-                                PrepareMessageChatOverHead(Chat, withBlock.Char_Renamed.CharIndex,
+                                PrepareMessageChatOverHead(Chat, withBlock.character.CharIndex,
                                     Declaraciones.CHAT_COLOR_DEAD_CHAR));
                         else
                             modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                                PrepareMessageChatOverHead(Chat, withBlock.Char_Renamed.CharIndex,
+                                PrepareMessageChatOverHead(Chat, withBlock.character.CharIndex,
                                     ColorTranslator.ToOle(Color.Red)));
                     }
                     else if (!(withBlock.flags.AdminInvisible == 1))
                     {
                         modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                            PrepareMessageChatOverHead(Chat, withBlock.Char_Renamed.CharIndex,
+                            PrepareMessageChatOverHead(Chat, withBlock.character.CharIndex,
                                 Declaraciones.CHAT_COLOR_GM_YELL));
                     }
                     else
@@ -2441,9 +2439,9 @@ internal static class Protocol
 
                             if (!(withBlock.flags.AdminInvisible == 1))
                             {
-                                WriteChatOverHead(UserIndex, Chat, withBlock.Char_Renamed.CharIndex,
+                                WriteChatOverHead(UserIndex, Chat, withBlock.character.CharIndex,
                                     ColorTranslator.ToOle(Color.Blue));
-                                WriteChatOverHead(TargetUserIndex, Chat, withBlock.Char_Renamed.CharIndex,
+                                WriteChatOverHead(TargetUserIndex, Chat, withBlock.character.CharIndex,
                                     ColorTranslator.ToOle(Color.Blue));
                                 FlushBuffer(TargetUserIndex);
 
@@ -2453,7 +2451,7 @@ internal static class Protocol
                                     modSendData.SendData(modSendData.SendTarget.ToAdminsAreaButConsejeros, UserIndex,
                                         PrepareMessageChatOverHead(
                                             "A " + Declaraciones.UserList[TargetUserIndex].name + "> " + Chat,
-                                            withBlock.Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                                            withBlock.character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                             }
                             else
                             {
@@ -2566,14 +2564,14 @@ internal static class Protocol
                 {
                     // Stop meditating, next action will start movement.
                     withBlock.flags.Meditando = false;
-                    withBlock.Char_Renamed.FX = 0;
-                    withBlock.Char_Renamed.loops = 0;
+                    withBlock.character.FX = 0;
+                    withBlock.character.loops = 0;
 
                     WriteMeditateToggle(UserIndex);
                     WriteConsoleMsg(UserIndex, "Dejas de meditar.", FontTypeNames.FONTTYPE_INFO);
 
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, 0, 0));
+                        PrepareMessageCreateFX(withBlock.character.CharIndex, 0, 0));
                 }
                 else
                 {
@@ -2618,8 +2616,8 @@ internal static class Protocol
                             UsUaRiOs.ToogleBoatBody(UserIndex);
                             WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                                 FontTypeNames.FONTTYPE_INFO);
-                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                                (byte)withBlock.Char_Renamed.heading, Declaraciones.NingunArma,
+                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                                (byte)withBlock.character.heading, Declaraciones.NingunArma,
                                 Declaraciones.NingunEscudo, Declaraciones.NingunCasco);
                         }
                     }
@@ -2627,7 +2625,7 @@ internal static class Protocol
                     else if (withBlock.flags.invisible == 0)
                     {
                         WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.", FontTypeNames.FONTTYPE_INFO);
-                        UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                        UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                     }
                 }
         }
@@ -2683,7 +2681,7 @@ internal static class Protocol
 
             // If equiped weapon is ranged, can't attack this way
             if (withBlock.Invent.WeaponEqpObjIndex > 0)
-                if (Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].proyectil == 1)
+                if (Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].proyectil == 1)
                 {
                     WriteConsoleMsg(UserIndex, "No puedes usar así este arma.", FontTypeNames.FONTTYPE_INFO);
                     return;
@@ -2712,14 +2710,14 @@ internal static class Protocol
                         UsUaRiOs.ToogleBoatBody(UserIndex);
                         WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                             FontTypeNames.FONTTYPE_INFO);
-                        UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                            (byte)withBlock.Char_Renamed.heading, Declaraciones.NingunArma, Declaraciones.NingunEscudo,
+                        UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                            (byte)withBlock.character.heading, Declaraciones.NingunArma, Declaraciones.NingunEscudo,
                             Declaraciones.NingunCasco);
                     }
                 }
                 else if (withBlock.flags.invisible == 0)
                 {
-                    UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                    UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                     WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO);
                 }
             }
@@ -3172,7 +3170,7 @@ internal static class Protocol
             // Only drop valid slots
             else if ((Slot <= Declaraciones.MAX_INVENTORY_SLOTS) & (Slot > 0))
             {
-                if (withBlock.Invent.Object_Renamed[Slot].ObjIndex == 0) return;
+                if (withBlock.Invent.userObj[Slot].ObjIndex == 0) return;
 
                 InvUsuario.DropObj(UserIndex, Slot, Amount, withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y);
             }
@@ -3471,7 +3469,7 @@ internal static class Protocol
             Slot = withBlock.incomingData.ReadByte();
 
             if ((Slot <= withBlock.CurrentInventorySlots) & (Slot > 0))
-                if (withBlock.Invent.Object_Renamed[Slot].ObjIndex == 0)
+                if (withBlock.Invent.userObj[Slot].ObjIndex == 0)
                     return;
 
             if (withBlock.flags.Meditando) return; // The error message should have been provided by the client.
@@ -3510,7 +3508,7 @@ internal static class Protocol
             if (Item < 1)
                 return;
 
-            if (Declaraciones.ObjData_Renamed[Item].SkHerreria == 0)
+            if (Declaraciones.objData[Item].SkHerreria == 0)
                 return;
 
             Trabajo.HerreroConstruirItem(UserIndex, Item);
@@ -3547,7 +3545,7 @@ internal static class Protocol
             if (Item < 1)
                 return;
 
-            if (Declaraciones.ObjData_Renamed[Item].SkCarpinteria == 0)
+            if (Declaraciones.objData[Item].SkCarpinteria == 0)
                 return;
 
             Trabajo.CarpinteroConstruirItem(UserIndex, Item);
@@ -3638,7 +3636,7 @@ internal static class Protocol
                             DummyInt = 1;
                         }
                         // Usa munición? (Si no la usa, puede ser un arma arrojadiza)
-                        else if (Declaraciones.ObjData_Renamed[withBlock1.WeaponEqpObjIndex].Municion == 1)
+                        else if (Declaraciones.objData[withBlock1.WeaponEqpObjIndex].Municion == 1)
                         {
                             // La municion esta equipada en un slot valido?
                             if ((withBlock1.MunicionEqpSlot < 1) | (withBlock1.MunicionEqpSlot >
@@ -3649,14 +3647,14 @@ internal static class Protocol
                             else if (withBlock1.MunicionEqpObjIndex == 0)
                                 DummyInt = 1;
                             // Son flechas?
-                            else if (Declaraciones.ObjData_Renamed[withBlock1.MunicionEqpObjIndex].OBJType !=
+                            else if (Declaraciones.objData[withBlock1.MunicionEqpObjIndex].OBJType !=
                                      Declaraciones.eOBJType.otFlechas)
                                 DummyInt = 1;
                             // Tiene suficientes?
-                            else if (withBlock1.Object_Renamed[withBlock1.MunicionEqpSlot].Amount < 1) DummyInt = 1;
+                            else if (withBlock1.userObj[withBlock1.MunicionEqpSlot].Amount < 1) DummyInt = 1;
                         }
                         // Es un arma de proyectiles?
-                        else if (Declaraciones.ObjData_Renamed[withBlock1.WeaponEqpObjIndex].proyectil != 1)
+                        else if (Declaraciones.objData[withBlock1.WeaponEqpObjIndex].proyectil != 1)
                         {
                             DummyInt = 2;
                         }
@@ -3738,7 +3736,7 @@ internal static class Protocol
                     {
                         ref var withBlock2 = ref withBlock.Invent;
                         // Tiene equipado arco y flecha?
-                        if (Declaraciones.ObjData_Renamed[withBlock2.WeaponEqpObjIndex].Municion == 1)
+                        if (Declaraciones.objData[withBlock2.WeaponEqpObjIndex].Municion == 1)
                         {
                             DummyInt = withBlock2.MunicionEqpSlot;
 
@@ -3746,12 +3744,12 @@ internal static class Protocol
                             // Take 1 arrow away - we do it AFTER hitting, since if Ammo Slot is 0 it gives a rt9 and kicks players
                             InvUsuario.QuitarUserInvItem(UserIndex, Convert.ToByte(DummyInt), 1);
 
-                            if (withBlock2.Object_Renamed[DummyInt].Amount > 0)
+                            if (withBlock2.userObj[DummyInt].Amount > 0)
                             {
                                 // QuitarUserInvItem unequips the ammo, so we equip it again
                                 withBlock2.MunicionEqpSlot = Convert.ToByte(DummyInt);
-                                withBlock2.MunicionEqpObjIndex = withBlock2.Object_Renamed[DummyInt].ObjIndex;
-                                withBlock2.Object_Renamed[DummyInt].Equipped = 1;
+                                withBlock2.MunicionEqpObjIndex = withBlock2.userObj[DummyInt].ObjIndex;
+                                withBlock2.userObj[DummyInt].Equipped = 1;
                             }
                             else
                             {
@@ -3767,12 +3765,12 @@ internal static class Protocol
                             // Take 1 knife away
                             InvUsuario.QuitarUserInvItem(UserIndex, Convert.ToByte(DummyInt), 1);
 
-                            if (withBlock2.Object_Renamed[DummyInt].Amount > 0)
+                            if (withBlock2.userObj[DummyInt].Amount > 0)
                             {
                                 // QuitarUserInvItem unequips the weapon, so we equip it again
                                 withBlock2.WeaponEqpSlot = Convert.ToByte(DummyInt);
-                                withBlock2.WeaponEqpObjIndex = withBlock2.Object_Renamed[DummyInt].ObjIndex;
-                                withBlock2.Object_Renamed[DummyInt].Equipped = 1;
+                                withBlock2.WeaponEqpObjIndex = withBlock2.userObj[DummyInt].ObjIndex;
+                                withBlock2.userObj[DummyInt].Equipped = 1;
                             }
                             else
                             {
@@ -3790,7 +3788,7 @@ internal static class Protocol
                 case Declaraciones.eSkill.Magia:
                 {
                     // Check the map allows spells to be casted.
-                    if (Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].MagiaSinEfecto > 0)
+                    if (Declaraciones.mapInfo[withBlock.Pos.Map].MagiaSinEfecto > 0)
                     {
                         WriteConsoleMsg(UserIndex, "Una fuerza oscura te impide canalizar tu energía.",
                             FontTypeNames.FONTTYPE_FIGHT);
@@ -3903,7 +3901,7 @@ internal static class Protocol
                 case Declaraciones.eSkill.Robar:
                 {
                     // Does the map allow us to steal here?
-                    if (Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk)
+                    if (Declaraciones.mapInfo[withBlock.Pos.Map].Pk)
                     {
                         // Check interval
                         if (!modNuevoTimer.IntervaloPermiteTrabajar(UserIndex))
@@ -3997,7 +3995,7 @@ internal static class Protocol
                         }
 
                         // ¿Hay un arbol donde clickeo?
-                        if ((Declaraciones.ObjData_Renamed[DummyInt].OBJType == Declaraciones.eOBJType.otArboles) &
+                        if ((Declaraciones.objData[DummyInt].OBJType == Declaraciones.eOBJType.otArboles) &
                             (withBlock.Invent.WeaponEqpObjIndex == Declaraciones.HACHA_LEÑADOR))
                         {
                             modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
@@ -4005,7 +4003,7 @@ internal static class Protocol
                                     Convert.ToByte(withBlock.Pos.Y)));
                             Trabajo.DoTalar(UserIndex);
                         }
-                        else if ((Declaraciones.ObjData_Renamed[DummyInt].OBJType ==
+                        else if ((Declaraciones.objData[DummyInt].OBJType ==
                                   Declaraciones.eOBJType.otArbolElfico) & (withBlock.Invent.WeaponEqpObjIndex ==
                                                                            Declaraciones.HACHA_LEÑA_ELFICA))
                         {
@@ -4059,7 +4057,7 @@ internal static class Protocol
 
                         DummyInt = Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.ObjIndex; // CHECK
                         // ¿Hay un yacimiento donde clickeo?
-                        if (Declaraciones.ObjData_Renamed[DummyInt].OBJType == Declaraciones.eOBJType.otYacimiento)
+                        if (Declaraciones.objData[DummyInt].OBJType == Declaraciones.eOBJType.otYacimiento)
                             Trabajo.DoMineria(UserIndex);
                         else
                             WriteConsoleMsg(UserIndex, "Ahí no hay ningún yacimiento.", FontTypeNames.FONTTYPE_INFO);
@@ -4124,7 +4122,7 @@ internal static class Protocol
                     // Check there is a proper item there
                     if (withBlock.flags.TargetObj > 0)
                     {
-                        if (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObj].OBJType ==
+                        if (Declaraciones.objData[withBlock.flags.TargetObj].OBJType ==
                             Declaraciones.eOBJType.otFragua)
                         {
                             // Validate other items
@@ -4132,11 +4130,11 @@ internal static class Protocol
                                 (withBlock.flags.TargetObjInvSlot > withBlock.CurrentInventorySlots)) return;
 
                             // 'chequeamos que no se zarpe duplicando oro
-                            if (withBlock.Invent.Object_Renamed[withBlock.flags.TargetObjInvSlot].ObjIndex !=
+                            if (withBlock.Invent.userObj[withBlock.flags.TargetObjInvSlot].ObjIndex !=
                                 withBlock.flags.TargetObjInvIndex)
                             {
-                                if ((withBlock.Invent.Object_Renamed[withBlock.flags.TargetObjInvSlot].ObjIndex == 0) |
-                                    (withBlock.Invent.Object_Renamed[withBlock.flags.TargetObjInvSlot].Amount == 0))
+                                if ((withBlock.Invent.userObj[withBlock.flags.TargetObjInvSlot].ObjIndex == 0) |
+                                    (withBlock.Invent.userObj[withBlock.flags.TargetObjInvSlot].Amount == 0))
                                 {
                                     WriteConsoleMsg(UserIndex, "No tienes más minerales.", FontTypeNames.FONTTYPE_INFO);
                                     return;
@@ -4149,10 +4147,10 @@ internal static class Protocol
                                 return;
                             }
 
-                            if (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].OBJType ==
+                            if (Declaraciones.objData[withBlock.flags.TargetObjInvIndex].OBJType ==
                                 Declaraciones.eOBJType.otMinerales)
                                 Trabajo.FundirMineral(UserIndex);
-                            else if (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].OBJType ==
+                            else if (Declaraciones.objData[withBlock.flags.TargetObjInvIndex].OBJType ==
                                      Declaraciones.eOBJType.otWeapon) Trabajo.FundirArmas(UserIndex);
                         }
                         else
@@ -4175,7 +4173,7 @@ internal static class Protocol
 
                     if (withBlock.flags.TargetObj > 0)
                     {
-                        if (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObj].OBJType ==
+                        if (Declaraciones.objData[withBlock.flags.TargetObj].OBJType ==
                             Declaraciones.eOBJType.otYunque)
                         {
                             InvUsuario.EnivarArmasConstruibles(UserIndex);
@@ -4355,7 +4353,7 @@ internal static class Protocol
             if ((itemSlot > withBlock.CurrentInventorySlots) | (itemSlot < 1))
                 return;
 
-            if (withBlock.Invent.Object_Renamed[itemSlot].ObjIndex == 0)
+            if (withBlock.Invent.userObj[itemSlot].ObjIndex == 0)
                 return;
 
             InvUsuario.EquiparInvItem(UserIndex, itemSlot);
@@ -4427,10 +4425,10 @@ internal static class Protocol
             // Validate heading (VB won't say invalid cast if not a valid index like .Net languages would do... *sigh*)
             if (((int)heading > 0) & ((int)heading < 5))
             {
-                withBlock.Char_Renamed.heading = heading;
-                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                    (byte)withBlock.Char_Renamed.heading, withBlock.Char_Renamed.WeaponAnim,
-                    withBlock.Char_Renamed.ShieldAnim, withBlock.Char_Renamed.CascoAnim);
+                withBlock.character.heading = heading;
+                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                    (byte)withBlock.character.heading, withBlock.character.WeaponAnim,
+                    withBlock.character.ShieldAnim, withBlock.character.CascoAnim);
             }
         }
     }
@@ -4569,7 +4567,7 @@ internal static class Protocol
             {
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                     PrepareMessageChatOverHead("No puedo traer más criaturas, mata las existentes.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White)));
             }
         }
@@ -4620,7 +4618,7 @@ internal static class Protocol
             {
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                     PrepareMessageChatOverHead("No tengo ningún interés en comerciar.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White)));
                 return;
             }
@@ -4731,7 +4729,7 @@ internal static class Protocol
             {
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                     PrepareMessageChatOverHead("No tengo ningún interés en comerciar.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White)));
                 return;
             }
@@ -4841,7 +4839,7 @@ internal static class Protocol
                         case (byte)Declaraciones.eForumType.ieGeneral:
                         {
                             ForumIndex =
-                                modForum.GetForumIndex(ref Declaraciones.ObjData_Renamed[withBlock.flags.TargetObj]
+                                modForum.GetForumIndex(ref Declaraciones.objData[withBlock.flags.TargetObj]
                                     .ForoID);
                             break;
                         }
@@ -4895,8 +4893,7 @@ internal static class Protocol
             return;
         }
 
-        // UPGRADE_NOTE: dir se actualizó a dir_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        short dir_Renamed;
+        short dir;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex].incomingData;
             // Remove packet ID
@@ -4904,11 +4901,11 @@ internal static class Protocol
 
 
             if (withBlock.ReadBoolean())
-                dir_Renamed = 1;
+                dir = 1;
             else
-                dir_Renamed = -1;
+                dir = -1;
 
-            modHechizos.DesplazarHechizo(UserIndex, dir_Renamed, withBlock.ReadByte());
+            modHechizos.DesplazarHechizo(UserIndex, dir, withBlock.ReadByte());
         }
     }
 
@@ -4932,8 +4929,7 @@ internal static class Protocol
 
         byte Slot;
         Declaraciones.Obj TempItem;
-        // UPGRADE_NOTE: dir se actualizó a dir_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        short dir_Renamed;
+        short dir;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex].incomingData;
             // Remove packet ID
@@ -4941,31 +4937,31 @@ internal static class Protocol
 
 
             if (withBlock.ReadBoolean())
-                dir_Renamed = 1;
+                dir = 1;
             else
-                dir_Renamed = -1;
+                dir = -1;
 
             Slot = withBlock.ReadByte();
         }
 
         {
             ref var withBlock1 = ref Declaraciones.UserList[UserIndex];
-            TempItem.ObjIndex = withBlock1.BancoInvent.Object_Renamed[Slot].ObjIndex;
-            TempItem.Amount = withBlock1.BancoInvent.Object_Renamed[Slot].Amount;
+            TempItem.ObjIndex = withBlock1.BancoInvent.userObj[Slot].ObjIndex;
+            TempItem.Amount = withBlock1.BancoInvent.userObj[Slot].Amount;
 
-            if (dir_Renamed == 1) // Mover arriba
+            if (dir == 1) // Mover arriba
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                withBlock1.BancoInvent.Object_Renamed[Slot] = withBlock1.BancoInvent.Object_Renamed[Slot - 1];
-                withBlock1.BancoInvent.Object_Renamed[Slot - 1].ObjIndex = TempItem.ObjIndex;
-                withBlock1.BancoInvent.Object_Renamed[Slot - 1].Amount = TempItem.Amount;
+                withBlock1.BancoInvent.userObj[Slot] = withBlock1.BancoInvent.userObj[Slot - 1];
+                withBlock1.BancoInvent.userObj[Slot - 1].ObjIndex = TempItem.ObjIndex;
+                withBlock1.BancoInvent.userObj[Slot - 1].Amount = TempItem.Amount;
             }
             else // mover abajo
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                withBlock1.BancoInvent.Object_Renamed[Slot] = withBlock1.BancoInvent.Object_Renamed[Slot + 1];
-                withBlock1.BancoInvent.Object_Renamed[Slot + 1].ObjIndex = TempItem.ObjIndex;
-                withBlock1.BancoInvent.Object_Renamed[Slot + 1].Amount = TempItem.Amount;
+                withBlock1.BancoInvent.userObj[Slot] = withBlock1.BancoInvent.userObj[Slot + 1];
+                withBlock1.BancoInvent.userObj[Slot + 1].ObjIndex = TempItem.ObjIndex;
+                withBlock1.BancoInvent.userObj[Slot + 1].Amount = TempItem.Amount;
             }
         }
 
@@ -5101,7 +5097,7 @@ internal static class Protocol
             {
                 // If modifing a filled offerSlot, we already got the objIndex, then we don't need to know it
                 if (Slot != 0)
-                    ObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+                    ObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
                 // Can't offer more than he has
                 if (!Trabajo.TieneObjetos(ObjIndex,
                         Convert.ToInt16(UsUaRiOs.TotalOfferItems(ObjIndex, UserIndex) + Amount), UserIndex))
@@ -5636,8 +5632,7 @@ internal static class Protocol
         {
             var buffer = new clsByteQueue();
             string details;
-            // UPGRADE_NOTE: User se actualizó a User_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            string User_Renamed;
+            string user;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -5647,9 +5642,9 @@ internal static class Protocol
                 buffer.ReadByte();
 
 
-                User_Renamed = buffer.ReadASCIIString();
+                user = buffer.ReadASCIIString();
 
-                details = modGuilds.a_DetallesAspirante(UserIndex, ref User_Renamed);
+                details = modGuilds.a_DetallesAspirante(UserIndex, ref user);
 
                 if (Migration.migr_LenB(details) == 0)
                     WriteConsoleMsg(UserIndex,
@@ -6112,16 +6107,15 @@ internal static class Protocol
         // Last Modification: 05/17/06
         // 
         // ***************************************************
-        // UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        var error_Renamed = default(string);
+        var error = default(string);
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             // Remove packet ID
             withBlock.incomingData.ReadByte();
 
 
-            if (!modGuilds.v_AbrirElecciones(UserIndex, ref error_Renamed))
-                WriteConsoleMsg(UserIndex, error_Renamed, FontTypeNames.FONTTYPE_GUILD);
+            if (!modGuilds.v_AbrirElecciones(UserIndex, ref error))
+                WriteConsoleMsg(UserIndex, error, FontTypeNames.FONTTYPE_GUILD);
             else
                 modSendData.SendData(modSendData.SendTarget.ToGuildMembers, withBlock.GuildIndex,
                     PrepareMessageConsoleMsg(
@@ -6389,7 +6383,7 @@ internal static class Protocol
                 case Declaraciones.eNPCType.Banquero:
                 {
                     WriteChatOverHead(UserIndex, "Tienes " + withBlock.Stats.Banco + " monedas de oro en tu cuenta.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                     break;
                 }
@@ -6730,36 +6724,36 @@ internal static class Protocol
                     "Te estás concentrando. En " + Conversion.Fix(Declaraciones.TIEMPO_INICIOMEDITAR / 1000d) +
                     " segundos comenzarás a meditar.", FontTypeNames.FONTTYPE_INFO);
 
-                withBlock.Char_Renamed.loops = Declaraciones.INFINITE_LOOPS;
+                withBlock.character.loops = Declaraciones.INFINITE_LOOPS;
 
                 // Show proper FX according to level
                 if (withBlock.Stats.ELV < 13)
-                    withBlock.Char_Renamed.FX = (short)Declaraciones.FXIDs.FXMEDITARCHICO;
+                    withBlock.character.FX = (short)Declaraciones.FXIDs.FXMEDITARCHICO;
 
                 else if (withBlock.Stats.ELV < 25)
-                    withBlock.Char_Renamed.FX = (short)Declaraciones.FXIDs.FXMEDITARMEDIANO;
+                    withBlock.character.FX = (short)Declaraciones.FXIDs.FXMEDITARMEDIANO;
 
                 else if (withBlock.Stats.ELV < 35)
-                    withBlock.Char_Renamed.FX = (short)Declaraciones.FXIDs.FXMEDITARGRANDE;
+                    withBlock.character.FX = (short)Declaraciones.FXIDs.FXMEDITARGRANDE;
 
                 else if (withBlock.Stats.ELV < 42)
-                    withBlock.Char_Renamed.FX = (short)Declaraciones.FXIDs.FXMEDITARXGRANDE;
+                    withBlock.character.FX = (short)Declaraciones.FXIDs.FXMEDITARXGRANDE;
 
                 else
-                    withBlock.Char_Renamed.FX = (short)Declaraciones.FXIDs.FXMEDITARXXGRANDE;
+                    withBlock.character.FX = (short)Declaraciones.FXIDs.FXMEDITARXXGRANDE;
 
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                    PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, withBlock.Char_Renamed.FX,
+                    PrepareMessageCreateFX(withBlock.character.CharIndex, withBlock.character.FX,
                         Declaraciones.INFINITE_LOOPS));
             }
             else
             {
                 withBlock.Counters.bPuedeMeditar = false;
 
-                withBlock.Char_Renamed.FX = 0;
-                withBlock.Char_Renamed.loops = 0;
+                withBlock.character.FX = 0;
+                withBlock.character.loops = 0;
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                    PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, 0, 0));
+                    PrepareMessageCreateFX(withBlock.character.CharIndex, 0, 0));
             }
         }
     }
@@ -6893,7 +6887,7 @@ internal static class Protocol
                         withBlock1.Counters.TiempoOculto = 0;
                         withBlock1.Counters.Invisibilidad = 0;
 
-                        UsUaRiOs.SetInvisible(UserConsulta, Declaraciones.UserList[UserConsulta].Char_Renamed.CharIndex,
+                        UsUaRiOs.SetInvisible(UserConsulta, Declaraciones.UserList[UserConsulta].character.CharIndex,
                             false);
                     }
                 }
@@ -7025,7 +7019,7 @@ internal static class Protocol
                 {
                     if (Migration.migr_LenB(Declaraciones.Npclist[withBlock.flags.TargetNPC].desc) != 0)
                         WriteChatOverHead(UserIndex, "No tengo ningún interés en comerciar.",
-                            Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                            Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                             ColorTranslator.ToOle(Color.White));
 
                     return;
@@ -7249,7 +7243,7 @@ internal static class Protocol
                 if (withBlock.Faccion.ArmadaReal == 0)
                 {
                     WriteChatOverHead(UserIndex, "¡¡No perteneces a las tropas reales!!",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -7261,12 +7255,12 @@ internal static class Protocol
                     WriteChatOverHead(UserIndex,
                         "Tu deber es combatir criminales, mata " + Diferencia +
                         " criminales más y te daré una recompensa.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                 else
                     WriteChatOverHead(UserIndex,
                         "Tu deber es combatir criminales, y ya has matado los suficientes como para merecerte una recompensa.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
             }
             else
@@ -7274,7 +7268,7 @@ internal static class Protocol
                 if (withBlock.Faccion.FuerzasCaos == 0)
                 {
                     WriteChatOverHead(UserIndex, "¡¡No perteneces a la legión oscura!!",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -7286,12 +7280,12 @@ internal static class Protocol
                     WriteChatOverHead(UserIndex,
                         "Tu deber es sembrar el caos y la desesperanza, mata " + Diferencia +
                         " ciudadanos más y te daré una recompensa.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                 else
                     WriteChatOverHead(UserIndex,
                         "Tu deber es sembrar el caos y la desesperanza, y creo que estás en condiciones de merecer una recompensa.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
             }
         }
@@ -7337,7 +7331,7 @@ internal static class Protocol
                 if (withBlock.Faccion.ArmadaReal == 0)
                 {
                     WriteChatOverHead(UserIndex, "¡¡No perteneces a las tropas reales!!",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -7349,7 +7343,7 @@ internal static class Protocol
                 if (withBlock.Faccion.FuerzasCaos == 0)
                 {
                     WriteChatOverHead(UserIndex, "¡¡No perteneces a la legión oscura!!",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -7661,7 +7655,7 @@ internal static class Protocol
 
                         if (!(withBlock.flags.AdminInvisible == 1))
                             modSendData.SendData(modSendData.SendTarget.ToClanArea, UserIndex,
-                                PrepareMessageChatOverHead("< " + Chat + " >", withBlock.Char_Renamed.CharIndex,
+                                PrepareMessageChatOverHead("< " + Chat + " >", withBlock.character.CharIndex,
                                     ColorTranslator.ToOle(Color.Yellow)));
                     }
                 }
@@ -8349,25 +8343,25 @@ internal static class Protocol
             else if (Declaraciones.Npclist[withBlock.flags.TargetNPC].NPCtype != Declaraciones.eNPCType.Timbero)
             {
                 WriteChatOverHead(UserIndex, "No tengo ningún interés en apostar.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
             else if (Amount < 1)
             {
                 WriteChatOverHead(UserIndex, "El mínimo de apuesta es 1 moneda.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
             else if (Amount > 5000)
             {
                 WriteChatOverHead(UserIndex, "El máximo de apuesta es 5000 monedas.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
             else if (withBlock.Stats.GLD < Amount)
             {
                 WriteChatOverHead(UserIndex, "No tienes esa cantidad.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
             else
@@ -8376,7 +8370,7 @@ internal static class Protocol
                 {
                     withBlock.Stats.GLD = withBlock.Stats.GLD + Amount;
                     WriteChatOverHead(UserIndex, "¡Felicidades! Has ganado " + Amount + " monedas de oro.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
 
                     Admin.Apuestas.Perdidas = Admin.Apuestas.Perdidas + Amount;
@@ -8387,7 +8381,7 @@ internal static class Protocol
                 {
                     withBlock.Stats.GLD = withBlock.Stats.GLD - Amount;
                     WriteChatOverHead(UserIndex, "Lo siento, has perdido " + Amount + " monedas de oro.",
-                        Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                         ColorTranslator.ToOle(Color.White));
 
                     Admin.Apuestas.Ganancias = Admin.Apuestas.Ganancias + Amount;
@@ -8493,13 +8487,13 @@ internal static class Protocol
                 withBlock.Stats.Banco = withBlock.Stats.Banco - Amount;
                 withBlock.Stats.GLD = withBlock.Stats.GLD + Amount;
                 WriteChatOverHead(UserIndex, "Tenés " + withBlock.Stats.Banco + " monedas de oro en tu cuenta.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
             else
             {
                 WriteChatOverHead(UserIndex, "No tienes esa cantidad.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
 
@@ -8558,7 +8552,7 @@ internal static class Protocol
                 if (TalkToDemon)
                 {
                     WriteChatOverHead(UserIndex, "¡¡¡Sal de aquí bufón!!!",
-                        Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.White));
+                        Declaraciones.Npclist[NpcIndex].character.CharIndex, ColorTranslator.ToOle(Color.White));
                 }
 
                 else
@@ -8566,7 +8560,7 @@ internal static class Protocol
                     // Si le pidio al rey salir de la armada, le responde.
                     if (TalkToKing)
                         WriteChatOverHead(UserIndex, "Serás bienvenido a las fuerzas imperiales si deseas regresar.",
-                            Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.White));
+                            Declaraciones.Npclist[NpcIndex].character.CharIndex, ColorTranslator.ToOle(Color.White));
 
                     var argExpulsado = false;
                     ModFacciones.ExpulsarFaccionReal(UserIndex, ref argExpulsado);
@@ -8580,14 +8574,14 @@ internal static class Protocol
                 if (TalkToKing)
                 {
                     WriteChatOverHead(UserIndex, "¡¡¡Sal de aquí maldito criminal!!!",
-                        Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.White));
+                        Declaraciones.Npclist[NpcIndex].character.CharIndex, ColorTranslator.ToOle(Color.White));
                 }
                 else
                 {
                     // Si le pidio al demonio salir del caos, este le responde.
                     if (TalkToDemon)
                         WriteChatOverHead(UserIndex, "Ya volverás arrastrandote.",
-                            Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.White));
+                            Declaraciones.Npclist[NpcIndex].character.CharIndex, ColorTranslator.ToOle(Color.White));
 
                     var argExpulsado1 = false;
                     ModFacciones.ExpulsarFaccionCaos(UserIndex, ref argExpulsado1);
@@ -8599,7 +8593,7 @@ internal static class Protocol
             else if (NpcIndex > 0)
             {
                 WriteChatOverHead(UserIndex, "¡No perteneces a ninguna facción!",
-                    Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.White));
+                    Declaraciones.Npclist[NpcIndex].character.CharIndex, ColorTranslator.ToOle(Color.White));
             }
             else
             {
@@ -8664,7 +8658,7 @@ internal static class Protocol
                 withBlock.Stats.Banco = withBlock.Stats.Banco + Amount;
                 withBlock.Stats.GLD = withBlock.Stats.GLD - Amount;
                 WriteChatOverHead(UserIndex, "Tenés " + withBlock.Stats.Banco + " monedas de oro en tu cuenta.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
 
                 WriteUpdateGold(UserIndex);
@@ -8673,7 +8667,7 @@ internal static class Protocol
             else
             {
                 WriteChatOverHead(UserIndex, "No tenés esa cantidad.",
-                    Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                    Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                     ColorTranslator.ToOle(Color.White));
             }
         }
@@ -8787,8 +8781,7 @@ internal static class Protocol
         }
 
         Declaraciones.eClanType clanType;
-        // UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        var error_Renamed = default(string);
+        var error = default(string);
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             // Remove packet ID
@@ -8847,14 +8840,14 @@ internal static class Protocol
                 }
             }
 
-            if (modGuilds.PuedeFundarUnClan(UserIndex, withBlock.FundandoGuildAlineacion, ref error_Renamed))
+            if (modGuilds.PuedeFundarUnClan(UserIndex, withBlock.FundandoGuildAlineacion, ref error))
             {
                 WriteShowGuildFundationForm(UserIndex);
             }
             else
             {
                 withBlock.FundandoGuildAlineacion = 0;
-                WriteConsoleMsg(UserIndex, error_Renamed, FontTypeNames.FONTTYPE_GUILD);
+                WriteConsoleMsg(UserIndex, error, FontTypeNames.FONTTYPE_GUILD);
             }
         }
     }
@@ -10760,11 +10753,11 @@ internal static class Protocol
                                 else
                                 {
                                     UsUaRiOs.ChangeUserChar(tUser, Convert.ToInt16(Migration.ParseVal(Arg1)),
-                                        Declaraciones.UserList[tUser].Char_Renamed.Head,
-                                        (byte)Declaraciones.UserList[tUser].Char_Renamed.heading,
-                                        Declaraciones.UserList[tUser].Char_Renamed.WeaponAnim,
-                                        Declaraciones.UserList[tUser].Char_Renamed.ShieldAnim,
-                                        Declaraciones.UserList[tUser].Char_Renamed.CascoAnim);
+                                        Declaraciones.UserList[tUser].character.Head,
+                                        (byte)Declaraciones.UserList[tUser].character.heading,
+                                        Declaraciones.UserList[tUser].character.WeaponAnim,
+                                        Declaraciones.UserList[tUser].character.ShieldAnim,
+                                        Declaraciones.UserList[tUser].character.CascoAnim);
                                 }
 
                                 // Log it
@@ -10782,12 +10775,12 @@ internal static class Protocol
                                 }
                                 else
                                 {
-                                    UsUaRiOs.ChangeUserChar(tUser, Declaraciones.UserList[tUser].Char_Renamed.body,
+                                    UsUaRiOs.ChangeUserChar(tUser, Declaraciones.UserList[tUser].character.body,
                                         Convert.ToInt16(Migration.ParseVal(Arg1)),
-                                        (byte)Declaraciones.UserList[tUser].Char_Renamed.heading,
-                                        Declaraciones.UserList[tUser].Char_Renamed.WeaponAnim,
-                                        Declaraciones.UserList[tUser].Char_Renamed.ShieldAnim,
-                                        Declaraciones.UserList[tUser].Char_Renamed.CascoAnim);
+                                        (byte)Declaraciones.UserList[tUser].character.heading,
+                                        Declaraciones.UserList[tUser].character.WeaponAnim,
+                                        Declaraciones.UserList[tUser].character.ShieldAnim,
+                                        Declaraciones.UserList[tUser].character.CascoAnim);
                                 }
 
                                 // Log it
@@ -11674,9 +11667,9 @@ internal static class Protocol
                                     WriteMultiMessage(tUser, (short)Declaraciones.eMessages.CancelHome);
                                 }
 
-                                UsUaRiOs.ChangeUserChar(tUser, withBlock1.Char_Renamed.body, withBlock1.OrigChar.Head,
-                                    (byte)withBlock1.Char_Renamed.heading, withBlock1.Char_Renamed.WeaponAnim,
-                                    withBlock1.Char_Renamed.ShieldAnim, withBlock1.Char_Renamed.CascoAnim);
+                                UsUaRiOs.ChangeUserChar(tUser, withBlock1.character.body, withBlock1.OrigChar.Head,
+                                    (byte)withBlock1.character.heading, withBlock1.character.WeaponAnim,
+                                    withBlock1.character.ShieldAnim, withBlock1.character.CascoAnim);
 
                                 WriteConsoleMsg(tUser, Declaraciones.UserList[UserIndex].name + " te ha resucitado.",
                                     FontTypeNames.FONTTYPE_INFO);
@@ -12323,23 +12316,22 @@ internal static class Protocol
             return;
         }
 
-        // UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        short npc_Renamed;
+        short npc;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             // Remove packet ID
             withBlock.incomingData.ReadByte();
 
-            npc_Renamed = withBlock.incomingData.ReadInteger();
+            npc = withBlock.incomingData.ReadInteger();
 
             if ((withBlock.flags.Privilegios & (Declaraciones.PlayerType.Admin | Declaraciones.PlayerType.Dios |
                                                 Declaraciones.PlayerType.SemiDios)) != 0)
 
             {
-                if ((npc_Renamed > 0) & (npc_Renamed <= Declaraciones.SpawnList.Length - 1))
-                    NPCs.SpawnNpc(Declaraciones.SpawnList[npc_Renamed].NpcIndex, ref withBlock.Pos, true, false);
+                if ((npc > 0) & (npc <= Declaraciones.SpawnList.Length - 1))
+                    NPCs.SpawnNpc(Declaraciones.SpawnList[npc].NpcIndex, ref withBlock.Pos, true, false);
 
-                var argtexto = "Sumoneo " + Declaraciones.SpawnList[npc_Renamed].NpcName;
+                var argtexto = "Sumoneo " + Declaraciones.SpawnList[npc].NpcName;
                 General.LogGM(ref withBlock.name, ref argtexto);
             }
         }
@@ -12792,7 +12784,7 @@ internal static class Protocol
                 if (withBlock1.ObjInfo.ObjIndex == 0)
                     return;
 
-                if ((Declaraciones.ObjData_Renamed[withBlock1.ObjInfo.ObjIndex].OBJType ==
+                if ((Declaraciones.objData[withBlock1.ObjInfo.ObjIndex].OBJType ==
                      Declaraciones.eOBJType.otTeleport) & (withBlock1.TileExit.Map > 0))
                 {
                     var argtexto = "/DT: " + mapa + "," + X + "," + Y;
@@ -12938,7 +12930,7 @@ internal static class Protocol
                 if (midiID == 0)
                     // Ponemos el default del mapa
                     modSendData.SendData(modSendData.SendTarget.toMap, mapa,
-                        PrepareMessagePlayMidi(Convert.ToByte(Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Music)));
+                        PrepareMessagePlayMidi(Convert.ToByte(Declaraciones.mapInfo[withBlock.Pos.Map].Music)));
                 else
                     // Ponemos el pedido por el GM
                     modSendData.SendData(modSendData.SendTarget.toMap, mapa, PrepareMessagePlayMidi(midiID));
@@ -13243,7 +13235,7 @@ internal static class Protocol
                     if (withBlock.flags.TargetNPC > 0)
                         modSendData.SendData(modSendData.SendTarget.ToNPCArea, withBlock.flags.TargetNPC,
                             PrepareMessageChatOverHead(message,
-                                Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex,
+                                Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex,
                                 ColorTranslator.ToOle(Color.White)));
                     else
                         WriteConsoleMsg(UserIndex,
@@ -13496,8 +13488,8 @@ internal static class Protocol
             {
                 tObj = Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.ObjIndex;
                 if (tObj > 0)
-                    if (Declaraciones.ObjData_Renamed[tObj].OBJType != Declaraciones.eOBJType.otArboles)
-                        WriteConsoleMsg(UserIndex, "(" + X + "," + Y + ") " + Declaraciones.ObjData_Renamed[tObj].name,
+                    if (Declaraciones.objData[tObj].OBJType != Declaraciones.eOBJType.otArboles)
+                        WriteConsoleMsg(UserIndex, "(" + X + "," + Y + ") " + Declaraciones.objData[tObj].name,
                             FontTypeNames.FONTTYPE_INFO);
             }
         }
@@ -14211,7 +14203,7 @@ internal static class Protocol
                 return;
 
             // Is the object not null?
-            if (Migration.migr_LenB(Declaraciones.ObjData_Renamed[tObj].name) == 0)
+            if (Migration.migr_LenB(Declaraciones.objData[tObj].name) == 0)
                 return;
 
             WriteConsoleMsg(UserIndex, "¡¡ATENCIÓN: FUERON CREADOS ***100*** ÍTEMS, TIRE Y /DEST LOS QUE NO NECESITE!!",
@@ -14251,7 +14243,7 @@ internal static class Protocol
             General.LogGM(ref withBlock.name, ref argtexto);
 
             if ((Declaraciones
-                    .ObjData_Renamed
+                    .objData
                         [Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].ObjInfo.ObjIndex]
                     .OBJType == Declaraciones.eOBJType.otTeleport) & (Declaraciones
                     .MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].TileExit.Map > 0))
@@ -14910,13 +14902,13 @@ internal static class Protocol
                     {
                         if ((Slot > 0) & (Slot <= Declaraciones.UserList[tIndex].CurrentInventorySlots))
                         {
-                            if (Declaraciones.UserList[tIndex].Invent.Object_Renamed[Slot].ObjIndex > 0)
+                            if (Declaraciones.UserList[tIndex].Invent.userObj[Slot].ObjIndex > 0)
                                 WriteConsoleMsg(UserIndex,
                                     " Objeto " + Slot + ") " +
                                     Declaraciones
-                                        .ObjData_Renamed[
-                                            Declaraciones.UserList[tIndex].Invent.Object_Renamed[Slot].ObjIndex].name +
-                                    " Cantidad:" + Declaraciones.UserList[tIndex].Invent.Object_Renamed[Slot].Amount,
+                                        .objData[
+                                            Declaraciones.UserList[tIndex].Invent.userObj[Slot].ObjIndex].name +
+                                    " Cantidad:" + Declaraciones.UserList[tIndex].Invent.userObj[Slot].Amount,
                                     FontTypeNames.FONTTYPE_INFO);
                             else
                                 WriteConsoleMsg(UserIndex, "No hay ningún objeto en slot seleccionado.",
@@ -15238,7 +15230,7 @@ internal static class Protocol
             var argtexto = withBlock.name + " ha borrado los SOS.";
             General.LogGM(ref withBlock.name, ref argtexto);
 
-            Declaraciones.Ayuda.Reset_Renamed();
+            Declaraciones.Ayuda.Reset();
         }
     }
 
@@ -15308,18 +15300,18 @@ internal static class Protocol
 
             // Change the boolean to byte in a fast way
             if (doTheBackUp)
-                Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].BackUp = 1;
+                Declaraciones.mapInfo[withBlock.Pos.Map].BackUp = 1;
             else
-                Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].BackUp = 0;
+                Declaraciones.mapInfo[withBlock.Pos.Map].BackUp = 0;
 
             // Change the boolean to string in a fast way
             ES.WriteVar(
                 AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" + withBlock.Pos.Map + ".dat",
                 "Mapa" + withBlock.Pos.Map, "backup",
-                Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].BackUp.ToString());
+                Declaraciones.mapInfo[withBlock.Pos.Map].BackUp.ToString());
 
             WriteConsoleMsg(UserIndex,
-                "Mapa " + withBlock.Pos.Map + " Backup: " + Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].BackUp,
+                "Mapa " + withBlock.Pos.Map + " Backup: " + Declaraciones.mapInfo[withBlock.Pos.Map].BackUp,
                 FontTypeNames.FONTTYPE_INFO);
         }
     }
@@ -15358,7 +15350,7 @@ internal static class Protocol
             var argtexto = withBlock.name + " ha cambiado la información sobre si es PK el mapa.";
             General.LogGM(ref withBlock.name, ref argtexto);
 
-            Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk = isMapPk;
+            Declaraciones.mapInfo[withBlock.Pos.Map].Pk = isMapPk;
 
             // Change the boolean to string in a fast way
             ES.WriteVar(
@@ -15366,7 +15358,7 @@ internal static class Protocol
                 "Mapa" + withBlock.Pos.Map, "Pk", isMapPk ? "1" : "0");
 
             WriteConsoleMsg(UserIndex,
-                "Mapa " + withBlock.Pos.Map + " PK: " + Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk,
+                "Mapa " + withBlock.Pos.Map + " PK: " + Declaraciones.mapInfo[withBlock.Pos.Map].Pk,
                 FontTypeNames.FONTTYPE_INFO);
         }
     }
@@ -15412,14 +15404,14 @@ internal static class Protocol
                     {
                         var argtexto = withBlock.name + " ha cambiado la información sobre si es restringido el mapa.";
                         General.LogGM(ref withBlock.name, ref argtexto);
-                        Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].Restringir = tStr;
+                        Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].Restringir = tStr;
                         ES.WriteVar(
                             AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" +
                             Declaraciones.UserList[UserIndex].Pos.Map + ".dat",
                             "Mapa" + Declaraciones.UserList[UserIndex].Pos.Map, "Restringir", tStr);
                         WriteConsoleMsg(UserIndex,
                             "Mapa " + withBlock.Pos.Map + " Restringido: " +
-                            Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Restringir, FontTypeNames.FONTTYPE_INFO);
+                            Declaraciones.mapInfo[withBlock.Pos.Map].Restringir, FontTypeNames.FONTTYPE_INFO);
                     }
                     else
                     {
@@ -15473,7 +15465,7 @@ internal static class Protocol
                 var argtexto = withBlock.name +
                                " ha cambiado la información sobre si está permitido usar la magia el mapa.";
                 General.LogGM(ref withBlock.name, ref argtexto);
-                Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].MagiaSinEfecto =
+                Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].MagiaSinEfecto =
                     nomagic ? (byte)1 : (byte)0;
                 ES.WriteVar(
                     AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" +
@@ -15481,7 +15473,7 @@ internal static class Protocol
                     "Mapa" + Declaraciones.UserList[UserIndex].Pos.Map, "MagiaSinEfecto", nomagic.ToString());
                 WriteConsoleMsg(UserIndex,
                     "Mapa " + withBlock.Pos.Map + " MagiaSinEfecto: " +
-                    Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].MagiaSinEfecto, FontTypeNames.FONTTYPE_INFO);
+                    Declaraciones.mapInfo[withBlock.Pos.Map].MagiaSinEfecto, FontTypeNames.FONTTYPE_INFO);
             }
         }
     }
@@ -15518,7 +15510,7 @@ internal static class Protocol
                 var argtexto = withBlock.name +
                                " ha cambiado la información sobre si está permitido usar la invisibilidad en el mapa.";
                 General.LogGM(ref withBlock.name, ref argtexto);
-                Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].InviSinEfecto =
+                Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].InviSinEfecto =
                     noinvi ? (byte)1 : (byte)0;
                 ES.WriteVar(
                     AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" +
@@ -15526,7 +15518,7 @@ internal static class Protocol
                     "Mapa" + Declaraciones.UserList[UserIndex].Pos.Map, "InviSinEfecto", noinvi.ToString());
                 WriteConsoleMsg(UserIndex,
                     "Mapa " + withBlock.Pos.Map + " InviSinEfecto: " +
-                    Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].InviSinEfecto, FontTypeNames.FONTTYPE_INFO);
+                    Declaraciones.mapInfo[withBlock.Pos.Map].InviSinEfecto, FontTypeNames.FONTTYPE_INFO);
             }
         }
     }
@@ -15563,7 +15555,7 @@ internal static class Protocol
                 var argtexto = withBlock.name +
                                " ha cambiado la información sobre si está permitido usar el resucitar en el mapa.";
                 General.LogGM(ref withBlock.name, ref argtexto);
-                Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].ResuSinEfecto =
+                Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].ResuSinEfecto =
                     noresu ? (byte)1 : (byte)0;
                 ES.WriteVar(
                     AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" +
@@ -15571,7 +15563,7 @@ internal static class Protocol
                     "Mapa" + Declaraciones.UserList[UserIndex].Pos.Map, "ResuSinEfecto", noresu.ToString());
                 WriteConsoleMsg(UserIndex,
                     "Mapa " + withBlock.Pos.Map + " ResuSinEfecto: " +
-                    Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].ResuSinEfecto, FontTypeNames.FONTTYPE_INFO);
+                    Declaraciones.mapInfo[withBlock.Pos.Map].ResuSinEfecto, FontTypeNames.FONTTYPE_INFO);
             }
         }
     }
@@ -15617,14 +15609,14 @@ internal static class Protocol
                     {
                         var argtexto = withBlock.name + " ha cambiado la información del terreno del mapa.";
                         General.LogGM(ref withBlock.name, ref argtexto);
-                        Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].Terreno = tStr;
+                        Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].Terreno = tStr;
                         ES.WriteVar(
                             AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" +
                             Declaraciones.UserList[UserIndex].Pos.Map + ".dat",
                             "Mapa" + Declaraciones.UserList[UserIndex].Pos.Map, "Terreno", tStr);
                         WriteConsoleMsg(UserIndex,
                             "Mapa " + withBlock.Pos.Map + " Terreno: " +
-                            Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Terreno, FontTypeNames.FONTTYPE_INFO);
+                            Declaraciones.mapInfo[withBlock.Pos.Map].Terreno, FontTypeNames.FONTTYPE_INFO);
                     }
                     else
                     {
@@ -15690,14 +15682,14 @@ internal static class Protocol
                     {
                         var argtexto = withBlock.name + " ha cambiado la información de la zona del mapa.";
                         General.LogGM(ref withBlock.name, ref argtexto);
-                        Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].Zona = tStr;
+                        Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].Zona = tStr;
                         ES.WriteVar(
                             AppDomain.CurrentDomain.BaseDirectory + Declaraciones.MapPath + "mapa" +
                             Declaraciones.UserList[UserIndex].Pos.Map + ".dat",
                             "Mapa" + Declaraciones.UserList[UserIndex].Pos.Map, "Zona", tStr);
                         WriteConsoleMsg(UserIndex,
                             "Mapa " + withBlock.Pos.Map + " Zona: " +
-                            Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Zona, FontTypeNames.FONTTYPE_INFO);
+                            Declaraciones.mapInfo[withBlock.Pos.Map].Zona, FontTypeNames.FONTTYPE_INFO);
                     }
                     else
                     {
@@ -16546,8 +16538,7 @@ internal static class Protocol
             var buffer = new clsByteQueue();
             string UserName;
             short tUser;
-            // UPGRADE_NOTE: Char se actualizó a Char_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            string Char_Renamed;
+            string character;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -16574,25 +16565,25 @@ internal static class Protocol
                     }
                     else
                     {
-                        Char_Renamed = Declaraciones.CharPath + UserName + ".chr";
+                        character = Declaraciones.CharPath + UserName + ".chr";
 
-                        if (File.Exists(Char_Renamed))
+                        if (File.Exists(character))
                         {
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "EjercitoReal", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "CiudMatados", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "CrimMatados", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "EjercitoCaos", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "FechaIngreso", "No ingresó a ninguna Facción");
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "rArCaos", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "rArReal", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "rExCaos", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "rExReal", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "recCaos", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "recReal", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "Reenlistadas", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "NivelIngreso", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "MatadosIngreso", 0.ToString());
-                            ES.WriteVar(Char_Renamed, "FACCIONES", "NextRecompensa", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "EjercitoReal", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "CiudMatados", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "CrimMatados", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "EjercitoCaos", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "FechaIngreso", "No ingresó a ninguna Facción");
+                            ES.WriteVar(character, "FACCIONES", "rArCaos", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "rArReal", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "rExCaos", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "rExReal", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "recCaos", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "recReal", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "Reenlistadas", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "NivelIngreso", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "MatadosIngreso", 0.ToString());
+                            ES.WriteVar(character, "FACCIONES", "NextRecompensa", 0.ToString());
                         }
                         else
                         {
@@ -17016,8 +17007,7 @@ internal static class Protocol
         catch (Exception ex)
         {
             Console.WriteLine("Error in HandleSetIniVar: " + ex.Message);
-            // UPGRADE_NOTE: error se actualizó a error_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            int error_Renamed;
+            int error;
         }
     }
 
@@ -17484,7 +17474,7 @@ internal static class Protocol
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.UserCharIndexInServer);
-                withBlock.WriteInteger(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex);
+                withBlock.WriteInteger(Declaraciones.UserList[UserIndex].character.CharIndex);
             }
         }, () => FlushBuffer(UserIndex));
     }
@@ -17744,13 +17734,13 @@ internal static class Protocol
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.ChangeInventorySlot);
                 withBlock.WriteByte(Slot);
-                ObjIndex = Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Slot].ObjIndex;
-                if (ObjIndex > 0) obData = Declaraciones.ObjData_Renamed[ObjIndex];
+                ObjIndex = Declaraciones.UserList[UserIndex].Invent.userObj[Slot].ObjIndex;
+                if (ObjIndex > 0) obData = Declaraciones.objData[ObjIndex];
                 withBlock.WriteInteger(ObjIndex);
                 withBlock.WriteASCIIString(obData.name);
-                withBlock.WriteInteger(Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Slot].Amount);
+                withBlock.WriteInteger(Declaraciones.UserList[UserIndex].Invent.userObj[Slot].Amount);
                 withBlock.WriteBoolean(
-                    Convert.ToBoolean(Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Slot].Equipped));
+                    Convert.ToBoolean(Declaraciones.UserList[UserIndex].Invent.userObj[Slot].Equipped));
                 withBlock.WriteInteger(obData.GrhIndex);
                 withBlock.WriteByte(Convert.ToByte((int)obData.OBJType));
                 withBlock.WriteInteger(obData.MaxHIT);
@@ -17800,11 +17790,11 @@ internal static class Protocol
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.ChangeBankSlot);
                 withBlock.WriteByte(Slot);
-                ObjIndex = Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[Slot].ObjIndex;
+                ObjIndex = Declaraciones.UserList[UserIndex].BancoInvent.userObj[Slot].ObjIndex;
                 withBlock.WriteInteger(ObjIndex);
-                if (ObjIndex > 0) obData = Declaraciones.ObjData_Renamed[ObjIndex];
+                if (ObjIndex > 0) obData = Declaraciones.objData[ObjIndex];
                 withBlock.WriteASCIIString(obData.name);
-                withBlock.WriteInteger(Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[Slot].Amount);
+                withBlock.WriteInteger(Declaraciones.UserList[UserIndex].BancoInvent.userObj[Slot].Amount);
                 withBlock.WriteInteger(obData.GrhIndex);
                 withBlock.WriteByte(Convert.ToByte((int)obData.OBJType));
                 withBlock.WriteInteger(obData.MaxHIT);
@@ -17875,7 +17865,7 @@ internal static class Protocol
         RetryOnceIfNotEnoughSpace(() =>
         {
             int i;
-            Declaraciones.ObjData Obj_Renamed;
+            Declaraciones.ObjData obj;
             short[] validIndexes;
             var Count = default(short);
             validIndexes = new short[Declaraciones.ArmasHerrero.Length];
@@ -17884,7 +17874,7 @@ internal static class Protocol
                 withBlock.WriteByte((byte)ServerPacketID.BlacksmithWeapons);
                 var loopTo = Declaraciones.ArmasHerrero.Length - 1;
                 for (i = 1; i <= loopTo; i++)
-                    if (Declaraciones.ObjData_Renamed[Declaraciones.ArmasHerrero[i]].SkHerreria <= Math.Round(
+                    if (Declaraciones.objData[Declaraciones.ArmasHerrero[i]].SkHerreria <= Math.Round(
                             Declaraciones.UserList[UserIndex].Stats.UserSkills[(int)Declaraciones.eSkill.Herreria] /
                             Trabajo.ModHerreriA(Declaraciones.UserList[UserIndex].clase), 0))
                     {
@@ -17896,14 +17886,14 @@ internal static class Protocol
                 var loopTo1 = (int)Count;
                 for (i = 1; i <= loopTo1; i++)
                 {
-                    Obj_Renamed = Declaraciones.ObjData_Renamed[Declaraciones.ArmasHerrero[validIndexes[i]]];
-                    withBlock.WriteASCIIString(Obj_Renamed.name);
-                    withBlock.WriteInteger(Obj_Renamed.GrhIndex);
-                    withBlock.WriteInteger(Obj_Renamed.LingH);
-                    withBlock.WriteInteger(Obj_Renamed.LingP);
-                    withBlock.WriteInteger(Obj_Renamed.LingO);
+                    obj = Declaraciones.objData[Declaraciones.ArmasHerrero[validIndexes[i]]];
+                    withBlock.WriteASCIIString(obj.name);
+                    withBlock.WriteInteger(obj.GrhIndex);
+                    withBlock.WriteInteger(obj.LingH);
+                    withBlock.WriteInteger(obj.LingP);
+                    withBlock.WriteInteger(obj.LingO);
                     withBlock.WriteInteger(Declaraciones.ArmasHerrero[validIndexes[i]]);
-                    withBlock.WriteInteger(Obj_Renamed.Upgrade);
+                    withBlock.WriteInteger(obj.Upgrade);
                 }
             }
         }, () => FlushBuffer(UserIndex));
@@ -17919,7 +17909,7 @@ internal static class Protocol
         RetryOnceIfNotEnoughSpace(() =>
         {
             int i;
-            Declaraciones.ObjData Obj_Renamed;
+            Declaraciones.ObjData obj;
             short[] validIndexes;
             var Count = default(short);
             validIndexes = new short[Declaraciones.ArmadurasHerrero.Length];
@@ -17928,7 +17918,7 @@ internal static class Protocol
                 withBlock.WriteByte((byte)ServerPacketID.BlacksmithArmors);
                 var loopTo = Declaraciones.ArmadurasHerrero.Length - 1;
                 for (i = 1; i <= loopTo; i++)
-                    if (Declaraciones.ObjData_Renamed[Declaraciones.ArmadurasHerrero[i]].SkHerreria <= Math.Round(
+                    if (Declaraciones.objData[Declaraciones.ArmadurasHerrero[i]].SkHerreria <= Math.Round(
                             Declaraciones.UserList[UserIndex].Stats.UserSkills[(int)Declaraciones.eSkill.Herreria] /
                             Trabajo.ModHerreriA(Declaraciones.UserList[UserIndex].clase), 0))
                     {
@@ -17940,14 +17930,14 @@ internal static class Protocol
                 var loopTo1 = (int)Count;
                 for (i = 1; i <= loopTo1; i++)
                 {
-                    Obj_Renamed = Declaraciones.ObjData_Renamed[Declaraciones.ArmadurasHerrero[validIndexes[i]]];
-                    withBlock.WriteASCIIString(Obj_Renamed.name);
-                    withBlock.WriteInteger(Obj_Renamed.GrhIndex);
-                    withBlock.WriteInteger(Obj_Renamed.LingH);
-                    withBlock.WriteInteger(Obj_Renamed.LingP);
-                    withBlock.WriteInteger(Obj_Renamed.LingO);
+                    obj = Declaraciones.objData[Declaraciones.ArmadurasHerrero[validIndexes[i]]];
+                    withBlock.WriteASCIIString(obj.name);
+                    withBlock.WriteInteger(obj.GrhIndex);
+                    withBlock.WriteInteger(obj.LingH);
+                    withBlock.WriteInteger(obj.LingP);
+                    withBlock.WriteInteger(obj.LingO);
                     withBlock.WriteInteger(Declaraciones.ArmadurasHerrero[validIndexes[i]]);
-                    withBlock.WriteInteger(Obj_Renamed.Upgrade);
+                    withBlock.WriteInteger(obj.Upgrade);
                 }
             }
         }, () => FlushBuffer(UserIndex));
@@ -17963,7 +17953,7 @@ internal static class Protocol
         RetryOnceIfNotEnoughSpace(() =>
         {
             int i;
-            Declaraciones.ObjData Obj_Renamed;
+            Declaraciones.ObjData obj;
             short[] validIndexes;
             var Count = default(short);
             validIndexes = new short[Declaraciones.ObjCarpintero.Length];
@@ -17972,7 +17962,7 @@ internal static class Protocol
                 withBlock.WriteByte((byte)ServerPacketID.CarpenterObjects);
                 var loopTo = Declaraciones.ObjCarpintero.Length - 1;
                 for (i = 1; i <= loopTo; i++)
-                    if (Declaraciones.ObjData_Renamed[Declaraciones.ObjCarpintero[i]].SkCarpinteria <=
+                    if (Declaraciones.objData[Declaraciones.ObjCarpintero[i]].SkCarpinteria <=
                         (short)(Declaraciones.UserList[UserIndex].Stats
                                     .UserSkills[(int)Declaraciones.eSkill.Carpinteria] /
                                 Trabajo.ModCarpinteria(Declaraciones.UserList[UserIndex].clase)))
@@ -17985,13 +17975,13 @@ internal static class Protocol
                 var loopTo1 = (int)Count;
                 for (i = 1; i <= loopTo1; i++)
                 {
-                    Obj_Renamed = Declaraciones.ObjData_Renamed[Declaraciones.ObjCarpintero[validIndexes[i]]];
-                    withBlock.WriteASCIIString(Obj_Renamed.name);
-                    withBlock.WriteInteger(Obj_Renamed.GrhIndex);
-                    withBlock.WriteInteger(Obj_Renamed.Madera);
-                    withBlock.WriteInteger(Obj_Renamed.MaderaElfica);
+                    obj = Declaraciones.objData[Declaraciones.ObjCarpintero[validIndexes[i]]];
+                    withBlock.WriteASCIIString(obj.name);
+                    withBlock.WriteInteger(obj.GrhIndex);
+                    withBlock.WriteInteger(obj.Madera);
+                    withBlock.WriteInteger(obj.MaderaElfica);
                     withBlock.WriteInteger(Declaraciones.ObjCarpintero[validIndexes[i]]);
-                    withBlock.WriteInteger(Obj_Renamed.Upgrade);
+                    withBlock.WriteInteger(obj.Upgrade);
                 }
             }
         }, () => FlushBuffer(UserIndex));
@@ -18057,8 +18047,8 @@ internal static class Protocol
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.ShowSignal);
-                withBlock.WriteASCIIString(Declaraciones.ObjData_Renamed[ObjIndex].texto);
-                withBlock.WriteInteger(Declaraciones.ObjData_Renamed[ObjIndex].GrhSecundario);
+                withBlock.WriteASCIIString(Declaraciones.objData[ObjIndex].texto);
+                withBlock.WriteInteger(Declaraciones.objData[ObjIndex].GrhSecundario);
             }
         }, () => FlushBuffer(UserIndex));
     }
@@ -18068,8 +18058,8 @@ internal static class Protocol
         RetryOnceIfNotEnoughSpace(() =>
         {
             var ObjInfo = default(Declaraciones.ObjData);
-            if ((Obj.ObjIndex >= 0) & (Obj.ObjIndex <= Declaraciones.ObjData_Renamed.Length - 1))
-                ObjInfo = Declaraciones.ObjData_Renamed[Obj.ObjIndex];
+            if ((Obj.ObjIndex >= 0) & (Obj.ObjIndex <= Declaraciones.objData.Length - 1))
+                ObjInfo = Declaraciones.objData[Obj.ObjIndex];
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.ChangeNPCInventorySlot);
@@ -18328,16 +18318,16 @@ internal static class Protocol
         RetryOnceIfNotEnoughSpace(() =>
         {
             int i;
-            var str_Renamed = default(string);
+            var str = default(string);
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.TrainerCreatureList);
                 var loopTo = (int)Declaraciones.Npclist[NpcIndex].NroCriaturas;
                 for (i = 1; i <= loopTo; i++)
-                    str_Renamed = str_Renamed + Declaraciones.Npclist[NpcIndex].Criaturas[i].NpcName + SEPARATOR;
-                if (Migration.migr_LenB(str_Renamed) > 0)
-                    str_Renamed = str_Renamed.Substring(0, Math.Min(str_Renamed.Length - 1, str_Renamed.Length));
-                withBlock.WriteASCIIString(str_Renamed);
+                    str = str + Declaraciones.Npclist[NpcIndex].Criaturas[i].NpcName + SEPARATOR;
+                if (Migration.migr_LenB(str) > 0)
+                    str = str.Substring(0, Math.Min(str.Length - 1, str.Length));
+                withBlock.WriteASCIIString(str);
             }
         }, () => FlushBuffer(UserIndex));
     }
@@ -18436,7 +18426,7 @@ internal static class Protocol
     }
 
     public static void WriteCharacterInfo(short UserIndex, string charName, Declaraciones.eRaza race,
-        Declaraciones.eClass Class_Renamed, Declaraciones.eGenero gender, byte level, int gold, int bank,
+        Declaraciones.eClass characterClass, Declaraciones.eGenero gender, byte level, int gold, int bank,
         int reputation, string previousPetitions, string currentGuild, string previousGuilds, bool RoyalArmy,
         bool CaosLegion, int citicensKilled, int criminalsKilled)
     {
@@ -18447,7 +18437,7 @@ internal static class Protocol
                 withBlock.WriteByte((byte)ServerPacketID.CharacterInfo);
                 withBlock.WriteASCIIString(charName);
                 withBlock.WriteByte((byte)race);
-                withBlock.WriteByte(Convert.ToByte((int)Class_Renamed));
+                withBlock.WriteByte(Convert.ToByte((int)characterClass));
                 withBlock.WriteByte((byte)gender);
                 withBlock.WriteByte(level);
                 withBlock.WriteLong(gold);
@@ -18656,14 +18646,14 @@ internal static class Protocol
                 withBlock.WriteLong(Amount);
                 if (ObjIndex > 0)
                 {
-                    withBlock.WriteInteger(Declaraciones.ObjData_Renamed[ObjIndex].GrhIndex);
-                    withBlock.WriteByte(Convert.ToByte((int)Declaraciones.ObjData_Renamed[ObjIndex].OBJType));
-                    withBlock.WriteInteger(Declaraciones.ObjData_Renamed[ObjIndex].MaxHIT);
-                    withBlock.WriteInteger(Declaraciones.ObjData_Renamed[ObjIndex].MinHIT);
-                    withBlock.WriteInteger(Declaraciones.ObjData_Renamed[ObjIndex].MaxDef);
-                    withBlock.WriteInteger(Declaraciones.ObjData_Renamed[ObjIndex].MinDef);
+                    withBlock.WriteInteger(Declaraciones.objData[ObjIndex].GrhIndex);
+                    withBlock.WriteByte(Convert.ToByte((int)Declaraciones.objData[ObjIndex].OBJType));
+                    withBlock.WriteInteger(Declaraciones.objData[ObjIndex].MaxHIT);
+                    withBlock.WriteInteger(Declaraciones.objData[ObjIndex].MinHIT);
+                    withBlock.WriteInteger(Declaraciones.objData[ObjIndex].MaxDef);
+                    withBlock.WriteInteger(Declaraciones.objData[ObjIndex].MinDef);
                     withBlock.WriteLong(Convert.ToInt32(modSistemaComercio.SalePrice(ObjIndex)));
-                    withBlock.WriteASCIIString(Declaraciones.ObjData_Renamed[ObjIndex].name);
+                    withBlock.WriteASCIIString(Declaraciones.objData[ObjIndex].name);
                 }
                 else
                 {
@@ -19510,7 +19500,7 @@ internal static class Protocol
             ref var withBlock = ref auxiliarBuffer;
             withBlock.WriteByte((byte)ServerPacketID.UpdateTagAndStatus);
 
-            withBlock.WriteInteger(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex);
+            withBlock.WriteInteger(Declaraciones.UserList[UserIndex].character.CharIndex);
             withBlock.WriteByte(NickColor);
             withBlock.WriteASCIIString(Tag);
 

@@ -486,7 +486,7 @@ internal static class ES
             using (var writerInf = new BinaryWriter(fsInf))
             {
                 // map Header
-                writerMap.Write(Declaraciones.MapInfo_Renamed[Map].MapVersion); // Int16
+                writerMap.Write(Declaraciones.mapInfo[Map].MapVersion); // Int16
                 // Skip 263 bytes from current position (padding)
                 fsMap.Position = fsMap.Position + 263L;
                 writerMap.Write(TempInt);
@@ -533,7 +533,7 @@ internal static class ES
                     ByFlags = 0;
 
                     if (withBlock.ObjInfo.ObjIndex > 0)
-                        if (Declaraciones.ObjData_Renamed[withBlock.ObjInfo.ObjIndex].OBJType ==
+                        if (Declaraciones.objData[withBlock.ObjInfo.ObjIndex].OBJType ==
                             Declaraciones.eOBJType.otFogata)
                         {
                             withBlock.ObjInfo.ObjIndex = 0;
@@ -568,7 +568,7 @@ internal static class ES
             }
 
             {
-                ref var withBlock1 = ref Declaraciones.MapInfo_Renamed[Map];
+                ref var withBlock1 = ref Declaraciones.mapInfo[Map];
 
                 // write .dat file
                 WriteVar(MAPFILE + ".dat", "Mapa" + Map, "Name", withBlock1.name);
@@ -660,7 +660,7 @@ internal static class ES
         // Modificadores de Clase
         for (i = 1; i <= Declaraciones.NUMCLASES; i++)
         {
-            ref var withBlock = ref Declaraciones.ModClase_Renamed[i];
+            ref var withBlock = ref Declaraciones.modClase[i];
             var argEmptySpaces = 1024;
             withBlock.Evasion = Migration.ParseVal(GetVar(Declaraciones.DatPath + "Balance.dat", "MODEVASION",
                 Declaraciones.ListaClases[i], ref argEmptySpaces));
@@ -690,7 +690,7 @@ internal static class ES
         // Modificadores de Raza
         for (i = 1; i <= Declaraciones.NUMRAZAS; i++)
         {
-            ref var withBlock1 = ref Declaraciones.ModRaza_Renamed[i];
+            ref var withBlock1 = ref Declaraciones.modRaza[i];
             var argEmptySpaces8 = 1024;
             withBlock1.Fuerza = Convert.ToSingle(Migration.ParseVal(GetVar(Declaraciones.DatPath + "Balance.dat",
                 "MODRAZA", Declaraciones.ListaRazas[i] + "Fuerza", ref argEmptySpaces8)));
@@ -806,8 +806,7 @@ internal static class ES
             // *****************************************************************
             // Carga la lista de objetos
             // *****************************************************************
-            // UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            short Object_Renamed;
+            short obj;
             var Leer = new clsIniReader();
 
             Leer.Initialize(Declaraciones.DatPath + "Obj.dat");
@@ -815,11 +814,9 @@ internal static class ES
             // obtiene el numero de obj
             Declaraciones.NumObjDatas = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("INIT", "NumObjs")));
 
-            // UPGRADE_WARNING: Es posible que la matriz ObjData_Renamed necesite tener elementos individuales inicializados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B97B714D-9338-48AC-B03F-345B617E2B02"'
-            // UPGRADE_WARNING: El límite inferior de la matriz ObjData_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-            // UPGRADE_NOTE: ObjData se actualizó a ObjData_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Array.Resize(ref Declaraciones.ObjData_Renamed, Declaraciones.NumObjDatas + 1);
-            ArrayInitializers.InitializeStruct(Declaraciones.ObjData_Renamed);
+            // UPGRADE_WARNING: El límite inferior de la matriz objData ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+            Array.Resize(ref Declaraciones.objData, Declaraciones.NumObjDatas + 1);
+            ArrayInitializers.InitializeStruct(Declaraciones.objData);
 
 
             // Llena la lista
@@ -827,145 +824,145 @@ internal static class ES
             short N;
             string S;
             var loopTo = Declaraciones.NumObjDatas;
-            for (Object_Renamed = 1; Object_Renamed <= loopTo; Object_Renamed++)
+            for (obj = 1; obj <= loopTo; obj++)
             {
-                ref var withBlock = ref Declaraciones.ObjData_Renamed[Object_Renamed];
-                withBlock.name = Leer.GetValue("OBJ" + Object_Renamed, "Name");
+                ref var withBlock = ref Declaraciones.objData[obj];
+                withBlock.name = Leer.GetValue("OBJ" + obj, "Name");
 
                 // Pablo (ToxicWaste) Log de Objetos.
-                withBlock.Log = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Log")));
-                withBlock.NoLog = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "NoLog")));
+                withBlock.Log = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Log")));
+                withBlock.NoLog = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "NoLog")));
 
                 // 07/09/07
                 withBlock.GrhIndex =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "GrhIndex")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "GrhIndex")));
                 if (withBlock.GrhIndex == 0) withBlock.GrhIndex = withBlock.GrhIndex;
 
                 withBlock.OBJType =
                     (Declaraciones.eOBJType)Convert.ToInt32(
-                        Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "ObjType")));
+                        Migration.ParseVal(Leer.GetValue("OBJ" + obj, "ObjType")));
 
-                withBlock.Newbie = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Newbie")));
+                withBlock.Newbie = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Newbie")));
 
                 switch (withBlock.OBJType)
                 {
                     case Declaraciones.eOBJType.otArmadura:
                     {
                         withBlock.Real =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Real")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Real")));
                         withBlock.Caos =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Caos")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Caos")));
                         withBlock.LingH =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingH")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingH")));
                         withBlock.LingP =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingP")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingP")));
                         withBlock.LingO =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingO")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingO")));
                         withBlock.SkHerreria =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SkHerreria")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SkHerreria")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otESCUDO:
                     {
                         withBlock.ShieldAnim =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Anim")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Anim")));
                         withBlock.LingH =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingH")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingH")));
                         withBlock.LingP =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingP")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingP")));
                         withBlock.LingO =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingO")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingO")));
                         withBlock.SkHerreria =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SkHerreria")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SkHerreria")));
                         withBlock.Real =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Real")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Real")));
                         withBlock.Caos =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Caos")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Caos")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otCASCO:
                     {
                         withBlock.CascoAnim =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Anim")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Anim")));
                         withBlock.LingH =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingH")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingH")));
                         withBlock.LingP =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingP")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingP")));
                         withBlock.LingO =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingO")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingO")));
                         withBlock.SkHerreria =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SkHerreria")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SkHerreria")));
                         withBlock.Real =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Real")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Real")));
                         withBlock.Caos =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Caos")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Caos")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otWeapon:
                     {
                         withBlock.WeaponAnim =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Anim")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Anim")));
                         withBlock.Apuñala =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Apuñala")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Apuñala")));
                         withBlock.Envenena =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Envenena")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Envenena")));
                         withBlock.MaxHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaxHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaxHIT")));
                         withBlock.MinHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinHIT")));
                         withBlock.proyectil =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Proyectil")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Proyectil")));
                         withBlock.Municion =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Municiones")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Municiones")));
                         withBlock.StaffPower =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "StaffPower")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "StaffPower")));
                         withBlock.StaffDamageBonus =
                             Convert.ToInt16(
-                                Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "StaffDamageBonus")));
+                                Migration.ParseVal(Leer.GetValue("OBJ" + obj, "StaffDamageBonus")));
                         withBlock.Refuerzo =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Refuerzo")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Refuerzo")));
 
                         withBlock.LingH =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingH")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingH")));
                         withBlock.LingP =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingP")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingP")));
                         withBlock.LingO =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingO")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingO")));
                         withBlock.SkHerreria =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SkHerreria")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SkHerreria")));
                         withBlock.Real =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Real")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Real")));
                         withBlock.Caos =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Caos")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Caos")));
 
                         withBlock.WeaponRazaEnanaAnim =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "RazaEnanaAnim")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "RazaEnanaAnim")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otInstrumentos:
                     {
                         withBlock.Snd1 =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SND1")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SND1")));
                         withBlock.Snd2 =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SND2")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SND2")));
                         withBlock.Snd3 =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SND3")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SND3")));
                         // Pablo (ToxicWaste)
                         withBlock.Real =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Real")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Real")));
                         withBlock.Caos =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Caos")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Caos")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otMinerales:
                     {
                         withBlock.MinSkill =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinSkill")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinSkill")));
                         break;
                     }
 
@@ -974,163 +971,163 @@ internal static class ES
                     case Declaraciones.eOBJType.otBotellaLlena:
                     {
                         withBlock.IndexAbierta =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "IndexAbierta")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "IndexAbierta")));
                         withBlock.IndexCerrada =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "IndexCerrada")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "IndexCerrada")));
                         withBlock.IndexCerradaLlave =
                             Convert.ToInt16(
-                                Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "IndexCerradaLlave")));
+                                Migration.ParseVal(Leer.GetValue("OBJ" + obj, "IndexCerradaLlave")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otPociones:
                     {
                         withBlock.TipoPocion =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "TipoPocion")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "TipoPocion")));
                         withBlock.MaxModificador =
                             Convert.ToInt16(
-                                Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaxModificador")));
+                                Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaxModificador")));
                         withBlock.MinModificador =
                             Convert.ToInt16(
-                                Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinModificador")));
+                                Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinModificador")));
                         withBlock.DuracionEfecto =
                             Convert.ToInt32(
-                                Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "DuracionEfecto")));
+                                Migration.ParseVal(Leer.GetValue("OBJ" + obj, "DuracionEfecto")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otBarcos:
                     {
                         withBlock.MinSkill =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinSkill")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinSkill")));
                         withBlock.MaxHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaxHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaxHIT")));
                         withBlock.MinHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinHIT")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otFlechas:
                     {
                         withBlock.MaxHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaxHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaxHIT")));
                         withBlock.MinHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinHIT")));
                         withBlock.Envenena =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Envenena")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Envenena")));
                         withBlock.Paraliza =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Paraliza")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Paraliza")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otAnillo: // Pablo (ToxicWaste)
                     {
                         withBlock.LingH =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingH")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingH")));
                         withBlock.LingP =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingP")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingP")));
                         withBlock.LingO =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingO")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingO")));
                         withBlock.SkHerreria =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SkHerreria")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SkHerreria")));
                         withBlock.MaxHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaxHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaxHIT")));
                         withBlock.MinHIT =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinHIT")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinHIT")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otTeleport:
                     {
                         withBlock.Radio =
-                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Radio")));
+                            Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Radio")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otMochilas:
                     {
                         withBlock.MochilaType =
-                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MochilaType")));
+                            Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MochilaType")));
                         break;
                     }
 
                     case Declaraciones.eOBJType.otForos:
                     {
-                        modForum.AddForum(Leer.GetValue("OBJ" + Object_Renamed, "ID"));
+                        modForum.AddForum(Leer.GetValue("OBJ" + obj, "ID"));
                         break;
                     }
                 }
 
                 withBlock.Ropaje =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "NumRopaje")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "NumRopaje")));
                 withBlock.HechizoIndex =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "HechizoIndex")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "HechizoIndex")));
 
                 withBlock.LingoteIndex =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "LingoteIndex")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "LingoteIndex")));
 
                 withBlock.MineralIndex =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MineralIndex")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MineralIndex")));
 
-                withBlock.MaxHp = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaxHP")));
-                withBlock.MinHp = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinHP")));
+                withBlock.MaxHp = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaxHP")));
+                withBlock.MinHp = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinHP")));
 
-                withBlock.Mujer = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Mujer")));
-                withBlock.Hombre = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Hombre")));
+                withBlock.Mujer = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Mujer")));
+                withBlock.Hombre = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Hombre")));
 
-                withBlock.MinHam = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinHam")));
-                withBlock.MinSed = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinAgu")));
+                withBlock.MinHam = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinHam")));
+                withBlock.MinSed = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinAgu")));
 
-                withBlock.MinDef = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MINDEF")));
-                withBlock.MaxDef = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MAXDEF")));
+                withBlock.MinDef = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MINDEF")));
+                withBlock.MaxDef = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MAXDEF")));
                 withBlock.def = Convert.ToInt16((withBlock.MinDef + withBlock.MaxDef) / 2);
 
                 withBlock.RazaEnana =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "RazaEnana")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "RazaEnana")));
                 withBlock.RazaDrow =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "RazaDrow")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "RazaDrow")));
                 withBlock.RazaElfa =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "RazaElfa")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "RazaElfa")));
                 withBlock.RazaGnoma =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "RazaGnoma")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "RazaGnoma")));
                 withBlock.RazaHumana =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "RazaHumana")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "RazaHumana")));
 
-                withBlock.Valor = Convert.ToInt32(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Valor")));
+                withBlock.Valor = Convert.ToInt32(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Valor")));
 
                 withBlock.Crucial =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Crucial")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Crucial")));
 
                 withBlock.Cerrada =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "abierta")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "abierta")));
                 if (withBlock.Cerrada == 1)
                 {
                     withBlock.Llave =
-                        Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Llave")));
+                        Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Llave")));
                     withBlock.clave =
-                        Convert.ToInt32(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Clave")));
+                        Convert.ToInt32(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Clave")));
                 }
 
                 // Puertas y llaves
-                withBlock.clave = Convert.ToInt32(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Clave")));
+                withBlock.clave = Convert.ToInt32(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Clave")));
 
-                withBlock.texto = Leer.GetValue("OBJ" + Object_Renamed, "Texto");
+                withBlock.texto = Leer.GetValue("OBJ" + obj, "Texto");
                 withBlock.GrhSecundario =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "VGrande")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "VGrande")));
 
                 withBlock.Agarrable =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Agarrable")));
-                withBlock.ForoID = Leer.GetValue("OBJ" + Object_Renamed, "ID");
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Agarrable")));
+                withBlock.ForoID = Leer.GetValue("OBJ" + obj, "ID");
 
                 withBlock.Acuchilla =
-                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Acuchilla")));
+                    Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Acuchilla")));
 
-                withBlock.Guante = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Guante")));
+                withBlock.Guante = Convert.ToByte(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Guante")));
 
                 // CHECK: !!! Esto es provisorio hasta que los de Dateo cambien los valores de string a numerico
                 for (i = 1; i <= Declaraciones.NUMCLASES; i++)
                 {
-                    var tmpVal = Leer.GetValue("OBJ" + Object_Renamed, "CP" + i);
+                    var tmpVal = Leer.GetValue("OBJ" + obj, "CP" + i);
                     S = tmpVal is not null ? tmpVal.ToUpper() : "";
                     N = 1;
                     while ((S.Length > 0) &
@@ -1142,27 +1139,27 @@ internal static class ES
                 }
 
                 withBlock.DefensaMagicaMax =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "DefensaMagicaMax")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "DefensaMagicaMax")));
                 withBlock.DefensaMagicaMin =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "DefensaMagicaMin")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "DefensaMagicaMin")));
 
                 withBlock.SkCarpinteria =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "SkCarpinteria")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "SkCarpinteria")));
 
                 if (withBlock.SkCarpinteria > 0)
                     withBlock.Madera =
-                        Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Madera")));
+                        Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Madera")));
                 withBlock.MaderaElfica =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MaderaElfica")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MaderaElfica")));
 
                 // Bebidas
-                withBlock.MinSta = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "MinST")));
+                withBlock.MinSta = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "MinST")));
 
                 withBlock.NoSeCae =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "NoSeCae")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "NoSeCae")));
 
                 withBlock.Upgrade =
-                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + Object_Renamed, "Upgrade")));
+                    Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "Upgrade")));
             }
 
 
@@ -1338,7 +1335,7 @@ internal static class ES
             withBlock.clase = (Declaraciones.eClass)Convert.ToInt32(UserFile.GetValue("INIT", "Clase"));
             withBlock.raza = (Declaraciones.eRaza)Convert.ToByte(UserFile.GetValue("INIT", "Raza"));
             withBlock.Hogar = (Declaraciones.eCiudad)Convert.ToInt32(UserFile.GetValue("INIT", "Hogar"));
-            withBlock.Char_Renamed.heading =
+            withBlock.character.heading =
                 (Declaraciones.eHeading)Convert.ToByte(UserFile.GetValue("INIT", "Heading"));
 
 
@@ -1358,15 +1355,15 @@ internal static class ES
             if (withBlock.flags.Muerto == 0)
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().Char. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                withBlock.Char_Renamed = withBlock.OrigChar;
+                withBlock.character = withBlock.OrigChar;
             }
             else
             {
-                withBlock.Char_Renamed.body = Declaraciones.iCuerpoMuerto;
-                withBlock.Char_Renamed.Head = Declaraciones.iCabezaMuerto;
-                withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
-                withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+                withBlock.character.body = Declaraciones.iCuerpoMuerto;
+                withBlock.character.Head = Declaraciones.iCabezaMuerto;
+                withBlock.character.WeaponAnim = Declaraciones.NingunArma;
+                withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+                withBlock.character.CascoAnim = Declaraciones.NingunCasco;
             }
 
 
@@ -1410,9 +1407,9 @@ internal static class ES
             for (LoopC = 1; LoopC <= Declaraciones.MAX_BANCOINVENTORY_SLOTS; LoopC++)
             {
                 ln = UserFile.GetValue("BancoInventory", "Obj" + LoopC);
-                withBlock.BancoInvent.Object_Renamed[LoopC].ObjIndex =
+                withBlock.BancoInvent.userObj[LoopC].ObjIndex =
                     Convert.ToInt16(General.ReadField(1, ref ln, 45));
-                withBlock.BancoInvent.Object_Renamed[LoopC].Amount = Convert.ToInt16(General.ReadField(2, ref ln, 45));
+                withBlock.BancoInvent.userObj[LoopC].Amount = Convert.ToInt16(General.ReadField(2, ref ln, 45));
             }
             // ------------------------------------------------------------------------------------
             // [/KEVIN]*****************************************************************************
@@ -1422,23 +1419,23 @@ internal static class ES
             for (LoopC = 1; LoopC <= Declaraciones.MAX_INVENTORY_SLOTS; LoopC++)
             {
                 ln = UserFile.GetValue("Inventory", "Obj" + LoopC);
-                withBlock.Invent.Object_Renamed[LoopC].ObjIndex = Convert.ToInt16(General.ReadField(1, ref ln, 45));
-                withBlock.Invent.Object_Renamed[LoopC].Amount = Convert.ToInt16(General.ReadField(2, ref ln, 45));
-                withBlock.Invent.Object_Renamed[LoopC].Equipped = Convert.ToByte(General.ReadField(3, ref ln, 45));
+                withBlock.Invent.userObj[LoopC].ObjIndex = Convert.ToInt16(General.ReadField(1, ref ln, 45));
+                withBlock.Invent.userObj[LoopC].Amount = Convert.ToInt16(General.ReadField(2, ref ln, 45));
+                withBlock.Invent.userObj[LoopC].Equipped = Convert.ToByte(General.ReadField(3, ref ln, 45));
             }
 
             // Obtiene el indice-objeto del arma
             withBlock.Invent.WeaponEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "WeaponEqpSlot"));
             if (withBlock.Invent.WeaponEqpSlot > 0)
                 withBlock.Invent.WeaponEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.WeaponEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.WeaponEqpSlot].ObjIndex;
 
             // Obtiene el indice-objeto del armadura
             withBlock.Invent.ArmourEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "ArmourEqpSlot"));
             if (withBlock.Invent.ArmourEqpSlot > 0)
             {
                 withBlock.Invent.ArmourEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.ArmourEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.ArmourEqpSlot].ObjIndex;
                 withBlock.flags.Desnudo = 0;
             }
             else
@@ -1450,36 +1447,36 @@ internal static class ES
             withBlock.Invent.EscudoEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "EscudoEqpSlot"));
             if (withBlock.Invent.EscudoEqpSlot > 0)
                 withBlock.Invent.EscudoEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.EscudoEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.EscudoEqpSlot].ObjIndex;
 
             // Obtiene el indice-objeto del casco
             withBlock.Invent.CascoEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "CascoEqpSlot"));
             if (withBlock.Invent.CascoEqpSlot > 0)
                 withBlock.Invent.CascoEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.CascoEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.CascoEqpSlot].ObjIndex;
 
             // Obtiene el indice-objeto barco
             withBlock.Invent.BarcoSlot = Convert.ToByte(UserFile.GetValue("Inventory", "BarcoSlot"));
             if (withBlock.Invent.BarcoSlot > 0)
-                withBlock.Invent.BarcoObjIndex = withBlock.Invent.Object_Renamed[withBlock.Invent.BarcoSlot].ObjIndex;
+                withBlock.Invent.BarcoObjIndex = withBlock.Invent.userObj[withBlock.Invent.BarcoSlot].ObjIndex;
 
             // Obtiene el indice-objeto municion
             withBlock.Invent.MunicionEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "MunicionSlot"));
             if (withBlock.Invent.MunicionEqpSlot > 0)
                 withBlock.Invent.MunicionEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.MunicionEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.MunicionEqpSlot].ObjIndex;
 
             // [Alejo]
             // Obtiene el indice-objeto anilo
             withBlock.Invent.AnilloEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "AnilloSlot"));
             if (withBlock.Invent.AnilloEqpSlot > 0)
                 withBlock.Invent.AnilloEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.AnilloEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.AnilloEqpSlot].ObjIndex;
 
             withBlock.Invent.MochilaEqpSlot = Convert.ToByte(UserFile.GetValue("Inventory", "MochilaSlot"));
             if (withBlock.Invent.MochilaEqpSlot > 0)
                 withBlock.Invent.MochilaEqpObjIndex =
-                    withBlock.Invent.Object_Renamed[withBlock.Invent.MochilaEqpSlot].ObjIndex;
+                    withBlock.Invent.userObj[withBlock.Invent.MochilaEqpSlot].ObjIndex;
 
             withBlock.NroMascotas = Convert.ToInt16(UserFile.GetValue("MASCOTAS", "NroMascotas"));
             for (LoopC = 1; LoopC <= Declaraciones.MAXMASCOTAS; LoopC++)
@@ -1576,9 +1573,8 @@ internal static class ES
             Declaraciones.MapData = new Declaraciones.MapBlock[Declaraciones.NumMaps + 1, Declaraciones.XMaxMapSize + 1,
                 Declaraciones.YMaxMapSize + 1];
             ArrayInitializers.InitializeStruct(Declaraciones.MapData);
-            // UPGRADE_WARNING: El límite inferior de la matriz MapInfo_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-            // UPGRADE_NOTE: MapInfo se actualizó a MapInfo_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.MapInfo_Renamed = new Declaraciones.MapInfo[Declaraciones.NumMaps + 1];
+            // UPGRADE_WARNING: El límite inferior de la matriz mapInfo ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+            Declaraciones.mapInfo = new Declaraciones.MapInfo[Declaraciones.NumMaps + 1];
 
             var loopTo = Declaraciones.NumMaps;
             for (Map = 1; Map <= loopTo; Map++)
@@ -1638,9 +1634,8 @@ internal static class ES
             Declaraciones.MapData = new Declaraciones.MapBlock[Declaraciones.NumMaps + 1, Declaraciones.XMaxMapSize + 1,
                 Declaraciones.YMaxMapSize + 1];
             ArrayInitializers.InitializeStruct(Declaraciones.MapData);
-            // UPGRADE_WARNING: El límite inferior de la matriz MapInfo_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-            // UPGRADE_NOTE: MapInfo se actualizó a MapInfo_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.MapInfo_Renamed = new Declaraciones.MapInfo[Declaraciones.NumMaps + 1];
+            // UPGRADE_WARNING: El límite inferior de la matriz mapInfo ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+            Declaraciones.mapInfo = new Declaraciones.MapInfo[Declaraciones.NumMaps + 1];
 
             var loopTo = Declaraciones.NumMaps;
             for (Map = 1; Map <= loopTo; Map++)
@@ -2146,11 +2141,11 @@ internal static class ES
 
                 if (withBlock.flags.Mimetizado == 1)
                 {
-                    withBlock.Char_Renamed.body = withBlock.CharMimetizado.body;
-                    withBlock.Char_Renamed.Head = withBlock.CharMimetizado.Head;
-                    withBlock.Char_Renamed.CascoAnim = withBlock.CharMimetizado.CascoAnim;
-                    withBlock.Char_Renamed.ShieldAnim = withBlock.CharMimetizado.ShieldAnim;
-                    withBlock.Char_Renamed.WeaponAnim = withBlock.CharMimetizado.WeaponAnim;
+                    withBlock.character.body = withBlock.CharMimetizado.body;
+                    withBlock.character.Head = withBlock.CharMimetizado.Head;
+                    withBlock.character.CascoAnim = withBlock.CharMimetizado.CascoAnim;
+                    withBlock.character.ShieldAnim = withBlock.CharMimetizado.ShieldAnim;
+                    withBlock.character.WeaponAnim = withBlock.CharMimetizado.WeaponAnim;
                     withBlock.Counters.Mimetismo = 0;
                     withBlock.flags.Mimetizado = 0;
                     // Se fue el efecto del mimetismo, puede ser atacado por npcs
@@ -2160,9 +2155,9 @@ internal static class ES
                 if (File.Exists(UserFile))
                     if (withBlock.flags.Muerto == 1)
                     {
-                        OldUserHead = withBlock.Char_Renamed.Head;
+                        OldUserHead = withBlock.character.Head;
                         var argEmptySpaces = 1024;
-                        withBlock.Char_Renamed.Head =
+                        withBlock.character.Head =
                             Convert.ToInt16(GetVar(UserFile, "INIT", "Head", ref argEmptySpaces));
                     }
                 // Kill UserFile
@@ -2238,16 +2233,16 @@ internal static class ES
                 WriteVar(UserFile, "INIT", "Clase", Convert.ToInt32((int)withBlock.clase).ToString());
                 WriteVar(UserFile, "INIT", "Desc", withBlock.desc);
 
-                WriteVar(UserFile, "INIT", "Heading", Convert.ToInt32((byte)withBlock.Char_Renamed.heading).ToString());
+                WriteVar(UserFile, "INIT", "Heading", Convert.ToInt32((byte)withBlock.character.heading).ToString());
 
                 WriteVar(UserFile, "INIT", "Head", withBlock.OrigChar.Head.ToString());
 
                 if (withBlock.flags.Muerto == 0)
-                    WriteVar(UserFile, "INIT", "Body", withBlock.Char_Renamed.body.ToString());
+                    WriteVar(UserFile, "INIT", "Body", withBlock.character.body.ToString());
 
-                WriteVar(UserFile, "INIT", "Arma", withBlock.Char_Renamed.WeaponAnim.ToString());
-                WriteVar(UserFile, "INIT", "Escudo", withBlock.Char_Renamed.ShieldAnim.ToString());
-                WriteVar(UserFile, "INIT", "Casco", withBlock.Char_Renamed.CascoAnim.ToString());
+                WriteVar(UserFile, "INIT", "Arma", withBlock.character.WeaponAnim.ToString());
+                WriteVar(UserFile, "INIT", "Escudo", withBlock.character.ShieldAnim.ToString());
+                WriteVar(UserFile, "INIT", "Casco", withBlock.character.CascoAnim.ToString());
 
                 TempDate = DateTime.FromOADate(DateTime.Now.ToOADate() - withBlock.LogOnTime.ToOADate());
                 withBlock.LogOnTime = DateTime.Now;
@@ -2346,8 +2341,8 @@ internal static class ES
                     Migration.ParseVal(withBlock.BancoInvent.NroItems.ToString()).ToString());
                 for (loopd = 1; loopd <= Declaraciones.MAX_BANCOINVENTORY_SLOTS; loopd++)
                     WriteVar(UserFile, "BancoInventory", "Obj" + loopd,
-                        withBlock.BancoInvent.Object_Renamed[loopd].ObjIndex + "-" +
-                        withBlock.BancoInvent.Object_Renamed[loopd].Amount);
+                        withBlock.BancoInvent.userObj[loopd].ObjIndex + "-" +
+                        withBlock.BancoInvent.userObj[loopd].Amount);
                 // *******************************************************************************************
                 // [/KEVIN]-----------
 
@@ -2357,9 +2352,9 @@ internal static class ES
 
                 for (LoopC = 1; LoopC <= Declaraciones.MAX_INVENTORY_SLOTS; LoopC++)
                     WriteVar(UserFile, "Inventory", "Obj" + LoopC,
-                        withBlock.Invent.Object_Renamed[LoopC].ObjIndex + "-" +
-                        withBlock.Invent.Object_Renamed[LoopC].Amount + "-" +
-                        withBlock.Invent.Object_Renamed[LoopC].Equipped);
+                        withBlock.Invent.userObj[LoopC].ObjIndex + "-" +
+                        withBlock.Invent.userObj[LoopC].Amount + "-" +
+                        withBlock.Invent.userObj[LoopC].Equipped);
 
                 WriteVar(UserFile, "Inventory", "WeaponEqpSlot", withBlock.Invent.WeaponEqpSlot.ToString());
                 WriteVar(UserFile, "Inventory", "ArmourEqpSlot", withBlock.Invent.ArmourEqpSlot.ToString());
@@ -2422,7 +2417,7 @@ internal static class ES
                 WriteVar(UserFile, "MASCOTAS", "NroMascotas", NroMascotas.ToString());
 
                 // Devuelve el head de muerto
-                if (withBlock.flags.Muerto == 1) withBlock.Char_Renamed.Head = Declaraciones.iCabezaMuerto;
+                if (withBlock.flags.Muerto == 1) withBlock.character.Head = Declaraciones.iCabezaMuerto;
             }
         }
 
@@ -2484,11 +2479,11 @@ internal static class ES
             WriteVar(npcfile, "NPC" + NpcNumero, "Name", withBlock.name);
             WriteVar(npcfile, "NPC" + NpcNumero, "Desc", withBlock.desc);
             WriteVar(npcfile, "NPC" + NpcNumero, "Head",
-                Migration.ParseVal(withBlock.Char_Renamed.Head.ToString()).ToString());
+                Migration.ParseVal(withBlock.character.Head.ToString()).ToString());
             WriteVar(npcfile, "NPC" + NpcNumero, "Body",
-                Migration.ParseVal(withBlock.Char_Renamed.body.ToString()).ToString());
+                Migration.ParseVal(withBlock.character.body.ToString()).ToString());
             WriteVar(npcfile, "NPC" + NpcNumero, "Heading",
-                Convert.ToInt32((byte)withBlock.Char_Renamed.heading).ToString());
+                Convert.ToInt32((byte)withBlock.character.heading).ToString());
             WriteVar(npcfile, "NPC" + NpcNumero, "Movement", Convert.ToInt32((int)withBlock.Movement).ToString());
             WriteVar(npcfile, "NPC" + NpcNumero, "Attackable",
                 Migration.ParseVal(withBlock.Attackable.ToString()).ToString());
@@ -2535,8 +2530,8 @@ internal static class ES
             if (withBlock.Invent.NroItems > 0)
                 for (LoopC = 1; LoopC <= Declaraciones.MAX_INVENTORY_SLOTS; LoopC++)
                     WriteVar(npcfile, "NPC" + NpcNumero, "Obj" + LoopC,
-                        withBlock.Invent.Object_Renamed[LoopC].ObjIndex + "-" +
-                        withBlock.Invent.Object_Renamed[LoopC].Amount);
+                        withBlock.Invent.userObj[LoopC].ObjIndex + "-" +
+                        withBlock.Invent.userObj[LoopC].Amount);
         }
     }
 
@@ -2578,14 +2573,14 @@ internal static class ES
                     ref argEmptySpaces5)));
 
             var argEmptySpaces6 = 1024;
-            withBlock.Char_Renamed.body =
+            withBlock.character.body =
                 Convert.ToInt16(Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "Body", ref argEmptySpaces6)));
             var argEmptySpaces7 = 1024;
-            withBlock.Char_Renamed.Head =
+            withBlock.character.Head =
                 Convert.ToInt16(Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "Head", ref argEmptySpaces7)));
             var argEmptySpaces8 = 1024;
             var argEmptySpaces9 = 1024;
-            withBlock.Char_Renamed.heading = (Declaraciones.eHeading)Convert.ToByte(
+            withBlock.character.heading = (Declaraciones.eHeading)Convert.ToByte(
                 Migration.ParseVal(GetVar(npcfile, "NPC" + NpcNumber, "Heading", ref argEmptySpaces9)));
 
             var argEmptySpaces10 = 1024;
@@ -2645,16 +2640,16 @@ internal static class ES
                 {
                     var argEmptySpaces23 = 1024;
                     ln = GetVar(npcfile, "NPC" + NpcNumber, "Obj" + LoopC, ref argEmptySpaces23);
-                    withBlock.Invent.Object_Renamed[LoopC].ObjIndex =
+                    withBlock.Invent.userObj[LoopC].ObjIndex =
                         Convert.ToInt16(Migration.ParseVal(General.ReadField(1, ref ln, 45)));
-                    withBlock.Invent.Object_Renamed[LoopC].Amount =
+                    withBlock.Invent.userObj[LoopC].Amount =
                         Convert.ToInt16(Migration.ParseVal(General.ReadField(2, ref ln, 45)));
                 }
             else
                 for (LoopC = 1; LoopC <= Declaraciones.MAX_INVENTORY_SLOTS; LoopC++)
                 {
-                    withBlock.Invent.Object_Renamed[LoopC].ObjIndex = 0;
-                    withBlock.Invent.Object_Renamed[LoopC].Amount = 0;
+                    withBlock.Invent.userObj[LoopC].ObjIndex = 0;
+                    withBlock.Invent.userObj[LoopC].Amount = 0;
                 }
 
             for (LoopC = 1; LoopC <= Declaraciones.MAX_NPC_DROPS; LoopC++)

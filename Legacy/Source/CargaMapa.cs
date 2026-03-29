@@ -235,7 +235,7 @@ internal static class CargaMapa
         var root = jsonDoc.RootElement;
 
         {
-            ref var withBlock = ref Declaraciones.MapInfo_Renamed[ind];
+            ref var withBlock = ref Declaraciones.mapInfo[ind];
             JsonElement tempProperty;
             if (root.TryGetProperty("name", out tempProperty))
                 withBlock.name = tempProperty.GetString();

@@ -92,7 +92,7 @@ internal static class TCP
             }
         }
 
-        Declaraciones.UserList[UserIndex].Char_Renamed.body = NewBody;
+        Declaraciones.UserList[UserIndex].character.body = NewBody;
     }
 
     private static bool ValidarCabeza(byte UserRaza, byte UserGenero, short Head)
@@ -381,19 +381,19 @@ internal static class TCP
             // [Pablo (Toxic Waste) 9/01/08]
             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Fuerza] = Convert.ToByte(
                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Fuerza] +
-                Declaraciones.ModRaza_Renamed[(int)UserRaza].Fuerza);
+                Declaraciones.modRaza[(int)UserRaza].Fuerza);
             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad] = Convert.ToByte(
                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad] +
-                Declaraciones.ModRaza_Renamed[(int)UserRaza].Agilidad);
+                Declaraciones.modRaza[(int)UserRaza].Agilidad);
             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Inteligencia] = Convert.ToByte(
                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Inteligencia] +
-                Declaraciones.ModRaza_Renamed[(int)UserRaza].Inteligencia);
+                Declaraciones.modRaza[(int)UserRaza].Inteligencia);
             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Carisma] = Convert.ToByte(
                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Carisma] +
-                Declaraciones.ModRaza_Renamed[(int)UserRaza].Carisma);
+                Declaraciones.modRaza[(int)UserRaza].Carisma);
             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Constitucion] = Convert.ToByte(
                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Constitucion] +
-                Declaraciones.ModRaza_Renamed[(int)UserRaza].Constitucion);
+                Declaraciones.modRaza[(int)UserRaza].Constitucion);
             // [/Pablo (Toxic Waste)]
 
             for (i = 1; i <= Declaraciones.NUMSKILLS; i++)
@@ -404,13 +404,13 @@ internal static class TCP
 
             withBlock.Stats.SkillPts = 10;
 
-            withBlock.Char_Renamed.heading = Declaraciones.eHeading.SOUTH;
+            withBlock.character.heading = Declaraciones.eHeading.SOUTH;
 
             DarCuerpo(UserIndex);
-            withBlock.Char_Renamed.Head = Head;
+            withBlock.character.Head = Head;
 
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().OrigChar. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            withBlock.OrigChar = withBlock.Char_Renamed;
+            withBlock.OrigChar = withBlock.character;
 
             MiInt = Matematicas.RandomNumber(1,
                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Constitucion] / 3);
@@ -483,28 +483,28 @@ internal static class TCP
 
             // Pociones Rojas (Newbie)
             Slot = 1;
-            withBlock.Invent.Object_Renamed[Slot].ObjIndex = 857;
-            withBlock.Invent.Object_Renamed[Slot].Amount = 200;
+            withBlock.Invent.userObj[Slot].ObjIndex = 857;
+            withBlock.Invent.userObj[Slot].Amount = 200;
 
             // Pociones azules (Newbie)
             if ((withBlock.Stats.MaxMAN > 0) | IsPaladin)
             {
                 Slot = Convert.ToByte(Slot + 1);
-                withBlock.Invent.Object_Renamed[Slot].ObjIndex = 856;
-                withBlock.Invent.Object_Renamed[Slot].Amount = 200;
+                withBlock.Invent.userObj[Slot].ObjIndex = 856;
+                withBlock.Invent.userObj[Slot].Amount = 200;
             }
 
             else
             {
                 // Pociones amarillas (Newbie)
                 Slot = Convert.ToByte(Slot + 1);
-                withBlock.Invent.Object_Renamed[Slot].ObjIndex = 855;
-                withBlock.Invent.Object_Renamed[Slot].Amount = 100;
+                withBlock.Invent.userObj[Slot].ObjIndex = 855;
+                withBlock.Invent.userObj[Slot].Amount = 100;
 
                 // Pociones verdes (Newbie)
                 Slot = Convert.ToByte(Slot + 1);
-                withBlock.Invent.Object_Renamed[Slot].ObjIndex = 858;
-                withBlock.Invent.Object_Renamed[Slot].Amount = 50;
+                withBlock.Invent.userObj[Slot].ObjIndex = 858;
+                withBlock.Invent.userObj[Slot].Amount = 50;
             }
 
             // Ropa (Newbie)
@@ -513,37 +513,37 @@ internal static class TCP
             {
                 case Declaraciones.eRaza.Humano:
                 {
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 463;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 463;
                     break;
                 }
                 case Declaraciones.eRaza.Elfo:
                 {
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 464;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 464;
                     break;
                 }
                 case Declaraciones.eRaza.Drow:
                 {
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 465;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 465;
                     break;
                 }
                 case Declaraciones.eRaza.Enano:
                 {
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 466;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 466;
                     break;
                 }
                 case Declaraciones.eRaza.Gnomo:
                 {
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 466;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 466;
                     break;
                 }
             }
 
             // Equipo ropa
-            withBlock.Invent.Object_Renamed[Slot].Amount = 1;
-            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+            withBlock.Invent.userObj[Slot].Amount = 1;
+            withBlock.Invent.userObj[Slot].Equipped = 1;
 
             withBlock.Invent.ArmourEqpSlot = Slot;
-            withBlock.Invent.ArmourEqpObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+            withBlock.Invent.ArmourEqpObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
 
             // Arma (Newbie)
             Slot = Convert.ToByte(Slot + 1);
@@ -552,13 +552,13 @@ internal static class TCP
                 case Declaraciones.eClass.Hunter:
                 {
                     // Arco (Newbie)
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 859;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 859;
                     break;
                 }
                 case Declaraciones.eClass.Worker:
                 {
                     // Herramienta (Newbie)
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex =
+                    withBlock.Invent.userObj[Slot].ObjIndex =
                         Convert.ToInt16(Matematicas.RandomNumber(561, 565));
                     break;
                 }
@@ -566,46 +566,46 @@ internal static class TCP
                 default:
                 {
                     // Daga (Newbie)
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 460;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 460;
                     break;
                 }
             }
 
             // Equipo arma
-            withBlock.Invent.Object_Renamed[Slot].Amount = 1;
-            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+            withBlock.Invent.userObj[Slot].Amount = 1;
+            withBlock.Invent.userObj[Slot].Equipped = 1;
 
-            withBlock.Invent.WeaponEqpObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+            withBlock.Invent.WeaponEqpObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
             withBlock.Invent.WeaponEqpSlot = Slot;
 
-            withBlock.Char_Renamed.WeaponAnim = UsUaRiOs.GetWeaponAnim(UserIndex, withBlock.Invent.WeaponEqpObjIndex);
+            withBlock.character.WeaponAnim = UsUaRiOs.GetWeaponAnim(UserIndex, withBlock.Invent.WeaponEqpObjIndex);
 
             // Municiones (Newbie)
             if (UserClase == Declaraciones.eClass.Hunter)
             {
                 Slot = Convert.ToByte(Slot + 1);
-                withBlock.Invent.Object_Renamed[Slot].ObjIndex = 860;
-                withBlock.Invent.Object_Renamed[Slot].Amount = 150;
+                withBlock.Invent.userObj[Slot].ObjIndex = 860;
+                withBlock.Invent.userObj[Slot].Amount = 150;
 
                 // Equipo flechas
-                withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                withBlock.Invent.userObj[Slot].Equipped = 1;
                 withBlock.Invent.MunicionEqpSlot = Slot;
                 withBlock.Invent.MunicionEqpObjIndex = 860;
             }
 
             // Manzanas (Newbie)
             Slot = Convert.ToByte(Slot + 1);
-            withBlock.Invent.Object_Renamed[Slot].ObjIndex = 467;
-            withBlock.Invent.Object_Renamed[Slot].Amount = 100;
+            withBlock.Invent.userObj[Slot].ObjIndex = 467;
+            withBlock.Invent.userObj[Slot].Amount = 100;
 
             // Jugos (Nwbie)
             Slot = Convert.ToByte(Slot + 1);
-            withBlock.Invent.Object_Renamed[Slot].ObjIndex = 468;
-            withBlock.Invent.Object_Renamed[Slot].Amount = 100;
+            withBlock.Invent.userObj[Slot].ObjIndex = 468;
+            withBlock.Invent.userObj[Slot].Amount = 100;
 
             // Sin casco y escudo
-            withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-            withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+            withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+            withBlock.character.CascoAnim = Declaraciones.NingunCasco;
 
             // Total Items
             withBlock.Invent.NroItems = Slot;
@@ -845,8 +845,8 @@ internal static class TCP
         // 
         // ***************************************************
 
-        ValidateChrRet = (Declaraciones.UserList[UserIndex].Char_Renamed.Head != 0) &
-                         (Declaraciones.UserList[UserIndex].Char_Renamed.body != 0) & ValidateSkills(UserIndex);
+        ValidateChrRet = (Declaraciones.UserList[UserIndex].character.Head != 0) &
+                         (Declaraciones.UserList[UserIndex].character.body != 0) & ValidateSkills(UserIndex);
         return ValidateChrRet;
     }
 
@@ -892,7 +892,7 @@ internal static class TCP
             withBlock.flags.TargetNpcTipo = Declaraciones.eNPCType.Comun;
             withBlock.flags.TargetObj = 0;
             withBlock.flags.TargetUser = 0;
-            withBlock.Char_Renamed.FX = 0;
+            withBlock.character.FX = 0;
 
             // Controlamos no pasar el maximo de usuarios
             if (Declaraciones.NumUsers >= Declaraciones.MaxUsers)
@@ -1018,18 +1018,18 @@ internal static class TCP
             Leer = null;
 
             if (withBlock.Invent.EscudoEqpSlot == 0)
-                withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
+                withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
             if (withBlock.Invent.CascoEqpSlot == 0)
-                withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+                withBlock.character.CascoAnim = Declaraciones.NingunCasco;
             if (withBlock.Invent.WeaponEqpSlot == 0)
-                withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
+                withBlock.character.WeaponAnim = Declaraciones.NingunArma;
 
             if (withBlock.Invent.MochilaEqpSlot > 0)
                 withBlock.CurrentInventorySlots = Convert.ToByte(Declaraciones.MAX_NORMAL_INVENTORY_SLOTS +
                                                                  Declaraciones
-                                                                     .ObjData_Renamed[
+                                                                     .objData[
                                                                          withBlock.Invent
-                                                                             .Object_Renamed[
+                                                                             .userObj[
                                                                                  withBlock.Invent.MochilaEqpSlot]
                                                                              .ObjIndex].MochilaType * 5);
             else
@@ -1210,21 +1210,21 @@ internal static class TCP
             // If in the water, and has a boat, equip it!
             if ((withBlock.Invent.BarcoObjIndex > 0) &
                 (General.HayAgua(withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y) |
-                 UsUaRiOs.BodyIsBoat(withBlock.Char_Renamed.body)))
+                 UsUaRiOs.BodyIsBoat(withBlock.character.body)))
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Barco. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Barco = Declaraciones.ObjData_Renamed[withBlock.Invent.BarcoObjIndex];
-                withBlock.Char_Renamed.Head = 0;
+                Barco = Declaraciones.objData[withBlock.Invent.BarcoObjIndex];
+                withBlock.character.Head = 0;
                 if (withBlock.flags.Muerto == 0)
                 {
                     UsUaRiOs.ToogleBoatBody(UserIndex);
                 }
                 else
                 {
-                    withBlock.Char_Renamed.body = Declaraciones.iFragataFantasmal;
-                    withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                    withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
-                    withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+                    withBlock.character.body = Declaraciones.iFragataFantasmal;
+                    withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+                    withBlock.character.WeaponAnim = Declaraciones.NingunArma;
+                    withBlock.character.CascoAnim = Declaraciones.NingunCasco;
                 }
 
                 withBlock.flags.Navegando = 1;
@@ -1234,10 +1234,10 @@ internal static class TCP
             // Info
             Protocol.WriteUserIndexInServer(UserIndex); // Enviamos el User index
             Protocol.WriteChangeMap(UserIndex, withBlock.Pos.Map,
-                Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].MapVersion); // Carga el mapa
+                Declaraciones.mapInfo[withBlock.Pos.Map].MapVersion); // Carga el mapa
             Protocol.WritePlayMidi(UserIndex,
                 Convert.ToByte(Migration.ParseVal(General.ReadField(1,
-                    ref Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Music, 45))));
+                    ref Declaraciones.mapInfo[withBlock.Pos.Map].Music, 45))));
 
             if (withBlock.flags.Privilegios == Declaraciones.PlayerType.Dios)
                 withBlock.flags.ChatColor = Information.RGB(250, 250, 150);
@@ -1310,8 +1310,8 @@ internal static class TCP
             Admin.EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.CANTIDAD_ONLINE,
                 Declaraciones.NumUsers);
 
-            Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].NumUsers =
-                Convert.ToInt16(Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].NumUsers + 1);
+            Declaraciones.mapInfo[withBlock.Pos.Map].NumUsers =
+                Convert.ToInt16(Declaraciones.mapInfo[withBlock.Pos.Map].NumUsers + 1);
 
             if (withBlock.Stats.SkillPts > 0)
             {
@@ -1333,7 +1333,7 @@ internal static class TCP
                     Declaraciones.recordusuarios);
             }
 
-            if ((withBlock.NroMascotas > 0) & Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk)
+            if ((withBlock.NroMascotas > 0) & Declaraciones.mapInfo[withBlock.Pos.Map].Pk)
                 for (i = 1; i <= Declaraciones.MAXMASCOTAS; i++)
                     if (withBlock.MascotasType[i] > 0)
                     {
@@ -1372,7 +1372,7 @@ internal static class TCP
                         Protocol.FontTypeNames.FONTTYPE_GUILD);
 
             modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, (short)Declaraciones.FXIDs.FXWARP,
+                Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex, (short)Declaraciones.FXIDs.FXWARP,
                     0));
 
             Protocol.WriteLoggedMessage(UserIndex);
@@ -1504,7 +1504,7 @@ internal static class TCP
         // 03/15/2006 Maraxus - Uso de With para mayor performance y claridad.
         // *************************************************
         {
-            ref var withBlock = ref Declaraciones.UserList[UserIndex].Char_Renamed;
+            ref var withBlock = ref Declaraciones.UserList[UserIndex].character;
             withBlock.body = 0;
             withBlock.CascoAnim = 0;
             withBlock.CharIndex = 0;
@@ -1721,9 +1721,9 @@ internal static class TCP
 
         for (LoopC = 1; LoopC <= Declaraciones.MAX_BANCOINVENTORY_SLOTS; LoopC++)
         {
-            Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[LoopC].Amount = 0;
-            Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[LoopC].Equipped = 0;
-            Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[LoopC].ObjIndex = 0;
+            Declaraciones.UserList[UserIndex].BancoInvent.userObj[LoopC].Amount = 0;
+            Declaraciones.UserList[UserIndex].BancoInvent.userObj[LoopC].Equipped = 0;
+            Declaraciones.UserList[UserIndex].BancoInvent.userObj[LoopC].ObjIndex = 0;
         }
 
         Declaraciones.UserList[UserIndex].BancoInvent.NroItems = 0;
@@ -1826,10 +1826,10 @@ internal static class TCP
             Map = Declaraciones.UserList[UserIndex].Pos.Map;
             name = Declaraciones.UserList[UserIndex].name.ToUpper();
 
-            Declaraciones.UserList[UserIndex].Char_Renamed.FX = 0;
-            Declaraciones.UserList[UserIndex].Char_Renamed.loops = 0;
+            Declaraciones.UserList[UserIndex].character.FX = 0;
+            Declaraciones.UserList[UserIndex].character.loops = 0;
             modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex, 0, 0));
+                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].character.CharIndex, 0, 0));
 
 
             Declaraciones.UserList[UserIndex].flags.UserLogged = false;
@@ -1859,13 +1859,13 @@ internal static class TCP
             // Call SendToUserArea(UserIndex, "QDL" & UserList(UserIndex).Char.charindex)
             // End If
 
-            if (Declaraciones.MapInfo_Renamed[Map].NumUsers > 0)
+            if (Declaraciones.mapInfo[Map].NumUsers > 0)
                 modSendData.SendData(modSendData.SendTarget.ToPCAreaButIndex, UserIndex,
-                    Protocol.PrepareMessageRemoveCharDialog(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex));
+                    Protocol.PrepareMessageRemoveCharDialog(Declaraciones.UserList[UserIndex].character.CharIndex));
 
 
             // Borrar el personaje
-            if (Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex > 0)
+            if (Declaraciones.UserList[UserIndex].character.CharIndex > 0)
                 UsUaRiOs.EraseUserChar(UserIndex, Declaraciones.UserList[UserIndex].flags.AdminInvisible == 1);
 
             // Borrar mascotas
@@ -1875,10 +1875,10 @@ internal static class TCP
                         NPCs.QuitarNPC(Declaraciones.UserList[UserIndex].MascotasIndex[i]);
 
             // Update Map Users
-            Declaraciones.MapInfo_Renamed[Map].NumUsers =
-                Convert.ToInt16(Declaraciones.MapInfo_Renamed[Map].NumUsers - 1);
+            Declaraciones.mapInfo[Map].NumUsers =
+                Convert.ToInt16(Declaraciones.mapInfo[Map].NumUsers - 1);
 
-            if (Declaraciones.MapInfo_Renamed[Map].NumUsers < 0) Declaraciones.MapInfo_Renamed[Map].NumUsers = 0;
+            if (Declaraciones.mapInfo[Map].NumUsers < 0) Declaraciones.mapInfo[Map].NumUsers = 0;
 
             // Si el usuario habia dejado un msg en la gm's queue lo borramos
             if (Declaraciones.Ayuda.Existe(Declaraciones.UserList[UserIndex].name))
@@ -1934,9 +1934,9 @@ internal static class TCP
 
         Protocol.WriteSendNight(UserIndex,
             Admin.DeNoche &
-            (((Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].Zona ?? "") ==
+            (((Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].Zona ?? "") ==
               Declaraciones.Campo) |
-             ((Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].Zona ?? "") ==
+             ((Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].Zona ?? "") ==
               Declaraciones.Ciudad))
                 ? true
                 : false);

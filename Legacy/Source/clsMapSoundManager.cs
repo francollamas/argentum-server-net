@@ -20,11 +20,10 @@ internal class SoundMapInfo
 
     public SoundMapInfo()
     {
-        Class_Initialize_Renamed();
+        Class_Initialize();
     }
 
-    // UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Initialize_Renamed()
+    private void Class_Initialize()
     {
         // armar el array
         // UPGRADE_WARNING: El límite inferior de la matriz p_Mapas ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'

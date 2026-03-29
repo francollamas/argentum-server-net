@@ -662,12 +662,11 @@ internal static class GameLoop
     {
         try
         {
-            // UPGRADE_NOTE: npc se actualizó a npc_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            short npc_Renamed;
+            short npc;
 
             var loopTo = Declaraciones.LastNPC;
-            for (npc_Renamed = 1; npc_Renamed <= loopTo; npc_Renamed++)
-                Declaraciones.Npclist[npc_Renamed].CanAttack = 1;
+            for (npc = 1; npc <= loopTo; npc++)
+                Declaraciones.Npclist[npc].CanAttack = 1;
         }
 
         catch (Exception ex)
@@ -772,7 +771,7 @@ internal static class GameLoop
                                 mapa = withBlock.Pos.Map;
 
                                 if (mapa > 0)
-                                    if (Declaraciones.MapInfo_Renamed[mapa].NumUsers > 0)
+                                    if (Declaraciones.mapInfo[mapa].NumUsers > 0)
                                         if (withBlock.Movement != AI.TipoAI.ESTATICO)
                                             AI.NPCAI(NpcIndex);
                             }

@@ -179,19 +179,19 @@ internal static class mdlCOmercioConUsuario
                     Trabajo.QuitarObjetos(TradingObj.ObjIndex, TradingObj.Amount, UserIndex);
 
                     // Es un Objeto que tenemos que loguear? Pablo (ToxicWaste) 07/09/07
-                    if (Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].Log == 1)
+                    if (Declaraciones.objData[TradingObj.ObjIndex].Log == 1)
                         General.LogDesarrollo(withBlock.name + " le pasó en comercio seguro a " +
                                               Declaraciones.UserList[OtroUserIndex].name + " " + TradingObj.Amount +
-                                              " " + Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].name);
+                                              " " + Declaraciones.objData[TradingObj.ObjIndex].name);
 
                     // Es mucha cantidad?
                     if (TradingObj.Amount > MAX_OBJ_LOGUEABLE)
                         // Si no es de los prohibidos de loguear, lo logueamos.
-                        if (Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].NoLog != 1)
+                        if (Declaraciones.objData[TradingObj.ObjIndex].NoLog != 1)
                             General.LogDesarrollo(Declaraciones.UserList[OtroUserIndex].name +
                                                   " le pasó en comercio seguro a " + withBlock.name + " " +
                                                   TradingObj.Amount + " " +
-                                                  Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].name);
+                                                  Declaraciones.objData[TradingObj.ObjIndex].name);
                 }
             }
 
@@ -238,18 +238,18 @@ internal static class mdlCOmercioConUsuario
                     Trabajo.QuitarObjetos(TradingObj.ObjIndex, TradingObj.Amount, OtroUserIndex);
 
                     // Es un Objeto que tenemos que loguear? Pablo (ToxicWaste) 07/09/07
-                    if (Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].Log == 1)
+                    if (Declaraciones.objData[TradingObj.ObjIndex].Log == 1)
                         General.LogDesarrollo(withBlock1.name + " le pasó en comercio seguro a " +
                                               Declaraciones.UserList[UserIndex].name + " " + TradingObj.Amount + " " +
-                                              Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].name);
+                                              Declaraciones.objData[TradingObj.ObjIndex].name);
 
                     // Es mucha cantidad?
                     if (TradingObj.Amount > MAX_OBJ_LOGUEABLE)
                         // Si no es de los prohibidos de loguear, lo logueamos.
-                        if (Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].NoLog != 1)
+                        if (Declaraciones.objData[TradingObj.ObjIndex].NoLog != 1)
                             General.LogDesarrollo(withBlock1.name + " le pasó en comercio seguro a " +
                                                   Declaraciones.UserList[UserIndex].name + " " + TradingObj.Amount +
-                                                  " " + Declaraciones.ObjData_Renamed[TradingObj.ObjIndex].name);
+                                                  " " + Declaraciones.objData[TradingObj.ObjIndex].name);
                 }
             }
         }

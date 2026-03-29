@@ -25,10 +25,10 @@ internal static class InvUsuario
             var loopTo = (short)Declaraciones.UserList[UserIndex].CurrentInventorySlots;
             for (i = 1; i <= loopTo; i++)
             {
-                ObjIndex = Declaraciones.UserList[UserIndex].Invent.Object_Renamed[i].ObjIndex;
+                ObjIndex = Declaraciones.UserList[UserIndex].Invent.userObj[i].ObjIndex;
                 if (ObjIndex > 0)
-                    if ((Declaraciones.ObjData_Renamed[ObjIndex].OBJType != Declaraciones.eOBJType.otLlaves) &
-                        (Declaraciones.ObjData_Renamed[ObjIndex].OBJType != Declaraciones.eOBJType.otBarcos))
+                    if ((Declaraciones.objData[ObjIndex].OBJType != Declaraciones.eOBJType.otLlaves) &
+                        (Declaraciones.objData[ObjIndex].OBJType != Declaraciones.eOBJType.otBarcos))
                     {
                         TieneObjetosRobablesRet = true;
                         return TieneObjetosRobablesRet;
@@ -61,9 +61,9 @@ internal static class InvUsuario
             // Admins can use ANYTHING!
             short i;
             if ((Declaraciones.UserList[UserIndex].flags.Privilegios & Declaraciones.PlayerType.User) != 0)
-                if (Declaraciones.ObjData_Renamed[ObjIndex].ClaseProhibida[1] != 0)
+                if (Declaraciones.objData[ObjIndex].ClaseProhibida[1] != 0)
                     for (i = 1; i <= Declaraciones.NUMCLASES; i++)
-                        if (Declaraciones.ObjData_Renamed[ObjIndex].ClaseProhibida[i] ==
+                        if (Declaraciones.objData[ObjIndex].ClaseProhibida[i] ==
                             Declaraciones.UserList[UserIndex].clase)
                         {
                             ClasePuedeUsarItemRet = false;
@@ -100,16 +100,16 @@ internal static class InvUsuario
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             var loopTo = (short)Declaraciones.UserList[UserIndex].CurrentInventorySlots;
             for (j = 1; j <= loopTo; j++)
-                if (withBlock.Invent.Object_Renamed[j].ObjIndex > 0)
+                if (withBlock.Invent.userObj[j].ObjIndex > 0)
                 {
-                    if (Declaraciones.ObjData_Renamed[withBlock.Invent.Object_Renamed[j].ObjIndex].Newbie == 1)
+                    if (Declaraciones.objData[withBlock.Invent.userObj[j].ObjIndex].Newbie == 1)
                         QuitarUserInvItem(UserIndex, Convert.ToByte(j), Declaraciones.MAX_INVENTORY_OBJS);
                     UpdateUserInv(false, UserIndex, Convert.ToByte(j));
                 }
 
             // [Barrin 17-12-03] Si el usuario dejó de ser Newbie, y estaba en el Newbie Dungeon
             // es transportado a su hogar de origen ;)
-            if (Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Restringir.ToUpper() == "NEWBIE")
+            if (Declaraciones.mapInfo[withBlock.Pos.Map].Restringir.ToUpper() == "NEWBIE")
             {
                 switch (withBlock.Hogar)
                 {
@@ -161,9 +161,9 @@ internal static class InvUsuario
             var loopTo = (short)withBlock.CurrentInventorySlots;
             for (j = 1; j <= loopTo; j++)
             {
-                withBlock.Invent.Object_Renamed[j].ObjIndex = 0;
-                withBlock.Invent.Object_Renamed[j].Amount = 0;
-                withBlock.Invent.Object_Renamed[j].Equipped = 0;
+                withBlock.Invent.userObj[j].ObjIndex = 0;
+                withBlock.Invent.userObj[j].Amount = 0;
+                withBlock.Invent.userObj[j].Equipped = 0;
             }
 
             withBlock.Invent.NroItems = 0;
@@ -214,8 +214,7 @@ internal static class InvUsuario
             var Cercanos = default(string);
             int TeniaOro;
             Declaraciones.WorldPos AuxPos;
-            // UPGRADE_NOTE: Extra se actualizó a Extra_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            var Extra_Renamed = default(int);
+            var extra = default(int);
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // SI EL Pjta TIENE ORO LO TIRAMOS
@@ -245,7 +244,7 @@ internal static class InvUsuario
                     TeniaOro = withBlock.Stats.GLD;
                     if (Cantidad > 500000) // Para evitar explotar demasiado
                     {
-                        Extra_Renamed = Cantidad - 500000;
+                        extra = Cantidad - 500000;
                         Cantidad = 500000;
                     }
 
@@ -268,7 +267,7 @@ internal static class InvUsuario
                         if (Extra.EsGM(UserIndex))
                         {
                             var argtexto = "Tiró cantidad:" + MiObj.Amount + " Objeto:" +
-                                           Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name;
+                                           Declaraciones.objData[MiObj.ObjIndex].name;
                             General.LogGM(ref withBlock.name, ref argtexto);
                         }
 
@@ -300,8 +299,8 @@ internal static class InvUsuario
                     }
 
                     if (TeniaOro == withBlock.Stats.GLD)
-                        Extra_Renamed = 0;
-                    if (Extra_Renamed > 0) withBlock.Stats.GLD = withBlock.Stats.GLD - Extra_Renamed;
+                        extra = 0;
+                    if (extra > 0) withBlock.Stats.GLD = withBlock.Stats.GLD - extra;
                 }
             }
         }
@@ -329,7 +328,7 @@ internal static class InvUsuario
                 return;
 
             {
-                ref var withBlock = ref Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Slot];
+                ref var withBlock = ref Declaraciones.UserList[UserIndex].Invent.userObj[Slot];
                 if ((withBlock.Amount <= Cantidad) & (withBlock.Equipped == 1)) Desequipar(UserIndex, Slot);
 
                 // Quita un objeto
@@ -373,8 +372,8 @@ internal static class InvUsuario
                 if (!UpdateAll)
                 {
                     // Actualiza el inventario
-                    if (withBlock.Invent.Object_Renamed[Slot].ObjIndex > 0)
-                        UsUaRiOs.ChangeUserInv(UserIndex, Slot, ref withBlock.Invent.Object_Renamed[Slot]);
+                    if (withBlock.Invent.userObj[Slot].ObjIndex > 0)
+                        UsUaRiOs.ChangeUserInv(UserIndex, Slot, ref withBlock.Invent.userObj[Slot]);
                     else
                         UsUaRiOs.ChangeUserInv(UserIndex, Slot, ref NullObj);
                 }
@@ -385,9 +384,9 @@ internal static class InvUsuario
                     var loopTo = (int)withBlock.CurrentInventorySlots;
                     for (LoopC = 1; LoopC <= loopTo; LoopC++)
                         // Actualiza el inventario
-                        if (withBlock.Invent.Object_Renamed[LoopC].ObjIndex > 0)
+                        if (withBlock.Invent.userObj[LoopC].ObjIndex > 0)
                             UsUaRiOs.ChangeUserInv(UserIndex, Convert.ToByte(LoopC),
-                                ref withBlock.Invent.Object_Renamed[LoopC]);
+                                ref withBlock.Invent.userObj[LoopC]);
                         else
                             UsUaRiOs.ChangeUserInv(UserIndex, Convert.ToByte(LoopC), ref NullObj);
                 }
@@ -411,20 +410,19 @@ internal static class InvUsuario
         // 
         // ***************************************************
 
-        // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Declaraciones.Obj Obj_Renamed;
+        Declaraciones.Obj obj;
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
             if (num > 0)
             {
-                if (num > withBlock.Invent.Object_Renamed[Slot].Amount)
-                    num = withBlock.Invent.Object_Renamed[Slot].Amount;
+                if (num > withBlock.Invent.userObj[Slot].Amount)
+                    num = withBlock.Invent.userObj[Slot].Amount;
 
-                Obj_Renamed.ObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
-                Obj_Renamed.Amount = num;
+                obj.ObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
+                obj.Amount = num;
 
-                if (ItemNewbie(Obj_Renamed.ObjIndex) &&
+                if (ItemNewbie(obj.ObjIndex) &&
                     (withBlock.flags.Privilegios & Declaraciones.PlayerType.User) != 0)
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "No puedes tirar objetos newbie.",
@@ -434,40 +432,40 @@ internal static class InvUsuario
 
                 // Check objeto en el suelo
                 if ((Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.ObjIndex == 0) |
-                    (Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.ObjIndex == Obj_Renamed.ObjIndex))
+                    (Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.ObjIndex == obj.ObjIndex))
                 {
                     if ((short)(num + Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.Amount) >
                         Declaraciones.MAX_INVENTORY_OBJS)
                         num = (short)(Declaraciones.MAX_INVENTORY_OBJS -
                                       Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.Amount);
 
-                    MakeObj(ref Obj_Renamed, Map, X, Y);
+                    MakeObj(ref obj, Map, X, Y);
                     QuitarUserInvItem(UserIndex, Slot, num);
                     UpdateUserInv(false, UserIndex, Slot);
 
-                    if (Declaraciones.ObjData_Renamed[Obj_Renamed.ObjIndex].OBJType == Declaraciones.eOBJType.otBarcos)
+                    if (Declaraciones.objData[obj.ObjIndex].OBJType == Declaraciones.eOBJType.otBarcos)
                         Protocol.WriteConsoleMsg(UserIndex, "¡¡ATENCIÓN!! ¡ACABAS DE TIRAR TU BARCA!",
                             Protocol.FontTypeNames.FONTTYPE_TALK);
 
                     if ((withBlock.flags.Privilegios & Declaraciones.PlayerType.User) == 0)
                     {
                         var argtexto = "Tiró cantidad:" + num + " Objeto:" +
-                                       Declaraciones.ObjData_Renamed[Obj_Renamed.ObjIndex].name;
+                                       Declaraciones.objData[obj.ObjIndex].name;
                         General.LogGM(ref withBlock.name, ref argtexto);
                     }
 
                     // Log de Objetos que se tiran al piso. Pablo (ToxicWaste) 07/09/07
                     // Es un Objeto que tenemos que loguear?
-                    if (Declaraciones.ObjData_Renamed[Obj_Renamed.ObjIndex].Log == 1)
-                        General.LogDesarrollo(withBlock.name + " tiró al piso " + Obj_Renamed.Amount + " " +
-                                              Declaraciones.ObjData_Renamed[Obj_Renamed.ObjIndex].name + " Mapa: " +
+                    if (Declaraciones.objData[obj.ObjIndex].Log == 1)
+                        General.LogDesarrollo(withBlock.name + " tiró al piso " + obj.Amount + " " +
+                                              Declaraciones.objData[obj.ObjIndex].name + " Mapa: " +
                                               Map + " X: " + X + " Y: " + Y);
-                    else if (Obj_Renamed.Amount > 5000)
+                    else if (obj.Amount > 5000)
                         // Es mucha cantidad? > Subí a 5000 el minimo porque si no se llenaba el log de cosas al pedo. (NicoNZ)
                         // Si no es de los prohibidos de loguear, lo logueamos.
-                        if (Declaraciones.ObjData_Renamed[Obj_Renamed.ObjIndex].NoLog != 1)
-                            General.LogDesarrollo(withBlock.name + " tiró al piso " + Obj_Renamed.Amount + " " +
-                                                  Declaraciones.ObjData_Renamed[Obj_Renamed.ObjIndex].name + " Mapa: " +
+                        if (Declaraciones.objData[obj.ObjIndex].NoLog != 1)
+                            General.LogDesarrollo(withBlock.name + " tiró al piso " + obj.Amount + " " +
+                                                  Declaraciones.objData[obj.ObjIndex].name + " Mapa: " +
                                                   Map + " X: " + X + " Y: " + Y);
                 }
                 else
@@ -510,7 +508,7 @@ internal static class InvUsuario
         // 
         // ***************************************************
 
-        if ((Obj.ObjIndex > 0) & (Obj.ObjIndex <= Declaraciones.ObjData_Renamed.Length - 1))
+        if ((Obj.ObjIndex > 0) & (Obj.ObjIndex <= Declaraciones.objData.Length - 1))
         {
             ref var withBlock = ref Declaraciones.MapData[Map, X, Y];
             if (withBlock.ObjInfo.ObjIndex == Obj.ObjIndex)
@@ -523,7 +521,7 @@ internal static class InvUsuario
                 withBlock.ObjInfo = Obj;
 
                 modSendData.SendToAreaByPos(Map, X, Y,
-                    Protocol.PrepareMessageObjectCreate(Declaraciones.ObjData_Renamed[Obj.ObjIndex].GrhIndex,
+                    Protocol.PrepareMessageObjectCreate(Declaraciones.objData[Obj.ObjIndex].GrhIndex,
                         Convert.ToByte(X), Convert.ToByte(Y)));
             }
         }
@@ -548,8 +546,8 @@ internal static class InvUsuario
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // ¿el user ya tiene un objeto del mismo tipo?
                 Slot = 1;
-                while (!((withBlock.Invent.Object_Renamed[Slot].ObjIndex == MiObj.ObjIndex) &
-                         ((short)(withBlock.Invent.Object_Renamed[Slot].Amount + MiObj.Amount) <=
+                while (!((withBlock.Invent.userObj[Slot].ObjIndex == MiObj.ObjIndex) &
+                         ((short)(withBlock.Invent.userObj[Slot].Amount + MiObj.Amount) <=
                           Declaraciones.MAX_INVENTORY_OBJS)))
 
                 {
@@ -561,7 +559,7 @@ internal static class InvUsuario
                 if (Slot > withBlock.CurrentInventorySlots)
                 {
                     Slot = 1;
-                    while (withBlock.Invent.Object_Renamed[Slot].ObjIndex != 0)
+                    while (withBlock.Invent.userObj[Slot].ObjIndex != 0)
                     {
                         Slot = Convert.ToByte(Slot + 1);
                         if (Slot > withBlock.CurrentInventorySlots)
@@ -581,24 +579,24 @@ internal static class InvUsuario
                     {
                         Protocol.WriteConsoleMsg(UserIndex,
                             "No puedes contener objetos especiales en tu " +
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.MochilaEqpObjIndex].name + ".",
+                            Declaraciones.objData[withBlock.Invent.MochilaEqpObjIndex].name + ".",
                             Protocol.FontTypeNames.FONTTYPE_FIGHT);
                         MeterItemEnInventarioRet = false;
                         return MeterItemEnInventarioRet;
                     }
 
                 // Mete el objeto
-                if ((short)(withBlock.Invent.Object_Renamed[Slot].Amount + MiObj.Amount) <=
+                if ((short)(withBlock.Invent.userObj[Slot].Amount + MiObj.Amount) <=
                     Declaraciones.MAX_INVENTORY_OBJS)
                 {
                     // Menor que MAX_INV_OBJS
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = MiObj.ObjIndex;
-                    withBlock.Invent.Object_Renamed[Slot].Amount =
-                        (short)(withBlock.Invent.Object_Renamed[Slot].Amount + MiObj.Amount);
+                    withBlock.Invent.userObj[Slot].ObjIndex = MiObj.ObjIndex;
+                    withBlock.Invent.userObj[Slot].Amount =
+                        (short)(withBlock.Invent.userObj[Slot].Amount + MiObj.Amount);
                 }
                 else
                 {
-                    withBlock.Invent.Object_Renamed[Slot].Amount = Declaraciones.MAX_INVENTORY_OBJS;
+                    withBlock.Invent.userObj[Slot].Amount = Declaraciones.MAX_INVENTORY_OBJS;
                 }
             }
 
@@ -627,8 +625,7 @@ internal static class InvUsuario
         // ***************************************************
 
         // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Declaraciones.ObjData Obj_Renamed;
+        Declaraciones.ObjData obj;
         Declaraciones.Obj MiObj;
         string ObjPos;
 
@@ -642,21 +639,21 @@ internal static class InvUsuario
             {
                 // ¿Esta permitido agarrar este obj?
                 if (Declaraciones
-                        .ObjData_Renamed[
+                        .objData[
                             Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].ObjInfo.ObjIndex]
                         .Agarrable != 1)
                 {
                     X = withBlock.Pos.X;
                     Y = withBlock.Pos.Y;
 
-                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = Declaraciones.ObjData_Renamed[
+                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = Declaraciones.objData[
                         Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].ObjInfo.ObjIndex];
                     MiObj.Amount = Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.Amount;
                     MiObj.ObjIndex = Declaraciones.MapData[withBlock.Pos.Map, X, Y].ObjInfo.ObjIndex;
 
                     // Oro directo a la billetera!
-                    if (Obj_Renamed.OBJType == Declaraciones.eOBJType.otGuita)
+                    if (obj.OBJType == Declaraciones.eOBJType.otGuita)
                     {
                         withBlock.Stats.GLD = withBlock.Stats.GLD + MiObj.Amount;
                         // Quitamos el objeto
@@ -673,28 +670,28 @@ internal static class InvUsuario
                         if ((withBlock.flags.Privilegios & Declaraciones.PlayerType.User) == 0)
                         {
                             var argtexto = "Agarro:" + MiObj.Amount + " Objeto:" +
-                                           Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name;
+                                           Declaraciones.objData[MiObj.ObjIndex].name;
                             General.LogGM(ref withBlock.name, ref argtexto);
                         }
 
                         // Log de Objetos que se agarran del piso. Pablo (ToxicWaste) 07/09/07
                         // Es un Objeto que tenemos que loguear?
-                        if (Declaraciones.ObjData_Renamed[MiObj.ObjIndex].Log == 1)
+                        if (Declaraciones.objData[MiObj.ObjIndex].Log == 1)
                         {
                             ObjPos = " Mapa: " + withBlock.Pos.Map + " X: " + withBlock.Pos.X + " Y: " +
                                      withBlock.Pos.Y;
                             General.LogDesarrollo(withBlock.name + " juntó del piso " + MiObj.Amount + " " +
-                                                  Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name + ObjPos);
+                                                  Declaraciones.objData[MiObj.ObjIndex].name + ObjPos);
                         }
                         else if (MiObj.Amount > Declaraciones.MAX_INVENTORY_OBJS - 1000) // Es mucha cantidad?
                         {
                             // Si no es de los prohibidos de loguear, lo logueamos.
-                            if (Declaraciones.ObjData_Renamed[MiObj.ObjIndex].NoLog != 1)
+                            if (Declaraciones.objData[MiObj.ObjIndex].NoLog != 1)
                             {
                                 ObjPos = " Mapa: " + withBlock.Pos.Map + " X: " + withBlock.Pos.X + " Y: " +
                                          withBlock.Pos.Y;
                                 General.LogDesarrollo(withBlock.name + " juntó del piso " + MiObj.Amount + " " +
-                                                      Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name + ObjPos);
+                                                      Declaraciones.objData[MiObj.ObjIndex].name + ObjPos);
                             }
                         }
                     }
@@ -719,35 +716,34 @@ internal static class InvUsuario
         {
             // Desequipa el item slot del inventario
             // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.ObjData Obj_Renamed;
+            Declaraciones.ObjData obj;
 
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 {
                     ref var withBlock1 = ref withBlock.Invent;
-                    if ((Slot < 0) | (Slot > withBlock1.Object_Renamed.Length - 1)) return;
+                    if ((Slot < 0) | (Slot > withBlock1.userObj.Length - 1)) return;
 
-                    if (withBlock1.Object_Renamed[Slot].ObjIndex == 0) return;
+                    if (withBlock1.userObj[Slot].ObjIndex == 0) return;
 
-                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    Obj_Renamed = Declaraciones.ObjData_Renamed[withBlock1.Object_Renamed[Slot].ObjIndex];
+                    // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    obj = Declaraciones.objData[withBlock1.userObj[Slot].ObjIndex];
                 }
 
-                switch (Obj_Renamed.OBJType)
+                switch (obj.OBJType)
                 {
                     case Declaraciones.eOBJType.otWeapon:
                     {
                         {
                             ref var withBlock2 = ref withBlock.Invent;
-                            withBlock2.Object_Renamed[Slot].Equipped = 0;
+                            withBlock2.userObj[Slot].Equipped = 0;
                             withBlock2.WeaponEqpObjIndex = 0;
                             withBlock2.WeaponEqpSlot = 0;
                         }
 
                         if (!(withBlock.flags.Mimetizado == 1))
                         {
-                            ref var withBlock3 = ref withBlock.Char_Renamed;
+                            ref var withBlock3 = ref withBlock.character;
                             withBlock3.WeaponAnim = Declaraciones.NingunArma;
                             UsUaRiOs.ChangeUserChar(UserIndex, withBlock3.body, withBlock3.Head,
                                 (byte)withBlock3.heading, withBlock3.WeaponAnim, withBlock3.ShieldAnim,
@@ -761,7 +757,7 @@ internal static class InvUsuario
                     {
                         {
                             ref var withBlock4 = ref withBlock.Invent;
-                            withBlock4.Object_Renamed[Slot].Equipped = 0;
+                            withBlock4.userObj[Slot].Equipped = 0;
                             withBlock4.MunicionEqpObjIndex = 0;
                             withBlock4.MunicionEqpSlot = 0;
                         }
@@ -773,7 +769,7 @@ internal static class InvUsuario
                     {
                         {
                             ref var withBlock5 = ref withBlock.Invent;
-                            withBlock5.Object_Renamed[Slot].Equipped = 0;
+                            withBlock5.userObj[Slot].Equipped = 0;
                             withBlock5.AnilloEqpObjIndex = 0;
                             withBlock5.AnilloEqpSlot = 0;
                         }
@@ -785,14 +781,14 @@ internal static class InvUsuario
                     {
                         {
                             ref var withBlock6 = ref withBlock.Invent;
-                            withBlock6.Object_Renamed[Slot].Equipped = 0;
+                            withBlock6.userObj[Slot].Equipped = 0;
                             withBlock6.ArmourEqpObjIndex = 0;
                             withBlock6.ArmourEqpSlot = 0;
                         }
 
                         General.DarCuerpoDesnudo(UserIndex, withBlock.flags.Mimetizado == 1);
                         {
-                            ref var withBlock7 = ref withBlock.Char_Renamed;
+                            ref var withBlock7 = ref withBlock.character;
                             UsUaRiOs.ChangeUserChar(UserIndex, withBlock7.body, withBlock7.Head,
                                 (byte)withBlock7.heading, withBlock7.WeaponAnim, withBlock7.ShieldAnim,
                                 withBlock7.CascoAnim);
@@ -805,14 +801,14 @@ internal static class InvUsuario
                     {
                         {
                             ref var withBlock8 = ref withBlock.Invent;
-                            withBlock8.Object_Renamed[Slot].Equipped = 0;
+                            withBlock8.userObj[Slot].Equipped = 0;
                             withBlock8.CascoEqpObjIndex = 0;
                             withBlock8.CascoEqpSlot = 0;
                         }
 
                         if (!(withBlock.flags.Mimetizado == 1))
                         {
-                            ref var withBlock9 = ref withBlock.Char_Renamed;
+                            ref var withBlock9 = ref withBlock.character;
                             withBlock9.CascoAnim = Declaraciones.NingunCasco;
                             UsUaRiOs.ChangeUserChar(UserIndex, withBlock9.body, withBlock9.Head,
                                 (byte)withBlock9.heading, withBlock9.WeaponAnim, withBlock9.ShieldAnim,
@@ -826,14 +822,14 @@ internal static class InvUsuario
                     {
                         {
                             ref var withBlock10 = ref withBlock.Invent;
-                            withBlock10.Object_Renamed[Slot].Equipped = 0;
+                            withBlock10.userObj[Slot].Equipped = 0;
                             withBlock10.EscudoEqpObjIndex = 0;
                             withBlock10.EscudoEqpSlot = 0;
                         }
 
                         if (!(withBlock.flags.Mimetizado == 1))
                         {
-                            ref var withBlock11 = ref withBlock.Char_Renamed;
+                            ref var withBlock11 = ref withBlock.character;
                             withBlock11.ShieldAnim = Declaraciones.NingunEscudo;
                             UsUaRiOs.ChangeUserChar(UserIndex, withBlock11.body, withBlock11.Head,
                                 (byte)withBlock11.heading, withBlock11.WeaponAnim, withBlock11.ShieldAnim,
@@ -847,7 +843,7 @@ internal static class InvUsuario
                     {
                         {
                             ref var withBlock12 = ref withBlock.Invent;
-                            withBlock12.Object_Renamed[Slot].Equipped = 0;
+                            withBlock12.userObj[Slot].Equipped = 0;
                             withBlock12.MochilaEqpObjIndex = 0;
                             withBlock12.MochilaEqpSlot = 0;
                         }
@@ -884,9 +880,9 @@ internal static class InvUsuario
 
         try
         {
-            if (Declaraciones.ObjData_Renamed[ObjIndex].Mujer == 1)
+            if (Declaraciones.objData[ObjIndex].Mujer == 1)
                 SexoPuedeUsarItemRet = Declaraciones.UserList[UserIndex].Genero != Declaraciones.eGenero.Hombre;
-            else if (Declaraciones.ObjData_Renamed[ObjIndex].Hombre == 1)
+            else if (Declaraciones.objData[ObjIndex].Hombre == 1)
                 SexoPuedeUsarItemRet = Declaraciones.UserList[UserIndex].Genero != Declaraciones.eGenero.Mujer;
             else
                 SexoPuedeUsarItemRet = true;
@@ -917,14 +913,14 @@ internal static class InvUsuario
         // 14/01/2010: ZaMa - Agrego el motivo por el que no puede equipar/usar el item.
         // ***************************************************
 
-        if (Declaraciones.ObjData_Renamed[ObjIndex].Real == 1)
+        if (Declaraciones.objData[ObjIndex].Real == 1)
         {
             if (!ES.criminal(UserIndex))
                 FaccionPuedeUsarItemRet = Extra.esArmada(UserIndex);
             else
                 FaccionPuedeUsarItemRet = false;
         }
-        else if (Declaraciones.ObjData_Renamed[ObjIndex].Caos == 1)
+        else if (Declaraciones.objData[ObjIndex].Caos == 1)
         {
             if (ES.criminal(UserIndex))
                 FaccionPuedeUsarItemRet = Extra.esCaos(UserIndex);
@@ -954,25 +950,25 @@ internal static class InvUsuario
         {
             // Equipa un item del inventario
             // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-            // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-            Declaraciones.ObjData Obj_Renamed;
+            // UPGRADE_NOTE: Obj se actualizó a obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+            Declaraciones.ObjData obj;
             short ObjIndex;
             var sMotivo = default(string);
 
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
-                ObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
-                // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                Obj_Renamed = Declaraciones.ObjData_Renamed[ObjIndex];
+                ObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
+                // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                obj = Declaraciones.objData[ObjIndex];
 
-                if ((Obj_Renamed.Newbie == 1) & !Extra.EsNewbie(UserIndex))
+                if ((obj.Newbie == 1) & !Extra.EsNewbie(UserIndex))
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "Sólo los newbies pueden usar este objeto.",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
                     return;
                 }
 
-                switch (Obj_Renamed.OBJType)
+                switch (obj.OBJType)
                 {
                     case Declaraciones.eOBJType.otWeapon:
                     {
@@ -980,7 +976,7 @@ internal static class InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, ref sMotivo))
                         {
                             // Si esta equipado lo quita
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped != 0)
                             {
                                 // Quitamos del inv el item
                                 Desequipar(UserIndex, Slot);
@@ -991,11 +987,11 @@ internal static class InvUsuario
                                 }
                                 else
                                 {
-                                    withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
-                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                        withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                        withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                        withBlock.Char_Renamed.CascoAnim);
+                                    withBlock.character.WeaponAnim = Declaraciones.NingunArma;
+                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                        withBlock.character.Head, (byte)withBlock.character.heading,
+                                        withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                        withBlock.character.CascoAnim);
                                 }
 
                                 return;
@@ -1005,7 +1001,7 @@ internal static class InvUsuario
                             if (withBlock.Invent.WeaponEqpObjIndex > 0)
                                 Desequipar(UserIndex, withBlock.Invent.WeaponEqpSlot);
 
-                            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                            withBlock.Invent.userObj[Slot].Equipped = 1;
                             withBlock.Invent.WeaponEqpObjIndex = ObjIndex;
                             withBlock.Invent.WeaponEqpSlot = Slot;
 
@@ -1021,11 +1017,11 @@ internal static class InvUsuario
                             }
                             else
                             {
-                                withBlock.Char_Renamed.WeaponAnim = UsUaRiOs.GetWeaponAnim(UserIndex, ObjIndex);
-                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                    withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                    withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                    withBlock.Char_Renamed.CascoAnim);
+                                withBlock.character.WeaponAnim = UsUaRiOs.GetWeaponAnim(UserIndex, ObjIndex);
+                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                    withBlock.character.Head, (byte)withBlock.character.heading,
+                                    withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                    withBlock.character.CascoAnim);
                             }
                         }
                         else
@@ -1042,7 +1038,7 @@ internal static class InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, ref sMotivo))
                         {
                             // Si esta equipado lo quita
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped != 0)
                             {
                                 // Quitamos del inv el item
                                 Desequipar(UserIndex, Slot);
@@ -1053,7 +1049,7 @@ internal static class InvUsuario
                             if (withBlock.Invent.AnilloEqpObjIndex > 0)
                                 Desequipar(UserIndex, withBlock.Invent.AnilloEqpSlot);
 
-                            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                            withBlock.Invent.userObj[Slot].Equipped = 1;
                             withBlock.Invent.AnilloEqpObjIndex = ObjIndex;
                             withBlock.Invent.AnilloEqpSlot = Slot;
                         }
@@ -1072,7 +1068,7 @@ internal static class InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, ref sMotivo))
                         {
                             // Si esta equipado lo quita
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped != 0)
                             {
                                 // Quitamos del inv el item
                                 Desequipar(UserIndex, Slot);
@@ -1083,7 +1079,7 @@ internal static class InvUsuario
                             if (withBlock.Invent.MunicionEqpObjIndex > 0)
                                 Desequipar(UserIndex, withBlock.Invent.MunicionEqpSlot);
 
-                            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                            withBlock.Invent.userObj[Slot].Equipped = 1;
                             withBlock.Invent.MunicionEqpObjIndex = ObjIndex;
                             withBlock.Invent.MunicionEqpSlot = Slot;
                         }
@@ -1108,15 +1104,15 @@ internal static class InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, ref sMotivo))
                         {
                             // Si esta equipado lo quita
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped != 0)
                             {
                                 Desequipar(UserIndex, Slot);
                                 General.DarCuerpoDesnudo(UserIndex, withBlock.flags.Mimetizado == 1);
                                 if (!(withBlock.flags.Mimetizado == 1))
-                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                        withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                        withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                        withBlock.Char_Renamed.CascoAnim);
+                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                        withBlock.character.Head, (byte)withBlock.character.heading,
+                                        withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                        withBlock.character.CascoAnim);
                                 return;
                             }
 
@@ -1125,21 +1121,21 @@ internal static class InvUsuario
                                 Desequipar(UserIndex, withBlock.Invent.ArmourEqpSlot);
 
                             // Lo equipa
-                            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                            withBlock.Invent.userObj[Slot].Equipped = 1;
                             withBlock.Invent.ArmourEqpObjIndex = ObjIndex;
                             withBlock.Invent.ArmourEqpSlot = Slot;
 
                             if (withBlock.flags.Mimetizado == 1)
                             {
-                                withBlock.CharMimetizado.body = Obj_Renamed.Ropaje;
+                                withBlock.CharMimetizado.body = obj.Ropaje;
                             }
                             else
                             {
-                                withBlock.Char_Renamed.body = Obj_Renamed.Ropaje;
-                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                    withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                    withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                    withBlock.Char_Renamed.CascoAnim);
+                                withBlock.character.body = obj.Ropaje;
+                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                    withBlock.character.Head, (byte)withBlock.character.heading,
+                                    withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                    withBlock.character.CascoAnim);
                             }
 
                             withBlock.flags.Desnudo = 0;
@@ -1159,7 +1155,7 @@ internal static class InvUsuario
                         if (ClasePuedeUsarItem(UserIndex, ObjIndex, ref sMotivo))
                         {
                             // Si esta equipado lo quita
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped != 0)
                             {
                                 Desequipar(UserIndex, Slot);
                                 if (withBlock.flags.Mimetizado == 1)
@@ -1168,11 +1164,11 @@ internal static class InvUsuario
                                 }
                                 else
                                 {
-                                    withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
-                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                        withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                        withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                        withBlock.Char_Renamed.CascoAnim);
+                                    withBlock.character.CascoAnim = Declaraciones.NingunCasco;
+                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                        withBlock.character.Head, (byte)withBlock.character.heading,
+                                        withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                        withBlock.character.CascoAnim);
                                 }
 
                                 return;
@@ -1184,20 +1180,20 @@ internal static class InvUsuario
 
                             // Lo equipa
 
-                            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                            withBlock.Invent.userObj[Slot].Equipped = 1;
                             withBlock.Invent.CascoEqpObjIndex = ObjIndex;
                             withBlock.Invent.CascoEqpSlot = Slot;
                             if (withBlock.flags.Mimetizado == 1)
                             {
-                                withBlock.CharMimetizado.CascoAnim = Obj_Renamed.CascoAnim;
+                                withBlock.CharMimetizado.CascoAnim = obj.CascoAnim;
                             }
                             else
                             {
-                                withBlock.Char_Renamed.CascoAnim = Obj_Renamed.CascoAnim;
-                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                    withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                    withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                    withBlock.Char_Renamed.CascoAnim);
+                                withBlock.character.CascoAnim = obj.CascoAnim;
+                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                    withBlock.character.Head, (byte)withBlock.character.heading,
+                                    withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                    withBlock.character.CascoAnim);
                             }
                         }
                         else
@@ -1217,7 +1213,7 @@ internal static class InvUsuario
                             FaccionPuedeUsarItem(UserIndex, ObjIndex, ref sMotivo))
                         {
                             // Si esta equipado lo quita
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped != 0)
                             {
                                 Desequipar(UserIndex, Slot);
                                 if (withBlock.flags.Mimetizado == 1)
@@ -1226,11 +1222,11 @@ internal static class InvUsuario
                                 }
                                 else
                                 {
-                                    withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                        withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                        withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                        withBlock.Char_Renamed.CascoAnim);
+                                    withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+                                    UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                        withBlock.character.Head, (byte)withBlock.character.heading,
+                                        withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                        withBlock.character.CascoAnim);
                                 }
 
                                 return;
@@ -1242,22 +1238,22 @@ internal static class InvUsuario
 
                             // Lo equipa
 
-                            withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                            withBlock.Invent.userObj[Slot].Equipped = 1;
                             withBlock.Invent.EscudoEqpObjIndex = ObjIndex;
                             withBlock.Invent.EscudoEqpSlot = Slot;
 
                             if (withBlock.flags.Mimetizado == 1)
                             {
-                                withBlock.CharMimetizado.ShieldAnim = Obj_Renamed.ShieldAnim;
+                                withBlock.CharMimetizado.ShieldAnim = obj.ShieldAnim;
                             }
                             else
                             {
-                                withBlock.Char_Renamed.ShieldAnim = Obj_Renamed.ShieldAnim;
+                                withBlock.character.ShieldAnim = obj.ShieldAnim;
 
-                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body,
-                                    withBlock.Char_Renamed.Head, (byte)withBlock.Char_Renamed.heading,
-                                    withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim,
-                                    withBlock.Char_Renamed.CascoAnim);
+                                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body,
+                                    withBlock.character.Head, (byte)withBlock.character.heading,
+                                    withBlock.character.WeaponAnim, withBlock.character.ShieldAnim,
+                                    withBlock.character.CascoAnim);
                             }
                         }
                         else
@@ -1278,7 +1274,7 @@ internal static class InvUsuario
                             return;
                         }
 
-                        if (withBlock.Invent.Object_Renamed[Slot].Equipped != 0)
+                        if (withBlock.Invent.userObj[Slot].Equipped != 0)
                         {
                             Desequipar(UserIndex, Slot);
                             return;
@@ -1286,13 +1282,13 @@ internal static class InvUsuario
 
                         if (withBlock.Invent.MochilaEqpObjIndex > 0)
                             Desequipar(UserIndex, withBlock.Invent.MochilaEqpSlot);
-                        withBlock.Invent.Object_Renamed[Slot].Equipped = 1;
+                        withBlock.Invent.userObj[Slot].Equipped = 1;
                         withBlock.Invent.MochilaEqpObjIndex = ObjIndex;
                         withBlock.Invent.MochilaEqpSlot = Slot;
                         withBlock.CurrentInventorySlots =
-                            Convert.ToByte(Declaraciones.MAX_NORMAL_INVENTORY_SLOTS + Obj_Renamed.MochilaType * 5);
+                            Convert.ToByte(Declaraciones.MAX_NORMAL_INVENTORY_SLOTS + obj.MochilaType * 5);
                         Protocol.WriteAddSlots(UserIndex,
-                            (Declaraciones.eMochilas)Convert.ToInt32(Obj_Renamed.MochilaType));
+                            (Declaraciones.eMochilas)Convert.ToInt32(obj.MochilaType));
                         break;
                     }
                 }
@@ -1329,13 +1325,13 @@ internal static class InvUsuario
                 // Verifica si la raza puede usar la ropa
                 if ((withBlock.raza == Declaraciones.eRaza.Humano) | (withBlock.raza == Declaraciones.eRaza.Elfo) |
                     (withBlock.raza == Declaraciones.eRaza.Drow))
-                    CheckRazaUsaRopaRet = Declaraciones.ObjData_Renamed[ItemIndex].RazaEnana == 0;
+                    CheckRazaUsaRopaRet = Declaraciones.objData[ItemIndex].RazaEnana == 0;
                 else
-                    CheckRazaUsaRopaRet = Declaraciones.ObjData_Renamed[ItemIndex].RazaEnana == 1;
+                    CheckRazaUsaRopaRet = Declaraciones.objData[ItemIndex].RazaEnana == 1;
 
                 // Solo se habilita la ropa exclusiva para Drows por ahora. Pablo (ToxicWaste)
                 if ((withBlock.raza != Declaraciones.eRaza.Drow) &
-                    (Declaraciones.ObjData_Renamed[ItemIndex].RazaDrow != 0)) CheckRazaUsaRopaRet = false;
+                    (Declaraciones.objData[ItemIndex].RazaDrow != 0)) CheckRazaUsaRopaRet = false;
             }
 
             if (!CheckRazaUsaRopaRet)
@@ -1369,8 +1365,7 @@ internal static class InvUsuario
         // *************************************************
 
         // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura Obj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Declaraciones.ObjData Obj_Renamed;
+        Declaraciones.ObjData obj;
         short ObjIndex;
         // UPGRADE_WARNING: Puede que necesite inicializar las matrices de la estructura TargObj, antes de poder utilizarlas. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Declaraciones.ObjData TargObj;
@@ -1379,22 +1374,22 @@ internal static class InvUsuario
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
 
-            if (withBlock.Invent.Object_Renamed[Slot].Amount == 0)
+            if (withBlock.Invent.userObj[Slot].Amount == 0)
                 return;
 
-            // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            Obj_Renamed = Declaraciones.ObjData_Renamed[withBlock.Invent.Object_Renamed[Slot].ObjIndex];
+            // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto obj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            obj = Declaraciones.objData[withBlock.Invent.userObj[Slot].ObjIndex];
 
-            if ((Obj_Renamed.Newbie == 1) & !Extra.EsNewbie(UserIndex))
+            if ((obj.Newbie == 1) & !Extra.EsNewbie(UserIndex))
             {
                 Protocol.WriteConsoleMsg(UserIndex, "Sólo los newbies pueden usar estos objetos.",
                     Protocol.FontTypeNames.FONTTYPE_INFO);
                 return;
             }
 
-            if (Obj_Renamed.OBJType == Declaraciones.eOBJType.otWeapon)
+            if (obj.OBJType == Declaraciones.eOBJType.otWeapon)
             {
-                if (Obj_Renamed.proyectil == 1)
+                if (obj.proyectil == 1)
                 {
                     // valido para evitar el flood pero no bloqueo. El bloqueo se hace en WLC con proyectiles.
                     if (!modNuevoTimer.IntervaloPermiteUsar(UserIndex, false))
@@ -1411,11 +1406,11 @@ internal static class InvUsuario
                 return;
             }
 
-            ObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+            ObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
             withBlock.flags.TargetObjInvIndex = ObjIndex;
             withBlock.flags.TargetObjInvSlot = Slot;
 
-            switch (Obj_Renamed.OBJType)
+            switch (obj.OBJType)
             {
                 case Declaraciones.eOBJType.otUseOnce:
                 {
@@ -1428,7 +1423,7 @@ internal static class InvUsuario
                     }
 
                     // Usa el item
-                    withBlock.Stats.MinHam = (short)(withBlock.Stats.MinHam + Obj_Renamed.MinHam);
+                    withBlock.Stats.MinHam = (short)(withBlock.Stats.MinHam + obj.MinHam);
                     if (withBlock.Stats.MinHam > withBlock.Stats.MaxHam)
                         withBlock.Stats.MinHam = withBlock.Stats.MaxHam;
                     withBlock.flags.Hambre = 0;
@@ -1461,9 +1456,9 @@ internal static class InvUsuario
                         return;
                     }
 
-                    withBlock.Stats.GLD = withBlock.Stats.GLD + withBlock.Invent.Object_Renamed[Slot].Amount;
-                    withBlock.Invent.Object_Renamed[Slot].Amount = 0;
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 0;
+                    withBlock.Stats.GLD = withBlock.Stats.GLD + withBlock.Invent.userObj[Slot].Amount;
+                    withBlock.Invent.userObj[Slot].Amount = 0;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 0;
                     withBlock.Invent.NroItems = Convert.ToInt16(withBlock.Invent.NroItems - 1);
 
                     UpdateUserInv(false, UserIndex, Slot);
@@ -1489,9 +1484,9 @@ internal static class InvUsuario
                         return;
                     }
 
-                    if (Declaraciones.ObjData_Renamed[ObjIndex].proyectil == 1)
+                    if (Declaraciones.objData[ObjIndex].proyectil == 1)
                     {
-                        if (withBlock.Invent.Object_Renamed[Slot].Equipped == 0)
+                        if (withBlock.Invent.userObj[Slot].Equipped == 0)
                         {
                             Protocol.WriteConsoleMsg(UserIndex, "Antes de usar la herramienta deberías equipartela.",
                                 Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -1504,9 +1499,9 @@ internal static class InvUsuario
                     // Call WriteWorkRequestTarget(UserIndex, Proyectiles)
                     else if (withBlock.flags.TargetObj == Declaraciones.Leña)
                     {
-                        if (withBlock.Invent.Object_Renamed[Slot].ObjIndex == Declaraciones.DAGA)
+                        if (withBlock.Invent.userObj[Slot].ObjIndex == Declaraciones.DAGA)
                         {
-                            if (withBlock.Invent.Object_Renamed[Slot].Equipped == 0)
+                            if (withBlock.Invent.userObj[Slot].Equipped == 0)
                             {
                                 Protocol.WriteConsoleMsg(UserIndex,
                                     "Antes de usar la herramienta deberías equipartela.",
@@ -1602,7 +1597,7 @@ internal static class InvUsuario
 
                             default:
                             {
-                                if (Declaraciones.ObjData_Renamed[ObjIndex].SkHerreria > 0)
+                                if (Declaraciones.objData[ObjIndex].SkHerreria > 0)
                                     // Solo objetos que pueda hacer el herrero
                                     Protocol.WriteMultiMessage(UserIndex,
                                         (short)Declaraciones.eMessages.WorkRequestTarget, Declaraciones.FundirMetal);
@@ -1633,18 +1628,18 @@ internal static class InvUsuario
                     }
 
                     withBlock.flags.TomoPocion = true;
-                    withBlock.flags.TipoPocion = Obj_Renamed.TipoPocion;
+                    withBlock.flags.TipoPocion = obj.TipoPocion;
 
                     switch (withBlock.flags.TipoPocion)
                     {
                         case 1: // Modif la agilidad
                         {
-                            withBlock.flags.DuracionEfecto = Obj_Renamed.DuracionEfecto;
+                            withBlock.flags.DuracionEfecto = obj.DuracionEfecto;
 
                             // Usa el item
                             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad] = Convert.ToByte(
                                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad] +
-                                Matematicas.RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador));
+                                Matematicas.RandomNumber(obj.MinModificador, obj.MaxModificador));
                             if (withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad] >
                                 Declaraciones.MAXATRIBUTOS)
                                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Agilidad] =
@@ -1680,12 +1675,12 @@ internal static class InvUsuario
 
                         case 2: // Modif la fuerza
                         {
-                            withBlock.flags.DuracionEfecto = Obj_Renamed.DuracionEfecto;
+                            withBlock.flags.DuracionEfecto = obj.DuracionEfecto;
 
                             // Usa el item
                             withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Fuerza] = Convert.ToByte(
                                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Fuerza] +
-                                Matematicas.RandomNumber(Obj_Renamed.MinModificador, Obj_Renamed.MaxModificador));
+                                Matematicas.RandomNumber(obj.MinModificador, obj.MaxModificador));
                             if (withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Fuerza] >
                                 Declaraciones.MAXATRIBUTOS)
                                 withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Fuerza] =
@@ -1725,8 +1720,8 @@ internal static class InvUsuario
                             // Usa el item
                             withBlock.Stats.MinHp = (short)(withBlock.Stats.MinHp +
                                                             Convert.ToInt16(Matematicas.RandomNumber(
-                                                                Obj_Renamed.MinModificador,
-                                                                Obj_Renamed.MaxModificador)));
+                                                                obj.MinModificador,
+                                                                obj.MaxModificador)));
                             if (withBlock.Stats.MinHp > withBlock.Stats.MaxHp)
                                 withBlock.Stats.MinHp = withBlock.Stats.MaxHp;
 
@@ -1839,7 +1834,7 @@ internal static class InvUsuario
                         return;
                     }
 
-                    withBlock.Stats.MinAGU = (short)(withBlock.Stats.MinAGU + Obj_Renamed.MinSed);
+                    withBlock.Stats.MinAGU = (short)(withBlock.Stats.MinAGU + obj.MinSed);
                     if (withBlock.Stats.MinAGU > withBlock.Stats.MaxAGU)
                         withBlock.Stats.MinAGU = withBlock.Stats.MaxAGU;
                     withBlock.flags.Sed = 0;
@@ -1879,7 +1874,7 @@ internal static class InvUsuario
                     if (withBlock.flags.TargetObj == 0)
                         return;
                     // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto TargObj. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    TargObj = Declaraciones.ObjData_Renamed[withBlock.flags.TargetObj];
+                    TargObj = Declaraciones.objData[withBlock.flags.TargetObj];
                     // ¿El objeto clickeado es una puerta?
                     if (TargObj.OBJType == Declaraciones.eOBJType.otPuertas)
                     {
@@ -1889,11 +1884,11 @@ internal static class InvUsuario
                             // ¿Cerrada con llave?
                             if (TargObj.Llave > 0)
                             {
-                                if (TargObj.clave == Obj_Renamed.clave)
+                                if (TargObj.clave == obj.clave)
                                 {
                                     Declaraciones.MapData[withBlock.flags.TargetObjMap, withBlock.flags.TargetObjX,
                                         withBlock.flags.TargetObjY].ObjInfo.ObjIndex = Declaraciones
-                                        .ObjData_Renamed[
+                                        .objData[
                                             Declaraciones.MapData[withBlock.flags.TargetObjMap,
                                                 withBlock.flags.TargetObjX,
                                                 withBlock.flags.TargetObjY].ObjInfo.ObjIndex].IndexCerrada;
@@ -1908,11 +1903,11 @@ internal static class InvUsuario
                                         Protocol.FontTypeNames.FONTTYPE_INFO);
                                 }
                             }
-                            else if (TargObj.clave == Obj_Renamed.clave)
+                            else if (TargObj.clave == obj.clave)
                             {
                                 Declaraciones.MapData[withBlock.flags.TargetObjMap, withBlock.flags.TargetObjX,
                                     withBlock.flags.TargetObjY].ObjInfo.ObjIndex = Declaraciones
-                                    .ObjData_Renamed[
+                                    .objData[
                                         Declaraciones.MapData[withBlock.flags.TargetObjMap, withBlock.flags.TargetObjX,
                                             withBlock.flags.TargetObjY].ObjInfo.ObjIndex].IndexCerradaLlave;
                                 Protocol.WriteConsoleMsg(UserIndex, "Has cerrado con llave la puerta.",
@@ -1953,7 +1948,7 @@ internal static class InvUsuario
                     }
 
                     MiObj.Amount = 1;
-                    MiObj.ObjIndex = Declaraciones.ObjData_Renamed[withBlock.Invent.Object_Renamed[Slot].ObjIndex]
+                    MiObj.ObjIndex = Declaraciones.objData[withBlock.Invent.userObj[Slot].ObjIndex]
                         .IndexAbierta;
                     QuitarUserInvItem(UserIndex, Slot, 1);
                     if (!MeterItemEnInventario(UserIndex, ref MiObj))
@@ -1976,13 +1971,13 @@ internal static class InvUsuario
                         return;
                     }
 
-                    withBlock.Stats.MinAGU = (short)(withBlock.Stats.MinAGU + Obj_Renamed.MinSed);
+                    withBlock.Stats.MinAGU = (short)(withBlock.Stats.MinAGU + obj.MinSed);
                     if (withBlock.Stats.MinAGU > withBlock.Stats.MaxAGU)
                         withBlock.Stats.MinAGU = withBlock.Stats.MaxAGU;
                     withBlock.flags.Sed = 0;
                     Protocol.WriteUpdateHungerAndThirst(UserIndex);
                     MiObj.Amount = 1;
-                    MiObj.ObjIndex = Declaraciones.ObjData_Renamed[withBlock.Invent.Object_Renamed[Slot].ObjIndex]
+                    MiObj.ObjIndex = Declaraciones.objData[withBlock.Invent.userObj[Slot].ObjIndex]
                         .IndexCerrada;
                     QuitarUserInvItem(UserIndex, Slot, 1);
                     if (!MeterItemEnInventario(UserIndex, ref MiObj))
@@ -2052,12 +2047,12 @@ internal static class InvUsuario
                         return;
                     }
 
-                    if (Obj_Renamed.Real != 0) // ¿Es el Cuerno Real?
+                    if (obj.Real != 0) // ¿Es el Cuerno Real?
                     {
                         var argsMotivo = "";
                         if (FaccionPuedeUsarItem(UserIndex, ObjIndex, ref argsMotivo))
                         {
-                            if (!Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk)
+                            if (!Declaraciones.mapInfo[withBlock.Pos.Map].Pk)
                             {
                                 Protocol.WriteConsoleMsg(UserIndex, "No hay peligro aquí. Es zona segura.",
                                     Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -2067,7 +2062,7 @@ internal static class InvUsuario
                             // Los admin invisibles solo producen sonidos a si mismos
                             if (withBlock.flags.AdminInvisible == 1)
                             {
-                                var argdatos6 = Protocol.PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1),
+                                var argdatos6 = Protocol.PrepareMessagePlayWave(Convert.ToByte(obj.Snd1),
                                     Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y));
                                 TCP.EnviarDatosASlot(UserIndex, ref argdatos6);
                             }
@@ -2075,7 +2070,7 @@ internal static class InvUsuario
                             {
                                 modSendData.AlertarFaccionarios(UserIndex);
                                 modSendData.SendData(modSendData.SendTarget.toMap, withBlock.Pos.Map,
-                                    Protocol.PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1),
+                                    Protocol.PrepareMessagePlayWave(Convert.ToByte(obj.Snd1),
                                         Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                             }
 
@@ -2087,12 +2082,12 @@ internal static class InvUsuario
                         return;
                     }
 
-                    if (Obj_Renamed.Caos != 0) // ¿Es el Cuerno Legión?
+                    if (obj.Caos != 0) // ¿Es el Cuerno Legión?
                     {
                         var argsMotivo1 = "";
                         if (FaccionPuedeUsarItem(UserIndex, ObjIndex, ref argsMotivo1))
                         {
-                            if (!Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk)
+                            if (!Declaraciones.mapInfo[withBlock.Pos.Map].Pk)
                             {
                                 Protocol.WriteConsoleMsg(UserIndex, "No hay peligro aquí. Es zona segura.",
                                     Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -2102,7 +2097,7 @@ internal static class InvUsuario
                             // Los admin invisibles solo producen sonidos a si mismos
                             if (withBlock.flags.AdminInvisible == 1)
                             {
-                                var argdatos7 = Protocol.PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1),
+                                var argdatos7 = Protocol.PrepareMessagePlayWave(Convert.ToByte(obj.Snd1),
                                     Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y));
                                 TCP.EnviarDatosASlot(UserIndex, ref argdatos7);
                             }
@@ -2110,7 +2105,7 @@ internal static class InvUsuario
                             {
                                 modSendData.AlertarFaccionarios(UserIndex);
                                 modSendData.SendData(modSendData.SendTarget.toMap, withBlock.Pos.Map,
-                                    Protocol.PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1),
+                                    Protocol.PrepareMessagePlayWave(Convert.ToByte(obj.Snd1),
                                         Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                             }
 
@@ -2127,14 +2122,14 @@ internal static class InvUsuario
                     // Los admin invisibles solo producen sonidos a si mismos
                     if (withBlock.flags.AdminInvisible == 1)
                     {
-                        var argdatos8 = Protocol.PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1),
+                        var argdatos8 = Protocol.PrepareMessagePlayWave(Convert.ToByte(obj.Snd1),
                             Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y));
                         TCP.EnviarDatosASlot(UserIndex, ref argdatos8);
                     }
                     else
                     {
                         modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                            Protocol.PrepareMessagePlayWave(Convert.ToByte(Obj_Renamed.Snd1),
+                            Protocol.PrepareMessagePlayWave(Convert.ToByte(obj.Snd1),
                                 Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                     }
 
@@ -2172,7 +2167,7 @@ internal static class InvUsuario
                               false) | Extra.LegalPos(withBlock.Pos.Map, withBlock.Pos.X,
                               Convert.ToInt16(withBlock.Pos.Y + 1), true, false)) & (withBlock.flags.Navegando == 0)) |
                         (withBlock.flags.Navegando == 1))
-                        Trabajo.DoNavega(UserIndex, ref Obj_Renamed, Slot);
+                        Trabajo.DoNavega(UserIndex, ref obj, Slot);
                     else
                         Protocol.WriteConsoleMsg(UserIndex, "¡Debes aproximarte al agua para usar el barco!",
                             Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -2257,7 +2252,7 @@ internal static class InvUsuario
         // ***************************************************
 
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[index];
+            ref var withBlock = ref Declaraciones.objData[index];
             ItemSeCaeRet = ((withBlock.Real != 1) | (withBlock.NoSeCae == 0)) &
                            ((withBlock.Caos != 1) | (withBlock.NoSeCae == 0)) &
                            (withBlock.OBJType != Declaraciones.eOBJType.otLlaves) &
@@ -2286,7 +2281,7 @@ internal static class InvUsuario
             var loopTo = withBlock.CurrentInventorySlots;
             for (i = 1; i <= loopTo; i++)
             {
-                ItemIndex = withBlock.Invent.Object_Renamed[i].ObjIndex;
+                ItemIndex = withBlock.Invent.userObj[i].ObjIndex;
                 if (ItemIndex > 0)
                     if (ItemSeCae(ItemIndex))
                     {
@@ -2294,7 +2289,7 @@ internal static class InvUsuario
                         NuevaPos.Y = 0;
 
                         // Creo el Obj
-                        MiObj.Amount = withBlock.Invent.Object_Renamed[i].Amount;
+                        MiObj.Amount = withBlock.Invent.userObj[i].Amount;
                         MiObj.ObjIndex = ItemIndex;
 
                         DropAgua = true;
@@ -2327,10 +2322,10 @@ internal static class InvUsuario
         // 
         // ***************************************************
 
-        if ((ItemIndex < 1) | (ItemIndex > Declaraciones.ObjData_Renamed.Length - 1))
+        if ((ItemIndex < 1) | (ItemIndex > Declaraciones.objData.Length - 1))
             return ItemNewbieRet;
 
-        ItemNewbieRet = Declaraciones.ObjData_Renamed[ItemIndex].Newbie == 1;
+        ItemNewbieRet = Declaraciones.objData[ItemIndex].Newbie == 1;
         return ItemNewbieRet;
     }
 
@@ -2355,7 +2350,7 @@ internal static class InvUsuario
             var loopTo = Declaraciones.UserList[UserIndex].CurrentInventorySlots;
             for (i = 1; i <= loopTo; i++)
             {
-                ItemIndex = withBlock.Invent.Object_Renamed[i].ObjIndex;
+                ItemIndex = withBlock.Invent.userObj[i].ObjIndex;
                 if (ItemIndex > 0)
                     if (ItemSeCae(ItemIndex) & !ItemNewbie(ItemIndex))
                     {
@@ -2363,7 +2358,7 @@ internal static class InvUsuario
                         NuevaPos.Y = 0;
 
                         // Creo MiObj
-                        MiObj.Amount = withBlock.Invent.Object_Renamed[i].Amount;
+                        MiObj.Amount = withBlock.Invent.userObj[i].Amount;
                         MiObj.ObjIndex = ItemIndex;
                         // Pablo (ToxicWaste) 24/01/2007
                         // Tira los Items no newbies en todos lados.
@@ -2397,7 +2392,7 @@ internal static class InvUsuario
             var loopTo = withBlock.CurrentInventorySlots;
             for (i = Declaraciones.MAX_NORMAL_INVENTORY_SLOTS + 1; i <= loopTo; i++)
             {
-                ItemIndex = withBlock.Invent.Object_Renamed[i].ObjIndex;
+                ItemIndex = withBlock.Invent.userObj[i].ObjIndex;
                 if (ItemIndex > 0)
                     if (ItemSeCae(ItemIndex))
                     {
@@ -2405,7 +2400,7 @@ internal static class InvUsuario
                         NuevaPos.Y = 0;
 
                         // Creo MiObj
-                        MiObj.Amount = withBlock.Invent.Object_Renamed[i].Amount;
+                        MiObj.Amount = withBlock.Invent.userObj[i].Amount;
                         MiObj.ObjIndex = ItemIndex;
                         var argAgua = true;
                         var argTierra = true;
@@ -2427,7 +2422,7 @@ internal static class InvUsuario
         // 
         // ***************************************************
 
-        if (ObjIndex > 0) getObjTypeRet = Declaraciones.ObjData_Renamed[ObjIndex].OBJType;
+        if (ObjIndex > 0) getObjTypeRet = Declaraciones.objData[ObjIndex].OBJType;
 
         return getObjTypeRet;
     }

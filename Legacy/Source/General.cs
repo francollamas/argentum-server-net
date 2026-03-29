@@ -112,7 +112,7 @@ public static class General
             if (Mimetizado)
                 withBlock.CharMimetizado.body = CuerpoDesnudo;
             else
-                withBlock.Char_Renamed.body = CuerpoDesnudo;
+                withBlock.character.body = CuerpoDesnudo;
 
             withBlock.flags.Desnudo = 1;
         }
@@ -285,56 +285,56 @@ public static class General
             Declaraciones.DatPath = AppDomain.CurrentDomain.BaseDirectory + "Dat/";
 
 
-            Declaraciones.LevelSkill_Renamed[1].LevelValue = 3;
-            Declaraciones.LevelSkill_Renamed[2].LevelValue = 5;
-            Declaraciones.LevelSkill_Renamed[3].LevelValue = 7;
-            Declaraciones.LevelSkill_Renamed[4].LevelValue = 10;
-            Declaraciones.LevelSkill_Renamed[5].LevelValue = 13;
-            Declaraciones.LevelSkill_Renamed[6].LevelValue = 15;
-            Declaraciones.LevelSkill_Renamed[7].LevelValue = 17;
-            Declaraciones.LevelSkill_Renamed[8].LevelValue = 20;
-            Declaraciones.LevelSkill_Renamed[9].LevelValue = 23;
-            Declaraciones.LevelSkill_Renamed[10].LevelValue = 25;
-            Declaraciones.LevelSkill_Renamed[11].LevelValue = 27;
-            Declaraciones.LevelSkill_Renamed[12].LevelValue = 30;
-            Declaraciones.LevelSkill_Renamed[13].LevelValue = 33;
-            Declaraciones.LevelSkill_Renamed[14].LevelValue = 35;
-            Declaraciones.LevelSkill_Renamed[15].LevelValue = 37;
-            Declaraciones.LevelSkill_Renamed[16].LevelValue = 40;
-            Declaraciones.LevelSkill_Renamed[17].LevelValue = 43;
-            Declaraciones.LevelSkill_Renamed[18].LevelValue = 45;
-            Declaraciones.LevelSkill_Renamed[19].LevelValue = 47;
-            Declaraciones.LevelSkill_Renamed[20].LevelValue = 50;
-            Declaraciones.LevelSkill_Renamed[21].LevelValue = 53;
-            Declaraciones.LevelSkill_Renamed[22].LevelValue = 55;
-            Declaraciones.LevelSkill_Renamed[23].LevelValue = 57;
-            Declaraciones.LevelSkill_Renamed[24].LevelValue = 60;
-            Declaraciones.LevelSkill_Renamed[25].LevelValue = 63;
-            Declaraciones.LevelSkill_Renamed[26].LevelValue = 65;
-            Declaraciones.LevelSkill_Renamed[27].LevelValue = 67;
-            Declaraciones.LevelSkill_Renamed[28].LevelValue = 70;
-            Declaraciones.LevelSkill_Renamed[29].LevelValue = 73;
-            Declaraciones.LevelSkill_Renamed[30].LevelValue = 75;
-            Declaraciones.LevelSkill_Renamed[31].LevelValue = 77;
-            Declaraciones.LevelSkill_Renamed[32].LevelValue = 80;
-            Declaraciones.LevelSkill_Renamed[33].LevelValue = 83;
-            Declaraciones.LevelSkill_Renamed[34].LevelValue = 85;
-            Declaraciones.LevelSkill_Renamed[35].LevelValue = 87;
-            Declaraciones.LevelSkill_Renamed[36].LevelValue = 90;
-            Declaraciones.LevelSkill_Renamed[37].LevelValue = 93;
-            Declaraciones.LevelSkill_Renamed[38].LevelValue = 95;
-            Declaraciones.LevelSkill_Renamed[39].LevelValue = 97;
-            Declaraciones.LevelSkill_Renamed[40].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[41].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[42].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[43].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[44].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[45].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[46].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[47].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[48].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[49].LevelValue = 100;
-            Declaraciones.LevelSkill_Renamed[50].LevelValue = 100;
+            Declaraciones.levelSkill[1].LevelValue = 3;
+            Declaraciones.levelSkill[2].LevelValue = 5;
+            Declaraciones.levelSkill[3].LevelValue = 7;
+            Declaraciones.levelSkill[4].LevelValue = 10;
+            Declaraciones.levelSkill[5].LevelValue = 13;
+            Declaraciones.levelSkill[6].LevelValue = 15;
+            Declaraciones.levelSkill[7].LevelValue = 17;
+            Declaraciones.levelSkill[8].LevelValue = 20;
+            Declaraciones.levelSkill[9].LevelValue = 23;
+            Declaraciones.levelSkill[10].LevelValue = 25;
+            Declaraciones.levelSkill[11].LevelValue = 27;
+            Declaraciones.levelSkill[12].LevelValue = 30;
+            Declaraciones.levelSkill[13].LevelValue = 33;
+            Declaraciones.levelSkill[14].LevelValue = 35;
+            Declaraciones.levelSkill[15].LevelValue = 37;
+            Declaraciones.levelSkill[16].LevelValue = 40;
+            Declaraciones.levelSkill[17].LevelValue = 43;
+            Declaraciones.levelSkill[18].LevelValue = 45;
+            Declaraciones.levelSkill[19].LevelValue = 47;
+            Declaraciones.levelSkill[20].LevelValue = 50;
+            Declaraciones.levelSkill[21].LevelValue = 53;
+            Declaraciones.levelSkill[22].LevelValue = 55;
+            Declaraciones.levelSkill[23].LevelValue = 57;
+            Declaraciones.levelSkill[24].LevelValue = 60;
+            Declaraciones.levelSkill[25].LevelValue = 63;
+            Declaraciones.levelSkill[26].LevelValue = 65;
+            Declaraciones.levelSkill[27].LevelValue = 67;
+            Declaraciones.levelSkill[28].LevelValue = 70;
+            Declaraciones.levelSkill[29].LevelValue = 73;
+            Declaraciones.levelSkill[30].LevelValue = 75;
+            Declaraciones.levelSkill[31].LevelValue = 77;
+            Declaraciones.levelSkill[32].LevelValue = 80;
+            Declaraciones.levelSkill[33].LevelValue = 83;
+            Declaraciones.levelSkill[34].LevelValue = 85;
+            Declaraciones.levelSkill[35].LevelValue = 87;
+            Declaraciones.levelSkill[36].LevelValue = 90;
+            Declaraciones.levelSkill[37].LevelValue = 93;
+            Declaraciones.levelSkill[38].LevelValue = 95;
+            Declaraciones.levelSkill[39].LevelValue = 97;
+            Declaraciones.levelSkill[40].LevelValue = 100;
+            Declaraciones.levelSkill[41].LevelValue = 100;
+            Declaraciones.levelSkill[42].LevelValue = 100;
+            Declaraciones.levelSkill[43].LevelValue = 100;
+            Declaraciones.levelSkill[44].LevelValue = 100;
+            Declaraciones.levelSkill[45].LevelValue = 100;
+            Declaraciones.levelSkill[46].LevelValue = 100;
+            Declaraciones.levelSkill[47].LevelValue = 100;
+            Declaraciones.levelSkill[48].LevelValue = 100;
+            Declaraciones.levelSkill[49].LevelValue = 100;
+            Declaraciones.levelSkill[50].LevelValue = 100;
 
 
             Declaraciones.ListaRazas[(int)Declaraciones.eRaza.Humano] = "Humano";
@@ -568,28 +568,28 @@ public static class General
     }
 
 
-    public static void LogClanes(string str_Renamed)
+    public static void LogClanes(string str)
     {
         AppendLog("logs/clanes.log",
             Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " +
-            str_Renamed);
+            str);
     }
 
-    public static void LogIP(string str_Renamed)
+    public static void LogIP(string str)
     {
         AppendLog("logs/IP.log",
             Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " +
-            str_Renamed);
+            str);
     }
 
 
-    public static void LogDesarrollo(string str_Renamed)
+    public static void LogDesarrollo(string str)
     {
         AppendLog(
             "logs/desarrollo" + Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(DateTime.Today) +
             Thread.CurrentThread.CurrentCulture.Calendar.GetYear(DateTime.Today) + ".log",
             Conversions.ToString(DateTime.Today) + " " + Conversions.ToString(DateAndTime.TimeOfDay) + " " +
-            str_Renamed);
+            str);
     }
 
     public static void LogGM(ref string Nombre, ref string texto)
@@ -750,7 +750,7 @@ public static class General
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
-            if (Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Zona != "DUNGEON")
+            if (Declaraciones.mapInfo[withBlock.Pos.Map].Zona != "DUNGEON")
             {
                 if (((int)Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].trigger != 1) &
                     ((int)Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].trigger != 2) &
@@ -836,7 +836,7 @@ public static class General
             }
             else
             {
-                if ((Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Terreno ?? "") == Declaraciones.Nieve)
+                if ((Declaraciones.mapInfo[withBlock.Pos.Map].Terreno ?? "") == Declaraciones.Nieve)
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "¡¡Estás muriendo de frío, abrigate o morirás!!",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -961,57 +961,57 @@ public static class General
                     {
                         if (withBlock.Faccion.ArmadaReal == 1)
                         {
-                            withBlock.Char_Renamed.body = Declaraciones.iFragataReal;
+                            withBlock.character.body = Declaraciones.iFragataReal;
                         }
                         else if (withBlock.Faccion.FuerzasCaos == 1)
                         {
-                            withBlock.Char_Renamed.body = Declaraciones.iFragataCaos;
+                            withBlock.character.body = Declaraciones.iFragataCaos;
                         }
                         else
                         {
                             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Barco. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            Barco = Declaraciones.ObjData_Renamed[
+                            Barco = Declaraciones.objData[
                                 Declaraciones.UserList[UserIndex].Invent.BarcoObjIndex];
                             if (ES.criminal(UserIndex))
                             {
                                 if (Barco.Ropaje == Declaraciones.iBarca)
-                                    withBlock.Char_Renamed.body = Declaraciones.iBarcaPk;
+                                    withBlock.character.body = Declaraciones.iBarcaPk;
                                 if (Barco.Ropaje == Declaraciones.iGalera)
-                                    withBlock.Char_Renamed.body = Declaraciones.iGaleraPk;
+                                    withBlock.character.body = Declaraciones.iGaleraPk;
                                 if (Barco.Ropaje == Declaraciones.iGaleon)
-                                    withBlock.Char_Renamed.body = Declaraciones.iGaleonPk;
+                                    withBlock.character.body = Declaraciones.iGaleonPk;
                             }
                             else
                             {
                                 if (Barco.Ropaje == Declaraciones.iBarca)
-                                    withBlock.Char_Renamed.body = Declaraciones.iBarcaCiuda;
+                                    withBlock.character.body = Declaraciones.iBarcaCiuda;
                                 if (Barco.Ropaje == Declaraciones.iGalera)
-                                    withBlock.Char_Renamed.body = Declaraciones.iGaleraCiuda;
+                                    withBlock.character.body = Declaraciones.iGaleraCiuda;
                                 if (Barco.Ropaje == Declaraciones.iGaleon)
-                                    withBlock.Char_Renamed.body = Declaraciones.iGaleonCiuda;
+                                    withBlock.character.body = Declaraciones.iGaleonCiuda;
                             }
                         }
                     }
                     else
                     {
-                        withBlock.Char_Renamed.body = Declaraciones.iFragataFantasmal;
+                        withBlock.character.body = Declaraciones.iFragataFantasmal;
                     }
 
-                    withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                    withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
-                    withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+                    withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+                    withBlock.character.WeaponAnim = Declaraciones.NingunArma;
+                    withBlock.character.CascoAnim = Declaraciones.NingunCasco;
                 }
                 else
                 {
-                    withBlock.Char_Renamed.body = withBlock.CharMimetizado.body;
-                    withBlock.Char_Renamed.Head = withBlock.CharMimetizado.Head;
-                    withBlock.Char_Renamed.CascoAnim = withBlock.CharMimetizado.CascoAnim;
-                    withBlock.Char_Renamed.ShieldAnim = withBlock.CharMimetizado.ShieldAnim;
-                    withBlock.Char_Renamed.WeaponAnim = withBlock.CharMimetizado.WeaponAnim;
+                    withBlock.character.body = withBlock.CharMimetizado.body;
+                    withBlock.character.Head = withBlock.CharMimetizado.Head;
+                    withBlock.character.CascoAnim = withBlock.CharMimetizado.CascoAnim;
+                    withBlock.character.ShieldAnim = withBlock.CharMimetizado.ShieldAnim;
+                    withBlock.character.WeaponAnim = withBlock.CharMimetizado.WeaponAnim;
                 }
 
                 {
-                    ref var withBlock1 = ref withBlock.Char_Renamed;
+                    ref var withBlock1 = ref withBlock.character;
                     UsUaRiOs.ChangeUserChar(UserIndex, withBlock1.body, withBlock1.Head, (byte)withBlock1.heading,
                         withBlock1.WeaponAnim, withBlock1.ShieldAnim, withBlock1.CascoAnim);
                 }
@@ -1047,7 +1047,7 @@ public static class General
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
-                    UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                    UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                     // Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageSetInvisible(.Char.CharIndex, False))
                 }
             }

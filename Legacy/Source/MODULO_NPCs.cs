@@ -298,7 +298,7 @@ internal static class NPCs
         // ***************************************************
 
         {
-            ref var withBlock = ref Declaraciones.Npclist[NpcIndex].Char_Renamed;
+            ref var withBlock = ref Declaraciones.Npclist[NpcIndex].character;
             withBlock.body = 0;
             withBlock.CascoAnim = 0;
             withBlock.CharIndex = 0;
@@ -670,10 +670,10 @@ internal static class NPCs
 
         short CharIndex;
 
-        if (Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex == 0)
+        if (Declaraciones.Npclist[NpcIndex].character.CharIndex == 0)
         {
             CharIndex = UsUaRiOs.NextOpenCharIndex();
-            Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex = CharIndex;
+            Declaraciones.Npclist[NpcIndex].character.CharIndex = CharIndex;
             Declaraciones.CharList[CharIndex] = NpcIndex;
         }
 
@@ -681,9 +681,9 @@ internal static class NPCs
 
         if (!toMap)
         {
-            Protocol.WriteCharacterCreate(sndIndex, Declaraciones.Npclist[NpcIndex].Char_Renamed.body,
-                Declaraciones.Npclist[NpcIndex].Char_Renamed.Head, Declaraciones.Npclist[NpcIndex].Char_Renamed.heading,
-                Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, Convert.ToByte(X), Convert.ToByte(Y), 0, 0, 0,
+            Protocol.WriteCharacterCreate(sndIndex, Declaraciones.Npclist[NpcIndex].character.body,
+                Declaraciones.Npclist[NpcIndex].character.Head, Declaraciones.Npclist[NpcIndex].character.heading,
+                Declaraciones.Npclist[NpcIndex].character.CharIndex, Convert.ToByte(X), Convert.ToByte(Y), 0, 0, 0,
                 0, 0, Constants.vbNullString, 0, 0);
             Protocol.FlushBuffer(sndIndex);
         }
@@ -703,7 +703,7 @@ internal static class NPCs
 
         if (NpcIndex > 0)
         {
-            ref var withBlock = ref Declaraciones.Npclist[NpcIndex].Char_Renamed;
+            ref var withBlock = ref Declaraciones.Npclist[NpcIndex].character;
             withBlock.body = body;
             withBlock.Head = Head;
             withBlock.heading = heading;
@@ -721,10 +721,10 @@ internal static class NPCs
         // 
         // ***************************************************
 
-        if (Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex != 0)
-            Declaraciones.CharList[Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex] = 0;
+        if (Declaraciones.Npclist[NpcIndex].character.CharIndex != 0)
+            Declaraciones.CharList[Declaraciones.Npclist[NpcIndex].character.CharIndex] = 0;
 
-        if (Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex == Declaraciones.LastChar)
+        if (Declaraciones.Npclist[NpcIndex].character.CharIndex == Declaraciones.LastChar)
             while (Declaraciones.CharList[Declaraciones.LastChar] <= 0)
             {
                 Declaraciones.LastChar = Convert.ToInt16(Declaraciones.LastChar - 1);
@@ -738,10 +738,10 @@ internal static class NPCs
 
         // Actualizamos los clientes
         modSendData.SendData(modSendData.SendTarget.ToNPCArea, NpcIndex,
-            Protocol.PrepareMessageCharacterRemove(Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex));
+            Protocol.PrepareMessageCharacterRemove(Declaraciones.Npclist[NpcIndex].character.CharIndex));
 
         // Update la lista npc
-        Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex = 0;
+        Declaraciones.Npclist[NpcIndex].character.CharIndex = 0;
 
 
         // update NumChars
@@ -802,7 +802,7 @@ internal static class NPCs
                             // Avisamos a los usuarios del area, y al propio usuario lo forzamos a moverse
                             modSendData.SendData(modSendData.SendTarget.ToPCAreaButIndex, UserIndex,
                                 Protocol.PrepareMessageCharacterMove(
-                                    Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex,
+                                    Declaraciones.UserList[UserIndex].character.CharIndex,
                                     Convert.ToByte(withBlock1.Pos.X), Convert.ToByte(withBlock1.Pos.Y)));
                             Protocol.WriteForceCharMove(UserIndex,
                                 UsUaRiOs.InvertHeading((Declaraciones.eHeading)nHeading));
@@ -810,14 +810,14 @@ internal static class NPCs
                     }
 
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, NpcIndex,
-                        Protocol.PrepareMessageCharacterMove(withBlock.Char_Renamed.CharIndex, Convert.ToByte(nPos.X),
+                        Protocol.PrepareMessageCharacterMove(withBlock.character.CharIndex, Convert.ToByte(nPos.X),
                             Convert.ToByte(nPos.Y)));
 
                     // Update map and user pos
                     Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].NpcIndex = 0;
                     // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto Npclist().Pos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     withBlock.Pos = nPos;
-                    withBlock.Char_Renamed.heading = (Declaraciones.eHeading)nHeading;
+                    withBlock.character.heading = (Declaraciones.eHeading)nHeading;
                     Declaraciones.MapData[withBlock.Pos.Map, nPos.X, nPos.Y].NpcIndex = NpcIndex;
                     ModAreas.CheckUpdateNeededNpc(NpcIndex, nHeading);
                 }
@@ -971,7 +971,7 @@ internal static class NPCs
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, nIndex,
                 Protocol.PrepareMessagePlayWave(Declaraciones.SND_WARP, Convert.ToByte(X), Convert.ToByte(Y)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, nIndex,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[nIndex].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[nIndex].character.CharIndex,
                     (short)Declaraciones.FXIDs.FXWARP, 0));
         }
 
@@ -1090,9 +1090,9 @@ internal static class NPCs
             withBlock.NPCtype =
                 (Declaraciones.eNPCType)Math.Round(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "NpcType")));
 
-            withBlock.Char_Renamed.body = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "Body")));
-            withBlock.Char_Renamed.Head = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "Head")));
-            withBlock.Char_Renamed.heading =
+            withBlock.character.body = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "Body")));
+            withBlock.character.Head = Convert.ToInt16(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "Head")));
+            withBlock.character.heading =
                 (Declaraciones.eHeading)Math.Round(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "Heading")));
 
             withBlock.Attackable = Convert.ToByte(Migration.ParseVal(Leer.GetValue("NPC" + NpcNumber, "Attackable")));
@@ -1135,9 +1135,9 @@ internal static class NPCs
             for (LoopC = 1; LoopC <= loopTo; LoopC++)
             {
                 ln = Leer.GetValue("NPC" + NpcNumber, "Obj" + LoopC);
-                withBlock.Invent.Object_Renamed[LoopC].ObjIndex =
+                withBlock.Invent.userObj[LoopC].ObjIndex =
                     Convert.ToInt16(Migration.ParseVal(General.ReadField(1, ref ln, 45)));
-                withBlock.Invent.Object_Renamed[LoopC].Amount =
+                withBlock.Invent.userObj[LoopC].Amount =
                     Convert.ToInt16(Migration.ParseVal(General.ReadField(2, ref ln, 45)));
             }
 

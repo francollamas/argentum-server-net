@@ -43,7 +43,7 @@ internal class clsClan
 
     public clsClan()
     {
-        Class_Initialize_Renamed();
+        Class_Initialize();
     }
 
     public string GuildName
@@ -202,15 +202,13 @@ internal class clsClan
     // INICIALIZADORES
     // 
 
-    // UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Initialize_Renamed()
+    private void Class_Initialize()
     {
         GUILDPATH = AppDomain.CurrentDomain.BaseDirectory + "GUILDS/";
         GUILDINFOFILE = GUILDPATH + "guildsinfo.inf";
     }
 
-    // UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Terminate_Renamed()
+    private void Class_Terminate()
     {
         // UPGRADE_NOTE: El objeto p_OnlineMembers no se puede destruir hasta que no se realice la recolección de los elementos no utilizados. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         p_OnlineMembers = null;
@@ -224,7 +222,7 @@ internal class clsClan
 
     ~clsClan()
     {
-        Class_Terminate_Renamed();
+        Class_Terminate();
     }
 
 

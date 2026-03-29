@@ -64,7 +64,7 @@ internal static class AI
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = withBlock.Pos;
-                if ((withBlock.flags.Inmovilizado == 0) | (headingloop == withBlock.Char_Renamed.heading))
+                if ((withBlock.flags.Inmovilizado == 0) | (headingloop == withBlock.character.heading))
                 {
                     Extra.HeadtoPos(headingloop, ref nPos);
                     if (Extra.InMapBounds(nPos.Map, nPos.X, nPos.Y))
@@ -86,8 +86,8 @@ internal static class AI
                                     if (ES.criminal(UI))
                                     {
                                         if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                            NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                                withBlock.Char_Renamed.Head, headingloop);
+                                            NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                                withBlock.character.Head, headingloop);
                                         return;
                                     }
 
@@ -95,24 +95,24 @@ internal static class AI
                                          (Declaraciones.UserList[UI].name ?? "")) & !withBlock.flags.Follow)
                                     {
                                         if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                            NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                                withBlock.Char_Renamed.Head, headingloop);
+                                            NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                                withBlock.character.Head, headingloop);
                                         return;
                                     }
                                 }
                                 else if (!ES.criminal(UI))
                                 {
                                     if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                            withBlock.Char_Renamed.Head, headingloop);
+                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                            withBlock.character.Head, headingloop);
                                     return;
                                 }
                                 else if (((withBlock.flags.AttackedBy ?? "") ==
                                           (Declaraciones.UserList[UI].name ?? "")) & !withBlock.flags.Follow)
                                 {
                                     if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                            withBlock.Char_Renamed.Head, headingloop);
+                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                            withBlock.character.Head, headingloop);
                                     return;
                                 }
                             }
@@ -153,7 +153,7 @@ internal static class AI
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = withBlock.Pos;
-                if ((withBlock.flags.Inmovilizado == 0) | (withBlock.Char_Renamed.heading == headingloop))
+                if ((withBlock.flags.Inmovilizado == 0) | (withBlock.character.heading == headingloop))
                 {
                     Extra.HeadtoPos(headingloop, ref nPos);
                     if (Extra.InMapBounds(nPos.Map, nPos.X, nPos.Y))
@@ -183,19 +183,19 @@ internal static class AI
                                             if (Matematicas.RandomNumber(0, 1) != 0)
                                             {
                                                 if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                                    NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                                        withBlock.Char_Renamed.Head, headingloop);
+                                                    NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                                        withBlock.character.Head, headingloop);
                                                 return;
                                             }
 
-                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                            withBlock.Char_Renamed.Head, headingloop);
+                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                            withBlock.character.Head, headingloop);
                                         NpcLanzaUnSpell(NpcIndex, UI);
                                     }
 
                                 if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                    NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                        withBlock.Char_Renamed.Head, headingloop);
+                                    NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                        withBlock.character.Head, headingloop);
                                 return;
                             }
                         }
@@ -204,7 +204,7 @@ internal static class AI
                             if ((Declaraciones.Npclist[NPCI].MaestroUser > 0) &
                                 (Declaraciones.Npclist[NPCI].flags.Paralizado == 0))
                             {
-                                NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
+                                NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body, withBlock.character.Head,
                                     headingloop);
                                 SistemaCombate.NpcAtacaNpc(NpcIndex, NPCI, false);
                                 return;
@@ -237,7 +237,7 @@ internal static class AI
             {
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto nPos. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 nPos = withBlock.Pos;
-                if ((withBlock.flags.Inmovilizado == 0) | (withBlock.Char_Renamed.heading == headingloop))
+                if ((withBlock.flags.Inmovilizado == 0) | (withBlock.character.heading == headingloop))
                 {
                     Extra.HeadtoPos(headingloop, ref nPos);
                     if (Extra.InMapBounds(nPos.Map, nPos.X, nPos.Y))
@@ -257,8 +257,8 @@ internal static class AI
                                     if (withBlock.flags.LanzaSpells > 0) NpcLanzaUnSpell(NpcIndex, UI);
 
                                     if (SistemaCombate.NpcAtacaUser(NpcIndex, UI))
-                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.Char_Renamed.body,
-                                            withBlock.Char_Renamed.Head, headingloop);
+                                        NPCs.ChangeNPCChar(NpcIndex, withBlock.character.body,
+                                            withBlock.character.Head, headingloop);
                                     return;
                                 }
                             }
@@ -290,7 +290,7 @@ internal static class AI
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
             if (withBlock.flags.Inmovilizado == 1)
             {
-                switch (withBlock.Char_Renamed.heading)
+                switch (withBlock.character.heading)
                 {
                     case Declaraciones.eHeading.NORTH:
                     {
@@ -444,7 +444,7 @@ internal static class AI
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
             if ((withBlock.flags.Paralizado == 1) | (withBlock.flags.Inmovilizado == 1))
             {
-                switch (withBlock.Char_Renamed.heading)
+                switch (withBlock.character.heading)
                 {
                     case Declaraciones.eHeading.NORTH:
                     {
@@ -649,7 +649,7 @@ internal static class AI
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
             if (withBlock.flags.Inmovilizado == 1)
             {
-                switch (withBlock.Char_Renamed.heading)
+                switch (withBlock.character.heading)
                 {
                     case Declaraciones.eHeading.NORTH:
                     {
@@ -807,7 +807,7 @@ internal static class AI
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
             if (withBlock.flags.Inmovilizado == 1)
             {
-                switch (withBlock.Char_Renamed.heading)
+                switch (withBlock.character.heading)
                 {
                     case Declaraciones.eHeading.NORTH:
                     {

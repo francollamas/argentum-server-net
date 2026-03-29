@@ -908,23 +908,20 @@ internal static class Declaraciones
 
     public static MapBlock[,,] MapData;
 
-    // UPGRADE_NOTE: MapInfo se actualizó a MapInfo_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static MapInfo[] MapInfo_Renamed;
+    public static MapInfo[] mapInfo;
 
     public static tHechizo[] Hechizos;
 
     // UPGRADE_WARNING: El límite inferior de la matriz CharList ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     public static short[] CharList = new short[MAXCHARS + 1];
 
-    // UPGRADE_NOTE: ObjData se actualizó a ObjData_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static ObjData[] ObjData_Renamed;
+    public static ObjData[] objData;
     public static FXdata[] FX;
 
     public static tCriaturasEntrenador[] SpawnList;
 
-    // UPGRADE_WARNING: El límite inferior de la matriz LevelSkill_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    // UPGRADE_NOTE: LevelSkill se actualizó a LevelSkill_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static LevelSkill[] LevelSkill_Renamed = new LevelSkill[51];
+    // UPGRADE_WARNING: El límite inferior de la matriz levelSkill ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+    public static LevelSkill[] levelSkill = new LevelSkill[51];
     public static string[] ForbidenNames;
     public static short[] ArmasHerrero;
     public static short[] ArmadurasHerrero;
@@ -936,13 +933,11 @@ internal static class Declaraciones
     // UPGRADE_WARNING: El límite inferior de la matriz Parties ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     public static clsParty[] Parties = new clsParty[mdParty.MAX_PARTIES + 1];
 
-    // UPGRADE_WARNING: El límite inferior de la matriz ModClase_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    // UPGRADE_NOTE: ModClase se actualizó a ModClase_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static ModClase[] ModClase_Renamed = new ModClase[NUMCLASES + 1];
+    // UPGRADE_WARNING: El límite inferior de la matriz modClase ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+    public static ModClase[] modClase = new ModClase[NUMCLASES + 1];
 
-    // UPGRADE_WARNING: El límite inferior de la matriz ModRaza_Renamed ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-    // UPGRADE_NOTE: ModRaza se actualizó a ModRaza_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static ModRaza[] ModRaza_Renamed = new ModRaza[NUMRAZAS + 1];
+    // UPGRADE_WARNING: El límite inferior de la matriz modRaza ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+    public static ModRaza[] modRaza = new ModRaza[NUMRAZAS + 1];
 
     // UPGRADE_WARNING: El límite inferior de la matriz ModVida ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     public static double[] ModVida = new double[NUMCLASES + 1];
@@ -1064,8 +1059,7 @@ internal static class Declaraciones
 
     public struct Inventario
     {
-        // UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        [VBFixedArray(MAX_INVENTORY_SLOTS)] public UserOBJ[] Object_Renamed;
+        [VBFixedArray(MAX_INVENTORY_SLOTS)] public UserOBJ[] userObj;
         public short WeaponEqpObjIndex;
         public byte WeaponEqpSlot;
         public short ArmourEqpObjIndex;
@@ -1086,7 +1080,7 @@ internal static class Declaraciones
 
         public void Initialize()
         {
-            Object_Renamed = new UserOBJ[MAX_INVENTORY_SLOTS + 1];
+            userObj = new UserOBJ[MAX_INVENTORY_SLOTS + 1];
         }
     }
 
@@ -1118,8 +1112,7 @@ internal static class Declaraciones
     }
 
     // Datos de user o npc
-    // UPGRADE_NOTE: Char se actualizó a Char_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public struct Char_Renamed
+    public struct Character
     {
         public short CharIndex;
         public short Head;
@@ -1269,15 +1262,14 @@ internal static class Declaraciones
     // [KEVIN]
     public struct BancoInventario
     {
-        // UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
         [VBFixedArray(MAX_BANCOINVENTORY_SLOTS)]
-        public UserOBJ[] Object_Renamed;
+        public UserOBJ[] userObj;
 
         public short NroItems;
 
         public void Initialize()
         {
-            Object_Renamed = new UserOBJ[MAX_BANCOINVENTORY_SLOTS + 1];
+            userObj = new UserOBJ[MAX_BANCOINVENTORY_SLOTS + 1];
         }
     }
 
@@ -1551,10 +1543,9 @@ internal static class Declaraciones
 
         public bool showName; // Permite que los GMs oculten su nick con el comando /SHOWNAME
 
-        // UPGRADE_NOTE: Char se actualizó a Char_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        public Char_Renamed Char_Renamed; // Define la apariencia
-        public Char_Renamed CharMimetizado;
-        public Char_Renamed OrigChar;
+        public Character character; // Define la apariencia
+        public Character CharMimetizado;
+        public Character OrigChar;
         public string desc; // Descripcion
         public string DescRM;
         public eClass clase;
@@ -1720,8 +1711,7 @@ internal static class Declaraciones
     {
         public string name;
 
-        // UPGRADE_NOTE: Char se actualizó a Char_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        public Char_Renamed Char_Renamed; // Define como se vera
+        public Character character; // Define como se vera
         public string desc;
         public eNPCType NPCtype;
         public short Numero;

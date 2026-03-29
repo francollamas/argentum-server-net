@@ -31,7 +31,7 @@ internal static class modCentinela
                         Convert.ToByte(Declaraciones.Npclist[CentinelaNPCIndex].Pos.X),
                         Convert.ToByte(Declaraciones.Npclist[CentinelaNPCIndex].Pos.Y));
                     Protocol.WriteCreateFX(Centinela.RevisandoUserIndex,
-                        Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex,
+                        Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex,
                         (short)Declaraciones.FXIDs.FXWARP, 0);
 
                     // Resend the key
@@ -71,7 +71,7 @@ internal static class modCentinela
                             "Saludos " + Declaraciones.UserList[LoopC].name +
                             ", soy el Centinela de estas tierras. Me gustaría que escribas /CENTINELA " +
                             Centinela.clave + " en no más de dos minutos.",
-                            Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex),
                             ColorTranslator.ToOle(Color.Lime));
                         Protocol.WriteConsoleMsg(Convert.ToInt16(LoopC),
                             "El centinela intenta llamar tu atención. ¡Respóndele rápido!",
@@ -180,7 +180,7 @@ internal static class modCentinela
             Protocol.WriteChatOverHead(UserIndex,
                 "¡Muchas gracias " + Declaraciones.UserList[Centinela.RevisandoUserIndex].name +
                 "! Espero no haber sido una molestia.",
-                Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex),
+                Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex),
                 ColorTranslator.ToOle(Color.White));
             Centinela.RevisandoUserIndex = 0;
             Protocol.FlushBuffer(UserIndex);
@@ -227,7 +227,7 @@ internal static class modCentinela
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "¡La clave que te he dicho es /CENTINELA " + Centinela.clave + ", escríbelo rápido!",
-                    Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex),
                     ColorTranslator.ToOle(Color.Lime));
                 Protocol.WriteConsoleMsg(UserIndex, "El centinela intenta llamar tu atención. ¡Respondele rápido!",
                     Protocol.FontTypeNames.FONTTYPE_CENTINELA);
@@ -238,14 +238,14 @@ internal static class modCentinela
                 LogCentinela("El usuario " + Declaraciones.UserList[Centinela.RevisandoUserIndex].name +
                              " respondió más de una vez la contraseña correcta.");
                 Protocol.WriteChatOverHead(UserIndex, "Te agradezco, pero ya me has respondido. Me retiraré pronto.",
-                    Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex),
                     ColorTranslator.ToOle(Color.Lime));
             }
         }
         else
         {
             Protocol.WriteChatOverHead(UserIndex, "No es a ti a quien estoy hablando, ¿No ves?",
-                Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex),
+                Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex),
                 ColorTranslator.ToOle(Color.White));
         }
     }
@@ -282,7 +282,7 @@ internal static class modCentinela
                 Protocol.WriteChatOverHead(Centinela.RevisandoUserIndex,
                     "¡" + Declaraciones.UserList[Centinela.RevisandoUserIndex].name +
                     ", tienes un minuto más para responder! Debes escribir /CENTINELA " + Centinela.clave + ".",
-                    Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[CentinelaNPCIndex].character.CharIndex),
                     ColorTranslator.ToOle(Color.Red));
                 Protocol.WriteConsoleMsg(Centinela.RevisandoUserIndex,
                     "¡" + Declaraciones.UserList[Centinela.RevisandoUserIndex].name +

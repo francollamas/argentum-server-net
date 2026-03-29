@@ -87,9 +87,9 @@ internal static class Extra
                 ref var withBlock = ref Declaraciones.MapData[Map, X, Y];
                 if (withBlock.ObjInfo.ObjIndex > 0)
                 {
-                    FxFlag = Declaraciones.ObjData_Renamed[withBlock.ObjInfo.ObjIndex].OBJType ==
+                    FxFlag = Declaraciones.objData[withBlock.ObjInfo.ObjIndex].OBJType ==
                              Declaraciones.eOBJType.otTeleport;
-                    TelepRadio = Declaraciones.ObjData_Renamed[withBlock.ObjInfo.ObjIndex].Radio;
+                    TelepRadio = Declaraciones.objData[withBlock.ObjInfo.ObjIndex].Radio;
                 }
 
                 if ((withBlock.TileExit.Map > 0) & (withBlock.TileExit.Map <= Declaraciones.NumMaps))
@@ -130,7 +130,7 @@ internal static class Extra
                     DestPos.Map = withBlock.TileExit.Map;
 
                     // ¿Es mapa de newbies?
-                    if (Declaraciones.MapInfo_Renamed[DestPos.Map].Restringir.ToUpper() == "NEWBIE")
+                    if (Declaraciones.mapInfo[DestPos.Map].Restringir.ToUpper() == "NEWBIE")
                     {
                         // ¿El usuario es un newbie?
                         if (EsNewbie(UserIndex) | EsGM(UserIndex))
@@ -158,7 +158,7 @@ internal static class Extra
                                 UsUaRiOs.WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, false);
                         }
                     }
-                    else if (Declaraciones.MapInfo_Renamed[DestPos.Map].Restringir.ToUpper() ==
+                    else if (Declaraciones.mapInfo[DestPos.Map].Restringir.ToUpper() ==
                              "ARMADA") // ¿Es mapa de Armadas?
                     {
                         // ¿El usuario es Armada?
@@ -187,7 +187,7 @@ internal static class Extra
                                 UsUaRiOs.WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag);
                         }
                     }
-                    else if (Declaraciones.MapInfo_Renamed[DestPos.Map].Restringir.ToUpper() ==
+                    else if (Declaraciones.mapInfo[DestPos.Map].Restringir.ToUpper() ==
                              "CAOS") // ¿Es mapa de Caos?
                     {
                         // ¿El usuario es Caos?
@@ -216,7 +216,7 @@ internal static class Extra
                                 UsUaRiOs.WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag);
                         }
                     }
-                    else if (Declaraciones.MapInfo_Renamed[DestPos.Map].Restringir.ToUpper() == "FACCION")
+                    else if (Declaraciones.mapInfo[DestPos.Map].Restringir.ToUpper() == "FACCION")
                     {
                         // ¿Es mapa de faccionarios?
                         // ¿El usuario es Armada o Caos?
@@ -848,7 +848,7 @@ internal static class Extra
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto randomi. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Npclist[NpcIndex].Expresiones[randomi],
-                    Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.White)));
+                    Declaraciones.Npclist[NpcIndex].character.CharIndex, ColorTranslator.ToOle(Color.White)));
         }
     }
 
@@ -900,7 +900,7 @@ internal static class Extra
                         else if (Declaraciones.MapData[Map, X + 1, Y].ObjInfo.ObjIndex > 0)
                         {
                             // Informa el nombre
-                            if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X + 1, Y].ObjInfo.ObjIndex]
+                            if (Declaraciones.objData[Declaraciones.MapData[Map, X + 1, Y].ObjInfo.ObjIndex]
                                     .OBJType == Declaraciones.eOBJType.otPuertas)
                             {
                                 withBlock1.TargetObjMap = Map;
@@ -911,7 +911,7 @@ internal static class Extra
                         }
                         else if (Declaraciones.MapData[Map, X + 1, Y + 1].ObjInfo.ObjIndex > 0)
                         {
-                            if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X + 1, Y + 1].ObjInfo.ObjIndex]
+                            if (Declaraciones.objData[Declaraciones.MapData[Map, X + 1, Y + 1].ObjInfo.ObjIndex]
                                     .OBJType == Declaraciones.eOBJType.otPuertas)
                             {
                                 // Informa el nombre
@@ -923,7 +923,7 @@ internal static class Extra
                         }
                         else if (Declaraciones.MapData[Map, X, Y + 1].ObjInfo.ObjIndex > 0)
                         {
-                            if (Declaraciones.ObjData_Renamed[Declaraciones.MapData[Map, X, Y + 1].ObjInfo.ObjIndex]
+                            if (Declaraciones.objData[Declaraciones.MapData[Map, X, Y + 1].ObjInfo.ObjIndex]
                                     .OBJType == Declaraciones.eOBJType.otPuertas)
                             {
                                 // Informa el nombre
@@ -940,13 +940,13 @@ internal static class Extra
                                 .MapData[Map, withBlock1.TargetObjX, withBlock1.TargetObjY].ObjInfo.ObjIndex;
                             if (MostrarCantidad(withBlock1.TargetObj))
                                 Protocol.WriteConsoleMsg(UserIndex,
-                                    Declaraciones.ObjData_Renamed[withBlock1.TargetObj].name + " - " +
+                                    Declaraciones.objData[withBlock1.TargetObj].name + " - " +
                                     Declaraciones.MapData[withBlock1.TargetObjMap, withBlock1.TargetObjX,
                                         withBlock1.TargetObjY].ObjInfo.Amount + "",
                                     Protocol.FontTypeNames.FONTTYPE_INFO);
                             else
                                 Protocol.WriteConsoleMsg(UserIndex,
-                                    Declaraciones.ObjData_Renamed[withBlock1.TargetObj].name,
+                                    Declaraciones.objData[withBlock1.TargetObj].name,
                                     Protocol.FontTypeNames.FONTTYPE_INFO);
                         }
 
@@ -1149,7 +1149,7 @@ internal static class Extra
                             if (Declaraciones.Npclist[TempCharIndex].desc.Length > 1)
                             {
                                 Protocol.WriteChatOverHead(UserIndex, Declaraciones.Npclist[TempCharIndex].desc,
-                                    Declaraciones.Npclist[TempCharIndex].Char_Renamed.CharIndex,
+                                    Declaraciones.Npclist[TempCharIndex].character.CharIndex,
                                     ColorTranslator.ToOle(Color.White));
                             }
                             else if (TempCharIndex == modCentinela.CentinelaNPCIndex)
@@ -1338,7 +1338,7 @@ internal static class Extra
         // ***************************************************
 
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[Index];
+            ref var withBlock = ref Declaraciones.objData[Index];
             ItemNoEsDeMapaRet = (withBlock.OBJType != Declaraciones.eOBJType.otPuertas) &
                                 (withBlock.OBJType != Declaraciones.eOBJType.otForos) &
                                 (withBlock.OBJType != Declaraciones.eOBJType.otCarteles) &
@@ -1360,7 +1360,7 @@ internal static class Extra
         // ***************************************************
 
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[Index];
+            ref var withBlock = ref Declaraciones.objData[Index];
             MostrarCantidadRet = (withBlock.OBJType != Declaraciones.eOBJType.otPuertas) &
                                  (withBlock.OBJType != Declaraciones.eOBJType.otForos) &
                                  (withBlock.OBJType != Declaraciones.eOBJType.otCarteles) &

@@ -16,14 +16,13 @@ internal class clsIniReader
 
     public clsIniReader()
     {
-        Class_Initialize_Renamed();
+        Class_Initialize();
     }
 
     // '
     // Default constructor. Does nothing.
 
-    // UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Initialize_Renamed()
+    private void Class_Initialize()
     {
         // **************************************************************
         // Author: Juan Martín Sotuyo Dodero
@@ -36,8 +35,7 @@ internal class clsIniReader
     // Destroy every array and deallocates al memory.
     // 
 
-    // UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private void Class_Terminate_Renamed()
+    private void Class_Terminate()
     {
         // **************************************************************
         // Author: Juan Martín Sotuyo Dodero
@@ -61,7 +59,7 @@ internal class clsIniReader
 
     ~clsIniReader()
     {
-        Class_Terminate_Renamed();
+        Class_Terminate();
     }
 
     // '
@@ -82,7 +80,7 @@ internal class clsIniReader
         int Pos;
 
         // Prevent memory losses if we are attempting to reload a file....
-        Class_Terminate_Renamed();
+        Class_Terminate();
 
         // Read line by line until the end
         using (var reader = new StreamReader(file))
@@ -332,35 +330,34 @@ internal class clsIniReader
         // **************************************************************
         int min;
         int max;
-        // UPGRADE_NOTE: mid se actualizó a mid_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        var mid_Renamed = default(int);
+        var mid = default(int);
 
         min = 0;
         max = Node.numValues - 1;
 
         while (min <= max)
         {
-            mid_Renamed = (min + max) / 2;
+            mid = (min + max) / 2;
 
-            if (Operators.CompareString(Node.values[mid_Renamed].Key, Key, false) < 0)
+            if (Operators.CompareString(Node.values[mid].Key, Key, false) < 0)
             {
-                min = mid_Renamed + 1;
+                min = mid + 1;
             }
-            else if (Operators.CompareString(Node.values[mid_Renamed].Key, Key, false) > 0)
+            else if (Operators.CompareString(Node.values[mid].Key, Key, false) > 0)
             {
-                max = mid_Renamed - 1;
+                max = mid - 1;
             }
             else
             {
                 // We found it
-                FindKeyRet = mid_Renamed;
+                FindKeyRet = mid;
                 return FindKeyRet;
             }
         }
 
         // Not found, return the negation of the position where it should be
         // (all higher values are to the right of the list and lower values are to the left)
-        FindKeyRet = ~mid_Renamed;
+        FindKeyRet = ~mid;
         return FindKeyRet;
     }
 
@@ -381,35 +378,34 @@ internal class clsIniReader
         // **************************************************************
         int min;
         int max;
-        // UPGRADE_NOTE: mid se actualizó a mid_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        var mid_Renamed = default(int);
+        var mid = default(int);
 
         min = 0;
         max = MainNodes - 1;
 
         while (min <= max)
         {
-            mid_Renamed = (min + max) / 2;
+            mid = (min + max) / 2;
 
-            if (Operators.CompareString(fileData[mid_Renamed].name, name, false) < 0)
+            if (Operators.CompareString(fileData[mid].name, name, false) < 0)
             {
-                min = mid_Renamed + 1;
+                min = mid + 1;
             }
-            else if (Operators.CompareString(fileData[mid_Renamed].name, name, false) > 0)
+            else if (Operators.CompareString(fileData[mid].name, name, false) > 0)
             {
-                max = mid_Renamed - 1;
+                max = mid - 1;
             }
             else
             {
                 // We found it
-                FindMainRet = mid_Renamed;
+                FindMainRet = mid;
                 return FindMainRet;
             }
         }
 
         // Not found, return the negation of the position where it should be
         // (all higher values are to the right of the list and lower values are to the left)
-        FindMainRet = ~mid_Renamed;
+        FindMainRet = ~mid;
         return FindMainRet;
     }
 

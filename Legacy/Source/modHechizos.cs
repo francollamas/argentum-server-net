@@ -23,7 +23,7 @@ internal static class modHechizos
             return;
 
         // Si no se peude usar magia en el mapa, no le deja hacerlo.
-        if (Declaraciones.MapInfo_Renamed[Declaraciones.UserList[UserIndex].Pos.Map].MagiaSinEfecto > 0)
+        if (Declaraciones.mapInfo[Declaraciones.UserList[UserIndex].Pos.Map].MagiaSinEfecto > 0)
             return;
 
         Declaraciones.Npclist[NpcIndex].CanAttack = 0;
@@ -39,7 +39,7 @@ internal static class modHechizos
                     Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[Spell].WAV),
                         Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                    Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex,
                         Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                 withBlock.Stats.MinHp = (short)(withBlock.Stats.MinHp + daño);
@@ -61,13 +61,13 @@ internal static class modHechizos
 
                     if (withBlock.Invent.CascoEqpObjIndex > 0)
                         daño = Convert.ToInt16(daño - Matematicas.RandomNumber(
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMin,
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMax));
+                            Declaraciones.objData[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMin,
+                            Declaraciones.objData[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMax));
 
                     if (withBlock.Invent.AnilloEqpObjIndex > 0)
                         daño = Convert.ToInt16(daño - Matematicas.RandomNumber(
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMin,
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMax));
+                            Declaraciones.objData[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMin,
+                            Declaraciones.objData[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMax));
 
                     if (daño < 0)
                         daño = 0;
@@ -76,7 +76,7 @@ internal static class modHechizos
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[Spell].WAV),
                             Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex,
                             Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                     withBlock.Stats.MinHp = (short)(withBlock.Stats.MinHp - daño);
@@ -114,7 +114,7 @@ internal static class modHechizos
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[Spell].WAV),
                             Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex,
                             Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                     if (withBlock.Invent.AnilloEqpObjIndex == SUPERANILLO)
@@ -139,7 +139,7 @@ internal static class modHechizos
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[Spell].WAV),
                             Convert.ToByte(withBlock.Pos.X), Convert.ToByte(withBlock.Pos.Y)));
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex,
                             Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                     if (withBlock.Invent.AnilloEqpObjIndex == SUPERANILLO)
@@ -182,7 +182,7 @@ internal static class modHechizos
                     Convert.ToByte(Declaraciones.Npclist[TargetNPC].Pos.X),
                     Convert.ToByte(Declaraciones.Npclist[TargetNPC].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, TargetNPC,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[TargetNPC].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[TargetNPC].character.CharIndex,
                     Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
             Declaraciones.Npclist[TargetNPC].Stats.MinHp = Declaraciones.Npclist[TargetNPC].Stats.MinHp - daño;
@@ -241,7 +241,7 @@ internal static class modHechizos
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
-            hIndex = Declaraciones.ObjData_Renamed[withBlock.Invent.Object_Renamed[Slot].ObjIndex].HechizoIndex;
+            hIndex = Declaraciones.objData[withBlock.Invent.userObj[Slot].ObjIndex].HechizoIndex;
 
             if (!TieneHechizo(hIndex, UserIndex))
             {
@@ -285,7 +285,7 @@ internal static class modHechizos
                 if (withBlock.flags.AdminInvisible != 1)
                 {
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        Protocol.PrepareMessageChatOverHead(SpellWords, withBlock.Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageChatOverHead(SpellWords, withBlock.character.CharIndex,
                             ColorTranslator.ToOle(Color.Cyan)));
 
                     // Si estaba oculto, se vuelve visible
@@ -298,7 +298,7 @@ internal static class modHechizos
                         {
                             Protocol.WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.",
                                 Protocol.FontTypeNames.FONTTYPE_INFO);
-                            UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                            UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                         }
                     }
                 }
@@ -344,7 +344,7 @@ internal static class modHechizos
                 {
                     if (withBlock.Invent.WeaponEqpObjIndex > 0)
                     {
-                        if (Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].StaffPower <
+                        if (Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].StaffPower <
                             Declaraciones.Hechizos[HechizoIndex].NeedStaff)
                         {
                             Protocol.WriteConsoleMsg(UserIndex,
@@ -472,7 +472,7 @@ internal static class modHechizos
                                         Protocol.PrepareMessageCreateFX(
                                             Declaraciones
                                                 .UserList[Declaraciones.MapData[PosCasteadaM, TempX, TempY].UserIndex]
-                                                .Char_Renamed.CharIndex, Declaraciones.Hechizos[H].FXgrh,
+                                                .character.CharIndex, Declaraciones.Hechizos[H].FXgrh,
                                             Declaraciones.Hechizos[H].loops));
                 }
 
@@ -504,7 +504,7 @@ internal static class modHechizos
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // No permitimos se invoquen criaturas en zonas seguras
-                if (!Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk |
+                if (!Declaraciones.mapInfo[withBlock.Pos.Map].Pk |
                     (Declaraciones.MapData[withBlock.Pos.Map, withBlock.Pos.X, withBlock.Pos.Y].trigger ==
                      Declaraciones.eTrigger.ZONASEGURA))
                 {
@@ -975,7 +975,7 @@ internal static class modHechizos
                 }
 
                 // No usar invi mapas InviSinEfecto
-                if (Declaraciones.MapInfo_Renamed[Declaraciones.UserList[TargetIndex].Pos.Map].InviSinEfecto > 0)
+                if (Declaraciones.mapInfo[Declaraciones.UserList[TargetIndex].Pos.Map].InviSinEfecto > 0)
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "¡La invisibilidad no funciona aquí!",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -998,7 +998,7 @@ internal static class modHechizos
                     }
 
                 Declaraciones.UserList[TargetIndex].flags.invisible = 1;
-                UsUaRiOs.SetInvisible(TargetIndex, Declaraciones.UserList[TargetIndex].Char_Renamed.CharIndex, true);
+                UsUaRiOs.SetInvisible(TargetIndex, Declaraciones.UserList[TargetIndex].character.CharIndex, true);
 
                 InfoHechizo(UserIndex);
                 HechizoCasteado = true;
@@ -1030,25 +1030,25 @@ internal static class modHechizos
 
                 // copio el char original al mimetizado
 
-                withBlock.CharMimetizado.body = withBlock.Char_Renamed.body;
-                withBlock.CharMimetizado.Head = withBlock.Char_Renamed.Head;
-                withBlock.CharMimetizado.CascoAnim = withBlock.Char_Renamed.CascoAnim;
-                withBlock.CharMimetizado.ShieldAnim = withBlock.Char_Renamed.ShieldAnim;
-                withBlock.CharMimetizado.WeaponAnim = withBlock.Char_Renamed.WeaponAnim;
+                withBlock.CharMimetizado.body = withBlock.character.body;
+                withBlock.CharMimetizado.Head = withBlock.character.Head;
+                withBlock.CharMimetizado.CascoAnim = withBlock.character.CascoAnim;
+                withBlock.CharMimetizado.ShieldAnim = withBlock.character.ShieldAnim;
+                withBlock.CharMimetizado.WeaponAnim = withBlock.character.WeaponAnim;
 
                 withBlock.flags.Mimetizado = 1;
 
                 // ahora pongo local el del enemigo
-                withBlock.Char_Renamed.body = Declaraciones.UserList[TargetIndex].Char_Renamed.body;
-                withBlock.Char_Renamed.Head = Declaraciones.UserList[TargetIndex].Char_Renamed.Head;
-                withBlock.Char_Renamed.CascoAnim = Declaraciones.UserList[TargetIndex].Char_Renamed.CascoAnim;
-                withBlock.Char_Renamed.ShieldAnim = Declaraciones.UserList[TargetIndex].Char_Renamed.ShieldAnim;
-                withBlock.Char_Renamed.WeaponAnim = UsUaRiOs.GetWeaponAnim(UserIndex,
+                withBlock.character.body = Declaraciones.UserList[TargetIndex].character.body;
+                withBlock.character.Head = Declaraciones.UserList[TargetIndex].character.Head;
+                withBlock.character.CascoAnim = Declaraciones.UserList[TargetIndex].character.CascoAnim;
+                withBlock.character.ShieldAnim = Declaraciones.UserList[TargetIndex].character.ShieldAnim;
+                withBlock.character.WeaponAnim = UsUaRiOs.GetWeaponAnim(UserIndex,
                     Declaraciones.UserList[TargetIndex].Invent.WeaponEqpObjIndex);
 
-                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                    (byte)withBlock.Char_Renamed.heading, withBlock.Char_Renamed.WeaponAnim,
-                    withBlock.Char_Renamed.ShieldAnim, withBlock.Char_Renamed.CascoAnim);
+                UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                    (byte)withBlock.character.heading, withBlock.character.WeaponAnim,
+                    withBlock.character.ShieldAnim, withBlock.character.CascoAnim);
 
                 InfoHechizo(UserIndex);
                 HechizoCasteado = true;
@@ -1226,7 +1226,7 @@ internal static class modHechizos
                     }
 
                     // No usar resu en mapas con ResuSinEfecto
-                    if (Declaraciones.MapInfo_Renamed[Declaraciones.UserList[TargetIndex].Pos.Map].ResuSinEfecto > 0)
+                    if (Declaraciones.mapInfo[Declaraciones.UserList[TargetIndex].Pos.Map].ResuSinEfecto > 0)
                     {
                         Protocol.WriteConsoleMsg(UserIndex,
                             "¡Revivir no está permitido aquí! Retirate de la Zona si deseas utilizar el Hechizo.",
@@ -1250,7 +1250,7 @@ internal static class modHechizos
                     if (withBlock.clase == Declaraciones.eClass.Mage)
                     {
                         if (withBlock.Invent.WeaponEqpObjIndex > 0)
-                            if (Declaraciones.ObjData_Renamed[withBlock.Invent.WeaponEqpObjIndex].StaffPower <
+                            if (Declaraciones.objData[withBlock.Invent.WeaponEqpObjIndex].StaffPower <
                                 Declaraciones.Hechizos[HechizoIndex].NeedStaff)
                             {
                                 Protocol.WriteConsoleMsg(UserIndex,
@@ -1605,24 +1605,24 @@ internal static class modHechizos
             if (withBlock1.clase == Declaraciones.eClass.Druid)
             {
                 // copio el char original al mimetizado
-                withBlock1.CharMimetizado.body = withBlock1.Char_Renamed.body;
-                withBlock1.CharMimetizado.Head = withBlock1.Char_Renamed.Head;
-                withBlock1.CharMimetizado.CascoAnim = withBlock1.Char_Renamed.CascoAnim;
-                withBlock1.CharMimetizado.ShieldAnim = withBlock1.Char_Renamed.ShieldAnim;
-                withBlock1.CharMimetizado.WeaponAnim = withBlock1.Char_Renamed.WeaponAnim;
+                withBlock1.CharMimetizado.body = withBlock1.character.body;
+                withBlock1.CharMimetizado.Head = withBlock1.character.Head;
+                withBlock1.CharMimetizado.CascoAnim = withBlock1.character.CascoAnim;
+                withBlock1.CharMimetizado.ShieldAnim = withBlock1.character.ShieldAnim;
+                withBlock1.CharMimetizado.WeaponAnim = withBlock1.character.WeaponAnim;
 
                 withBlock1.flags.Mimetizado = 1;
 
                 // ahora pongo lo del NPC.
-                withBlock1.Char_Renamed.body = Declaraciones.Npclist[NpcIndex].Char_Renamed.body;
-                withBlock1.Char_Renamed.Head = Declaraciones.Npclist[NpcIndex].Char_Renamed.Head;
-                withBlock1.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
-                withBlock1.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                withBlock1.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
+                withBlock1.character.body = Declaraciones.Npclist[NpcIndex].character.body;
+                withBlock1.character.Head = Declaraciones.Npclist[NpcIndex].character.Head;
+                withBlock1.character.CascoAnim = Declaraciones.NingunCasco;
+                withBlock1.character.ShieldAnim = Declaraciones.NingunEscudo;
+                withBlock1.character.WeaponAnim = Declaraciones.NingunArma;
 
-                UsUaRiOs.ChangeUserChar(UserIndex, withBlock1.Char_Renamed.body, withBlock1.Char_Renamed.Head,
-                    (byte)withBlock1.Char_Renamed.heading, withBlock1.Char_Renamed.WeaponAnim,
-                    withBlock1.Char_Renamed.ShieldAnim, withBlock1.Char_Renamed.CascoAnim);
+                UsUaRiOs.ChangeUserChar(UserIndex, withBlock1.character.body, withBlock1.character.Head,
+                    (byte)withBlock1.character.heading, withBlock1.character.WeaponAnim,
+                    withBlock1.character.ShieldAnim, withBlock1.character.CascoAnim);
             }
 
             else
@@ -1685,7 +1685,7 @@ internal static class modHechizos
                         if (Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex > 0)
                             daño = Convert.ToInt32(daño *
                                 (Declaraciones
-                                    .ObjData_Renamed[Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex]
+                                    .objData[Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex]
                                     .StaffDamageBonus + 70) / 100d);
                         // Aumenta daño segun el staff-
                         // Daño = (Daño* (70 + BonifBáculo)) / 100
@@ -1749,7 +1749,7 @@ internal static class modHechizos
                 // Los admins invisibles no producen sonidos ni fx's
                 if ((withBlock.flags.AdminInvisible == 1) & (UserIndex == tUser))
                 {
-                    var argdatos = Protocol.PrepareMessageCreateFX(Declaraciones.UserList[tUser].Char_Renamed.CharIndex,
+                    var argdatos = Protocol.PrepareMessageCreateFX(Declaraciones.UserList[tUser].character.CharIndex,
                         Declaraciones.Hechizos[SpellIndex].FXgrh, Declaraciones.Hechizos[SpellIndex].loops);
                     TCP.EnviarDatosASlot(UserIndex, ref argdatos);
                     var argdatos1 = Protocol.PrepareMessagePlayWave(
@@ -1761,7 +1761,7 @@ internal static class modHechizos
                 else
                 {
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, tUser,
-                        Protocol.PrepareMessageCreateFX(Declaraciones.UserList[tUser].Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCreateFX(Declaraciones.UserList[tUser].character.CharIndex,
                             Declaraciones.Hechizos[SpellIndex].FXgrh, Declaraciones.Hechizos[SpellIndex].loops));
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, tUser,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[SpellIndex].WAV),
@@ -1772,7 +1772,7 @@ internal static class modHechizos
             else if (tNPC > 0)
             {
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, tNPC,
-                    Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[tNPC].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[tNPC].character.CharIndex,
                         Declaraciones.Hechizos[SpellIndex].FXgrh, Declaraciones.Hechizos[SpellIndex].loops));
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, tNPC,
                     Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[SpellIndex].WAV),
@@ -2141,7 +2141,7 @@ internal static class modHechizos
                         if (Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex > 0)
                             daño = Convert.ToInt32(daño *
                                 (Declaraciones
-                                    .ObjData_Renamed[Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex]
+                                    .objData[Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex]
                                     .StaffDamageBonus + 70) / 100d);
                         else
                             daño = Convert.ToInt32(daño * 0.7d); // Baja daño a 70% del original
@@ -2154,14 +2154,14 @@ internal static class modHechizos
                 // cascos antimagia
                 if (withBlock.Invent.CascoEqpObjIndex > 0)
                     daño = daño - Matematicas.RandomNumber(
-                        Declaraciones.ObjData_Renamed[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMin,
-                        Declaraciones.ObjData_Renamed[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMax);
+                        Declaraciones.objData[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMin,
+                        Declaraciones.objData[withBlock.Invent.CascoEqpObjIndex].DefensaMagicaMax);
 
                 // anillos
                 if (withBlock.Invent.AnilloEqpObjIndex > 0)
                     daño = daño - Matematicas.RandomNumber(
-                        Declaraciones.ObjData_Renamed[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMin,
-                        Declaraciones.ObjData_Renamed[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMax);
+                        Declaraciones.objData[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMin,
+                        Declaraciones.objData[withBlock.Invent.AnilloEqpObjIndex].DefensaMagicaMax);
 
                 if (daño < 0)
                     daño = 0;

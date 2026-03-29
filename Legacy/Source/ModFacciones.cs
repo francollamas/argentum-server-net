@@ -202,7 +202,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "¡¡¡Ya perteneces a las tropas reales!!! Ve a combatir criminales.",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -210,7 +210,7 @@ internal static class ModFacciones
             if (withBlock.Faccion.FuerzasCaos == 1)
             {
                 Protocol.WriteChatOverHead(UserIndex, "¡¡¡Maldito insolente!!! Vete de aquí seguidor de las sombras.",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -218,7 +218,7 @@ internal static class ModFacciones
             if (ES.criminal(UserIndex))
             {
                 Protocol.WriteChatOverHead(UserIndex, "¡¡¡No se permiten criminales en el ejército real!!!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -228,7 +228,7 @@ internal static class ModFacciones
                 Protocol.WriteChatOverHead(UserIndex,
                     "Para unirte a nuestras fuerzas debes matar al menos 30 criminales, sólo has matado " +
                     withBlock.Faccion.CriminalesMatados + ".",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -237,7 +237,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "¡¡¡Para unirte a nuestras fuerzas debes ser al menos de nivel 25!!!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -246,7 +246,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "¡Has asesinado gente inocente, no aceptamos asesinos en las tropas reales!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -254,7 +254,7 @@ internal static class ModFacciones
             if (withBlock.Faccion.Reenlistadas > 4)
             {
                 Protocol.WriteChatOverHead(UserIndex, "¡Has sido expulsado de las fuerzas reales demasiadas veces!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -264,7 +264,7 @@ internal static class ModFacciones
                 Protocol.WriteChatOverHead(UserIndex,
                     "Necesitas ser aún más noble para integrar el ejército real, sólo tienes " +
                     withBlock.Reputacion.NobleRep + "/1.000.000 puntos de nobleza",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -274,7 +274,7 @@ internal static class ModFacciones
                 {
                     Protocol.WriteChatOverHead(UserIndex,
                         "¡¡¡Perteneces a un clan neutro, sal de él si quieres unirte a nuestras fuerzas!!!",
-                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -284,7 +284,7 @@ internal static class ModFacciones
 
             Protocol.WriteChatOverHead(UserIndex,
                 "¡¡¡Bienvenido al ejército real!!! Aquí tienes tus vestimentas. Cumple bien tu labor exterminando criminales y me encargaré de recompensarte.",
-                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                 ColorTranslator.ToOle(Color.White));
 
             // TODO: Dejo esta variable por ahora, pero con chequear las reenlistadas deberia ser suficiente :S
@@ -337,7 +337,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "Mata " + (NextRecom - Crimis) + " criminales más para recibir la próxima recompensa.",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -386,7 +386,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (27 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -417,7 +417,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (30 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -434,7 +434,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (2000000 - Nobleza) +
                             " puntos de nobleza para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -451,7 +451,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (3000000 - Nobleza) +
                             " puntos de nobleza para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -468,7 +468,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (35 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -478,7 +478,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (4000000 - Nobleza) +
                             " puntos de nobleza para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -495,7 +495,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (36 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -505,7 +505,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (5000000 - Nobleza) +
                             " puntos de nobleza para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -522,7 +522,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (37 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -532,7 +532,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes criminales, pero te faltan " + (6000000 - Nobleza) +
                             " puntos de nobleza para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -547,7 +547,7 @@ internal static class ModFacciones
                     Protocol.WriteChatOverHead(UserIndex,
                         "Eres uno de mis mejores soldados. Mataste " + Crimis +
                         " criminales, sigue así. Ya no tengo más recompensa para darte que mi agradecimiento. ¡Felicidades!",
-                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -559,7 +559,7 @@ internal static class ModFacciones
             }
 
             Protocol.WriteChatOverHead(UserIndex, "¡¡¡Aquí tienes tu recompensa " + TituloReal(UserIndex) + "!!!",
-                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                 ColorTranslator.ToOle(Color.White));
 
             // Recompensas de armaduras y exp
@@ -589,12 +589,12 @@ internal static class ModFacciones
 
             if (withBlock.Invent.ArmourEqpObjIndex != 0)
                 // Desequipamos la armadura real si está equipada
-                if (Declaraciones.ObjData_Renamed[withBlock.Invent.ArmourEqpObjIndex].Real == 1)
+                if (Declaraciones.objData[withBlock.Invent.ArmourEqpObjIndex].Real == 1)
                     InvUsuario.Desequipar(UserIndex, withBlock.Invent.ArmourEqpSlot);
 
             if (withBlock.Invent.EscudoEqpObjIndex != 0)
                 // Desequipamos el escudo de caos si está equipado
-                if (Declaraciones.ObjData_Renamed[withBlock.Invent.EscudoEqpObjIndex].Real == 1)
+                if (Declaraciones.objData[withBlock.Invent.EscudoEqpObjIndex].Real == 1)
                     InvUsuario.Desequipar(UserIndex, Convert.ToByte(withBlock.Invent.EscudoEqpObjIndex));
 
             if (withBlock.flags.Navegando != 0)
@@ -623,12 +623,12 @@ internal static class ModFacciones
 
             if (withBlock.Invent.ArmourEqpObjIndex != 0)
                 // Desequipamos la armadura de caos si está equipada
-                if (Declaraciones.ObjData_Renamed[withBlock.Invent.ArmourEqpObjIndex].Caos == 1)
+                if (Declaraciones.objData[withBlock.Invent.ArmourEqpObjIndex].Caos == 1)
                     InvUsuario.Desequipar(UserIndex, withBlock.Invent.ArmourEqpSlot);
 
             if (withBlock.Invent.EscudoEqpObjIndex != 0)
                 // Desequipamos el escudo de caos si está equipado
-                if (Declaraciones.ObjData_Renamed[withBlock.Invent.EscudoEqpObjIndex].Caos == 1)
+                if (Declaraciones.objData[withBlock.Invent.EscudoEqpObjIndex].Caos == 1)
                     InvUsuario.Desequipar(UserIndex, Convert.ToByte(withBlock.Invent.EscudoEqpObjIndex));
 
             if (withBlock.flags.Navegando != 0)
@@ -760,7 +760,7 @@ internal static class ModFacciones
             if (!ES.criminal(UserIndex))
             {
                 Protocol.WriteChatOverHead(UserIndex, "¡¡¡Lárgate de aquí, bufón!!!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -768,7 +768,7 @@ internal static class ModFacciones
             if (withBlock.Faccion.FuerzasCaos == 1)
             {
                 Protocol.WriteChatOverHead(UserIndex, "¡¡¡Ya perteneces a la legión oscura!!!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -777,7 +777,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "Las sombras reinarán en Argentum. ¡¡¡Fuera de aquí insecto real!!!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -787,7 +787,7 @@ internal static class ModFacciones
                 1) // Tomamos el valor de ahí: ¿Recibio la experiencia para entrar?
             {
                 Protocol.WriteChatOverHead(UserIndex, "No permitiré que ningún insecto real ingrese a mis tropas.",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -796,7 +796,7 @@ internal static class ModFacciones
             if (!ES.criminal(UserIndex))
             {
                 Protocol.WriteChatOverHead(UserIndex, "¡¡Ja ja ja!! Tú no eres bienvenido aquí asqueroso ciudadano.",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -806,7 +806,7 @@ internal static class ModFacciones
                 Protocol.WriteChatOverHead(UserIndex,
                     "Para unirte a nuestras fuerzas debes matar al menos 70 ciudadanos, sólo has matado " +
                     withBlock.Faccion.CiudadanosMatados + ".",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -815,7 +815,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "¡¡¡Para unirte a nuestras fuerzas debes ser al menos nivel 25!!!",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -825,7 +825,7 @@ internal static class ModFacciones
                 {
                     Protocol.WriteChatOverHead(UserIndex,
                         "¡¡¡Perteneces a un clan neutro, sal de él si quieres unirte a nuestras fuerzas!!!",
-                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -836,12 +836,12 @@ internal static class ModFacciones
                 if (withBlock.Faccion.Reenlistadas == 200)
                     Protocol.WriteChatOverHead(UserIndex,
                         "Has sido expulsado de las fuerzas oscuras y durante tu rebeldía has atacado a mi ejército. ¡Vete de aquí!",
-                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                         ColorTranslator.ToOle(Color.White));
                 else
                     Protocol.WriteChatOverHead(UserIndex,
                         "¡Has sido expulsado de las fuerzas oscuras demasiadas veces!",
-                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                         ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -851,7 +851,7 @@ internal static class ModFacciones
 
             Protocol.WriteChatOverHead(UserIndex,
                 "¡¡¡Bienvenido al lado oscuro!!! Aquí tienes tus armaduras. Derrama sangre ciudadana y real, y serás recompensado, lo prometo.",
-                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                 ColorTranslator.ToOle(Color.White));
 
             if (withBlock.Faccion.RecibioArmaduraCaos == 0)
@@ -899,7 +899,7 @@ internal static class ModFacciones
             {
                 Protocol.WriteChatOverHead(UserIndex,
                     "Mata " + (NextRecom - Ciudas) + " cuidadanos más para recibir la próxima recompensa.",
-                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                    Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                     ColorTranslator.ToOle(Color.White));
                 return;
             }
@@ -948,7 +948,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (27 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -979,7 +979,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (30 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -996,7 +996,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (31 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -1013,7 +1013,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (33 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -1030,7 +1030,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (35 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -1047,7 +1047,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (36 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -1064,7 +1064,7 @@ internal static class ModFacciones
                         Protocol.WriteChatOverHead(UserIndex,
                             "Mataste suficientes ciudadanos, pero te faltan " + (37 - Lvl) +
                             " niveles para poder recibir la próxima recompensa.",
-                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                            Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                             ColorTranslator.ToOle(Color.White));
                         return;
                     }
@@ -1079,7 +1079,7 @@ internal static class ModFacciones
                     Protocol.WriteChatOverHead(UserIndex,
                         "Eres uno de mis mejores soldados. Mataste " + Ciudas +
                         " ciudadanos . Tu única recompensa será la sangre derramada. ¡¡Continúa así!!",
-                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                        Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                         ColorTranslator.ToOle(Color.White));
                     return;
                 }
@@ -1092,7 +1092,7 @@ internal static class ModFacciones
 
             Protocol.WriteChatOverHead(UserIndex,
                 "¡¡¡Bien hecho " + TituloCaos(UserIndex) + ", aquí tienes tu recompensa!!!",
-                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].Char_Renamed.CharIndex),
+                Convert.ToInt16(Declaraciones.Npclist[withBlock.flags.TargetNPC].character.CharIndex),
                 ColorTranslator.ToOle(Color.White));
 
             // Recompensas de armaduras y exp

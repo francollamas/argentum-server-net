@@ -32,8 +32,7 @@ internal static class modBanco
         }
     }
 
-    // UPGRADE_NOTE: Object se actualizó a Object_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static void SendBanObj(ref short UserIndex, ref byte Slot, ref Declaraciones.UserOBJ Object_Renamed)
+    public static void SendBanObj(ref short UserIndex, ref byte Slot, ref Declaraciones.UserOBJ userObj)
     {
         // ***************************************************
         // Author: Unknown
@@ -42,7 +41,7 @@ internal static class modBanco
         // ***************************************************
 
         // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto UserList().BancoInvent.Object(Slot). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[Slot] = Object_Renamed;
+        Declaraciones.UserList[UserIndex].BancoInvent.userObj[Slot] = userObj;
 
         Protocol.WriteChangeBankSlot(UserIndex, Slot);
     }
@@ -64,8 +63,8 @@ internal static class modBanco
             if (!UpdateAll)
             {
                 // Actualiza el inventario
-                if (withBlock.BancoInvent.Object_Renamed[Slot].ObjIndex > 0)
-                    SendBanObj(ref UserIndex, ref Slot, ref withBlock.BancoInvent.Object_Renamed[Slot]);
+                if (withBlock.BancoInvent.userObj[Slot].ObjIndex > 0)
+                    SendBanObj(ref UserIndex, ref Slot, ref withBlock.BancoInvent.userObj[Slot]);
                 else
                     SendBanObj(ref UserIndex, ref Slot, ref NullObj);
             }
@@ -74,8 +73,8 @@ internal static class modBanco
                 // Actualiza todos los slots
                 for (LoopC = 1; LoopC <= Declaraciones.MAX_BANCOINVENTORY_SLOTS; LoopC++)
                     // Actualiza el inventario
-                    if (withBlock.BancoInvent.Object_Renamed[LoopC].ObjIndex > 0)
-                        SendBanObj(ref UserIndex, ref LoopC, ref withBlock.BancoInvent.Object_Renamed[LoopC]);
+                    if (withBlock.BancoInvent.userObj[LoopC].ObjIndex > 0)
+                        SendBanObj(ref UserIndex, ref LoopC, ref withBlock.BancoInvent.userObj[LoopC]);
                     else
                         SendBanObj(ref UserIndex, ref LoopC, ref NullObj);
             }
@@ -97,10 +96,10 @@ internal static class modBanco
 
             Protocol.WriteUpdateUserStats(UserIndex);
 
-            if (Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[i].Amount > 0)
+            if (Declaraciones.UserList[UserIndex].BancoInvent.userObj[i].Amount > 0)
             {
-                if (Cantidad > Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[i].Amount)
-                    Cantidad = Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[i].Amount;
+                if (Cantidad > Declaraciones.UserList[UserIndex].BancoInvent.userObj[i].Amount)
+                    Cantidad = Declaraciones.UserList[UserIndex].BancoInvent.userObj[i].Amount;
                 // Agregamos el obj que compro al inventario
                 UserReciveObj(UserIndex, Convert.ToInt16(i), Cantidad);
                 // Actualizamos el inventario del usuario
@@ -133,16 +132,16 @@ internal static class modBanco
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
-            if (withBlock.BancoInvent.Object_Renamed[ObjIndex].Amount <= 0)
+            if (withBlock.BancoInvent.userObj[ObjIndex].Amount <= 0)
                 return;
 
-            obji = withBlock.BancoInvent.Object_Renamed[ObjIndex].ObjIndex;
+            obji = withBlock.BancoInvent.userObj[ObjIndex].ObjIndex;
 
 
             // ¿Ya tiene un objeto de este tipo?
             Slot = 1;
-            while (!((withBlock.Invent.Object_Renamed[Slot].ObjIndex == obji) &
-                     ((short)(withBlock.Invent.Object_Renamed[Slot].Amount + Cantidad) <=
+            while (!((withBlock.Invent.userObj[Slot].ObjIndex == obji) &
+                     ((short)(withBlock.Invent.userObj[Slot].Amount + Cantidad) <=
                       Declaraciones.MAX_INVENTORY_OBJS)))
 
             {
@@ -154,7 +153,7 @@ internal static class modBanco
             if (Slot > withBlock.CurrentInventorySlots)
             {
                 Slot = 1;
-                while (withBlock.Invent.Object_Renamed[Slot].ObjIndex != 0)
+                while (withBlock.Invent.userObj[Slot].ObjIndex != 0)
                 {
                     Slot = Convert.ToInt16(Slot + 1);
 
@@ -171,12 +170,12 @@ internal static class modBanco
 
 
             // Mete el obj en el slot
-            if ((short)(withBlock.Invent.Object_Renamed[Slot].Amount + Cantidad) <= Declaraciones.MAX_INVENTORY_OBJS)
+            if ((short)(withBlock.Invent.userObj[Slot].Amount + Cantidad) <= Declaraciones.MAX_INVENTORY_OBJS)
             {
                 // Menor que MAX_INV_OBJS
-                withBlock.Invent.Object_Renamed[Slot].ObjIndex = obji;
-                withBlock.Invent.Object_Renamed[Slot].Amount =
-                    (short)(withBlock.Invent.Object_Renamed[Slot].Amount + Cantidad);
+                withBlock.Invent.userObj[Slot].ObjIndex = obji;
+                withBlock.Invent.userObj[Slot].Amount =
+                    (short)(withBlock.Invent.userObj[Slot].Amount + Cantidad);
 
                 QuitarBancoInvItem(UserIndex, Convert.ToByte(ObjIndex), Cantidad);
             }
@@ -200,18 +199,18 @@ internal static class modBanco
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
-            ObjIndex = withBlock.BancoInvent.Object_Renamed[Slot].ObjIndex;
+            ObjIndex = withBlock.BancoInvent.userObj[Slot].ObjIndex;
 
             // Quita un Obj
 
-            withBlock.BancoInvent.Object_Renamed[Slot].Amount =
-                (short)(withBlock.BancoInvent.Object_Renamed[Slot].Amount - Cantidad);
+            withBlock.BancoInvent.userObj[Slot].Amount =
+                (short)(withBlock.BancoInvent.userObj[Slot].Amount - Cantidad);
 
-            if (withBlock.BancoInvent.Object_Renamed[Slot].Amount <= 0)
+            if (withBlock.BancoInvent.userObj[Slot].Amount <= 0)
             {
                 withBlock.BancoInvent.NroItems = Convert.ToInt16(withBlock.BancoInvent.NroItems - 1);
-                withBlock.BancoInvent.Object_Renamed[Slot].ObjIndex = 0;
-                withBlock.BancoInvent.Object_Renamed[Slot].Amount = 0;
+                withBlock.BancoInvent.userObj[Slot].ObjIndex = 0;
+                withBlock.BancoInvent.userObj[Slot].Amount = 0;
             }
         }
     }
@@ -237,10 +236,10 @@ internal static class modBanco
 
         try
         {
-            if ((Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Item].Amount > 0) & (Cantidad > 0))
+            if ((Declaraciones.UserList[UserIndex].Invent.userObj[Item].Amount > 0) & (Cantidad > 0))
             {
-                if (Cantidad > Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Item].Amount)
-                    Cantidad = Declaraciones.UserList[UserIndex].Invent.Object_Renamed[Item].Amount;
+                if (Cantidad > Declaraciones.UserList[UserIndex].Invent.userObj[Item].Amount)
+                    Cantidad = Declaraciones.UserList[UserIndex].Invent.userObj[Item].Amount;
 
                 // Agregamos el obj que deposita al banco
                 UserDejaObj(UserIndex, Convert.ToInt16(Item), Cantidad);
@@ -278,12 +277,12 @@ internal static class modBanco
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
-            obji = withBlock.Invent.Object_Renamed[ObjIndex].ObjIndex;
+            obji = withBlock.Invent.userObj[ObjIndex].ObjIndex;
 
             // ¿Ya tiene un objeto de este tipo?
             Slot = 1;
-            while (!((withBlock.BancoInvent.Object_Renamed[Slot].ObjIndex == obji) &
-                     ((short)(withBlock.BancoInvent.Object_Renamed[Slot].Amount + Cantidad) <=
+            while (!((withBlock.BancoInvent.userObj[Slot].ObjIndex == obji) &
+                     ((short)(withBlock.BancoInvent.userObj[Slot].Amount + Cantidad) <=
                       Declaraciones.MAX_INVENTORY_OBJS)))
 
             {
@@ -296,7 +295,7 @@ internal static class modBanco
             if (Slot > Declaraciones.MAX_BANCOINVENTORY_SLOTS)
             {
                 Slot = 1;
-                while (withBlock.BancoInvent.Object_Renamed[Slot].ObjIndex != 0)
+                while (withBlock.BancoInvent.userObj[Slot].ObjIndex != 0)
                 {
                     Slot = Convert.ToInt16(Slot + 1);
 
@@ -314,13 +313,13 @@ internal static class modBanco
             if (Slot <= Declaraciones.MAX_BANCOINVENTORY_SLOTS) // Slot valido
             {
                 // Mete el obj en el slot
-                if ((short)(withBlock.BancoInvent.Object_Renamed[Slot].Amount + Cantidad) <=
+                if ((short)(withBlock.BancoInvent.userObj[Slot].Amount + Cantidad) <=
                     Declaraciones.MAX_INVENTORY_OBJS)
                 {
                     // Menor que MAX_INV_OBJS
-                    withBlock.BancoInvent.Object_Renamed[Slot].ObjIndex = obji;
-                    withBlock.BancoInvent.Object_Renamed[Slot].Amount =
-                        (short)(withBlock.BancoInvent.Object_Renamed[Slot].Amount + Cantidad);
+                    withBlock.BancoInvent.userObj[Slot].ObjIndex = obji;
+                    withBlock.BancoInvent.userObj[Slot].Amount =
+                        (short)(withBlock.BancoInvent.userObj[Slot].Amount + Cantidad);
 
                     InvUsuario.QuitarUserInvItem(UserIndex, Convert.ToByte(ObjIndex), Cantidad);
                 }
@@ -352,13 +351,13 @@ internal static class modBanco
                 Protocol.FontTypeNames.FONTTYPE_INFO);
 
             for (j = 1; j <= Declaraciones.MAX_BANCOINVENTORY_SLOTS; j++)
-                if (Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[j].ObjIndex > 0)
+                if (Declaraciones.UserList[UserIndex].BancoInvent.userObj[j].ObjIndex > 0)
                     Protocol.WriteConsoleMsg(sendIndex,
                         "Objeto " + j + " " +
                         Declaraciones
-                            .ObjData_Renamed[Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[j].ObjIndex]
+                            .objData[Declaraciones.UserList[UserIndex].BancoInvent.userObj[j].ObjIndex]
                             .name + " Cantidad:" +
-                        Declaraciones.UserList[UserIndex].BancoInvent.Object_Renamed[j].Amount,
+                        Declaraciones.UserList[UserIndex].BancoInvent.userObj[j].Amount,
                         Protocol.FontTypeNames.FONTTYPE_INFO);
         }
 
@@ -399,7 +398,7 @@ internal static class modBanco
                     ObjCant = Convert.ToInt32(General.ReadField(2, ref Tmp, Convert.ToByte(Strings.Asc("-"))));
                     if (ObjInd > 0)
                         Protocol.WriteConsoleMsg(sendIndex,
-                            "Objeto " + j + " " + Declaraciones.ObjData_Renamed[ObjInd].name + " Cantidad:" + ObjCant,
+                            "Objeto " + j + " " + Declaraciones.objData[ObjInd].name + " Cantidad:" + ObjCant,
                             Protocol.FontTypeNames.FONTTYPE_INFO);
                 }
             }

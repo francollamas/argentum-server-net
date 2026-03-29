@@ -48,8 +48,8 @@ internal static class Trabajo
                             UsUaRiOs.ToogleBoatBody(UserIndex);
                             Protocol.WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
                                 Protocol.FontTypeNames.FONTTYPE_INFO);
-                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                                (byte)withBlock.Char_Renamed.heading, Declaraciones.NingunArma,
+                            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                                (byte)withBlock.character.heading, Declaraciones.NingunArma,
                                 Declaraciones.NingunEscudo, Declaraciones.NingunCasco);
                         }
                     }
@@ -57,7 +57,7 @@ internal static class Trabajo
                     {
                         Protocol.WriteConsoleMsg(UserIndex, "Has vuelto a ser visible.",
                             Protocol.FontTypeNames.FONTTYPE_INFO);
-                        UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                        UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                     }
                 }
             }
@@ -109,7 +109,7 @@ internal static class Trabajo
                     // No es pirata o es uno sin barca
                     if (withBlock.flags.Navegando == 0)
                     {
-                        UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, true);
+                        UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, true);
 
                         Protocol.WriteConsoleMsg(UserIndex, "¡Te has escondido entre las sombras!",
                             Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -118,10 +118,10 @@ internal static class Trabajo
                     else
                     {
                         // Le cambiamos el body a galeon fantasmal
-                        withBlock.Char_Renamed.body = Declaraciones.iFragataFantasmal;
+                        withBlock.character.body = Declaraciones.iFragataFantasmal;
                         // Actualizamos clientes
-                        UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                            (byte)withBlock.Char_Renamed.heading, Declaraciones.NingunArma, Declaraciones.NingunEscudo,
+                        UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                            (byte)withBlock.character.heading, Declaraciones.NingunArma, Declaraciones.NingunEscudo,
                             Declaraciones.NingunCasco);
                     }
 
@@ -178,13 +178,13 @@ internal static class Trabajo
                 return;
             }
 
-            withBlock.Invent.BarcoObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+            withBlock.Invent.BarcoObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
             withBlock.Invent.BarcoSlot = Convert.ToByte(Slot);
 
             // No estaba navegando
             if (withBlock.flags.Navegando == 0)
             {
-                withBlock.Char_Renamed.Head = 0;
+                withBlock.character.Head = 0;
 
                 // No esta muerto
                 if (withBlock.flags.Muerto == 0)
@@ -195,7 +195,7 @@ internal static class Trabajo
                         if (withBlock.flags.Oculto == 1)
                         {
                             withBlock.flags.Oculto = 0;
-                            UsUaRiOs.SetInvisible(UserIndex, withBlock.Char_Renamed.CharIndex, false);
+                            UsUaRiOs.SetInvisible(UserIndex, withBlock.character.CharIndex, false);
                             Protocol.WriteConsoleMsg(UserIndex, "¡Has vuelto a ser visible!",
                                 Protocol.FontTypeNames.FONTTYPE_INFO);
                         }
@@ -204,10 +204,10 @@ internal static class Trabajo
                 // Esta muerto
                 else
                 {
-                    withBlock.Char_Renamed.body = Declaraciones.iFragataFantasmal;
-                    withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                    withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
-                    withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+                    withBlock.character.body = Declaraciones.iFragataFantasmal;
+                    withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+                    withBlock.character.WeaponAnim = Declaraciones.NingunArma;
+                    withBlock.character.CascoAnim = Declaraciones.NingunCasco;
                 }
 
                 // Comienza a navegar
@@ -220,7 +220,7 @@ internal static class Trabajo
                 // No esta muerto
                 if (withBlock.flags.Muerto == 0)
                 {
-                    withBlock.Char_Renamed.Head = withBlock.OrigChar.Head;
+                    withBlock.character.Head = withBlock.OrigChar.Head;
 
                     if (withBlock.clase == Declaraciones.eClass.Pirat)
                         if (withBlock.flags.Oculto == 1)
@@ -233,30 +233,30 @@ internal static class Trabajo
                         }
 
                     if (withBlock.Invent.ArmourEqpObjIndex > 0)
-                        withBlock.Char_Renamed.body =
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.ArmourEqpObjIndex].Ropaje;
+                        withBlock.character.body =
+                            Declaraciones.objData[withBlock.Invent.ArmourEqpObjIndex].Ropaje;
                     else
                         General.DarCuerpoDesnudo(UserIndex);
 
                     if (withBlock.Invent.EscudoEqpObjIndex > 0)
-                        withBlock.Char_Renamed.ShieldAnim =
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.EscudoEqpObjIndex].ShieldAnim;
+                        withBlock.character.ShieldAnim =
+                            Declaraciones.objData[withBlock.Invent.EscudoEqpObjIndex].ShieldAnim;
                     if (withBlock.Invent.WeaponEqpObjIndex > 0)
-                        withBlock.Char_Renamed.WeaponAnim =
+                        withBlock.character.WeaponAnim =
                             UsUaRiOs.GetWeaponAnim(UserIndex, withBlock.Invent.WeaponEqpObjIndex);
                     if (withBlock.Invent.CascoEqpObjIndex > 0)
-                        withBlock.Char_Renamed.CascoAnim =
-                            Declaraciones.ObjData_Renamed[withBlock.Invent.CascoEqpObjIndex].CascoAnim;
+                        withBlock.character.CascoAnim =
+                            Declaraciones.objData[withBlock.Invent.CascoEqpObjIndex].CascoAnim;
                 }
 
                 // Esta muerto
                 else
                 {
-                    withBlock.Char_Renamed.body = Declaraciones.iCuerpoMuerto;
-                    withBlock.Char_Renamed.Head = Declaraciones.iCabezaMuerto;
-                    withBlock.Char_Renamed.ShieldAnim = Declaraciones.NingunEscudo;
-                    withBlock.Char_Renamed.WeaponAnim = Declaraciones.NingunArma;
-                    withBlock.Char_Renamed.CascoAnim = Declaraciones.NingunCasco;
+                    withBlock.character.body = Declaraciones.iCuerpoMuerto;
+                    withBlock.character.Head = Declaraciones.iCabezaMuerto;
+                    withBlock.character.ShieldAnim = Declaraciones.NingunEscudo;
+                    withBlock.character.WeaponAnim = Declaraciones.NingunArma;
+                    withBlock.character.CascoAnim = Declaraciones.NingunCasco;
                 }
 
                 // Termina de navegar
@@ -264,9 +264,9 @@ internal static class Trabajo
             }
 
             // Actualizo clientes
-            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.Char_Renamed.body, withBlock.Char_Renamed.Head,
-                (byte)withBlock.Char_Renamed.heading, withBlock.Char_Renamed.WeaponAnim,
-                withBlock.Char_Renamed.ShieldAnim, withBlock.Char_Renamed.CascoAnim);
+            UsUaRiOs.ChangeUserChar(UserIndex, withBlock.character.body, withBlock.character.Head,
+                (byte)withBlock.character.heading, withBlock.character.WeaponAnim,
+                withBlock.character.ShieldAnim, withBlock.character.CascoAnim);
         }
 
         Protocol.WriteNavigateToggle(UserIndex);
@@ -286,9 +286,9 @@ internal static class Trabajo
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 if (withBlock.flags.TargetObjInvIndex > 0)
                 {
-                    if ((Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].OBJType ==
+                    if ((Declaraciones.objData[withBlock.flags.TargetObjInvIndex].OBJType ==
                          Declaraciones.eOBJType.otMinerales) &
-                        (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].MinSkill <=
+                        (Declaraciones.objData[withBlock.flags.TargetObjInvIndex].MinSkill <=
                          withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Mineria] / ModFundicion(withBlock.clase)))
                         DoLingotes(UserIndex);
                     else
@@ -321,10 +321,10 @@ internal static class Trabajo
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 if (withBlock.flags.TargetObjInvIndex > 0)
-                    if (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].OBJType ==
+                    if (Declaraciones.objData[withBlock.flags.TargetObjInvIndex].OBJType ==
                         Declaraciones.eOBJType.otWeapon)
                     {
-                        if (Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].SkHerreria <=
+                        if (Declaraciones.objData[withBlock.flags.TargetObjInvIndex].SkHerreria <=
                             withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Herreria] /
                             ModHerreriA(withBlock.clase))
                             DoFundir(UserIndex);
@@ -358,8 +358,8 @@ internal static class Trabajo
         var Total = default(int);
         var loopTo = (short)Declaraciones.UserList[UserIndex].CurrentInventorySlots;
         for (i = 1; i <= loopTo; i++)
-            if (Declaraciones.UserList[UserIndex].Invent.Object_Renamed[i].ObjIndex == ItemIndex)
-                Total = Total + Declaraciones.UserList[UserIndex].Invent.Object_Renamed[i].Amount;
+            if (Declaraciones.UserList[UserIndex].Invent.userObj[i].ObjIndex == ItemIndex)
+                Total = Total + Declaraciones.UserList[UserIndex].Invent.userObj[i].Amount;
 
         if (cant <= Total)
         {
@@ -382,7 +382,7 @@ internal static class Trabajo
         var loopTo = (short)Declaraciones.UserList[UserIndex].CurrentInventorySlots;
         for (i = 1; i <= loopTo; i++)
         {
-            ref var withBlock = ref Declaraciones.UserList[UserIndex].Invent.Object_Renamed[i];
+            ref var withBlock = ref Declaraciones.UserList[UserIndex].Invent.userObj[i];
             if (withBlock.ObjIndex == ItemIndex)
             {
                 if ((withBlock.Amount <= cant) & (withBlock.Equipped == 1))
@@ -418,7 +418,7 @@ internal static class Trabajo
         // 16/11/2009: ZaMa - Ahora considera la cantidad de items a construir
         // ***************************************************
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[ItemIndex];
+            ref var withBlock = ref Declaraciones.objData[ItemIndex];
             if (withBlock.LingH > 0)
                 QuitarObjetos(Declaraciones.LingoteHierro, (short)(withBlock.LingH * CantidadItems), UserIndex);
             if (withBlock.LingP > 0)
@@ -436,7 +436,7 @@ internal static class Trabajo
         // 16/11/2009: ZaMa - Ahora quita tambien madera elfica
         // ***************************************************
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[ItemIndex];
+            ref var withBlock = ref Declaraciones.objData[ItemIndex];
             if (withBlock.Madera > 0)
                 QuitarObjetos(Declaraciones.Leña, (short)(withBlock.Madera * CantidadItems), UserIndex);
             if (withBlock.MaderaElfica > 0)
@@ -455,7 +455,7 @@ internal static class Trabajo
         // ***************************************************
 
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[ItemIndex];
+            ref var withBlock = ref Declaraciones.objData[ItemIndex];
             if (withBlock.Madera > 0)
                 if (!TieneObjetos(Declaraciones.Leña, (short)(withBlock.Madera * Cantidad), UserIndex))
                 {
@@ -489,7 +489,7 @@ internal static class Trabajo
         // 16/11/2009: ZaMa - Agregada validacion a madera elfica.
         // ***************************************************
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[ItemIndex];
+            ref var withBlock = ref Declaraciones.objData[ItemIndex];
             if (withBlock.LingH > 0)
                 if (!TieneObjetos(Declaraciones.LingoteHierro, (short)(withBlock.LingH * CantidadItems), UserIndex))
                 {
@@ -531,13 +531,13 @@ internal static class Trabajo
         // ***************************************************
         short ItemUpgrade;
 
-        ItemUpgrade = Declaraciones.ObjData_Renamed[ItemIndex].Upgrade;
+        ItemUpgrade = Declaraciones.objData[ItemIndex].Upgrade;
 
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[ItemUpgrade];
+            ref var withBlock = ref Declaraciones.objData[ItemUpgrade];
             if (withBlock.LingH > 0)
                 if (!TieneObjetos(Declaraciones.LingoteHierro,
-                        Convert.ToInt16(withBlock.LingH - Declaraciones.ObjData_Renamed[ItemIndex].LingH *
+                        Convert.ToInt16(withBlock.LingH - Declaraciones.objData[ItemIndex].LingH *
                             Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex))
 
                 {
@@ -549,7 +549,7 @@ internal static class Trabajo
 
             if (withBlock.LingP > 0)
                 if (!TieneObjetos(Declaraciones.LingotePlata,
-                        Convert.ToInt16(withBlock.LingP - Declaraciones.ObjData_Renamed[ItemIndex].LingP *
+                        Convert.ToInt16(withBlock.LingP - Declaraciones.objData[ItemIndex].LingP *
                             Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex))
 
                 {
@@ -561,7 +561,7 @@ internal static class Trabajo
 
             if (withBlock.LingO > 0)
                 if (!TieneObjetos(Declaraciones.LingoteOro,
-                        Convert.ToInt16(withBlock.LingO - Declaraciones.ObjData_Renamed[ItemIndex].LingO *
+                        Convert.ToInt16(withBlock.LingO - Declaraciones.objData[ItemIndex].LingO *
                             Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex))
 
                 {
@@ -573,7 +573,7 @@ internal static class Trabajo
 
             if (withBlock.Madera > 0)
                 if (!TieneObjetos(Declaraciones.Leña,
-                        Convert.ToInt16(withBlock.Madera - Declaraciones.ObjData_Renamed[ItemIndex].Madera *
+                        Convert.ToInt16(withBlock.Madera - Declaraciones.objData[ItemIndex].Madera *
                             Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex))
 
                 {
@@ -585,7 +585,7 @@ internal static class Trabajo
 
             if (withBlock.MaderaElfica > 0)
                 if (!TieneObjetos(Declaraciones.LeñaElfica,
-                        Convert.ToInt16(withBlock.MaderaElfica - Declaraciones.ObjData_Renamed[ItemIndex].MaderaElfica *
+                        Convert.ToInt16(withBlock.MaderaElfica - Declaraciones.objData[ItemIndex].MaderaElfica *
                             Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex))
 
 
@@ -610,29 +610,29 @@ internal static class Trabajo
         // ***************************************************
         short ItemUpgrade;
 
-        ItemUpgrade = Declaraciones.ObjData_Renamed[ItemIndex].Upgrade;
+        ItemUpgrade = Declaraciones.objData[ItemIndex].Upgrade;
 
         {
-            ref var withBlock = ref Declaraciones.ObjData_Renamed[ItemUpgrade];
+            ref var withBlock = ref Declaraciones.objData[ItemUpgrade];
             if (withBlock.LingH > 0)
                 QuitarObjetos(Declaraciones.LingoteHierro,
-                    Convert.ToInt16(withBlock.LingH - Declaraciones.ObjData_Renamed[ItemIndex].LingH *
+                    Convert.ToInt16(withBlock.LingH - Declaraciones.objData[ItemIndex].LingH *
                         Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex);
             if (withBlock.LingP > 0)
                 QuitarObjetos(Declaraciones.LingotePlata,
-                    Convert.ToInt16(withBlock.LingP - Declaraciones.ObjData_Renamed[ItemIndex].LingP *
+                    Convert.ToInt16(withBlock.LingP - Declaraciones.objData[ItemIndex].LingP *
                         Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex);
             if (withBlock.LingO > 0)
                 QuitarObjetos(Declaraciones.LingoteOro,
-                    Convert.ToInt16(withBlock.LingO - Declaraciones.ObjData_Renamed[ItemIndex].LingO *
+                    Convert.ToInt16(withBlock.LingO - Declaraciones.objData[ItemIndex].LingO *
                         Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex);
             if (withBlock.Madera > 0)
                 QuitarObjetos(Declaraciones.Leña,
-                    Convert.ToInt16(withBlock.Madera - Declaraciones.ObjData_Renamed[ItemIndex].Madera *
+                    Convert.ToInt16(withBlock.Madera - Declaraciones.objData[ItemIndex].Madera *
                         Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex);
             if (withBlock.MaderaElfica > 0)
                 QuitarObjetos(Declaraciones.LeñaElfica,
-                    Convert.ToInt16(withBlock.MaderaElfica - Declaraciones.ObjData_Renamed[ItemIndex].MaderaElfica *
+                    Convert.ToInt16(withBlock.MaderaElfica - Declaraciones.objData[ItemIndex].MaderaElfica *
                         Declaraciones.PORCENTAJE_MATERIALES_UPGRADE), UserIndex);
         }
 
@@ -653,7 +653,7 @@ internal static class Trabajo
                                  Declaraciones.UserList[UserIndex].Stats
                                      .UserSkills[(int)Declaraciones.eSkill.Herreria] /
                                  ModHerreriA(Declaraciones.UserList[UserIndex].clase), 0) >=
-                             Declaraciones.ObjData_Renamed[ItemIndex].SkHerreria);
+                             Declaraciones.objData[ItemIndex].SkHerreria);
         return PuedeConstruirRet;
     }
 
@@ -762,19 +762,19 @@ internal static class Trabajo
 
                 HerreroQuitarMateriales(UserIndex, ItemIndex, CantidadItems);
                 // AGREGAR FX
-                if (Declaraciones.ObjData_Renamed[ItemIndex].OBJType == Declaraciones.eOBJType.otWeapon)
+                if (Declaraciones.objData[ItemIndex].OBJType == Declaraciones.eOBJType.otWeapon)
                     Protocol.WriteConsoleMsg(UserIndex,
                         "Has construido " + (CantidadItems > 1 ? CantidadItems + " armas!" : "el arma!"),
                         Protocol.FontTypeNames.FONTTYPE_INFO);
-                else if (Declaraciones.ObjData_Renamed[ItemIndex].OBJType == Declaraciones.eOBJType.otESCUDO)
+                else if (Declaraciones.objData[ItemIndex].OBJType == Declaraciones.eOBJType.otESCUDO)
                     Protocol.WriteConsoleMsg(UserIndex,
                         "Has construido " + (CantidadItems > 1 ? CantidadItems + " escudos!" : "el escudo!"),
                         Protocol.FontTypeNames.FONTTYPE_INFO);
-                else if (Declaraciones.ObjData_Renamed[ItemIndex].OBJType == Declaraciones.eOBJType.otCASCO)
+                else if (Declaraciones.objData[ItemIndex].OBJType == Declaraciones.eOBJType.otCASCO)
                     Protocol.WriteConsoleMsg(UserIndex,
                         "Has construido " + (CantidadItems > 1 ? CantidadItems + " cascos!" : "el casco!"),
                         Protocol.FontTypeNames.FONTTYPE_INFO);
-                else if (Declaraciones.ObjData_Renamed[ItemIndex].OBJType == Declaraciones.eOBJType.otArmadura)
+                else if (Declaraciones.objData[ItemIndex].OBJType == Declaraciones.eOBJType.otArmadura)
                     Protocol.WriteConsoleMsg(UserIndex,
                         "Has construido " + (CantidadItems > 1 ? CantidadItems + " armaduras" : "la armadura!"),
                         Protocol.FontTypeNames.FONTTYPE_INFO);
@@ -789,9 +789,9 @@ internal static class Trabajo
                 }
 
                 // Log de construcción de Items. Pablo (ToxicWaste) 10/09/07
-                if (Declaraciones.ObjData_Renamed[MiObj.ObjIndex].Log == 1)
+                if (Declaraciones.objData[MiObj.ObjIndex].Log == 1)
                     General.LogDesarrollo(withBlock.name + " ha construído " + MiObj.Amount + " " +
-                                          Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name);
+                                          Declaraciones.objData[MiObj.ObjIndex].name);
 
                 UsUaRiOs.SubirSkill(UserIndex, (short)Declaraciones.eSkill.Herreria, true);
                 InvUsuario.UpdateUserInv(true, UserIndex, 0);
@@ -861,7 +861,7 @@ internal static class Trabajo
             if ((Math.Round(
                      (decimal)(withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Carpinteria] /
                                ModCarpinteria(withBlock.clase)), 0) >=
-                 Declaraciones.ObjData_Renamed[ItemIndex].SkCarpinteria) & PuedeConstruirCarpintero(ItemIndex) &
+                 Declaraciones.objData[ItemIndex].SkCarpinteria) & PuedeConstruirCarpintero(ItemIndex) &
                 (withBlock.Invent.WeaponEqpObjIndex == Declaraciones.SERRUCHO_CARPINTERO))
             {
                 // Calculo cuantos item puede construir
@@ -923,9 +923,9 @@ internal static class Trabajo
                 }
 
                 // Log de construcción de Items. Pablo (ToxicWaste) 10/09/07
-                if (Declaraciones.ObjData_Renamed[MiObj.ObjIndex].Log == 1)
+                if (Declaraciones.objData[MiObj.ObjIndex].Log == 1)
                     General.LogDesarrollo(withBlock.name + " ha construído " + MiObj.Amount + " " +
-                                          Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name);
+                                          Declaraciones.objData[MiObj.ObjIndex].name);
 
                 UsUaRiOs.SubirSkill(UserIndex, (short)Declaraciones.eSkill.Carpinteria, true);
                 InvUsuario.UpdateUserInv(true, UserIndex, 0);
@@ -1006,34 +1006,34 @@ internal static class Trabajo
                 Convert.ToInt16(SistemaCombate.MaximoInt(1, Convert.ToInt32((withBlock.Stats.ELV - 4) / 5d)));
 
             Slot = withBlock.flags.TargetObjInvSlot;
-            obji = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+            obji = withBlock.Invent.userObj[Slot].ObjIndex;
 
             while ((CantidadItems > 0) & !TieneMinerales)
-                if (withBlock.Invent.Object_Renamed[Slot].Amount >=
+                if (withBlock.Invent.userObj[Slot].Amount >=
                     (short)(MineralesParaLingote((Declaraciones.iMinerales)obji) * CantidadItems))
                     TieneMinerales = true;
                 else
                     CantidadItems = Convert.ToInt16(CantidadItems - 1);
 
-            if (!TieneMinerales | (Declaraciones.ObjData_Renamed[obji].OBJType != Declaraciones.eOBJType.otMinerales))
+            if (!TieneMinerales | (Declaraciones.objData[obji].OBJType != Declaraciones.eOBJType.otMinerales))
             {
                 Protocol.WriteConsoleMsg(UserIndex, "No tienes suficientes minerales para hacer un lingote.",
                     Protocol.FontTypeNames.FONTTYPE_INFO);
                 return;
             }
 
-            withBlock.Invent.Object_Renamed[Slot].Amount = (short)(withBlock.Invent.Object_Renamed[Slot].Amount -
+            withBlock.Invent.userObj[Slot].Amount = (short)(withBlock.Invent.userObj[Slot].Amount -
                                                                    (short)(MineralesParaLingote(
                                                                                (Declaraciones.iMinerales)obji) *
                                                                            CantidadItems));
-            if (withBlock.Invent.Object_Renamed[Slot].Amount < 1)
+            if (withBlock.Invent.userObj[Slot].Amount < 1)
             {
-                withBlock.Invent.Object_Renamed[Slot].Amount = 0;
-                withBlock.Invent.Object_Renamed[Slot].ObjIndex = 0;
+                withBlock.Invent.userObj[Slot].Amount = 0;
+                withBlock.Invent.userObj[Slot].ObjIndex = 0;
             }
 
             MiObj.Amount = CantidadItems;
-            MiObj.ObjIndex = Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].LingoteIndex;
+            MiObj.ObjIndex = Declaraciones.objData[withBlock.flags.TargetObjInvIndex].LingoteIndex;
             if (!InvUsuario.MeterItemEnInventario(UserIndex, ref MiObj))
             {
                 var argNotPirata = true;
@@ -1068,7 +1068,7 @@ internal static class Trabajo
             Slot = Convert.ToByte(withBlock.flags.TargetObjInvSlot);
 
             {
-                ref var withBlock1 = ref withBlock.Invent.Object_Renamed[Slot];
+                ref var withBlock1 = ref withBlock.Invent.userObj[Slot];
                 withBlock1.Amount = Convert.ToInt16(withBlock1.Amount - 1);
 
                 if (withBlock1.Amount < 1)
@@ -1083,11 +1083,11 @@ internal static class Trabajo
 
             num = Convert.ToInt16(Matematicas.RandomNumber(10, 25));
 
-            Lingotes[0] = Convert.ToInt16(Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].LingH * num *
+            Lingotes[0] = Convert.ToInt16(Declaraciones.objData[withBlock.flags.TargetObjInvIndex].LingH * num *
                                           0.01d);
-            Lingotes[1] = Convert.ToInt16(Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].LingP * num *
+            Lingotes[1] = Convert.ToInt16(Declaraciones.objData[withBlock.flags.TargetObjInvIndex].LingP * num *
                                           0.01d);
-            Lingotes[2] = Convert.ToInt16(Declaraciones.ObjData_Renamed[withBlock.flags.TargetObjInvIndex].LingO * num *
+            Lingotes[2] = Convert.ToInt16(Declaraciones.objData[withBlock.flags.TargetObjInvIndex].LingO * num *
                                           0.01d);
 
 
@@ -1124,7 +1124,7 @@ internal static class Trabajo
         // ***************************************************
         short ItemUpgrade;
 
-        ItemUpgrade = Declaraciones.ObjData_Renamed[ItemIndex].Upgrade;
+        ItemUpgrade = Declaraciones.objData[ItemIndex].Upgrade;
 
         Declaraciones.Obj MiObj;
         {
@@ -1174,14 +1174,14 @@ internal static class Trabajo
 
                 if (Math.Round(
                         withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Herreria] / ModHerreriA(withBlock.clase),
-                        0) < Declaraciones.ObjData_Renamed[ItemUpgrade].SkHerreria)
+                        0) < Declaraciones.objData[ItemUpgrade].SkHerreria)
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "No tienes suficientes skills.",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
                     return;
                 }
 
-                switch (Declaraciones.ObjData_Renamed[ItemIndex].OBJType)
+                switch (Declaraciones.objData[ItemIndex].OBJType)
                 {
                     case Declaraciones.eOBJType.otWeapon:
                     {
@@ -1230,14 +1230,14 @@ internal static class Trabajo
                 if (Math.Round(
                         (decimal)(withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Carpinteria] /
                                   ModCarpinteria(withBlock.clase)), 0) <
-                    Declaraciones.ObjData_Renamed[ItemUpgrade].SkCarpinteria)
+                    Declaraciones.objData[ItemUpgrade].SkCarpinteria)
                 {
                     Protocol.WriteConsoleMsg(UserIndex, "No tienes suficientes skills.",
                         Protocol.FontTypeNames.FONTTYPE_INFO);
                     return;
                 }
 
-                switch (Declaraciones.ObjData_Renamed[ItemIndex].OBJType)
+                switch (Declaraciones.objData[ItemIndex].OBJType)
                 {
                     case Declaraciones.eOBJType.otFlechas:
                     {
@@ -1282,10 +1282,10 @@ internal static class Trabajo
                 InvNpc.TirarItemAlPiso(ref withBlock.Pos, ref MiObj, ref argNotPirata);
             }
 
-            if (Declaraciones.ObjData_Renamed[ItemIndex].Log == 1)
+            if (Declaraciones.objData[ItemIndex].Log == 1)
                 General.LogDesarrollo(withBlock.name + " ha mejorado el ítem " +
-                                      Declaraciones.ObjData_Renamed[ItemIndex].name + " a " +
-                                      Declaraciones.ObjData_Renamed[ItemUpgrade].name);
+                                      Declaraciones.objData[ItemIndex].name + " a " +
+                                      Declaraciones.objData[ItemUpgrade].name);
 
             InvUsuario.UpdateUserInv(true, UserIndex, 0);
 
@@ -1545,7 +1545,7 @@ internal static class Trabajo
                             Protocol.FontTypeNames.FONTTYPE_INFO);
 
                         // Es zona segura?
-                        CanStay = Declaraciones.MapInfo_Renamed[withBlock.Pos.Map].Pk;
+                        CanStay = Declaraciones.mapInfo[withBlock.Pos.Map].Pk;
 
                         if (!CanStay)
                         {
@@ -1638,11 +1638,11 @@ internal static class Trabajo
                 // Sacamos el mimetizmo
                 if (withBlock.flags.Mimetizado == 1)
                 {
-                    withBlock.Char_Renamed.body = withBlock.CharMimetizado.body;
-                    withBlock.Char_Renamed.Head = withBlock.CharMimetizado.Head;
-                    withBlock.Char_Renamed.CascoAnim = withBlock.CharMimetizado.CascoAnim;
-                    withBlock.Char_Renamed.ShieldAnim = withBlock.CharMimetizado.ShieldAnim;
-                    withBlock.Char_Renamed.WeaponAnim = withBlock.CharMimetizado.WeaponAnim;
+                    withBlock.character.body = withBlock.CharMimetizado.body;
+                    withBlock.character.Head = withBlock.CharMimetizado.Head;
+                    withBlock.character.CascoAnim = withBlock.CharMimetizado.CascoAnim;
+                    withBlock.character.ShieldAnim = withBlock.CharMimetizado.ShieldAnim;
+                    withBlock.character.WeaponAnim = withBlock.CharMimetizado.WeaponAnim;
                     withBlock.Counters.Mimetismo = 0;
                     withBlock.flags.Mimetizado = 0;
                     // Se fue el efecto del mimetismo, puede ser atacado por npcs
@@ -1652,17 +1652,17 @@ internal static class Trabajo
                 withBlock.flags.AdminInvisible = 1;
                 withBlock.flags.invisible = 1;
                 withBlock.flags.Oculto = 1;
-                withBlock.flags.OldBody = withBlock.Char_Renamed.body;
-                withBlock.flags.OldHead = withBlock.Char_Renamed.Head;
-                withBlock.Char_Renamed.body = 0;
-                withBlock.Char_Renamed.Head = 0;
+                withBlock.flags.OldBody = withBlock.character.body;
+                withBlock.flags.OldHead = withBlock.character.Head;
+                withBlock.character.body = 0;
+                withBlock.character.Head = 0;
 
                 // Solo el admin sabe que se hace invi
-                var argdatos = Protocol.PrepareMessageSetInvisible(withBlock.Char_Renamed.CharIndex, true);
+                var argdatos = Protocol.PrepareMessageSetInvisible(withBlock.character.CharIndex, true);
                 TCP.EnviarDatosASlot(UserIndex, ref argdatos);
                 // Le mandamos el mensaje para que borre el personaje a los clientes que estén cerca
                 modSendData.SendData(modSendData.SendTarget.ToPCAreaButIndex, UserIndex,
-                    Protocol.PrepareMessageCharacterRemove(withBlock.Char_Renamed.CharIndex));
+                    Protocol.PrepareMessageCharacterRemove(withBlock.character.CharIndex));
             }
             else
             {
@@ -1670,16 +1670,16 @@ internal static class Trabajo
                 withBlock.flags.invisible = 0;
                 withBlock.flags.Oculto = 0;
                 withBlock.Counters.TiempoOculto = 0;
-                withBlock.Char_Renamed.body = withBlock.flags.OldBody;
-                withBlock.Char_Renamed.Head = withBlock.flags.OldHead;
+                withBlock.character.body = withBlock.flags.OldBody;
+                withBlock.character.Head = withBlock.flags.OldHead;
 
                 // Solo el admin sabe que se hace visible
-                var argdatos1 = Protocol.PrepareMessageCharacterChange(withBlock.Char_Renamed.body,
-                    withBlock.Char_Renamed.Head, withBlock.Char_Renamed.heading, withBlock.Char_Renamed.CharIndex,
-                    withBlock.Char_Renamed.WeaponAnim, withBlock.Char_Renamed.ShieldAnim, withBlock.Char_Renamed.FX,
-                    withBlock.Char_Renamed.loops, withBlock.Char_Renamed.CascoAnim);
+                var argdatos1 = Protocol.PrepareMessageCharacterChange(withBlock.character.body,
+                    withBlock.character.Head, withBlock.character.heading, withBlock.character.CharIndex,
+                    withBlock.character.WeaponAnim, withBlock.character.ShieldAnim, withBlock.character.FX,
+                    withBlock.character.loops, withBlock.character.CascoAnim);
                 TCP.EnviarDatosASlot(UserIndex, ref argdatos1);
-                var argdatos2 = Protocol.PrepareMessageSetInvisible(withBlock.Char_Renamed.CharIndex, false);
+                var argdatos2 = Protocol.PrepareMessageSetInvisible(withBlock.character.CharIndex, false);
                 TCP.EnviarDatosASlot(UserIndex, ref argdatos2);
 
                 // Le mandamos el mensaje para crear el personaje a los clientes que estén cerca
@@ -1700,8 +1700,7 @@ internal static class Trabajo
 
         var Suerte = default(byte);
         byte exito;
-        // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-        Declaraciones.Obj Obj_Renamed;
+        Declaraciones.Obj obj;
         Declaraciones.WorldPos posMadera = default;
 
         if (!Extra.LegalPos(Map, X, Y))
@@ -1757,13 +1756,13 @@ internal static class Trabajo
 
         if (exito == 1)
         {
-            Obj_Renamed.ObjIndex = Declaraciones.FOGATA_APAG;
-            Obj_Renamed.Amount = Convert.ToInt16(Declaraciones.MapData[Map, X, Y].ObjInfo.Amount / 3);
+            obj.ObjIndex = Declaraciones.FOGATA_APAG;
+            obj.Amount = Convert.ToInt16(Declaraciones.MapData[Map, X, Y].ObjInfo.Amount / 3);
 
-            Protocol.WriteConsoleMsg(UserIndex, "Has hecho " + Obj_Renamed.Amount + " fogatas.",
+            Protocol.WriteConsoleMsg(UserIndex, "Has hecho " + obj.Amount + " fogatas.",
                 Protocol.FontTypeNames.FONTTYPE_INFO);
 
-            InvUsuario.MakeObj(ref Obj_Renamed, Map, X, Y);
+            InvUsuario.MakeObj(ref obj, Map, X, Y);
 
             // Seteamos la fogata como el nuevo TargetObj del user
             Declaraciones.UserList[UserIndex].flags.TargetObj = Declaraciones.FOGATA_APAG;
@@ -1980,7 +1979,7 @@ internal static class Trabajo
 
         try
         {
-            if (!Declaraciones.MapInfo_Renamed[Declaraciones.UserList[VictimaIndex].Pos.Map].Pk)
+            if (!Declaraciones.mapInfo[Declaraciones.UserList[VictimaIndex].Pos.Map].Pk)
                 return;
 
             if (Declaraciones.UserList[LadrOnIndex].flags.Seguro)
@@ -2178,12 +2177,12 @@ internal static class Trabajo
 
         short OI;
 
-        OI = Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[Slot].ObjIndex;
+        OI = Declaraciones.UserList[VictimaIndex].Invent.userObj[Slot].ObjIndex;
 
-        ObjEsRobableRet = (Declaraciones.ObjData_Renamed[OI].OBJType != Declaraciones.eOBJType.otLlaves) &
-                          (Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[Slot].Equipped == 0) &
-                          (Declaraciones.ObjData_Renamed[OI].Real == 0) &
-                          (Declaraciones.ObjData_Renamed[OI].Caos == 0) & (Declaraciones.ObjData_Renamed[OI].OBJType !=
+        ObjEsRobableRet = (Declaraciones.objData[OI].OBJType != Declaraciones.eOBJType.otLlaves) &
+                          (Declaraciones.UserList[VictimaIndex].Invent.userObj[Slot].Equipped == 0) &
+                          (Declaraciones.objData[OI].Real == 0) &
+                          (Declaraciones.objData[OI].Caos == 0) & (Declaraciones.objData[OI].OBJType !=
                                                                            Declaraciones.eOBJType.otBarcos);
         return ObjEsRobableRet;
     }
@@ -2211,7 +2210,7 @@ internal static class Trabajo
             while (!flag & (i <= Declaraciones.UserList[VictimaIndex].CurrentInventorySlots))
             {
                 // Hay objeto en este slot?
-                if (Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[i].ObjIndex > 0)
+                if (Declaraciones.UserList[VictimaIndex].Invent.userObj[i].ObjIndex > 0)
                     if (ObjEsRobable(VictimaIndex, i))
                         if (Matematicas.RandomNumber(1, 10) < 4)
                             flag = true;
@@ -2226,7 +2225,7 @@ internal static class Trabajo
             while (!flag & (i > 0))
             {
                 // Hay objeto en este slot?
-                if (Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[i].ObjIndex > 0)
+                if (Declaraciones.UserList[VictimaIndex].Invent.userObj[i].ObjIndex > 0)
                     if (ObjEsRobable(VictimaIndex, i))
                         if (Matematicas.RandomNumber(1, 10) < 4)
                             flag = true;
@@ -2241,18 +2240,18 @@ internal static class Trabajo
         short ObjAmount;
         if (flag)
         {
-            ObjAmount = Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[i].Amount;
+            ObjAmount = Declaraciones.UserList[VictimaIndex].Invent.userObj[i].Amount;
 
             // Cantidad al azar entre el 5% y el 10% del total, con minimo 1.
             num = Convert.ToByte(SistemaCombate.MaximoInt(1,
                 Matematicas.RandomNumber(Convert.ToInt32(ObjAmount * 0.05d), Convert.ToInt32(ObjAmount * 0.1d))));
 
             MiObj.Amount = num;
-            MiObj.ObjIndex = Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[i].ObjIndex;
+            MiObj.ObjIndex = Declaraciones.UserList[VictimaIndex].Invent.userObj[i].ObjIndex;
 
-            Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[i].Amount = (short)(ObjAmount - num);
+            Declaraciones.UserList[VictimaIndex].Invent.userObj[i].Amount = (short)(ObjAmount - num);
 
-            if (Declaraciones.UserList[VictimaIndex].Invent.Object_Renamed[i].Amount <= 0)
+            if (Declaraciones.UserList[VictimaIndex].Invent.userObj[i].Amount <= 0)
                 InvUsuario.QuitarUserInvItem(VictimaIndex, Convert.ToByte(i), 1);
 
             InvUsuario.UpdateUserInv(false, VictimaIndex, Convert.ToByte(i));
@@ -2265,11 +2264,11 @@ internal static class Trabajo
 
             if (Declaraciones.UserList[LadrOnIndex].clase == Declaraciones.eClass.Thief)
                 Protocol.WriteConsoleMsg(LadrOnIndex,
-                    "Has robado " + MiObj.Amount + " " + Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name,
+                    "Has robado " + MiObj.Amount + " " + Declaraciones.objData[MiObj.ObjIndex].name,
                     Protocol.FontTypeNames.FONTTYPE_INFO);
             else
                 Protocol.WriteConsoleMsg(LadrOnIndex,
-                    "Has hurtado " + MiObj.Amount + " " + Declaraciones.ObjData_Renamed[MiObj.ObjIndex].name,
+                    "Has hurtado " + MiObj.Amount + " " + Declaraciones.objData[MiObj.ObjIndex].name,
                     Protocol.FontTypeNames.FONTTYPE_INFO);
         }
         else
@@ -2419,7 +2418,7 @@ internal static class Trabajo
             return;
         if (Declaraciones.UserList[UserIndex].Invent.WeaponEqpSlot == 0)
             return;
-        if (Declaraciones.ObjData_Renamed[Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex].name !=
+        if (Declaraciones.objData[Declaraciones.UserList[UserIndex].Invent.WeaponEqpObjIndex].name !=
             "Espada Vikinga")
             return;
 
@@ -2603,7 +2602,7 @@ internal static class Trabajo
                     if (withBlock.flags.TargetObj == 0)
                         return;
 
-                    MiObj.ObjIndex = Declaraciones.ObjData_Renamed[withBlock.flags.TargetObj].MineralIndex;
+                    MiObj.ObjIndex = Declaraciones.objData[withBlock.flags.TargetObj].MineralIndex;
 
                     if (Declaraciones.UserList[UserIndex].clase == Declaraciones.eClass.Worker)
                     {
@@ -2691,10 +2690,10 @@ internal static class Trabajo
                 Protocol.WriteConsoleMsg(UserIndex, "Has terminado de meditar.", Protocol.FontTypeNames.FONTTYPE_INFO);
                 Protocol.WriteMeditateToggle(UserIndex);
                 withBlock.flags.Meditando = false;
-                withBlock.Char_Renamed.FX = 0;
-                withBlock.Char_Renamed.loops = 0;
+                withBlock.character.FX = 0;
+                withBlock.character.loops = 0;
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                    Protocol.PrepareMessageCreateFX(withBlock.Char_Renamed.CharIndex, 0, 0));
+                    Protocol.PrepareMessageCreateFX(withBlock.character.CharIndex, 0, 0));
                 return;
             }
 

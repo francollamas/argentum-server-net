@@ -61,10 +61,10 @@ internal static class InvNpc
             if (IsPretoriano)
             {
                 for (i = 1; i <= Declaraciones.MAX_INVENTORY_SLOTS; i++)
-                    if (npc.Invent.Object_Renamed[i].ObjIndex > 0)
+                    if (npc.Invent.userObj[i].ObjIndex > 0)
                     {
-                        MiObj.Amount = npc.Invent.Object_Renamed[i].Amount;
-                        MiObj.ObjIndex = npc.Invent.Object_Renamed[i].ObjIndex;
+                        MiObj.Amount = npc.Invent.userObj[i].Amount;
+                        MiObj.ObjIndex = npc.Invent.userObj[i].ObjIndex;
                         var argNotPirata = true;
                         TirarItemAlPiso(ref npc.Pos, ref MiObj, ref argNotPirata);
                     }
@@ -135,7 +135,7 @@ internal static class InvNpc
             short i;
             if (Declaraciones.Npclist[NpcIndex].Invent.NroItems > 0)
                 for (i = 1; i <= Declaraciones.MAX_INVENTORY_SLOTS; i++)
-                    if (Declaraciones.Npclist[NpcIndex].Invent.Object_Renamed[i].ObjIndex == ObjIndex)
+                    if (Declaraciones.Npclist[NpcIndex].Invent.userObj[i].ObjIndex == ObjIndex)
                     {
                         QuedanItemsRet = true;
                         return QuedanItemsRet;
@@ -217,8 +217,8 @@ internal static class InvNpc
 
                 for (i = 1; i <= Declaraciones.MAX_INVENTORY_SLOTS; i++)
                 {
-                    withBlock.Invent.Object_Renamed[i].ObjIndex = 0;
-                    withBlock.Invent.Object_Renamed[i].Amount = 0;
+                    withBlock.Invent.userObj[i].ObjIndex = 0;
+                    withBlock.Invent.userObj[i].Amount = 0;
                 }
 
                 withBlock.InvReSpawn = 0;
@@ -251,33 +251,33 @@ internal static class InvNpc
 
         {
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
-            ObjIndex = withBlock.Invent.Object_Renamed[Slot].ObjIndex;
+            ObjIndex = withBlock.Invent.userObj[Slot].ObjIndex;
 
             // Quita un Obj
-            if (Declaraciones.ObjData_Renamed[withBlock.Invent.Object_Renamed[Slot].ObjIndex].Crucial == 0)
+            if (Declaraciones.objData[withBlock.Invent.userObj[Slot].ObjIndex].Crucial == 0)
             {
-                withBlock.Invent.Object_Renamed[Slot].Amount =
-                    Convert.ToInt16((short)(withBlock.Invent.Object_Renamed[Slot].Amount - Cantidad));
+                withBlock.Invent.userObj[Slot].Amount =
+                    Convert.ToInt16((short)(withBlock.Invent.userObj[Slot].Amount - Cantidad));
 
-                if (withBlock.Invent.Object_Renamed[Slot].Amount <= 0)
+                if (withBlock.Invent.userObj[Slot].Amount <= 0)
                 {
                     withBlock.Invent.NroItems = Convert.ToInt16(withBlock.Invent.NroItems - 1);
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 0;
-                    withBlock.Invent.Object_Renamed[Slot].Amount = 0;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 0;
+                    withBlock.Invent.userObj[Slot].Amount = 0;
                     if ((withBlock.Invent.NroItems == 0) &
                         (withBlock.InvReSpawn != 1)) CargarInvent(NpcIndex); // Reponemos el inventario
                 }
             }
             else
             {
-                withBlock.Invent.Object_Renamed[Slot].Amount =
-                    Convert.ToInt16((short)(withBlock.Invent.Object_Renamed[Slot].Amount - Cantidad));
+                withBlock.Invent.userObj[Slot].Amount =
+                    Convert.ToInt16((short)(withBlock.Invent.userObj[Slot].Amount - Cantidad));
 
-                if (withBlock.Invent.Object_Renamed[Slot].Amount <= 0)
+                if (withBlock.Invent.userObj[Slot].Amount <= 0)
                 {
                     withBlock.Invent.NroItems = Convert.ToInt16(withBlock.Invent.NroItems - 1);
-                    withBlock.Invent.Object_Renamed[Slot].ObjIndex = 0;
-                    withBlock.Invent.Object_Renamed[Slot].Amount = 0;
+                    withBlock.Invent.userObj[Slot].ObjIndex = 0;
+                    withBlock.Invent.userObj[Slot].Amount = 0;
 
                     if (!QuedanItems(NpcIndex, ObjIndex))
                     {
@@ -285,8 +285,8 @@ internal static class InvNpc
                         iCant = Convert.ToInt16(EncontrarCant(NpcIndex, ObjIndex));
                         if (iCant != 0)
                         {
-                            withBlock.Invent.Object_Renamed[Slot].ObjIndex = ObjIndex;
-                            withBlock.Invent.Object_Renamed[Slot].Amount = iCant;
+                            withBlock.Invent.userObj[Slot].ObjIndex = ObjIndex;
+                            withBlock.Invent.userObj[Slot].Amount = iCant;
                             withBlock.Invent.NroItems = Convert.ToInt16(withBlock.Invent.NroItems + 1);
                         }
                     }
@@ -324,9 +324,9 @@ internal static class InvNpc
             {
                 var argEmptySpaces1 = 1024;
                 ln = ES.GetVar(npcfile, "NPC" + withBlock.Numero, "Obj" + LoopC, ref argEmptySpaces1);
-                withBlock.Invent.Object_Renamed[LoopC].ObjIndex =
+                withBlock.Invent.userObj[LoopC].ObjIndex =
                     Convert.ToInt16(Migration.ParseVal(General.ReadField(1, ref ln, 45)));
-                withBlock.Invent.Object_Renamed[LoopC].Amount =
+                withBlock.Invent.userObj[LoopC].Amount =
                     Convert.ToInt16(Migration.ParseVal(General.ReadField(2, ref ln, 45)));
             }
         }

@@ -22,15 +22,14 @@ internal class clsParty
 
     public clsParty()
     {
-        Class_Initialize_Renamed();
+        Class_Initialize();
     }
     // suma de todos los niveles elevados a la ExponenteNivelParty > Esta variable se usa para calcular la experiencia repartida en la Party.
 
     // datos en los pjs: | indexParty(indice en p_members), partyLeader(userindex del lider) |
 
     // Constructor de clase
-    // UPGRADE_NOTE: Class_Initialize se actualizó a Class_Initialize_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public void Class_Initialize_Renamed()
+    public void Class_Initialize()
     {
         // ***************************************************
         // Author: Unknown
@@ -45,14 +44,13 @@ internal class clsParty
     }
 
     // Destructor de clase
-    // UPGRADE_NOTE: Class_Terminate se actualizó a Class_Terminate_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public void Class_Terminate_Renamed()
+    public void Class_Terminate()
     {
     }
 
     ~clsParty()
     {
-        Class_Terminate_Renamed();
+        Class_Terminate();
     }
 
     // '

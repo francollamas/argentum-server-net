@@ -62,7 +62,7 @@ internal static class PraetoriansCoopNPC
             short N;
             short i;
             N = Declaraciones.Npclist[NpcIndex].Numero;
-            i = Declaraciones.Npclist[NpcIndex].Char_Renamed.CharIndex;
+            i = Declaraciones.Npclist[NpcIndex].character.CharIndex;
             // Call SendData(SendTarget.ToNPCArea, NpcIndex, Npclist(NpcIndex).Pos.Map, "||" & vbGreen & "° Soy Pretoriano °" & Str(ind))
             switch (Declaraciones.Npclist[NpcIndex].Numero)
             {
@@ -158,7 +158,7 @@ internal static class PraetoriansCoopNPC
                     // 'mover al actual
 
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, TeleFrag,
-                        Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[TeleFrag].Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[TeleFrag].character.CharIndex,
                             Convert.ToByte(wp2.X), Convert.ToByte(wp2.Y)));
                     // Update map and user pos
                     Declaraciones.MapData[wp.Map, wp.X, wp.Y].NpcIndex = 0;
@@ -507,7 +507,7 @@ internal static class PraetoriansCoopNPC
                 {
                     Declaraciones.Npclist[npcind].Invent.BarcoSlot = 6; // 'restore wand break counter
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                        Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, 0, 0));
+                        Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[npcind].character.CharIndex, 0, 0));
                 }
 
                 // pick the best target according to the following criteria:
@@ -612,7 +612,7 @@ internal static class PraetoriansCoopNPC
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead(
                             Declaraciones.Hechizos[Declaraciones.Npclist[npcind].Spells[DAT_APOCALIPSIS]]
-                                .PalabrasMagicas, Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                                .PalabrasMagicas, Declaraciones.Npclist[npcind].character.CharIndex,
                             ColorTranslator.ToOle(Color.Cyan)));
                     NpcLanzaSpellSobreUser2(npcind, BestTarget, Declaraciones.Npclist[npcind].Spells[DAT_APOCALIPSIS]);
                     break;
@@ -621,7 +621,7 @@ internal static class PraetoriansCoopNPC
                 case 3:
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                        Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[npcind].character.CharIndex,
                             (short)Declaraciones.FXIDs.FXMEDITARGRANDE, Declaraciones.INFINITE_LOOPS));
                     // 'UserList(UserIndex).Char.FX = FXIDs.FXMEDITARGRANDE
 
@@ -881,8 +881,8 @@ internal static class PraetoriansCoopNPC
                             if (UI > 0)
                             {
                                 if (SistemaCombate.NpcAtacaUser(npcind, UI))
-                                    NPCs.ChangeNPCChar(npcind, Declaraciones.Npclist[npcind].Char_Renamed.body,
-                                        Declaraciones.Npclist[npcind].Char_Renamed.Head, headingloop);
+                                    NPCs.ChangeNPCChar(npcind, Declaraciones.Npclist[npcind].character.body,
+                                        Declaraciones.Npclist[npcind].character.Head, headingloop);
 
                                 // 'special speed ability for praetorian king ---------
                                 Declaraciones.Npclist[npcind].CanAttack = 1; // 'this is NOT a bug!!
@@ -1007,8 +1007,8 @@ internal static class PraetoriansCoopNPC
                         if (!(Declaraciones.UserList[UI].flags.Muerto == 1))
                         {
                             if (SistemaCombate.NpcAtacaUser(npcind, UI))
-                                NPCs.ChangeNPCChar(npcind, Declaraciones.Npclist[npcind].Char_Renamed.body,
-                                    Declaraciones.Npclist[npcind].Char_Renamed.Head, headingloop);
+                                NPCs.ChangeNPCChar(npcind, Declaraciones.Npclist[npcind].character.body,
+                                    Declaraciones.Npclist[npcind].character.Head, headingloop);
                             Declaraciones.Npclist[npcind].CanAttack = 0;
                         }
                 }
@@ -1225,7 +1225,7 @@ internal static class PraetoriansCoopNPC
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead(
                             Declaraciones.Hechizos[Declaraciones.Npclist[npcind].Spells[DAT_PARALIZARPJ]]
-                                .PalabrasMagicas, Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                                .PalabrasMagicas, Declaraciones.Npclist[npcind].character.CharIndex,
                             ColorTranslator.ToOle(Color.Cyan)));
                     modHechizos.NpcLanzaSpellSobreUser(npcind, BestTarget,
                         Declaraciones.Npclist[npcind].Spells[DAT_PARALIZARPJ]);
@@ -1237,7 +1237,7 @@ internal static class PraetoriansCoopNPC
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead(
                             Declaraciones.Hechizos[Declaraciones.Npclist[npcind].Spells[DAT_TORMENTAAVANZADA]]
-                                .PalabrasMagicas, Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                                .PalabrasMagicas, Declaraciones.Npclist[npcind].character.CharIndex,
                             ColorTranslator.ToOle(Color.Cyan)));
                     NpcLanzaSpellSobreUser2(npcind, BestTarget,
                         Declaraciones.Npclist[npcind].Spells[DAT_TORMENTAAVANZADA]);
@@ -1364,9 +1364,9 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, NPCAlInd,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[NPCAlInd].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[NPCAlInd].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, NPCAlInd,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
@@ -1395,13 +1395,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, NPCAlInd,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.Npclist[NPCAlInd].Pos.X),
                     Convert.ToByte(Declaraciones.Npclist[NPCAlInd].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, NPCAlInd,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[NPCAlInd].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[NPCAlInd].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
 
             if (Declaraciones.Npclist[NPCAlInd].Stats.MinHp + 5 < Declaraciones.Npclist[NPCAlInd].Stats.MaxHp)
@@ -1430,13 +1430,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, NPCAlInd,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.Npclist[NPCAlInd].Pos.X),
                     Convert.ToByte(Declaraciones.Npclist[NPCAlInd].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, NPCAlInd,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[NPCAlInd].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[NPCAlInd].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
             Declaraciones.Npclist[NPCAlInd].Contadores.Paralisis = 0;
             Declaraciones.Npclist[NPCAlInd].flags.Paralizado = 0;
@@ -1462,13 +1462,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, paralizador,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[paralizador].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[paralizador].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, Paralizado,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.Npclist[Paralizado].Pos.X),
                     Convert.ToByte(Declaraciones.Npclist[Paralizado].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, Paralizado,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[Paralizado].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[Paralizado].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
 
             Declaraciones.Npclist[Paralizado].flags.Paralizado = 1;
@@ -1495,13 +1495,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, curador,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[curador].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[curador].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, curado,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.Npclist[curado].Pos.X),
                     Convert.ToByte(Declaraciones.Npclist[curado].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, curado,
-                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[curado].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.Npclist[curado].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
             if (Declaraciones.Npclist[curado].Stats.MinHp + 30 > Declaraciones.Npclist[curado].Stats.MaxHp)
                 Declaraciones.Npclist[curado].Stats.MinHp = Declaraciones.Npclist[curado].Stats.MaxHp;
@@ -1528,13 +1528,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, PJEnInd,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.UserList[PJEnInd].Pos.X),
                     Convert.ToByte(Declaraciones.UserList[PJEnInd].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToPCArea, PJEnInd,
-                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJEnInd].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJEnInd].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
 
             Declaraciones.UserList[PJEnInd].flags.Ceguera = 1;
@@ -1572,13 +1572,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, PJEnInd,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.UserList[PJEnInd].Pos.X),
                     Convert.ToByte(Declaraciones.UserList[PJEnInd].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToPCArea, PJEnInd,
-                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJEnInd].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJEnInd].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
             Declaraciones.UserList[PJEnInd].flags.Estupidez = 1;
             Declaraciones.UserList[PJEnInd].Counters.Estupidez = Convert.ToInt16(Admin.IntervaloInvisible);
@@ -1610,13 +1610,13 @@ internal static class PraetoriansCoopNPC
             // ' Envia las palabras magicas, fx y wav del indice-esimo hechizo del npc-hostiles.dat
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                 Protocol.PrepareMessageChatOverHead(Declaraciones.Hechizos[indireccion].PalabrasMagicas,
-                    Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
+                    Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Cyan)));
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, PJEnInd,
                 Protocol.PrepareMessagePlayWave(Convert.ToByte(Declaraciones.Hechizos[indireccion].WAV),
                     Convert.ToByte(Declaraciones.UserList[PJEnInd].Pos.X),
                     Convert.ToByte(Declaraciones.UserList[PJEnInd].Pos.Y)));
             modSendData.SendData(modSendData.SendTarget.ToPCArea, PJEnInd,
-                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJEnInd].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJEnInd].character.CharIndex,
                     Declaraciones.Hechizos[indireccion].FXgrh, Declaraciones.Hechizos[indireccion].loops));
 
             // Sacamos el efecto de ocultarse
@@ -1624,7 +1624,7 @@ internal static class PraetoriansCoopNPC
             {
                 Declaraciones.UserList[PJEnInd].Counters.TiempoOculto = 0;
                 Declaraciones.UserList[PJEnInd].flags.Oculto = 0;
-                UsUaRiOs.SetInvisible(PJEnInd, Declaraciones.UserList[PJEnInd].Char_Renamed.CharIndex, false);
+                UsUaRiOs.SetInvisible(PJEnInd, Declaraciones.UserList[PJEnInd].character.CharIndex, false);
                 // Call SendData(SendTarget.ToPCArea, PJEnInd, PrepareMessageSetInvisible(UserList(PJEnInd).Char.CharIndex, False))
                 Protocol.WriteConsoleMsg(PJEnInd, "¡Has sido detectado!", Protocol.FontTypeNames.FONTTYPE_VENENO);
             }
@@ -1674,7 +1674,7 @@ internal static class PraetoriansCoopNPC
                         Convert.ToByte(Declaraciones.UserList[UserIndex].Pos.X),
                         Convert.ToByte(Declaraciones.UserList[UserIndex].Pos.Y)));
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                    Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].character.CharIndex,
                         Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                 Declaraciones.UserList[UserIndex].Stats.MinHp =
@@ -1697,7 +1697,7 @@ internal static class PraetoriansCoopNPC
                         Convert.ToByte(Declaraciones.UserList[UserIndex].Pos.X),
                         Convert.ToByte(Declaraciones.UserList[UserIndex].Pos.Y)));
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                    Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].character.CharIndex,
                         Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                 if ((Declaraciones.UserList[UserIndex].flags.Privilegios & Declaraciones.PlayerType.User) != 0)
@@ -1728,7 +1728,7 @@ internal static class PraetoriansCoopNPC
                             Convert.ToByte(Declaraciones.UserList[UserIndex].Pos.X),
                             Convert.ToByte(Declaraciones.UserList[UserIndex].Pos.Y)));
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
-                        Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].Char_Renamed.CharIndex,
+                        Protocol.PrepareMessageCreateFX(Declaraciones.UserList[UserIndex].character.CharIndex,
                             Declaraciones.Hechizos[Spell].FXgrh, Declaraciones.Hechizos[Spell].loops));
 
                     Protocol.WriteParalizeOK(UserIndex);
@@ -1769,7 +1769,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead("Rahma",
-                            Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Lime)));
+                            Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
                             Convert.ToByte(Declaraciones.Npclist[npcind].Pos.X),
@@ -1780,7 +1780,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead("vôrtax",
-                            Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Lime)));
+                            Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
                             Convert.ToByte(Declaraciones.Npclist[npcind].Pos.X),
@@ -1791,7 +1791,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead("Zill",
-                            Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Lime)));
+                            Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
                             Convert.ToByte(Declaraciones.Npclist[npcind].Pos.X),
@@ -1802,7 +1802,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead("yäkà E'nta",
-                            Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Lime)));
+                            Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
                             Convert.ToByte(Declaraciones.Npclist[npcind].Pos.X),
@@ -1813,7 +1813,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead("¡¡Koràtá!!",
-                            Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Lime)));
+                            Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
                             Convert.ToByte(Declaraciones.Npclist[npcind].Pos.X),
@@ -1824,7 +1824,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessageChatOverHead(Constants.vbNullString,
-                            Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Lime)));
+                            Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
                             Convert.ToByte(Declaraciones.Npclist[npcind].Pos.X),
@@ -1860,7 +1860,7 @@ internal static class PraetoriansCoopNPC
                                     Convert.ToByte(Declaraciones.UserList[PJInd].Pos.X),
                                     Convert.ToByte(Declaraciones.UserList[PJInd].Pos.Y)));
                             modSendData.SendData(modSendData.SendTarget.ToPCArea, PJInd,
-                                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJInd].Char_Renamed.CharIndex,
+                                Protocol.PrepareMessageCreateFX(Declaraciones.UserList[PJInd].character.CharIndex,
                                     Declaraciones.Hechizos[indireccion].FXgrh,
                                     Declaraciones.Hechizos[indireccion].loops));
 
@@ -1891,7 +1891,7 @@ internal static class PraetoriansCoopNPC
                                         Convert.ToByte(Declaraciones.Npclist[MascotaInd].Pos.Y)));
                                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, MascotaInd,
                                     Protocol.PrepareMessageCreateFX(
-                                        Declaraciones.Npclist[MascotaInd].Char_Renamed.CharIndex,
+                                        Declaraciones.Npclist[MascotaInd].character.CharIndex,
                                         Declaraciones.Hechizos[indireccion].FXgrh,
                                         Declaraciones.Hechizos[indireccion].loops));
 
@@ -2054,7 +2054,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                         Protocol.PrepareMessageChatOverHead("Maldito bastardo, ¡Ven aquí!",
-                            Convert.ToInt16(Conversion.Str(Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex)),
+                            Convert.ToInt16(Conversion.Str(Declaraciones.Npclist[npcorig].character.CharIndex)),
                             ColorTranslator.ToOle(Color.Yellow)));
                     Declaraciones.Npclist[npcorig].CanAttack = 0;
                 }
@@ -2157,7 +2157,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                         Protocol.PrepareMessageChatOverHead("Maldito bastardo, ¡Ven aquí!",
-                            Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex,
+                            Declaraciones.Npclist[npcorig].character.CharIndex,
                             ColorTranslator.ToOle(Color.Yellow)));
                     Declaraciones.Npclist[npcorig].CanAttack = 0;
                 }
@@ -2184,7 +2184,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                         Protocol.PrepareMessageChatOverHead("Maldito bastardo, ¡Ven aquí!",
-                            Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex,
+                            Declaraciones.Npclist[npcorig].character.CharIndex,
                             ColorTranslator.ToOle(Color.Yellow)));
                     Declaraciones.Npclist[npcorig].CanAttack = 0;
                 }
@@ -2207,7 +2207,7 @@ internal static class PraetoriansCoopNPC
             {
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                     Protocol.PrepareMessageChatOverHead("Maldito bastardo, ¡Ven aquí!",
-                        Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                        Declaraciones.Npclist[npcorig].character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                 Declaraciones.Npclist[npcorig].CanAttack = 0;
             }
         }
@@ -2233,12 +2233,12 @@ internal static class PraetoriansCoopNPC
             NPCy = Declaraciones.Npclist[npcorig].Pos.Y;
 
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
-                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx), Convert.ToByte(NPCy + 1)));
             // Update map and npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.Y = Convert.ToInt16(NPCy + 1);
-            Declaraciones.Npclist[npcorig].Char_Renamed.heading = Declaraciones.eHeading.SOUTH;
+            Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.SOUTH;
             Declaraciones.MapData[mapa, NPCx, NPCy + 1].NpcIndex = npcorig;
 
             // Revisamos sidebemos cambair el área
@@ -2266,12 +2266,12 @@ internal static class PraetoriansCoopNPC
             NPCy = Declaraciones.Npclist[npcorig].Pos.Y;
 
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
-                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx), Convert.ToByte(NPCy - 1)));
             // Update map and npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.Y = Convert.ToInt16(NPCy - 1);
-            Declaraciones.Npclist[npcorig].Char_Renamed.heading = Declaraciones.eHeading.NORTH;
+            Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.NORTH;
             Declaraciones.MapData[mapa, NPCx, NPCy - 1].NpcIndex = npcorig;
 
             // Revisamos sidebemos cambair el área
@@ -2299,12 +2299,12 @@ internal static class PraetoriansCoopNPC
             NPCy = Declaraciones.Npclist[npcorig].Pos.Y;
 
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
-                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx - 1), Convert.ToByte(NPCy)));
             // Update map and npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.X = Convert.ToInt16(NPCx - 1);
-            Declaraciones.Npclist[npcorig].Char_Renamed.heading = Declaraciones.eHeading.WEST;
+            Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.WEST;
             Declaraciones.MapData[mapa, NPCx - 1, NPCy].NpcIndex = npcorig;
 
             // Revisamos sidebemos cambair el área
@@ -2332,12 +2332,12 @@ internal static class PraetoriansCoopNPC
             NPCy = Declaraciones.Npclist[npcorig].Pos.Y;
 
             modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
-                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].Char_Renamed.CharIndex,
+                Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcorig].character.CharIndex,
                     Convert.ToByte(NPCx + 1), Convert.ToByte(NPCy)));
             // Update map and npc pos
             Declaraciones.MapData[mapa, NPCx, NPCy].NpcIndex = 0;
             Declaraciones.Npclist[npcorig].Pos.X = Convert.ToInt16(NPCx + 1);
-            Declaraciones.Npclist[npcorig].Char_Renamed.heading = Declaraciones.eHeading.EAST;
+            Declaraciones.Npclist[npcorig].character.heading = Declaraciones.eHeading.EAST;
             Declaraciones.MapData[mapa, NPCx + 1, NPCy].NpcIndex = npcorig;
 
             // Revisamos sidebemos cambair el área
@@ -2603,68 +2603,68 @@ internal static class PraetoriansCoopNPC
             if (Extra.LegalPos(NPCPosM, Convert.ToInt16(NPCPosX + 1), Convert.ToInt16(NPCPosY + 1)))
             {
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX + 1), Convert.ToByte(NPCPosY + 1)));
                 // Update map and npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY + 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX + 1);
-                Declaraciones.Npclist[npcind].Char_Renamed.heading = Declaraciones.eHeading.SOUTH;
+                Declaraciones.Npclist[npcind].character.heading = Declaraciones.eHeading.SOUTH;
                 Declaraciones.MapData[NPCPosM, NPCPosX + 1, NPCPosY + 1].NpcIndex = npcind;
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageChatOverHead("¡¡JA JA JA JA!!",
-                        Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                        Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                 return;
             }
 
             if (Extra.LegalPos(NPCPosM, Convert.ToInt16(NPCPosX - 1), Convert.ToInt16(NPCPosY - 1)))
             {
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX - 1), Convert.ToByte(NPCPosY - 1)));
                 // Update map and npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY - 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX - 1);
-                Declaraciones.Npclist[npcind].Char_Renamed.heading = Declaraciones.eHeading.NORTH;
+                Declaraciones.Npclist[npcind].character.heading = Declaraciones.eHeading.NORTH;
                 Declaraciones.MapData[NPCPosM, NPCPosX - 1, NPCPosY - 1].NpcIndex = npcind;
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageChatOverHead("¡¡JA JA JA JA!!",
-                        Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                        Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                 return;
             }
 
             if (Extra.LegalPos(NPCPosM, Convert.ToInt16(NPCPosX + 1), Convert.ToInt16(NPCPosY - 1)))
             {
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX + 1), Convert.ToByte(NPCPosY - 1)));
                 // Update map and npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY - 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX + 1);
-                Declaraciones.Npclist[npcind].Char_Renamed.heading = Declaraciones.eHeading.EAST;
+                Declaraciones.Npclist[npcind].character.heading = Declaraciones.eHeading.EAST;
                 Declaraciones.MapData[NPCPosM, NPCPosX + 1, NPCPosY - 1].NpcIndex = npcind;
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageChatOverHead("¡¡JA JA JA JA!!",
-                        Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                        Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                 return;
             }
 
             if (Extra.LegalPos(NPCPosM, Convert.ToInt16(NPCPosX - 1), Convert.ToInt16(NPCPosY + 1)))
             {
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].Char_Renamed.CharIndex,
+                    Protocol.PrepareMessageCharacterMove(Declaraciones.Npclist[npcind].character.CharIndex,
                         Convert.ToByte(NPCPosX - 1), Convert.ToByte(NPCPosY + 1)));
                 // Update map and npc pos
                 Declaraciones.MapData[NPCPosM, NPCPosX, NPCPosY].NpcIndex = 0;
                 Declaraciones.Npclist[npcind].Pos.Y = Convert.ToInt16(NPCPosY + 1);
                 Declaraciones.Npclist[npcind].Pos.X = Convert.ToInt16(NPCPosX - 1);
-                Declaraciones.Npclist[npcind].Char_Renamed.heading = Declaraciones.eHeading.WEST;
+                Declaraciones.Npclist[npcind].character.heading = Declaraciones.eHeading.WEST;
                 Declaraciones.MapData[NPCPosM, NPCPosX - 1, NPCPosY + 1].NpcIndex = npcind;
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageChatOverHead("¡¡JA JA JA JA!!",
-                        Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                        Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                 return;
             }
 
@@ -2674,7 +2674,7 @@ internal static class PraetoriansCoopNPC
                 modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                     Protocol.PrepareMessageChatOverHead(
                         "¡Por las barbas de los antiguos reyes! ¡Alejáos endemoniados espectros o sufriréis la furia de los dioses!",
-                        Declaraciones.Npclist[npcind].Char_Renamed.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
+                        Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Yellow)));
                 Declaraciones.Npclist[npcind].CanAttack = 0;
             }
         }

@@ -29,7 +29,7 @@ internal static class Characters
             return CharIndexToUserIndexRet;
         }
 
-        if (Declaraciones.UserList[CharIndexToUserIndexRet].Char_Renamed.CharIndex != CharIndex)
+        if (Declaraciones.UserList[CharIndexToUserIndexRet].character.CharIndex != CharIndex)
         {
             CharIndexToUserIndexRet = INVALID_INDEX;
             return CharIndexToUserIndexRet;

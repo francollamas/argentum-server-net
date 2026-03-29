@@ -17,8 +17,7 @@ internal class clsEstadisticasIPC
 
     // *************************************************
 
-    // UPGRADE_NOTE: str se actualizó a str_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    private int BuscaVentana(ref int Wnd, ref string str_Renamed)
+    private int BuscaVentana(ref int Wnd, ref string str)
     {
         int BuscaVentanaRet = default;
 

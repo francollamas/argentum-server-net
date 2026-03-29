@@ -30,8 +30,7 @@ internal static class modHexaStrings
         return hexMd52AscRet;
     }
 
-    // UPGRADE_NOTE: hex se actualizó a hex_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    public static int hexHex2Dec(string hex_Renamed)
+    public static int hexHex2Dec(string hex)
     {
         int hexHex2DecRet = default;
         // ***************************************************
@@ -40,7 +39,7 @@ internal static class modHexaStrings
         // 
         // ***************************************************
 
-        hexHex2DecRet = Convert.ToInt32(Convert.ToInt64(hex_Renamed, 16));
+        hexHex2DecRet = Convert.ToInt32(Convert.ToInt64(hex, 16));
         return hexHex2DecRet;
     }
 
