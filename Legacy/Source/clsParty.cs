@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal class clsParty
@@ -88,7 +86,7 @@ internal class clsParty
             i = Convert.ToInt16(i + 1);
 
         if (i <= mdParty.PARTY_MAXMEMBERS)
-            MiExperienciaRet = Convert.ToInt32(Conversion.Fix(p_members[i].Experiencia));
+            MiExperienciaRet = Convert.ToInt32((int)Math.Truncate(p_members[i].Experiencia));
         else // esto no deberia pasar :p
             MiExperienciaRet = -1;
 
@@ -229,14 +227,14 @@ internal class clsParty
                             ".", Protocol.FontTypeNames.FONTTYPE_PARTY);
 
                     Protocol.WriteConsoleMsg(withBlock.UserIndex,
-                        "Durante la misma has conseguido " + Conversion.Fix(withBlock.Experiencia) +
+                        "Durante la misma has conseguido " + (int)Math.Truncate(withBlock.Experiencia) +
                         " puntos de experiencia.", Protocol.FontTypeNames.FONTTYPE_PARTY);
 
                     if (!mdParty.PARTY_EXPERIENCIAPORGOLPE)
                     {
                         Declaraciones.UserList[withBlock.UserIndex].Stats.Exp =
                             Declaraciones.UserList[withBlock.UserIndex].Stats.Exp +
-                            Conversion.Fix(withBlock.Experiencia);
+                            (int)Math.Truncate(withBlock.Experiencia);
                         if (Declaraciones.UserList[withBlock.UserIndex].Stats.Exp > Declaraciones.MAXEXP)
                             Declaraciones.UserList[withBlock.UserIndex].Stats.Exp = Declaraciones.MAXEXP;
                         UsUaRiOs.CheckUserLevel(withBlock.UserIndex);
@@ -264,7 +262,7 @@ internal class clsParty
                 ref var withBlock1 = ref Declaraciones.UserList[MemberIndex];
                 if (!mdParty.PARTY_EXPERIENCIAPORGOLPE)
                 {
-                    withBlock1.Stats.Exp = withBlock1.Stats.Exp + Conversion.Fix(p_members[i].Experiencia);
+                    withBlock1.Stats.Exp = withBlock1.Stats.Exp + (int)Math.Truncate(p_members[i].Experiencia);
                     if (withBlock1.Stats.Exp > Declaraciones.MAXEXP)
                         withBlock1.Stats.Exp = Declaraciones.MAXEXP;
 
@@ -275,7 +273,7 @@ internal class clsParty
                 MandarMensajeAConsola(withBlock1.name + " abandona la party.", "Servidor");
                 // TODO: Revisar que esto este bien, y no este faltando/sobrando un mensaje, ahora solo los estoy corrigiendo
                 Protocol.WriteConsoleMsg(MemberIndex,
-                    "Durante la misma has conseguido " + Conversion.Fix(p_members[i].Experiencia) +
+                    "Durante la misma has conseguido " + (int)Math.Truncate(p_members[i].Experiencia) +
                     " puntos de experiencia.", Protocol.FontTypeNames.FONTTYPE_PARTY);
 
                 p_CantMiembros = Convert.ToInt16(p_CantMiembros - 1);
@@ -481,17 +479,17 @@ internal class clsParty
                     {
                         Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp =
                             Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp +
-                            Conversion.Fix(p_members[i].Experiencia);
+                            (int)Math.Truncate(p_members[i].Experiencia);
                         if (Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp > Declaraciones.MAXEXP)
                             Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp = Declaraciones.MAXEXP;
                         UsUaRiOs.CheckUserLevel(p_members[i].UserIndex);
                     }
                     else if (Math.Abs(Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp) >
-                             Math.Abs(Conversion.Fix(p_members[i].Experiencia)))
+                             Math.Abs((int)Math.Truncate(p_members[i].Experiencia)))
                     {
                         Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp =
                             Declaraciones.UserList[p_members[i].UserIndex].Stats.Exp +
-                            Conversion.Fix(p_members[i].Experiencia);
+                            (int)Math.Truncate(p_members[i].Experiencia);
                     }
                     else
                     {

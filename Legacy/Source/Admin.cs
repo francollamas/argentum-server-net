@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal static class Admin
@@ -194,7 +191,7 @@ internal static class Admin
     }
 
 
-    public static void Encarcelar(short UserIndex, int Minutos, string GmName = Constants.vbNullString)
+    public static void Encarcelar(short UserIndex, int Minutos, string GmName = "")
     {
         // ***************************************************
         // Author: Unknown

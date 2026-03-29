@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class AI
@@ -496,7 +494,7 @@ internal static class AI
                                             "La mascota no atacará a ciudadanos si eres miembro del ejército real o tienes el seguro activado.",
                                             Protocol.FontTypeNames.FONTTYPE_INFO);
                                         Protocol.FlushBuffer(withBlock.MaestroUser);
-                                        withBlock.flags.AttackedBy = Constants.vbNullString;
+                                        withBlock.flags.AttackedBy = string.Empty;
                                         return;
                                     }
 
@@ -538,7 +536,7 @@ internal static class AI
                                             "La mascota no atacará a ciudadanos si eres miembro del ejército real o tienes el seguro activado.",
                                             Protocol.FontTypeNames.FONTTYPE_INFO);
                                         Protocol.FlushBuffer(withBlock.MaestroUser);
-                                        withBlock.flags.AttackedBy = Constants.vbNullString;
+                                        withBlock.flags.AttackedBy = string.Empty;
                                         NPCs.FollowAmo(NpcIndex);
                                         return;
                                     }
@@ -577,7 +575,7 @@ internal static class AI
             {
                 withBlock.Movement = withBlock.flags.OldMovement;
                 withBlock.Hostile = withBlock.flags.OldHostil;
-                withBlock.flags.AttackedBy = Constants.vbNullString;
+                withBlock.flags.AttackedBy = string.Empty;
             }
         }
     }
@@ -1153,7 +1151,7 @@ internal static class AI
 
         {
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
-            UserNearRet = !(Conversion.Int(Matematicas.Distance(withBlock.Pos.X, withBlock.Pos.Y,
+            UserNearRet = !((int)Math.Floor(Matematicas.Distance(withBlock.Pos.X, withBlock.Pos.Y,
                 Declaraciones.UserList[withBlock.PFINFO.TargetUser].Pos.X,
                 Declaraciones.UserList[withBlock.PFINFO.TargetUser].Pos.Y)) > 1d);
         }

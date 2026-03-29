@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class Trabajo
@@ -28,7 +26,7 @@ internal static class Trabajo
                 if (withBlock.Counters.TiempoOculto <= 0)
                 {
                     if (withBlock.clase == Declaraciones.eClass.Bandit)
-                        withBlock.Counters.TiempoOculto = Convert.ToInt16(Conversion.Int(Admin.IntervaloOculto / 2d));
+                        withBlock.Counters.TiempoOculto = Convert.ToInt16((int)Math.Floor(Admin.IntervaloOculto / 2d));
                     else
                         withBlock.Counters.TiempoOculto = Admin.IntervaloOculto;
 
@@ -1804,7 +1802,7 @@ internal static class Trabajo
 
             short Skill;
             Skill = Declaraciones.UserList[UserIndex].Stats.UserSkills[(int)Declaraciones.eSkill.Pesca];
-            Suerte = Convert.ToInt16(Conversion.Int(-0.00125d * Skill * Skill - 0.3d * Skill + 49d));
+            Suerte = Convert.ToInt16((int)Math.Floor(-0.00125d * Skill * Skill - 0.3d * Skill + 49d));
 
             res = Convert.ToInt16(Matematicas.RandomNumber(1, Suerte));
 
@@ -1901,7 +1899,7 @@ internal static class Trabajo
             // m = (60-11)/(1-10)
             // y = mx - m*10 + 11
 
-            Suerte = Convert.ToInt16(Conversion.Int(-0.00125d * iSkill * iSkill - 0.3d * iSkill + 49d));
+            Suerte = Convert.ToInt16((int)Math.Floor(-0.00125d * iSkill * iSkill - 0.3d * iSkill + 49d));
 
             Declaraciones.Obj MiObj;
             // UPGRADE_WARNING: El límite inferior de la matriz PecesPosibles ha cambiado de 1 a 0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -2298,8 +2296,8 @@ internal static class Trabajo
         {
             case Declaraciones.eClass.Assasin:
             {
-                Suerte = Convert.ToInt16(Conversion.Int(((0.00003d * Skill - 0.002d) * Skill + 0.098d) * Skill +
-                                                        4.25d));
+                Suerte = Convert.ToInt16((int)Math.Floor((double)(((0.00003d * Skill - 0.002d) * Skill + 0.098d) * Skill +
+                                                        4.25d)));
                 break;
             }
 
@@ -2307,21 +2305,21 @@ internal static class Trabajo
             case Declaraciones.eClass.Paladin:
             case Declaraciones.eClass.Pirat:
             {
-                Suerte = Convert.ToInt16(Conversion.Int(((0.000003d * Skill + 0.0006d) * Skill + 0.0107d) * Skill +
-                                                        4.93d));
+                Suerte = Convert.ToInt16((int)Math.Floor((double)(((0.000003d * Skill + 0.0006d) * Skill + 0.0107d) * Skill +
+                                                        4.93d)));
                 break;
             }
 
             case Declaraciones.eClass.Bard:
             {
                 Suerte = Convert.ToInt16(
-                    Conversion.Int(((0.000002d * Skill + 0.0002d) * Skill + 0.032d) * Skill + 4.81d));
+                    (int)Math.Floor((double)(((0.000002d * Skill + 0.0002d) * Skill + 0.032d) * Skill + 4.81d)));
                 break;
             }
 
             default:
             {
-                Suerte = Convert.ToInt16(Conversion.Int(0.0361d * Skill + 4.39d));
+                Suerte = Convert.ToInt16((int)Math.Floor(0.0361d * Skill + 4.39d));
                 break;
             }
         }
@@ -2350,8 +2348,8 @@ internal static class Trabajo
             else
             {
                 Declaraciones.Npclist[VictimNpcIndex].Stats.MinHp =
-                    Declaraciones.Npclist[VictimNpcIndex].Stats.MinHp - Conversion.Int(daño * 2);
-                Protocol.WriteConsoleMsg(UserIndex, "Has apuñalado la criatura por " + Conversion.Int(daño * 2),
+                    Declaraciones.Npclist[VictimNpcIndex].Stats.MinHp - (int)Math.Floor((double)(daño * 2));
+                Protocol.WriteConsoleMsg(UserIndex, "Has apuñalado la criatura por " + (int)Math.Floor((double)(daño * 2)),
                     Protocol.FontTypeNames.FONTTYPE_FIGHT);
                 // [Alejo]
                 SistemaCombate.CalcularDarExp(UserIndex, VictimNpcIndex, daño * 2);
@@ -2381,7 +2379,7 @@ internal static class Trabajo
 
         if (Matematicas.RandomNumber(0, 100) < Declaraciones.PROB_ACUCHILLAR)
         {
-            daño = Convert.ToInt16(Conversion.Int(daño * Declaraciones.DAÑO_ACUCHILLAR));
+            daño = Convert.ToInt16((int)Math.Floor(daño * Declaraciones.DAÑO_ACUCHILLAR));
 
             if (VictimUserIndex != 0)
             {
@@ -2426,11 +2424,11 @@ internal static class Trabajo
         Skill = Declaraciones.UserList[UserIndex].Stats.UserSkills[(int)Declaraciones.eSkill.Wrestling];
 
         Suerte = Convert.ToInt16(
-            Conversion.Int((((0.00000003d * Skill + 0.000006d) * Skill + 0.000107d) * Skill + 0.0893d) * 100d));
+            (int)Math.Floor((double)((((0.00000003d * Skill + 0.000006d) * Skill + 0.000107d) * Skill + 0.0893d) * 100d)));
 
         if (Matematicas.RandomNumber(0, 100) < Suerte)
         {
-            daño = Convert.ToInt16(Conversion.Int(daño * 0.75d));
+            daño = Convert.ToInt16((int)Math.Floor(daño * 0.75d));
             if (VictimUserIndex != 0)
             {
                 Declaraciones.UserList[VictimUserIndex].Stats.MinHp =
@@ -2501,7 +2499,7 @@ internal static class Trabajo
 
             short Skill;
             Skill = Declaraciones.UserList[UserIndex].Stats.UserSkills[(int)Declaraciones.eSkill.Talar];
-            Suerte = Convert.ToInt16(Conversion.Int(-0.00125d * Skill * Skill - 0.3d * Skill + 49d));
+            Suerte = Convert.ToInt16((int)Math.Floor(-0.00125d * Skill * Skill - 0.3d * Skill + 49d));
 
             res = Convert.ToInt16(Matematicas.RandomNumber(1, Suerte));
 
@@ -2593,7 +2591,7 @@ internal static class Trabajo
                     QuitarSta(UserIndex, Declaraciones.EsfuerzoExcavarGeneral);
 
                 Skill = withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Mineria];
-                Suerte = Convert.ToInt16(Conversion.Int(-0.00125d * Skill * Skill - 0.3d * Skill + 49d));
+                Suerte = Convert.ToInt16((int)Math.Floor(-0.00125d * Skill * Skill - 0.3d * Skill + 49d));
 
                 res = Convert.ToInt16(Matematicas.RandomNumber(1, Suerte));
 

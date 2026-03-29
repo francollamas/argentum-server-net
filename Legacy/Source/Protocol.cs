@@ -2,9 +2,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using Legacy.Exceptions;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal static class Protocol
@@ -4302,11 +4299,11 @@ internal static class Protocol
                 ref var withBlock1 = ref Declaraciones.Hechizos[Spell];
                 // Send information
                 WriteConsoleMsg(UserIndex,
-                    "%%%%%%%%%%%% INFO DEL HECHIZO %%%%%%%%%%%%" + Constants.vbCrLf + "Nombre:" + withBlock1.Nombre +
-                    Constants.vbCrLf + "Descripción:" + withBlock1.desc + Constants.vbCrLf + "Skill requerido: " +
-                    withBlock1.MinSkill + " de magia." + Constants.vbCrLf + "Maná necesario: " +
-                    withBlock1.ManaRequerido + Constants.vbCrLf + "Energía necesaria: " + withBlock1.StaRequerido +
-                    Constants.vbCrLf + "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", FontTypeNames.FONTTYPE_INFO);
+                    "%%%%%%%%%%%% INFO DEL HECHIZO %%%%%%%%%%%%" + Environment.NewLine + "Nombre:" + withBlock1.Nombre +
+                    Environment.NewLine + "Descripción:" + withBlock1.desc + Environment.NewLine + "Skill requerido: " +
+                    withBlock1.MinSkill + " de magia." + Environment.NewLine + "Maná necesario: " +
+                    withBlock1.ManaRequerido + Environment.NewLine + "Energía necesaria: " + withBlock1.StaRequerido +
+                    Environment.NewLine + "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", FontTypeNames.FONTTYPE_INFO);
             }
         }
     }
@@ -6386,11 +6383,11 @@ internal static class Protocol
 
                         if ((earnings >= 0) & (Admin.Apuestas.Ganancias != 0))
                             Percentage =
-                                Convert.ToInt16(Conversion.Int(earnings * 100 / (double)Admin.Apuestas.Ganancias));
+                                Convert.ToInt16((int)Math.Floor(earnings * 100 / (double)Admin.Apuestas.Ganancias));
 
                         if ((earnings < 0) & (Admin.Apuestas.Perdidas != 0))
                             Percentage =
-                                Convert.ToInt16(Conversion.Int(earnings * 100 / (double)Admin.Apuestas.Perdidas));
+                                Convert.ToInt16((int)Math.Floor(earnings * 100 / (double)Admin.Apuestas.Perdidas));
 
                         WriteConsoleMsg(UserIndex,
                             "Entradas: " + Admin.Apuestas.Ganancias + " Salida: " + Admin.Apuestas.Perdidas +
@@ -6711,7 +6708,7 @@ internal static class Protocol
                 withBlock.Counters.tInicioMeditar = Convert.ToInt32(Migration.GetTickCount());
 
                 WriteConsoleMsg(UserIndex,
-                    "Te estás concentrando. En " + Conversion.Fix(Declaraciones.TIEMPO_INICIOMEDITAR / 1000d) +
+                    "Te estás concentrando. En " + (int)Math.Truncate(Declaraciones.TIEMPO_INICIOMEDITAR / 1000d) +
                     " segundos comenzarás a meditar.", FontTypeNames.FONTTYPE_INFO);
 
                 withBlock.character.loops = Declaraciones.INFINITE_LOOPS;
@@ -11559,7 +11556,7 @@ internal static class Protocol
                             var argEmptySpaces = 1024;
                             message = message + "CHAR>" + Declaraciones.SkillsNames[LoopC] + " = " +
                                       ES.GetVar(Declaraciones.CharPath + UserName + ".chr", "SKILLS", "SK" + LoopC,
-                                          ref argEmptySpaces) + Constants.vbCrLf;
+                                          ref argEmptySpaces) + Environment.NewLine;
                         }
 
                         var argEmptySpaces1 = 1024;
@@ -14744,7 +14741,7 @@ internal static class Protocol
                             for (LoopC = 1; LoopC <= 5; LoopC++)
                             {
                                 var argEmptySpaces = 1024;
-                                lista = lista + Constants.vbCrLf + LoopC + " - " + ES.GetVar(
+                                lista = lista + Environment.NewLine + LoopC + " - " + ES.GetVar(
                                     Declaraciones.CharPath + UserName + ".chr", "INIT", "LastIP" + LoopC,
                                     ref argEmptySpaces);
                             }
@@ -16802,7 +16799,7 @@ internal static class Protocol
 
 
                 newMOTD = buffer.ReadASCIIString();
-                auxiliaryString = newMOTD.Split(Constants.vbCrLf);
+                auxiliaryString = newMOTD.Split(Environment.NewLine);
 
                 if (((int)(~withBlock.flags.Privilegios & Declaraciones.PlayerType.RoleMaster) != 0) &
                     ((withBlock.flags.Privilegios & (Declaraciones.PlayerType.Admin | Declaraciones.PlayerType.Dios)) !=
@@ -16869,10 +16866,10 @@ internal static class Protocol
 
             var loopTo = Admin.MOTD.Length - 1;
             for (LoopC = 0; LoopC <= loopTo; LoopC++)
-                auxiliaryString = auxiliaryString + Admin.MOTD[LoopC].texto + Constants.vbCrLf;
+                auxiliaryString = auxiliaryString + Admin.MOTD[LoopC].texto + Environment.NewLine;
 
             if (auxiliaryString.Length >= 2)
-                if ((auxiliaryString.Substring(Math.Max(0, auxiliaryString.Length - 2)) ?? "") == Constants.vbCrLf)
+                if ((auxiliaryString.Substring(Math.Max(0, auxiliaryString.Length - 2)) ?? "") == Environment.NewLine)
                     auxiliaryString =
                         auxiliaryString.Substring(0, Math.Min(auxiliaryString.Length - 2, auxiliaryString.Length));
 
@@ -18275,7 +18272,7 @@ internal static class Protocol
                 {
                     withBlock.outgoingData.WriteByte(Declaraciones.UserList[UserIndex].Stats.UserSkills[i]);
                     if (withBlock.Stats.UserSkills[i] < Declaraciones.MAXSKILLPOINTS)
-                        withBlock.outgoingData.WriteByte(Convert.ToByte(Conversion.Int(withBlock.Stats.ExpSkills[i] *
+                        withBlock.outgoingData.WriteByte(Convert.ToByte((int)Math.Floor(withBlock.Stats.ExpSkills[i] *
                             100 / (double)withBlock.Stats.EluSkills[i])));
                     else
                         withBlock.outgoingData.WriteByte(0);
@@ -18324,7 +18321,7 @@ internal static class Protocol
                 if (Tmp.Length > 0)
                     Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length));
                 withBlock.WriteASCIIString(Tmp);
-                Tmp = Constants.vbNullString;
+                Tmp = string.Empty;
                 var loopTo1 = allies.Length - 1;
                 for (i = 0; i <= loopTo1; i++)
                     Tmp = Tmp + allies[i] + SEPARATOR;
@@ -18445,7 +18442,7 @@ internal static class Protocol
                 if (Tmp.Length > 0)
                     Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length));
                 withBlock.WriteASCIIString(Tmp);
-                Tmp = Constants.vbNullString;
+                Tmp = string.Empty;
                 var loopTo1 = MemberList.Length - 1;
                 for (i = 0; i <= loopTo1; i++)
                     Tmp = Tmp + MemberList[i] + SEPARATOR;
@@ -18453,7 +18450,7 @@ internal static class Protocol
                     Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length));
                 withBlock.WriteASCIIString(Tmp);
                 withBlock.WriteASCIIString(guildNews);
-                Tmp = Constants.vbNullString;
+                Tmp = string.Empty;
                 var loopTo2 = joinRequests.Length - 1;
                 for (i = 0; i <= loopTo2; i++)
                     Tmp = Tmp + joinRequests[i] + SEPARATOR;
@@ -18484,7 +18481,7 @@ internal static class Protocol
                 if (Tmp.Length > 0)
                     Tmp = Tmp.Substring(0, Math.Min(Tmp.Length - 1, Tmp.Length));
                 withBlock.WriteASCIIString(Tmp);
-                Tmp = Constants.vbNullString;
+                Tmp = string.Empty;
                 var loopTo1 = MemberList.Length - 1;
                 for (i = 0; i <= loopTo1; i++)
                     Tmp = Tmp + MemberList[i] + SEPARATOR;
@@ -18734,7 +18731,7 @@ internal static class Protocol
                     for (i = 1; i <= mdParty.PARTY_MAXMEMBERS; i++)
                         if (members[i] > 0)
                             Tmp = Tmp + Declaraciones.UserList[members[i]].name + " (" +
-                                  Conversion.Fix(Declaraciones.Parties[PI].MiExperiencia(members[i])) + ")" + SEPARATOR;
+                                  (int)Math.Truncate((double)Declaraciones.Parties[PI].MiExperiencia(members[i])) + ")" + SEPARATOR;
                 }
 
                 if (Migration.migr_LenB(Tmp) != 0)

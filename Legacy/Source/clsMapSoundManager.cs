@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal class SoundMapInfo

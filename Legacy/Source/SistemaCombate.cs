@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class SistemaCombate
@@ -603,7 +601,7 @@ internal static class SistemaCombate
                 withBlock.Stats.MinHp = (short)(withBlock.Stats.MinHp - daño);
 
             if (withBlock.flags.Meditando)
-                if (daño > Conversion.Fix(withBlock.Stats.MinHp / 100d *
+                if (daño > (int)Math.Truncate(withBlock.Stats.MinHp / 100d *
                                           withBlock.Stats.UserAtributos[(int)Declaraciones.eAtributos.Inteligencia] *
                                           withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Meditar] / 100d * 12d /
                                           (Matematicas.RandomNumber(0, 5) + 7)))
@@ -644,7 +642,7 @@ internal static class SistemaCombate
                 {
                     Declaraciones.Npclist[NpcIndex].Movement = Declaraciones.Npclist[NpcIndex].flags.OldMovement;
                     Declaraciones.Npclist[NpcIndex].Hostile = Declaraciones.Npclist[NpcIndex].flags.OldHostil;
-                    Declaraciones.Npclist[NpcIndex].flags.AttackedBy = Constants.vbNullString;
+                    Declaraciones.Npclist[NpcIndex].flags.AttackedBy = string.Empty;
                 }
 
                 UsUaRiOs.UserDie(UserIndex);

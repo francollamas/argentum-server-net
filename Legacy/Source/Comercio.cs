@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class modSistemaComercio
@@ -177,7 +175,7 @@ internal static class modSistemaComercio
             InvUsuario.QuitarUserInvItem(UserIndex, Convert.ToByte(Slot), Cantidad);
 
             // Precio = Round(ObjData(Objeto.ObjIndex).valor / REDUCTOR_PRECIOVENTA * Cantidad, 0)
-            Precio = Convert.ToInt32(Conversion.Fix(SalePrice(Objeto.ObjIndex) * Cantidad));
+            Precio = (int)Math.Truncate(SalePrice(Objeto.ObjIndex) * Cantidad);
             Declaraciones.UserList[UserIndex].Stats.GLD = Declaraciones.UserList[UserIndex].Stats.GLD + Precio;
 
             if (Declaraciones.UserList[UserIndex].Stats.GLD > Declaraciones.MAXORO)

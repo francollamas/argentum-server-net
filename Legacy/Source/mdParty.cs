@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class mdParty
@@ -435,7 +433,7 @@ internal static class mdParty
             for (i = 1; i <= PARTY_MAXMEMBERS; i++)
                 if (MembersOnline[i] > 0)
                     Text = Text + " - " + Declaraciones.UserList[MembersOnline[i]].name + " (" +
-                           Conversion.Fix(Declaraciones.Parties[PI].MiExperiencia(MembersOnline[i])) + ")";
+                           (int)Math.Truncate((double)Declaraciones.Parties[PI].MiExperiencia(MembersOnline[i])) + ")";
 
             Text = Text + ". Experiencia total: " + Declaraciones.Parties[PI].ObtenerExperienciaTotal();
             Protocol.WriteConsoleMsg(UserIndex, Text, Protocol.FontTypeNames.FONTTYPE_PARTY);

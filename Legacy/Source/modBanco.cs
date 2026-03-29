@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class modBanco

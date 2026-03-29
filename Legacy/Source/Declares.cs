@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class Declaraciones
@@ -1053,7 +1051,7 @@ internal static class Declaraciones
 
     public struct Inventario
     {
-        [VBFixedArray(MAX_INVENTORY_SLOTS)] public UserOBJ[] userObj;
+        public UserOBJ[] userObj;
         public short WeaponEqpObjIndex;
         public byte WeaponEqpSlot;
         public short ArmourEqpObjIndex;
@@ -1194,7 +1192,7 @@ internal static class Declaraciones
         public string texto;
 
         // Clases que no tienen permitido usar este obj
-        [VBFixedArray(NUMCLASES)] public eClass[] ClaseProhibida;
+        public eClass[] ClaseProhibida;
         public short Snd1;
         public short Snd2;
         public short Snd3;
@@ -1250,7 +1248,6 @@ internal static class Declaraciones
     // [KEVIN]
     public struct BancoInventario
     {
-        [VBFixedArray(MAX_BANCOINVENTORY_SLOTS)]
         public UserOBJ[] userObj;
 
         public short NroItems;
@@ -1264,10 +1261,10 @@ internal static class Declaraciones
     // Estructura contenedora de mensajes
     public struct tForo
     {
-        [VBFixedArray(MAX_STICKY_POST)] public string[] StickyTitle;
-        [VBFixedArray(MAX_STICKY_POST)] public string[] StickyPost;
-        [VBFixedArray(MAX_GENERAL_POST)] public string[] GeneralTitle;
-        [VBFixedArray(MAX_GENERAL_POST)] public string[] GeneralPost;
+        public string[] StickyTitle;
+        public string[] StickyPost;
+        public string[] GeneralTitle;
+        public string[] GeneralPost;
 
         // UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
         public void Initialize()
@@ -1325,16 +1322,16 @@ internal static class Declaraciones
         public double Exp;
         public byte ELV;
         public int ELU;
-        [VBFixedArray(NUMSKILLS)] public byte[] UserSkills;
-        [VBFixedArray(NUMATRIBUTOS)] public byte[] UserAtributos;
-        [VBFixedArray(NUMATRIBUTOS)] public byte[] UserAtributosBackUP;
-        [VBFixedArray(MAXUSERHECHIZOS)] public short[] UserHechizos;
+        public byte[] UserSkills;
+        public byte[] UserAtributos;
+        public byte[] UserAtributosBackUP;
+        public short[] UserHechizos;
         public int UsuariosMatados;
         public int CriminalesMatados;
         public short NPCsMuertos;
         public short SkillPts;
-        [VBFixedArray(NUMSKILLS)] public int[] ExpSkills;
-        [VBFixedArray(NUMSKILLS)] public int[] EluSkills;
+        public int[] ExpSkills;
+        public int[] EluSkills;
 
         // UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
         public void Initialize()
@@ -1557,8 +1554,8 @@ internal static class Declaraciones
         // [/KEVIN]
         public UserCounters Counters;
         public tCrafting Construir;
-        [VBFixedArray(MAXMASCOTAS)] public short[] MascotasIndex;
-        [VBFixedArray(MAXMASCOTAS)] public short[] MascotasType;
+        public short[] MascotasIndex;
+        public short[] MascotasType;
 
         public short NroMascotas;
 
@@ -1720,7 +1717,7 @@ internal static class Declaraciones
         public short Owner;
         public int GiveEXP;
         public int GiveGLD;
-        [VBFixedArray(MAX_NPC_DROPS)] public tDrops[] Drop;
+        public tDrops[] Drop;
         public NPCStats Stats;
         public NPCFlags flags;
 
@@ -1770,7 +1767,7 @@ internal static class Declaraciones
     public struct MapBlock
     {
         public byte Blocked;
-        [VBFixedArray(4)] public short[] Graphic;
+        public short[] Graphic;
         public short UserIndex;
         public short NpcIndex;
         public Obj ObjInfo;
@@ -1807,7 +1804,7 @@ internal static class Declaraciones
 
     public struct HomeDistance
     {
-        [VBFixedArray(5)] public short[] distanceToCity;
+        public short[] distanceToCity;
 
         // UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
         public void Initialize()

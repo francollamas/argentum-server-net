@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal class clsClan
@@ -431,7 +428,7 @@ internal class clsClan
 
             if (EsMiembro)
             {
-                ES.WriteVar(Declaraciones.CharPath + Nombre + ".chr", "GUILD", "GuildIndex", Constants.vbNullString);
+                ES.WriteVar(Declaraciones.CharPath + Nombre + ".chr", "GUILD", "GuildIndex", string.Empty);
                 while (i < OldQ)
                 {
                     var argEmptySpaces2 = 1024;
@@ -440,7 +437,7 @@ internal class clsClan
                     i = Convert.ToInt16(i + 1);
                 }
 
-                ES.WriteVar(MEMBERSFILE, "Members", "Member" + OldQ, Constants.vbNullString);
+                ES.WriteVar(MEMBERSFILE, "Members", "Member" + OldQ, string.Empty);
                 // seteo la cantidad de miembros nueva
                 ES.WriteVar(MEMBERSFILE, "INIT", "NroMembers", (OldQ - 1).ToString());
                 // lo echo a el
@@ -580,8 +577,8 @@ internal class clsClan
                 ES.GetVar(SOLICITUDESFILE, "SOLICITUD" + (i + 1), "Detalle", ref argEmptySpaces3));
         }
 
-        ES.WriteVar(SOLICITUDESFILE, "SOLICITUD" + modGuilds.MAXASPIRANTES, "Nombre", Constants.vbNullString);
-        ES.WriteVar(SOLICITUDESFILE, "SOLICITUD" + modGuilds.MAXASPIRANTES, "Detalle", Constants.vbNullString);
+        ES.WriteVar(SOLICITUDESFILE, "SOLICITUD" + modGuilds.MAXASPIRANTES, "Nombre", string.Empty);
+        ES.WriteVar(SOLICITUDESFILE, "SOLICITUD" + modGuilds.MAXASPIRANTES, "Detalle", string.Empty);
     }
 
     public void InformarRechazoEnChar(ref string Nombre, ref string Detalles)
@@ -689,7 +686,7 @@ internal class clsClan
     private void CerrarElecciones() // solo pueden cerrarse mediante recuento de votos
     {
         ES.WriteVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesAbiertas", "0");
-        ES.WriteVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesFinalizan", Constants.vbNullString);
+        ES.WriteVar(GUILDINFOFILE, "GUILD" + p_GuildNumber, "EleccionesFinalizan", string.Empty);
         File.Delete(VOTACIONESFILE); // borramos toda la evidencia ;-)
     }
 
@@ -727,7 +724,7 @@ internal class clsClan
 
         try
         {
-            ContarVotosRet = Constants.vbNullString;
+            ContarVotosRet = string.Empty;
             CantGanadores = 0;
             var argEmptySpaces = 1024;
             Temps = ES.GetVar(MEMBERSFILE, "INIT", "NroMembers", ref argEmptySpaces);
@@ -758,7 +755,7 @@ internal class clsClan
                 // quien quedo con mas votos, y cuantos tuvieron esos votos?
                 short maxVotes = -1;
                 short cantGan = 0;
-                var claveGanadora = Constants.vbNullString;
+                var claveGanadora = string.Empty;
 
                 foreach (var kvp in d)
                     if (kvp.Value > maxVotes)
@@ -783,7 +780,7 @@ internal class clsClan
             Console.WriteLine("Error in CambiarAlineacion: " + ex.Message);
             var argdesc = "clsClan.Contarvotos: " + ex.Message;
             General.LogError(ref argdesc);
-            ContarVotosRet = Constants.vbNullString;
+            ContarVotosRet = string.Empty;
         }
 
         return ContarVotosRet;
@@ -898,7 +895,7 @@ internal class clsClan
     {
         short i;
 
-        ES.WriteVar(PROPUESTASFILE, OtroGuild.ToString(), "Detalle", Constants.vbNullString);
+        ES.WriteVar(PROPUESTASFILE, OtroGuild.ToString(), "Detalle", string.Empty);
         ES.WriteVar(PROPUESTASFILE, OtroGuild.ToString(), "Pendiente", "0");
         var loopTo = Convert.ToInt16(p_PropuestasDePaz.Count - 1);
         for (i = 0; i <= loopTo; i++)
@@ -1109,9 +1106,9 @@ internal class clsClan
 
     private void ReplaceInvalidChars(ref string S)
     {
-        if (Migration.migr_InStrB(S, "\r") != 0) S = S.Replace("\r", Constants.vbNullString);
-        if (Migration.migr_InStrB(S, "\n") != 0) S = S.Replace("\n", Constants.vbNullString);
+        if (Migration.migr_InStrB(S, "\r") != 0) S = S.Replace("\r", string.Empty);
+        if (Migration.migr_InStrB(S, "\n") != 0) S = S.Replace("\n", string.Empty);
         if (Migration.migr_InStrB(S, "¬") != 0)
-            S = S.Replace("¬", Constants.vbNullString); // morgo usaba esto como "separador"
+            S = S.Replace("¬", string.Empty); // morgo usaba esto como "separador"
     }
 }

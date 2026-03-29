@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class mdlCOmercioConUsuario
@@ -114,7 +112,7 @@ internal static class mdlCOmercioConUsuario
             }
 
             withBlock.ComUsu.GoldAmount = 0;
-            withBlock.ComUsu.DestNick = Constants.vbNullString;
+            withBlock.ComUsu.DestNick = string.Empty;
             withBlock.flags.Comerciando = false;
         }
     }
@@ -368,9 +366,9 @@ internal static class mdlCOmercioConUsuario
     {
         public short DestUsu; // El otro Usuario
         public string DestNick;
-        [VBFixedArray(MAX_OFFER_SLOTS)] public short[] Objeto; // Indice de los objetos que se desea dar
+        public short[] Objeto; // Indice de los objetos que se desea dar
         public int GoldAmount;
-        [VBFixedArray(MAX_OFFER_SLOTS)] public int[] cant; // Cuantos objetos desea dar
+        public int[] cant; // Cuantos objetos desea dar
         public bool Acepto;
         public bool Confirmo;
 

@@ -1,9 +1,6 @@
 using System;
 using System.IO;
 using System.Threading;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 public static class General

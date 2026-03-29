@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class modForum
@@ -489,8 +487,8 @@ internal static class modForum
 
     public struct tForo
     {
-        [VBFixedArray(MAX_MENSAJES_FORO)] public tPost[] vsPost;
-        [VBFixedArray(MAX_ANUNCIOS_FORO)] public tPost[] vsAnuncio;
+        public tPost[] vsPost;
+        public tPost[] vsAnuncio;
         public byte CantPosts;
         public byte CantAnuncios;
         public string ID;

@@ -1,9 +1,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal static class TCP
@@ -1305,7 +1302,7 @@ internal static class TCP
                         " usuarios.", Protocol.FontTypeNames.FONTTYPE_INFO));
                 Declaraciones.recordusuarios = Declaraciones.NumUsers;
                 ES.WriteVar(Declaraciones.IniPath + "Server.ini", "INIT", "Record",
-                    Conversion.Str(Declaraciones.recordusuarios));
+                    Declaraciones.recordusuarios.ToString());
 
                 Admin.EstadisticasWeb.Informar(clsEstadisticasIPC.EstaNotificaciones.RECORD_USUARIOS,
                     Declaraciones.recordusuarios);
@@ -1506,15 +1503,15 @@ internal static class TCP
         // *************************************************
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
-            withBlock.name = Constants.vbNullString;
-            withBlock.desc = Constants.vbNullString;
-            withBlock.DescRM = Constants.vbNullString;
+            withBlock.name = string.Empty;
+            withBlock.desc = string.Empty;
+            withBlock.DescRM = string.Empty;
             withBlock.Pos.Map = 0;
             withBlock.Pos.X = 0;
             withBlock.Pos.Y = 0;
-            withBlock.ip = Constants.vbNullString;
+            withBlock.ip = string.Empty;
             withBlock.clase = 0;
-            withBlock.email = Constants.vbNullString;
+            withBlock.email = string.Empty;
             withBlock.Genero = 0;
             withBlock.Hogar = 0;
             withBlock.raza = 0;
@@ -1615,7 +1612,7 @@ internal static class TCP
             withBlock.TargetUser = 0;
             withBlock.TipoPocion = 0;
             withBlock.TomoPocion = false;
-            withBlock.Descuento = Constants.vbNullString;
+            withBlock.Descuento = string.Empty;
             withBlock.Hambre = 0;
             withBlock.Sed = 0;
             withBlock.Descansar = false;
@@ -1761,7 +1758,7 @@ internal static class TCP
             }
 
             withBlock.GoldAmount = 0;
-            withBlock.DestNick = Constants.vbNullString;
+            withBlock.DestNick = string.Empty;
             withBlock.DestUsu = 0;
         }
     }
@@ -1787,14 +1784,14 @@ internal static class TCP
             {
                 Declaraciones.Npclist[aN].Movement = Declaraciones.Npclist[aN].flags.OldMovement;
                 Declaraciones.Npclist[aN].Hostile = Declaraciones.Npclist[aN].flags.OldHostil;
-                Declaraciones.Npclist[aN].flags.AttackedBy = Constants.vbNullString;
+                Declaraciones.Npclist[aN].flags.AttackedBy = string.Empty;
             }
 
             aN = Declaraciones.UserList[UserIndex].flags.NPCAtacado;
             if (aN > 0)
                 if ((Declaraciones.Npclist[aN].flags.AttackedFirstBy ?? "") ==
                     (Declaraciones.UserList[UserIndex].name ?? ""))
-                    Declaraciones.Npclist[aN].flags.AttackedFirstBy = Constants.vbNullString;
+                    Declaraciones.Npclist[aN].flags.AttackedFirstBy = string.Empty;
 
             Declaraciones.UserList[UserIndex].flags.AtacadoPorNpc = 0;
             Declaraciones.UserList[UserIndex].flags.NPCAtacado = 0;

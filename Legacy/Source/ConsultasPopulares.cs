@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal class ConsultasPopulares
@@ -114,7 +112,7 @@ internal class ConsultasPopulares
                                 "RESULTADOS" + pEncuestaActualNum, "V" + opcion, ref argEmptySpaces1)));
                             sufragio = Convert.ToInt16(sufragio + 1);
                             ES.WriteVar(AppDomain.CurrentDomain.BaseDirectory + ARCHIVOCONFIG,
-                                "RESULTADOS" + pEncuestaActualNum, "V" + opcion, Conversion.Str(sufragio));
+                                "RESULTADOS" + pEncuestaActualNum, "V" + opcion, sufragio.ToString());
                             doVotarRet = "Tu voto ha sido computado. Opcion: " + opcion;
                             MarcarPjComoQueYaVoto(UserIndex);
                             MarcarMailComoQueYaVoto(Declaraciones.UserList[UserIndex].email);
@@ -180,7 +178,7 @@ internal class ConsultasPopulares
     private void MarcarPjComoQueYaVoto(short UserIndex)
     {
         ES.WriteVar(Declaraciones.CharPath + Declaraciones.UserList[UserIndex].name + ".chr", "CONSULTAS", "Voto",
-            Conversion.Str(pEncuestaActualNum));
+            pEncuestaActualNum.ToString());
     }
 
 

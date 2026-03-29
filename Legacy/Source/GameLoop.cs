@@ -2,9 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal static class GameLoop

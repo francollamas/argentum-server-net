@@ -1,8 +1,6 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class Extra
@@ -267,14 +265,14 @@ internal static class Extra
                     {
                         Declaraciones.Npclist[aN].Movement = Declaraciones.Npclist[aN].flags.OldMovement;
                         Declaraciones.Npclist[aN].Hostile = Declaraciones.Npclist[aN].flags.OldHostil;
-                        Declaraciones.Npclist[aN].flags.AttackedBy = Constants.vbNullString;
+                        Declaraciones.Npclist[aN].flags.AttackedBy = string.Empty;
                     }
 
                     aN = Declaraciones.UserList[UserIndex].flags.NPCAtacado;
                     if (aN > 0)
                         if ((Declaraciones.Npclist[aN].flags.AttackedFirstBy ?? "") ==
                             (Declaraciones.UserList[UserIndex].name ?? ""))
-                            Declaraciones.Npclist[aN].flags.AttackedFirstBy = Constants.vbNullString;
+                            Declaraciones.Npclist[aN].flags.AttackedFirstBy = string.Empty;
 
                     Declaraciones.UserList[UserIndex].flags.AtacadoPorNpc = 0;
                     Declaraciones.UserList[UserIndex].flags.NPCAtacado = 0;

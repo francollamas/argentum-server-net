@@ -3,8 +3,6 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class UsUaRiOs
@@ -366,7 +364,7 @@ internal static class UsUaRiOs
             }
             else
             {
-                var argTag = Constants.vbNullString;
+                var argTag = string.Empty;
                 modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex,
                     Protocol.PrepareMessageUpdateTagAndStatus(UserIndex, NickColor, ref argTag));
             }
@@ -593,7 +591,7 @@ internal static class UsUaRiOs
                     aux = Convert.ToInt16(Matematicas.RandomNumber(0, 100));
 
 
-                    if (Promedio - Conversion.Int(Promedio) == 0.5d)
+                    if (Promedio - (int)Math.Floor(Promedio) == 0.5d)
                     {
                         // Es promedio semientero
                         DistVida[1] = Declaraciones.DistribucionSemienteraVida[1];
@@ -1573,7 +1571,7 @@ internal static class UsUaRiOs
             if (LastNpcHit != 0)
                 if ((Declaraciones.Npclist[LastNpcHit].flags.AttackedFirstBy ?? "") ==
                     (Declaraciones.UserList[UserIndex].name ?? ""))
-                    Declaraciones.Npclist[LastNpcHit].flags.AttackedFirstBy = Constants.vbNullString;
+                    Declaraciones.Npclist[LastNpcHit].flags.AttackedFirstBy = string.Empty;
 
             Declaraciones.Npclist[NpcIndex].flags.AttackedFirstBy = Declaraciones.UserList[UserIndex].name;
         }
@@ -1585,7 +1583,7 @@ internal static class UsUaRiOs
             if (LastNpcHit != 0)
                 if ((Declaraciones.Npclist[LastNpcHit].flags.AttackedFirstBy ?? "") ==
                     (Declaraciones.UserList[UserIndex].name ?? ""))
-                    Declaraciones.Npclist[LastNpcHit].flags.AttackedFirstBy = Constants.vbNullString;
+                    Declaraciones.Npclist[LastNpcHit].flags.AttackedFirstBy = string.Empty;
         }
 
         if (Declaraciones.Npclist[NpcIndex].MaestroUser > 0)
@@ -1797,13 +1795,13 @@ internal static class UsUaRiOs
                 {
                     Declaraciones.Npclist[aN].Movement = Declaraciones.Npclist[aN].flags.OldMovement;
                     Declaraciones.Npclist[aN].Hostile = Declaraciones.Npclist[aN].flags.OldHostil;
-                    Declaraciones.Npclist[aN].flags.AttackedBy = Constants.vbNullString;
+                    Declaraciones.Npclist[aN].flags.AttackedBy = string.Empty;
                 }
 
                 aN = withBlock.flags.NPCAtacado;
                 if (aN > 0)
                     if ((Declaraciones.Npclist[aN].flags.AttackedFirstBy ?? "") == (withBlock.name ?? ""))
-                        Declaraciones.Npclist[aN].flags.AttackedFirstBy = Constants.vbNullString;
+                        Declaraciones.Npclist[aN].flags.AttackedFirstBy = string.Empty;
 
                 withBlock.flags.AtacadoPorNpc = 0;
                 withBlock.flags.NPCAtacado = 0;

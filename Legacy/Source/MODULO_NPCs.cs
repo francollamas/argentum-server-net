@@ -1,7 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class NPCs
@@ -249,8 +247,8 @@ internal static class NPCs
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex].flags;
             withBlock.AfectaParalisis = 0;
             withBlock.AguaValida = 0;
-            withBlock.AttackedBy = Constants.vbNullString;
-            withBlock.AttackedFirstBy = Constants.vbNullString;
+            withBlock.AttackedBy = string.Empty;
+            withBlock.AttackedFirstBy = string.Empty;
             withBlock.BackUp = 0;
             withBlock.Bendicion = 0;
             withBlock.Domable = 0;
@@ -327,7 +325,7 @@ internal static class NPCs
             for (j = 1; j <= loopTo; j++)
             {
                 withBlock.Criaturas[j].NpcIndex = 0;
-                withBlock.Criaturas[j].NpcName = Constants.vbNullString;
+                withBlock.Criaturas[j].NpcName = string.Empty;
             }
 
             withBlock.NroCriaturas = 0;
@@ -348,7 +346,7 @@ internal static class NPCs
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
             var loopTo = (int)withBlock.NroExpresiones;
             for (j = 1; j <= loopTo; j++)
-                withBlock.Expresiones[j] = Constants.vbNullString;
+                withBlock.Expresiones[j] = string.Empty;
 
             withBlock.NroExpresiones = 0;
         }
@@ -383,7 +381,7 @@ internal static class NPCs
 
             withBlock.Mascotas = 0;
             withBlock.Movement = 0;
-            withBlock.name = Constants.vbNullString;
+            withBlock.name = string.Empty;
             withBlock.NPCtype = 0;
             withBlock.Numero = 0;
             withBlock.Orig.Map = 0;
@@ -399,7 +397,7 @@ internal static class NPCs
             withBlock.TargetNPC = 0;
             withBlock.TipoItems = 0;
             withBlock.Veneno = 0;
-            withBlock.desc = Constants.vbNullString;
+            withBlock.desc = string.Empty;
 
 
             var loopTo = (int)withBlock.NroSpells;
@@ -684,7 +682,7 @@ internal static class NPCs
             Protocol.WriteCharacterCreate(sndIndex, Declaraciones.Npclist[NpcIndex].character.body,
                 Declaraciones.Npclist[NpcIndex].character.Head, Declaraciones.Npclist[NpcIndex].character.heading,
                 Declaraciones.Npclist[NpcIndex].character.CharIndex, Convert.ToByte(X), Convert.ToByte(Y), 0, 0, 0,
-                0, 0, Constants.vbNullString, 0, 0);
+                0, 0, string.Empty, 0, 0);
             Protocol.FlushBuffer(sndIndex);
         }
         else
@@ -1233,7 +1231,7 @@ internal static class NPCs
             ref var withBlock = ref Declaraciones.Npclist[NpcIndex];
             if (withBlock.flags.Follow)
             {
-                withBlock.flags.AttackedBy = Constants.vbNullString;
+                withBlock.flags.AttackedBy = string.Empty;
                 withBlock.flags.Follow = false;
                 withBlock.Movement = withBlock.flags.OldMovement;
                 withBlock.Hostile = withBlock.flags.OldHostil;

@@ -1,7 +1,5 @@
 using System;
 using System.Drawing;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class PraetoriansCoopNPC
@@ -1809,7 +1807,7 @@ internal static class PraetoriansCoopNPC
                 case 0:
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
-                        Protocol.PrepareMessageChatOverHead(Constants.vbNullString,
+                        Protocol.PrepareMessageChatOverHead(string.Empty,
                             Declaraciones.Npclist[npcind].character.CharIndex, ColorTranslator.ToOle(Color.Lime)));
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcind,
                         Protocol.PrepareMessagePlayWave(Convert.ToByte(SONIDO_Dragon_VIVO),
@@ -1832,7 +1830,7 @@ internal static class PraetoriansCoopNPC
                                 Math.Pow(Math.Sqrt(Declaraciones.UserList[PJInd].Pos.X - NPCPosX), 2d) +
                                 Math.Pow(Declaraciones.UserList[PJInd].Pos.Y - NPCPosY, 2d));
                             danio = 880d / Math.Pow(dist, 3d / 7d);
-                            danioI = Convert.ToInt16(Math.Abs(Conversion.Int(danio)));
+                            danioI = Convert.ToInt16(Math.Abs((int)Math.Floor(danio)));
                             // 'efectiviza el danio
                             if ((Declaraciones.UserList[PJInd].flags.Privilegios & Declaraciones.PlayerType.User) != 0)
                                 Declaraciones.UserList[PJInd].Stats.MinHp =
@@ -1865,7 +1863,7 @@ internal static class PraetoriansCoopNPC
                                     Math.Pow(Math.Sqrt(Declaraciones.Npclist[MascotaInd].Pos.X - NPCPosX), 2d) +
                                     Math.Pow(Declaraciones.Npclist[MascotaInd].Pos.Y - NPCPosY, 2d));
                                 danio = 880d / Math.Pow(dist, 3d / 7d);
-                                danioI = Convert.ToInt16(Math.Abs(Conversion.Int(danio)));
+                                danioI = Convert.ToInt16(Math.Abs((int)Math.Floor(danio)));
                                 // 'efectiviza el danio
                                 Declaraciones.Npclist[MascotaInd].Stats.MinHp =
                                     Declaraciones.Npclist[MascotaInd].Stats.MinHp - danioI;
@@ -2040,7 +2038,7 @@ internal static class PraetoriansCoopNPC
                 {
                     modSendData.SendData(modSendData.SendTarget.ToNPCArea, npcorig,
                         Protocol.PrepareMessageChatOverHead("Maldito bastardo, ¡Ven aquí!",
-                            Convert.ToInt16(Conversion.Str(Declaraciones.Npclist[npcorig].character.CharIndex)),
+                            Declaraciones.Npclist[npcorig].character.CharIndex,
                             ColorTranslator.ToOle(Color.Yellow)));
                     Declaraciones.Npclist[npcorig].CanAttack = 0;
                 }

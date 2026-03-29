@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class Statistics
@@ -240,7 +238,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[1].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlLvl_Bar");
@@ -254,7 +252,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[2].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlLvl_Mag");
@@ -268,7 +266,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[3].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlLvl_Pal");
@@ -282,7 +280,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[4].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlLvl_Gue");
@@ -296,7 +294,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[5].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlLvl_Cle");
@@ -310,7 +308,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[6].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlLvl_Caz");
@@ -324,7 +322,7 @@ internal static class Statistics
                     line = line + " " + fragLvlLvlData[7].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
 
@@ -341,7 +339,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[1].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlRace_Bar");
@@ -355,7 +353,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[2].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlRace_Mag");
@@ -369,7 +367,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[3].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlRace_Pal");
@@ -383,7 +381,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[4].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlRace_Gue");
@@ -397,7 +395,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[5].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlRace_Cle");
@@ -411,7 +409,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[6].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlRace_Caz");
@@ -425,7 +423,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[7].matrix[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
 
@@ -442,7 +440,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[j].matrix[i, 1];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlClass_Dar");
@@ -456,7 +454,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[j].matrix[i, 2];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlClass_Dwa");
@@ -470,7 +468,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[j].matrix[i, 3];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlClass_Gno");
@@ -484,7 +482,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[j].matrix[i, 4];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
             writer.WriteLine("# name: fragLvlClass_Hum");
@@ -498,7 +496,7 @@ internal static class Statistics
                     line = line + " " + fragLvlRaceData[j].matrix[i, 5];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
 
 
@@ -515,7 +513,7 @@ internal static class Statistics
                     line = line + " " + fragAlignmentLvlData[i, j];
 
                 writer.WriteLine(line);
-                line = Constants.vbNullString;
+                line = string.Empty;
             }
         }
 
@@ -575,7 +573,7 @@ internal static class Statistics
 
     public struct fragLvlRace
     {
-        [VBFixedArray(50, 5)] public int[,] matrix;
+        public int[,] matrix;
 
         // UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
         public void Initialize()
@@ -587,7 +585,7 @@ internal static class Statistics
 
     public struct fragLvlLvl
     {
-        [VBFixedArray(50, 50)] public int[,] matrix;
+        public int[,] matrix;
 
         // UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
         public void Initialize()

@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class modGuilds
@@ -466,7 +464,7 @@ internal static class modGuilds
             var loopTo1 = Convert.ToInt32(CANTIDADMAXIMACODEX);
             for (i = codex.Length; i <= loopTo1; i++)
             {
-                var argcodex = Constants.vbNullString;
+                var argcodex = string.Empty;
                 withBlock.SetCodex(Convert.ToByte(i), ref argcodex);
             }
         }
@@ -804,9 +802,9 @@ internal static class modGuilds
 
         m_EstadoPermiteEntrarCharRet = false;
 
-        if (Migration.migr_InStrB(Personaje, @"\") != 0) Personaje = Personaje.Replace(@"\", Constants.vbNullString);
-        if (Migration.migr_InStrB(Personaje, "/") != 0) Personaje = Personaje.Replace("/", Constants.vbNullString);
-        if (Migration.migr_InStrB(Personaje, ".") != 0) Personaje = Personaje.Replace(".", Constants.vbNullString);
+        if (Migration.migr_InStrB(Personaje, @"\") != 0) Personaje = Personaje.Replace(@"\", string.Empty);
+        if (Migration.migr_InStrB(Personaje, "/") != 0) Personaje = Personaje.Replace("/", string.Empty);
+        if (Migration.migr_InStrB(Personaje, ".") != 0) Personaje = Personaje.Replace(".", string.Empty);
 
         if (File.Exists(Declaraciones.CharPath + Personaje + ".chr"))
         {
@@ -1341,9 +1339,9 @@ internal static class modGuilds
         // aca si que vamos a violar las capas deliveradamente ya que
         // visual basic no permite declarar metodos de clase
         string Temps;
-        if (Migration.migr_InStrB(PlayerName, @"\") != 0) PlayerName = PlayerName.Replace(@"\", Constants.vbNullString);
-        if (Migration.migr_InStrB(PlayerName, "/") != 0) PlayerName = PlayerName.Replace("/", Constants.vbNullString);
-        if (Migration.migr_InStrB(PlayerName, ".") != 0) PlayerName = PlayerName.Replace(".", Constants.vbNullString);
+        if (Migration.migr_InStrB(PlayerName, @"\") != 0) PlayerName = PlayerName.Replace(@"\", string.Empty);
+        if (Migration.migr_InStrB(PlayerName, "/") != 0) PlayerName = PlayerName.Replace("/", string.Empty);
+        if (Migration.migr_InStrB(PlayerName, ".") != 0) PlayerName = PlayerName.Replace(".", string.Empty);
         var argEmptySpaces = 1024;
         Temps = ES.GetVar(Declaraciones.CharPath + PlayerName + ".chr", "GUILD", "GUILDINDEX", ref argEmptySpaces);
         return short.TryParse(Temps, out var guildIndex) ? guildIndex : (short)0;
@@ -1385,7 +1383,7 @@ internal static class modGuilds
 
         short i;
 
-        m_ListaDeMiembrosOnlineRet = Constants.vbNullString;
+        m_ListaDeMiembrosOnlineRet = string.Empty;
         if ((GuildIndex > 0) & (GuildIndex <= CANTIDADDECLANES))
         {
             i = guilds[GuildIndex].m_Iterador_ProximoUserIndex();
@@ -2031,8 +2029,8 @@ internal static class modGuilds
         short OtroClanGI;
         short GI;
 
-        r_VerPropuestaRet = Constants.vbNullString;
-        refError = Constants.vbNullString;
+        r_VerPropuestaRet = string.Empty;
+        refError = string.Empty;
 
         GI = Declaraciones.UserList[UserIndex].GuildIndex;
         if ((GI <= 0) | (GI > CANTIDADDECLANES))
@@ -2127,7 +2125,7 @@ internal static class modGuilds
         var argEmptySpaces = 1024;
         a_ObtenerRechazoDeCharRet = ES.GetVar(Declaraciones.CharPath + Aspirante + ".chr", "GUILD", "MotivoRechazo",
             ref argEmptySpaces);
-        ES.WriteVar(Declaraciones.CharPath + Aspirante + ".chr", "GUILD", "MotivoRechazo", Constants.vbNullString);
+        ES.WriteVar(Declaraciones.CharPath + Aspirante + ".chr", "GUILD", "MotivoRechazo", string.Empty);
         return a_ObtenerRechazoDeCharRet;
     }
 
@@ -2177,7 +2175,7 @@ internal static class modGuilds
         short GI;
         short NroAspirante;
 
-        a_DetallesAspiranteRet = Constants.vbNullString;
+        a_DetallesAspiranteRet = string.Empty;
         GI = Declaraciones.UserList[UserIndex].GuildIndex;
         if ((GI <= 0) | (GI > CANTIDADDECLANES)) return a_DetallesAspiranteRet;
 
@@ -2227,9 +2225,9 @@ internal static class modGuilds
             }
 
             if (Migration.migr_InStrB(Personaje, @"\") != 0)
-                Personaje = Personaje.Replace(@"\", Constants.vbNullString);
-            if (Migration.migr_InStrB(Personaje, "/") != 0) Personaje = Personaje.Replace("/", Constants.vbNullString);
-            if (Migration.migr_InStrB(Personaje, ".") != 0) Personaje = Personaje.Replace(".", Constants.vbNullString);
+                Personaje = Personaje.Replace(@"\", string.Empty);
+            if (Migration.migr_InStrB(Personaje, "/") != 0) Personaje = Personaje.Replace("/", string.Empty);
+            if (Migration.migr_InStrB(Personaje, ".") != 0) Personaje = Personaje.Replace(".", string.Empty);
 
             NroAsp = guilds[GI].NumeroDeAspirante(ref Personaje);
 
@@ -2475,7 +2473,7 @@ internal static class modGuilds
         // 
         // ***************************************************
 
-        GuildNameRet = Constants.vbNullString;
+        GuildNameRet = string.Empty;
         if ((GuildIndex <= 0) | (GuildIndex > CANTIDADDECLANES))
             return GuildNameRet;
 
@@ -2492,7 +2490,7 @@ internal static class modGuilds
         // 
         // ***************************************************
 
-        GuildLeaderRet = Constants.vbNullString;
+        GuildLeaderRet = string.Empty;
         if ((GuildIndex <= 0) | (GuildIndex > CANTIDADDECLANES))
             return GuildLeaderRet;
 
@@ -2509,7 +2507,7 @@ internal static class modGuilds
         // 
         // ***************************************************
 
-        GuildAlignmentRet = Constants.vbNullString;
+        GuildAlignmentRet = string.Empty;
         if ((GuildIndex <= 0) | (GuildIndex > CANTIDADDECLANES))
             return GuildAlignmentRet;
 
@@ -2525,7 +2523,7 @@ internal static class modGuilds
         // Returns the guild founder's name
         // Last Modification: 25/03/2009
         // ***************************************************
-        GuildFounderRet = Constants.vbNullString;
+        GuildFounderRet = string.Empty;
         if ((GuildIndex <= 0) | (GuildIndex > CANTIDADDECLANES))
             return GuildFounderRet;
 

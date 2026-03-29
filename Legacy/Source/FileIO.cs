@@ -4,9 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal static class ES
@@ -421,7 +418,7 @@ internal static class ES
             var argEmptySpaces1 = 1024;
             Admin.MOTD[i].texto = GetVar(AppDomain.CurrentDomain.BaseDirectory + "Dat/Motd.ini", "Motd", "Line" + i,
                 ref argEmptySpaces1);
-            Admin.MOTD[i].Formato = Constants.vbNullString;
+            Admin.MOTD[i].Formato = string.Empty;
         }
     }
 
@@ -579,7 +576,7 @@ internal static class ES
                 WriteVar(MAPFILE + ".dat", "Mapa" + Map, "Terreno", withBlock1.Terreno);
                 WriteVar(MAPFILE + ".dat", "Mapa" + Map, "Zona", withBlock1.Zona);
                 WriteVar(MAPFILE + ".dat", "Mapa" + Map, "Restringir", withBlock1.Restringir);
-                WriteVar(MAPFILE + ".dat", "Mapa" + Map, "BackUp", Conversion.Str(withBlock1.BackUp));
+                WriteVar(MAPFILE + ".dat", "Mapa" + Map, "BackUp", withBlock1.BackUp.ToString());
 
                 if (withBlock1.Pk)
                     WriteVar(MAPFILE + ".dat", "Mapa" + Map, "Pk", "0");
@@ -1990,7 +1987,7 @@ internal static class ES
         // --- Separar en líneas ---
         if (!string.IsNullOrEmpty(fileContent))
         {
-            rawLines = fileContent.Split(new[] { Constants.vbCrLf }, StringSplitOptions.None);
+            rawLines = fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
         }
         else
         {
@@ -2095,7 +2092,7 @@ internal static class ES
         // -----------------------------------------------------------------------------
         // 4) Escribir el archivo resultante
         // -----------------------------------------------------------------------------
-        fileContent = string.Join(Constants.vbCrLf, outputLines.ToArray());
+        fileContent = string.Join(Environment.NewLine, outputLines.ToArray());
         File.WriteAllText(fileName, fileContent);
     }
 

@@ -1,9 +1,6 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace Legacy;
 
 internal static class ModFacciones
@@ -1210,10 +1207,7 @@ internal static class ModFacciones
 
     public struct tFaccionArmaduras
     {
-        [VBFixedArray(NUM_DEF_FACCION_ARMOURS - 1)]
         public short[] Armada;
-
-        [VBFixedArray(NUM_DEF_FACCION_ARMOURS - 1)]
         public short[] Caos;
 
         // UPGRADE_TODO: Se debe llamar a "Initialize" para inicializar instancias de esta estructura. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'

@@ -1,6 +1,4 @@
 using System;
-using Microsoft.VisualBasic;
-
 namespace Legacy;
 
 internal static class Matematicas
@@ -56,7 +54,7 @@ internal static class Matematicas
         // Last Modify Date: 3/06/2006
         // Generates a random number in the range given - recoded to use longs and work properly with ranges
         // **************************************************************
-        RandomNumberRet = Convert.ToInt32(Conversion.Fix(VBMath.Rnd() * (UpperBound - LowerBound + 1))) + LowerBound;
+        RandomNumberRet = (int)Math.Truncate(Random.Shared.NextDouble() * (UpperBound - LowerBound + 1)) + LowerBound;
         return RandomNumberRet;
     }
 }
