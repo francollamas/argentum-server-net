@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using Legacy.Exceptions;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -97,9 +98,10 @@ internal static class Protocol
         // Last Modification: 01/09/07
         // 
         // ***************************************************
+        byte packetID = 0;
+        
         try
         {
-            byte packetID;
 
             packetID = Declaraciones.UserList[UserIndex].incomingData.PeekByte();
 
@@ -919,37 +921,28 @@ internal static class Protocol
             }
 
             // Done with this packet, move on to next one or send everything if no more packets found
-            if ((Declaraciones.UserList[UserIndex].incomingData.length > 0) & (Information.Err().Number == 0))
+            if (Declaraciones.UserList[UserIndex].incomingData.length > 0)
             {
-                Information.Err().Clear();
                 HandleIncomingData(UserIndex);
             }
-
-            else if ((Information.Err().Number != 0) & !(Information.Err().Number ==
-                                                         Declaraciones.UserList[UserIndex].incomingData
-                                                             .NotEnoughDataErrCode))
-            {
-                // An error ocurred, log it and kick player.
-                var argdesc = "Error: " + Information.Err().Number + " [" + Information.Err().Description + "] " +
-                              " Source: " + Information.Err().Source + Constants.vbTab + " HelpFile: " +
-                              Information.Err().HelpFile + Constants.vbTab + " HelpContext: " +
-                              Information.Err().HelpContext + Constants.vbTab + " LastDllError: " +
-                              Information.Err().LastDllError + Constants.vbTab + " - UserIndex: " + UserIndex +
-                              " - producido al manejar el paquete: " + packetID;
-                General.LogError(ref argdesc);
-                TCP.CloseSocket(UserIndex);
-            }
-
             else
             {
                 // Flush buffer - send everything that has been written
                 FlushBuffer(UserIndex);
             }
         }
-
+        catch (NotEnoughDataException)
+        {
+            // Not enough data to complete the packet, wait for more data
+            // Flush buffer with partial data
+            FlushBuffer(UserIndex);
+        }
         catch (Exception ex)
         {
-            Console.WriteLine("Error in HandleIncomingData: " + ex.Message);
+            // An error occurred, log it and kick player
+            var desc = $"Error handling packet {packetID} for UserIndex {UserIndex}: {ex.GetType().Name} - {ex.Message}\n{ex.StackTrace}";
+            General.LogError(ref desc);
+            TCP.CloseSocket(UserIndex);
         }
     }
 
@@ -1946,7 +1939,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -2054,7 +2047,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 15)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -2143,7 +2136,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -2248,7 +2241,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -2360,7 +2353,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -2497,7 +2490,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -2992,7 +2985,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3131,7 +3124,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3191,7 +3184,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3243,7 +3236,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3276,7 +3269,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3309,7 +3302,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3455,7 +3448,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3492,7 +3485,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3529,7 +3522,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -3568,7 +3561,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4210,7 +4203,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 9)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4234,7 +4227,7 @@ internal static class Protocol
                 desc = buffer.ReadASCIIString();
                 GuildName = buffer.ReadASCIIString().Trim();
                 site = buffer.ReadASCIIString();
-                codex = Strings.Split(buffer.ReadASCIIString(), SEPARATOR.ToString());
+                codex = buffer.ReadASCIIString().Split(SEPARATOR.ToString());
 
                 if (modGuilds.CrearNuevoClan(UserIndex, ref desc, ref GuildName, ref site, ref codex,
                         withBlock.FundandoGuildAlineacion, ref errorStr))
@@ -4281,7 +4274,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4332,7 +4325,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4376,7 +4369,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4447,7 +4440,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 1 + Declaraciones.NUMSKILLS)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4526,7 +4519,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4587,7 +4580,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4650,7 +4643,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4698,7 +4691,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4754,7 +4747,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4802,7 +4795,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4887,7 +4880,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4921,7 +4914,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -4981,7 +4974,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5000,7 +4993,7 @@ internal static class Protocol
 
 
                 desc = buffer.ReadASCIIString();
-                codex = Strings.Split(buffer.ReadASCIIString(), SEPARATOR.ToString());
+                codex = buffer.ReadASCIIString().Split(SEPARATOR.ToString());
 
                 modGuilds.ChangeCodexAndDesc(ref desc, ref codex, withBlock.GuildIndex);
 
@@ -5030,7 +5023,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 7)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5149,7 +5142,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5213,7 +5206,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5277,7 +5270,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5341,7 +5334,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5405,7 +5398,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5459,7 +5452,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5513,7 +5506,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5568,7 +5561,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5622,7 +5615,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5714,7 +5707,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5783,7 +5776,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5827,7 +5820,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5895,7 +5888,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -5959,7 +5952,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -6020,7 +6013,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -6064,7 +6057,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -6136,7 +6129,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -6191,7 +6184,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -7621,7 +7614,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -7683,7 +7676,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -7738,7 +7731,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -7812,7 +7805,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -7872,7 +7865,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -7960,7 +7953,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8014,7 +8007,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8075,7 +8068,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8149,7 +8142,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8233,7 +8226,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8308,7 +8301,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8409,7 +8402,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8441,7 +8434,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8612,7 +8605,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8683,7 +8676,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8739,7 +8732,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 1)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8772,7 +8765,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8863,7 +8856,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8927,7 +8920,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -8990,7 +8983,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9075,7 +9068,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9153,7 +9146,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9328,7 +9321,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9434,7 +9427,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9515,7 +9508,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9585,7 +9578,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9786,7 +9779,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 7)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -9867,7 +9860,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -10019,7 +10012,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -10066,7 +10059,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -10332,7 +10325,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -10490,7 +10483,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -10582,7 +10575,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 8)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11182,7 +11175,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11253,7 +11246,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11320,7 +11313,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11389,7 +11382,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11457,7 +11450,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11525,7 +11518,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11606,7 +11599,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11813,7 +11806,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11881,7 +11874,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -11958,7 +11951,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12033,7 +12026,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12085,7 +12078,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12203,7 +12196,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12306,7 +12299,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12399,7 +12392,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12457,7 +12450,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12552,7 +12545,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12613,7 +12606,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12674,7 +12667,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12842,7 +12835,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12898,7 +12891,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12946,7 +12939,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -12998,7 +12991,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13049,7 +13042,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13100,7 +13093,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13151,7 +13144,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13202,7 +13195,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13309,7 +13302,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13386,7 +13379,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13500,7 +13493,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13559,7 +13552,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13648,7 +13641,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13754,7 +13747,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -13904,7 +13897,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14019,7 +14012,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14119,7 +14112,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14163,7 +14156,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14261,7 +14254,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14349,7 +14342,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14437,7 +14430,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14475,7 +14468,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14510,7 +14503,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14695,7 +14688,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14798,7 +14791,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -14809,8 +14802,8 @@ internal static class Protocol
             withBlock.incomingData.ReadByte();
 
 
-            color = Information.RGB(withBlock.incomingData.ReadByte(), withBlock.incomingData.ReadByte(),
-                withBlock.incomingData.ReadByte());
+            color = Color.FromArgb(withBlock.incomingData.ReadByte(), withBlock.incomingData.ReadByte(),
+                withBlock.incomingData.ReadByte()).ToArgb();
 
             if ((withBlock.flags.Privilegios & (Declaraciones.PlayerType.Admin | Declaraciones.PlayerType.Dios |
                                                 Declaraciones.PlayerType.RoleMaster)) !=
@@ -14856,7 +14849,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15269,7 +15262,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15321,7 +15314,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15367,7 +15360,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15437,7 +15430,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15482,7 +15475,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15527,7 +15520,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 2)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15572,7 +15565,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15645,7 +15638,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15751,7 +15744,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15875,7 +15868,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -15997,7 +15990,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16071,7 +16064,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 5)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16148,7 +16141,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16190,7 +16183,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16232,7 +16225,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16295,7 +16288,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 4)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16455,7 +16448,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16513,7 +16506,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16603,7 +16596,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16673,7 +16666,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16732,7 +16725,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16789,7 +16782,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 3)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 
@@ -16809,7 +16802,7 @@ internal static class Protocol
 
 
                 newMOTD = buffer.ReadASCIIString();
-                auxiliaryString = Strings.Split(newMOTD, Constants.vbCrLf);
+                auxiliaryString = newMOTD.Split(Constants.vbCrLf);
 
                 if (((int)(~withBlock.flags.Privilegios & Declaraciones.PlayerType.RoleMaster) != 0) &
                     ((withBlock.flags.Privilegios & (Declaraciones.PlayerType.Admin | Declaraciones.PlayerType.Dios)) !=
@@ -16922,7 +16915,7 @@ internal static class Protocol
         // ***************************************************
         if (Declaraciones.UserList[UserIndex].incomingData.length < 6)
         {
-            Information.Err().Raise(Declaraciones.UserList[UserIndex].incomingData.NotEnoughDataErrCode);
+            throw new NotEnoughDataException();
             return;
         }
 

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Legacy;
 
@@ -172,9 +171,9 @@ internal class clsIniReader
 
             while (min <= max)
             {
-                while ((Operators.CompareString(withBlock.values[min].Key, comp, false) < 0) & (min < Last))
+                while ((string.Compare(withBlock.values[min].Key, comp, StringComparison.Ordinal) < 0) & (min < Last))
                     min = Convert.ToInt16(min + 1);
-                while ((Operators.CompareString(withBlock.values[max].Key, comp, false) > 0) & (max > First))
+                while ((string.Compare(withBlock.values[max].Key, comp, StringComparison.Ordinal) > 0) & (max > First))
                     max = Convert.ToInt16(max - 1);
                 if (min <= max)
                 {
@@ -223,9 +222,9 @@ internal class clsIniReader
 
         while (min <= max)
         {
-            while ((Operators.CompareString(fileData[min].name, comp, false) < 0) & (min < Last))
+            while ((string.Compare(fileData[min].name, comp, StringComparison.Ordinal) < 0) & (min < Last))
                 min = Convert.ToInt16(min + 1);
-            while ((Operators.CompareString(fileData[max].name, comp, false) > 0) & (max > First))
+            while ((string.Compare(fileData[max].name, comp, StringComparison.Ordinal) > 0) & (max > First))
                 max = Convert.ToInt16(max - 1);
             if (min <= max)
             {
@@ -338,11 +337,11 @@ internal class clsIniReader
         {
             mid = (min + max) / 2;
 
-            if (Operators.CompareString(Node.values[mid].Key, Key, false) < 0)
+            if (string.Compare(Node.values[mid].Key, Key, StringComparison.Ordinal) < 0)
             {
                 min = mid + 1;
             }
-            else if (Operators.CompareString(Node.values[mid].Key, Key, false) > 0)
+            else if (string.Compare(Node.values[mid].Key, Key, StringComparison.Ordinal) > 0)
             {
                 max = mid - 1;
             }
@@ -386,11 +385,11 @@ internal class clsIniReader
         {
             mid = (min + max) / 2;
 
-            if (Operators.CompareString(fileData[mid].name, name, false) < 0)
+            if (string.Compare(fileData[mid].name, name, StringComparison.Ordinal) < 0)
             {
                 min = mid + 1;
             }
-            else if (Operators.CompareString(fileData[mid].name, name, false) > 0)
+            else if (string.Compare(fileData[mid].name, name, StringComparison.Ordinal) > 0)
             {
                 max = mid - 1;
             }

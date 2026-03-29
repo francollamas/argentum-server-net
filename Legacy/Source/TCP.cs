@@ -1226,19 +1226,19 @@ internal static class TCP
                     ref Declaraciones.mapInfo[withBlock.Pos.Map].Music, 45))));
 
             if (withBlock.flags.Privilegios == Declaraciones.PlayerType.Dios)
-                withBlock.flags.ChatColor = Information.RGB(250, 250, 150);
+                withBlock.flags.ChatColor = ColorTranslator.ToOle(Color.FromArgb(250, 250, 150));
             else if ((withBlock.flags.Privilegios != Declaraciones.PlayerType.User) &
                      (withBlock.flags.Privilegios !=
                       (Declaraciones.PlayerType.User | Declaraciones.PlayerType.ChaosCouncil)) &
                      (withBlock.flags.Privilegios !=
                       (Declaraciones.PlayerType.User | Declaraciones.PlayerType.RoyalCouncil)))
-                withBlock.flags.ChatColor = Information.RGB(0, 255, 0);
+                withBlock.flags.ChatColor = ColorTranslator.ToOle(Color.FromArgb(0, 255, 0));
             else if (withBlock.flags.Privilegios ==
                      (Declaraciones.PlayerType.User | Declaraciones.PlayerType.RoyalCouncil))
-                withBlock.flags.ChatColor = Information.RGB(0, 255, 255);
+                withBlock.flags.ChatColor = ColorTranslator.ToOle(Color.FromArgb(0, 255, 255));
             else if (withBlock.flags.Privilegios ==
                      (Declaraciones.PlayerType.User | Declaraciones.PlayerType.ChaosCouncil))
-                withBlock.flags.ChatColor = Information.RGB(255, 128, 64);
+                withBlock.flags.ChatColor = ColorTranslator.ToOle(Color.FromArgb(255, 128, 64));
             else
                 withBlock.flags.ChatColor = ColorTranslator.ToOle(Color.White);
 

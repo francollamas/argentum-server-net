@@ -113,12 +113,10 @@ internal class clsClan
     {
         get
         {
-            short CantidadDeMiembrosRet = default;
             string OldQ;
             var argEmptySpaces = 1024;
             OldQ = ES.GetVar(MEMBERSFILE, "INIT", "NroMembers", ref argEmptySpaces);
-            CantidadDeMiembrosRet = Convert.ToInt16(Information.IsNumeric(OldQ) ? Convert.ToInt16(OldQ) : 0);
-            return CantidadDeMiembrosRet;
+            return short.TryParse(OldQ, out var count) ? count : (short)0;
         }
     }
 
@@ -299,8 +297,8 @@ internal class clsClan
 
         var argEmptySpaces = 1024;
         OldQ = ES.GetVar(GUILDINFOFILE, "INIT", "nroguilds", ref argEmptySpaces);
-        if (Information.IsNumeric(OldQ))
-            NewQ = Convert.ToInt16(Convert.ToInt16(OldQ.Trim()) + 1);
+        if (short.TryParse(OldQ?.Trim(), out var oldCount))
+            NewQ = Convert.ToInt16(oldCount + 1);
         else
             NewQ = 1;
 
@@ -404,10 +402,7 @@ internal class clsClan
             // Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ClanesParticipo", CantP + 1)
             var argEmptySpaces = 1024;
             OldQs = ES.GetVar(MEMBERSFILE, "INIT", "NroMembers", ref argEmptySpaces);
-            if (Information.IsNumeric(OldQs))
-                OldQ = Convert.ToInt16(OldQs);
-            else
-                OldQ = 0;
+            OldQ = short.TryParse(OldQs, out var count) ? count : (short)0;
             ES.WriteVar(MEMBERSFILE, "INIT", "NroMembers", (OldQ + 1).ToString());
             ES.WriteVar(MEMBERSFILE, "Members", "Member" + (OldQ + 1), Nombre);
         }
@@ -492,14 +487,9 @@ internal class clsClan
     public short CantidadAspirantes()
     {
         short CantidadAspirantesRet = default;
-        string Temps;
-
-        CantidadAspirantesRet = 0;
         var argEmptySpaces = 1024;
-        Temps = ES.GetVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", ref argEmptySpaces);
-        if (!Information.IsNumeric(Temps)) return CantidadAspirantesRet;
-        CantidadAspirantesRet = Convert.ToInt16(Temps);
-        return CantidadAspirantesRet;
+        var temps = ES.GetVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", ref argEmptySpaces);
+        return short.TryParse(temps, out var count) ? count : (short)0;
     }
 
     public string DetallesSolicitudAspirante(short NroAspirante)
@@ -540,10 +530,7 @@ internal class clsClan
 
         var argEmptySpaces = 1024;
         OldQ = ES.GetVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", ref argEmptySpaces);
-        if (Information.IsNumeric(OldQ))
-            OldQI = Convert.ToInt16(OldQ);
-        else
-            OldQI = 0;
+        OldQI = short.TryParse(OldQ, out var count) ? count : (short)0;
         for (i = 1; i <= modGuilds.MAXASPIRANTES; i++)
         {
             var argEmptySpaces1 = 1024;
@@ -568,10 +555,7 @@ internal class clsClan
 
         var argEmptySpaces = 1024;
         OldQ = ES.GetVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", ref argEmptySpaces);
-        if (Information.IsNumeric(OldQ))
-            OldQI = Convert.ToInt16(OldQ).ToString();
-        else
-            OldQI = 1.ToString();
+        OldQI = (short.TryParse(OldQ, out var count) ? count : (short)1).ToString();
         // Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Nombre", vbNullString)
         // Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Detalle", vbNullString)
         ES.WriteVar(Declaraciones.CharPath + Nombre + ".chr", "GUILD", "ASPIRANTEA", "0");
@@ -716,7 +700,7 @@ internal class clsClan
 
         var argEmptySpaces = 1024;
         Temps = ES.GetVar(VOTACIONESFILE, "INIT", "NumVotos", ref argEmptySpaces);
-        q = Convert.ToInt16(Information.IsNumeric(Temps) ? Convert.ToInt16(Temps) : 0);
+        q = short.TryParse(Temps, out var voteCount) ? voteCount : (short)0;
         ES.WriteVar(VOTACIONESFILE, "VOTOS", Votante, Votado);
         ES.WriteVar(VOTACIONESFILE, "INIT", "NumVotos", (q + 1).ToString());
     }
@@ -747,7 +731,7 @@ internal class clsClan
             CantGanadores = 0;
             var argEmptySpaces = 1024;
             Temps = ES.GetVar(MEMBERSFILE, "INIT", "NroMembers", ref argEmptySpaces);
-            q = Convert.ToInt16(Information.IsNumeric(Temps) ? Convert.ToInt16(Temps) : 0);
+            q = short.TryParse(Temps, out var memberCount) ? memberCount : (short)0;
             if (q > 0)
             {
                 var loopTo = q;
@@ -823,9 +807,8 @@ internal class clsClan
         if (string.IsNullOrEmpty(Temps))
             return RevisarEleccionesRet;
 
-        if (Information.IsDate(Temps))
+        if (DateTime.TryParse(Temps, out FechaSufragio))
         {
-            FechaSufragio = DateTime.Parse(Temps);
             if (FechaSufragio < DateTime.Now) // toca!
             {
                 Ganador = ContarVotos(ref CantGanadores);

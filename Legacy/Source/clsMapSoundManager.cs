@@ -46,9 +46,9 @@ internal class SoundMapInfo
             var argEmptySpaces = 1024;
             Temps = ES.GetVar(MAPFILE + i + ".dat", "SONIDOS", "Cantidad", ref argEmptySpaces);
 
-            if (Information.IsNumeric(Temps))
+            if (short.TryParse(Migration.ParseVal(Temps).ToString(), out var cantidad))
             {
-                p_Mapas[i].Cantidad = Convert.ToInt16(Migration.ParseVal(Temps));
+                p_Mapas[i].Cantidad = cantidad;
 
                 p_Mapas[i].flags = new int[p_Mapas[i].Cantidad + 1];
                 p_Mapas[i].Probabilidad = new float[p_Mapas[i].Cantidad + 1];

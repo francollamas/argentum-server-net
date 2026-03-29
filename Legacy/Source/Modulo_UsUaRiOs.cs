@@ -1382,12 +1382,11 @@ internal static class UsUaRiOs
                 Protocol.FontTypeNames.FONTTYPE_INFO);
 
             var argEmptySpaces22 = 1024;
-            if (Information.IsNumeric(ES.GetVar(CharFile, "Guild", "GUILDINDEX", ref argEmptySpaces22)))
+            var guildIndexStr = ES.GetVar(CharFile, "Guild", "GUILDINDEX", ref argEmptySpaces22);
+            if (short.TryParse(guildIndexStr, out var guildIndex))
             {
-                var argEmptySpaces21 = 1024;
                 Protocol.WriteConsoleMsg(sendIndex,
-                    "Clan: " + modGuilds.GuildName(Convert.ToInt16(ES.GetVar(CharFile, "Guild", "GUILDINDEX",
-                        ref argEmptySpaces21))), Protocol.FontTypeNames.FONTTYPE_INFO);
+                    "Clan: " + modGuilds.GuildName(guildIndex), Protocol.FontTypeNames.FONTTYPE_INFO);
             }
 
             var argEmptySpaces23 = 1024;

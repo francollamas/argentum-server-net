@@ -1481,8 +1481,8 @@ internal static class ES
                     Convert.ToInt16(Migration.ParseVal(UserFile.GetValue("MASCOTAS", "MAS" + LoopC)));
 
             ln = UserFile.GetValue("Guild", "GUILDINDEX");
-            if (Information.IsNumeric(ln))
-                withBlock.GuildIndex = Convert.ToInt16(ln);
+            if (short.TryParse(ln, out var guildIndex))
+                withBlock.GuildIndex = guildIndex;
             else
                 withBlock.GuildIndex = 0;
         }
@@ -1518,15 +1518,15 @@ internal static class ES
                     {
                         currentSection = currentLine.Length > 2 ? currentLine.Substring(1, currentLine.Length - 2) : "";
                     }
-                    else if (Strings.StrComp(currentSection, sectionName, CompareMethod.Text) == 0)
+                    else if (string.Equals(currentSection, sectionName, StringComparison.OrdinalIgnoreCase))
                     {
                         // We are in the correct section, check if line contains the key
                         equalPos = currentLine is not null ? currentLine.IndexOf("=") + 1 : 0;
                         if (equalPos > 1)
                             // Extract the key (left side of '=') and compare
-                            if (Strings.StrComp(
+                            if (string.Equals(
                                     currentLine is not null ? currentLine.Substring(0, equalPos - 1).Trim() : "",
-                                    keyName, CompareMethod.Text) == 0)
+                                    keyName, StringComparison.OrdinalIgnoreCase))
                                 // Return the value (right side of '='), trimmed
                                 return currentLine is not null ? currentLine.Substring(equalPos).Trim() : "";
                     }

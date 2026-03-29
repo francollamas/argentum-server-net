@@ -88,10 +88,7 @@ internal static class modGuilds
         var argEmptySpaces = 1024;
         CantClanes = ES.GetVar(GUILDINFOFILE, "INIT", "nroGuilds", ref argEmptySpaces);
 
-        if (Information.IsNumeric(CantClanes))
-            CANTIDADDECLANES = Convert.ToInt16(CantClanes);
-        else
-            CANTIDADDECLANES = 0;
+        CANTIDADDECLANES = short.TryParse(CantClanes, out var count) ? count : (short)0;
 
         var loopTo = CANTIDADDECLANES;
         for (i = 1; i <= loopTo; i++)
@@ -1349,12 +1346,7 @@ internal static class modGuilds
         if (Migration.migr_InStrB(PlayerName, ".") != 0) PlayerName = PlayerName.Replace(".", Constants.vbNullString);
         var argEmptySpaces = 1024;
         Temps = ES.GetVar(Declaraciones.CharPath + PlayerName + ".chr", "GUILD", "GUILDINDEX", ref argEmptySpaces);
-        if (Information.IsNumeric(Temps))
-            GetGuildIndexFromCharRet = Convert.ToInt16(Temps);
-        else
-            GetGuildIndexFromCharRet = 0;
-
-        return GetGuildIndexFromCharRet;
+        return short.TryParse(Temps, out var guildIndex) ? guildIndex : (short)0;
     }
 
     public static short GuildIndex(ref string GuildName)
