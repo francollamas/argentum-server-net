@@ -1,7 +1,7 @@
 # 📊 WARNINGS CLEANUP REPORT
 
-**Fecha:** 2026-03-29 02:40:03
-**Total Warnings Corregidas:** 130
+**Fecha:** 2026-03-29 02:59:42
+**Total Warnings Corregidas:** 125
 
 ---
 
@@ -14,16 +14,16 @@
   - CS0168 @ Legacy/Source/AI_NPC.cs:950 - Removed unused variable 'SignoEO'
   - CS0168 @ Legacy/Source/clsIniReader.cs:78 - Removed unused variable 'handle'
   - CS0168 @ Legacy/Source/FileIO.cs:437 - Removed unused variable 'i'
-  - CS0168 @ Legacy/Source/FileIO.cs:1287 - Removed unused variable 'NpcIndex'
-  - CS0168 @ Legacy/Source/FileIO.cs:1557 - Removed unused variable 'TempInt'
-  - CS0168 @ Legacy/Source/FileIO.cs:1559 - Removed unused variable 'npcfile'
-  - CS0219 @ Legacy/Source/FileIO.cs:2564 - Removed unused variable 'argEmptySpaces2'
-  - CS0219 @ Legacy/Source/FileIO.cs:2569 - Removed unused variable 'argEmptySpaces4'
-  - CS0219 @ Legacy/Source/FileIO.cs:2581 - Removed unused variable 'argEmptySpaces8'
-  - CS0168 @ Legacy/Source/FileIO.cs:2767 - Removed unused variable 'X'
-  - CS0168 @ Legacy/Source/FileIO.cs:2768 - Removed unused variable 'Y'
-  - CS0168 @ Legacy/Source/FileIO.cs:2874 - Removed unused variable 'i'
-  - CS0168 @ Legacy/Source/FileIO.cs:2927 - Removed unused variable 'RaceIndex'
+  - CS0168 @ Legacy/Source/FileIO.cs:1286 - Removed unused variable 'NpcIndex'
+  - CS0168 @ Legacy/Source/FileIO.cs:1556 - Removed unused variable 'TempInt'
+  - CS0168 @ Legacy/Source/FileIO.cs:1558 - Removed unused variable 'npcfile'
+  - CS0219 @ Legacy/Source/FileIO.cs:2562 - Removed unused variable 'argEmptySpaces2'
+  - CS0219 @ Legacy/Source/FileIO.cs:2567 - Removed unused variable 'argEmptySpaces4'
+  - CS0219 @ Legacy/Source/FileIO.cs:2579 - Removed unused variable 'argEmptySpaces8'
+  - CS0168 @ Legacy/Source/FileIO.cs:2765 - Removed unused variable 'X'
+  - CS0168 @ Legacy/Source/FileIO.cs:2766 - Removed unused variable 'Y'
+  - CS0168 @ Legacy/Source/FileIO.cs:2872 - Removed unused variable 'i'
+  - CS0168 @ Legacy/Source/FileIO.cs:2925 - Removed unused variable 'RaceIndex'
   - CS0168 @ Legacy/Source/GameLoop.cs:609 - Removed unused variable 'i'
   - CS0168 @ Legacy/Source/GameLoop.cs:610 - Removed unused variable 'num'
   - CS0168 @ Legacy/Source/GameLoop.cs:706 - Removed unused variable 'X'
@@ -55,9 +55,6 @@
   - CS0168 @ Legacy/Source/Protocol.cs:16435 - Removed unused variable 'handle'
   - CS0168 @ Legacy/Source/Protocol.cs:17010 - Added exception logging for 'error' in catch block
   - CS0168 @ Legacy/Source/Protocol.cs:18371 - Removed unused variable 'i'
-  - CS0168 @ Legacy/Source/TCP.cs:864 - Removed unused variable 'N'
-  - CS0168 @ Legacy/Source/TCP.cs:1801 - Removed unused variable 'N'
-  - CS0168 @ Legacy/Source/TCP.cs:1802 - Removed unused variable 'LoopC'
   - CS0169 @ Legacy/Source/Admin.cs:31 - Removed unused field 'IntervaloLanzaHechizo'
   - CS0169 @ Legacy/Source/Admin.cs:32 - Removed unused field 'IntervaloNPCPuedeAtacar'
   - CS0169 @ Legacy/Source/Admin.cs:33 - Removed unused field 'IntervaloNPCAI'
@@ -136,5 +133,3 @@
   - CS0169 @ Legacy/Source/GameLoop.cs:49 - Removed unused field '_TickAutoSave_MinsPjesSave'
   - CS0169 @ Legacy/Source/mdParty.cs:19 - Removed unused field 'MINPARTYLEVEL'
   - CS0169 @ Legacy/Source/mdParty.cs:32 - Removed unused field 'MAXPARTYDELTALEVEL'
-  - CS0169 @ Legacy/Source/modHechizos.cs:8 - Removed unused field 'HELEMENTAL_FUEGO'
-  - CS0169 @ Legacy/Source/modHechizos.cs:9 - Removed unused field 'HELEMENTAL_TIERRA'

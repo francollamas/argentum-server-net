@@ -4810,11 +4810,9 @@ internal static class Protocol
         {
             var buffer = new clsByteQueue();
             Declaraciones.eForumMsgType ForumMsgType;
-            string file;
             string Title;
             string Post;
             var ForumIndex = default(short);
-            string postFile;
             byte ForumType;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
@@ -6269,7 +6267,6 @@ internal static class Protocol
         // 04/15/2008 - No se reseteaban lso contadores de invi ni de ocultar. (NicoNZ)
         // ***************************************************
         short tUser;
-        bool isNotVisible;
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
@@ -7970,7 +7967,6 @@ internal static class Protocol
         try
         {
             var buffer = new clsByteQueue();
-            short N;
             string bugReport;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
@@ -10601,7 +10597,6 @@ internal static class Protocol
             var valido = default(bool);
             byte LoopC;
             string CommandString;
-            byte N;
             string UserCharPath;
             int Var;
             short GI;
@@ -11620,7 +11615,6 @@ internal static class Protocol
             var buffer = new clsByteQueue();
             string UserName;
             short tUser;
-            byte LoopC;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -13324,7 +13318,6 @@ internal static class Protocol
             var buffer = new clsByteQueue();
             string UserName;
             short tUser;
-            byte LoopC;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -13402,7 +13395,6 @@ internal static class Protocol
             var buffer = new clsByteQueue();
             string UserName;
             short tUser;
-            byte LoopC;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex];
                 // This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
@@ -13470,7 +13462,6 @@ internal static class Protocol
         // 
         // ***************************************************
         short tObj;
-        string lista;
         int X;
         int Y;
         {
@@ -14177,7 +14168,6 @@ internal static class Protocol
         }
 
         short tObj;
-        string tStr;
         Declaraciones.Obj Objeto;
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
@@ -16427,12 +16417,6 @@ internal static class Protocol
 
     public static void HandleTurnOffServer(short UserIndex)
     {
-        // ***************************************************
-        // Author: Juan Martín Sotuyo Dodero (Maraxus)
-        // Last Modification: 12/24/06
-        // Turns off the server
-        // ***************************************************
-        short handle;
 
         {
             ref var withBlock = ref Declaraciones.UserList[UserIndex];
@@ -18368,7 +18352,6 @@ internal static class Protocol
         // ***************************************************
         RetryOnceIfNotEnoughSpace(() =>
         {
-            int i;
             {
                 ref var withBlock = ref Declaraciones.UserList[UserIndex].outgoingData;
                 withBlock.WriteByte((byte)ServerPacketID.OfferDetails);

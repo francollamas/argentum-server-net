@@ -15,10 +15,6 @@ internal static class mdParty
     public const short MAX_PARTIES = 300;
 
     // '
-    // nivel minimo para crear party
-    public const byte MINPARTYLEVEL = 15;
-
-    // '
     // Cantidad maxima de gente en la party
     public const byte PARTY_MAXMEMBERS = 5;
 
@@ -26,10 +22,6 @@ internal static class mdParty
     // Si esto esta en True, la exp sale por cada golpe que le da
     // Si no, la exp la recibe al salirse de la party (pq las partys, floodean)
     public const bool PARTY_EXPERIENCIAPORGOLPE = false;
-
-    // '
-    // maxima diferencia de niveles permitida en una party
-    public const byte MAXPARTYDELTALEVEL = 7;
 
     // '
     // distancia al leader para que este acepte el ingreso
