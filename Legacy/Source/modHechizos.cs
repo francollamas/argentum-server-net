@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using System.Drawing;
 
 namespace Legacy;
 
 internal static class modHechizos
 {
-    public const short HELEMENTAL_FUEGO = 26;
-    public const short HELEMENTAL_TIERRA = 28;
     public const short SUPERANILLO = 700;
 
     public static void NpcLanzaSpellSobreUser(short NpcIndex, short UserIndex, short Spell)

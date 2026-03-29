@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Legacy;
 
@@ -10,8 +10,6 @@ internal static class PathFinding
 
     // UPGRADE_WARNING: El límite inferior de la matriz TmpArray ha cambiado de 1,1 a 0,0. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     private static tIntermidiateWork[,] TmpArray = new tIntermidiateWork[ROWS + 1, COLUMS + 1];
-
-    private static short TilePosY;
 
     private static bool Limites(short vfila, short vcolu)
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;

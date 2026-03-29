@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualBasic;
 
 namespace Legacy;
@@ -6,7 +6,6 @@ namespace Legacy;
 internal static class SistemaCombate
 {
     public const byte MAXDISTANCIAARCO = 18;
-    public const byte MAXDISTANCIAMAGIA = 18;
 
     public static int MinimoInt(int a, int b)
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -242,7 +242,6 @@ namespace ArgentumServer.Script
                     string methodDeclaration = match.Groups[1].Value;
                     string methodName = match.Groups[2].Value;
                     string beforeError = match.Groups[3].Value;
-                    string errorStatement = match.Groups[4].Value;
                     string methodBody = match.Groups[5].Value;
                     string endStatement = match.Groups[6].Value;
                     
@@ -264,10 +263,8 @@ namespace ArgentumServer.Script
                     string methodDeclaration = match.Groups[1].Value;
                     string methodName = match.Groups[2].Value;
                     string beforeError = match.Groups[3].Value;
-                    string errorStatement = match.Groups[4].Value;
                     string errorLabel = match.Groups[5].Value;
                     string methodBody = match.Groups[6].Value;
-                    string errorLabelDef = match.Groups[7].Value;
                     string errorHandlingCode = match.Groups[8].Value;
                     string endStatement = match.Groups[9].Value;
                     

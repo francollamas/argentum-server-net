@@ -1,4 +1,4 @@
-﻿// Codigo by Loopzer todos los derechos se le reservan a él!
+// Codigo by Loopzer todos los derechos se le reservan a él!
 // GSZone 2010
 
 using System;

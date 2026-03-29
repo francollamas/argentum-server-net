@@ -1,4 +1,4 @@
-﻿namespace Legacy;
+namespace Legacy;
 
 internal class clsEstadisticasIPC
 {
