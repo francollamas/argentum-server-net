@@ -438,9 +438,10 @@ internal static class ModAreas
         ConnGroups[Map].CountEntrys = ConnGroups[Map].CountEntrys - 1;
         TempVal = ConnGroups[Map].CountEntrys;
 
-        // Move list back
+        // Move list back (shift elements from found index)
+        int foundIndex = LoopC;
         var loopTo1 = TempVal;
-        for (LoopC = LoopC; LoopC <= loopTo1; LoopC++)
+        for (LoopC = foundIndex; LoopC <= loopTo1; LoopC++)
             ConnGroups[Map].UserEntrys[LoopC] = ConnGroups[Map].UserEntrys[LoopC + 1];
 
         if (TempVal > ConnGroups[Map].OptValue) // Nescesito Redim?

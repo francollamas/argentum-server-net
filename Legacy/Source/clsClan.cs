@@ -922,8 +922,10 @@ internal class clsClan
         {
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDePaz.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             if ((p_PropuestasDePaz[i] ?? "") == (OtroGuild.ToString() ?? ""))
+            {
                 p_PropuestasDePaz.Remove(p_PropuestasDePaz[i]);
-            return;
+                break;
+            }
         }
 
         var loopTo1 = Convert.ToInt16(p_PropuestasDeAlianza.Count - 1);
@@ -931,8 +933,10 @@ internal class clsClan
         {
             // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto p_PropuestasDeAlianza.Item(i). Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             if ((p_PropuestasDeAlianza[i] ?? "") == (OtroGuild.ToString() ?? ""))
+            {
                 p_PropuestasDeAlianza.Remove(p_PropuestasDeAlianza[i]);
-            return;
+                break;
+            }
         }
     }
 

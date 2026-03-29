@@ -2044,7 +2044,7 @@ internal static class Trabajo
                 {
                     RobarSkill = withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Robar];
 
-                    if ((RobarSkill <= 10) & (RobarSkill >= -1))
+                    if (RobarSkill <= 10)
                         Suerte = 35;
                     else if ((RobarSkill <= 20) & (RobarSkill >= 11))
                         Suerte = 30;
@@ -2699,7 +2699,7 @@ internal static class Trabajo
 
             MeditarSkill = withBlock.Stats.UserSkills[(int)Declaraciones.eSkill.Meditar];
 
-            if ((MeditarSkill <= 10) & (MeditarSkill >= -1))
+            if (MeditarSkill <= 10)
                 Suerte = 35;
             else if ((MeditarSkill <= 20) & (MeditarSkill >= 11))
                 Suerte = 30;

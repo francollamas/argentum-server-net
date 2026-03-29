@@ -836,7 +836,6 @@ internal static class ES
                 // 07/09/07
                 withBlock.GrhIndex =
                     Convert.ToInt16(Migration.ParseVal(Leer.GetValue("OBJ" + obj, "GrhIndex")));
-                if (withBlock.GrhIndex == 0) withBlock.GrhIndex = withBlock.GrhIndex;
 
                 withBlock.OBJType =
                     (Declaraciones.eOBJType)Convert.ToInt32(
@@ -2250,7 +2249,6 @@ internal static class ES
                                    Thread.CurrentThread.CurrentCulture.Calendar.GetHour(TempDate) * 3600 +
                                    Thread.CurrentThread.CurrentCulture.Calendar.GetMinute(TempDate) * 60 +
                                    Thread.CurrentThread.CurrentCulture.Calendar.GetSecond(TempDate);
-                withBlock.UpTime = withBlock.UpTime;
                 WriteVar(UserFile, "INIT", "UpTime", withBlock.UpTime.ToString());
 
                 // First time around?

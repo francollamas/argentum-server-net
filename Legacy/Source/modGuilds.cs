@@ -467,7 +467,7 @@ internal static class modGuilds
                 withBlock.SetCodex(Convert.ToByte(i), ref codex[i]);
 
             var loopTo1 = Convert.ToInt32(CANTIDADMAXIMACODEX);
-            for (i = i; i <= loopTo1; i++)
+            for (i = codex.Length; i <= loopTo1; i++)
             {
                 var argcodex = Constants.vbNullString;
                 withBlock.SetCodex(Convert.ToByte(i), ref argcodex);

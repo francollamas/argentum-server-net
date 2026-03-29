@@ -279,12 +279,8 @@ internal static class TCP
         short LoopC;
 
         for (LoopC = 1; LoopC <= Declaraciones.NUMSKILLS; LoopC++)
-            if (Declaraciones.UserList[UserIndex].Stats.UserSkills[LoopC] < 0)
-            {
-                return ValidateSkillsRet;
-                if (Declaraciones.UserList[UserIndex].Stats.UserSkills[LoopC] > 100)
-                    Declaraciones.UserList[UserIndex].Stats.UserSkills[LoopC] = 100;
-            }
+            if (Declaraciones.UserList[UserIndex].Stats.UserSkills[LoopC] > 100)
+                Declaraciones.UserList[UserIndex].Stats.UserSkills[LoopC] = 100;
 
         ValidateSkillsRet = true;
         return ValidateSkillsRet;

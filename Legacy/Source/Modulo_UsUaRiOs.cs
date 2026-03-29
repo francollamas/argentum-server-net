@@ -2128,7 +2128,7 @@ internal static class UsUaRiOs
                 else if (!previousMap & !nextMap)
                 {
                     // 140 => 141 (Ninguno es superficial, el ultimo mapa es el mismo de antes)
-                    withBlock.flags.lastMap = withBlock.flags.lastMap;
+                    // withBlock.flags.lastMap se mantiene sin cambios
                 }
             }
 
@@ -2487,7 +2487,7 @@ internal static class UsUaRiOs
         {
             // hace un backup del char
             ViejoCharBackup = Declaraciones.CharPath + ViejoNick + ".chr.old-";
-            FileSystem.Rename(Declaraciones.CharPath + ViejoNick + ".chr", ViejoCharBackup);
+            File.Move(Declaraciones.CharPath + ViejoNick + ".chr", ViejoCharBackup, overwrite: false);
         }
     }
 
