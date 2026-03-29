@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <RootNamespace>Legacy</RootNamespace>
-        <TargetFramework>net10.0</TargetFramework>
-    </PropertyGroup>
-
-</Project>
