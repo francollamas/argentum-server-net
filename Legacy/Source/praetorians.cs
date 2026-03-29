@@ -294,10 +294,10 @@ namespace Legacy
                 // 2) in any other case, our nearest enemy will be attacked
 
                 var loopTo = Convert.ToInt16(NPCPosX + azar * -8);
-                for (X = Convert.ToInt16(NPCPosX + azar * 8); -azar >= 0 ? X <= loopTo : X >= loopTo; X += -azar)
+                for (X = Convert.ToInt16(NPCPosX + azar * 8); -azar >= 0 ? X <= loopTo : X >= loopTo; X += (short)-azar)
                 {
                     var loopTo1 = Convert.ToInt16(NPCPosY + azar2 * -7);
-                    for (Y = Convert.ToInt16(NPCPosY + azar2 * 7); -azar2 >= 0 ? Y <= loopTo1 : Y >= loopTo1; Y += -azar2)
+                    for (Y = Convert.ToInt16(NPCPosY + azar2 * 7); -azar2 >= 0 ? Y <= loopTo1 : Y >= loopTo1; Y += (short)-azar2)
                     {
                         NPCAlInd = Declaraciones.MapData[NPCPosM, X, Y].NpcIndex; // 'por si implementamos algo contra NPCs
                         PJEnInd = Declaraciones.MapData[NPCPosM, X, Y].UserIndex;
@@ -527,11 +527,11 @@ namespace Legacy
 
                     // azar = 1
 
-                    var loopTo = Convert.ToInt16(NPCPosX + azar * -8);
-                    for (X = Convert.ToInt16(NPCPosX + azar * 8); -azar >= 0 ? X <= loopTo : X >= loopTo; X += -azar)
-                    {
-                        var loopTo1 = Convert.ToInt16(NPCPosY + azar2 * -7);
-                        for (Y = Convert.ToInt16(NPCPosY + azar2 * 7); -azar2 >= 0 ? Y <= loopTo1 : Y >= loopTo1; Y += -azar2)
+                var loopTo = Convert.ToInt16(NPCPosX + azar * -8);
+                for (X = Convert.ToInt16(NPCPosX + azar * 8); -azar >= 0 ? X <= loopTo : X >= loopTo; X += (short)-azar)
+                {
+                    var loopTo1 = Convert.ToInt16(NPCPosY + azar2 * -7);
+                    for (Y = Convert.ToInt16(NPCPosY + azar2 * 7); -azar2 >= 0 ? Y <= loopTo1 : Y >= loopTo1; Y += (short)-azar2)
                         {
                             NPCAlInd = Declaraciones.MapData[NPCPosM, X, Y].NpcIndex; // 'por si implementamos algo contra NPCs
                             PJEnInd = Declaraciones.MapData[NPCPosM, X, Y].UserIndex;
@@ -1080,12 +1080,12 @@ namespace Legacy
                 // 3) party healing if no threats
                 // UPGRADE_WARNING: No se puede resolver la propiedad predeterminada del objeto azar. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 var loopTo = Convert.ToInt16(NPCPosX + azar * -8);
-                for (X = Convert.ToInt16(NPCPosX + azar * 8); -azar >= 0 ? X <= loopTo : X >= loopTo; X += -azar)
+                for (X = Convert.ToInt16(NPCPosX + azar * 8); -azar >= 0 ? X <= loopTo : X >= loopTo; X += (short)-azar)
                 {
                     var loopTo1 = Convert.ToInt16(NPCPosY + azar2 * -7);
-                    for (Y = Convert.ToInt16(NPCPosY + azar2 * 7); -azar2 >= 0 ? Y <= loopTo1 : Y >= loopTo1; Y += -azar2)
+                    for (Y = Convert.ToInt16(NPCPosY + azar2 * 7); -azar2 >= 0 ? Y <= loopTo1 : Y >= loopTo1; Y += (short)-azar2)
                     {
-                        // scan combat field
+                         // scan combat field
                         NPCAlInd = Declaraciones.MapData[NPCPosM, X, Y].NpcIndex;
                         PJEnInd = Declaraciones.MapData[NPCPosM, X, Y].UserIndex;
                         if (Declaraciones.Npclist[npcind].CanAttack == 1) // 'saltea el analisis si no puede atacar para evitar cuentas

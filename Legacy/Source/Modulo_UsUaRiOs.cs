@@ -356,7 +356,8 @@ namespace Legacy
 
                 if (withBlock.showName)
                 {
-                    string localPrepareMessageUpdateTagAndStatus() { string argTag = withBlock.name + ClanTag; var ret = Protocol.PrepareMessageUpdateTagAndStatus(UserIndex, NickColor, ref argTag); return ret; }
+                    string nameValue = withBlock.name;
+                    string localPrepareMessageUpdateTagAndStatus() { string argTag = nameValue + ClanTag; var ret = Protocol.PrepareMessageUpdateTagAndStatus(UserIndex, NickColor, ref argTag); return ret; }
 
                     modSendData.SendData(modSendData.SendTarget.ToPCArea, UserIndex, localPrepareMessageUpdateTagAndStatus());
                 }

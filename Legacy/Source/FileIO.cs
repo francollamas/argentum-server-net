@@ -1233,13 +1233,14 @@ namespace Legacy
 
                 withBlock.desc = UserFile.GetValue("INIT", "Desc");
 
-                string localReadField() { string argText = UserFile.GetValue("INIT", "Position"); var ret = General.ReadField(1, ref argText, 45); return ret; }
+                string positionStr = UserFile.GetValue("INIT", "Position");
+                string localReadField() { string argText = positionStr; var ret = General.ReadField(1, ref argText, 45); return ret; }
 
                 withBlock.Pos.Map = Convert.ToInt16(localReadField());
-                string localReadField1() { string argText1 = UserFile.GetValue("INIT", "Position"); var ret = General.ReadField(2, ref argText1, 45); return ret; }
+                string localReadField1() { string argText1 = positionStr; var ret = General.ReadField(2, ref argText1, 45); return ret; }
 
                 withBlock.Pos.X = Convert.ToInt16(localReadField1());
-                string localReadField2() { string argText2 = UserFile.GetValue("INIT", "Position"); var ret = General.ReadField(3, ref argText2, 45); return ret; }
+                string localReadField2() { string argText2 = positionStr; var ret = General.ReadField(3, ref argText2, 45); return ret; }
 
                 withBlock.Pos.Y = Convert.ToInt16(localReadField2());
 
@@ -2047,29 +2048,34 @@ namespace Legacy
                         // Is it a different ip from last time?
                         WriteVar(UserFile, "INIT", "LastIP1", withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" + Conversions.ToString(DateAndTime.TimeOfDay));
                     }
-                    else if ((withBlock.ip ?? "") != ((() =>
-                    {
-                        int argEmptySpaces = 1024;
-                        string lastIP = GetVar(UserFile, "INIT", "LastIP1", EmptySpaces: ref argEmptySpaces);
-                        if (lastIP is not null)
-                        {
-                            int spacePos = lastIP.IndexOf(" ");
-                            return spacePos > 0 ? lastIP.Substring(0, spacePos) : "";
-                        }
-                        return "";
-                    })() ?? ""))
-                    {
-                        for (i = 5; i >= 2; i -= 1)
-                        {
-                            int argEmptySpaces1 = 1024;
-                            WriteVar(UserFile, "INIT", "LastIP" + i, GetVar(UserFile, "INIT", "LastIP" + (i - 1).ToString(), EmptySpaces: ref argEmptySpaces1));
-                        }
-                        WriteVar(UserFile, "INIT", "LastIP1", withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" + Conversions.ToString(DateAndTime.TimeOfDay));
-                    }
-                    // Same ip, just update the date
                     else
                     {
-                        WriteVar(UserFile, "INIT", "LastIP1", withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" + Conversions.ToString(DateAndTime.TimeOfDay));
+                        string getLastIPFromVar()
+                        {
+                            int argEmptySpaces = 1024;
+                            string lastIP = GetVar(UserFile, "INIT", "LastIP1", EmptySpaces: ref argEmptySpaces);
+                            if (lastIP is not null)
+                            {
+                                int spacePos = lastIP.IndexOf(" ");
+                                return spacePos > 0 ? lastIP.Substring(0, spacePos) : "";
+                            }
+                            return "";
+                        }
+
+                        if ((withBlock.ip ?? "") != (getLastIPFromVar() ?? ""))
+                        {
+                            for (i = 5; i >= 2; i -= 1)
+                            {
+                                int argEmptySpaces1 = 1024;
+                                WriteVar(UserFile, "INIT", "LastIP" + i, GetVar(UserFile, "INIT", "LastIP" + (i - 1).ToString(), EmptySpaces: ref argEmptySpaces1));
+                            }
+                            WriteVar(UserFile, "INIT", "LastIP1", withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" + Conversions.ToString(DateAndTime.TimeOfDay));
+                        }
+                        // Same ip, just update the date
+                        else
+                        {
+                            WriteVar(UserFile, "INIT", "LastIP1", withBlock.ip + " - " + Conversions.ToString(DateTime.Today) + ":" + Conversions.ToString(DateAndTime.TimeOfDay));
+                        }
                     }
 
                     WriteVar(UserFile, "INIT", "Position", withBlock.Pos.Map + "-" + withBlock.Pos.X + "-" + withBlock.Pos.Y);

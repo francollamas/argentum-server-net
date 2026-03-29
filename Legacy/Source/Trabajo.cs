@@ -1666,7 +1666,7 @@ namespace Legacy
             byte exito;
             // UPGRADE_NOTE: Obj se actualizó a Obj_Renamed. Haga clic aquí para obtener más información: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
             Declaraciones.Obj Obj_Renamed;
-            Declaraciones.WorldPos posMadera;
+            Declaraciones.WorldPos posMadera = default;
 
             if (!Extra.LegalPos(Map, X, Y))
                 return;

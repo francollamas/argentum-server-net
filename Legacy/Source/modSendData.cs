@@ -491,10 +491,10 @@ namespace Legacy
             {
                 tempIndex = Convert.ToInt16(ModAreas.ConnGroups[Map].UserEntrys[LoopC]);
 
-                TempInt = Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveX & AreaX;
+                TempInt = (short)(Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveX & AreaX);
                 if (TempInt != 0) // Esta en el area?
                 {
-                    TempInt = Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveY & AreaY;
+                    TempInt = (short)(Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveY & AreaY);
                     if (TempInt != 0)
                     {
                         if (tempIndex != UserIndex)
@@ -700,10 +700,10 @@ namespace Legacy
             {
                 tempIndex = Convert.ToInt16(ModAreas.ConnGroups[Map].UserEntrys[LoopC]);
 
-                TempInt = Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveX & AreaX;
+                TempInt = (short)(Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveX & AreaX);
                 if (TempInt != 0) // Esta en el area?
                 {
-                    TempInt = Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveY & AreaY;
+                    TempInt = (short)(Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveY & AreaY);
                     if (TempInt != 0)
                     {
                         if (Declaraciones.UserList[tempIndex].ConnIDValida)
@@ -737,10 +737,10 @@ namespace Legacy
             {
                 tempIndex = Convert.ToInt16(ModAreas.ConnGroups[Map].UserEntrys[LoopC]);
 
-                TempInt = Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveX & AreaX;
+                TempInt = (short)(Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveX & AreaX);
                 if (TempInt != 0) // Esta en el area?
                 {
-                    TempInt = Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveY & AreaY;
+                    TempInt = (short)(Declaraciones.UserList[tempIndex].AreasInfo.AreaReciveY & AreaY);
                     if (TempInt != 0)
                     {
                         if (Declaraciones.UserList[tempIndex].ConnIDValida)

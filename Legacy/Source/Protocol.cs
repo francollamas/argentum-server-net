@@ -35,7 +35,7 @@ namespace Legacy
         // '
         // Auxiliar ByteQueue used as buffer to generate messages not intended to be sent right away.
         // Specially usefull to create a message once and send it over to several clients.
-        private readonly static clsByteQueue auxiliarBuffer = new clsByteQueue();
+        private static clsByteQueue auxiliarBuffer = new clsByteQueue();
 
 
         private enum ServerPacketID : byte

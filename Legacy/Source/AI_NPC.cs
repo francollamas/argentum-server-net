@@ -884,10 +884,10 @@ namespace Legacy
                     }
 
                     var loopTo = withBlock.Pos.Y + (short)(SignoNS * RANGO_VISION_Y);
-                    for (Y = withBlock.Pos.Y; SignoNS == 0 ? 1 : SignoNS >= 0 ? Y <= loopTo : Y >= loopTo; Y += SignoNS == 0 ? 1 : SignoNS)
+                    for (Y = withBlock.Pos.Y; SignoNS == 0 || (SignoNS >= 0 ? Y <= loopTo : Y >= loopTo); Y += (short)(SignoNS == 0 ? 1 : SignoNS))
                     {
                         var loopTo1 = withBlock.Pos.X + (short)(SignoEO * RANGO_VISION_X);
-                        for (X = withBlock.Pos.X; SignoEO == 0 ? 1 : SignoEO >= 0 ? X <= loopTo1 : X >= loopTo1; X += SignoEO == 0 ? 1 : SignoEO)
+                        for (X = withBlock.Pos.X; SignoEO == 0 || (SignoEO >= 0 ? X <= loopTo1 : X >= loopTo1); X += (short)(SignoEO == 0 ? 1 : SignoEO))
                         {
                             if (X >= Declaraciones.MinXBorder & X <= Declaraciones.MaxXBorder & Y >= Declaraciones.MinYBorder & Y <= Declaraciones.MaxYBorder)
                             {
