@@ -1,9 +1,5 @@
-﻿
-namespace Legacy
+namespace Legacy;
+
+internal class cSolicitud
 {
-    internal class cSolicitud
-    {
-        public string UserName;
-        public string desc;
-    }
 }

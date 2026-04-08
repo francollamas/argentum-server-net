@@ -1,4 +1,4 @@
-﻿using Legacy;
+using Legacy;
 
 namespace Server
 {
